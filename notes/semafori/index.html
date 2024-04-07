@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Semafori | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 120 Ripasso: September 28, 2023 Ultima modifica: May 19, 2023 10:28 AM Primo Abbozzo: October 15, 2022 10:22 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Semafori Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
+Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
+due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="flecart.github.io/notes/semafori/">
+<link crossorigin="anonymous" href="flecart.github.io/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="flecart.github.io/notes/semafori/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Semafori" />
+<meta property="og:description" content="Ripasso Prox: 120 Ripasso: September 28, 2023 Ultima modifica: May 19, 2023 10:28 AM Primo Abbozzo: October 15, 2022 10:22 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Semafori Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
+Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
+due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="flecart.github.io/notes/semafori/" />
+<meta property="og:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta name="twitter:title" content="Semafori"/>
+<meta name="twitter:description" content="Ripasso Prox: 120 Ripasso: September 28, 2023 Ultima modifica: May 19, 2023 10:28 AM Primo Abbozzo: October 15, 2022 10:22 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Semafori Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
+Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
+due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Semafori",
+      "item": "flecart.github.io/notes/semafori/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Semafori",
+  "name": "Semafori",
+  "description": "Ripasso Prox: 120 Ripasso: September 28, 2023 Ultima modifica: May 19, 2023 10:28 AM Primo Abbozzo: October 15, 2022 10:22 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Semafori Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice\nQuesto è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.\ndue o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 120 Ripasso: September 28, 2023 Ultima modifica: May 19, 2023 10:28 AM Primo Abbozzo: October 15, 2022 10:22 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Semafori Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice\nQuesto è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.\ndue o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo\nPrimitive dei semafori 🟩- Il semaforo solitamente è una variabile intera non negativa.\nV anche chiamao sem_wait.\nDa verhogen utilizzata per rilasciare una risorsa. Di solito è implementata aumentando il valore di un semaforo.\nP, anche chiamato sem_post.\nDa proberen per attendere evento o rilascio di una risorsa. Di solito è implementata decrementando il valore del semaforo solo se è positivo non nullo.\nInvarianti per i semafori (!!!)\nSlide invarianti\nImplementazione classica della CS 🟩 Programma concorrente con semafori per CS\nImplementazione classica di P e V (ricordare da metterle nella CS)\nSi può notare che tutte le 4 proprietà espresse per la concorrenza sembrano essere soddisfatte.\nOltre a questo bisogna avere una struttura di dati (Queue) che tenga conto dei processi che stanno aspettando la risorsa dietro questo semaforo, in modo da poter ricominciare.\nSi potrebbe in questo caso anche disabilitare l’interrupt! Perché tanto ora non è dentro lo scope del programmatore, è dentro lo scope del semaforo! Per i multicore si possono utilizzare le soluzioni trattate in parti precedenti.\nVantaggi dei semafori 🟩 Fairness data dalla politica FIFO utilizzata per la struttura di dati della coda\nSlide\nBusy waiting molto minore\nInterleaving controllato? Boh non ho capito il concetto di questa frase\nSemafori binari Descrizione generale 🟩 Sono semafori che possono solamente avere come valore 0 e 1.\nTODO: dire anche cosa succede per l’attesa dei due…\nImplementazione 🟩- Implementazione semaforo binario\nI semafori binari ci garantiscono mutua esclusione\nSemafori binari equiv. semafori normali 🟩 Implementazione dei semafori con semafori binari 🟩\nImplementazione di semafori binari con semafori 🟩\nProblemi classici Producer consumer 🟩 Abbiamo due agenti, un programma che produce una risorsa e un agente che la consuma. Questa comunicazione di disponibilità di un valore avviene attraverso una singola variabile condivisa.\nProprietà importanti\nProducer non può scrivere la zona di memoria comune prima che il consumer l’abbia consumato Consumer non deve leggere due volte la stessa cosa. No deadlock né starvation In questo caso sono come delle sezioni critiche alternate passing the baton perché è come se passasse il testimone, e vanno avanti in modo alternato.\nSoluzione\nLimited Buffer 🟩 La descrizione del problema è molto simile, la differenza è che si utilizza un buffer condiviso per lo scambio di informazioni, non una singola variabile, il resto delle proprietà è molto simile.\nSoluzione\nOsservazioni personali\nNon c’è deadlock perché si bloccherebbero assieme solo se sia empty sia full sono 0, ma questo sarebbe un problema di inizializzazione. Dining philophers 🟩- Ho 5 filosofi intorno a una tavola che devono acquisire le due bacchette (risorse condivise) per mangiare, altrimenti pensano.\nInvarianti\nResource hierarchy solution\nSoluzione\nIn questa soluzione si crea una gerarchia di priorità per chi deve acquisire la fork, con una rottura di simmetria per l’ultima.\nIl problema è che non è libero da starvation.\nPagina wiki\nAltre soluzioni\nOsservazioni personali\nCredo ci sia starvation perché non c’è niente che mi garantisca che non ci sia.\nRoba da buttare, riguardo dining\nPseudocodice per il problema dei dining filosophers che utilizza il token, e la struttura ad anello inizializza 5 semafori, solo uno sarà a 1 sarà quello attivo direi. 5 booleani che indicano la disponibilità. inizializzo 5 numeri che identificano il numero delle volte che si ha mangiato Alla fine di ogni ciclo di mangiata viene incrementato il numero, e questo numero viene incrementato solamente da un unico thread, quello di un certo filosofo, quindi non devo metterci il mutex, o forse sì??. Quindi fra gli attivi voglio solamente chi ha il token e chi può mangiare. bool done = false; while (!done): waiting_for_token = true, // anche done può essere utilizzato come waiting for token. [enter CS] if (disponibile left): prendi left if (disponibile right): prendi right waiting_for_token = false; // done = true qui, invece che sotto. make calls to take left and right. else: release left [exit CS] if (has both forks): eat() releaseLeft() signal left is available releaseRight() signal right is available done = true; else: go to sleep (try again lather, if not done)) passtoken to next waiting for token. - somebody is waiting for token if 1. Is not eating 2. Has not finished Quindi ci metto il check booleano sopra. Readers and writers 🟩- Questo è uno dei problemi più importanti, adremo in seguito a sviluppare il concetto di awaiting.\nCi sono due tipi di processi che devono leggere un database. I lettori accedono al database per leggerlo, gli scrittori per scriverlo, fatto è che i lettori possono leggere quanto vogliono, quando però uno ci vuole scrivere, nessun altro ci può andare a leggere.\nUn solo scrittore, che blocca tutti\nSe nessuno scrive tutti possono leggere.\nInvarianti da rispettare\nSoluzione Readers and Writers con semafori\nStarvation degli scrittori\nQuesta soluzione ha il drawback del fatto che starvation per i scrittori.\nQuesta è una soluzione che funziona ma vorremmo trovare un metodo per descrivere tutti i problemi con await, in modo molto clean.\nPriorità ai scrittori con await framework 🟨+ Vogliamo in questa parte trattare di una soluzione che non metta in starvation gli scrittori, ma mette in starvation i lettori in questo caso.\nSlide soluzione\nLa soluzione è quasi la stessa, ma si cambia la condizione di entrata per i lettori che sarà quando non c’è nessun scrittore che sta scrivendo e nemmeno nessuno che sta aspettando di scrivere.\nScegliere quale soluzione utilizzare dipende molto dall’ambiente in cui stiamo, dipende se vogliamo più gente che scriva o più gente che legga (di solito per un database c’è molta gente ch elegge e poca che scrive).\nProblema del barbiere addormentato Slide\nFramework per semafori Andiamo in questa parte a creare un framework generale per la discussione di problemi con await con i semafori.\nFramework semafori Andrews (4) 🟨- Notazione con Await (2) 🟨+ Notazione (andrews Await)\nQuindi la sintassi diventa di due parametri in particoalre\nStatement atomico Statemento atomico con await su una condizione booleana. Molto interessante notare che è questo ciò che stato implementato con Javascript! Ed è una cosa molto clean questo paradigma :D.\nSoluzione readers and writers con await (generale)\nSi noti che questa soluzione è equivalente alla soluzione dei semafori, ma è scritta in modo molto più clean.\nImplementazione await con semafori 🟩 Note sulle variabili di implementazione\nLe note principali sono i semafori e i waiting.\nImplementazione in slide\ni quadrati sono degli if non deterministici, nel senso che posso riordinarli come mi pare e sarebbe comunque apposto\nSu signal, ci dà un idea di quanti processi possono andare avanti dato un cambiamento di stato.\nLa modifica sul waiting[i]- - non è un write non protetto??? No perché sempre passaggi di testimoni! Siamo sempre in una sezione critica, ma divisa fra più processi grazie a questo meccanismo passing the baton.\nInfatti è per questo che possono fare waiting[i]- - senza apparentemente essere in mutua esclusione!.\nNota che sembra interessante è che questo baton viene continuamente passato da processo a un altro da signal ad un altro finché non posso più fare signal.\nNota sui passaggi di testimoni\nLa mutex è sempre rilasciata attraverso la tecnica del passing the baton, in qui il mutex è rilasciato da processi diversi, si può espandere su molti processi diversi la mutua esclusione… Cavolo però credo sia molto difficile sbagliarci qualcosa no? boh.\nReaders and writers con await (!) 🟨- Slide soluzione\nSoluzione in singola slide (e con signal ottimizzato)\nConsiderazioni finali (3) 🟨 I semafori pongono forti problemi di leggibilità dato che sono costrutti a basso livello sparsi in mezzo al codice.\nÈ possibile inoltre compiere errori stupidi in modo molto facile, come scambiare P o V, omettere Po V.\nE pone un sacco di responsabilità sul prorammatore che deve gestire lui in modo corretto le risorse e definire gli accessi.\n",
+  "wordCount" : "1387",
+  "inLanguage": "en",
+  "image": "flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "flecart.github.io/notes/semafori/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="flecart.github.io/flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Semafori
+    </h1>
+    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#semafori" aria-label="Semafori">Semafori</a><ul>
+                        
+                <li>
+                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#concetto-principale--" aria-label="Concetto principale 🟩-">Concetto principale 🟩-</a></li>
+                <li>
+                    <a href="#primitive-dei-semafori--" aria-label="Primitive dei semafori 🟩-">Primitive dei semafori 🟩-</a></li>
+                <li>
+                    <a href="#implementazione-classica-della-cs-" aria-label="Implementazione classica della CS 🟩">Implementazione classica della CS 🟩</a></li>
+                <li>
+                    <a href="#vantaggi-dei-semafori-" aria-label="Vantaggi dei semafori 🟩">Vantaggi dei semafori 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#semafori-binari" aria-label="Semafori binari">Semafori binari</a><ul>
+                        
+                <li>
+                    <a href="#descrizione-generale-" aria-label="Descrizione generale 🟩">Descrizione generale 🟩</a></li>
+                <li>
+                    <a href="#implementazione--" aria-label="Implementazione 🟩-">Implementazione 🟩-</a></li>
+                <li>
+                    <a href="#semafori-binari-equiv-semafori-normali-" aria-label="Semafori binari equiv. semafori normali 🟩">Semafori binari equiv. semafori normali 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#problemi-classici" aria-label="Problemi classici">Problemi classici</a><ul>
+                        
+                <li>
+                    <a href="#producer-consumer-" aria-label="Producer consumer 🟩">Producer consumer 🟩</a></li>
+                <li>
+                    <a href="#limited-buffer--" aria-label="Limited Buffer  🟩">Limited Buffer  🟩</a></li>
+                <li>
+                    <a href="#dining-philophers--" aria-label="Dining philophers 🟩-">Dining philophers 🟩-</a></li>
+                <li>
+                    <a href="#readers-and-writers--" aria-label="Readers and writers 🟩-">Readers and writers 🟩-</a></li>
+                <li>
+                    <a href="#priorit%c3%a0-ai-scrittori-con-await-framework-" aria-label="Priorità ai scrittori con await framework 🟨&#43;">Priorità ai scrittori con await framework 🟨+</a></li>
+                <li>
+                    <a href="#problema-del-barbiere-addormentato" aria-label="Problema del barbiere addormentato">Problema del barbiere addormentato</a></li></ul>
+                </li>
+                <li>
+                    <a href="#framework-per-semafori" aria-label="Framework per semafori">Framework per semafori</a><ul>
+                        
+                <li>
+                    <a href="#framework-semafori-andrews-4--" aria-label="Framework semafori Andrews (4) 🟨-">Framework semafori Andrews (4) 🟨-</a></li>
+                <li>
+                    <a href="#notazione-con-await-2-" aria-label="Notazione con Await (2) 🟨&#43;">Notazione con Await (2) 🟨+</a></li>
+                <li>
+                    <a href="#implementazione-await-con-semafori-" aria-label="Implementazione await con semafori 🟩">Implementazione await con semafori 🟩</a></li>
+                <li>
+                    <a href="#readers-and-writers-con-await---" aria-label="Readers and writers con await (!) 🟨-">Readers and writers con await (!) 🟨-</a></li></ul>
+                </li>
+                <li>
+                    <a href="#considerazioni-finali-3-" aria-label="Considerazioni finali (3) 🟨">Considerazioni finali (3) 🟨</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 120
+Ripasso: September 28, 2023
+Ultima modifica: May 19, 2023 10:28 AM
+Primo Abbozzo: October 15, 2022 10:22 AM
+Stato: 🌕🌕🌕🌕🌗
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<h1 id="semafori">Semafori<a hidden class="anchor" aria-hidden="true" href="#semafori">#</a></h1>
+<h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
+<h3 id="concetto-principale--">Concetto principale 🟩-<a hidden class="anchor" aria-hidden="true" href="#concetto-principale--">#</a></h3>
+<p>È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice</p>
+<p>Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.</p>
+<blockquote>
+<p>due o più processi possono cooperare attraverso semplici
+segnali, in modo tale che un processo possa essere bloccato
+in specifici punti del suo programma finché non riceve un
+segnale da un altro processo</p>
+</blockquote>
+<h3 id="primitive-dei-semafori--">Primitive dei semafori 🟩-<a hidden class="anchor" aria-hidden="true" href="#primitive-dei-semafori--">#</a></h3>
+<p>Il semaforo solitamente è una <strong>variabile intera non negativa</strong>.</p>
+<p><strong>V</strong> anche chiamao <em>sem_wait</em>.</p>
+<p>Da <em>verhogen</em> utilizzata per <strong>rilasciare una risorsa</strong>. Di solito è implementata <em>aumentando</em> il valore di un semaforo.</p>
+<p><strong>P</strong>, anche chiamato <em>sem_post</em>.</p>
+<p>Da <em>proberen</em> per attendere evento o rilascio di una risorsa. Di solito è implementata <em>decrementando</em>  il valore del semaforo <strong>solo se è positivo non nullo</strong>.</p>
+<p><strong>Invarianti per i semafori  (!!!)</strong></p>
+<ul>
+<li>
+<p>Slide invarianti</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled.png" alt="image/universita/ex-notion/Semafori/Untitled">
+</li>
+</ul>
+<h3 id="implementazione-classica-della-cs-">Implementazione classica della CS 🟩<a hidden class="anchor" aria-hidden="true" href="#implementazione-classica-della-cs-">#</a></h3>
+<ul>
+<li>
+<p>Programma concorrente con semafori per CS</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 1.png" alt="image/universita/ex-notion/Semafori/Untitled 1">
+</li>
+<li>
+<p>Implementazione classica di P e V (ricordare da metterle nella CS)</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 2.png" alt="image/universita/ex-notion/Semafori/Untitled 2">
+</li>
+</ul>
+<p>Si può notare che tutte le 4 proprietà espresse per la concorrenza sembrano essere soddisfatte.</p>
+<p>Oltre a questo bisogna avere una <strong>struttura di dati (Queue)</strong> che tenga conto dei processi che stanno aspettando la risorsa dietro questo semaforo, in modo da poter ricominciare.</p>
+<p>Si potrebbe in questo caso anche disabilitare l&rsquo;interrupt! Perché tanto ora non è dentro lo scope del programmatore, è dentro lo scope del semaforo! Per i multicore si possono utilizzare le soluzioni trattate in parti precedenti.</p>
+<h3 id="vantaggi-dei-semafori-">Vantaggi dei semafori 🟩<a hidden class="anchor" aria-hidden="true" href="#vantaggi-dei-semafori-">#</a></h3>
+<ul>
+<li>
+<p>Fairness data dalla politica FIFO utilizzata per la struttura di dati della coda</p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 3.png" alt="image/universita/ex-notion/Semafori/Untitled 3">
+</li>
+</ul>
+</li>
+<li>
+<p>Busy waiting molto minore</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 4.png" alt="image/universita/ex-notion/Semafori/Untitled 4">
+</li>
+<li>
+<p>Interleaving controllato? Boh non ho capito il concetto di questa frase</p>
+</li>
+</ul>
+<h2 id="semafori-binari">Semafori binari<a hidden class="anchor" aria-hidden="true" href="#semafori-binari">#</a></h2>
+<h3 id="descrizione-generale-">Descrizione generale 🟩<a hidden class="anchor" aria-hidden="true" href="#descrizione-generale-">#</a></h3>
+<p>Sono semafori che possono solamente avere come valore 0 e 1.</p>
+<p>TODO: dire anche cosa succede per l’attesa dei due…</p>
+<h3 id="implementazione--">Implementazione 🟩-<a hidden class="anchor" aria-hidden="true" href="#implementazione--">#</a></h3>
+<ul>
+<li>
+<p>Implementazione semaforo binario</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 5.png" alt="image/universita/ex-notion/Semafori/Untitled 5">
+</li>
+</ul>
+<p>I semafori binari ci <strong>garantiscono mutua esclusione</strong></p>
+<h3 id="semafori-binari-equiv-semafori-normali-">Semafori binari equiv. semafori normali 🟩<a hidden class="anchor" aria-hidden="true" href="#semafori-binari-equiv-semafori-normali-">#</a></h3>
+<ul>
+<li>
+<p>Implementazione dei semafori con semafori binari 🟩</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 6.png" alt="image/universita/ex-notion/Semafori/Untitled 6">
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 7.png" alt="image/universita/ex-notion/Semafori/Untitled 7">
+</li>
+<li>
+<p>Implementazione di semafori binari con semafori 🟩</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 8.png" alt="image/universita/ex-notion/Semafori/Untitled 8">
+</li>
+</ul>
+<h2 id="problemi-classici">Problemi classici<a hidden class="anchor" aria-hidden="true" href="#problemi-classici">#</a></h2>
+<h3 id="producer-consumer-">Producer consumer 🟩<a hidden class="anchor" aria-hidden="true" href="#producer-consumer-">#</a></h3>
+<p>Abbiamo due agenti, un programma che produce una risorsa e un agente che la consuma. Questa comunicazione di disponibilità di un valore avviene attraverso una <strong>singola variabile condivisa.</strong></p>
+<p><strong>Proprietà importanti</strong></p>
+<ul>
+<li>Producer non può scrivere la zona di memoria comune prima che il consumer l&rsquo;abbia consumato</li>
+<li>Consumer non deve leggere due volte la stessa cosa.</li>
+<li>No deadlock né starvation</li>
+</ul>
+<p>In questo caso sono come delle sezioni critiche alternate  <strong>passing the baton</strong> perché è come se passasse il testimone, e vanno avanti in modo alternato.</p>
+<ul>
+<li>
+<p>Soluzione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 9.png" alt="image/universita/ex-notion/Semafori/Untitled 9">
+</li>
+</ul>
+<h3 id="limited-buffer--">Limited Buffer  🟩<a hidden class="anchor" aria-hidden="true" href="#limited-buffer--">#</a></h3>
+<p>La descrizione del problema è molto simile, la differenza è che si utilizza un <strong>buffer condiviso</strong> per lo scambio di informazioni, non una singola variabile, il resto delle proprietà è molto simile.</p>
+<ul>
+<li>
+<p>Soluzione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 10.png" alt="image/universita/ex-notion/Semafori/Untitled 10">
+</li>
+</ul>
+<p><strong>Osservazioni personali</strong></p>
+<ul>
+<li>Non c&rsquo;è deadlock perché si bloccherebbero assieme solo se sia empty sia full sono 0, ma questo sarebbe un problema di inizializzazione.</li>
+</ul>
+<h3 id="dining-philophers--">Dining philophers 🟩-<a hidden class="anchor" aria-hidden="true" href="#dining-philophers--">#</a></h3>
+<p>Ho 5 filosofi intorno a una tavola che devono acquisire le due bacchette (risorse condivise) per mangiare, altrimenti pensano.</p>
+<ul>
+<li>
+<p>Invarianti</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 11.png" alt="image/universita/ex-notion/Semafori/Untitled 11">
+</li>
+</ul>
+<p><strong>Resource hierarchy solution</strong></p>
+<ul>
+<li>
+<p>Soluzione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 12.png" alt="image/universita/ex-notion/Semafori/Untitled 12">
+</li>
+</ul>
+<p>In questa soluzione si crea una gerarchia di priorità per chi deve acquisire la fork, con una rottura di simmetria per l’ultima.</p>
+<p>Il problema è che non è libero da starvation.</p>
+<p>Pagina <a href="https://en.wikipedia.org/wiki/Dining_philosophers_problem#Resource_hierarchy_solution">wiki</a></p>
+<ul>
+<li>
+<p>Altre soluzioni</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 13.png" alt="image/universita/ex-notion/Semafori/Untitled 13">
+</li>
+</ul>
+<p><strong>Osservazioni personali</strong></p>
+<p>Credo ci sia starvation perché non c&rsquo;è niente che mi garantisca che non ci sia.</p>
+<ul>
+<li>
+<p>Roba da buttare, riguardo dining</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Pseudocodice</span> <span class="n">per</span> <span class="n">il</span> <span class="n">problema</span> <span class="n">dei</span> <span class="n">dining</span> <span class="n">filosophers</span> <span class="n">che</span> <span class="n">utilizza</span> <span class="n">il</span> <span class="n">token</span><span class="p">,</span> <span class="n">e</span> <span class="n">la</span>
+</span></span><span class="line"><span class="cl"><span class="n">struttura</span> <span class="n">ad</span> <span class="n">anello</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">inizializza</span> <span class="mi">5</span> <span class="n">semafori</span><span class="p">,</span> <span class="n">solo</span> <span class="n">uno</span> <span class="n">sarà</span> <span class="n">a</span> <span class="mi">1</span> <span class="n">sarà</span> <span class="n">quello</span> <span class="n">attivo</span> <span class="n">direi</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="mi">5</span> <span class="n">booleani</span> <span class="n">che</span> <span class="n">indicano</span> <span class="n">la</span> <span class="n">disponibilità</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">inizializzo</span> <span class="mi">5</span> <span class="n">numeri</span> <span class="n">che</span> <span class="n">identificano</span> <span class="n">il</span> <span class="n">numero</span> <span class="n">delle</span> <span class="n">volte</span> <span class="n">che</span> <span class="n">si</span> <span class="n">ha</span> <span class="n">mangiato</span>
+</span></span><span class="line"><span class="cl"><span class="n">Alla</span> <span class="n">fine</span> <span class="n">di</span> <span class="n">ogni</span> <span class="n">ciclo</span> <span class="n">di</span> <span class="n">mangiata</span> <span class="n">viene</span> <span class="n">incrementato</span> <span class="n">il</span> <span class="n">numero</span><span class="p">,</span> <span class="n">e</span> <span class="n">questo</span> <span class="n">numero</span> <span class="n">viene</span>
+</span></span><span class="line"><span class="cl"><span class="n">incrementato</span> <span class="n">solamente</span> <span class="n">da</span> <span class="n">un</span> <span class="n">unico</span> <span class="kr">thread</span><span class="p">,</span> <span class="n">quello</span> <span class="n">di</span> <span class="n">un</span> <span class="n">certo</span> <span class="n">filosofo</span><span class="p">,</span> <span class="n">quindi</span>
+</span></span><span class="line"><span class="cl"><span class="n">non</span> <span class="n">devo</span> <span class="n">metterci</span> <span class="n">il</span> <span class="n">mutex</span><span class="p">,</span> <span class="n">o</span> <span class="n">forse</span> <span class="n">sì</span><span class="o">??</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">Quindi</span> <span class="n">fra</span> <span class="n">gli</span> <span class="n">attivi</span> <span class="n">voglio</span> <span class="n">solamente</span> <span class="n">chi</span> <span class="n">ha</span> <span class="n">il</span> <span class="n">token</span> <span class="n">e</span> <span class="n">chi</span> <span class="n">può</span> <span class="n">mangiare</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">done</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="n">waiting_for_token</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span> <span class="c1">// anche done può essere utilizzato come waiting for token.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">[</span><span class="n">enter</span> <span class="n">CS</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">disponibile</span> <span class="n">left</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">prendi</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">disponibile</span> <span class="n">right</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">			<span class="n">prendi</span> <span class="n">right</span>
+</span></span><span class="line"><span class="cl">			<span class="n">waiting_for_token</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// done = true qui, invece che sotto.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="n">make</span> <span class="n">calls</span> <span class="n">to</span> <span class="n">take</span> <span class="n">left</span> <span class="n">and</span> <span class="n">right</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">			<span class="n">release</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">	<span class="p">[</span><span class="n">exit</span> <span class="n">CS</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">has</span> <span class="n">both</span> <span class="n">forks</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">eat</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="n">releaseLeft</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="n">signal</span> <span class="n">left</span> <span class="n">is</span> <span class="n">available</span>
+</span></span><span class="line"><span class="cl">		<span class="n">releaseRight</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="n">signal</span> <span class="n">right</span> <span class="n">is</span> <span class="n">available</span>
+</span></span><span class="line"><span class="cl">		<span class="n">done</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">go</span> <span class="n">to</span> <span class="n">sleep</span> <span class="p">(</span><span class="k">try</span> <span class="n">again</span> <span class="n">lather</span><span class="p">,</span> <span class="k">if</span> <span class="n">not</span> <span class="n">done</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">passtoken</span> <span class="n">to</span> <span class="n">next</span> <span class="n">waiting</span> <span class="k">for</span> <span class="n">token</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="n">somebody</span> <span class="n">is</span> <span class="n">waiting</span> <span class="k">for</span> <span class="n">token</span> <span class="k">if</span>
+</span></span><span class="line"><span class="cl"><span class="mf">1.</span> <span class="n">Is</span> <span class="n">not</span> <span class="n">eating</span>
+</span></span><span class="line"><span class="cl"><span class="mf">2.</span> <span class="n">Has</span> <span class="n">not</span> <span class="n">finished</span>
+</span></span><span class="line"><span class="cl"><span class="n">Quindi</span> <span class="n">ci</span> <span class="n">metto</span> <span class="n">il</span> <span class="n">check</span> <span class="n">booleano</span> <span class="n">sopra</span><span class="p">.</span>
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="readers-and-writers--">Readers and writers 🟩-<a hidden class="anchor" aria-hidden="true" href="#readers-and-writers--">#</a></h3>
+<p>Questo è uno dei problemi più importanti, adremo in seguito a sviluppare il concetto di awaiting.</p>
+<p>Ci sono due tipi di processi che devono leggere un database. I lettori accedono al database per leggerlo, gli scrittori per scriverlo, fatto è che i lettori possono leggere quanto vogliono, quando però uno ci vuole scrivere, nessun altro ci può andare a leggere.</p>
+<ul>
+<li>
+<p>Un solo scrittore, che blocca tutti</p>
+</li>
+<li>
+<p>Se nessuno scrive tutti possono leggere.</p>
+</li>
+<li>
+<p>Invarianti da rispettare</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 14.png" alt="image/universita/ex-notion/Semafori/Untitled 14">
+</li>
+<li>
+<p>Soluzione Readers and Writers con semafori</p>
+<p><strong>Starvation degli scrittori</strong></p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 15.png" alt="image/universita/ex-notion/Semafori/Untitled 15">
+<p>Questa soluzione ha il drawback del fatto che <strong>starvation</strong> per i scrittori.</p>
+</li>
+</ul>
+<p>Questa è una soluzione che funziona ma vorremmo trovare un metodo per descrivere tutti i problemi con await, in modo molto clean.</p>
+<h3 id="priorità-ai-scrittori-con-await-framework-">Priorità ai scrittori con await framework 🟨+<a hidden class="anchor" aria-hidden="true" href="#priorità-ai-scrittori-con-await-framework-">#</a></h3>
+<p>Vogliamo in questa parte trattare di una soluzione che non metta in starvation gli scrittori, ma mette in starvation i lettori in questo caso.</p>
+<ul>
+<li>
+<p>Slide soluzione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 16.png" alt="image/universita/ex-notion/Semafori/Untitled 16">
+</li>
+</ul>
+<p>La soluzione è quasi la stessa, ma si cambia la condizione di entrata per i lettori che sarà quando non c&rsquo;è nessun scrittore che sta scrivendo e <strong>nemmeno</strong> nessuno che sta aspettando di scrivere.</p>
+<p>Scegliere quale soluzione utilizzare dipende molto dall’ambiente in cui stiamo, dipende se vogliamo più gente che scriva o più gente che legga (di solito per un database c&rsquo;è molta gente ch elegge e poca che scrive).</p>
+<h3 id="problema-del-barbiere-addormentato">Problema del barbiere addormentato<a hidden class="anchor" aria-hidden="true" href="#problema-del-barbiere-addormentato">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 17.png" alt="image/universita/ex-notion/Semafori/Untitled 17">
+</li>
+</ul>
+<h2 id="framework-per-semafori">Framework per semafori<a hidden class="anchor" aria-hidden="true" href="#framework-per-semafori">#</a></h2>
+<p>Andiamo in questa parte a creare un framework generale per la discussione di problemi con await con i semafori.</p>
+<h3 id="framework-semafori-andrews-4--">Framework semafori Andrews (4) 🟨-<a hidden class="anchor" aria-hidden="true" href="#framework-semafori-andrews-4--">#</a></h3>
+<img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 18.png" alt="image/universita/ex-notion/Semafori/Untitled 18">
+<h3 id="notazione-con-await-2-">Notazione con Await (2) 🟨+<a hidden class="anchor" aria-hidden="true" href="#notazione-con-await-2-">#</a></h3>
+<ul>
+<li>
+<p>Notazione (andrews Await)</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 19.png" alt="image/universita/ex-notion/Semafori/Untitled 19">
+</li>
+</ul>
+<p>Quindi la sintassi diventa di due parametri in particoalre</p>
+<ol>
+<li>Statement atomico</li>
+<li>Statemento atomico con await su una condizione booleana.</li>
+</ol>
+<p>Molto interessante notare che è questo ciò che stato implementato con Javascript! Ed è una cosa molto clean questo paradigma :D.</p>
+<ul>
+<li>
+<p>Soluzione readers and writers con await (generale)</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 20.png" alt="image/universita/ex-notion/Semafori/Untitled 20">
+</li>
+</ul>
+<p>Si noti che questa soluzione è equivalente alla soluzione dei semafori, ma è scritta in modo molto più clean.</p>
+<h3 id="implementazione-await-con-semafori-">Implementazione await con semafori 🟩<a hidden class="anchor" aria-hidden="true" href="#implementazione-await-con-semafori-">#</a></h3>
+<ul>
+<li>
+<p>Note sulle variabili di implementazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 21.png" alt="image/universita/ex-notion/Semafori/Untitled 21">
+</li>
+</ul>
+<p>Le note principali sono i semafori e i waiting.</p>
+<ul>
+<li>
+<p>Implementazione in slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 22.png" alt="image/universita/ex-notion/Semafori/Untitled 22">
+<p>i quadrati sono degli if non deterministici, nel senso che posso riordinarli come mi pare e sarebbe comunque apposto</p>
+</li>
+</ul>
+<p><strong>Su signal</strong>, ci dà un idea di quanti processi possono andare avanti dato un cambiamento di stato.</p>
+<p>La modifica sul waiting[i]- - non è un write non protetto??? No perché sempre passaggi di testimoni! Siamo sempre in una sezione critica, ma divisa fra più processi grazie a questo meccanismo passing the baton.</p>
+<p>Infatti è per questo che possono fare waiting[i]- - senza apparentemente essere in mutua esclusione!.</p>
+<p>Nota che sembra interessante è che questo baton viene continuamente passato da processo a un altro da signal ad un altro finché non posso più fare signal.</p>
+<p><strong>Nota sui passaggi di testimoni</strong></p>
+<p>La mutex è sempre rilasciata attraverso la tecnica del passing the baton, in qui il mutex è rilasciato da processi diversi, si può espandere su molti processi diversi la mutua esclusione… Cavolo però credo sia molto difficile sbagliarci qualcosa no? boh.</p>
+<h3 id="readers-and-writers-con-await---">Readers and writers con await (!) 🟨-<a hidden class="anchor" aria-hidden="true" href="#readers-and-writers-con-await---">#</a></h3>
+<ul>
+<li>
+<p>Slide soluzione</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 23.png" alt="image/universita/ex-notion/Semafori/Untitled 23">
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 24.png" alt="image/universita/ex-notion/Semafori/Untitled 24">
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 25.png" alt="image/universita/ex-notion/Semafori/Untitled 25">
+</li>
+<li>
+<p>Soluzione in singola slide (e con signal ottimizzato)</p>
+  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 26.png" alt="image/universita/ex-notion/Semafori/Untitled 26">
+</li>
+</ul>
+<h2 id="considerazioni-finali-3-">Considerazioni finali (3) 🟨<a hidden class="anchor" aria-hidden="true" href="#considerazioni-finali-3-">#</a></h2>
+<p>I semafori pongono <strong>forti problemi di leggibilità</strong> dato che sono costrutti a basso livello sparsi in mezzo al codice.</p>
+<p>È possibile inoltre compiere <strong>errori stupidi</strong> in modo molto facile, come scambiare P o V, omettere Po V.</p>
+<p>E pone un <strong>sacco di responsabilità sul prorammatore</strong> che deve gestire lui in modo corretto le risorse e definire gli accessi.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="flecart.github.io/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on x"
+            href="https://x.com/intent/tweet/?text=Semafori&amp;url=flecart.github.io%2fnotes%2fsemafori%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=flecart.github.io%2fnotes%2fsemafori%2f&amp;title=Semafori&amp;summary=Semafori&amp;source=flecart.github.io%2fnotes%2fsemafori%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on reddit"
+            href="https://reddit.com/submit?url=flecart.github.io%2fnotes%2fsemafori%2f&title=Semafori">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=flecart.github.io%2fnotes%2fsemafori%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on whatsapp"
+            href="https://api.whatsapp.com/send?text=Semafori%20-%20flecart.github.io%2fnotes%2fsemafori%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on telegram"
+            href="https://telegram.me/share/url?text=Semafori&amp;url=flecart.github.io%2fnotes%2fsemafori%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Semafori on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Semafori&u=flecart.github.io%2fnotes%2fsemafori%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Classical Cyphers | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="🛡️cybersecurity">
+<meta name="description" content="Ripasso Prox: 21 Ultima modifica: November 29, 2022 10:56 AM Primo Abbozzo: November 1, 2022 7:59 AM Stato: 🌕🌕🌕🌕🌕 Studi Personali: No
+Introduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.
+Classifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field
+Cryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/classical-cyphers/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/classical-cyphers/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Classical Cyphers" />
+<meta property="og:description" content="Ripasso Prox: 21 Ultima modifica: November 29, 2022 10:56 AM Primo Abbozzo: November 1, 2022 7:59 AM Stato: 🌕🌕🌕🌕🌕 Studi Personali: No
+Introduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.
+Classifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field
+Cryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/classical-cyphers/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="Classical Cyphers"/>
+<meta name="twitter:description" content="Ripasso Prox: 21 Ultima modifica: November 29, 2022 10:56 AM Primo Abbozzo: November 1, 2022 7:59 AM Stato: 🌕🌕🌕🌕🌕 Studi Personali: No
+Introduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.
+Classifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field
+Cryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Classical Cyphers",
+      "item": "http://localhost:1313/content/notes/classical-cyphers/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Classical Cyphers",
+  "name": "Classical Cyphers",
+  "description": "Ripasso Prox: 21 Ultima modifica: November 29, 2022 10:56 AM Primo Abbozzo: November 1, 2022 7:59 AM Stato: 🌕🌕🌕🌕🌕 Studi Personali: No\nIntroduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.\nClassifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field\nCryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale.",
+  "keywords": [
+    "🛡️cybersecurity"
+  ],
+  "articleBody": "Ripasso Prox: 21 Ultima modifica: November 29, 2022 10:56 AM Primo Abbozzo: November 1, 2022 7:59 AM Stato: 🌕🌕🌕🌕🌕 Studi Personali: No\nIntroduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.\nClassifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field\nCryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale.\nRelazione con Sicurezza informatica 🟩 Questo campo si può considerare una piccola branca della sicurezza informatica, che è praticamente necessaria per la sicurezza, però allo stesso tempo non può essere utilizzata da sola, ha bisogno anche di sistemi operativi sicuri, hardware sicuro etc…\nCryptography 🟩 Questo è quello che ci interessa, ed è ciò che il corso tratta.\nSymmetrical ciphers Asymmetrical ciphers Protocols Classification of cryptoattacks 3 🟩- We define attack vector as a possible way to attack a cipher\nClassical Cryptanalisys Bruteforce Analytical attacks (Properties of the Cipher, useful to decrypt it) Social engineering (like a people that gives you the key) (phishing) Implementation attacks (Attack hardware to discover key) Side channel analysis (eg. power consumption related to the key). Ovviamente questi sono molto diversi rispetto ai reali (nella vita reale ci sono molti attack vectors), secondo la Jocelyne, sembra che crypto sembra una scienza perché definisci metodi di risoluzione di errore per singolo attack vector, che puoi dimostrare come solido, ma nella vita reale credo che hai bisogno che sia valido per ogni tipologia di attacco (ne basta una per distruggerti e ritrovare la chiave diciamo).\nSymmetric cryptography Vogliamo cercare di trovare un modo di comunicare attraverso un canale di comunicazione insicuro, questo è il problema principale di questa critografia.\nCanali insicuri possono essere per esempio\nInternet Wifi Setting classico del problema di comunicazione\nAllora introduco uno step di criptazione e decrittazione fra il pirmo e l’ultimo comunicante.\nQuesto è un scenario leggermente più generale, in cui nel mezzo c'è un attaccante, solitamente un *eve* o altro che ha accesso a $c$ e prova a decrittare. On security of cipher One important note is that the security of the cipher is not enough to mantain a security of the algorithm. But experience says it’s not! (Ma nonostante questo è stato fatto per centinaia e centinaia di anni, ora sappiamo che è cosa stupida).\nAnd a bad thing about this is that there is no clear way to know if a cipher is secure or not, usually what is done is that the algorithm is made public and if nobody knows how to break it is considered secure.\nAnd it’s very easy to build something that is breakable!!!\nKerckhoffs’ Principle 1883 Enunciato kerckhoff 🟩- This is the most important principle of the course!\nA cryptosystem should be secure even if the attacker (oscar in this case) knows all the details about the system, with the exception of the secret key.\nHow can we make sense of this? This is counterintuitive. Maybe because in the past there were like two keys, the key and the algorithm itself, seems like that this setting didn’t help to have a better security. But historically speaking, this principle seems to hold.\nSubstitution cipher Vedere #Affine and Caesar Cipher per definizione formale.\nThis was one of the oldest ciphers in history. (Old and stupid ciphers by the Professor).\nHistorical ciphers Operates on letters (solitamente delle permutazioni) Replace ever plaintext letter by a fixed ciphertext letter, this was the main idea. Examples\nCaesar Cipher, replace with a shift (bruteforce easy attack! The keyspace is very small) Function that replaces each letterwith another letter with bijective. bruteforce, it’s too big for a braindead bruteforce to attack this function. 26! Frequency attack because in the language the letters are not equally distributed! And this works. (when the most frequent letter is discovered a big part of ciphertext is found!) And a bad thing is that same letter to same letter (frequency attack)!!!! Attacco di frequenza 🟩 In teoria la chiave è una permutazione (nel caso di vigenere, quindi avremmo $26! \\approx 2^{88}$ di keysize, però un attacco di frequenza è troppo forte per questo genere di cifrari. Fatto per la prima volta da Al-Kindi 800 AD.\nAttacco brute-force 🟩 Un modo semplice, ma non molto pratico per fare questa definizione è la corrente: dati una coppia $M, C$ di plaintext e ciphertext, un attacco bruteforce su un insieme di chaivi $K = \\left{ k_{1}, k_{2}, \\dots \\right}$ consiste nel provare almeno una chiave (solitamente unica) per cui vale $$ D(C, k_{i}) = M $$ Ossia la chiave che usando $D$ abbiamo il plaintext. Solitamente questo valore non si può calcolare, perché avremmo bisogno di $M$, quindi abbiamo il problema dei falsi positivi all’interno del nostro spazio di interesse. (vedere sezione 5.2 di (Paar \u0026 Pelzl 2010))\nVigenère Cipher Esempio intuitive Vigenère 🟩 Tentativo formalizzazione 🟩 Consideriamo una chiave $k = (k_{1}, k_{2}, \\dots, k_{l})$ Ognuno equivalente al shift presente in cesare #Affine and Caesar Cipher. Ripetiamo la chiave più volte e cifriamo col shift cipher corrispondente ogni lettera. Questo fa nascere l’idea dei rotori senza problemi!\nAttacco a Vigenère 🟩 Guess the length of the key l using some methods Divide the cyphertext into l shift cipher encryptions Use frequency analysis on each shift cipher È una specie di algoritmo, e si riutilizza la vulnerabilità presente sui shift ciphers normali. L’attacco a frequenza diventa più difficile rispetto a Cesare, ma ancora possibile (molti ciphers indipendenti). Per il primo steps un plaintext attack è facilissimo per esempio! Qualcuno ha fatto la domanda su come scoprire la lunghezza chiave alla prof. La prof non sa come attaccarlo, e ha detto solo bruteforce su lunghezza. Poi ha citato un caso di plain-text senza chiamarlo plain-text. Ma è stata molto vaga. Bad. Ha detto anche entrare nel sistema per trovarlo… lol.\nRotor machines Main idea of rotors 🟨- Queste macchine sono nate principalmente nel secolo scorso, da queste idee\nMultiple rounds of substitution, encryption consists of mapping a letter many times ○ M Mechanical/electrical wiring to automate the encryption/decryption process La meccanizzazione è stata risolta dal punto di vista del red team da Turing, che ha dato un contributo fondamentale (Turing 1950).\nEsempi storici di rotor machines I moderni simili sono DES e AES, li tratteremo un po' più avanti. ### Security of the Key Note sulla lunghezza della chiave (non fare) Andiamo in questa parte a misurare la sicurezza di una chiave di fronte agli attacchi. Una prima nota molto importante è il fatto che questa misura della lunghezza ha senso solamente quando si parla di bruteforce, infatti la lunghezza della chiave non può difendere contro side-channel oppure frequency-attacks.\nLa lunghezza della chiave per cifrari simmetrici e asimmetrici cambia. Segretezza perfetta 🟩- Secondo Shannon 1949. Consideriamo un cifrario $E, D$ su $K, M, C$, allora si dice che si ha perfect secrecy quando $\\forall m_{0},m_{1} \\in M$ tale per cui $\\mid m_{0} \\mid = \\mid m_{1} \\mid$ , dove $k$ è presa uniforme. e $\\forall c \\in C$ $$ \\mathbb{P}(E(k, m_{0}) = c) = \\mathbb{P}(E(k, m_{1}) = c) $$\nDetto in altre parole, se ho un certo cipher-text, ho la stessa probabilità di avere qualunque messaggio possibile di una certa lunghezza rispetto al messaggio iniziale. Quando succede questo there are no computational assumptions about the attacker, this is why this is also called unconditional security or perfect security.\nIl cyphertext potrebbe essere qualunque messaggio!, cioè non posso attaccare il $c$ sapendo solo $c$ con la segretezza perfetta. Altri autori come Stinson definisco tale per cui $P(E|M) = P(E)$. Attualmente non mi è chiaro se le due definizioni sono equivalenti.\nL’idea è limitare qualunque informazione che si può trovare dalla chiave come\nNon posso ritrovare la chiave dai processi di $E$ e $D$ Non posso ritrovare il plain-text da ciphertext. Una definizione equivalente sembra essere: dato un $M$ deve essere che $\\forall e \\in E, P(e|M) = P(e) \\not = 0$ (https://www3.cs.stonybrook.edu/~omkant/L02-short.pdf) Questo significa che il $e$ è indipendente da M quando non si conosce la chiave, nel senso che non riesci prendere nessuna informazione (se inverti con bayes dovresti avere stesso valore). Si può dimostrare che la seconda definizione, più l’ipotesi che $\\lvert K \\rvert = \\lvert P \\rvert = \\lvert C \\rvert$ è equivalente alla prima (il contrario dovrebbe essere facile!?).\nSegretezza perfetta e lunghezza chiave 🟨+ Si può dimostrare che per avere segretezza perfetta è necessario avere\n$$ \\lvert K \\rvert \\geq \\lvert M \\rvert $$ Questa proprietà rende cifrari come OTP molto difficili da usare nella pratica, perché non riusciamo a comunicare questo valore, che tra l’altro dovrebbe essere utilizzato una singola volta.\nProof: https://cs.ioc.ee/yik/schools/win2006/massey/slides1.pdf Dove $H$ è l’informazione Shannon. quindi $H(P) = \\sum_{x} P(x)\\log\\left( \\frac{1}{P(x)} \\right)$, e la lunghezza è strettamente dipendente dall’entropia. Questo Shannon lo ha dimostrato nel 1949.\nUna altra dimo è su (Stinson 2005) 3.3, abbastanza ez.\nUnconditional security 🟩 La nota importante è il fatto che sia infinito, anche se ho il tempo dell’universo o maggiore non posso mai rompere un cifrario sicuro incondizionalmente. (molti cifrari sicuri nella pratica quindi non sono sicuri sequendo questa definizione). Questo dovrebbe essere equivalente alla definizione di sopra si segretezza perfetta.\nCome vedremo c’è un cifrario teoricamente sicuro, ma nella pratica di poco utilizzo\nAffine and Caesar Cipher Definizione shift cipher 🟩 Sono definizioni 1.4.3 presenti su (Paar \u0026 Pelzl 2010). Shift Cipher\nSiano $x,y,k \\in \\mathbb{Z}{26}$ Allora l’encryption è $$ e{k}(x) \\equiv x + k, \\mod 26 $$ Mentre il decryption è $$ d_{k}(y) = y - k \\mod 26 $$\nDefinizione affine cipher 🟩 Affine cipher Siano $x, y, a, b \\in \\mathbb{Z}{26}$ Encryption: $$ e{k}(x) = y \\equiv a\\cdot x + b \\mod 26 $$ Decription $$ d_{k}(y) = x \\equiv a^{-1}\\cdot(y - b) \\mod 26 $$ Con la restrizione del fatto che affinché $a$ sia invertibile dobbiamo avere $gcd(a, 26) = 1$\nAritmetica modulare Guardare Algebra modulare, perché è praticamente quella stessa roba, molto importante crittografia, ma andiamo a trattare in un altro modo\nSul modulo 🟩 Il resto non è unico! ci possono essere molte cose che soddisfano quelle cose Il resto si può considerare una classe di equivalenza. Anelli 🟩 Un anello è un insieme di elementi su cui sono definite certe proprietà di interesse.\nEsiste somma e prodotto e sono chiusi. E ci sono molte altre cose… Slide\nL’inverso non ci deve stare\nReferences [1] Turing “I.—COMPUTING MACHINERY AND INTELLIGENCE” Mind Vol. LIX(236), pp. 433–460 1950\n[2] Paar \u0026 Pelzl “Understanding Cryptography: A Textbook for Students and Practitioners” Springer 2010\n[3] Stinson “Cryptography: Theory and Practice, Third Edition” CRC Press 2005\n",
+  "wordCount" : "1787",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/classical-cyphers/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Classical Cyphers
+    </h1>
+    <div class="post-meta">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#introduzione-a-crittografia" aria-label="Introduzione a Crittografia">Introduzione a Crittografia</a><ul>
+                        
+                <li>
+                    <a href="#classifications-and-definitions" aria-label="Classifications and definitions">Classifications and definitions</a><ul>
+                        
+                <li>
+                    <a href="#cryptology-2-" aria-label="Cryptology (2) 🟩">Cryptology (2) 🟩</a></li>
+                <li>
+                    <a href="#relazione-con-sicurezza-informatica-" aria-label="Relazione con Sicurezza informatica 🟩">Relazione con Sicurezza informatica 🟩</a></li>
+                <li>
+                    <a href="#cryptography-" aria-label="Cryptography 🟩">Cryptography 🟩</a></li>
+                <li>
+                    <a href="#classification-of-cryptoattacks-3--" aria-label="Classification of cryptoattacks 3 🟩-">Classification of cryptoattacks 3 🟩-</a></li></ul>
+                </li>
+                <li>
+                    <a href="#symmetric-cryptography" aria-label="Symmetric cryptography">Symmetric cryptography</a><ul>
+                        
+                <li>
+                    <a href="#on-security-of-cipher" aria-label="On security of cipher">On security of cipher</a></li>
+                <li>
+                    <a href="#kerckhoffs-principle-1883" aria-label="Kerckhoffs’ Principle 1883">Kerckhoffs’ Principle 1883</a><ul>
+                        
+                <li>
+                    <a href="#enunciato-kerckhoff--" aria-label="Enunciato kerckhoff 🟩-">Enunciato kerckhoff 🟩-</a></li></ul>
+                </li>
+                <li>
+                    <a href="#substitution-cipher" aria-label="Substitution cipher">Substitution cipher</a><ul>
+                        
+                <li>
+                    <a href="#attacco-di-frequenza-" aria-label="Attacco di frequenza 🟩">Attacco di frequenza 🟩</a></li>
+                <li>
+                    <a href="#attacco-brute-force-" aria-label="Attacco brute-force 🟩">Attacco brute-force 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#vigen%c3%a8re-cipher" aria-label="Vigenère Cipher">Vigenère Cipher</a><ul>
+                        
+                <li>
+                    <a href="#esempio-intuitive-vigen%c3%a8re-" aria-label="Esempio intuitive Vigenère 🟩">Esempio intuitive Vigenère 🟩</a></li>
+                <li>
+                    <a href="#tentativo-formalizzazione-" aria-label="Tentativo formalizzazione 🟩">Tentativo formalizzazione 🟩</a></li>
+                <li>
+                    <a href="#attacco-a-vigen%c3%a8re-" aria-label="Attacco a Vigenère 🟩">Attacco a Vigenère 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#rotor-machines" aria-label="Rotor machines">Rotor machines</a><ul>
+                        
+                <li>
+                    <a href="#main-idea-of-rotors--" aria-label="Main idea of rotors 🟨-">Main idea of rotors 🟨-</a></li>
+                <li>
+                    <a href="#esempi-storici-di-rotor-machines" aria-label="Esempi storici di rotor machines">Esempi storici di rotor machines</a></li>
+                <li>
+                    <a href="#note-sulla-lunghezza-della-chiave-non-fare" aria-label="Note sulla lunghezza della chiave (non fare)">Note sulla lunghezza della chiave (non fare)</a></li>
+                <li>
+                    <a href="#segretezza-perfetta--" aria-label="Segretezza perfetta 🟩-">Segretezza perfetta 🟩-</a></li>
+                <li>
+                    <a href="#segretezza-perfetta-e-lunghezza-chiave-" aria-label="Segretezza perfetta e lunghezza chiave 🟨&#43;">Segretezza perfetta e lunghezza chiave 🟨+</a></li>
+                <li>
+                    <a href="#unconditional-security-" aria-label="Unconditional security 🟩">Unconditional security 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#affine-and-caesar-cipher" aria-label="Affine and Caesar Cipher">Affine and Caesar Cipher</a><ul>
+                        
+                <li>
+                    <a href="#definizione-shift-cipher-" aria-label="Definizione shift cipher 🟩">Definizione shift cipher 🟩</a></li>
+                <li>
+                    <a href="#definizione-affine-cipher-" aria-label="Definizione affine cipher 🟩">Definizione affine cipher 🟩</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#aritmetica-modulare" aria-label="Aritmetica modulare">Aritmetica modulare</a><ul>
+                        
+                <li>
+                    <a href="#sul-modulo-" aria-label="Sul modulo 🟩">Sul modulo 🟩</a></li>
+                <li>
+                    <a href="#anelli-" aria-label="Anelli 🟩">Anelli 🟩</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 21
+Ultima modifica: November 29, 2022 10:56 AM
+Primo Abbozzo: November 1, 2022 7:59 AM
+Stato: 🌕🌕🌕🌕🌕
+Studi Personali: No</p>
+<h1 id="introduzione-a-crittografia">Introduzione a Crittografia<a hidden class="anchor" aria-hidden="true" href="#introduzione-a-crittografia">#</a></h1>
+<p>al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.</p>
+<h2 id="classifications-and-definitions">Classifications and definitions<a hidden class="anchor" aria-hidden="true" href="#classifications-and-definitions">#</a></h2>
+<p>Classification nowadays as many many applications like, and it’s a increasing important field</p>
+<img src="/images/notes/image/universita/ex-notion/Introduzione/Untitled.png" alt="image/universita/ex-notion/Introduzione/Untitled">
+<h3 id="cryptology-2-">Cryptology (2) 🟩<a hidden class="anchor" aria-hidden="true" href="#cryptology-2-">#</a></h3>
+<p>La branca comunemente riferita come crittografia è divisa principalmente in due campi <strong>crittografia e cryptanalysis</strong> in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale.</p>
+<h3 id="relazione-con-sicurezza-informatica-">Relazione con Sicurezza informatica 🟩<a hidden class="anchor" aria-hidden="true" href="#relazione-con-sicurezza-informatica-">#</a></h3>
+<p>Questo campo si può considerare una piccola branca della sicurezza informatica, che è praticamente necessaria per la sicurezza, però allo stesso tempo non può essere utilizzata da sola, ha bisogno anche di sistemi operativi sicuri, hardware sicuro etc…</p>
+<h3 id="cryptography-">Cryptography 🟩<a hidden class="anchor" aria-hidden="true" href="#cryptography-">#</a></h3>
+<p>Questo è quello che ci interessa, ed è ciò che il corso tratta.</p>
+<ol>
+<li>Symmetrical ciphers</li>
+<li>Asymmetrical ciphers</li>
+<li>Protocols</li>
+</ol>
+<h3 id="classification-of-cryptoattacks-3--">Classification of cryptoattacks 3 🟩-<a hidden class="anchor" aria-hidden="true" href="#classification-of-cryptoattacks-3--">#</a></h3>
+<p>We define <strong>attack vector</strong> as a possible way to attack a cipher</p>
+<ol>
+<li>Classical Cryptanalisys
+<ol>
+<li>Bruteforce</li>
+<li>Analytical attacks (Properties of the Cipher, useful to decrypt it)</li>
+</ol>
+</li>
+<li>Social engineering (like a people that gives you the key) (phishing)</li>
+<li>Implementation attacks (Attack hardware to discover key)
+<ol>
+<li>Side channel analysis (eg. power consumption related to the key).</li>
+</ol>
+</li>
+</ol>
+<p>Ovviamente questi sono molto diversi rispetto ai reali (nella vita reale ci sono molti attack vectors), secondo la Jocelyne, sembra che crypto sembra una scienza perché definisci metodi di risoluzione di errore per singolo attack vector, che puoi dimostrare come solido, ma nella vita reale credo che hai bisogno che sia valido per ogni tipologia di attacco (ne basta una per distruggerti e ritrovare la chiave diciamo).</p>
+<h2 id="symmetric-cryptography">Symmetric cryptography<a hidden class="anchor" aria-hidden="true" href="#symmetric-cryptography">#</a></h2>
+<p>Vogliamo cercare di trovare un modo di comunicare attraverso un canale di comunicazione insicuro, questo è il problema principale di questa critografia.</p>
+<p>Canali insicuri possono essere per esempio</p>
+<ol>
+<li>Internet</li>
+<li>Wifi</li>
+</ol>
+<ul>
+<li>
+<p>Setting classico del problema di comunicazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione/Untitled 2.png" alt="image/universita/ex-notion/Introduzione/Untitled 2">
+<p>Allora introduco uno step di criptazione e decrittazione fra il pirmo e l’ultimo comunicante.</p>
+</li>
+</ul>
+<img src="/images/notes/Introduzione a crittografia-20240222094332860.webp" alt="Introduzione a crittografia-20240222094332860">
+Questo è un scenario leggermente più generale, in cui nel mezzo c'è un attaccante, solitamente un *eve* o altro che ha accesso a $c$ e prova a decrittare.
+<h3 id="on-security-of-cipher">On security of cipher<a hidden class="anchor" aria-hidden="true" href="#on-security-of-cipher">#</a></h3>
+<p>One important note is that the security of the cipher is <strong>not</strong> enough to mantain a security of the algorithm. But experience says it’s not!  (Ma nonostante questo è stato fatto per centinaia e centinaia di anni, ora sappiamo che è cosa stupida).</p>
+<p>And a bad thing about this is that there is no clear way to know if a cipher is secure or not, usually what is done is that the algorithm is made public and if nobody knows how to break it is considered secure.</p>
+<p>And it’s very easy to build something that is breakable!!!</p>
+<h3 id="kerckhoffs-principle-1883">Kerckhoffs’ Principle 1883<a hidden class="anchor" aria-hidden="true" href="#kerckhoffs-principle-1883">#</a></h3>
+<h4 id="enunciato-kerckhoff--">Enunciato kerckhoff 🟩-<a hidden class="anchor" aria-hidden="true" href="#enunciato-kerckhoff--">#</a></h4>
+<p>This is the most important principle of the course!</p>
+<blockquote>
+<p>A cryptosystem should be secure even if the attacker (oscar in this case) knows all the details about the system, with the exception of the secret key.</p>
+</blockquote>
+<p>How can we make sense of this? This is counterintuitive. Maybe because in the past there were like two keys, the key and the algorithm itself, seems like that this setting didn’t help to have a better security.
+But historically speaking, this principle seems to hold.</p>
+<h3 id="substitution-cipher">Substitution cipher<a hidden class="anchor" aria-hidden="true" href="#substitution-cipher">#</a></h3>
+<p>Vedere <a href="/content/notes/classical-cyphers/#affine-and-caesar-cipher">#Affine and Caesar Cipher</a> per definizione formale.</p>
+<p>This was one of the oldest ciphers in history. (Old and stupid ciphers by the Professor).</p>
+<ol>
+<li>Historical ciphers</li>
+<li>Operates on letters (solitamente delle permutazioni)</li>
+<li>Replace ever plaintext letter by a fixed ciphertext letter, this was the main idea.</li>
+</ol>
+<p><strong>Examples</strong></p>
+<ol>
+<li>Caesar Cipher, replace with a shift (bruteforce easy attack! The keyspace is very small)</li>
+<li>Function that replaces each letterwith another letter with bijective.
+<ol>
+<li><strong>bruteforce</strong>, it’s too big for a braindead bruteforce to attack this function. 26!</li>
+<li><strong>Frequency attack</strong> because in the language the letters are not equally distributed! And this works. (when the most frequent letter is discovered a big part of ciphertext is found!)
+And a bad thing is that same letter to same letter (frequency attack)!!!!</li>
+</ol>
+</li>
+</ol>
+<h4 id="attacco-di-frequenza-">Attacco di frequenza 🟩<a hidden class="anchor" aria-hidden="true" href="#attacco-di-frequenza-">#</a></h4>
+<p>In teoria la chiave è una permutazione (nel caso di <strong>vigenere</strong>, quindi avremmo $26! \approx 2^{88}$ di keysize, però un attacco di frequenza è troppo forte per questo genere di cifrari.
+<img src="/images/notes/Introduzione a crittografia-20240222100147432.webp" width="550" alt="Introduzione a crittografia-20240222100147432">
+Fatto per la prima volta da Al-Kindi 800 AD.</p>
+<h4 id="attacco-brute-force-">Attacco brute-force 🟩<a hidden class="anchor" aria-hidden="true" href="#attacco-brute-force-">#</a></h4>
+<p>Un modo semplice, ma non molto pratico per fare questa definizione è la corrente:
+dati una coppia $M, C$ di plaintext e ciphertext, un attacco bruteforce su un insieme di chaivi $K = \left{ k_{1}, k_{2}, \dots \right}$ consiste nel provare almeno una chiave (solitamente unica) per cui vale
+$$
+D(C, k_{i}) = M
+$$
+Ossia la chiave che usando $D$ abbiamo il plaintext.
+Solitamente questo valore non si può calcolare, perché avremmo bisogno di $M$, quindi abbiamo il problema dei <strong>falsi positivi</strong> all&rsquo;interno del nostro spazio di interesse. (vedere sezione 5.2 di <a href="http://link.springer.com/10.1007/978-3-642-04101-3">(Paar &amp; Pelzl 2010)</a>)</p>
+<h3 id="vigenère-cipher">Vigenère Cipher<a hidden class="anchor" aria-hidden="true" href="#vigenère-cipher">#</a></h3>
+<h4 id="esempio-intuitive-vigenère-">Esempio intuitive Vigenère 🟩<a hidden class="anchor" aria-hidden="true" href="#esempio-intuitive-vigenère-">#</a></h4>
+<img src="/images/notes/Introduzione a crittografia-20240222100456865.webp" alt="Introduzione a crittografia-20240222100456865">
+<h4 id="tentativo-formalizzazione-">Tentativo formalizzazione 🟩<a hidden class="anchor" aria-hidden="true" href="#tentativo-formalizzazione-">#</a></h4>
+<p>Consideriamo una chiave $k = (k_{1}, k_{2}, \dots, k_{l})$
+Ognuno equivalente al shift presente in cesare <a href="/content/notes/classical-cyphers/#affine-and-caesar-cipher">#Affine and Caesar Cipher</a>.
+Ripetiamo la chiave più volte e cifriamo col shift cipher corrispondente ogni lettera. Questo fa nascere l&rsquo;idea dei rotori senza problemi!</p>
+<h4 id="attacco-a-vigenère-">Attacco a Vigenère 🟩<a hidden class="anchor" aria-hidden="true" href="#attacco-a-vigenère-">#</a></h4>
+<ul>
+<li>Guess the length of the key l using some methods</li>
+<li>Divide the cyphertext into l shift cipher encryptions</li>
+<li>Use frequency analysis on each shift cipher
+È una specie di algoritmo, e si riutilizza la vulnerabilità presente sui shift ciphers normali.
+L&rsquo;attacco a frequenza diventa più difficile rispetto a Cesare, ma ancora possibile (molti ciphers indipendenti).</li>
+</ul>
+<p>Per il primo steps un plaintext attack è facilissimo per esempio!
+Qualcuno ha fatto la domanda su come scoprire la lunghezza chiave alla prof. La prof non sa come attaccarlo, e ha detto solo bruteforce su lunghezza. Poi ha citato un caso di plain-text senza chiamarlo plain-text. Ma è stata molto vaga. Bad. Ha detto anche entrare nel sistema per trovarlo&hellip; lol.</p>
+<h3 id="rotor-machines">Rotor machines<a hidden class="anchor" aria-hidden="true" href="#rotor-machines">#</a></h3>
+<h4 id="main-idea-of-rotors--">Main idea of rotors 🟨-<a hidden class="anchor" aria-hidden="true" href="#main-idea-of-rotors--">#</a></h4>
+<p>Queste macchine sono nate principalmente nel secolo scorso, da queste idee</p>
+<ul>
+<li>Multiple rounds of substitution, encryption consists of mapping a letter many times ○ M</li>
+<li>Mechanical/electrical wiring to automate the encryption/decryption process</li>
+</ul>
+<p>La meccanizzazione è stata risolta dal punto di vista del red team da Turing, che ha dato un contributo fondamentale <a href="https://academic.oup.com/mind/article/LIX/236/433/986238">(Turing 1950)</a>.</p>
+<h4 id="esempi-storici-di-rotor-machines">Esempi storici di rotor machines<a hidden class="anchor" aria-hidden="true" href="#esempi-storici-di-rotor-machines">#</a></h4>
+<img src="/images/notes/Introduzione a crittografia-20240222101158992.webp" alt="Introduzione a crittografia-20240222101158992">
+<img src="/images/notes/Introduzione a crittografia-20240222101359665.webp" alt="Introduzione a crittografia-20240222101359665">
+I moderni simili sono DES e AES, li tratteremo un po' più avanti.
+### Security of the Key
+<h4 id="note-sulla-lunghezza-della-chiave-non-fare">Note sulla lunghezza della chiave (non fare)<a hidden class="anchor" aria-hidden="true" href="#note-sulla-lunghezza-della-chiave-non-fare">#</a></h4>
+<p>Andiamo in questa parte a misurare la sicurezza di una chiave di fronte agli attacchi. Una prima nota molto importante è il fatto che questa misura della lunghezza ha senso solamente quando si parla di bruteforce, infatti la lunghezza della chiave non può difendere contro side-channel oppure frequency-attacks.</p>
+<ol>
+<li>La lunghezza della chiave per cifrari simmetrici e asimmetrici cambia.</li>
+</ol>
+<img src="/images/notes/image/universita/ex-notion/Introduzione/Untitled 3.png" alt="image/universita/ex-notion/Introduzione/Untitled 3">
+<h4 id="segretezza-perfetta--">Segretezza perfetta 🟩-<a hidden class="anchor" aria-hidden="true" href="#segretezza-perfetta--">#</a></h4>
+<p>Secondo Shannon 1949.
+Consideriamo un cifrario $E, D$ su $K, M, C$, allora si dice che si ha perfect secrecy quando
+$\forall m_{0},m_{1} \in M$ tale per cui $\mid m_{0} \mid = \mid m_{1} \mid$ , dove $k$ è presa uniforme. e $\forall c \in C$
+$$
+\mathbb{P}(E(k, m_{0}) = c) = \mathbb{P}(E(k, m_{1}) = c)
+$$</p>
+<p>Detto in altre parole, se ho un certo cipher-text, ho la stessa probabilità di avere qualunque messaggio possibile di una certa lunghezza rispetto al messaggio iniziale.  Quando succede questo
+there are no computational assumptions about the attacker, this is why this is also called <strong>unconditional security or perfect security.</strong></p>
+<p>Il cyphertext potrebbe essere <em>qualunque messaggio!</em>, cioè non posso attaccare il $c$ sapendo solo $c$ con la segretezza perfetta.
+Altri autori come Stinson definisco tale per cui $P(E|M) = P(E)$.
+Attualmente non mi è chiaro se le due definizioni sono equivalenti.</p>
+<p>L&rsquo;idea è <strong>limitare qualunque informazione</strong> che si può trovare dalla chiave come</p>
+<ol>
+<li>Non posso ritrovare la chiave dai processi di $E$ e $D$</li>
+<li>Non posso ritrovare il plain-text da ciphertext.
+Una definizione equivalente sembra essere:
+dato un $M$ deve essere che $\forall e \in E, P(e|M) = P(e) \not = 0$ (<a href="https://www3.cs.stonybrook.edu/~omkant/L02-short.pdf">https://www3.cs.stonybrook.edu/~omkant/L02-short.pdf</a>)
+Questo significa che il $e$ è <strong>indipendente da M</strong> quando non si conosce la chiave, nel senso che non riesci prendere nessuna informazione (se inverti con bayes dovresti avere stesso valore).</li>
+</ol>
+<p>Si può dimostrare che la seconda definizione, più l&rsquo;ipotesi che $\lvert K \rvert = \lvert P \rvert = \lvert C \rvert$ è equivalente alla prima (il contrario dovrebbe essere facile!?).</p>
+<h4 id="segretezza-perfetta-e-lunghezza-chiave-">Segretezza perfetta e lunghezza chiave 🟨+<a hidden class="anchor" aria-hidden="true" href="#segretezza-perfetta-e-lunghezza-chiave-">#</a></h4>
+<p>Si può dimostrare che per avere segretezza perfetta è necessario avere</p>
+<p>$$
+\lvert K \rvert  \geq \lvert M \rvert
+$$
+Questa proprietà rende cifrari come <a href="//notes/otp-and-stream-ciphers">OTP</a> molto difficili da usare nella pratica, perché non riusciamo a comunicare questo valore, che tra l&rsquo;altro dovrebbe essere utilizzato una singola volta.</p>
+<p><strong>Proof:</strong>
+<a href="https://cs.ioc.ee/yik/schools/win2006/massey/slides1.pdf">https://cs.ioc.ee/yik/schools/win2006/massey/slides1.pdf</a>
+<img src="/images/notes/Introduzione a crittografia-20240227093802054.webp" alt="Introduzione a crittografia-20240227093802054">
+Dove $H$ è l&rsquo;informazione Shannon. quindi $H(P) = \sum_{x} P(x)\log\left( \frac{1}{P(x)} \right)$, e la lunghezza è strettamente dipendente dall&rsquo;entropia.
+Questo Shannon lo ha dimostrato nel 1949.</p>
+<p>Una altra dimo è su <a href="https://books.google.it/books/about/Cryptography.html?id=FAPLBQAAQBAJ">(Stinson 2005)</a> 3.3, abbastanza ez.</p>
+<h4 id="unconditional-security-">Unconditional security 🟩<a hidden class="anchor" aria-hidden="true" href="#unconditional-security-">#</a></h4>
+<img src="/images/notes/image/universita/ex-notion/Stream Ciphers/Untitled 5.png" alt="image/universita/ex-notion/Stream Ciphers/Untitled 5">
+<p>La nota importante è il fatto che sia <strong>infinito</strong>, anche se ho il tempo dell’universo o maggiore non posso mai rompere un cifrario sicuro incondizionalmente. (molti cifrari sicuri nella pratica quindi non sono sicuri sequendo questa definizione).
+Questo dovrebbe essere equivalente alla definizione di sopra si segretezza perfetta.</p>
+<p>Come vedremo c’è un cifrario teoricamente sicuro, ma nella pratica di poco utilizzo</p>
+<h3 id="affine-and-caesar-cipher">Affine and Caesar Cipher<a hidden class="anchor" aria-hidden="true" href="#affine-and-caesar-cipher">#</a></h3>
+<h4 id="definizione-shift-cipher-">Definizione shift cipher 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-shift-cipher-">#</a></h4>
+<p>Sono definizioni 1.4.3 presenti su <a href="http://link.springer.com/10.1007/978-3-642-04101-3">(Paar &amp; Pelzl 2010)</a>.
+<strong>Shift Cipher</strong></p>
+<p>Siano $x,y,k \in \mathbb{Z}<em>{26}$
+Allora l&rsquo;encryption è
+$$
+e</em>{k}(x) \equiv x + k, \mod 26
+$$
+Mentre il decryption è
+$$
+d_{k}(y) = y - k \mod  26
+$$</p>
+<h4 id="definizione-affine-cipher-">Definizione affine cipher 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-affine-cipher-">#</a></h4>
+<p><strong>Affine cipher</strong>
+Siano $x, y, a, b \in \mathbb{Z}<em>{26}$
+Encryption:
+$$
+e</em>{k}(x) = y \equiv a\cdot x + b \mod 26
+$$
+Decription
+$$
+d_{k}(y) = x \equiv a^{-1}\cdot(y - b) \mod 26
+$$
+Con la restrizione del fatto che affinché $a$ sia invertibile dobbiamo avere $gcd(a, 26) = 1$</p>
+<h2 id="aritmetica-modulare">Aritmetica modulare<a hidden class="anchor" aria-hidden="true" href="#aritmetica-modulare">#</a></h2>
+<p>Guardare <a href="//notes/algebra-modulare">Algebra modulare</a>, perché è praticamente quella stessa roba, molto importante crittografia, ma andiamo a trattare in un altro modo</p>
+<h3 id="sul-modulo-">Sul modulo 🟩<a hidden class="anchor" aria-hidden="true" href="#sul-modulo-">#</a></h3>
+<ol>
+<li>Il resto non è unico! ci possono essere molte cose che soddisfano quelle cose</li>
+<li>Il resto si può considerare una <strong>classe di equivalenza</strong>.</li>
+</ol>
+<h3 id="anelli-">Anelli 🟩<a hidden class="anchor" aria-hidden="true" href="#anelli-">#</a></h3>
+<p>Un anello è un insieme di elementi su cui sono definite certe proprietà di interesse.</p>
+<ol>
+<li>Esiste somma e prodotto e sono chiusi. E ci sono molte altre cose…</li>
+</ol>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione/Untitled 6.png" alt="image/universita/ex-notion/Introduzione/Untitled 6">
+<p>L’inverso non ci deve stare</p>
+</li>
+</ul>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Turing <a href="https://academic.oup.com/mind/article/LIX/236/433/986238">“I.—COMPUTING MACHINERY AND INTELLIGENCE”</a> Mind Vol. LIX(236), pp. 433&ndash;460 1950</p>
+<p>[2] Paar &amp; Pelzl <a href="http://link.springer.com/10.1007/978-3-642-04101-3">“Understanding Cryptography: A Textbook for Students and Practitioners”</a> Springer 2010</p>
+<p>[3] Stinson <a href="https://books.google.it/books/about/Cryptography.html?id=FAPLBQAAQBAJ">“Cryptography: Theory and Practice, Third Edition”</a> CRC Press 2005</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/%EF%B8%8Fcybersecurity/">🛡️Cybersecurity</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on x"
+            href="https://x.com/intent/tweet/?text=Classical%20Cyphers&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f&amp;hashtags=%f0%9f%9b%a1%ef%b8%8fcybersecurity">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f&amp;title=Classical%20Cyphers&amp;summary=Classical%20Cyphers&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f&title=Classical%20Cyphers">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on whatsapp"
+            href="https://api.whatsapp.com/send?text=Classical%20Cyphers%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on telegram"
+            href="https://telegram.me/share/url?text=Classical%20Cyphers&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Classical Cyphers on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Classical%20Cyphers&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fclassical-cyphers%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

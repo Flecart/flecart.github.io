@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Automi e Regexp | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 70 Ripasso: June 7, 2023 Ultima modifica: June 4, 2023 4:06 PM Primo Abbozzo: October 14, 2022 2:19 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Domande
+Automi e Regexp Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all&rsquo;interno di questo linguaggio e questo è fatto con i linguaggi regolari.
+Introduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti
+Identificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/automi-e-regexp/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/automi-e-regexp/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Automi e Regexp" />
+<meta property="og:description" content="Ripasso Prox: 70 Ripasso: June 7, 2023 Ultima modifica: June 4, 2023 4:06 PM Primo Abbozzo: October 14, 2022 2:19 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Domande
+Automi e Regexp Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all&rsquo;interno di questo linguaggio e questo è fatto con i linguaggi regolari.
+Introduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti
+Identificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/automi-e-regexp/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="Automi e Regexp"/>
+<meta name="twitter:description" content="Ripasso Prox: 70 Ripasso: June 7, 2023 Ultima modifica: June 4, 2023 4:06 PM Primo Abbozzo: October 14, 2022 2:19 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Domande
+Automi e Regexp Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all&rsquo;interno di questo linguaggio e questo è fatto con i linguaggi regolari.
+Introduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti
+Identificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Automi e Regexp",
+      "item": "http://localhost:1313/content/notes/automi-e-regexp/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Automi e Regexp",
+  "name": "Automi e Regexp",
+  "description": "Ripasso Prox: 70 Ripasso: June 7, 2023 Ultima modifica: June 4, 2023 4:06 PM Primo Abbozzo: October 14, 2022 2:19 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Domande\nAutomi e Regexp Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all\u0026rsquo;interno di questo linguaggio e questo è fatto con i linguaggi regolari.\nIntroduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti\nIdentificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token.",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 70 Ripasso: June 7, 2023 Ultima modifica: June 4, 2023 4:06 PM Primo Abbozzo: October 14, 2022 2:19 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Domande\nAutomi e Regexp Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all’interno di questo linguaggio e questo è fatto con i linguaggi regolari.\nIntroduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti\nIdentificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token.\nLessema è una istanza di un particolare pattern\nEsempio di scan\nDi solito viene storato come puntatore alla tabella dei simboli\nEspressioni regolari Definizione 🟩 Slide definizione espressioni regolari\nDisambiguazione della grammatica\nEsempio espressione regolare\nLinguaggio generato da regexp 🟩 Per capire questa parte è importante avere in mente le operazioni sui linguaggio definiti in Descrizione linguaggio\nSlide\nLinguaggio regolare 🟩 Definizione linguaggio regolare\nOgni linguaggio finito è un linguaggio regolare questo è una proposizione che lega fortemente i linguaggi (utilizzati poi veramente per l’implementazione) (basta fare l’unione!)\nEsempio linguaggio finito generato da linguaggio regolare\nEsempi di espressioni regolari infiniti\nOltre ai classici operatori definiti in precedena per questa sezione aggiungiamo\nRipetizione-positiva, Possibilità, Elenco\nDefinizioni regolari 🟩- Le definizioni regolari ci aiutano a creare una struttura del token di cui dobbiamo fare lo scanning.\nIn pratica andiamo a creare delle definizioni che rendono più facile la descrizione di un pattern con regexp.\nSlide\nEsempi\nEquivalenza regexp 🟩 Esempi di equivalenze\nQueste equivalenze non sono sempre facili da dimostrare\nAutomi In questa parte si fa una descrizione molto generale di cosa siano gli automi.\nCaratteristiche (3) 🟩 Slide\nMemoria finita (dato da un numero di stati) Input una stringa da riconoscere Output è solamente un singolo bit (si oppure no) Descrizione e funzionamento 🟩 Slide\nDescrizione\nTestina sul primo carattere in input. Su stato q0 Funzionamento\nIl funzionamento dell’automa è molto semplice, esegue un semplice algoritmo:\nLeggi il carattere attuale, se esiste una transizione etichettata con quanto letto spostati secondo la regola di quel carattere. Dopo aver finito di leggere la stringa, se è in uno stato buono restituisci 1, altrimenti 0 Se è bloccato in uno stato ritorna 0 Diagrammi di transizione 🟩 I diagrammi di transizione sono utili per definire in modo grafico cosa fa l’espressione regolare\nSlide\nAutomi finiti non deterministici (NFA) Definizione (5) 🟩 Slide\nPossiamo definire gli automi non deterministici come una quintupla di\n$$ (\\Sigma, Q, q_0 \\in Q, F \\subseteq Q, \\delta) \\ \\delta : Q \\times (\\Sigma \\cup \\varepsilon) \\to P(Q) $$\nAlbeto dei simboli di input Stati possibili Stato iniziale Stati finali (accettati) Funzioni di transizione, che ha come codominio l’insieme delle parti di Q Alla fine, per scopi didattici si utilizza sempre il diagramma di transizione. La differenza principale con gli automi a stati finiti è che posso avere lo stesso label di transizione per singolo stato\nCaratteristiche (2) 🟩 Facili da realizzare (esiste quasi una bigezione credo fra NDA ed espressione regolare) Inefficienti (backtracking, e fallibile), principalmente causato dal suo non determinismo Stato finale accettato 🟩 — Slide\nQuesto è una slide molto importante per definire il concetto di stringa accettata/riconosciuta. Praticamente posso affermare che una stringa è riconosciuto da questo automa finito non-deterinistico se anche un solo cammino da q0 a un qualunque stato accettato.\nOltre questo voglio andare a definire in modo formale il concetto di mossa, o cammino in un diagramma di rappresentazione per un automa finito.\nDescrizione istantanea, mossa, cammino, stringa accettata\nIndico che uno stato $q$ è raggiungibile da uno stato $s$, con il simbolo $\\vdash$, ossia $s \\vdash v$, questo è possibile solo se sto leggendo una stringa che ha come relazione una stringa buona, ma questo pezzo è più chiaro negli appunti quindi ti invito di leggere dalì con la rappresentazione logica classica.\nLa chiusura riflessiva e transitiva di questo concetto di mossa è indicata con $\\vdash ^*_N$, N è il nome di questo automa, dovrebbe essere ancora sopra.\nTODO: da definire bene cosa sia la mossa e il cammino!\nLinguaggio riconosciuto da NDA e equivalenza 🟩 Slide\n$$ L[N] = { w \\in \\Sigma^* | \\exists q \\in F, (q_0, w) \\vdash ^*_N (q , \\varepsilon)} $$\nLa parte di sopra è la definizione di un linguaggio riconosciuto da un automa, è un modo molto compatto per esprire l’esistenza di un cammino come sopra.\nInoltre possiamo definire il concetto di equivalenza fra NDA che è quando il linguaggio riconosciuto è esattamente lo stesso.\nDefinizione di linguaggio riconosciuto con e-closure 🟨+ Linguaggio riconosciuto, scritto in modo più elegante, con epsilon closure\nCon la definizione di delta cappuccio possiamo definire che un linguaggio in questo modo:\n$$ w \\in L[N] \\iff \\exists p \\in F : p \\in \\hat{\\delta}(q_0, w) $$\nNFA da espressioni regolari (!!!) (duplicato) 🟩 Questo è un teorema molto importante per rappresentare una sorta di equivalenza fra linguaggi regolari e NFA.\nEnunciato\nHint dimostrazione\nInduzione strutturale sulla sintassi BNF delle espressioni regolari, andremo a dimostrare che posso comporre NFA che alla fine riescono a riconoscere il linguaggio regolare\nConsigli di studio\nImpararsi i metodi di conversione di ogni parte della sintassi in NFA, poi li componi come dei lego e sei apposto\nDimostrazione\nAutomi finiti deterministici (DFA) Definizione 🟩 Slide\nDifferenze rispetto NDA\nPrincipalmente la definizione è uguale agli automi non deterministici l’unica cosa che cambia è il delta che ora è definito come\n$$ \\delta: Q \\times \\Sigma \\to Q $$\nNon c’è più l’insieme delle parti, magari dopo vediamo come questi automi sono equivalenti, ma c’è una esplosione esponenziale al momento di conversione da deterministico a non deterministico.\nAlgoritmo creazione DFA da NFA 🟩 L’algoritmo di creazione\nEsempio di utilizzo dell’algoritmo (lezione 6)\ncon $F$ l’insieme degli stati finali della NFA.\nDFA equivalente a NFA (non chiede) 🟨 Dimostrazione both, e osservazioni in modo informale\nSlide →\nQuesta proposizione si può vedere dalla definizione\nSlide ←\nC’è veramente in questo passo una esplosione esponenziale perché il numero degli stati diventa esponenzialmente tanto.\nDimostrazione, induzione, molto formale.\nEsempio di conversione\nepsilon-closure 🟩 Slide\nAlgoritmo per epsilon-closure\nQuesto concetto di chiusura Epsilon ci racchiude il concetto degli stati raggiungibili in un NFA senza leggere nessun input.\n",
+  "wordCount" : "1051",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/automi-e-regexp/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Automi e Regexp
+    </h1>
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#automi-e-regexp" aria-label="Automi e Regexp">Automi e Regexp</a><ul>
+                        
+                <li>
+                    <a href="#introduzione-a-analizzatori-lessicali" aria-label="Introduzione a analizzatori lessicali">Introduzione a analizzatori lessicali</a><ul>
+                        
+                <li>
+                    <a href="#token-" aria-label="Token 🟩">Token 🟩</a></li>
+                <li>
+                    <a href="#pattern-e-lessema-" aria-label="Pattern e Lessema 🟩">Pattern e Lessema 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#espressioni-regolari" aria-label="Espressioni regolari">Espressioni regolari</a><ul>
+                        
+                <li>
+                    <a href="#definizione-" aria-label="Definizione 🟩">Definizione 🟩</a></li>
+                <li>
+                    <a href="#linguaggio-generato-da-regexp-" aria-label="Linguaggio generato da regexp 🟩">Linguaggio generato da regexp 🟩</a></li>
+                <li>
+                    <a href="#linguaggio-regolare-" aria-label="Linguaggio regolare 🟩">Linguaggio regolare 🟩</a></li>
+                <li>
+                    <a href="#definizioni-regolari--" aria-label="Definizioni regolari 🟩-">Definizioni regolari 🟩-</a></li>
+                <li>
+                    <a href="#equivalenza-regexp-" aria-label="Equivalenza regexp 🟩">Equivalenza regexp 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#automi" aria-label="Automi">Automi</a><ul>
+                        
+                <li>
+                    <a href="#caratteristiche-3-" aria-label="Caratteristiche (3) 🟩">Caratteristiche (3) 🟩</a></li>
+                <li>
+                    <a href="#descrizione-e-funzionamento-" aria-label="Descrizione e funzionamento 🟩">Descrizione e funzionamento 🟩</a></li>
+                <li>
+                    <a href="#diagrammi-di-transizione-" aria-label="Diagrammi di transizione 🟩">Diagrammi di transizione 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#automi-finiti-non-deterministici-nfa" aria-label="Automi finiti non deterministici (NFA)">Automi finiti non deterministici (NFA)</a><ul>
+                        
+                <li>
+                    <a href="#definizione-5-" aria-label="Definizione (5) 🟩">Definizione (5) 🟩</a></li>
+                <li>
+                    <a href="#caratteristiche-2-" aria-label="Caratteristiche (2) 🟩">Caratteristiche (2) 🟩</a></li>
+                <li>
+                    <a href="#stato-finale-accettato--" aria-label="Stato finale accettato 🟩 —">Stato finale accettato 🟩 —</a></li>
+                <li>
+                    <a href="#linguaggio-riconosciuto-da-nda-e-equivalenza-" aria-label="Linguaggio riconosciuto da NDA e equivalenza 🟩">Linguaggio riconosciuto da NDA e equivalenza 🟩</a></li>
+                <li>
+                    <a href="#definizione-di-linguaggio-riconosciuto-con-e-closure-" aria-label="Definizione di linguaggio riconosciuto con e-closure 🟨&#43;">Definizione di linguaggio riconosciuto con e-closure 🟨+</a></li>
+                <li>
+                    <a href="#nfa-da-espressioni-regolari--duplicato-" aria-label="NFA da espressioni regolari (!!!) (duplicato) 🟩">NFA da espressioni regolari (!!!) (duplicato) 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#automi-finiti-deterministici-dfa" aria-label="Automi finiti deterministici (DFA)">Automi finiti deterministici (DFA)</a><ul>
+                        
+                <li>
+                    <a href="#definizione--1" aria-label="Definizione 🟩">Definizione 🟩</a></li>
+                <li>
+                    <a href="#algoritmo-creazione-dfa-da-nfa-" aria-label="Algoritmo creazione DFA da NFA 🟩">Algoritmo creazione DFA da NFA 🟩</a></li>
+                <li>
+                    <a href="#dfa-equivalente-a-nfa-non-chiede-" aria-label="DFA equivalente a NFA (non chiede) 🟨">DFA equivalente a NFA (non chiede) 🟨</a></li>
+                <li>
+                    <a href="#epsilon-closure-" aria-label="epsilon-closure 🟩">epsilon-closure 🟩</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 70
+Ripasso: June 7, 2023
+Ultima modifica: June 4, 2023 4:06 PM
+Primo Abbozzo: October 14, 2022 2:19 PM
+Stato: 🌕🌕🌕🌕🌗
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<ul>
+<li>
+<p>Domande</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled">
+</li>
+</ul>
+<h1 id="automi-e-regexp">Automi e Regexp<a hidden class="anchor" aria-hidden="true" href="#automi-e-regexp">#</a></h1>
+<p>Per l’analisi lessicale vogliamo cercare di ricordare le <strong>parole legali</strong> all&rsquo;interno di questo linguaggio e questo è fatto con i linguaggi regolari.</p>
+<h2 id="introduzione-a-analizzatori-lessicali">Introduzione a analizzatori lessicali<a hidden class="anchor" aria-hidden="true" href="#introduzione-a-analizzatori-lessicali">#</a></h2>
+<h3 id="token-">Token 🟩<a hidden class="anchor" aria-hidden="true" href="#token-">#</a></h3>
+<p>Struttura del token è fatto da due parti</p>
+<ul>
+<li>Identificatore della classe del token</li>
+<li>Identificatore del valore del token</li>
+<li>Pattern e lessema ci sono direi boh</li>
+</ul>
+<h3 id="pattern-e-lessema-">Pattern e Lessema 🟩<a hidden class="anchor" aria-hidden="true" href="#pattern-e-lessema-">#</a></h3>
+<p>I pattern sono una descrizione generale della forma dei valori di una classe di token.</p>
+<p>Lessema è una istanza di un particolare pattern</p>
+<ul>
+<li>
+<p>Esempio di scan</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 1.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 1">
+</li>
+</ul>
+<p>Di solito viene storato come puntatore alla tabella dei simboli</p>
+<h2 id="espressioni-regolari">Espressioni regolari<a hidden class="anchor" aria-hidden="true" href="#espressioni-regolari">#</a></h2>
+<h3 id="definizione-">Definizione 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-">#</a></h3>
+<ul>
+<li>
+<p>Slide definizione espressioni regolari</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 2.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 2">
+</li>
+<li>
+<p>Disambiguazione della grammatica</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 3.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 3">
+</li>
+<li>
+<p>Esempio espressione regolare</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 4.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 4">
+</li>
+</ul>
+<h3 id="linguaggio-generato-da-regexp-">Linguaggio generato da regexp 🟩<a hidden class="anchor" aria-hidden="true" href="#linguaggio-generato-da-regexp-">#</a></h3>
+<p>Per capire questa parte è importante avere in mente le operazioni sui linguaggio definiti in <a href="//notes/descrizione-linguaggio">Descrizione linguaggio</a></p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 5.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 5">
+</li>
+</ul>
+<h3 id="linguaggio-regolare-">Linguaggio regolare 🟩<a hidden class="anchor" aria-hidden="true" href="#linguaggio-regolare-">#</a></h3>
+<ul>
+<li>
+<p>Definizione linguaggio regolare</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 6.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 6">
+</li>
+</ul>
+<p><strong>Ogni linguaggio finito è un linguaggio regolare</strong> questo è una proposizione che lega fortemente i linguaggi (utilizzati poi veramente per l&rsquo;implementazione) (basta fare l’unione!)</p>
+<ul>
+<li>
+<p>Esempio linguaggio finito generato da linguaggio regolare</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 7.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 7">
+</li>
+<li>
+<p>Esempi di espressioni regolari infiniti</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 8.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 8">
+</li>
+</ul>
+<p>Oltre ai classici operatori definiti in precedena per questa sezione aggiungiamo</p>
+<p><em>Ripetizione-positiva</em>, <em>Possibilità</em>, <em>Elenco</em></p>
+<h3 id="definizioni-regolari--">Definizioni regolari 🟩-<a hidden class="anchor" aria-hidden="true" href="#definizioni-regolari--">#</a></h3>
+<p>Le definizioni regolari ci aiutano a creare una struttura del token di cui dobbiamo fare lo scanning.</p>
+<p>In pratica andiamo a creare delle definizioni che rendono più facile la descrizione di un pattern con regexp.</p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 9.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 9">
+</li>
+<li>
+<p>Esempi</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 10.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 10">
+</li>
+</ul>
+<h3 id="equivalenza-regexp-">Equivalenza regexp 🟩<a hidden class="anchor" aria-hidden="true" href="#equivalenza-regexp-">#</a></h3>
+<img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 11.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 11">
+<ul>
+<li>
+<p>Esempi di equivalenze</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 12.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 12">
+</li>
+</ul>
+<p>Queste equivalenze non sono sempre facili da dimostrare</p>
+<h2 id="automi">Automi<a hidden class="anchor" aria-hidden="true" href="#automi">#</a></h2>
+<p>In questa parte si fa una descrizione molto generale di cosa siano gli automi.</p>
+<h3 id="caratteristiche-3-">Caratteristiche (3) 🟩<a hidden class="anchor" aria-hidden="true" href="#caratteristiche-3-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 13.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 13">
+</li>
+</ul>
+<ol>
+<li><em>Memoria</em> finita (dato da un numero di stati)</li>
+<li><em>Input</em> una stringa da riconoscere</li>
+<li><em>Output</em> è solamente un singolo bit (si oppure no)</li>
+</ol>
+<h3 id="descrizione-e-funzionamento-">Descrizione e funzionamento 🟩<a hidden class="anchor" aria-hidden="true" href="#descrizione-e-funzionamento-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 14.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 14">
+</li>
+</ul>
+<p><strong>Descrizione</strong></p>
+<ul>
+<li>Testina sul primo carattere in input.</li>
+<li>Su stato q0</li>
+</ul>
+<p><strong>Funzionamento</strong></p>
+<p>Il funzionamento dell&rsquo;automa è molto semplice, esegue un semplice algoritmo:</p>
+<ol>
+<li>Leggi il carattere attuale, se esiste una transizione etichettata con quanto letto spostati secondo la regola di quel carattere.</li>
+<li>Dopo aver finito di leggere la stringa, se è in uno stato buono restituisci 1, altrimenti 0</li>
+<li>Se è bloccato in uno stato ritorna 0</li>
+</ol>
+<h3 id="diagrammi-di-transizione-">Diagrammi di transizione 🟩<a hidden class="anchor" aria-hidden="true" href="#diagrammi-di-transizione-">#</a></h3>
+<p>I diagrammi di transizione sono utili per definire in modo grafico cosa fa l&rsquo;espressione regolare</p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 15.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 15">
+</li>
+</ul>
+<h2 id="automi-finiti-non-deterministici-nfa">Automi finiti non deterministici (NFA)<a hidden class="anchor" aria-hidden="true" href="#automi-finiti-non-deterministici-nfa">#</a></h2>
+<h3 id="definizione-5-">Definizione (5) 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-5-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 16.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 16">
+</li>
+</ul>
+<p>Possiamo definire gli automi non deterministici come una quintupla di</p>
+<p>$$
+(\Sigma, Q, q_0 \in Q, F \subseteq Q, \delta) \
+\delta : Q \times (\Sigma \cup \varepsilon) \to P(Q)
+$$</p>
+<ol>
+<li>Albeto dei simboli di input</li>
+<li>Stati possibili</li>
+<li>Stato iniziale</li>
+<li>Stati finali (accettati)</li>
+<li>Funzioni di transizione, che ha come codominio l&rsquo;insieme delle parti di Q</li>
+</ol>
+<p>Alla fine, per scopi didattici si utilizza sempre il diagramma di transizione. La differenza principale con gli automi a stati finiti è che posso avere lo stesso label di transizione per singolo stato</p>
+<h3 id="caratteristiche-2-">Caratteristiche (2) 🟩<a hidden class="anchor" aria-hidden="true" href="#caratteristiche-2-">#</a></h3>
+<ol>
+<li>Facili da realizzare (esiste quasi una bigezione credo fra NDA ed espressione regolare)</li>
+<li>Inefficienti (backtracking, e fallibile), principalmente causato dal suo non determinismo</li>
+</ol>
+<h3 id="stato-finale-accettato--">Stato finale accettato 🟩 —<a hidden class="anchor" aria-hidden="true" href="#stato-finale-accettato--">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 17.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 17">
+</li>
+</ul>
+<p>Questo è una slide molto importante per definire il concetto di <strong>stringa accettata/riconosciuta</strong>. Praticamente posso affermare che una stringa è riconosciuto da questo automa finito non-deterinistico se anche un solo cammino da q0 a un qualunque stato accettato.</p>
+<p>Oltre questo voglio andare a definire in modo formale il concetto di mossa, o cammino in un diagramma di rappresentazione per un automa finito.</p>
+<ul>
+<li>
+<p>Descrizione istantanea, mossa, cammino, stringa accettata</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 18.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 18">
+</li>
+</ul>
+<p>Indico che uno stato $q$ è raggiungibile da uno stato $s$, con il simbolo $\vdash$, ossia $s \vdash v$, questo è possibile solo se sto leggendo una stringa che ha come relazione una stringa buona, ma questo pezzo è più chiaro negli appunti quindi ti invito di leggere dalì con la rappresentazione logica classica.</p>
+<p>La chiusura riflessiva e transitiva di questo concetto di mossa è indicata con $\vdash ^*_N$, N è il nome di questo automa, dovrebbe essere ancora sopra.</p>
+<p>TODO: da definire bene cosa sia la mossa e il cammino!</p>
+<h3 id="linguaggio-riconosciuto-da-nda-e-equivalenza-">Linguaggio riconosciuto da NDA e equivalenza 🟩<a hidden class="anchor" aria-hidden="true" href="#linguaggio-riconosciuto-da-nda-e-equivalenza-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 19.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 19">
+</li>
+</ul>
+<p>$$
+L[N] = { w \in \Sigma^* |  \exists q \in F, (q_0, w) \vdash ^*_N (q , \varepsilon)}
+$$</p>
+<p>La parte di sopra è la definizione di un <strong>linguaggio riconosciuto da un automa</strong>, è un modo molto compatto per esprire l&rsquo;esistenza di un cammino come sopra.</p>
+<p>Inoltre possiamo definire il concetto di <strong>equivalenza fra NDA</strong> che è quando il linguaggio riconosciuto è esattamente lo stesso.</p>
+<h3 id="definizione-di-linguaggio-riconosciuto-con-e-closure-">Definizione di linguaggio riconosciuto con e-closure 🟨+<a hidden class="anchor" aria-hidden="true" href="#definizione-di-linguaggio-riconosciuto-con-e-closure-">#</a></h3>
+<ul>
+<li>
+<p>Linguaggio riconosciuto, scritto in modo più elegante, con epsilon closure</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 20.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 20">
+</li>
+</ul>
+<p>Con la definizione di delta cappuccio possiamo definire che un linguaggio in questo modo:</p>
+<p>$$
+w \in L[N] \iff \exists p \in F : p \in \hat{\delta}(q_0, w)
+$$</p>
+<h3 id="nfa-da-espressioni-regolari--duplicato-">NFA da espressioni regolari (!!!) (duplicato) 🟩<a hidden class="anchor" aria-hidden="true" href="#nfa-da-espressioni-regolari--duplicato-">#</a></h3>
+<p>Questo è un teorema molto importante per rappresentare una sorta di equivalenza fra linguaggi regolari e NFA.</p>
+<ul>
+<li>
+<p>Enunciato</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 21.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 21">
+</li>
+<li>
+<p>Hint dimostrazione</p>
+<p>Induzione strutturale sulla sintassi BNF delle espressioni regolari, andremo a dimostrare che posso comporre NFA che alla fine riescono a riconoscere il linguaggio regolare</p>
+</li>
+<li>
+<p>Consigli di studio</p>
+<p>Impararsi i metodi di conversione di ogni parte della sintassi in NFA, poi li componi come dei lego e sei apposto</p>
+</li>
+<li>
+<p>Dimostrazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 22.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 22">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 23.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 23">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 24.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 24">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 25.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 25">
+</li>
+</ul>
+<h2 id="automi-finiti-deterministici-dfa">Automi finiti deterministici (DFA)<a hidden class="anchor" aria-hidden="true" href="#automi-finiti-deterministici-dfa">#</a></h2>
+<h3 id="definizione--1">Definizione 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione--1">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 26.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 26">
+</li>
+<li>
+<p>Differenze rispetto NDA</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 27.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 27">
+</li>
+</ul>
+<p>Principalmente la definizione è uguale agli automi non deterministici l’unica cosa che cambia è il delta che ora è definito come</p>
+<p>$$
+\delta: Q \times \Sigma \to Q
+$$</p>
+<p>Non c’è più l’insieme delle parti, magari dopo vediamo come questi automi sono equivalenti, ma c’è una esplosione esponenziale al momento di conversione da deterministico a non deterministico.</p>
+<h3 id="algoritmo-creazione-dfa-da-nfa-">Algoritmo creazione DFA da NFA 🟩<a hidden class="anchor" aria-hidden="true" href="#algoritmo-creazione-dfa-da-nfa-">#</a></h3>
+<img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 28.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 28">
+<ul>
+<li>
+<p>L’algoritmo di creazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 29.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 29">
+</li>
+<li>
+<p>Esempio di utilizzo dell&rsquo;algoritmo (lezione 6)</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 30.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 30">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 31.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 31">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 32.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 32">
+</li>
+</ul>
+<p>con $F$ l’insieme degli stati finali della NFA.</p>
+<h3 id="dfa-equivalente-a-nfa-non-chiede-">DFA equivalente a NFA (non chiede) 🟨<a hidden class="anchor" aria-hidden="true" href="#dfa-equivalente-a-nfa-non-chiede-">#</a></h3>
+<ul>
+<li>
+<p>Dimostrazione both, e osservazioni in modo informale</p>
+<ul>
+<li>
+<p>Slide →</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 33.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 33">
+</li>
+</ul>
+<p>Questa proposizione si può vedere dalla definizione</p>
+<ul>
+<li>
+<p>Slide ←</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 34.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 34">
+</li>
+</ul>
+</li>
+</ul>
+<p>C&rsquo;è veramente in questo passo una <strong>esplosione esponenziale</strong> perché il numero degli stati diventa esponenzialmente tanto.</p>
+<img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 35.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 35">
+<ul>
+<li>
+<p>Dimostrazione, induzione, molto formale.</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 36.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 36">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 37.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 37">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 38.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 38">
+</li>
+<li>
+<p>Esempio di conversione</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 39.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 39">
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 40.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 40">
+</li>
+</ul>
+<h3 id="epsilon-closure-">epsilon-closure 🟩<a hidden class="anchor" aria-hidden="true" href="#epsilon-closure-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 41.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 41">
+</li>
+<li>
+<p>Algoritmo per epsilon-closure</p>
+  <img src="/images/notes/image/universita/ex-notion/Automi e Regexp/Untitled 42.png" alt="image/universita/ex-notion/Automi e Regexp/Untitled 42">
+</li>
+</ul>
+<p>Questo concetto di chiusura Epsilon ci racchiude il concetto degli stati raggiungibili in un NFA senza leggere nessun input.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on x"
+            href="https://x.com/intent/tweet/?text=Automi%20e%20Regexp&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f&amp;title=Automi%20e%20Regexp&amp;summary=Automi%20e%20Regexp&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f&title=Automi%20e%20Regexp">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on whatsapp"
+            href="https://api.whatsapp.com/send?text=Automi%20e%20Regexp%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on telegram"
+            href="https://telegram.me/share/url?text=Automi%20e%20Regexp&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Automi e Regexp on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Automi%20e%20Regexp&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fautomi-e-regexp%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>N-Bandit Problem | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="reinforcement-learning">
+<meta name="description" content="Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.
+Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/n-bandit-problem/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/n-bandit-problem/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="N-Bandit Problem" />
+<meta property="og:description" content="Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.
+Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/n-bandit-problem/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="N-Bandit Problem"/>
+<meta name="twitter:description" content="Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.
+Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "N-Bandit Problem",
+      "item": "http://localhost:1313/content/notes/n-bandit-problem/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "N-Bandit Problem",
+  "name": "N-Bandit Problem",
+  "description": "Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.\nQuesto è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.",
+  "keywords": [
+    "reinforcement-learning"
+  ],
+  "articleBody": "Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.\nQuesto è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.\nThe mathematical model Supponiamo che ${ \\mathcal{R}{a} | a \\in \\mathcal{A}}$ dove $a$ è l’index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall’agente. $a$ è l’azione, ossia su quale slot machine possiamo andare a giocare. L’obiettivo è massimizzare il reward sul tempo, assumendo che $R{t}$ sia il reward al tempo $t$. Per farlo abbiamo bisogno di trovare una policy. Teniamo sempre le definizioni di action value, optimal value.\nDef: Regret, action value and optimal value Action value $q(a) = E[R_t | A_t = a]$\nOptimal value $V = \\max_a q(a)$\nRegret Ossia rappresenta quanto potremmo fare meglio. $$ \\Delta_{a} = v_{*} - q(a) $$ Total regret $$ L_{t} = \\sum_{n=1}^{t} \\Delta_{A_{n}} $$ Ossia tutti i regrets per l’azione del tempo\nSoluzioni classiche Accenno soluzioni (vecchio, da riguardare) I metodi presentati sono\nOptimistic initial value Mean-reward UCB choice Mean-reward\nVogliamo cercare di capire quale sia il valore nascosto all’interno di questi cosi. Possiamo supporre di avere un valore di default per ogni slot machine. Poi la strategia seguirà questo pseudo codice\ndef make_choice( extimate_r, # /*array of extimates*/, epsilon # /* exploration-exploitation balance */ ): x = random_sample from 0 to 1 // uniform distribution if (x \u003c= epsilon): // explore idx = random choice x from all r else: idx = argmax(extimate_r); return idx; Dopo aver fatto la scelta, cercheremo di aggiornare il valore del reward seguendo proprio la media, quindi\n$R_k = (r_k + \\dfrac{1}{(k -1)} R_{k - 1}) / k$, con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina\n$$ R_k = R_{k - 1} + \\dfrac{1}{k}( r_k - R_{k - 1}) $$\nQuesto è il classico reinforcement learning per sta roba. UCB cambia solo nella selezione dell’indice da esplorare, che lo fa con la formula dipendente dal numero di esplorazioni fatte su questo, sugli altri nodi e simili.\nmentre il optimistic initial value è molto particolare, si assegna un valore molto ottimistico, poi 0 al valore epsilon per l’esplorazione, poi piano piano tutte le mosse scendono di valore, fin quando non diventano realistiche.\nGreedy solutions Estimate of the average $$ Q_t(a) = \\frac{\\sum_{n=1}^t I(A_n = a) R_n}{\\sum_{n=1}^t I(A_n = a)} $$\nQuesto si può fare anche in modo incrementale:\n$$ Q_{t}(A_{t})) = Q_{t- 1} (A_{t} + \\alpha_{t}(R_{t} - Q_{t - 1} (A_{t}))) $$ Dove l’ultima parte è un errore. e $\\alpha_{t} = \\frac{1}{N_{t}(A_{t})}$\nGreedy solution La parte greedy prende solamente l’azione che massimizza il valore atteso per l’azione. Quindi $$ A_{t} = arg\\max_{a} Q_{t}(a) $$ Il problema è che questo non esplora. Potrebbe trovare il minimo e restare in quello perché la sua stima è quella.\nEpsilon greedy solution La epsilon greedy prova a risolvere questo, tenendo una probabilità di esplorare. Uniform $\\varepsilon$, e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto. $$ \\pi_{t}(a) = \\begin{cases} (1 - e) + \\frac{e}{|A|} \u0026 \\text{if } Q(a) = \\max_b Q(b) \\ \\ \\frac{\\varepsilon}{\\lvert \\mathcal{A} \\rvert } \u0026 \\text{otherwise} \\end{cases} $$ Questo dovrebbe essere l’algoritmo utilizzato per Atari. Problema è che continua ad esplorare anche se ha raggiunto convergenza buona della stima\nGradient Based Policy search Action preferences proviamo a stimare $$ \\pi(a) = \\frac{e^{H_{t}(a)}}{\\sum_{b} e^{H_{t}(b)}} $$ Utile per avere distribuzioni di probabilità. Vogliamo trovare action preferences per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il $\\pi$.\nAbbiamo quindi $$ \\theta_{t + 1} = \\theta_{t} + \\alpha \\nabla_{\\theta}\\mathbf{E}[R_{t} | \\pi_{\\theta_{t}}] $$ E ci permette di fare gradient ascent. Abbiamo un problema di come fare sample.\nUsiamo (Williams 1992). Chiamato anche Reinforce. Da quello e da questo punto della lezione deriviamo $$ \\nabla_{\\theta}\\mathbf{E}[R_{t}|\\theta] = \\nabla_{\\theta}\\mathbf{E}[R_{t}\\nabla_{\\theta}\\log \\pi_{\\theta}(A_{t})] $$ E si può fare classico gradient ascent con la parte dentro all’argomento.\nProviamo avere questo algoritmo per action preferences $$ H_{t+1}(a) = H_{t}(a) + \\alpha R_{T} \\frac{\\delta \\log\\pi_{t}(A_{t})}{\\delta H_{t}(a)} = H_{t}(a) + \\alpha R_{t} (\\mathbb{1}(a = A_{t}) - \\pi_{t}(a)) $$ È un esercizio provare a derivare questo cosa.\nThe upper confidence bound L’idea è\nSelezionare se l’azione è big reward Selezionare se l’azione non è ancora stata esplorata abbastanza Quindi come per il precedente, che vogliamo esplorare ancora, con la differenza che però vorremmo diminuire la possibilità nel caso fosse esplorata abbastanza\nL’algoritmo sembra poi molto simile ai greedy, solo che abbiamo una funzione di UCB in più. Logarithmic regret as upperbound! (Auer et al 2002 questa roba).\nHoeffding’s Inequality How wrong is our extimate? Consider $X_{1}, X_{2}, \\dots, X_{n}$ variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che $\\bar{X}$ ma media fino a $n$, in un certo senso simile ai bounds che stavamo studiando in Central Limit Theorem and Law of Large Numbers. La differenza con Markov e Chebicheff è che qui scende in modo esponenziale.\n$$ p\\left(\\overline{X}_{n}+u\\leq\\mu\\right)\\leq,e^{-2n u^{2}} $$ Questo è un caso particolare in cui $b = 1, a = 0$ e funziona.\nPossiamo utilizzare questo teorema con $R_{t}$, infatti possiamo vedere che $$ p(Q_{t}(a) + U_{t}(a) \\leq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ E vale per qualche motivo strano anche con la - $$ p(Q_{t}(a) - U_{t}(a) \\geq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ Questo teorema giustifica perché vogliamo scegliere il bound come questo valore:\n$$ U_{t}(a) = \\sqrt{ \\frac{-\\log p}{ 2N_{t}(a)} } $$ $p$ possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi $p = \\frac{1}{t}$ . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.\nLai and Robbins on Regret growth $$ \\lim_{ t \\to \\infty } L_{t} \\geq \\log t \\sum_{a| \\Delta_{a}} \\frac{\\Delta_{a}}{KL(\\mathcal{R}{a} \\mid\\mid \\mathcal{R}{a^{*}})} $$\nOssia il total regret è bounded sotto almeno logaritmica-mente! Quindi se riesco a boundarlo sopra ho la cosa tight.\nDerivation of the algorithm Consideriamo $L_{t}$ che è il total regret numero di volte che selezioniamo l’azione, per il regret atteso. $$ L_{t} = \\sum_{a} N_{t}(a) \\Delta_{a} $$ E vorremmo che questa cosa sia il più basso possibile affinché possa risultare utile. Supponiamo che sia bounded. Ossia che per ogni $a = a^{*}$ valga $N_{t}(a) \\Delta_{a} \\leq x_{a} \\log t$ .\nVorremmo trovare con una versione di UCB, che ci serve per selezionare l’azione.\nOra prendiamo $m \\leq t$ allora dovrebbe valere che $N_{m}(a) \\Delta_{a} \\leq x_{a} \\log m \\leq x_{a} \\log t$\nProbability Matching and Thompson sampling Vogliamo scegliere l’azione che possa sembrare la migliore secondo la nostra credenza: $$ \\pi_{t}(a) = p\\left(q(a) = \\max_{a’}q(a’) | \\mathcal{H}_{t - 1}\\right) $$\nPer calcolare questo si può utilizzare Thompson sampling.\nSample $Q_{t}(a) ~~~ p_{t}q(a)$ Seleziona l’azione che massimizza $Q_{t}(a)$ per ogni $a$ all’interno di $\\mathcal{A}$. Questo si avvicina al limite teorico ottimo, quindi nice. Ma il problema è che non sono scalabili questi algoritmi. References [1] Williams “Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning” Machine Learning Vol. 8(3), pp. 229–256 1992\n",
+  "wordCount" : "1235",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/n-bandit-problem/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      N-Bandit Problem
+    </h1>
+    <div class="post-meta">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#impostazione-del-problema" aria-label="Impostazione del problema">Impostazione del problema</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#the-mathematical-model" aria-label="The mathematical model">The mathematical model</a></li>
+                <li>
+                    <a href="#def-regret-action-value-and-optimal-value" aria-label="Def: Regret, action value and optimal value">Def: Regret, action value and optimal value</a></li></ul>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#soluzioni-classiche" aria-label="Soluzioni classiche">Soluzioni classiche</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#accenno-soluzioni-vecchio-da-riguardare" aria-label="Accenno soluzioni (vecchio, da riguardare)">Accenno soluzioni (vecchio, da riguardare)</a></li></ul>
+                    
+                <li>
+                    <a href="#greedy-solutions" aria-label="Greedy solutions">Greedy solutions</a><ul>
+                        
+                <li>
+                    <a href="#greedy-solution" aria-label="Greedy solution">Greedy solution</a></li>
+                <li>
+                    <a href="#epsilon-greedy-solution" aria-label="Epsilon greedy solution">Epsilon greedy solution</a></li></ul>
+                </li>
+                <li>
+                    <a href="#gradient-based" aria-label="Gradient Based">Gradient Based</a><ul>
+                        
+                <li>
+                    <a href="#policy-search" aria-label="Policy search">Policy search</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-upper-confidence-bound" aria-label="The upper confidence bound">The upper confidence bound</a><ul>
+                        
+                <li>
+                    <a href="#hoeffdings-inequality" aria-label="Hoeffding&rsquo;s Inequality">Hoeffding&rsquo;s Inequality</a></li>
+                <li>
+                    <a href="#lai-and-robbins-on-regret-growth" aria-label="Lai and Robbins on Regret growth">Lai and Robbins on Regret growth</a><ul>
+                        
+                <li>
+                    <a href="#derivation-of-the-algorithm" aria-label="Derivation of the algorithm">Derivation of the algorithm</a></li></ul>
+                </li>
+                <li>
+                    <a href="#probability-matching-and-thompson-sampling" aria-label="Probability Matching and Thompson sampling">Probability Matching and Thompson sampling</a></li></ul>
+                </li></ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="impostazione-del-problema">Impostazione del problema<a hidden class="anchor" aria-hidden="true" href="#impostazione-del-problema">#</a></h2>
+<p>Supponiamo di stare giocando a n <strong>slot machine</strong> contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.</p>
+<p>Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.</p>
+<h4 id="the-mathematical-model">The mathematical model<a hidden class="anchor" aria-hidden="true" href="#the-mathematical-model">#</a></h4>
+<p>Supponiamo che ${ \mathcal{R}<em>{a} | a \in \mathcal{A}}$ dove $a$ è l&rsquo;index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall&rsquo;agente.
+$a$ è l&rsquo;azione, ossia su quale slot machine possiamo andare a giocare.
+L&rsquo;obiettivo è <strong>massimizzare il reward</strong> sul tempo, assumendo che $R</em>{t}$ sia il reward al tempo $t$.
+Per farlo abbiamo bisogno di trovare una <strong>policy</strong>. Teniamo sempre le definizioni di <strong>action value</strong>, <strong>optimal value</strong>.</p>
+<h4 id="def-regret-action-value-and-optimal-value">Def: Regret, action value and optimal value<a hidden class="anchor" aria-hidden="true" href="#def-regret-action-value-and-optimal-value">#</a></h4>
+<p><strong>Action value</strong>
+$q(a) = E[R_t | A_t = a]$</p>
+<p><strong>Optimal value</strong>
+$V = \max_a q(a)$</p>
+<p><strong>Regret</strong>
+Ossia rappresenta <em>quanto potremmo fare meglio</em>.
+$$
+\Delta_{a} = v_{*} - q(a)
+$$
+<strong>Total regret</strong>
+$$
+L_{t} = \sum_{n=1}^{t} \Delta_{A_{n}}
+$$
+Ossia tutti i regrets per l&rsquo;azione del tempo</p>
+<h2 id="soluzioni-classiche">Soluzioni classiche<a hidden class="anchor" aria-hidden="true" href="#soluzioni-classiche">#</a></h2>
+<h4 id="accenno-soluzioni-vecchio-da-riguardare">Accenno soluzioni (vecchio, da riguardare)<a hidden class="anchor" aria-hidden="true" href="#accenno-soluzioni-vecchio-da-riguardare">#</a></h4>
+<p>I metodi presentati sono</p>
+<ol>
+<li>Optimistic initial value</li>
+<li>Mean-reward</li>
+<li>UCB choice</li>
+</ol>
+<p>Mean-reward</p>
+<p>Vogliamo cercare di capire quale sia il valore nascosto all&rsquo;interno di questi cosi. Possiamo supporre di avere un <strong>valore di default</strong> per ogni slot machine. Poi la strategia seguirà questo pseudo codice</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">make_choice</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="n">extimate_r</span><span class="p">,</span> <span class="c1"># /*array of extimates*/,</span>
+</span></span><span class="line"><span class="cl">	<span class="n">epsilon</span> <span class="c1"># /* exploration-exploitation balance */</span>
+</span></span><span class="line"><span class="cl"><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">x</span> <span class="o">=</span> <span class="n">random_sample</span> <span class="kn">from</span> <span class="mi">0</span> <span class="n">to</span> <span class="mi">1</span> <span class="o">//</span> <span class="n">uniform</span> <span class="n">distribution</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">):</span> <span class="o">//</span> <span class="n">explore</span>
+</span></span><span class="line"><span class="cl">		<span class="n">idx</span> <span class="o">=</span> <span class="n">random</span> <span class="n">choice</span> <span class="n">x</span> <span class="kn">from</span> <span class="nn">all</span> <span class="n">r</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">idx</span> <span class="o">=</span> <span class="n">argmax</span><span class="p">(</span><span class="n">extimate_r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
+</span></span></code></pre></div><p>Dopo aver fatto la scelta, cercheremo di aggiornare il valore del reward seguendo proprio la media, quindi</p>
+<p>$R_k = (r_k +  \dfrac{1}{(k -1)} R_{k - 1}) / k$, con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina</p>
+<p>$$
+R_k = R_{k - 1} + \dfrac{1}{k}( r_k  - R_{k - 1})
+$$</p>
+<p>Questo è il classico reinforcement learning per sta roba. UCB cambia solo nella selezione dell’indice da esplorare, che lo fa con la formula dipendente dal numero di esplorazioni fatte su questo, sugli altri nodi e simili.</p>
+<p>mentre il optimistic initial value è molto particolare, si assegna un valore molto ottimistico, poi 0 al valore epsilon per l’esplorazione, poi piano piano tutte le mosse scendono di valore, fin quando non diventano realistiche.</p>
+<h3 id="greedy-solutions">Greedy solutions<a hidden class="anchor" aria-hidden="true" href="#greedy-solutions">#</a></h3>
+<p><strong>Estimate of the average</strong>
+$$
+Q_t(a) = \frac{\sum_{n=1}^t I(A_n = a) R_n}{\sum_{n=1}^t I(A_n = a)}
+$$</p>
+<p>Questo si può fare anche in modo incrementale:</p>
+<p>$$
+Q_{t}(A_{t})) = Q_{t- 1} (A_{t} + \alpha_{t}(R_{t} - Q_{t - 1} (A_{t})))
+$$
+Dove l&rsquo;ultima parte è un errore.
+e $\alpha_{t} = \frac{1}{N_{t}(A_{t})}$</p>
+<h4 id="greedy-solution">Greedy solution<a hidden class="anchor" aria-hidden="true" href="#greedy-solution">#</a></h4>
+<p>La parte greedy prende solamente l&rsquo;azione che massimizza il valore atteso per l&rsquo;azione.
+Quindi
+$$
+A_{t} = arg\max_{a} Q_{t}(a)
+$$
+Il problema è che questo non esplora. Potrebbe trovare il minimo e restare in quello perché la sua stima è quella.</p>
+<h4 id="epsilon-greedy-solution">Epsilon greedy solution<a hidden class="anchor" aria-hidden="true" href="#epsilon-greedy-solution">#</a></h4>
+<p>La epsilon greedy prova a risolvere questo, tenendo una probabilità di esplorare.
+Uniform $\varepsilon$, e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto.
+$$
+\pi_{t}(a) =
+\begin{cases} (1 - e) + \frac{e}{|A|} &amp; \text{if } Q(a) = \max_b Q(b)  \
+\ \frac{\varepsilon}{\lvert \mathcal{A} \rvert } &amp; \text{otherwise} \end{cases}
+$$
+Questo dovrebbe essere l&rsquo;algoritmo utilizzato per Atari.
+Problema è che <strong>continua ad esplorare anche se ha raggiunto convergenza buona della stima</strong></p>
+<h3 id="gradient-based">Gradient Based<a hidden class="anchor" aria-hidden="true" href="#gradient-based">#</a></h3>
+<h4 id="policy-search">Policy search<a hidden class="anchor" aria-hidden="true" href="#policy-search">#</a></h4>
+<p><strong>Action preferences</strong> proviamo a stimare
+$$
+\pi(a) = \frac{e^{H_{t}(a)}}{\sum_{b} e^{H_{t}(b)}}
+$$
+Utile per avere distribuzioni di probabilità. Vogliamo trovare <strong>action preferences</strong> per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il $\pi$.</p>
+<p>Abbiamo quindi
+$$
+\theta_{t + 1} = \theta_{t} + \alpha \nabla_{\theta}\mathbf{E}[R_{t} | \pi_{\theta_{t}}]
+$$
+E ci permette di fare gradient ascent. Abbiamo un problema di come fare sample.</p>
+<p>Usiamo <a href="https://doi.org/10.1007/BF00992696">(Williams 1992)</a>. Chiamato anche <strong>Reinforce</strong>.
+Da quello e da <a href="https://youtu.be/aQJP3Z2Ho8U?si=9VNP2oO9rj7pVg1X&t=2365">questo punto</a> della lezione deriviamo
+$$
+\nabla_{\theta}\mathbf{E}[R_{t}|\theta] = \nabla_{\theta}\mathbf{E}[R_{t}\nabla_{\theta}\log \pi_{\theta}(A_{t})]
+$$
+E si può fare classico gradient ascent con la parte dentro all&rsquo;argomento.</p>
+<p>Proviamo avere questo algoritmo per action preferences
+$$
+H_{t+1}(a) = H_{t}(a) + \alpha R_{T}  \frac{\delta \log\pi_{t}(A_{t})}{\delta H_{t}(a)}
+= H_{t}(a) + \alpha R_{t} (\mathbb{1}(a = A_{t}) - \pi_{t}(a))
+$$
+È un esercizio provare a derivare questo cosa.</p>
+<h3 id="the-upper-confidence-bound">The upper confidence bound<a hidden class="anchor" aria-hidden="true" href="#the-upper-confidence-bound">#</a></h3>
+<p>L&rsquo;idea è</p>
+<ul>
+<li>Selezionare se l&rsquo;azione è big reward</li>
+<li>Selezionare se l&rsquo;azione non è ancora stata esplorata abbastanza</li>
+</ul>
+<p>Quindi come per il precedente, che vogliamo esplorare ancora, con la differenza che però vorremmo diminuire la possibilità nel caso fosse esplorata abbastanza</p>
+<p>L&rsquo;algoritmo sembra poi molto simile ai greedy, solo che abbiamo una funzione di <em>UCB</em> in più.
+<strong>Logarithmic regret as upperbound!</strong> (Auer et al 2002 questa roba).</p>
+<h4 id="hoeffdings-inequality">Hoeffding&rsquo;s Inequality<a hidden class="anchor" aria-hidden="true" href="#hoeffdings-inequality">#</a></h4>
+<p>How wrong is our extimate?
+Consider $X_{1}, X_{2}, \dots, X_{n}$ variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che  $\bar{X}$ ma media fino a $n$, in un certo senso simile ai bounds che stavamo studiando in <a href="//notes/central-limit-theorem-and-law-of-large-numbers">Central Limit Theorem and Law of Large Numbers</a>.
+La differenza con Markov e Chebicheff è che qui scende in modo esponenziale.</p>
+<p>$$
+p\left(\overline{X}_{n}+u\leq\mu\right)\leq,e^{-2n u^{2}}
+$$
+Questo è un caso particolare in cui $b = 1, a = 0$ e funziona.</p>
+<p>Possiamo utilizzare questo teorema con $R_{t}$, infatti possiamo vedere che
+$$
+p(Q_{t}(a) + U_{t}(a) \leq q(a)) \leq \exp(-2N_{t}(a) U_{t}(a)^{2})
+$$
+E vale per qualche motivo strano anche con la -
+$$
+p(Q_{t}(a) - U_{t}(a) \geq q(a)) \leq \exp(-2N_{t}(a) U_{t}(a)^{2})
+$$
+Questo teorema giustifica perché vogliamo scegliere il bound come questo valore:</p>
+<p>$$
+U_{t}(a) = \sqrt{  \frac{-\log p}{ 2N_{t}(a)} }
+$$
+$p$ possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi
+$p = \frac{1}{t}$ . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.</p>
+<h4 id="lai-and-robbins-on-regret-growth">Lai and Robbins on Regret growth<a hidden class="anchor" aria-hidden="true" href="#lai-and-robbins-on-regret-growth">#</a></h4>
+<p>$$
+\lim_{ t \to \infty }  L_{t} \geq \log t \sum_{a| \Delta_{a}} \frac{\Delta_{a}}{KL(\mathcal{R}<em>{a} \mid\mid \mathcal{R}</em>{a^{*}})}
+$$</p>
+<p>Ossia il <strong>total regret</strong> è bounded sotto almeno logaritmica-mente! Quindi se riesco a boundarlo sopra ho la cosa tight.</p>
+<h5 id="derivation-of-the-algorithm">Derivation of the algorithm<a hidden class="anchor" aria-hidden="true" href="#derivation-of-the-algorithm">#</a></h5>
+<p>Consideriamo $L_{t}$ che è il <em>total regret</em> numero di volte che selezioniamo l&rsquo;azione, per il regret atteso.
+$$
+L_{t} = \sum_{a} N_{t}(a) \Delta_{a}
+$$
+E vorremmo che questa cosa sia il più basso possibile affinché possa risultare utile.
+Supponiamo che sia bounded.
+Ossia che per ogni $a = a^{*}$ valga $N_{t}(a) \Delta_{a} \leq x_{a} \log t$ .</p>
+<p>Vorremmo trovare con una versione di UCB, che ci serve per selezionare l&rsquo;azione.</p>
+<p>Ora prendiamo $m \leq t$ allora dovrebbe valere che $N_{m}(a) \Delta_{a} \leq x_{a} \log m \leq x_{a} \log t$</p>
+<h4 id="probability-matching-and-thompson-sampling">Probability Matching and Thompson sampling<a hidden class="anchor" aria-hidden="true" href="#probability-matching-and-thompson-sampling">#</a></h4>
+<p>Vogliamo scegliere l&rsquo;azione che possa sembrare la migliore secondo la nostra credenza:
+$$
+\pi_{t}(a) = p\left(q(a) = \max_{a&rsquo;}q(a&rsquo;) | \mathcal{H}_{t - 1}\right)
+$$</p>
+<p>Per calcolare questo si può utilizzare <strong>Thompson sampling</strong>.</p>
+<ul>
+<li>Sample $Q_{t}(a) ~~~ p_{t}q(a)$</li>
+<li>Seleziona l&rsquo;azione che massimizza $Q_{t}(a)$ per ogni $a$ all&rsquo;interno di $\mathcal{A}$.
+Questo si avvicina al limite teorico ottimo, quindi nice. Ma il problema è che non sono scalabili questi algoritmi.</li>
+</ul>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Williams <a href="https://doi.org/10.1007/BF00992696">“Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning”</a> Machine Learning Vol. 8(3), pp. 229&ndash;256 1992</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/reinforcement-learning/">Reinforcement-Learning</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on x"
+            href="https://x.com/intent/tweet/?text=N-Bandit%20Problem&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f&amp;hashtags=reinforcement-learning">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f&amp;title=N-Bandit%20Problem&amp;summary=N-Bandit%20Problem&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f&title=N-Bandit%20Problem">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on whatsapp"
+            href="https://api.whatsapp.com/send?text=N-Bandit%20Problem%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on telegram"
+            href="https://telegram.me/share/url?text=N-Bandit%20Problem&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share N-Bandit Problem on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=N-Bandit%20Problem&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fn-bandit-problem%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

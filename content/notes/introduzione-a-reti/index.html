@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Introduzione a reti | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 60 Ripasso: May 18, 2023 Ultima modifica: May 12, 2023 7:59 PM Primo Abbozzo: September 19, 2022 11:11 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Vecchi ripassi Esempi di rete di calcolatori e non Metodi di valutazione della qualità della rete Il connettore di rete 0 Introduzione 0.1 Introduzione 0.1.1 Definizione di rete di calcolatori (2) 🟩- Slide
+I requisiti sono principalmente 2
+Essere autonomi nel calcolo (capacità di eseguire dei programmi) Essere interconnessi (capacità di ricevere ed inviare dei segnali) Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/introduzione-a-reti/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/introduzione-a-reti/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Introduzione a reti" />
+<meta property="og:description" content="Ripasso Prox: 60 Ripasso: May 18, 2023 Ultima modifica: May 12, 2023 7:59 PM Primo Abbozzo: September 19, 2022 11:11 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Vecchi ripassi Esempi di rete di calcolatori e non Metodi di valutazione della qualità della rete Il connettore di rete 0 Introduzione 0.1 Introduzione 0.1.1 Definizione di rete di calcolatori (2) 🟩- Slide
+I requisiti sono principalmente 2
+Essere autonomi nel calcolo (capacità di eseguire dei programmi) Essere interconnessi (capacità di ricevere ed inviare dei segnali) Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/introduzione-a-reti/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="Introduzione a reti"/>
+<meta name="twitter:description" content="Ripasso Prox: 60 Ripasso: May 18, 2023 Ultima modifica: May 12, 2023 7:59 PM Primo Abbozzo: September 19, 2022 11:11 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso Vecchi ripassi Esempi di rete di calcolatori e non Metodi di valutazione della qualità della rete Il connettore di rete 0 Introduzione 0.1 Introduzione 0.1.1 Definizione di rete di calcolatori (2) 🟩- Slide
+I requisiti sono principalmente 2
+Essere autonomi nel calcolo (capacità di eseguire dei programmi) Essere interconnessi (capacità di ricevere ed inviare dei segnali) Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Introduzione a reti",
+      "item": "http://localhost:1313/content/notes/introduzione-a-reti/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Introduzione a reti",
+  "name": "Introduzione a reti",
+  "description": "Ripasso Prox: 60 Ripasso: May 18, 2023 Ultima modifica: May 12, 2023 7:59 PM Primo Abbozzo: September 19, 2022 11:11 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Vecchi ripassi Esempi di rete di calcolatori e non Metodi di valutazione della qualità della rete Il connettore di rete 0 Introduzione 0.1 Introduzione 0.1.1 Definizione di rete di calcolatori (2) 🟩- Slide\nI requisiti sono principalmente 2\nEssere autonomi nel calcolo (capacità di eseguire dei programmi) Essere interconnessi (capacità di ricevere ed inviare dei segnali) Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori.",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 60 Ripasso: May 18, 2023 Ultima modifica: May 12, 2023 7:59 PM Primo Abbozzo: September 19, 2022 11:11 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso Vecchi ripassi Esempi di rete di calcolatori e non Metodi di valutazione della qualità della rete Il connettore di rete 0 Introduzione 0.1 Introduzione 0.1.1 Definizione di rete di calcolatori (2) 🟩- Slide\nI requisiti sono principalmente 2\nEssere autonomi nel calcolo (capacità di eseguire dei programmi) Essere interconnessi (capacità di ricevere ed inviare dei segnali) Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori.\nNon-esempi\nRete telefonica, non sono autonomi Rete televisiva Esempi\nSmartphones con wi-fi WWW E-mail Una rete di calcolatori è un insieme di dispositivi autonomi, cioè in grado di eseguire e svolgere autonomamente i compiti programmati di calcolo e di comunicazione, interconnessi tra loro da supporti fisici alla trasmissione di segnali. Non sono considerate reti di calcolatori, ad esempio, né le reti di comunicazione telefonica (i cui terminali telefonici non sono dispositivi autonomi), né le reti di distribuzione televisiva (in quanto i televisori non sono dispositivi autonomi in grado di comunicare informazione). Nel prosieguo della presentazione, con il generico termine di “rete” o “rete di comunicazione” intenderemo implicitamente solo le reti di calcolatori elettronici. Con l’avvento dei calcolatori elettronici, e con la loro diffusione tra comunità sempre più grandi di utenti, è emersa l’esigenza e l’utilità di fornire un supporto alla comunicazione tra utenti, attraverso l’uso del calcolatore, supportando innovativi servizi di comunicazione per l’utente, quali ad esempio il World Wide Web e la posta elettronica. In tempi più recenti si sono sviluppati ulteriormente i sistemi di rete includendo Internet of Things (IoT), reti senza fili (Wireless), ecc. Le necessità di comunicare e condividere informazione sono tra i principali motivi che favoriscono la nascita e lo sviluppo di reti di calcolatori. La fruizione dell’informazione contenuta in questo corso rappresenta un esempio. Un ulteriore aspetto che ha favorito la nascita e la diffusione delle reti di calcolatori è legato alla possibilità di condividere dispositivi costosi, altrimenti sotto-utilizzati, come ad esempio stampanti o capienti dispositivi di memorizzazione dei dati, e la possibilità di accedere e lavorare sui dati di un calcolatore, senza doversi spostare fisicamente sul calcolatore stesso. Una rete di calcolatori può consentire di eseguire calcoli complessi in parallelo e in maniera distribuita, aumentando le prestazioni per l’ottenimento dei risultati. In tal senso, le reti rendono possibile la scalabilità dei sistemi di comunicazione e di calcolo: il numero di dispositivi usati, e l’investimento relativo, possono essere dimensionati dinamicamente in funzione delle richieste di servizio. In tempi recenti, le reti sono utilizzate in particolare per supportare la comunicazione utente, secondo svariate forme e applicazioni, oppure per supportare la comunicazione diretta tra dispositivi pervasivi e mobili (es. Internet of Things, Wireless Networks), ecc\n0.1.2 Classificazione delle reti (5 principali) 🟩 Slide\nUna prima classificazione delle reti di calcolatori si basa sulla dimensione delle reti stesse. Non esiste in generale un criterio ben definito per tale classificazione, ma ci si basa su considerazioni generali, riguardanti la dimensione dell’area di copertura geografica della rete, ovvero l’area entro la quale possano esistere dispositivi connessi.\nLe reti personali (PAN) sono reti di comunicazione per connettere dispositivi vicini tra loro, ad esempio sul corpo di una persona o entro una stanza. Un esempio potrebbe essere dato dalla connessione di due dispositivi indossabili, sensori e smartphone, oppure calcolatori, una stampante e un agenda elettronica. Le reti personali sono di solito finanziate e gestite dal singolo utente che le utilizza.\nLe reti locali (LAN) sono molto spesso reti gestite e mantenute da organizzazioni, università, enti o aziende. Esse connettono calcolatori nel raggio di qualche centinaio di metri, ad esempio su interi edifici o campus universitari. Ad esempio, la rete delle aule del Dipartimento.\nLe reti metropolitane (MAN) hanno connessioni in un raggio dell’ordine delle decine di chilometri, e possono connettere intere aree urbane. Esse sono mantenute e gestite da fornitori di servizi di comunicazione (provider) e gestori di servizi telefonici.\nLe reti geografiche (WAN) sono reti in grado di coprire distanze internazionali e addirittura planetarie. Tali reti sono mantenute e gestite da enti nazionali e internazionali, oppure da grossi enti o gestori delle comunicazioni. L’organizzazione e la struttura di tali reti può essere molto complessa, e può risultare composta da diverse parti, e da diverse tecnologie, eterogenee e integrate (ad esempio, molte reti collegate tra loro con tecnologie cablate o in fibra, fino a reti basate su comunicazione satellitare senza fili).\nInternet (inter-networking, ossia comunicazione di rete fra rete diverse) è una rete di reti, composta da molte reti diverse connesse tra loro, integrate grazie a un insieme di regole comuni: i protocolli della rete Internet.\nAlcuni esempi PAN Anche reti all’interno del corpo stesso! (es. per autenticazione). (qualcosa che passa da un pezzo del corpo a un altro pezzo). (molto piccola) LAN Alma-wifi (wireless) → WLAN MAN Alma-wifi, perché ce in molte parti della città (diffusa con ripetitori, che all’insieme hanno una rete metropolitana). NOTA: MAN (e più in generale le reti) si possono espandere componendo reti più piccole NOTA: la grandezza della rete influenza i problemi che la rete deve risolvere. WAN Internet C’è un problema di comunicazione, come connettere tutti i calcolatori del mondo??? 0.1.3 Evoluzione e costi della rete (storia, non richiesta) 🟨 Slide\nLo sviluppo delle reti di calcolatori, che ha permesso la nascita di Internet, non sarebbe stato possibile senza una distribuzione dei costi di realizzazione e gestione delle infrastrutture tra molte entità.\nUn pò di storia Storicamente, la prima rete di Internet nasce da un esperimento nel 1969, connettendo solo 4 calcolatori di 4 università americane (con linee di telefoni!).\nDa allora molte entità hanno dato il loro contributo per lo sviluppo e la diffusione delle reti di calcolatori. All’inizio del 2003 Internet contava oltre 172 milioni di calcolatori (fonte Internet Software Consortium). Già nel 2017 si parla di oltre 4 miliardi di dispositivi connessi (anche se non tutti connessi allo stesso momento). Entro 5-7 anni si raggiungeranno i 60 miliardi di dispositivi connessi, realizzando l’avvento dell’Internet of Things.\nPoi si è sviluppata (dal primo esperimento, si racconta che HELL sia stato il primo messaggio, poi c’è stato un system crash) grazie ad ingesti investimenti militari, poi aziende private. Queste aziende private poi rivendono al cliente finale.\nSui costi Per quello che riguarda i costi, la realizzazione, mantenimento e gestione dell’infrastruttura di una rete molto ampia richiede investimenti economici elevati, che possono essere maggiori a seconda del grado di avanzamento delle tecnologie e delle prestazioni richieste.\nCosti MAN e WAN\nAlcune delle infrastrutture principali delle reti estese MAN e WAN (e di Internet) hanno costi affrontabili solo attraverso un consistente investimento e una pianificazione delle ricadute commerciali da parte di consorzi o fornitori di servizi di comunicazione nazionali e multinazionali.\nCosti LAN\nTuttavia, la maggior percentuale del complesso delle infrastrutture di rete che compongono Internet risultano essere mantenute e gestite capillarmente da piccoli gestori e piccoli gruppi, con investimenti relativamente modesti per la realizzazione di piccole reti locali (LAN). L’integrazione di un insieme molto vasto di reti grandi e soprattutto piccole reti locali, eterogenee e distribuite su tutto il pianeta, ha permesso la crescita incrementale, il successo commerciale e la esplosiva diffusione delle reti su scala globale, fino a Internet.\nCosti utente finale\nL’utente delle reti paga tipicamente per i servizi di trasmissione offerti dalle reti, con tariffe che possono essere basate sul tempo di collegamento, sulla quantità di dati.\n0.1.4 Valutazione prestazioni della rete (2) 🟩 Slide\nPer ciò che riguarda le prestazioni delle reti di calcolatori, l’utente è principalmente interessato a due indici: la capacità di trasmissione (impropriamente detta velocità della rete) e il ritardo del collegamento di rete.\nLa capacità di trasmissione si misura sulla base della quantità di dati che è possibile comunicare in un secondo mediante la rete. I dati digitali del calcolatore si misurano in bit o in byte (gruppi di 8 bit), e di conseguenza l’unità di misura usata tipicamente per misurare la capacità di trasmissione dei dati di una rete è il numero di bit oppure di byte trasmessi al secondo (bit/sec, byte/sec). Spesso si usano i prefissi Kilo (K) per le migliaia, Mega (M) per i milioni e Giga (G) per i miliardi di bit o byte al secondo, Tera (T) per le migliaia di miliardi, ecc. (esempio Kbit/sec, Kbyte/sec). Il ritardo del collegamento di rete indica il tempo necessario ai dati per transitare dal mittente al destinatario finale sulla rete. I fattori del ritardo (non solo questi): la distanza fisica del collegamento i tempi necessari alla gestione delle regole dei processi di comunicazione in rete (protocolli) che i dati devono subire durante il loro tragitto. (che può essere anche fisico letterale: eg. aereo o furgone, invece che fibra o reti, questo è un protocollo 🙂). Variazione del ritardo (es. coda per furgoni, congestione delle linee e simili) Jitter (su quale sia meglio, dipende sempre dagli utilizzi → Streaming? o semplice scaricare? a seconda di quanto ci serve è meglio la rete blu o rossa) Ovviamente sono da preferire reti dotate di basso ritardo, in quanto ciò favorisce la rapidità e l’interattività del processo di comunicazione. Per fare un parallelo intuitivo, pensando alle reti come a tubi che trasportano bit, la capacità di trasmissione equivale al diametro del tubo, mentre il ritardo equivale al tempo che i bit impiegano ad attraversare una serie di tubi in tutta la loro lunghezza.\n0.2 Componenti della rete Introduzione generali dei componenti principali 🟩- Slide\nEsempi di pezzi di rete\nLa connessione di un calcolatore a una rete di calcolatori richiede un insieme essenziale di componenti, hardware e software, in aggiunta al calcolatore elettronico di base.\nL’elemento primario da aggiungere al calcolatore è il dispositivo (o scheda) di rete: si tratta di un dispositivo hardware di comunicazione, fisicamente collegato al calcolatore, in grado di codificare e trasmettere, oppure ricevere e decodificare i dati inviati dal calcolatore alla rete, e dalla rete al calcolatore. I mezzi di trasmissione sono supporti fisici alla propagazione e trasmissione di segnali, quali cavi o fili elettrici, fibre ottiche, o semplicemente lo spazio tridimensionale nel quale si propagano le onde radio. Tali mezzi di trasmissione realizzano l’infrastruttura fisica della rete. Il costo di realizzazione dell’infrastruttura di rete rappresenta spesso un fattore rilevante e critico per la diffusione e l’implementazione di reti di calcolatori. Il connettore di rete è semplicemente un’interfaccia standard presente sul dispositivo di rete, per il collegamento del dispositivo di rete al mezzo di trasmissione. Esistono vari connettori, diversi a seconda del tipo di tecnologia impiegata per la rete di comunicazione. I connettori possono avere varie forme, e tipicamente permettono il collegamento solo quando le tecnologie dei dispositivi di rete, dei protocolli di gestione, e dei mezzi di trasmissione sono tra loro compatibili. I dispositivi di rete sono amministrati da componenti software del sistema operativo, e devono rispettare un insieme di regole standard per la gestione dei processi di comunicazione, definite dai protocolli di rete. I protocolli di rete sono un insieme di regole, univocamente definite, per garantire la compatibilità e la corretta configurazione e gestione delle fasi della comunicazione tra i dispositivi di rete.\n0.2.1 Mezzo fisico di trasmissione 🟩 Slide\nEsempi mezzi di trasmissione\nIl mezzo di trasmissione è l’elemento fisico che supporta la propagazione dei segnali trasmessi tra i dispositivi della rete. Ne abbiamo parlato anche nella sezione dispositivi di rete Le connessioni di rete possono essere realizzate mediante tre mezzi di trasmissione diversi:\ncavi conduttori fibre ottiche connessioni senza fili. I cavi di materiale conduttore (cavetti, doppino intrecciato o cavo coassiale), sono in grado di propagare segnali elettrici, cioè variazioni di tensione e corrente elettrica. Questi mezzi fisici sono i più utilizzati nelle reti locali, e nelle brevi distanze, per il loro buon rapporto tra costo e prestazioni. Oggi tale mezzo trasmissivo è in grado di supportare trasmissioni dati con una capacità dell’ordine del miliardo di bit al secondo (1-2 Gbit/sec).\nLa tecnologia a fibre ottiche è tecnologicamente avanzata, e si basa sulla trasmissione di segnali ottici, cioè di luce, vincolata all’interno di una sottile fibra di vetro purissimo. La fibra è sottile come un capello, è elastica ed è protetta da una guaina esterna per facilitare il suo impiego. Il costo della fibra non è molto elevato, tuttavia la fibra è molto delicata per quanto riguarda la connessione degli estremi (giunzione) e questo influisce molto sui costi di distribuzione e di realizzazione dell’infrastruttura di rete. La capacità di una fibra ottica può arrivare oggi a qualche decina di migliaia di miliardi di bit al secondo (oltre 10000 Gbit/sec).\nOnde elettromagnetiche e dalla loro propagazione nello spazio. Esempi in tal senso sono forniti dalle onde radio e dalla luce infrarossa. Tali tecnologie vengono dette senza fili (wireless). Le reti senza fili sono molto interessanti, e la loro diffusione è oggi esplosiva, in quanto permettono la mobilità dei dispositivi e degli utenti. La capacità dei collegamenti senza fili può arrivare oggi a qualche decina di milioni di bit al secondo (1- 54 Mbit/sec). Il limite della tecnologia senza fili è dato dalla vulnerabilità del segnale rispetto ad errori e interferenza dei segnali, e dai limiti fisici della propagazione dei segnali. Due dispositivi possono essere connessi senza fili solo se rimangono entro un limite di distanza $d$ che dipende dalla potenza del segnale radio emesso dal trasmettitore, e da eventuali ostacoli intermedi per il segnale. Inoltre non è precisa, nel senso che non si riesce in modo effettivo ad isolare la direzione di arrivo (la destination e sorgente non sono isolate).\nCollisione è un problema molto comune per\nOgni rete può essere realizzata attraverso un singolo mezzo fisico di trasmissione, oppure attraverso la composizione di mezzi fisici eterogenei.\nCanali, vedi canali di comunicazione, dividono spesso il mezzo di comunicazione. (si potrebbe infatti dire che il singolo mezzo di comunicazione abbia un fascio di canali)\n0.2.2 Dispositivo o scheda di rete 🟩 Slide\nLe schede di rete permettono la comunicazione in rete tra calcolatori diversi, attraverso i vari mezzi di trasmissione illustrati, avviene mediante dispositivi interni o periferiche esterne del calcolatore. Queste schede sono collegate al calcolatore attraverso un’interfaccia di collegamento del calcolatore: su tale interfaccia transitano i dati (bit di informazione) da trasmettere in rete, oppure ricevuti dalla rete.\nLa scheda di rete si occupa inoltre di trasformare i bit di informazione in segnali trasmissibili sul mezzo di trasmissione della rete e viceversa: tali trasformazioni si chiamano codifica e decodifica dei dati. Un connettore di rete pone direttamente in contatto la scheda di rete con il mezzo di trasmissione per l’invio e ricezione dei segnali in rete.\nIn sintesi, la funzione della scheda di rete è quella di memorizzare temporaneamente, codificare, decodificare, trasmettere e ricevere i dati da e verso il mezzo di trasmissione (cioè la rete) o il calcolatore.\nIdentificazione della scheda di rete Il tipo della scheda di rete viene identificato a seconda del mezzo trasmissivo, e soprattutto a seconda dei protocolli di comunicazione utilizzati per la codifica, e per la trasmissione dei dati in rete. Per le reti locali (LAN) basate su mezzo di trasmissione cablato, le tecnologie più diffuse sono chiamate con il nome del protocollo di comunicazione primario: ad esempio Ethernet, nelle varianti a 10, 100 Mbit/sec (Fast Ethernet) e 1000 Mbit/sec (Gigabit Ethernet).\nPer le reti LAN senza fili (WLAN), le schede di rete più diffuse sono denominate Wi-Fi (da 11 a 54 Mbit/sec), e Bluetooth (da 1 a 2 Mbit/sec). Ogni scheda di rete, per permettere di essere identificata univocamente nel contesto di una rete locale, dispone dalla sua costruzione di un indirizzo univoco (unico) a livello mondiale, non modificabile, detto indirizzo MAC (Medium Access Control), spesso questa scheda di rete è specifica per il mezo trasmissivo!. Tali indirizzi vengono assegnati dai costruttori delle schede, per evitare che si possano originare indirizzi MAC duplicati. (spesso hai moltissime informazioni riguardo al modello della scheda di rete e del produttore solo guardando questo).\nIl MAC si occupa anche di evitare le collisioni (come non lo so).\n0.2.3 Protocolli di rete 🟩 Slide (la parte sull’architettura presente in slide è trattata in Architettura e livelli 1, 2\nLe regole che governano i processi di comunicazione in rete, tra dispositivi e sistemi eterogenei\nPerché è necessario: La necessità di accordarsi su regole e servizi comuni per la comunicazione di rete ha lo scopo di permettere una completa compatibilità e supporto alla comunicazione su sistemi, tecnologie e dispositivi eterogenei.\nAl fine di far ciò definiscono delle regole semantiche (processi) e sintattiche (struttura pacchetto) formali.\nI protocolli definiscono aspetti e regole semantiche sulla sequenza dei messaggi, e regole sintattiche sul formato dei messaggi scambiati durante la comunicazione. La definizione dei protocolli di rete deve prevedere e supportare diverse finalità di comunicazione.\nNon ha quindi senso definire un protocollo rigido, ma ha senso definire classi di protocolli, deputate a svolgere e gestire determinate funzioni della comunicazione. Tali classi di protocolli, opportunamente organizzate, permettono di semplificare la gestione della rete, ma è necessario definire in modo non ambiguo le relazioni tra le classi di protocolli (ovvero quale protocollo si occupa di gestire un certo problema? Come avviene il dialogo tra protocolli?)\n0.3 Struttura della rete 0.3.1 Strutture della connessione di rete (4) 🟩 Slide\nUn collegamento o connessione fisica di rete è fornita da un mezzo di trasmissione (ad esempio un cavo, una fibra ottica oppure lo spazio per la propagazione di onde radio) che sia condiviso tra due o più dispositivi ad esso collegati, e che permetta il trasferimento di segnali, e quindi informazione, tra i dispositivi stessi.\nUn’infrastruttura di rete rappresenta l’insieme dei collegamenti o connessioni fisiche esistenti tra tutti i dispositivi di una rete.\nLa comunicazione tra una coppia qualsiasi di calcolatori in rete, detti nodi (oppure host) della rete, è possibile se esiste un collegamento diretto tra i nodi, oppure se esiste una sequenza di collegamenti, detta cammino, che permetta la comunicazione dei segnali passando per eventuali nodi e collegamenti intermedi.\nClassi di strutture di connessione della rete. (4)\nLe connessioni di rete punto a punto, come nell’esempio (a), sono connessioni che possono essere instaurate tra una coppia di calcolatori, senza coinvolgerne altri. Esse rappresentano il caso più semplice di infrastruttura di rete, e sono semplici da gestire. Reti completamente connesse: Le connessioni di rete multiple permettono di connettere contemporaneamente un dispositivo a molti altri dispositivi. Nell’esempio (b) viene mostrata una infrastruttura di rete nella quale ogni nodo è connesso attraverso un linea dedicata ad ogni altro nodo. Questa infrastruttura di rete viene detta completamente connessa, ed è molto ridondante: infatti esistono molti cammini, oltre al collegamento diretto, per connettere ogni coppia di nodi passando per nodi intermedi. Una simile infrastruttura di rete si può ritenere a volte troppo complessa e costosa. Ad esempio, sarebbe impensabile disporre di una connessione dedicata (cioè un filo diretto) da ogni calcolatore ad ogni altro calcolatore sulle reti mondiali. Reti parzialmente connesse: Nell’esempio c, malgrado il ridotto numero di collegamenti rispetto al caso b, è comunque possibile per ogni dispositivo trasferire segnali, cioè comunicare, verso ogni altro dispositivo. In altre parole esiste un cammino, attraverso le connessioni disponibili, per trasferire informazione tra ogni coppia di dispositivi della rete.Nella rete (c) esiste però un fattore di rischio: in seguito a un guasto di una connessione, potrebbe risultare un insieme di componenti separato da tutti gli altri, detto “partizione” della rete (esempio d). Le partizioni della rete limitano il grado di comunicazione possibile, e possono essere dovute a cause fisiche (guasti fisici della connessione) oppure a cause che dipendono da cattive applicazioni delle regole di utilizzo (ovvero dei protocolli, che vedremo in seguito). 0.3.2 Topologia di rete 🟩 Slide\nTopologie di rete sono i diversi schemi di connessione sono possibili per creare le infrastrutture di rete\nTopologia per PAN e locali LAN: Topologia ad anello (esempio a) è basata sull’organizzazione delle connessioni tra i dispositivi, in modo da creare un anello chiuso. Ogni componente può comunicare con ogni altro componente inviando i segnali attraverso la sequenza di connessioni in senso orario o antiorario. La topologia a stella (esempio b) prevede un componente centrale direttamente connesso a tutti gli altri. Ogni componente periferico può comunicare con ogni altro componente periferico passando attraverso il componente centrale. La topologia a bus (esempio c) prevede che ogni componente abbia una connessione verso un bus condiviso (cioè una connessione condivisa da tutti). Questo tipo di connessione permette di introdurre una delle problematiche fondamentali che saranno trattate in seguito: la gestione dell’accesso al bus, ovvero il decidere chi possa trasmettere tra tutti i possibili dispositivi, per evitare sovrapposizioni delle trasmissioni. La topologia ad albero (esempio d) prevede un’organizzazione gerarchica delle connessioni. Se pensiamo all’analogia con un albero genealogico, esiste un dispositivo (nonno) che connette direttamente due o più dispositivi (figli), ognuno dei quali a sua volta connette direttamente un numero variabile di dispositivi (nipoti), e così via.\nMano a mano che le reti più piccole vengono collegate tra loro e organizzate in strutture di rete più grandi, la topologia della rete globale può diventare incredibilmente complessa, e quindi uno schema topologico generalizzato non è quasi mai applicabile. In questo caso si parla di rete con topologia a grafo complesso, oppure a maglia. In tali topologie a grafo, possono essere presenti cammini multipli che connettono coppie di nodi, dando luogo a possibili alternative per la connessione dei dispositivi. Questo fatto può ridurre il rischio di incorrere in partizioni della rete, in quanto un certo grado di ridondanza dei cammini di connessione permette di aggirare i collegamenti soggetti a eventuali guasti.\n0.3.3 I due generali 🟩 È possibile implementare una comunicazione sicura in un ambiente che possa fallire, anzi con un nemico che voglia far fallire questo?\nFai finta che A = 3, B = 3, e C = 5, ma A e B sono separati, è possibile avere una comunicazione per attaccare insieme? Se A o B attaccano da soli verrebbero ammazzati.\nSemplificazione del problema dei due generali\nCome si manda il messaggio in modo sicuro? Se si manda il singolo messaggio, senza aspettare nessuna risposta, allora è molto insicuro (per niente sicuro) che il messaggio sia arrivato.\nPer questo motivo si aspetta un acknowledgment, e un altro acknowledgment dall’altra parte → SYN/ACK protocol è simile.\nMa facendo in questo modo non si è mai sicuri che l’altro abbia ricevuto il messaggio. La rete a due è fallibile, e questo è dimostrato.\n0.3.4 Reti commutazione a circuito 🟩 Slide\nNelle reti a commutazione di circuito, i dati vengono trasmessi tra un mittente e un destinatario finale agli estremi di un cammino end-to-end (circuito) di canali di comunicazione punto a punto. Il circuito viene negoziato e prenotato, attraverso opportune procedure (come avviene quando si digita un numero per una chiamata telefonica). Una volta identificati e ottenuti i canali che collegano mittente e destinatario, la comunicazione dati può avvenire anche come un’unica sequenza di bit, senza interruzioni.\nVantaggi\nNon c’è bisogno di dichiarare periodicamente chi sia il mittente e il destinatario dei dati, in quanto entrambi sono fissati al momento della creazione del circuito riservato (riservato = prenotato da qualcuno). Ridotto ritardo di trasmissione per i dati, in quanto ogni nodo intermedio ha già disponibile il canale libero uscente sul quale inviare immediatamente i dati ricevuti sul canale entrante, dal mittente fino al destinatario finale. Svantaggi\nUtilizzo basso dei canali del circuito Quantità dei dati da trasmettere non è grande I dati arrivano a gruppi, intervallati da tempi di vuoto. Inefficienza di utilizzo delle risorse del circuito nei casi sopraelencati (il canale resta tutto occupato). Pagato a tempo! Un pò di tempo in più per prenotare il percorso all’inizio. 0.3.5 Reti commutazione a pacchetto 🟩 Slides\nLa maggior parte delle reti per trasmissione dati digitali, inclusa la rete di reti globale Internet, sono di questo tipo.\nCome funziona\nI dati digitali vengono suddivisi in pacchetti separati, e vengono trasmessi su canali ad accesso multiplo (broadcast, non per forza deve essere punto a punto ). Per consentire la corretta ricezione dei dati, è però necessario includere in ogni pacchetto l’informazione sull’identità del rispettivo mittente e soprattutto del destinatario. Si attua in questo modo la condivisione di un canale unico per diversi flussi di pacchetti appartenenti a diversi mittenti e destinatari. Componendo in serie una sequenza di canali broadcast a commutazione di pacchetto, i nodi ricevitori devono di volta in volta farsi carico di verificare se il pacchetto sia giunto a destinazione o, in caso contrario, possono provvedere all’inoltro del pacchetto ricevuto sul successivo canale broadcast.\nSvantaggi\nRitardo per la comunicazione dei dati tra mittente e destinatario (più lenti dovuto all’esigenza di iterare più volte la ricezione e l’inoltro di pacchetti su canali broadcast in sequenza. Maggiore rischio di collisione dei pacchetti (perdita di pacchetti) A causa dei jitter, i pacchetti possono arrivare in ordine diverso(perdita di ordine → riordinamento) Se utilizzo il broadcast, serve il mittente e il destinatario Vantaggi\nmaggiore utilizzo dei canali ad accesso multiplo, e quindi alla possibilità di tariffare la comunicazione in base ai dati trasmessi, e non in base al tempo necessario. 0.3.6 Canali di comunicazione della rete 🟩 Slide\nBisogna dire che è una virtualizzazione sul mezzo di comunicazione, ossia si utilizza il mezzo di comunicazione come se avesse alcuni canali diversi (che non interferiscono fra di loro) quindi possiamo riutilizzare la stessa risorsa fisica!\nDa riallacciarsi con mezzi di comunicazione per capire come sono implementate fisicamente i canali di comunicazione.\nI canali punto a punto si basano sull’accordo tra un mittente e un destinatario riguardante la definizione del canale da usare (in figura equivale al colore). Solo due dispositivi possono usare il canale di tipo punto a punto a loro riservato. Possiamo creare un canale logico da un singolo mezzo trasmissivo (eg una frequenza diversa, che possono essere filtrate). Il problema principale di questo è che è fisso, ossia posso comunicare solamente con un unico computer, senza poter cambiare il destinatario, direi che abbia più problemi nel momento di wiring.\nI canali ad accesso multiplo (broadcast) sono canali sui quali tutti possono trasmettere e dove tutti ricevono le trasmissioni di altri (chiaramente il problema di collissione è molto alto). Half duplex o uno trasmette o uno riceve mentre i Full-duplex possono trasmettere e ricevere contemporaneamente. Spesso per queste reti c’è un master e dei slave che gestiscono.\nEthernet risolve questo problema senza fare utilizzo di un master, utilizza un sistema di ___ (non mi ricordo, è comunque una race condition) lo risolve con un sistema di counter interno dopo il quale, se è ancora vuoto il canale di comunicazione broadcast, prova a fare la comunciazione.\n0.3.7 Problema delle collisioni su canali multiple 🟨 Un problema per i canali ad accesso multiplo è legato alla possibile collisione di segnali appartenenti allo stesso canale di comunicazione. Se due trasmissioni di segnali si sovrappongono nel tempo sullo stesso canale di comunicazione, l’effetto sui segnali può essere distruttivo e l’esito della comunicazione può essere nullo. Intuitivamente, se due dispositivi trasmettono i loro segnali contemporaneamente, nessuno ricevitore sarà in grado di capire quali bit di informazione siano stati trasmessi.\nIl problema delle collisioni è molto critico, e determina l’esigenza di arbitraggio nell’accesso al canale: chi trasmette e quando? Il problema dell’arbitraggio può essere banale su canali punto a punto, dove mittente e destinatario possono definire semplici leggi (cioè protocolli di gestione della comunicazione) per evitare le collisioni: ad esempio, trasmetto io, poi trasmetti tu. In canali condivisi ad accesso multiplo (broadcast) il problema risulta invece molto complesso, in quanto occorre definire leggi non ambigue, in grado di regolare gli accessi da parte di molti utenti, evitando le collisioni.\nIl problema principale delle collisioni è che fanno perdere tempo o infomazioni (se il nostro protocollo non le gestisce).\nUtilizzo\nDi solito è uguale a $capacità \\cdot overhead$, ad esempio se trasmetto 100 bit e solo 1 un bit è di informazione, questo è l’utilizzo del protocollo. Questo va a misurare efficienza di informazioni di questo protocollo.\n0.3.8 Servizi orientati alla connessione e non 🟨+ Slide\nI servizi orientati alla connessione (connection-oriented) garantiscono che la spedizione di pacchetti di dati tra mittente e destinatario sia equivalente a una trasmissione affidabile e corretta. In altre parole, essi implementano una serie di operazioni attraverso le quali tutti i pacchetti perduti saranno ritrasmessi, e correttamente ordinati, fino a ricostruire esattamente tutta l’informazione trasmessa. L’implementazione di tale tipo di servizi potrebbe essere basata sulla definizione di vari protocolli alternativi. Ad esempio, potrebbe essere definito un cammino riservato unico per i pacchetti. Intuitivamente, ciò equivarrebbe a un circuito virtuale per l’invio dei pacchetti. Un altro modo per ottenere tale servizio potrebbe essere basato sulla numerazione dei pacchetti inviati, sul riordino dei pacchetti ricevuti e sulla richiesta di ri-trasmissione dei pacchetti perduti.\nIn breve questo risolve un problema di:\nRiordinamento dei pacchetti\nSoluzione riordinamento\nBasta numerare i pacchetti e poi far riordinare dal destinatario, questo è un problema molto facile da risolvere\nReinvio dei pacchetti perduti\nSoluzione reinvio\nBisogna che il destinatario mandi degli acknowledgements. Anche questi possono essere persi.\nProblema tempo da aspettare prima di reinviare il pacchetto Pacchetto duplicato quando si perde l’acknowledgement o ci mette troppo. I servizi non orientati alla connessione (connectionless) non si preoccupano di garantire l’ordine corretto dei pacchetti inviati e nemmeno la ricezione di tutti i pacchetti. Tale servizio è simile all’invio dei pacchetti in modo analogo a una sequenza di lettere attraverso la posta ordinaria.\nNon ci importa l’ordine di arrivo né per forza alcuni buchi.\nQuesto è come sono le reti normali, normalmente sono connectionless, con un protocollo in più sono connection-oriented.\nIn modo molto veloce si potrebbe dire che i servizi non orientati alla connessione non garantiscono nulla.\n",
+  "wordCount" : "4934",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/introduzione-a-reti/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Introduzione a reti
+    </h1>
+    <div class="post-meta">24 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#0-introduzione" aria-label="0 Introduzione">0 Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#01-introduzione" aria-label="0.1 Introduzione">0.1 Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#011-definizione-di-rete-di-calcolatori-2--" aria-label="0.1.1 Definizione di rete di calcolatori (2) 🟩-">0.1.1 Definizione di rete di calcolatori (2) 🟩-</a></li>
+                <li>
+                    <a href="#012-classificazione-delle-reti-5-principali-" aria-label="0.1.2 Classificazione delle reti (5 principali) 🟩">0.1.2 Classificazione delle reti (5 principali) 🟩</a></li>
+                <li>
+                    <a href="#013-evoluzione-e-costi-della-rete-storia-non-richiesta-" aria-label="0.1.3 Evoluzione e costi della rete (storia, non richiesta) 🟨">0.1.3 Evoluzione e costi della rete (storia, non richiesta) 🟨</a></li>
+                <li>
+                    <a href="#014-valutazione-prestazioni-della-rete-2-" aria-label="0.1.4 Valutazione prestazioni della rete (2) 🟩">0.1.4 Valutazione prestazioni della rete (2) 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#02-componenti-della-rete" aria-label="0.2 Componenti della rete">0.2 Componenti della rete</a><ul>
+                        
+                <li>
+                    <a href="#introduzione-generali-dei-componenti-principali--" aria-label="Introduzione generali dei componenti principali 🟩-">Introduzione generali dei componenti principali 🟩-</a></li>
+                <li>
+                    <a href="#021-mezzo-fisico-di-trasmissione-" aria-label="0.2.1 Mezzo fisico di trasmissione 🟩">0.2.1 Mezzo fisico di trasmissione 🟩</a></li>
+                <li>
+                    <a href="#022-dispositivo-o-scheda-di-rete-" aria-label="0.2.2 Dispositivo o scheda di rete 🟩">0.2.2 Dispositivo o scheda di rete 🟩</a></li>
+                <li>
+                    <a href="#023-protocolli-di-rete-" aria-label="0.2.3 Protocolli di rete 🟩">0.2.3 Protocolli di rete 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#03-struttura-della-rete" aria-label="0.3 Struttura della rete">0.3 Struttura della rete</a><ul>
+                        
+                <li>
+                    <a href="#031-strutture-della-connessione-di-rete-4-" aria-label="0.3.1 Strutture della connessione di rete (4) 🟩">0.3.1 Strutture della connessione di rete (4) 🟩</a></li>
+                <li>
+                    <a href="#032-topologia-di-rete-" aria-label="0.3.2 Topologia di rete 🟩">0.3.2 Topologia di rete 🟩</a></li>
+                <li>
+                    <a href="#033-i-due-generali-" aria-label="0.3.3 I due generali 🟩">0.3.3 I due generali 🟩</a></li>
+                <li>
+                    <a href="#034-reti-commutazione-a-circuito-" aria-label="0.3.4 Reti commutazione a circuito 🟩">0.3.4 Reti commutazione a circuito 🟩</a></li>
+                <li>
+                    <a href="#035-reti-commutazione-a-pacchetto-" aria-label="0.3.5 Reti commutazione a pacchetto 🟩">0.3.5 Reti commutazione a pacchetto 🟩</a></li>
+                <li>
+                    <a href="#036-canali-di-comunicazione-della-rete-" aria-label="0.3.6 Canali di comunicazione della rete 🟩">0.3.6 Canali di comunicazione della rete 🟩</a></li>
+                <li>
+                    <a href="#037-problema-delle-collisioni-su-canali-multiple--" aria-label="0.3.7 Problema delle collisioni su canali multiple  🟨">0.3.7 Problema delle collisioni su canali multiple  🟨</a></li>
+                <li>
+                    <a href="#038-servizi-orientati-alla-connessione--e-non-" aria-label="0.3.8 Servizi orientati alla connessione  e non 🟨&#43;">0.3.8 Servizi orientati alla connessione  e non 🟨+</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 60
+Ripasso: May 18, 2023
+Ultima modifica: May 12, 2023 7:59 PM
+Primo Abbozzo: September 19, 2022 11:11 AM
+Stato: 🌕🌕🌕🌕🌗
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<ul>
+<li>Vecchi ripassi
+<ul>
+<li>Esempi di rete di calcolatori e non</li>
+<li>Metodi di valutazione della qualità della rete</li>
+<li>Il connettore di rete</li>
+</ul>
+</li>
+</ul>
+<h1 id="0-introduzione">0 Introduzione<a hidden class="anchor" aria-hidden="true" href="#0-introduzione">#</a></h1>
+<h2 id="01-introduzione">0.1 Introduzione<a hidden class="anchor" aria-hidden="true" href="#01-introduzione">#</a></h2>
+<h3 id="011-definizione-di-rete-di-calcolatori-2--">0.1.1 Definizione di rete di calcolatori (2) 🟩-<a hidden class="anchor" aria-hidden="true" href="#011-definizione-di-rete-di-calcolatori-2--">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled">
+</li>
+</ul>
+<p>I requisiti sono principalmente 2</p>
+<ol>
+<li>Essere autonomi nel calcolo (capacità di eseguire dei programmi)</li>
+<li>Essere interconnessi (capacità di ricevere ed inviare dei segnali)</li>
+</ol>
+<p>Gli scopi sono principalmente per la comunicazione fra utenti o calcolatori.</p>
+<p><strong>Non-esempi</strong></p>
+<ol>
+<li>Rete telefonica, <em>non sono autonomi</em></li>
+<li>Rete televisiva</li>
+</ol>
+<p><strong>Esempi</strong></p>
+<ol>
+<li>Smartphones con wi-fi</li>
+<li>WWW</li>
+<li>E-mail</li>
+</ol>
+<p>Una rete di calcolatori è un insieme di dispositivi autonomi, cioè in grado di eseguire e svolgere autonomamente i compiti programmati di calcolo e di comunicazione, interconnessi tra loro da supporti fisici alla trasmissione di segnali. Non sono considerate reti di calcolatori, ad esempio, né le reti di comunicazione telefonica (i cui terminali telefonici non sono dispositivi autonomi), né le reti di distribuzione televisiva (in quanto i televisori non sono dispositivi autonomi in grado di comunicare informazione).
+Nel prosieguo della presentazione, con il generico termine di “rete” o “rete di comunicazione” intenderemo implicitamente solo le reti di calcolatori elettronici.
+Con l’avvento dei calcolatori elettronici, e con la loro diffusione tra comunità sempre più grandi di utenti, è emersa l’esigenza e l’utilità di fornire un supporto alla comunicazione tra utenti, attraverso l’uso del calcolatore, supportando innovativi servizi di comunicazione per l’utente, quali ad esempio il World Wide Web e la posta elettronica. In tempi più recenti si sono sviluppati ulteriormente i sistemi di rete includendo Internet of Things (IoT), reti senza fili (Wireless), ecc.
+Le necessità di comunicare e condividere informazione sono tra i principali motivi che favoriscono la nascita e lo sviluppo di reti di calcolatori. La fruizione dell’informazione contenuta in questo corso rappresenta un esempio.
+Un ulteriore aspetto che ha favorito la nascita e la diffusione delle reti di calcolatori è legato alla possibilità di condividere dispositivi costosi, altrimenti sotto-utilizzati, come ad esempio stampanti o capienti dispositivi di memorizzazione dei dati, e la possibilità di accedere e lavorare sui dati di un calcolatore, senza doversi spostare fisicamente sul calcolatore stesso.
+Una rete di calcolatori può consentire di eseguire calcoli complessi in parallelo e in maniera distribuita, aumentando le prestazioni per l’ottenimento dei risultati. In tal senso, le reti rendono possibile la scalabilità dei sistemi di comunicazione e di calcolo: il numero di dispositivi usati, e l’investimento relativo, possono essere dimensionati dinamicamente in funzione delle
+richieste di servizio. In tempi recenti, le reti sono utilizzate in particolare per supportare la comunicazione utente, secondo svariate forme e applicazioni, oppure per supportare la comunicazione diretta tra dispositivi pervasivi e mobili (es. Internet of Things, Wireless Networks), ecc</p>
+<h3 id="012-classificazione-delle-reti-5-principali-">0.1.2 Classificazione delle reti (5 principali) 🟩<a hidden class="anchor" aria-hidden="true" href="#012-classificazione-delle-reti-5-principali-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 1.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 1">
+</li>
+</ul>
+<p>Una prima classificazione delle reti di calcolatori si basa sulla <strong>dimensione delle reti stesse</strong>.
+Non esiste in generale un criterio ben definito per tale classificazione, ma ci si basa su considerazioni generali, riguardanti la dimensione dell’area di copertura geografica della rete, ovvero l’area entro la quale possano esistere dispositivi connessi.</p>
+<p><strong>Le reti personali (PAN)</strong> sono reti di comunicazione per connettere dispositivi vicini tra loro, ad esempio sul corpo di una persona o entro una stanza.
+Un esempio potrebbe essere dato dalla connessione di due dispositivi indossabili, sensori e smartphone, oppure calcolatori, una stampante e un agenda elettronica. Le reti personali sono di solito finanziate e gestite dal singolo utente che le utilizza.</p>
+<p><strong>Le reti locali (LAN)</strong> sono molto spesso reti gestite e mantenute da <em>organizzazioni, università, enti o aziende</em>. Esse connettono calcolatori nel raggio di qualche centinaio di metri, ad esempio su interi edifici o campus universitari. Ad esempio, la rete delle aule del Dipartimento.</p>
+<p><strong>Le reti metropolitane (MAN)</strong> hanno connessioni in un raggio dell’ordine delle decine di chilometri, e possono connettere intere aree urbane. Esse sono mantenute e gestite da fornitori di servizi di comunicazione (provider) e gestori di servizi telefonici.</p>
+<p><strong>Le reti geografiche (WAN)</strong> sono reti in grado di coprire distanze internazionali e addirittura planetarie. Tali reti sono mantenute e gestite da enti nazionali e internazionali, oppure da grossi enti o gestori delle comunicazioni. L’organizzazione e la struttura di tali reti può essere molto complessa, e può risultare composta da diverse parti, e da diverse tecnologie, eterogenee e integrate (ad esempio, molte reti collegate tra loro con tecnologie cablate o in fibra, fino a reti basate su comunicazione satellitare senza fili).</p>
+<p><strong>Internet</strong> (inter-networking, ossia comunicazione di rete fra <em>rete diverse</em>) è una rete di reti, composta da molte reti diverse connesse tra loro, integrate grazie a un insieme di regole comuni: i protocolli della rete Internet.</p>
+<ul>
+<li>Alcuni esempi
+<ol>
+<li>PAN
+<ol>
+<li>Anche reti all’interno del corpo stesso! (es. per autenticazione). (qualcosa che passa da un pezzo del corpo a un altro pezzo). (molto piccola)</li>
+</ol>
+</li>
+<li>LAN
+<ol>
+<li>Alma-wifi (wireless) → WLAN</li>
+</ol>
+</li>
+<li>MAN
+<ol>
+<li>Alma-wifi, perché ce in molte parti della città (diffusa con ripetitori, che all’insieme hanno una rete metropolitana).</li>
+<li>NOTA: MAN (e più in generale le reti) si possono espandere componendo reti più piccole</li>
+<li>NOTA: la grandezza della rete influenza i problemi che la rete deve risolvere.</li>
+</ol>
+</li>
+<li>WAN</li>
+<li>Internet
+<ol>
+<li>C’è un problema di comunicazione, come connettere tutti i calcolatori del mondo???</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="013-evoluzione-e-costi-della-rete-storia-non-richiesta-">0.1.3 Evoluzione e costi della rete (storia, non richiesta) 🟨<a hidden class="anchor" aria-hidden="true" href="#013-evoluzione-e-costi-della-rete-storia-non-richiesta-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 2.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 2">
+</li>
+</ul>
+<p>Lo sviluppo delle reti di calcolatori, che ha permesso la nascita di Internet, non sarebbe stato possibile senza una distribuzione dei costi di realizzazione e gestione delle infrastrutture tra molte entità.</p>
+<p><strong>Un pò di storia</strong>
+Storicamente, la prima rete di Internet nasce da un esperimento nel 1969, connettendo solo 4 calcolatori di 4 università americane (con linee di telefoni!).</p>
+<p>Da allora molte entità hanno dato il loro contributo per lo sviluppo e la diffusione delle reti di calcolatori.
+All’inizio del 2003 Internet contava oltre 172 milioni di calcolatori (fonte Internet Software Consortium). Già nel 2017 si parla di oltre 4 miliardi di dispositivi connessi (anche se non tutti connessi allo stesso momento). Entro 5-7 anni si raggiungeranno i 60 miliardi di dispositivi connessi, realizzando l’avvento dell’Internet of Things.</p>
+<p>Poi si è sviluppata (dal primo esperimento, si racconta che HELL sia stato il primo messaggio, poi c&rsquo;è stato un system crash) grazie ad ingesti investimenti militari, poi aziende private. Queste aziende private poi rivendono al cliente finale.</p>
+<p><strong>Sui costi</strong>
+Per quello che riguarda i costi, la realizzazione, mantenimento e gestione dell’infrastruttura di una rete molto ampia richiede investimenti economici elevati, che possono essere maggiori a seconda del grado di avanzamento delle tecnologie e delle prestazioni richieste.</p>
+<p><strong>Costi MAN e WAN</strong></p>
+<p>Alcune delle infrastrutture principali delle reti estese MAN e WAN (e di Internet) hanno costi affrontabili solo attraverso un consistente investimento e una pianificazione delle ricadute commerciali da parte di consorzi o fornitori di servizi di comunicazione nazionali e multinazionali.</p>
+<p><strong>Costi LAN</strong></p>
+<p>Tuttavia, la maggior percentuale del complesso delle infrastrutture di rete che compongono Internet risultano essere mantenute e gestite capillarmente da piccoli gestori e piccoli gruppi, con investimenti relativamente modesti per la realizzazione di piccole reti locali (LAN). L’integrazione di un insieme molto vasto di reti grandi e soprattutto piccole reti locali, eterogenee e distribuite su tutto il pianeta, ha permesso la crescita incrementale, il successo commerciale e la esplosiva diffusione delle reti su scala globale, fino a Internet.</p>
+<p><strong>Costi utente finale</strong></p>
+<p>L’utente delle reti paga tipicamente per i servizi di trasmissione offerti dalle reti, con tariffe che possono essere basate sul tempo di collegamento, sulla quantità di dati.</p>
+<h3 id="014-valutazione-prestazioni-della-rete-2-">0.1.4 Valutazione prestazioni della rete (2) 🟩<a hidden class="anchor" aria-hidden="true" href="#014-valutazione-prestazioni-della-rete-2-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 3.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 3">
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 4.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 4">
+</li>
+</ul>
+<p>Per ciò che riguarda le prestazioni delle reti di calcolatori, l’utente è principalmente interessato a due indici: la capacità di trasmissione (impropriamente detta velocità della rete) e il ritardo del collegamento di rete.</p>
+<ol>
+<li><em>La capacità di trasmissione</em> si misura sulla base della quantità di dati che è possibile comunicare in un secondo mediante la rete. I dati digitali del calcolatore si misurano in bit o in byte (gruppi di 8 bit), e di conseguenza l’unità di misura usata tipicamente per misurare la capacità di trasmissione dei dati di una rete è il numero di bit oppure di byte trasmessi al secondo
+(bit/sec, byte/sec). Spesso si usano i prefissi Kilo (K) per le migliaia, Mega (M) per i milioni e Giga (G) per i miliardi di bit o byte al secondo, Tera (T) per le migliaia di miliardi, ecc. (esempio Kbit/sec, Kbyte/sec).</li>
+<li><em>Il ritardo del collegamento di rete</em> indica il tempo necessario ai dati per transitare dal mittente al destinatario finale sulla rete.
+I fattori del ritardo (non solo questi):
+<ul>
+<li>la distanza fisica del collegamento</li>
+<li>i tempi necessari alla gestione delle regole dei processi di comunicazione in rete (protocolli) che i dati devono subire durante il loro tragitto. (che può essere anche fisico letterale: eg. aereo o furgone, invece che fibra o reti, questo è un protocollo 🙂).</li>
+<li>Variazione del ritardo (es. coda per furgoni, congestione delle linee e simili) <strong>Jitter</strong> (su quale sia meglio, dipende sempre dagli utilizzi → Streaming? o semplice scaricare? a seconda di quanto ci serve è meglio la rete blu o rossa)</li>
+</ul>
+</li>
+</ol>
+<p>Ovviamente sono da preferire reti dotate di basso ritardo, in quanto ciò favorisce la rapidità e l’interattività del processo di comunicazione.
+Per fare un parallelo intuitivo, pensando alle reti come a tubi che trasportano bit, la capacità di trasmissione equivale al diametro del tubo, mentre il ritardo equivale al tempo che i bit impiegano ad attraversare una serie di tubi in tutta la loro lunghezza.</p>
+<h2 id="02-componenti-della-rete">0.2 Componenti della rete<a hidden class="anchor" aria-hidden="true" href="#02-componenti-della-rete">#</a></h2>
+<h3 id="introduzione-generali-dei-componenti-principali--">Introduzione generali dei componenti principali 🟩-<a hidden class="anchor" aria-hidden="true" href="#introduzione-generali-dei-componenti-principali--">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 5.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 5">
+</li>
+<li>
+<p>Esempi di pezzi di rete</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 6.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 6">
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 7.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 7">
+</li>
+</ul>
+<p>La connessione di un calcolatore a una rete di calcolatori richiede un insieme essenziale di componenti, hardware e software, in aggiunta al calcolatore elettronico di base.</p>
+<p>L’elemento primario da aggiungere al calcolatore è il <strong>dispositivo (o scheda) di rete</strong>: si tratta di un dispositivo hardware di comunicazione, fisicamente collegato al calcolatore, in grado di codificare e trasmettere, oppure ricevere e decodificare i dati inviati dal calcolatore alla rete, e dalla rete al calcolatore.
+<strong>I mezzi di trasmissione</strong> sono supporti fisici alla propagazione e trasmissione di segnali, quali cavi o fili elettrici, fibre ottiche, o semplicemente lo spazio tridimensionale nel quale si propagano le onde radio. Tali mezzi di trasmissione realizzano l’infrastruttura fisica della rete. Il costo di realizzazione dell’infrastruttura di rete rappresenta spesso un fattore rilevante e critico per la diffusione e l’implementazione di reti di calcolatori.
+Il <strong>connettore di rete</strong> è semplicemente un’interfaccia standard presente sul dispositivo di rete, per il collegamento del dispositivo di rete al mezzo di trasmissione. Esistono vari connettori, diversi a seconda del tipo di tecnologia impiegata per la rete di comunicazione. I connettori possono avere varie forme, e tipicamente permettono il collegamento solo quando le tecnologie dei dispositivi di rete, dei protocolli di gestione, e dei mezzi di trasmissione sono tra loro compatibili.
+I dispositivi di rete sono amministrati da componenti software del sistema operativo, e devono rispettare un insieme di regole standard per la gestione dei processi di comunicazione, definite dai protocolli di rete.
+I <strong>protocolli di rete</strong> sono un insieme di regole, univocamente definite, per garantire la compatibilità e la corretta configurazione e gestione delle fasi della comunicazione tra i dispositivi di rete.</p>
+<h3 id="021-mezzo-fisico-di-trasmissione-">0.2.1 Mezzo fisico di trasmissione 🟩<a hidden class="anchor" aria-hidden="true" href="#021-mezzo-fisico-di-trasmissione-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 8.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 8">
+</li>
+<li>
+<p>Esempi mezzi di trasmissione</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 9.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 9">
+</li>
+</ul>
+<p><strong>Il mezzo di trasmissione</strong> è l’elemento fisico che supporta la propagazione dei segnali trasmessi tra i dispositivi della rete. Ne abbiamo parlato anche nella sezione dispositivi di rete
+<strong>Le connessioni di rete</strong> possono essere realizzate mediante tre mezzi di trasmissione diversi:</p>
+<ol>
+<li>cavi conduttori</li>
+<li>fibre ottiche</li>
+<li>connessioni senza fili.</li>
+</ol>
+<p><strong>I cavi di materiale conduttore</strong> (cavetti, doppino intrecciato o cavo coassiale), sono in grado di propagare segnali elettrici, cioè variazioni di tensione e corrente elettrica. Questi mezzi fisici sono i più utilizzati nelle reti locali, e nelle brevi distanze, per il loro buon rapporto tra costo e prestazioni. Oggi tale mezzo trasmissivo è in grado di supportare trasmissioni dati con una capacità
+dell’ordine del miliardo di bit al secondo (1-2 Gbit/sec).</p>
+<p><strong>La tecnologia a fibre ottiche</strong> è tecnologicamente avanzata, e si basa sulla trasmissione di segnali ottici, cioè di luce, vincolata all’interno di una sottile fibra di vetro purissimo. La fibra è sottile come un capello, è elastica ed è protetta da una guaina esterna per facilitare il suo impiego. Il costo della fibra non è molto elevato, tuttavia la fibra è molto delicata per quanto riguarda la connessione degli estremi (giunzione) e questo influisce molto sui costi di distribuzione e di realizzazione dell’infrastruttura di rete. La capacità di una fibra ottica può arrivare oggi a qualche decina di migliaia di miliardi di bit al secondo (oltre 10000 Gbit/sec).</p>
+<p><strong>Onde elettromagnetiche e dalla loro propagazione nello spazio</strong>. Esempi in tal senso sono forniti dalle onde radio e dalla luce infrarossa. Tali tecnologie vengono dette senza fili (wireless). Le reti senza fili sono molto interessanti, e la loro diffusione è oggi esplosiva, in quanto permettono la mobilità dei dispositivi e degli utenti. La capacità dei collegamenti senza fili può arrivare oggi a qualche decina di milioni di bit al secondo (1- 54 Mbit/sec). Il limite della tecnologia senza fili è dato dalla vulnerabilità del segnale rispetto ad errori e interferenza dei segnali, e dai limiti fisici della propagazione dei segnali. Due dispositivi possono essere connessi senza fili solo se rimangono entro un limite di distanza $d$ che dipende dalla potenza del segnale radio emesso dal trasmettitore, e da eventuali ostacoli intermedi per il segnale.
+Inoltre non è precisa, nel senso che non si riesce in modo effettivo ad isolare la direzione di arrivo (la destination e sorgente non sono isolate).</p>
+<p><strong>Collisione</strong> è un problema molto comune per</p>
+<p>Ogni rete può essere realizzata attraverso un singolo mezzo fisico di trasmissione, oppure attraverso la composizione di mezzi fisici eterogenei.</p>
+<p><strong>Canali,</strong> vedi canali di comunicazione, dividono spesso il mezzo di comunicazione. (si potrebbe infatti dire che il singolo mezzo di comunicazione abbia un fascio di canali)</p>
+<h3 id="022-dispositivo-o-scheda-di-rete-">0.2.2 Dispositivo o scheda di rete 🟩<a hidden class="anchor" aria-hidden="true" href="#022-dispositivo-o-scheda-di-rete-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 10.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 10">
+</li>
+</ul>
+<p>Le <strong>schede di rete</strong> permettono la comunicazione in rete tra calcolatori diversi, attraverso i vari mezzi di trasmissione illustrati, avviene mediante dispositivi interni o periferiche esterne del calcolatore. Queste schede sono collegate al calcolatore attraverso un’interfaccia di collegamento del calcolatore: su tale interfaccia transitano i dati (bit di informazione) da trasmettere
+in rete, oppure ricevuti dalla rete.</p>
+<p>La scheda di rete si occupa inoltre di trasformare i bit di informazione in segnali trasmissibili sul mezzo di trasmissione della rete e viceversa: tali trasformazioni si chiamano codifica e decodifica dei dati. Un connettore di rete pone direttamente in contatto la scheda di rete con il mezzo di trasmissione per l’invio e ricezione dei segnali in rete.</p>
+<blockquote>
+<p>In sintesi, la funzione della scheda di rete è quella di memorizzare temporaneamente, codificare, decodificare, trasmettere e ricevere i dati da e verso il mezzo di trasmissione (cioè la rete) o il calcolatore.</p>
+</blockquote>
+<p><strong>Identificazione della scheda di rete</strong>
+Il tipo della scheda di rete viene identificato a seconda del mezzo trasmissivo, e soprattutto a seconda dei protocolli di comunicazione utilizzati per la codifica, e per la trasmissione dei dati in rete.
+Per le reti locali (LAN) basate su mezzo di trasmissione cablato, le tecnologie più diffuse sono chiamate con il nome del protocollo di comunicazione primario: ad esempio <strong>Ethernet</strong>, nelle varianti a 10, 100 Mbit/sec (Fast Ethernet) e 1000 Mbit/sec
+(Gigabit Ethernet).</p>
+<p>Per le reti LAN senza fili (WLAN), le schede di rete più diffuse sono denominate <strong>Wi-Fi</strong> (da 11 a 54 Mbit/sec), e <strong>Bluetooth</strong> (da 1 a 2 Mbit/sec).
+Ogni scheda di rete, per permettere di essere identificata univocamente nel contesto di una rete locale, dispone dalla sua costruzione di un indirizzo univoco (unico) a livello mondiale, non modificabile, detto indirizzo <strong>MAC</strong> (Medium Access Control), spesso questa scheda di rete è specifica per il mezo trasmissivo!.
+Tali indirizzi vengono assegnati dai costruttori delle schede, per evitare che si possano originare indirizzi MAC duplicati. (spesso hai moltissime informazioni riguardo al modello della scheda di rete e del produttore solo guardando questo).</p>
+<p>Il <strong>MAC</strong> si occupa anche di evitare le collisioni (come non lo so).</p>
+<h3 id="023-protocolli-di-rete-">0.2.3 Protocolli di rete 🟩<a hidden class="anchor" aria-hidden="true" href="#023-protocolli-di-rete-">#</a></h3>
+<ul>
+<li>
+<p>Slide (la parte sull’architettura presente in slide è trattata in <a href="//notes/architettura-e-livelli-1,-2">Architettura e livelli 1, 2</a></p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 11.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 11">
+</li>
+</ul>
+<blockquote>
+<p>Le regole che governano i processi di comunicazione in rete, tra dispositivi e sistemi eterogenei</p>
+</blockquote>
+<p><em>Perché è necessario:</em> La necessità di accordarsi su regole e servizi comuni per la comunicazione di rete ha lo scopo di permettere una completa compatibilità e supporto alla comunicazione su sistemi, tecnologie e dispositivi eterogenei.</p>
+<p>Al fine di far ciò definiscono delle regole semantiche (processi) e sintattiche (struttura pacchetto) formali.</p>
+<p>I protocolli definiscono aspetti e regole semantiche sulla sequenza dei messaggi, e regole sintattiche sul formato dei messaggi scambiati durante la comunicazione. La definizione dei protocolli di rete deve prevedere e supportare diverse finalità di comunicazione.</p>
+<p>Non ha quindi senso definire un protocollo rigido, ma ha senso definire classi di protocolli, deputate a svolgere e gestire <em>determinate</em> funzioni della comunicazione. Tali classi di protocolli, opportunamente organizzate, permettono di semplificare la gestione della rete, ma è necessario definire in modo non ambiguo le relazioni tra le classi di protocolli (ovvero quale protocollo si occupa di gestire un certo problema? Come avviene il dialogo tra protocolli?)</p>
+<h2 id="03-struttura-della-rete">0.3 Struttura della rete<a hidden class="anchor" aria-hidden="true" href="#03-struttura-della-rete">#</a></h2>
+<h3 id="031-strutture-della-connessione-di-rete-4-">0.3.1 Strutture della connessione di rete (4) 🟩<a hidden class="anchor" aria-hidden="true" href="#031-strutture-della-connessione-di-rete-4-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 12.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 12">
+</li>
+</ul>
+<p><strong>Un collegamento o connessione fisica</strong> di rete è fornita da un <em>mezzo di trasmissione</em> (ad esempio un cavo, una fibra ottica oppure lo spazio per la propagazione di onde radio) che sia condiviso tra due o più dispositivi ad esso collegati, e che permetta il trasferimento di segnali, e quindi informazione, tra i dispositivi stessi.</p>
+<p><strong>Un’infrastruttura di rete</strong> rappresenta l’insieme dei collegamenti o connessioni fisiche esistenti tra tutti i dispositivi di una rete.</p>
+<p><strong>La comunicazione</strong> tra una coppia qualsiasi di calcolatori in rete, detti <strong>nodi (oppure host)</strong> della rete, è possibile se esiste un collegamento diretto tra i nodi, oppure se esiste una sequenza di collegamenti, detta cammino, che permetta la comunicazione dei segnali passando per eventuali nodi e collegamenti intermedi.</p>
+<p><strong>Classi di strutture di connessione della rete</strong>. (4)</p>
+<ul>
+<li><em>Le connessioni di rete punto a punto</em>, come nell’esempio (a), sono connessioni che possono essere instaurate tra una coppia di calcolatori, senza coinvolgerne altri. Esse rappresentano il caso più semplice di infrastruttura di rete, e sono semplici da gestire.</li>
+<li><em>Reti completamente connesse:</em> Le connessioni di rete multiple permettono di connettere contemporaneamente un dispositivo a molti altri dispositivi.
+Nell’esempio (b) viene mostrata una infrastruttura di rete nella quale ogni nodo è connesso attraverso un linea dedicata ad ogni altro nodo. Questa infrastruttura di rete viene detta completamente connessa, ed è molto ridondante: infatti esistono molti cammini, oltre al collegamento diretto, per connettere ogni coppia di nodi passando per nodi intermedi.
+Una simile infrastruttura di rete si può ritenere a volte troppo complessa e costosa. Ad esempio, sarebbe impensabile disporre di una connessione dedicata (cioè un filo diretto) da ogni calcolatore ad ogni altro calcolatore sulle reti mondiali.</li>
+<li><em>Reti parzialmente connesse:</em> Nell’esempio c, malgrado il ridotto numero di collegamenti rispetto al caso b, è comunque possibile per ogni dispositivo trasferire segnali, cioè comunicare, verso ogni altro dispositivo. In altre parole esiste un cammino, attraverso le connessioni disponibili, per trasferire informazione tra ogni coppia di dispositivi della rete.Nella rete (c) esiste però un fattore di rischio: in
+seguito a un guasto di una connessione, potrebbe risultare un insieme di componenti separato da tutti gli altri, detto “<strong>partizione</strong>” della rete (esempio d).</li>
+<li><em>Le partizioni della rete</em> limitano il grado di comunicazione possibile, e possono essere dovute a cause fisiche (guasti fisici della connessione) oppure a cause che dipendono da cattive applicazioni delle regole di utilizzo (ovvero dei protocolli, che vedremo in seguito).</li>
+</ul>
+<h3 id="032-topologia-di-rete-">0.3.2 Topologia di rete 🟩<a hidden class="anchor" aria-hidden="true" href="#032-topologia-di-rete-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 13.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 13">
+</li>
+</ul>
+<p><strong>Topologie di rete</strong> sono i diversi schemi di connessione sono possibili per creare le infrastrutture di rete</p>
+<p>Topologia per  PAN e locali LAN:
+<strong>Topologia ad anello</strong> (esempio a) è basata sull’organizzazione delle connessioni tra i dispositivi, in
+modo da creare un anello chiuso. Ogni componente può comunicare con ogni altro componente inviando i segnali attraverso la sequenza di connessioni in senso orario o antiorario.
+<strong>La topologia a stella</strong> (esempio b) prevede un componente centrale direttamente connesso a tutti gli altri. Ogni componente periferico può comunicare con ogni altro componente periferico passando attraverso il componente centrale.
+<strong>La topologia a bus</strong> (esempio c) prevede che ogni componente abbia una connessione verso un bus condiviso (cioè una connessione condivisa da tutti). Questo tipo di connessione permette di introdurre una delle problematiche fondamentali che saranno trattate in seguito: la gestione dell’accesso al bus, ovvero il decidere chi possa trasmettere tra tutti i possibili dispositivi, per evitare sovrapposizioni delle trasmissioni.
+<strong>La topologia ad albero</strong> (esempio d) prevede un’organizzazione gerarchica delle connessioni.
+Se pensiamo all’analogia con un albero genealogico, esiste un dispositivo (nonno) che connette direttamente due o più dispositivi (figli), ognuno dei quali a sua volta connette direttamente un numero variabile di dispositivi (nipoti), e così via.</p>
+<p>Mano a mano che le reti più piccole vengono collegate tra loro e organizzate in strutture di rete più grandi, la topologia della rete globale può diventare incredibilmente complessa, e quindi uno schema topologico generalizzato non è quasi mai applicabile. In questo caso si parla di <strong>rete con topologia a grafo complesso, oppure a maglia</strong>. In tali topologie a grafo, possono essere presenti
+cammini multipli che connettono coppie di nodi, dando luogo a possibili alternative per la connessione dei dispositivi.
+Questo fatto può ridurre il rischio di incorrere in partizioni della rete, in quanto un certo grado di ridondanza dei cammini di connessione permette di aggirare i collegamenti soggetti a eventuali guasti.</p>
+<h3 id="033-i-due-generali-">0.3.3 I due generali 🟩<a hidden class="anchor" aria-hidden="true" href="#033-i-due-generali-">#</a></h3>
+<p>È possibile implementare una comunicazione sicura in un ambiente che possa fallire, anzi con un nemico che voglia far fallire questo?</p>
+<p>Fai finta che A = 3, B = 3, e C = 5, ma A e B sono separati, è possibile avere una comunicazione per attaccare insieme? Se A o B attaccano da soli verrebbero ammazzati.</p>
+<ul>
+<li>
+<p>Semplificazione del problema dei due generali</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 14.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 14">
+</li>
+</ul>
+<p>Come si manda il messaggio in modo sicuro? Se si manda il singolo messaggio, senza aspettare nessuna risposta, allora è molto insicuro (per niente sicuro) che il messaggio sia arrivato.</p>
+<p>Per questo motivo si aspetta un <strong>acknowledgment</strong>, e un altro acknowledgment dall’altra parte → SYN/ACK  protocol è simile.</p>
+<p>Ma facendo in questo modo <strong>non si è mai sicuri</strong> che l’altro abbia ricevuto il messaggio. La rete a due è fallibile, e questo è dimostrato.</p>
+<h3 id="034-reti-commutazione-a-circuito-">0.3.4 Reti commutazione a circuito 🟩<a hidden class="anchor" aria-hidden="true" href="#034-reti-commutazione-a-circuito-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 15.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 15">
+</li>
+</ul>
+<p>Nelle reti a commutazione di circuito, i dati vengono trasmessi tra un mittente e un destinatario finale agli estremi di un cammino <strong>end-to-end</strong> (circuito) di canali di comunicazione punto a punto. Il circuito viene negoziato e prenotato, attraverso opportune procedure (come avviene quando si digita un numero per una chiamata telefonica). Una volta identificati e ottenuti i canali che collegano mittente e destinatario, la comunicazione dati può avvenire anche come un’unica sequenza di bit, senza interruzioni.</p>
+<p><em>Vantaggi</em></p>
+<ul>
+<li>Non c’è bisogno di dichiarare periodicamente chi sia il mittente e il destinatario dei dati, in quanto entrambi sono fissati al momento della creazione del circuito riservato (riservato = prenotato da qualcuno).</li>
+<li>Ridotto ritardo di trasmissione per i dati, in quanto ogni nodo intermedio ha già disponibile il canale libero uscente sul quale inviare immediatamente i dati ricevuti sul canale entrante, dal mittente fino al destinatario finale.</li>
+</ul>
+<p><em>Svantaggi</em></p>
+<ul>
+<li>Utilizzo basso dei canali del circuito
+<ul>
+<li>Quantità dei dati da trasmettere non è grande</li>
+<li>I dati arrivano a gruppi, intervallati da tempi di vuoto.</li>
+</ul>
+</li>
+<li>Inefficienza di utilizzo delle risorse del circuito nei casi sopraelencati (il canale resta tutto occupato).</li>
+<li>Pagato a tempo!</li>
+<li>Un pò di tempo in più per prenotare il percorso all’inizio.</li>
+</ul>
+<h3 id="035-reti-commutazione-a-pacchetto-">0.3.5 Reti commutazione a pacchetto 🟩<a hidden class="anchor" aria-hidden="true" href="#035-reti-commutazione-a-pacchetto-">#</a></h3>
+<ul>
+<li>
+<p>Slides</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 16.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 16">
+</li>
+</ul>
+<p>La maggior parte delle reti per trasmissione dati digitali, inclusa la rete di reti globale Internet, sono di questo tipo.</p>
+<p><strong>Come funziona</strong></p>
+<p>I dati digitali vengono suddivisi in pacchetti separati, e vengono trasmessi su canali ad accesso multiplo (broadcast, non per forza deve essere punto a punto ).
+Per consentire la corretta ricezione dei dati, è però necessario includere in ogni pacchetto l’informazione sull’identità del rispettivo mittente e soprattutto del destinatario.
+Si attua in questo modo la condivisione di un canale unico per diversi flussi di pacchetti appartenenti a diversi mittenti e destinatari.
+Componendo in serie una sequenza di canali broadcast a commutazione di pacchetto, i nodi ricevitori devono di volta in volta farsi carico di verificare se il pacchetto sia giunto a destinazione o, in caso contrario, possono provvedere all’inoltro del pacchetto ricevuto sul successivo canale broadcast.</p>
+<p><em>Svantaggi</em></p>
+<ul>
+<li>Ritardo per la comunicazione dei dati tra mittente e destinatario (più lenti
+<ul>
+<li>dovuto all’esigenza di iterare più volte la ricezione e l’inoltro di pacchetti su canali broadcast in sequenza.</li>
+</ul>
+</li>
+<li>Maggiore rischio di collisione dei pacchetti (<em>perdita di pacchetti</em>)</li>
+<li>A causa dei jitter, i pacchetti possono arrivare in ordine diverso(<em>perdita di ordine → riordinamento</em>)</li>
+<li>Se utilizzo il broadcast, serve il mittente e il destinatario</li>
+</ul>
+<p><em>Vantaggi</em></p>
+<ul>
+<li>maggiore utilizzo dei canali ad accesso multiplo, e quindi alla possibilità di tariffare la comunicazione in base ai dati trasmessi, e non in base al tempo necessario.</li>
+</ul>
+<h3 id="036-canali-di-comunicazione-della-rete-">0.3.6 Canali di comunicazione della rete 🟩<a hidden class="anchor" aria-hidden="true" href="#036-canali-di-comunicazione-della-rete-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 17.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 17">
+</li>
+</ul>
+<p>Bisogna dire che è una virtualizzazione sul mezzo di comunicazione, ossia si utilizza il mezzo di comunicazione come se avesse alcuni canali diversi (che non interferiscono fra di loro) quindi possiamo riutilizzare la stessa risorsa fisica!</p>
+<p>Da riallacciarsi con mezzi di comunicazione per capire come sono implementate fisicamente i canali di comunicazione.</p>
+<p><strong>I canali punto a punto</strong>  si basano sull’accordo tra un mittente e un destinatario riguardante la definizione del canale da usare (in figura equivale al colore). Solo due dispositivi possono usare il canale di tipo punto a punto a loro riservato. Possiamo creare un canale logico da un singolo mezzo trasmissivo (eg una frequenza diversa, che possono essere filtrate).
+Il problema principale di questo è che è fisso, ossia posso comunicare solamente con un unico computer, senza poter cambiare il destinatario, direi che abbia più problemi nel momento di wiring.</p>
+<p><strong>I canali ad accesso multiplo (broadcast)</strong>  sono canali sui quali tutti possono trasmettere e dove tutti ricevono le trasmissioni di altri (chiaramente il problema di collissione è molto alto). Half duplex o uno trasmette o uno riceve mentre i Full-duplex possono trasmettere e ricevere contemporaneamente. Spesso per queste reti c&rsquo;è un master e dei slave che gestiscono.</p>
+<p>Ethernet risolve questo problema senza fare utilizzo di un master, utilizza un sistema di ___ (non mi ricordo, è comunque una race condition) lo risolve con un sistema di counter interno dopo il quale, se è ancora vuoto il canale di comunicazione broadcast, prova a fare la comunciazione.</p>
+<h3 id="037-problema-delle-collisioni-su-canali-multiple--">0.3.7 Problema delle collisioni su canali multiple  🟨<a hidden class="anchor" aria-hidden="true" href="#037-problema-delle-collisioni-su-canali-multiple--">#</a></h3>
+<p>Un problema per i canali ad accesso multiplo è legato alla possibile collisione di segnali appartenenti allo stesso canale di comunicazione. Se due trasmissioni di segnali si sovrappongono nel tempo sullo stesso canale di comunicazione, l’effetto sui segnali può essere distruttivo e l’esito della comunicazione può essere nullo. Intuitivamente, se due dispositivi trasmettono i loro segnali contemporaneamente, nessuno ricevitore sarà in grado di capire quali bit di informazione siano stati trasmessi.</p>
+<p>Il problema delle collisioni è molto critico, e determina l’esigenza di arbitraggio nell’accesso al canale: chi trasmette e quando?
+<strong>Il problema dell’arbitraggio</strong> può essere banale su canali punto a punto, dove mittente e destinatario possono definire semplici leggi (cioè protocolli di gestione della comunicazione) per evitare le collisioni: ad esempio, trasmetto io, poi trasmetti tu.
+In canali condivisi ad accesso multiplo (broadcast) il problema risulta invece molto complesso, in quanto occorre definire leggi non ambigue, in grado di regolare gli accessi da parte di molti utenti, evitando le collisioni.</p>
+<p>Il problema principale delle collisioni è che fanno perdere tempo o infomazioni (se il nostro protocollo non le gestisce).</p>
+<p><strong>Utilizzo</strong></p>
+<p>Di solito è uguale a $capacità \cdot overhead$, ad esempio se trasmetto 100 bit e solo 1 un bit è di informazione, questo è l&rsquo;utilizzo del protocollo. Questo va a misurare efficienza di informazioni di questo protocollo.</p>
+<h3 id="038-servizi-orientati-alla-connessione--e-non-">0.3.8 Servizi orientati alla connessione  e non 🟨+<a hidden class="anchor" aria-hidden="true" href="#038-servizi-orientati-alla-connessione--e-non-">#</a></h3>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduzione a reti/Untitled 18.png" alt="image/universita/ex-notion/Introduzione a reti/Untitled 18">
+</li>
+</ul>
+<p><strong>I servizi orientati alla connessione (connection-oriented)</strong> garantiscono che la spedizione di pacchetti di dati tra mittente e destinatario sia equivalente a una trasmissione affidabile e corretta. In altre parole, essi implementano una serie di operazioni attraverso le quali tutti i pacchetti perduti saranno ritrasmessi, e correttamente ordinati, fino a ricostruire esattamente tutta l’informazione trasmessa.
+L’implementazione di tale tipo di servizi potrebbe essere basata sulla definizione di vari protocolli alternativi. Ad esempio, potrebbe essere definito un cammino riservato unico per i pacchetti. Intuitivamente, ciò equivarrebbe a un circuito virtuale per l’invio dei pacchetti. Un altro modo per ottenere tale servizio potrebbe essere basato sulla numerazione dei pacchetti inviati, sul
+riordino dei pacchetti ricevuti e sulla richiesta di ri-trasmissione dei pacchetti perduti.</p>
+<p>In breve questo risolve un problema di:</p>
+<ol>
+<li>
+<p>Riordinamento dei pacchetti</p>
+<ul>
+<li>
+<p>Soluzione riordinamento</p>
+<p>Basta numerare i pacchetti e poi far riordinare dal destinatario, questo è un problema molto facile da risolvere</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Reinvio dei pacchetti perduti</p>
+<ul>
+<li>
+<p>Soluzione reinvio</p>
+<p>Bisogna che il destinatario mandi degli acknowledgements. Anche questi possono essere persi.</p>
+<ol>
+<li>Problema tempo da aspettare prima di reinviare il pacchetto</li>
+<li>Pacchetto duplicato quando si perde l&rsquo;acknowledgement o ci mette troppo.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>I servizi non orientati alla connessione</strong> (<strong>connectionless</strong>) non si preoccupano di garantire l’ordine corretto dei pacchetti inviati e nemmeno la ricezione di tutti i pacchetti. Tale servizio è simile all’invio dei pacchetti in modo analogo a una sequenza di lettere attraverso la posta ordinaria.</p>
+<p>Non ci importa l&rsquo;ordine di arrivo né per forza alcuni buchi.</p>
+<p>Questo è come sono le reti normali, normalmente sono connectionless, con un protocollo in più sono connection-oriented.</p>
+<p>In modo molto veloce si potrebbe dire che i servizi non orientati alla connessione non garantiscono nulla.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on x"
+            href="https://x.com/intent/tweet/?text=Introduzione%20a%20reti&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f&amp;title=Introduzione%20a%20reti&amp;summary=Introduzione%20a%20reti&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f&title=Introduzione%20a%20reti">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on whatsapp"
+            href="https://api.whatsapp.com/send?text=Introduzione%20a%20reti%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on telegram"
+            href="https://telegram.me/share/url?text=Introduzione%20a%20reti&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduzione a reti on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Introduzione%20a%20reti&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fintroduzione-a-reti%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

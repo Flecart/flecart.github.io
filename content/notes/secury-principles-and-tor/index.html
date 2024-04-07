@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Secury Principles and Tor | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Security principles We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors These are acronyms, usually called CIA and AAA for infrastructure
+Confidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/secury-principles-and-tor/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/secury-principles-and-tor/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Secury Principles and Tor" />
+<meta property="og:description" content="Security principles We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors These are acronyms, usually called CIA and AAA for infrastructure
+Confidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/secury-principles-and-tor/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="Secury Principles and Tor"/>
+<meta name="twitter:description" content="Security principles We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors These are acronyms, usually called CIA and AAA for infrastructure
+Confidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Secury Principles and Tor",
+      "item": "http://localhost:1313/content/notes/secury-principles-and-tor/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Secury Principles and Tor",
+  "name": "Secury Principles and Tor",
+  "description": "Security principles We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors These are acronyms, usually called CIA and AAA for infrastructure\nConfidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Security principles We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors These are acronyms, usually called CIA and AAA for infrastructure\nConfidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.\nEavesdropping 🟩 This is an example of attack of confidentiality. The setting is usually like this: Eve that intercepts the message sent by each other. For example in network security, it is quite easy to eavesdrop with Wireshark or similars.\nIntegrity Integrity concerns with message tampering. The received message should be the same as the sent one (man in the middle are common attacks).\nAuthentication Authentication is important when we need to know to whom we are talking to. We should need to be sure that that is exactly the person (or the machine) we are trying to connect (or talk to). In this framework it is about integrity.\nSpoofing attacks 🟩 When an attacker authenticates as another user.\nManipulation attacks 🟩 This is tampering.\nAvailability The system should be available, that is accessible by its users.\nDenial of service attacks 🟩 For example if you have limited number of ports, a common example of denial of service attack is the Syn flooding where multiple services ask to open a TCP connection, but it doesn’t continue with the communication, leaving the port occupied but useless.\nAnonymity On the internet we are not anonymous we are always tracked by ISP, cookies and many other strategies that I am not even aware of. This is a problem we we want to be anonymous, so how can we reach this target??\nAnonymity by proxy 🟩 We just use another computer to repeat my information, this computer doesn’t have access to the underlying information, but it substitutes his IP to ours, so the end receiver doesn’t exactly know where the initial message comes from.\nMix-based systems 🟨 Created in 1981 by David Chaum. Very similar to the previous one, in practice, in the end, it acts as a proxy but not only does it take and receive, but it also mixes together the packets it has received from the sources, applying its key.\nDisadvantage: The public-private mixing system is very slow. For this reason, a network of nodes is established, each having a symmetric key, making it much faster.\nThe important thing to note is that this system has been influential in modern tor networks.\nFullz dataleak A fullz dataleak has the minimum indispensable to create bank accounts or pay with credit cards\nName and Surname birthdate fiscal code phone number residence address So its very important to keep this information private!\nThe Tor Ecosystem This system tries to anonymize the user with principles similar to #Anonymity by proxy. The initial user message goes through different relays before reaching the end destination. The system is a little bit more complex than this, so we are breaking down a connection example\nIt’s called onion because each relay has only an outer layer of the onion. The core is what the end user receives.\nHow Tor Works The Tor network sends the payload through three random relay servers in the network. Information about what we are accessing, from who, is not accessible. But some information is still accessible, for example:\nOur ISP knows that we are trying to access the Tor network, because we need a listing of tor nodes. The exit relay knows to whom we are talking to, as this information is needed to send the message. As the exit node is often public, they are often blocked by institutions, like banks.\nOverlay networks Rete “overlay”. Una rete chiusa al quale interno vengono distribuiti dati in forma anonima. Questo è il principio dei servizi onion.\nService setup When a service is put onto this network it connects to some intro nodes whose role is to introduce clients to the servers. The map server-\u003eintro nodes is then saved into another node, which is called the directory node. This node contain mappings from services and intro points.\nClient Connection The client that wants to connect to an anonymous service needs to know who are the intro nodes. He asks the directory node who gives him the connections. Directory gives him a descriptor, that is verified with the original .onion address who acts as a secure key.\nThe the client asks a secret string from a rendezvous node. The secret string and rendezvous are then sent to the intro nodes, and these sent it to the original service that decides whether to accept or not that service.\nIf it accepts, it sends the secret to the rendezvous, who then creates a circuit between the client and the server. Now everything can be sent and received anonymously.\nOld section Some concepts Security vogliamo impedire modi che un altro possa accedere ad informazioni riservate\nObiettivo solo qualcuno può leggere una password.\nPolicy Threath models, and mechanism. sono modi che potrebbero essere attaccati (permessi, provare a rompere la password, attaccare il sistema operativo e simili). Questo è un buon framework generale, ma nella pratica non è mai utilizzato. Utilizziamo questa pratica per introdurre al corso.\nÈ molto difficile prevedere tutti i tipi di attacco, l’unica soluzione è iterare provare a sapere dal passato ed evolvere le policy che vengono messe. Da questo si può capire che non è perfetto. Cose da considerare sono\nCosto dell’attacco Big payoff: cose che costano poco da implementare per il difensore, ma che rendono l’attaccante molto inabilitato. Recuperare fra gli attacchi. Di solito gli attacchi sono fatti perché è facile! È facile connettersi agli altri computer nel mondo.\nPolicy flaws examples Business class airfare (tipo cambiare il biglietto dopo essere andati su, bisogna investire in un sistema che non permetta di fare questo).\nSchool system. (Students → nothing, Director → reads all, Teacher can add student and change password of students), un insegnante può aggiungere il director come studente e cambiargli la password, e uno studente può accedere al computer dell’insegnante 💀\nYahoo recovery password asks questions! But it was listed in the wikipedia page of the persone, so breaked xD.\nCrazy gmail attack\nInsecure defaults Sono molto importanti perché è molto facile dimenticarsi di cambiare il default in caso sia molto debole come sistema.\nDefault password! (pubblicati e.g. da un manuale riguardo qualcosa). Default permission. (e.g. amazon S3 bucket public by default). Threat model problems Sono cose che un attaccante può utilizzare per entrare nel sistema.\nClipper chips of the 90’ Secret design /impl, non si può supporre che il design sia nascosto, si può sempre disassemblare col giusto tempo, quindi è facilmente rompibile diciamo, se diventa abbastanza importante da dover essere rotto. (per questo è meglio avere una chiave) Prova a dare una occhiata al kerchoffs principle in Classical Cyphers.\nNon assumere che l’utente sia conoscitore delle pratiche generali della sicurezza (e.g. dirgli che ciò che scarica può essere un virus). list of attack vectors! Soft dev Source git (add backdoor that is integrated!) so the compiling shipped the attacked version\nXcode in china, compromised mirror.\nSw Updates.\nInitialization of seed?\n(some checks, and in many places, probabilmente si dimentica qualche check!)\nRandomness in Virtual machines (molto limitato, poche fonti di randomness come tastiera e cose simili.\nAppunti prof\nIntroduction ============ Welcome to 6.858 -- Computer Systems Security Course structure Lectures will be MW1-2:30, in 32-123. One paper per lecture. Tentative schedule online. Likely stable up until spring break. Lectures after spring break may change. Read the paper before lecture, and submit before lecture: Answer to a short homework question (link from schedule page). Your own question about the paper (will try to answer in lecture). Some papers about production systems, others about research ideas Even if the overall system described in the paper didn't pan out, many of the ideas and techniques in the paper are important and useful. Interrupt, ask questions, point out mistakes. [http://es.csail.mit.edu:8080/room/6.858/2adb3e10](http://es.csail.mit.edu:8080/room/6.858/2adb3e10) One quiz, one final exam. Quiz during class, final during finals week. Assignments: Five labs. Defenses and/or attacks on fairly real systems. Not a lot of coding, but lots of non-standard thinking. Poke into obscure corners of x86 asm, C, Python, Javascript, .. Office hours for lab/lecture help. Lab 1, buffer overflows, first part due this Friday. Start early. Two options for Lab 5: Ordinary lab, or your choice of final project, in groups. For projects: Presentations at the end of the semester. Think of projects you'd like to work on as you're reading papers. Both attack- or defense-oriented projects are possible. Discuss project ideas with course staff ahead of time. Two lecturers: Frans, Nickolai. 4 TAs: Rayden, Noah, Cattalyya, Jonathan. Sign up for Piazza (link on course web site). Mostly questions/answers about labs. We will post any important announcements there. Warning about security work/research on MITnet (and in general). You will learn how to attack systems, so that you know how to defend them. Know the rules: [http://ist.mit.edu/network/rules](http://ist.mit.edu/network/rules) Don't mess with other peoples' data/computers/networks w/o permission. Ask course staff for advice if in doubt. 6.858 is about building secure computer systems Secure = achieves some property despite attacks by adversaries. Systematic thought is required for successful defense. Details matter! High-level plan for thinking about security: Goal: what your system is trying to achieve. e.g. only Alice should read file F. Common goals: confidentiality, integrity, availability. Policy: some plan (rules) that will get your system to achieve the goal. e.g. set permissions on F so it's readable only by Alice's processes. e.g. require a password and two-factor authentication. Threat model: assumptions about what the attacker can do. e.g. can guess passwords, cannot physically steal our server. Mechanism: software/hardware that your system uses to enforce policy. e.g. user accounts, passwords, file permissions, encryption. policy might include human components (e.g., do not share passwords) that's outside of the scope of the security mechanisms Often layered: mechanism of one layer is policy of next level down. Building secure systems is hard -- why? Example: 6.858 grade file, stored on an Athena AFS server. Policy: only TAs should be able to read and write the grades file. Easy to implement the *positive* aspect of the policy: There just has to be one code path that allows a TA to get at the file. But security is a *negative* goal: We want no tricky way for a non-TA to get at the file. There are a huge number of potential attacks to consider! Exploit a bug in the server's code. Guess a TA's password. Steal a TA's laptop, maybe it has a local copy of the grades file. Intercept grades when they are sent over the network to the registrar. Get a job in the registrar's office, or as a 6.858 TA. Result: One cannot get policies/threats/mechanisms right on the first try. One must usually iterate: Design, watch attacks, update understanding of threats and policies. Post-mortems important to understand Public databases of vulnerabilities (e.g., https://cve.mitre.org/) Encourage people to report vulnerabilities (e.g., bounty programs) Defender is often at a disadvantage in this game. Defender usually has limited resources, other priorities. Defender must balance security against convenience. A determined attacker can usually win! Defense in depth Recovery plan (e.g., secure backups) Most of this lecture is about failures to make you start thinking in this way What's the point if we can't achieve perfect security? Perfect security is rarely required. Make cost of attack greater than the value of the information. So that perfect defenses aren't needed. Make our systems less attractive than other peoples'. Works well if attacker e.g. just wants to generate spam. Find techniques that have big security payoff (i.e. not merely patching holes). We'll look at techniques that cut off whole classes of attacks. Successful: popular attacks from 10 years ago are no longer very fruitful. Sometimes security *increases* value for defender: VPNs might give employees more flexibility to work at home. Sandboxing (JavaScript, Native Client) might give me more confidence to run software I don't fully understand. No perfect physical security either. But that's OK: cost, deterrence. One big difference in computer security: attacks are cheap. What goes wrong # 1: problems with the policy. I.e. system correctly enforces policy -- but policy is inadequate. Example: Business-class airfare. Airlines allow business-class tickets to be changed at any time, no fees. Is this a good policy? Turns out, in some systems ticket could have been changed even AFTER boarding. Adversary can keep boarding plane, changing ticket to next flight, ad infinitum. Revised policy: ticket cannot be changed once passenger has boarded the flight. Sometimes requires changes to the system architecture. Need computer at the aircraft gate to send updates to the reservation system. Example: Verifying domain ownership for TLS certificates. Browser verifies server's certificate to ensure talking to the right server. Certificate contains server's host name and cryptographic key, signed by some trusted certificate authority (CA). Browser has CA's public key built in to verify certificates. CA is in charge of ensuring that certificate is issued only to legitimate domain (hostname) owner. Typical approach: send email to the contact address for a domain. Some TLDs (like .eu) do not reveal the contact address in ASCII text. Most likely to prevent spam to domain owners. Instead, they reveal an ASCII image of the email address. One CA (Comodo) decided to automate this by OCR'ing the ASCII image. Turns out, some ASCII images are ambiguous! E.g., foo@a1telekom.at was mis-OCRed as foo@altelekom.at Adversary can register mis-parsed domain name, get certificate for someone else's domain. [ Ref: [https://www.mail-archive.com/dev-security-policy@lists.mozilla.org/msg04654.html](https://www.mail-archive.com/dev-security-policy@lists.mozilla.org/msg04654.html) ] Example: Fairfax County, VA school system. [ Ref: [http://catless.ncl.ac.uk/Risks/26.02.html#subj7.1](http://catless.ncl.ac.uk/Risks/26.02.html#subj7.1) ] Student can access only his/her own files in the school system. Superintendent has access to everyone's files. Teachers can add new students to their class. Teachers can change password of students in their class. What's the worst that could happen if student gets teacher's password? Student adds the superintendent to the compromised teacher's class. Changes the superintendent's password, since they're a student in class. Logs in as superintendent and gets access to all files. Policy amounts to: teachers can do anything. Example: Sarah Palin's email account. [ Ref: [http://en.wikipedia.org/wiki/Sarah_Palin_email_hack](http://en.wikipedia.org/wiki/Sarah_Palin_email_hack) ] Yahoo email accounts have a username, password, and security questions. User can log in by supplying username and password. If user forgets password, can reset by answering security Qs. Some adversary guessed Sarah Palin's high school, birthday, etc. Policy amounts to: can log in with either password *or* security Qs. No way to enforce \"Only if user forgets password, then ...\" Thus user should ensure that password *and* security Qs are both hard to guess. Example: Mat Honan's accounts at Amazon, Apple, Google, etc. [ Ref: [http://www.wired.com/gadgetlab/2012/08/apple-amazon-mat-honan-hacking/all/](http://www.wired.com/gadgetlab/2012/08/apple-amazon-mat-honan-hacking/all/) ] Honan an editor at wired.com; someone wanted to break into his gmail account. Gmail password reset: send a verification link to a backup email address. Google helpfully prints part of the backup email address. Mat Honan's backup address was his Apple @me.com account. Apple password reset: need billing address, last 4 digits of credit card. Address is easy, but how to get the 4 digits? How to get hold of that e-mail? Call Amazon and ask to add a credit card to an account. No authentication required, presumably because this didn't seem like a sensitive operation. Call Amazon tech support again, and ask to change the email address on an account. Authentication required! Tech support accepts the full number of any credit card registered with the account. Can use the credit card just added to the account. Now go to Amazon's web site and request a password reset. Reset link sent to the new e-mail address. Now log in to Amazon account, view saved credit cards. Amazon doesn't show full number, but DOES show last 4 digits of all cards. Including the account owner's original cards! Now attacker can reset Apple password, read gmail reset e-mail, reset gmail password. Lesson: attacks often assemble apparently unrelated trivia. Lesson: individual policies OK, but combination is not. Apple views last 4 as a secret, but many other sites do not. Lesson: big sites cannot hope to identify which human they are talking to; at best \"same person who originally created this account\". security questions and e-mailed reset link are examples of this. Example: Insecure defaults. Well-known default passwords in routers. Public default permissions in cloud services (e.g., objects in AWS S3 bucket). Secure defaults are crucial because of the \"negative goal\" aspect. Large systems are complicated, lots of components. Operator might forget to configure some component in their overall system. Important for components to be secure if operator forgets to configure them. Policies typically go wrong in \"management\" or \"maintenance\" cases. Who can change permissions or passwords? Who can access audit logs? Who can access the backups? Who can upgrade the software or change the configuration? Who can manage the servers? Who revokes privileges of former admins / users / ...? What goes wrong # 2: problems with threat model / assumptions. I.e. designer assumed an attack wasn't feasible (or didn't think of the attack). Example: assume the design/implementation is secret \"Security through obsecurity\" Clipper chip [ Ref: [https://en.wikipedia.org/wiki/Clipper_chip](https://en.wikipedia.org/wiki/Clipper_chip) ] Broken secret crypto functions Example: most users are not thinking about security. User gets e-mail saying \"click here to renew your account\", then plausible-looking page asks for their password. Or dialog box pops up with \"Do you really want to install this program?\" Or tech support gets call from convincing-sounding user to reset password. Example: computational assumptions change over time. MIT's Kerberos system used 56-bit DES keys, since mid-1980's. At the time, seemed fine to assume adversary can't check all 2^56 keys. No longer reasonable: now costs about $100. [ Ref: [https://www.cloudcracker.com/dictionaries.html](https://www.cloudcracker.com/dictionaries.html) ] Several years ago, 6.858 final project showed can get any key in a day. Example: assuming a particular kind of a solution to the problem. Many services use CAPTCHAs to check if a human is registering for an account. Requires decoding an image of some garbled text, for instance. Goal is to prevent mass registration of accounts to limit spam, prevent high rate of password guessing, etc. Assumed adversary would try to build OCR to solve the puzzles. Good plan because it's easy to change image to break the OCR algorithm. Costly for adversary to develop new OCR! Turns out adversaries found another way to solve the same problem. Human CAPTCHA solvers in third-world countries. Human solvers are far better at solving CAPTCHAs than OCRs or even regular users. Cost is very low (fraction of a cent per CAPTCHA solved). [ Ref: [https://www.cs.uic.edu/pub/Kanich/Publications/re.captchas.pdf](https://www.cs.uic.edu/pub/Kanich/Publications/re.captchas.pdf) ] Example: all TLS CAs are fully trusted. If attacker compromises CA, can generate fake certificate for any server name. Originally there were only a few CAs; seemed unlikely that attacker could compromise a CA. But now browsers fully trust 100s of CAs! In 2011, two CAs were compromised, issued fake certs for many domains (google, yahoo, tor, ...), apparently used in Iran (?). [ Ref: [http://en.wikipedia.org/wiki/DigiNotar](http://en.wikipedia.org/wiki/DigiNotar) ] [ Ref: [http://en.wikipedia.org/wiki/Comodo_Group](http://en.wikipedia.org/wiki/Comodo_Group) ] In 2012, a CA inadvertently issued a root certificate valid for any domain. [ Ref: [http://www.h-online.com/security/news/item/Trustwave-issued-a-man-in-the-middle-certificate-1429982.html](http://www.h-online.com/security/news/item/Trustwave-issued-a-man-in-the-middle-certificate-1429982.html) ] Several other high-profile incidents since then too. Mistake: maybe reasonable to trust one CA, but not 100s. Example: assuming your hardware is trustworthy. If NSA is your adversary, turns out to not be a good assumption. [ Ref: [https://www.schneier.com/blog/archives/2013/12/more_about_the.html](https://www.schneier.com/blog/archives/2013/12/more_about_the.html) ] Example: assuming you are running the expected software. 1. In the 80's, military encouraged research into secure OS'es. Surprise: successful attacks by gaining access to development systems Mistake: implicit trust in compiler, developers, distribution, \u0026c 2. Apple's development tools for iPhone applications (Xcode) are large. Downloading them from China required going to Apple's servers outside of China. Takes a long time. Unofficial mirrors of Xcode tools inside China. Some of these mirrors contained a modified version of Xcode that injected malware into the resulting iOS applications. Found in a number of high-profile, popular iOS apps! [ Ref: [https://en.wikipedia.org/wiki/XcodeGhost](https://en.wikipedia.org/wiki/XcodeGhost) ] Classic paper: Reflections on Trusting Trust. Example: decomissioned disks. Many laptops, desktops, servers are thrown out without deleting sensitive data. One study reports large amounts of confidential data on disks bought via ebay, etc. [ Ref: [https://simson.net/page/Real_Data_Corpus](https://simson.net/page/Real_Data_Corpus) ] Example: software updates. Apple iPhone software updates vs FBI. [ Ref: [http://www.apple.com/customer-letter/](http://www.apple.com/customer-letter/) ] Chrome extensions bought by malware/adware vendors. [ Ref: [https://arstechnica.com/security/2014/01/malware-vendors-buy-chrome-extensions-to-send-adware-filled-updates/](https://arstechnica.com/security/2014/01/malware-vendors-buy-chrome-extensions-to-send-adware-filled-updates/) ] Node.js library updated to include code that steals Bitcoin keys. [ Ref: [https://www.theregister.co.uk/2018/11/26/npm_repo_bitcoin_stealer/](https://www.theregister.co.uk/2018/11/26/npm_repo_bitcoin_stealer/) ] Example: machines disconnected from the Internet are secure? Stuxnet worm spread via specially-constructed files on USB drives. What to do about threat model problems? More explicit threat models, to understand possible weaknesses. Simpler, more general threat models. E.g., should a threat model assume that system design is secret? May be incrementally useful but then hard to recover. Probably not a good foundation for security. Better designs may eliminate / lessen reliance on certain assumptions. E.g., alternative trust models that don't have fully-trusted CAs. E.g., authentication mechanisms that aren't susceptible to phishing. What goes wrong # 3: problems with the mechanism -- bugs. Bugs routinely undermine security. Rule of thumb: one bug per 1000 lines of code. Bugs in implementation of security policy. But also bugs in code that may seem unrelated to security, but they are not. Good mindset: Any bug is a potential security exploit. Especially if there is no isolation around the bug. Example: Apple's iCloud password-guessing rate limits. [ Ref: [https://github.com/hackappcom/ibrute](https://github.com/hackappcom/ibrute) ] People often pick weak passwords; can often guess w/ few attempts (1K-1M). Most services, including Apple's iCloud, rate-limit login attempts. Apple's iCloud service has many APIs. One API (the \"Find my iPhone\" service) forgot to implement rate-limiting. Attacker could use that API for millions of guesses/day. Lesson: if many checks are required, one will be missing. Example: Missing access control checks in Citigroup's credit card web site. [ Ref: [http://www.nytimes.com/2011/06/14/technology/14security.html](http://www.nytimes.com/2011/06/14/technology/14security.html) ] Citigroup allowed credit card users to access their accounts online. Login page asks for username and password. If username and password OK, redirected to account info page. The URL of the account info page included some numbers. e.g. x.citi.com/id=1234 The numbers were (related to) the user's account number. Adversary tried different numbers, got different people's account info. The server didn't check that you were logged into that account! Lesson: programmers tend to think only of intended operation. Example: poor randomness for cryptography. Need high-quality randomness to generate the keys that can't be guessed. Android's Java SecureRandom weakness leads to Bitcoin theft. [ Ref: [https://bitcoin.org/en/alert/2013-08-11-android](https://bitcoin.org/en/alert/2013-08-11-android) ] [ Ref: [https://www.nilsschneider.net/2013/01/28/recovering-bitcoin-private-keys.html](https://www.nilsschneider.net/2013/01/28/recovering-bitcoin-private-keys.html) ] Bitcoins can be spent by anyone that knows the owner's private key. Many Bitcoin wallet apps on Android used Java's SecureRandom API. Turns out the system sometimes forgot to seed the PRNG! A Pseudo-Random Number Generator is deterministic after you set the seed. So the seed had better be random! As a result, some Bitcoin keys turned out to be easy to guess. Adversaries searched for guessable keys, spent any corresponding bitcoins. Really it was the nonce in the ECDSA signature that wasn't random, and repeated nonce allows private key to be deduced. Lesson: be careful. Embedded devices generate predictable keys. Problem: embedded devices, virtual machines may not have much randomness. As a result, many keys are similar or susceptible to guessing attacks. [ Ref: [https://factorable.net/weakkeys12.extended.pdf](https://factorable.net/weakkeys12.extended.pdf) ] Casino slot machines. [ Ref: [https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/](https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/) ] Example: Moxie's SSL certificate name checking bug [ Ref: [http://www.wired.com/2009/07/kaminsky/](http://www.wired.com/2009/07/kaminsky/) ] Certificates use length-encoded strings, but C code often is null-terminated. CAs would grant certificate for amazon.com\\0.nickolai.org Browsers saw the \\0 and interpreted as a cert for amazon.com Lesson: parsing code is a huge source of security bugs. Example: buffer overflows (see below). Case study: buffer overflows. An important class of security problems, for which many attacks and defenses are known. This is the topic of Lab 1. Suppose your web server has a bug in the HTTP input parsing. On certain inputs, it crashes. Should you be worried? Let's take a look at a simplified example. % cat readreq.c #include #include char * gets(char *buf) { int c; while((c = getchar()) != EOF \u0026\u0026 c != '\\n') *buf++ = c; *buf = '\\0'; return buf; } int read_req(void) { char buf[128]; int i; gets(buf); i = atoi(buf); return i; } int main() { int x = read_req(); printf(\"x = %d\\n\", x); } % gcc -g -static -fno-stack-protector -fcf-protection=none readreq.c -o readreq % ./readreq 1234 % ./readreq AAAAAAAAAAAA....AAAA Why did it crash? We should think \"this is a bug; could an attacker exploit it?\" Let's figure out what exactly is happening. Need to know details of x86-64. % gdb ./readreq b read_req r disas $rip info reg Where is buf[]? print \u0026buf[0] print $rsp print \u0026i Aha, buf[] is on the stack, followed by i. The sub $0x90, %rsp allocates space for buf[] and i. Let's draw a picture of what's on the stack. +------------------+ | main()'s frame | | | | | +------------------+ | return address | +------------------+ %rbp ------\u003e | saved %rbp | +------------------+ | i | +------------------+ | ... | +------------------+ | buf[127] | | ... | %rsp ------\u003e | buf[0] | +------------------+ The x86 stack grows down in addresses. push == decrement %rsp, then write to *%rsp %rbp is \"frame pointer\" -- saved stack ptr at function entry. x $rbp x $rbp+8 Let's see what the saved return %rip refers to: disas 0x00401cf3 It's the instruction in main() after the call to read_req() OK, back to read_req, just before gets() disas $rip next AAAAAAA...AAA (190 times) What did gets() do to the stack? print \u0026buf[0] Hmm, 190 is more than 128! How can that be? x $rbp x $rbp+8 Saved frame pointer and return eip are 0x41414141! What's 0x41? next disas stepi stepi disas Now about to execute read_req()'s return instruction. x $rsp note rip will be 0x41414141 stepi -- crash, this is our seg fault Is this a serious problem? I.e. if our web server code had this bug, could an attacker exploit it to break into our computer? Is the attacker limited to jumping somewhere random? No: \"code injection\" attack. How does the adversary know the address of the buffer? Simulate attack: handle SIGSEGV nopass set{long}$rsp=. What can the adversary do once they are executing injected code? If the process is running as root or Administrator, can do anything. Even if not, can still send spam, read files (web server, database), .. Can load bigger program from somewhere on the net. What happens if stack grows up, instead of down? Stack frame for read_req() has buf[] at highest address, so won't overflow onto read_req()'s return %rip. Can an attacker still exploit this bug? How to defend against buffer overflows? Use a language that checks array bounds automatically. For C: Don't call gets(). Intel lets you mark the stack as non-executable. Is this a 100% solution for C? Randomize layout, canaries, \u0026c Structure the application to limit damage from bugs (Lab 2). Good news: simple buffer overruns like this do not work any more. Buffer overflow lessons: Bugs are a problem in all parts of code, not just in security mechanism. Policy may be irrelevant if the implementation has bugs. But stay tuned; there is hope for the defense. ",
+  "wordCount" : "4549",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/secury-principles-and-tor/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Secury Principles and Tor
+    </h1>
+    <div class="post-meta">22 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#security-principles" aria-label="Security principles">Security principles</a><ul>
+                        
+                <li>
+                    <a href="#confidentiality" aria-label="Confidentiality">Confidentiality</a><ul>
+                        
+                <li>
+                    <a href="#eavesdropping-" aria-label="Eavesdropping 🟩">Eavesdropping 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#integrity" aria-label="Integrity">Integrity</a><ul>
+                        
+                <li>
+                    <a href="#authentication" aria-label="Authentication">Authentication</a></li>
+                <li>
+                    <a href="#spoofing-attacks-" aria-label="Spoofing attacks 🟩">Spoofing attacks 🟩</a></li>
+                <li>
+                    <a href="#manipulation-attacks-" aria-label="Manipulation attacks 🟩">Manipulation attacks 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#availability" aria-label="Availability">Availability</a><ul>
+                        
+                <li>
+                    <a href="#denial-of-service-attacks-" aria-label="Denial of service attacks 🟩">Denial of service attacks 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#anonymity" aria-label="Anonymity">Anonymity</a><ul>
+                        
+                <li>
+                    <a href="#anonymity-by-proxy-" aria-label="Anonymity by proxy 🟩">Anonymity by proxy 🟩</a></li>
+                <li>
+                    <a href="#mix-based-systems-" aria-label="Mix-based systems 🟨">Mix-based systems 🟨</a></li>
+                <li>
+                    <a href="#fullz-dataleak" aria-label="Fullz dataleak">Fullz dataleak</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#the-tor-ecosystem" aria-label="The Tor Ecosystem">The Tor Ecosystem</a><ul>
+                        
+                <li>
+                    <a href="#how-tor-works" aria-label="How Tor Works">How Tor Works</a><ul>
+                        
+                <li>
+                    <a href="#overlay-networks" aria-label="Overlay networks">Overlay networks</a></li></ul>
+                </li>
+                <li>
+                    <a href="#service-setup" aria-label="Service setup">Service setup</a><ul>
+                        
+                <li>
+                    <a href="#client-connection" aria-label="Client Connection">Client Connection</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#old-section" aria-label="Old section">Old section</a><ul>
+                        
+                <li>
+                    <a href="#some-concepts" aria-label="Some concepts">Some concepts</a></li>
+                <li>
+                    <a href="#policy-flaws-examples" aria-label="Policy flaws examples">Policy flaws examples</a></li>
+                <li>
+                    <a href="#insecure-defaults" aria-label="Insecure defaults">Insecure defaults</a></li>
+                <li>
+                    <a href="#threat-model-problems" aria-label="Threat model problems">Threat model problems</a></li>
+                <li>
+                    <a href="#soft-dev" aria-label="Soft dev">Soft dev</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="security-principles">Security principles<a hidden class="anchor" aria-hidden="true" href="#security-principles">#</a></h2>
+<p>We have already  outlined these principles in <a href="//notes/sicurezza-delle-reti">Sicurezza delle reti</a> and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors
+These are acronyms, usually called CIA and AAA for infrastructure</p>
+<h3 id="confidentiality">Confidentiality<a hidden class="anchor" aria-hidden="true" href="#confidentiality">#</a></h3>
+<p>This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.</p>
+<h4 id="eavesdropping-">Eavesdropping 🟩<a hidden class="anchor" aria-hidden="true" href="#eavesdropping-">#</a></h4>
+<p>This is an example of attack of confidentiality. The setting is usually like this: Eve that intercepts the message sent by each other.
+For example in network security, it is quite easy to eavesdrop with Wireshark or similars.</p>
+<h3 id="integrity">Integrity<a hidden class="anchor" aria-hidden="true" href="#integrity">#</a></h3>
+<p>Integrity concerns with message tampering. The received message should be the same as the sent one (man in the middle are common attacks).</p>
+<h4 id="authentication">Authentication<a hidden class="anchor" aria-hidden="true" href="#authentication">#</a></h4>
+<p>Authentication is important when we <strong>need to know</strong> to whom we are talking to. We should need to be sure that that is exactly the person (or the machine) we are trying to connect (or talk to). In this framework it is about integrity.</p>
+<h4 id="spoofing-attacks-">Spoofing attacks 🟩<a hidden class="anchor" aria-hidden="true" href="#spoofing-attacks-">#</a></h4>
+<p>When an attacker authenticates as another user.</p>
+<h4 id="manipulation-attacks-">Manipulation attacks 🟩<a hidden class="anchor" aria-hidden="true" href="#manipulation-attacks-">#</a></h4>
+<p>This is tampering.</p>
+<h3 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h3>
+<p>The system should be available, that is accessible by its users.</p>
+<h4 id="denial-of-service-attacks-">Denial of service attacks 🟩<a hidden class="anchor" aria-hidden="true" href="#denial-of-service-attacks-">#</a></h4>
+<p>For example if you have limited number of ports, a common example of denial of service attack is the <strong>Syn flooding</strong> where multiple services ask to open a TCP connection, but it doesn&rsquo;t continue with the communication, leaving the port occupied but useless.</p>
+<h3 id="anonymity">Anonymity<a hidden class="anchor" aria-hidden="true" href="#anonymity">#</a></h3>
+<p>On the internet we <strong>are not anonymous</strong> we are always tracked by ISP, cookies and many other strategies that I am not even aware of.
+This is a problem we we want to be anonymous, so how can we reach this target??</p>
+<h4 id="anonymity-by-proxy-">Anonymity by proxy 🟩<a hidden class="anchor" aria-hidden="true" href="#anonymity-by-proxy-">#</a></h4>
+<p>We just use another computer to repeat my information, this computer doesn&rsquo;t have access to the underlying information, but it substitutes his IP to ours, so the end receiver doesn&rsquo;t exactly know where the initial message comes from.</p>
+<h4 id="mix-based-systems-">Mix-based systems 🟨<a hidden class="anchor" aria-hidden="true" href="#mix-based-systems-">#</a></h4>
+<p>Created in 1981 by David Chaum.
+Very similar to the previous one, in practice, in the end, it acts as a proxy but not only does it take and receive, but it also mixes together the packets it has received from the sources, applying its key.</p>
+<img src="/images/notes/Introduction to Cyber Security-20240326102655961.webp" alt="Introduction to Cyber Security-20240326102655961">
+<p><strong>Disadvantage:</strong>
+The public-private mixing system is very slow. For this reason, a network of nodes is established, each having a symmetric key, making it much faster.</p>
+<p>The important thing to note is that this system has been influential in modern tor networks.</p>
+<h4 id="fullz-dataleak">Fullz dataleak<a hidden class="anchor" aria-hidden="true" href="#fullz-dataleak">#</a></h4>
+<p>A fullz dataleak has the <strong>minimum indispensable</strong> to create bank accounts or pay with credit cards</p>
+<ul>
+<li>Name and Surname</li>
+<li>birthdate</li>
+<li>fiscal code</li>
+<li>phone number</li>
+<li>residence address</li>
+</ul>
+<p>So its very important to keep this information private!</p>
+<h2 id="the-tor-ecosystem">The Tor Ecosystem<a hidden class="anchor" aria-hidden="true" href="#the-tor-ecosystem">#</a></h2>
+<p>This system tries to anonymize the user with principles similar to <a href="/content/notes/secury-principles-and-tor/#anonymity-by-proxy">#Anonymity by proxy</a>. The initial user message goes through different relays before reaching the end destination. The system is a little bit more complex than this, so we are breaking down a connection example</p>
+<p>It&rsquo;s called onion because each relay has only an outer layer of the onion. The core is what the end user receives.</p>
+<h3 id="how-tor-works">How Tor Works<a hidden class="anchor" aria-hidden="true" href="#how-tor-works">#</a></h3>
+<p>The Tor network sends the payload through three <strong>random relay servers</strong> in the network.
+Information about what we are accessing, from who, is not accessible.
+But some information is still accessible, for example:</p>
+<ol>
+<li>Our ISP knows that we are trying to access the Tor network, because we need a listing of tor nodes.</li>
+<li>The exit relay knows to whom we are talking to, as this information is needed to send the message.</li>
+</ol>
+<p>As the exit node is often public, they are often <strong>blocked</strong> by institutions, like banks.</p>
+<h4 id="overlay-networks">Overlay networks<a hidden class="anchor" aria-hidden="true" href="#overlay-networks">#</a></h4>
+<blockquote>
+<p>Rete “overlay”. Una rete <strong>chiusa</strong> al quale interno vengono distribuiti dati in <strong>forma anonima</strong>. Questo è il principio dei servizi onion.</p>
+</blockquote>
+<h3 id="service-setup">Service setup<a hidden class="anchor" aria-hidden="true" href="#service-setup">#</a></h3>
+<p>When a service is put onto this network it connects to some <strong>intro nodes</strong> whose role is to introduce clients to the servers.
+The map server-&gt;intro nodes is then saved into another node, which is called the <strong>directory node</strong>. This node contain mappings from services and intro points.</p>
+<h4 id="client-connection">Client Connection<a hidden class="anchor" aria-hidden="true" href="#client-connection">#</a></h4>
+<p>The client that wants to connect to an anonymous service needs to know who are the intro nodes.
+He asks the directory node who gives him the connections. Directory gives him a descriptor, that is verified with the original <code>.onion</code> address who acts as a secure key.</p>
+<p>The the client asks a secret string from a <strong>rendezvous</strong> node. The secret string and rendezvous are then sent to the intro nodes, and these sent it to the original service that decides whether to accept or not that service.</p>
+<p>If it accepts, it sends the secret to the rendezvous, who then creates a circuit between the client and the server. Now everything can be sent and received anonymously.</p>
+<h2 id="old-section">Old section<a hidden class="anchor" aria-hidden="true" href="#old-section">#</a></h2>
+<h3 id="some-concepts">Some concepts<a hidden class="anchor" aria-hidden="true" href="#some-concepts">#</a></h3>
+<p><strong>Security</strong> vogliamo impedire modi che un altro possa accedere ad informazioni riservate</p>
+<p><strong>Obiettivo</strong> solo qualcuno può leggere una password.</p>
+<p><strong>Policy Threath models, and mechanism.</strong> sono modi che potrebbero essere attaccati (permessi, provare a rompere la password, attaccare il sistema operativo e simili). Questo è un buon framework generale, ma nella pratica non è mai utilizzato. Utilizziamo questa pratica per introdurre al corso.</p>
+<p>È molto difficile prevedere tutti i tipi di attacco, l’unica soluzione è <strong>iterare</strong> provare a sapere dal passato ed evolvere le policy che vengono messe. Da questo si può capire che non è perfetto. Cose da considerare sono</p>
+<ol>
+<li>Costo dell’attacco</li>
+<li>Big payoff: cose che costano poco da implementare per il difensore, ma che rendono l’attaccante molto inabilitato.</li>
+<li>Recuperare fra gli attacchi.</li>
+</ol>
+<p>Di solito gli attacchi sono fatti perché  è facile! È facile connettersi agli altri computer nel mondo.</p>
+<h3 id="policy-flaws-examples">Policy flaws examples<a hidden class="anchor" aria-hidden="true" href="#policy-flaws-examples">#</a></h3>
+<ul>
+<li>
+<p>Business class airfare (tipo cambiare il biglietto dopo essere andati su, bisogna investire in un sistema che non permetta di fare questo).</p>
+</li>
+<li>
+<p>School system. (Students → nothing, Director → reads all, Teacher can add student and change password of students), un insegnante può aggiungere il director come studente e cambiargli la password, e uno studente può accedere al computer dell’insegnante 💀</p>
+</li>
+<li>
+<p>Yahoo recovery password asks questions! But it was listed in the wikipedia page of the persone, so breaked xD.</p>
+</li>
+<li>
+<p>Crazy gmail attack</p>
+  <img src="/images/notes/image/universita/ex-notion/Introduction to the course/Untitled.png" alt="image/universita/ex-notion/Introduction to the course/Untitled">
+</li>
+</ul>
+<h3 id="insecure-defaults">Insecure defaults<a hidden class="anchor" aria-hidden="true" href="#insecure-defaults">#</a></h3>
+<p>Sono molto importanti perché è molto facile dimenticarsi di cambiare il default in caso sia molto debole come sistema.</p>
+<ul>
+<li>Default password! (pubblicati e.g. da un manuale riguardo qualcosa).</li>
+<li>Default permission. (e.g. amazon S3 bucket public by default).</li>
+</ul>
+<h3 id="threat-model-problems">Threat model problems<a hidden class="anchor" aria-hidden="true" href="#threat-model-problems">#</a></h3>
+<p>Sono cose che un attaccante può utilizzare per entrare nel sistema.</p>
+<ul>
+<li>Clipper chips of the 90’</li>
+<li>Secret design /impl, non si può supporre che il design sia nascosto, si può sempre disassemblare col giusto tempo, quindi è facilmente rompibile diciamo, se diventa abbastanza importante da dover essere rotto. (per questo è meglio avere una chiave)</li>
+</ul>
+<p>Prova a dare una occhiata al kerchoffs principle in <a href="//notes/classical-cyphers">Classical Cyphers</a>.</p>
+<ul>
+<li>Non assumere che l’utente sia conoscitore delle pratiche generali della sicurezza (e.g. dirgli che ciò che scarica può essere un virus).</li>
+<li>list of attack vectors!</li>
+</ul>
+<h3 id="soft-dev">Soft dev<a hidden class="anchor" aria-hidden="true" href="#soft-dev">#</a></h3>
+<ul>
+<li>
+<p>Source git (add backdoor that is integrated!) so the compiling shipped the attacked version</p>
+</li>
+<li>
+<p>Xcode in china, compromised mirror.</p>
+</li>
+<li>
+<p>Sw Updates.</p>
+</li>
+<li>
+<p>Initialization of seed?</p>
+</li>
+<li>
+<p>(some checks, and in many places, probabilmente si dimentica qualche check!)</p>
+</li>
+<li>
+<p>Randomness in Virtual machines (molto limitato, poche fonti di randomness come tastiera e cose simili.</p>
+</li>
+<li>
+<p>Appunti prof</p>
+<pre tabindex="0"><code>Introduction
+============
+
+Welcome to 6.858 -- Computer Systems Security
+
+Course structure
+  Lectures will be MW1-2:30, in 32-123.
+    One paper per lecture.
+      Tentative schedule online.
+      Likely stable up until spring break.
+      Lectures after spring break may change.
+    Read the paper before lecture, and submit before lecture:
+      Answer to a short homework question (link from schedule page).
+      Your own question about the paper (will try to answer in lecture).
+      Some papers about production systems, others about research ideas
+      Even if the overall system described in the paper didn&#39;t pan out, many of
+      the ideas and techniques in the paper are important and useful.
+    Interrupt, ask questions, point out mistakes.
+    [http://es.csail.mit.edu:8080/room/6.858/2adb3e10](http://es.csail.mit.edu:8080/room/6.858/2adb3e10)
+  One quiz, one final exam.
+    Quiz during class, final during finals week.
+  Assignments: Five labs.
+    Defenses and/or attacks on fairly real systems.
+    Not a lot of coding, but lots of non-standard thinking.
+      Poke into obscure corners of x86 asm, C, Python, Javascript, ..
+    Office hours for lab/lecture help.
+    Lab 1, buffer overflows, first part due this Friday.  Start early.
+    Two options for Lab 5:
+      Ordinary lab,
+      or your choice of final project, in groups.
+    For projects:
+      Presentations at the end of the semester.
+      Think of projects you&#39;d like to work on as you&#39;re reading papers.
+      Both attack- or defense-oriented projects are possible.
+      Discuss project ideas with course staff ahead of time.
+  Two lecturers: Frans, Nickolai.
+  4 TAs: Rayden, Noah, Cattalyya, Jonathan.
+  Sign up for Piazza (link on course web site).
+    Mostly questions/answers about labs.
+    We will post any important announcements there.
+  Warning about security work/research on MITnet (and in general).
+    You will learn how to attack systems, so that you know how to defend them.
+    Know the rules: [http://ist.mit.edu/network/rules](http://ist.mit.edu/network/rules)
+    Don&#39;t mess with other peoples&#39; data/computers/networks w/o permission.
+    Ask course staff for advice if in doubt.
+
+6.858 is about building secure computer systems
+  Secure = achieves some property despite attacks by adversaries.
+  Systematic thought is required for successful defense.
+    Details matter!
+  High-level plan for thinking about security:
+    Goal: what your system is trying to achieve.
+      e.g. only Alice should read file F.
+      Common goals: confidentiality, integrity, availability.
+    Policy: some plan (rules) that will get your system to achieve the goal.
+      e.g. set permissions on F so it&#39;s readable only by Alice&#39;s processes.
+      e.g. require a password and two-factor authentication.
+    Threat model: assumptions about what the attacker can do.
+      e.g. can guess passwords, cannot physically steal our server.
+    Mechanism: software/hardware that your system uses to enforce policy.
+      e.g. user accounts, passwords, file permissions, encryption.
+      policy might include human components (e.g., do not share passwords)
+        that&#39;s outside of the scope of the security mechanisms
+    Often layered: mechanism of one layer is policy of next level down.
+
+Building secure systems is hard -- why?
+  Example: 6.858 grade file, stored on an Athena AFS server.
+    Policy: only TAs should be able to read and write the grades file.
+  Easy to implement the *positive* aspect of the policy:
+    There just has to be one code path that allows a TA to get at the file.
+  But security is a *negative* goal:
+    We want no tricky way for a non-TA to get at the file.
+  There are a huge number of potential attacks to consider!
+    Exploit a bug in the server&#39;s code.
+    Guess a TA&#39;s password.
+    Steal a TA&#39;s laptop, maybe it has a local copy of the grades file.
+    Intercept grades when they are sent over the network to the registrar.
+    Get a job in the registrar&#39;s office, or as a 6.858 TA.
+  Result:
+    One cannot get policies/threats/mechanisms right on the first try.
+    One must usually iterate:
+      Design, watch attacks, update understanding of threats and policies.
+      Post-mortems important to understand
+        Public databases of vulnerabilities (e.g., https://cve.mitre.org/)
+        Encourage people to report vulnerabilities (e.g., bounty programs)
+    Defender is often at a disadvantage in this game.
+      Defender usually has limited resources, other priorities.
+      Defender must balance security against convenience.
+    A determined attacker can usually win!
+      Defense in depth
+      Recovery plan (e.g., secure backups)
+    Most of this lecture is about failures to make you start thinking in this way
+
+What&#39;s the point if we can&#39;t achieve perfect security?
+  Perfect security is rarely required.
+  Make cost of attack greater than the value of the information.
+    So that perfect defenses aren&#39;t needed.
+  Make our systems less attractive than other peoples&#39;.
+    Works well if attacker e.g. just wants to generate spam.
+  Find techniques that have big security payoff (i.e. not merely patching holes).
+    We&#39;ll look at techniques that cut off whole classes of attacks.
+    Successful: popular attacks from 10 years ago are no longer very fruitful.
+  Sometimes security *increases* value for defender:
+    VPNs might give employees more flexibility to work at home.
+    Sandboxing (JavaScript, Native Client) might give me more confidence
+      to run software I don&#39;t fully understand.
+  No perfect physical security either.
+    But that&#39;s OK: cost, deterrence.
+    One big difference in computer security: attacks are cheap.
+
+What goes wrong # 1: problems with the policy.
+  I.e. system correctly enforces policy -- but policy is inadequate.
+
+Example: Business-class airfare.
+  Airlines allow business-class tickets to be changed at any time, no fees.
+  Is this a good policy?
+  Turns out, in some systems ticket could have been changed even AFTER boarding.
+  Adversary can keep boarding plane, changing ticket to next flight, ad infinitum.
+  Revised policy: ticket cannot be changed once passenger has boarded the flight.
+    Sometimes requires changes to the system architecture.
+    Need computer at the aircraft gate to send updates to the reservation system.
+
+Example: Verifying domain ownership for TLS certificates.
+  Browser verifies server&#39;s certificate to ensure talking to the right server.
+  Certificate contains server&#39;s host name and cryptographic key,
+    signed by some trusted certificate authority (CA).
+  Browser has CA&#39;s public key built in to verify certificates.
+  CA is in charge of ensuring that certificate is issued only to
+    legitimate domain (hostname) owner.
+  Typical approach: send email to the contact address for a domain.
+  Some TLDs (like .eu) do not reveal the contact address in ASCII text.
+    Most likely to prevent spam to domain owners.
+  Instead, they reveal an ASCII image of the email address.
+  One CA (Comodo) decided to automate this by OCR&#39;ing the ASCII image.
+  Turns out, some ASCII images are ambiguous!
+    E.g., foo@a1telekom.at was mis-OCRed as foo@altelekom.at
+    Adversary can register mis-parsed domain name, get certificate for
+      someone else&#39;s domain.
+  [ Ref: [https://www.mail-archive.com/dev-security-policy@lists.mozilla.org/msg04654.html](https://www.mail-archive.com/dev-security-policy@lists.mozilla.org/msg04654.html) ]
+
+Example: Fairfax County, VA school system.
+  [ Ref: [http://catless.ncl.ac.uk/Risks/26.02.html#subj7.1](http://catless.ncl.ac.uk/Risks/26.02.html#subj7.1) ]
+  Student can access only his/her own files in the school system.
+  Superintendent has access to everyone&#39;s files.
+  Teachers can add new students to their class.
+  Teachers can change password of students in their class.
+  What&#39;s the worst that could happen if student gets teacher&#39;s password?
+    Student adds the superintendent to the compromised teacher&#39;s class.
+    Changes the superintendent&#39;s password, since they&#39;re a student in class.
+    Logs in as superintendent and gets access to all files.
+  Policy amounts to: teachers can do anything.
+
+Example: Sarah Palin&#39;s email account.
+  [ Ref: [http://en.wikipedia.org/wiki/Sarah_Palin_email_hack](http://en.wikipedia.org/wiki/Sarah_Palin_email_hack) ]
+  Yahoo email accounts have a username, password, and security questions.
+  User can log in by supplying username and password.
+  If user forgets password, can reset by answering security Qs.
+  Some adversary guessed Sarah Palin&#39;s high school, birthday, etc.
+  Policy amounts to: can log in with either password *or* security Qs.
+    No way to enforce &#34;Only if user forgets password, then ...&#34;
+  Thus user should ensure that password *and* security Qs are
+    both hard to guess.
+
+Example: Mat Honan&#39;s accounts at Amazon, Apple, Google, etc.
+  [ Ref: [http://www.wired.com/gadgetlab/2012/08/apple-amazon-mat-honan-hacking/all/](http://www.wired.com/gadgetlab/2012/08/apple-amazon-mat-honan-hacking/all/) ]
+  Honan an editor at wired.com; someone wanted to break into his gmail account.
+  Gmail password reset: send a verification link to a backup email address.
+    Google helpfully prints part of the backup email address.
+    Mat Honan&#39;s backup address was his Apple @me.com account.
+  Apple password reset: need billing address, last 4 digits of credit card.
+    Address is easy, but how to get the 4 digits?
+  How to get hold of that e-mail?
+  Call Amazon and ask to add a credit card to an account.
+    No authentication required,
+    presumably because this didn&#39;t seem like a sensitive operation.
+  Call Amazon tech support again, and ask to change the email address on an account.
+    Authentication required!
+    Tech support accepts the full number of any credit card registered with the account.
+    Can use the credit card just added to the account.
+  Now go to Amazon&#39;s web site and request a password reset.
+    Reset link sent to the new e-mail address.
+  Now log in to Amazon account, view saved credit cards.
+    Amazon doesn&#39;t show full number, but DOES show last 4 digits of all cards.
+    Including the account owner&#39;s original cards!
+  Now attacker can reset Apple password, read gmail reset e-mail,
+    reset gmail password.
+  Lesson: attacks often assemble apparently unrelated trivia.
+  Lesson: individual policies OK, but combination is not.
+    Apple views last 4 as a secret, but many other sites do not.
+  Lesson: big sites cannot hope to identify which human they are talking to;
+    at best &#34;same person who originally created this account&#34;.
+    security questions and e-mailed reset link are examples of this.
+
+Example: Insecure defaults.
+  Well-known default passwords in routers.
+  Public default permissions in cloud services (e.g., objects in AWS S3 bucket).
+  Secure defaults are crucial because of the &#34;negative goal&#34; aspect.
+    Large systems are complicated, lots of components.
+    Operator might forget to configure some component in their overall system.
+    Important for components to be secure if operator forgets to configure them.
+
+Policies typically go wrong in &#34;management&#34; or &#34;maintenance&#34; cases.
+  Who can change permissions or passwords?
+  Who can access audit logs?
+  Who can access the backups?
+  Who can upgrade the software or change the configuration?
+  Who can manage the servers?
+  Who revokes privileges of former admins / users / ...?
+
+What goes wrong # 2: problems with threat model / assumptions.
+  I.e. designer assumed an attack wasn&#39;t feasible (or didn&#39;t think of the attack).
+
+Example: assume the design/implementation is secret
+  &#34;Security through obsecurity&#34;
+  Clipper chip
+    [ Ref: [https://en.wikipedia.org/wiki/Clipper_chip](https://en.wikipedia.org/wiki/Clipper_chip) ]
+  Broken secret crypto functions
+
+Example: most users are not thinking about security.
+  User gets e-mail saying &#34;click here to renew your account&#34;,
+    then plausible-looking page asks for their password.
+  Or dialog box pops up with &#34;Do you really want to install this program?&#34;
+  Or tech support gets call from convincing-sounding user to reset password.
+
+Example: computational assumptions change over time.
+  MIT&#39;s Kerberos system used 56-bit DES keys, since mid-1980&#39;s.
+  At the time, seemed fine to assume adversary can&#39;t check all 2^56 keys.
+  No longer reasonable: now costs about $100.
+    [ Ref: [https://www.cloudcracker.com/dictionaries.html](https://www.cloudcracker.com/dictionaries.html) ]
+    Several years ago, 6.858 final project showed can get any key in a day.
+
+Example: assuming a particular kind of a solution to the problem.
+  Many services use CAPTCHAs to check if a human is registering for an account.
+    Requires decoding an image of some garbled text, for instance.
+  Goal is to prevent mass registration of accounts to limit spam, prevent
+    high rate of password guessing, etc.
+  Assumed adversary would try to build OCR to solve the puzzles.
+    Good plan because it&#39;s easy to change image to break the OCR algorithm.
+    Costly for adversary to develop new OCR!
+  Turns out adversaries found another way to solve the same problem.
+    Human CAPTCHA solvers in third-world countries.
+    Human solvers are far better at solving CAPTCHAs than OCRs or even regular users.
+    Cost is very low (fraction of a cent per CAPTCHA solved).
+  [ Ref: [https://www.cs.uic.edu/pub/Kanich/Publications/re.captchas.pdf](https://www.cs.uic.edu/pub/Kanich/Publications/re.captchas.pdf) ]
+
+Example: all TLS CAs are fully trusted.
+  If attacker compromises CA, can generate fake certificate
+    for any server name.
+  Originally there were only a few CAs; seemed unlikely that
+    attacker could compromise a CA.
+  But now browsers fully trust 100s of CAs!
+  In 2011, two CAs were compromised, issued fake certs for many domains
+    (google, yahoo, tor, ...), apparently used in Iran (?).
+    [ Ref: [http://en.wikipedia.org/wiki/DigiNotar](http://en.wikipedia.org/wiki/DigiNotar) ]
+    [ Ref: [http://en.wikipedia.org/wiki/Comodo_Group](http://en.wikipedia.org/wiki/Comodo_Group) ]
+  In 2012, a CA inadvertently issued a root certificate valid for any domain.
+    [ Ref: [http://www.h-online.com/security/news/item/Trustwave-issued-a-man-in-the-middle-certificate-1429982.html](http://www.h-online.com/security/news/item/Trustwave-issued-a-man-in-the-middle-certificate-1429982.html) ]
+  Several other high-profile incidents since then too.
+  Mistake: maybe reasonable to trust one CA, but not 100s.
+
+Example: assuming your hardware is trustworthy.
+  If NSA is your adversary, turns out to not be a good assumption.
+  [ Ref: [https://www.schneier.com/blog/archives/2013/12/more_about_the.html](https://www.schneier.com/blog/archives/2013/12/more_about_the.html) ]
+
+Example: assuming you are running the expected software.
+  1. In the 80&#39;s, military encouraged research into secure OS&#39;es.
+    Surprise: successful attacks by gaining access to development systems
+    Mistake: implicit trust in compiler, developers, distribution, &amp;c
+  2. Apple&#39;s development tools for iPhone applications (Xcode) are large.
+    Downloading them from China required going to Apple&#39;s servers outside of China.
+    Takes a long time.
+    Unofficial mirrors of Xcode tools inside China.
+    Some of these mirrors contained a modified version of Xcode that injected malware
+      into the resulting iOS applications.
+    Found in a number of high-profile, popular iOS apps!
+      [ Ref: [https://en.wikipedia.org/wiki/XcodeGhost](https://en.wikipedia.org/wiki/XcodeGhost) ]
+  Classic paper: Reflections on Trusting Trust.
+
+Example: decomissioned disks.
+  Many laptops, desktops, servers are thrown out without deleting sensitive data.
+  One study reports large amounts of confidential data on disks bought via ebay, etc.
+  [ Ref: [https://simson.net/page/Real_Data_Corpus](https://simson.net/page/Real_Data_Corpus) ]
+
+Example: software updates.
+  Apple iPhone software updates vs FBI.
+    [ Ref: [http://www.apple.com/customer-letter/](http://www.apple.com/customer-letter/) ]
+  Chrome extensions bought by malware/adware vendors.
+    [ Ref: [https://arstechnica.com/security/2014/01/malware-vendors-buy-chrome-extensions-to-send-adware-filled-updates/](https://arstechnica.com/security/2014/01/malware-vendors-buy-chrome-extensions-to-send-adware-filled-updates/) ]
+  Node.js library updated to include code that steals Bitcoin keys.
+    [ Ref: [https://www.theregister.co.uk/2018/11/26/npm_repo_bitcoin_stealer/](https://www.theregister.co.uk/2018/11/26/npm_repo_bitcoin_stealer/) ]
+
+Example: machines disconnected from the Internet are secure?
+  Stuxnet worm spread via specially-constructed files on USB drives.
+
+What to do about threat model problems?
+  More explicit threat models, to understand possible weaknesses.
+  Simpler, more general threat models.
+    E.g., should a threat model assume that system design is secret?
+    May be incrementally useful but then hard to recover.
+    Probably not a good foundation for security.
+  Better designs may eliminate / lessen reliance on certain assumptions.
+    E.g., alternative trust models that don&#39;t have fully-trusted CAs.
+    E.g., authentication mechanisms that aren&#39;t susceptible to phishing.
+
+What goes wrong # 3: problems with the mechanism -- bugs.
+  Bugs routinely undermine security.
+    Rule of thumb: one bug per 1000 lines of code.
+    Bugs in implementation of security policy.
+    But also bugs in code that may seem unrelated to security, but they are not.
+      Good mindset: Any bug is a potential security exploit.
+      Especially if there is no isolation around the bug.
+
+Example: Apple&#39;s iCloud password-guessing rate limits.
+  [ Ref: [https://github.com/hackappcom/ibrute](https://github.com/hackappcom/ibrute) ]
+  People often pick weak passwords; can often guess w/ few attempts (1K-1M).
+  Most services, including Apple&#39;s iCloud, rate-limit login attempts.
+  Apple&#39;s iCloud service has many APIs.
+  One API (the &#34;Find my iPhone&#34; service) forgot to implement rate-limiting.
+  Attacker could use that API for millions of guesses/day.
+  Lesson: if many checks are required, one will be missing.
+
+Example: Missing access control checks in Citigroup&#39;s credit card web site.
+  [ Ref: [http://www.nytimes.com/2011/06/14/technology/14security.html](http://www.nytimes.com/2011/06/14/technology/14security.html) ]
+  Citigroup allowed credit card users to access their accounts online.
+  Login page asks for username and password.
+  If username and password OK, redirected to account info page.
+  The URL of the account info page included some numbers.
+    e.g. x.citi.com/id=1234
+  The numbers were (related to) the user&#39;s account number.
+  Adversary tried different numbers, got different people&#39;s account info.
+  The server didn&#39;t check that you were logged into that account!
+  Lesson: programmers tend to think only of intended operation.
+
+Example: poor randomness for cryptography.
+  Need high-quality randomness to generate the keys that can&#39;t be guessed.
+  Android&#39;s Java SecureRandom weakness leads to Bitcoin theft.
+    [ Ref: [https://bitcoin.org/en/alert/2013-08-11-android](https://bitcoin.org/en/alert/2013-08-11-android) ]
+    [ Ref: [https://www.nilsschneider.net/2013/01/28/recovering-bitcoin-private-keys.html](https://www.nilsschneider.net/2013/01/28/recovering-bitcoin-private-keys.html) ]
+    Bitcoins can be spent by anyone that knows the owner&#39;s private key.
+    Many Bitcoin wallet apps on Android used Java&#39;s SecureRandom API.
+    Turns out the system sometimes forgot to seed the PRNG!
+      A Pseudo-Random Number Generator is deterministic after you set the seed.
+      So the seed had better be random!
+    As a result, some Bitcoin keys turned out to be easy to guess.
+    Adversaries searched for guessable keys, spent any corresponding bitcoins.
+      Really it was the nonce in the ECDSA signature that wasn&#39;t random,
+      and repeated nonce allows private key to be deduced.
+    Lesson: be careful.
+  Embedded devices generate predictable keys.
+    Problem: embedded devices, virtual machines may not have much randomness.
+    As a result, many keys are similar or susceptible to guessing attacks.
+    [ Ref: [https://factorable.net/weakkeys12.extended.pdf](https://factorable.net/weakkeys12.extended.pdf) ]
+  Casino slot machines.
+    [ Ref: [https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/](https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/) ]
+
+Example: Moxie&#39;s SSL certificate name checking bug
+  [ Ref: [http://www.wired.com/2009/07/kaminsky/](http://www.wired.com/2009/07/kaminsky/) ]
+  Certificates use length-encoded strings, but C code often is null-terminated.
+  CAs would grant certificate for amazon.com\0.nickolai.org
+  Browsers saw the \0 and interpreted as a cert for amazon.com
+  Lesson: parsing code is a huge source of security bugs.
+
+Example: buffer overflows (see below).
+
+Case study: buffer overflows.
+  An important class of security problems,
+    for which many attacks and defenses are known.
+  This is the topic of Lab 1.
+  Suppose your web server has a bug in the HTTP input parsing.
+    On certain inputs, it crashes.
+  Should you be worried?
+  Let&#39;s take a look at a simplified example.
+
+    % cat readreq.c
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+char *
+gets(char *buf) {
+  int c;
+  while((c = getchar()) != EOF &amp;&amp; c != &#39;\n&#39;)
+    *buf++ = c;
+  *buf = &#39;\0&#39;;
+  return buf;
+}
+
+int
+read_req(void) {
+  char buf[128];
+  int i;
+  gets(buf);
+  i = atoi(buf);
+  return i;
+}
+
+int
+main() {
+  int x = read_req();
+  printf(&#34;x = %d\n&#34;, x);
+}
+
+    % gcc -g -static -fno-stack-protector -fcf-protection=none readreq.c -o readreq
+    % ./readreq
+    1234
+    % ./readreq
+    AAAAAAAAAAAA....AAAA
+
+  Why did it crash?
+  We should think &#34;this is a bug; could an attacker exploit it?&#34;
+  Let&#39;s figure out what exactly is happening.
+    Need to know details of x86-64.
+
+    % gdb ./readreq
+    b read_req
+    r
+    disas $rip
+    info reg
+
+  Where is buf[]?
+
+    print &amp;buf[0]
+    print $rsp
+    print &amp;i
+
+  Aha, buf[] is on the stack, followed by i.
+  The sub $0x90, %rsp allocates space for buf[] and i.
+
+  Let&#39;s draw a picture of what&#39;s on the stack.
+                         +------------------+
+                         |  main()&#39;s frame  |
+                         |                  |
+                         |                  |
+                         +------------------+
+                         |  return address  |
+                         +------------------+
+            %rbp ------&gt; |    saved %rbp    |
+                         +------------------+
+                         |        i         |
+                         +------------------+
+                         |       ...        |
+                         +------------------+
+                         |     buf[127]     |
+                         |       ...        |
+            %rsp ------&gt; |      buf[0]      |
+                         +------------------+
+  The x86 stack grows down in addresses.
+  push == decrement %rsp, then write to *%rsp
+
+  %rbp is &#34;frame pointer&#34; -- saved stack ptr at function entry.
+
+    x $rbp
+    x $rbp+8
+
+  Let&#39;s see what the saved return %rip refers to:
+
+    disas 0x00401cf3
+
+  It&#39;s the instruction in main() after the call to read_req()
+  OK, back to read_req, just before gets()
+
+    disas $rip
+    next
+    AAAAAAA...AAA (190 times)
+
+  What did gets() do to the stack?
+
+    print &amp;buf[0]
+
+  Hmm, 190 is more than 128!
+  How can that be?
+
+    x $rbp
+    x $rbp+8
+
+  Saved frame pointer and return eip are 0x41414141!
+  What&#39;s 0x41?
+
+    next
+    disas
+    stepi
+    stepi
+    disas
+
+  Now about to execute read_req()&#39;s return instruction.
+
+    x $rsp
+    note rip will be 0x41414141
+    stepi -- crash, this is our seg fault
+
+  Is this a serious problem?
+    I.e. if our web server code had this bug,
+      could an attacker exploit it to break into our computer?
+
+  Is the attacker limited to jumping somewhere random?
+    No: &#34;code injection&#34; attack.
+    How does the adversary know the address of the buffer?
+    Simulate attack:
+      handle SIGSEGV nopass
+      set{long}$rsp=&lt;address of lea before call to printf in main&gt;.
+
+  What can the adversary do once they are executing injected code?
+    If the process is running as root or Administrator, can do anything.
+    Even if not, can still send spam, read files (web server, database), ..
+    Can load bigger program from somewhere on the net.
+
+  What happens if stack grows up, instead of down?
+    Stack frame for read_req() has buf[] at highest address,
+      so won&#39;t overflow onto read_req()&#39;s return %rip.
+    Can an attacker still exploit this bug?
+
+How to defend against buffer overflows?
+  Use a language that checks array bounds automatically.
+  For C:
+    Don&#39;t call gets().
+    Intel lets you mark the stack as non-executable.
+      Is this a 100% solution for C?
+    Randomize layout, canaries, &amp;c
+    Structure the application to limit damage from bugs (Lab 2).
+    Good news: simple buffer overruns like this do not work any more.
+
+Buffer overflow lessons:
+  Bugs are a problem in all parts of code, not just in security mechanism.
+  Policy may be irrelevant if the implementation has bugs.
+  But stay tuned; there is hope for the defense.
+</code></pre></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on x"
+            href="https://x.com/intent/tweet/?text=Secury%20Principles%20and%20Tor&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f&amp;title=Secury%20Principles%20and%20Tor&amp;summary=Secury%20Principles%20and%20Tor&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f&title=Secury%20Principles%20and%20Tor">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on whatsapp"
+            href="https://api.whatsapp.com/send?text=Secury%20Principles%20and%20Tor%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on telegram"
+            href="https://telegram.me/share/url?text=Secury%20Principles%20and%20Tor&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Secury Principles and Tor on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Secury%20Principles%20and%20Tor&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fsecury-principles-and-tor%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

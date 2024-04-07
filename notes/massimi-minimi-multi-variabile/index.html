@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Massimi minimi multi-variabile | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 6 Ripasso: May 18, 2022 Ultima modifica: October 8, 2022 12:07 PM Primo Abbozzo: April 5, 2022 4:23 PM Stato: 🌕🌕🌕🌑🌑 Studi Personali: No
+Elementi di ripasso 074179
+gli utilizzi della matrice jacobiana Riguardarsi come la continuità finisce la dimostrazione di schwarz Rivedere i calcoli e l&rsquo;idea principale per taylor al secondo ordine di coso. Massimi e Minimi multivariabile Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="flecart.github.io/notes/massimi-minimi-multi-variabile/">
+<link crossorigin="anonymous" href="flecart.github.io/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="flecart.github.io/notes/massimi-minimi-multi-variabile/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Massimi minimi multi-variabile" />
+<meta property="og:description" content="Ripasso Prox: 6 Ripasso: May 18, 2022 Ultima modifica: October 8, 2022 12:07 PM Primo Abbozzo: April 5, 2022 4:23 PM Stato: 🌕🌕🌕🌑🌑 Studi Personali: No
+Elementi di ripasso 074179
+gli utilizzi della matrice jacobiana Riguardarsi come la continuità finisce la dimostrazione di schwarz Rivedere i calcoli e l&rsquo;idea principale per taylor al secondo ordine di coso. Massimi e Minimi multivariabile Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="flecart.github.io/notes/massimi-minimi-multi-variabile/" />
+<meta property="og:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta name="twitter:title" content="Massimi minimi multi-variabile"/>
+<meta name="twitter:description" content="Ripasso Prox: 6 Ripasso: May 18, 2022 Ultima modifica: October 8, 2022 12:07 PM Primo Abbozzo: April 5, 2022 4:23 PM Stato: 🌕🌕🌕🌑🌑 Studi Personali: No
+Elementi di ripasso 074179
+gli utilizzi della matrice jacobiana Riguardarsi come la continuità finisce la dimostrazione di schwarz Rivedere i calcoli e l&rsquo;idea principale per taylor al secondo ordine di coso. Massimi e Minimi multivariabile Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Massimi minimi multi-variabile",
+      "item": "flecart.github.io/notes/massimi-minimi-multi-variabile/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Massimi minimi multi-variabile",
+  "name": "Massimi minimi multi-variabile",
+  "description": "Ripasso Prox: 6 Ripasso: May 18, 2022 Ultima modifica: October 8, 2022 12:07 PM Primo Abbozzo: April 5, 2022 4:23 PM Stato: 🌕🌕🌕🌑🌑 Studi Personali: No\nElementi di ripasso 074179\ngli utilizzi della matrice jacobiana Riguardarsi come la continuità finisce la dimostrazione di schwarz Rivedere i calcoli e l\u0026rsquo;idea principale per taylor al secondo ordine di coso. Massimi e Minimi multivariabile Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma.",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 6 Ripasso: May 18, 2022 Ultima modifica: October 8, 2022 12:07 PM Primo Abbozzo: April 5, 2022 4:23 PM Stato: 🌕🌕🌕🌑🌑 Studi Personali: No\nElementi di ripasso 074179\ngli utilizzi della matrice jacobiana Riguardarsi come la continuità finisce la dimostrazione di schwarz Rivedere i calcoli e l’idea principale per taylor al secondo ordine di coso. Massimi e Minimi multivariabile Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma.\nData una funzione $f: \\R^n \\to \\R^p$\nossia per esempio $x=(x_1,…,x_n) \\to(f_1(x),…,f_p(x))$\nSe le p funzioni di arrivo sono differenziabili, allora la matrice jacobiana è definita in questo modo:\n$$J_f(x) = \\begin{pmatrix} \\delta_{x_1} f_1(x) \u0026 … \u0026 \\delta_{x_n} f_1(x)\\ . \u0026 . \u0026 . \\ \\delta_{x_1} f_p(x) \u0026 … \u0026 \\delta_{x_n} f_p(x)\n\\end{pmatrix}$$\nUna matrice con p righe e n colonne, che rappresentano tutte le derivate parziali possibile\nOsservazione\nDa una funzione differenziabile f(r(x)) in modo simile a quanto fatto prima, abbiamo che\n$J_f(r(t)) J_r(t)$ è uguale al prodotto scalare!\n$$ (\\delta_1f(r(t)), …, \\delta_nf(r(t))) \\cdot \\begin{pmatrix} \\delta_{s} r_1(t) \\ . \\ \\delta_{s} r_n(t) \\end{pmatrix} $$\nOssia è proprio $\\delta_t(f(r(t))$ il prodotto scalare, ossia $J_{f \\cdot r}(t)$ e la cosa bella è che vale per dimensione qualsiasi. (vedere gli appunti lezione 11, ci dovrebbe essere l’enunciato di questo).\nComposizione di funzioni\nSi può dimostrare che la Jacobiana si comporta bene per le composizione di funzioni ossia:\nE questo vale per funzioni definite per qualunque dimensione.\n$$ J_{g \\cdot f}(v)= J_g(f(v)) J_f(v) $$\nStudio del massimo e del minimo In più dimensioni non possiamo più applicare lo studio del segno della derivata come nella prima dimensione, in questo momento abbiamo più derivate, e non abbiamo nemmeno il concetto di funzione crescente. Vogliamo affidarci al concetto delle derivate seconde (concavità e convessità)\nVedere che $f’(x) = 0 \\land f’’(x)\u003e0$ oppure minore. Andremo a generalizzare questa idea.\nCondizione di stazionarietà Andiamo a definire una condizione di stazionarietà a più dimensione, che ci sarà molto utile per trovare il minimo locale (o massimo locale).(è anche chiamato fermat, come ti ricordi qui Teoremi Base Analisi)\nsia $f:A \\to \\R, \\bar{x} \\in A$ è minimo locale, f è differenziabile in xbar, allora si ha che $\\nabla f(\\bar{x}) = 0$\nQuando il gradiente si annulla, quel punto in cui si annulla si chiama punto critico o stazionario.\nLa stazionarietà non permette di distinguere massimi e minimi (valeva anche per R dim 1 Punto di sella\nÈ la generalizzazione di un punto di flesso (in cui 2 derivata seconda si annullava).\nsia f una funzione ben definita differenziabile tale che il suo gradiente sia 0 in un punto a. Allora si dice che il punto a è di sella se esistono due punti per ogni intorno di a, tali per cui f(x0) \u003c f(a) \u003c f(x1).\nIn pratica mi sta dicendo che comunque io mi avvicini a questo punto, riesco sempre a trovare un punto la cui immagine è minore, e riesco sempre a trovare un punto la cui immagine è maggiore.\nQuesto è la terza possibilità, nel caso questo punto stazionario non sia né massimo né minimo.\nNecessarietà della differenziabilità\nAffinché valga la condizione di stazionarietà devono sempre esistere almeno le derivate parziali in OGNI direzione.\nQuesto è utile per le considerazioni dell’inverso, in quanto per f(x) = |x| , nel punto 0 non è differenziabile, ma è un punto di minimo.\nDimostrazione\nSia f ben definita e a un punto di minimo locale, vogliamo dimostrare che ogni derivata parziale in questo punto sia 0. (ovvero che il gradiente sia 0).\nConsideriamo $g(t) = f(a + te_1)$, ovvero incrementato solamente nella direzione 1.\nPoiché f ha minimo in a, ho che per t=0 ho un minimo locale di g (dato che g è scritta in funzione di f).\nHo che la derivata di g è la derivata parziale di f (per come è definita), quindi g è differenziabile poiché per ipotesi f è differenziabile. Per fermat, in quanto t=0 è un punto di minimo, ho che la derivata di g in t = 0 è 0, quindi applicando questa idea per ogni direzione ho che l’intero gradiente è 0.\nDerivata seconda Possiamo derivare parzialmente in più direzioni\nDerivate seconde pure se derivo rispetto alla stessa variabile anche la seconda volta\nDerivate seconde miste se derivo rispetto a una variabile differente.\nMatrice Hessiana Questa matrice contiene tutte le derivate seconde possibili per una certa funzione da Rn a R (sarà di dimensione n x n\n$$ Hf(x) = \\begin{pmatrix} \\delta_{11} f(x) \u0026 … \u0026 \\delta_{1n} f(x)\\ . \u0026 . \u0026 . \\ \\delta_{n1} f(x) \u0026 … \u0026 \\delta_{nn} f(x)\n\\end{pmatrix} $$\nTeorema di Schwarz Sia f una funzione ben definita, con dominio multidimensionale.\nSiano tutte le derivate seconde ben definite.\nAllora $\\forall ij \\in {1,..,n}, i \\neq j$ si ha che $\\delta_{ij}f = \\delta_{ji}f$, ossia è un altro modo per dire che la matrice hessiana è simmetrica.\nDimostrazione l’idea principale è utilizzare qualcosa di simile alla differenziabilità per continuità e derivabilità parziale. Considero $g(h) = f(x + h, y+h) + f(x, y) - f(x + h,y) - f(x, y + h)$\npoi considero $u(t) = f(x + t, y+h) + f(x, y) - f(x + t,y) - f(x, y + h)$ e utilizzando lagrange due volte ottengo che $g(h) = \\delta_{xy}f(x + ah, y + bh)h^2$\nCome usare Lagrange due volte Noto che $u(h) = g(h)$ e che $u(0) = 0$. Per lagrange noto che $u(h) - u(0) = h\\cdot u’(\\theta_1 h)$ con theta da 0 a 1. Facendo la derivata prima di $u$ ottengo che è uguale a $\\delta_x f(x + t, y+ h) - \\delta_x f(x + t, y)$ perché il resto è costante in t. Utilizzando di nuovo taylor su questo (su y) ottengo che $$ \\delta_x f(x + t, y+ h) - \\delta_x f(x + t, y) = h \\delta_y(\\delta_x f(x + t, y + \\theta_2 y)) $$ mettendo tutto all’inizio, ottengo che $g(h) = u(h) - u(0) = h^2 \\delta_y(\\delta_x f(x + \\theta_1h, y + \\theta_2 h))$ Lo faccio ancora per il simmetrico (cioè costruendomi una funzione v(t) che vari a seconda della y e mi trovo che $g(h) = \\delta_{yx}f(x + ah, y + bh)h^2$\nFaccio il limite per h tendente a 0, dividendo per la stessa variabile, e trovo che sono esattamente uguali. cioè $\\lim_{h \\to 0} \\dfrac{\\delta_{yx}f(x + ah, y + bh)h^2}{h^2} = \\lim_{h \\to 0} \\delta_{yx}f(x + ah, y + bh)= \\delta_{yx}f(x,y)$ l’ultimo uguale è giustificabile per la continuità della funzione f (basta aprire e controllare 🙂).\nForma Hessiana Conoscendo le forme quadratiche, possiamo andare a definire una forma Hessiana di una funzione di classe $C^{2}$.\nLa forma hessiana di una funzione di class $C^2$ è la funzione così definita:\n$h\\to \\langle Hf(x) h, h\\rangle$\nTaylor di ordine 2 Resto secondo Peano Questa è una analisi multivariabile vedere sotto per il caso univariabile col resto espresso in altro modo.\nPossiamo andare a definire una funzione di taylor per funzioni do ordine superiore, lo facciamo utilizzando la matrice hessiana (per definire la derivata seconda 😀) Possiamo andare in teoria anche a definire formule di taylor di ordine superiore al 2 ma per questo corso finiamo qui. (probabilmente ci saranno matrici più complicate, e di dimensioni maggiori).\nVogliamo dimostrare che $\\forall v \\in \\R^n$\n$$ f(w + tv) = f(w) + \\langle\\nabla f(w), tv\\rangle + \\dfrac{1}{2}\\langle H(f(w)) tv, tv\\rangle + o(|t^2|), \\t \\to 0_v, v\\in Dominio $$\nOsservazione paraboloide\nScriviamolo in maltro modo:\n$f(w) = f(v) + \\langle\\nabla f(v), w - v\\rangle + \\dfrac{1}{2}\\langle H(f(v)) w - v, w - v\\rangle + o(|(w - v)^2|), w \\to v$\nQuesta è una funzione al secondo ordine in w, è un paraboloide in cui possiamo andare a cercare la miglior funzione in questa classe di funzioni quadratiche.\nDimostrazione definiamo $g(t) = f(w + tv)$, la derivata è uguale a $g’(t) = \\delta_t f(r(t))$ con $r(t) = w + tv$ che per il teorema della derivata di funzioni composte è $\\langle \\nabla f(w + tv), v \\rangle$ Calcoliamo la derivata seconda di questo, ovvero si va ad ottenere: (praticamente sto applicando la 10.4.4 estensivamente.\n$$ \\sum \\delta_t (\\delta_k f) (r(t))v_k = \\sum \\langle(\\nabla\\delta_k f) (r(t)), r’(t)\\rangle v_k \\ = \\sum \\langle(\\nabla\\delta_k f) (r(t)), v\\rangle v_k = \\sum\\sum \\delta_j \\delta_k f(r(t) v_jv_k = \\ \\langle Hf(r(t))v,v\\rangle $$\nIn quanto $g: \\R \\to \\R$ possiamo utilizzare taylor classico per affermare che\n$g(t) = g(0) + g’(0) t + \\dfrac{1}{2}g’’(0)t^2 + o(t^2)$, che per dimostrazione precedente, sostituendo pezzo per pezzo, si ottiene che\n$f(w + vt) = f(w) + \\langle \\nabla f(w), v \\rangle t + \\dfrac{1}{2}\\langle Hf(w)v,v\\rangle t^2 + o(t^2)$ il che finisce la dimostrazione\nResto secondo Lagrange (univar) Questo è equivalente al precedente, col resto secondo Peano.\nSia $f:\\R \\to \\R$ f derivabile due volte, allora\n$\\forall x, \\bar{x} \\in \\R , \\exists c \\in [x, \\bar{x}]$ tale per cui\n$$ f(x) = f(\\bar{x}) + f’(\\bar{x})(x - \\bar{x}) + f’’(c) \\dfrac{(x - \\bar{x}) ^2}{2} $$\nNote sulla dimostrazione Noto che l’unica cosa che cambia è la parte finale della somma, quindi vorrei in qualche modo dimostrare che queste due cose siano uguali.\nIo aggiungo e tolgo questo valore : (imprecisato) e riesco a dire la funzione ottenuta è un opiccolo per la continuità della derivata seconda. questo nella direzione lagrange $\\implies$peano\nNon so esattamente cosa stia facendo in questo momento il prof. Quindi la ometto, dico solo che stranamente sta cercando dimostrare che esiste un valore $k \\in R$ tale che\n$f(x) = f(\\bar{x}) + f’(\\bar{x})(x - \\bar{x}) + k{(x - \\bar{x}) ^2}$ e lo dimostra utilizzando Rolle presente in Teoremi Base Analisi costruendosi una funzione che prenda la roba di sopra.\nOssia mi creo $g(\\bar{x}) = f(x) - f(\\bar{x}) -f’(\\bar{x})(x - \\bar{x}) - k{(x - \\bar{x}) ^2}$ In secondo momento calcolandosi il valore della derivata della funzione così creata si ottengono altri valori.\nNel caso in cui derivata seconda è continua Allora posso dimostrare quanto sopra, semplicemente utilizzando la continuità della derivata seconda, perché cambiano di poco le due cose.\nResto secondo Lagrange in Rn (multivar) Sia $A \\subseteq \\R^n$ aperto e $f$ di classe $C^2(A)$ ovvero con le derivate seconde continue.\nSia $a, a+h \\in A$ e il segmento $[a, a+h] \\subseteq A$ allora esiste $\\theta \\in (0,1)$ tale che\n$$ f(a + h) = f(a) + \\langle\\nabla f(a), h\\rangle + \\dfrac{1}{2}\\langle H(f(a + \\theta h)) h, h\\rangle $$\nDimostrazione\nconsidero la parametrizzazione data dalla funzione\n$g(t) = f(a + th)$, notiamo che $g(0) = f(a)$ e $g(1) = f(a + h)$ che sono le cose da cui eravamo partiti. se prendiamo $r(t) = a + th$ si ha che $g(t) = f(r(t))$ e allora possiamo utilizzare la derivata di funzioni composte e riscriverla.\nPoi si procede in modo equivalente alla dimostrazione del teorema di lagrange con resto di peano (però si parte con lagrange con resto lagrange in R).\nPolinomio di Taylor È un taylor senza opiccolo, però di devi andare a cercare l’appunto giusto.\nForme quadratiche Queste cose sembrano essere un buon utilizzo della matrice hessiana. Comunque vediamo cosa sono: prendiamo una matrice $A \\in \\R^{n \\times n}$ tale che sia simmetrica, consideriamo una funzione $q_A : \\R ^n \\to \\R$ definita in questo modo : $q_A(h) = \\langle Ah, h\\rangle = h^TAh$. Scopriremo che c’è una equivalenza (forse isomorfismo) fra un polinomio di grado n e una matrice n per n. Si può dimostrare che è uguale a una forma quadrata questa matrice, questo perché $\\sum^n_{k,j=1} a_{kj}h_jh_k = \\sum^n_{k=1}a_k h^2_k + 2 \\sum_{ 1\\leq j \u003c k \\leq n} a_{jk} h_j h_k$ ed è qualcosa di molto comodo perché questo non è altro che (ricordando che $a_k$ è un modo semplice per scrivere $a_{kk}$\n$$ \\langle Ah, h\\rangle = (a_1h_1 + …+ a_nh_n)^2 $$\nMa questo vale nel caso solo in cui $a_ia_k = a_{ik}$, da ricordare!. Comunque c’è questa buonissima corrispondenza e ci piace molto.\nSegno della forma quadratica Positivo Se per ogni h diverso da zero la forma quadratica è sempre positiva esempio se ho solo numeri sulla diagonale, probabilmente è di segno positivo\nNegativo Se per ogni h diverso da zero la forma quadratica è sempre negativa\nIndefinita Se esistono due h diversi fra loro per cui la forma della prima è minore di 0, la forma della seconda è maggiore di zero.\nAltro Ci sono anche altre caratterizzazione della forma quadratica. ad esempio q(h1, h2) = h2^2 non è né indefinita, né positiva questa è semidefinita\nClassificazione del segno n-dimensionale Vogliamo una forma quadratica in Rn, con n≥3 ora.(fino ad ora abbiamo solamente considerato il caso in cui forma quadratica è 2).\nDeterminanti\nMi sono costruito molte sottomatrici.\nLavagna prof\nAutovalori\nTeorema criterio classificazione 2x2 Consideriamo la matrice $$ \\begin{pmatrix} a \u0026 b \\ b \u0026 c \\ \\end{pmatrix} $$ Allora possiamo individuare i seguenti casi:\nPositivo Una forma quadratica è positiva sse $a \u003e 0 \\land ac - b^2 \u003e 0$\nNegativa Una forma quadrata è negativa sse $a \u003c 0 \\land ac - b^2 \u003e 0$\nIndefinita sse il determinante è negativo., se il determinante è 0 si dice che è una matrice singolare.\nDimostrazione primo caso vogliamo dimostrare un sse, andiamo per le due frecce. $\\implies$ Se pongo h = (1, 0) ottengo $a \u003e 0$ quindi deve essere così altrimenti assurdo.\nse pongo h = (h,1) (nota questi due h sono diversi) ottengo $ah ^2 + 2bh + c$ che è sempre positivo quando il determinante è negativo, quindi verificato\n$\\impliedby$ Se $h_2 = 0$ ottengo $ah^2_1 \u003e 0$ vero perché a \u003e 0 e ho un quadrato in R\nSe $h_2 \\neq 0$, allora raccogliendo un h2 e ponendo $e = \\dfrac{h1}{h2}$, ottengo\n$q(h) = ae^2 + 2be + c \u003e 0$ (già diviso per h2 alla seconda), prendendo il determinante ho che è $b^2 - ac$ , che è sempre minore di 0, quindi sempre vera.\nSemidefinito\nQuando ho il determinante che è 0\nCaratteristica positività negatività della Forma Quadratica Possiamo trovare una caratteristica fondante per le matrici positive e negative (sono uguali ma inverse, enunciamole).\nSia $A = A ^t \\in \\mathbb{R} ^{n \\times n}$ allora se $A$ è positivo si ha che $\\exists m \u003e 0$\n$\\langle Ah, h\\rangle \\geq m \\lvert h \\rvert^2$\nHint di dimostrazione (osservazione) Questo è vero perché se consideriamo un $h \\neq 0$, possiamo riscrivere l’equazione in tesi come $\\langle A \\dfrac{h}{\\lvert h \\rvert}, \\dfrac{h}{\\lvert h \\rvert}\\rangle \\geq m$, che è equivalente a dire che comunque prendo un vettore unitario, si ha che la forma quadratica è maggiore di un numero m.\nDimostrazione Allora scrivo h con coordinate polari, apro A in dimensione 2 e raccolgo questo $r ^2$. Allora ho in tesi qualcosa di questo tipo $r ^2 f(\\theta) \\geq r^2 m$ e devo dire che esiste questo m. utilizziamo 2 cose per terminare.\n$r^2 f(\\theta) \u003e 0$ in quanto la forma quadratica è positiva f è una funzione continua, e limitata in $[0, 2\\pi] \\in \\R$, quindi possiamo usare weierstrass per concludere che esiste un minimo. è proprio questo il minimo! Concludo dicendo che $r^2 f(\\theta) \\geq r^2 m$ per ogni theta, in particolare il minimo è maggiore di 0 in quanto per ipotesi la hessiana è positiva, quindi ho finito qui\nDimostrazione con autovalori\nCondizione sufficiente per minimo e massimo e sella Questa cosa ci piace per calcolare i punti di massimi e minimi!\nMassimo Se il gradiente è 0 e la hessiana è positiva, ho un punto di massimo\nMinimo Grandiente 0 e hessiana negativa, ho un punto di minimo.\nIndefinita Se gradiente è 0 e la hessiana è indefinita è un punto di sella\nDimostrazione (minimo)\nConsideriamo una funzione $f :A \\subseteq \\R^n \\to \\R$ di classe $C^2$ consideriamo un punto $a \\in A$ tale che $\\nabla f(a) = 0$ e so che $Hf(a) \u003e0$. Voglio dimostrare che sia un minimo locale, ovvero che $\\exists \\delta \u003e0$ tale che $f(a + h) \\geq f(a)$ per ogni $h \\in B(0, \\delta)$, ossia $|h| \u003c \\delta$ Espando con taylor, e utilizzo l’ipotesi di punto critico e ottengo che $f(a + h) - f(a) = \\dfrac{1}{2} \\langle Hf(a),h,h \\rangle + o(|h^2|)$ voglio dimostrare che per un delta opportuno RHS sia maggiore di 0, se ho questa cosa ho finito, in qualche modo voglio utilizzare la positività della matrice hessiana.\nPer il teorema caratterizzante della matrice della forma quadratica, so che $\\exists m \u003e0 \\in \\R :\\langle Hf(a),h,h \\rangle \\geq m \\lvert h^{2} \\rvert, \\forall h \\in \\R^n$ Allora continuando il ragionamento Ottengo che $\\dfrac{1}{2} m \\lvert h^{2} \\rvert+ o(\\lvert h^{2} \\rvert) = \\lvert h^{2} \\rvert(\\dfrac{m}{2} + \\dfrac{o(\\lvert h^{2} \\rvert)}{\\lvert h^{2} \\rvert})$ Ragioniamo ora sull’o-piccolo. Allora per definizione di o piccolo, so che posso prendere questa cosa piccola quanto mi pare. In particolare scelgo un intorno in cui questo o piccolo sia compreso fra $m/4$, allora l’intorno delta è definito da questo momento. Scelto questo intervallo allora finire la dimostrazione è veloce, ottengo che $$ f(a + h) - f(a) \\geq |h^2|(m/2 - m/4) \\geq 0 $$ (abbiamo anche dimostrato che dipende da h) però è finito, questa cosa vale per ogni h nell’intorno scelto sopra.\nSemidefinita\nNel caso in cui il determinante della hessiana è 0, non posso utilizzare i metodi precedenti, quindi in questo caso devo dividere il processo analizzando le derivate parziali.\nCondizione necessaria per minimo e massimo È molto simile alla condizione sufficiente, solo è abbiamo ora che la hessiana può anche essere semidefinita positiva.\n",
+  "wordCount" : "2895",
+  "inLanguage": "en",
+  "image": "flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "flecart.github.io/notes/massimi-minimi-multi-variabile/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="flecart.github.io/flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Massimi minimi multi-variabile
+    </h1>
+    <div class="post-meta">14 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#massimi-e-minimi-multivariabile" aria-label="Massimi e Minimi multivariabile">Massimi e Minimi multivariabile</a><ul>
+                        
+                <li>
+                    <a href="#matrice-jacobiana" aria-label="Matrice Jacobiana">Matrice Jacobiana</a><ul>
+                        
+                <li>
+                    <a href="#studio-del-massimo-e-del-minimo" aria-label="Studio del massimo e del minimo">Studio del massimo e del minimo</a></li>
+                <li>
+                    <a href="#condizione-di-stazionariet%c3%a0" aria-label="Condizione di stazionarietà">Condizione di stazionarietà</a></li>
+                <li>
+                    <a href="#derivata-seconda" aria-label="Derivata seconda">Derivata seconda</a></li></ul>
+                </li>
+                <li>
+                    <a href="#matrice-hessiana" aria-label="Matrice Hessiana">Matrice Hessiana</a><ul>
+                        
+                <li>
+                    <a href="#teorema-di-schwarz" aria-label="Teorema di Schwarz">Teorema di Schwarz</a></li>
+                <li>
+                    <a href="#forma-hessiana" aria-label="Forma Hessiana">Forma Hessiana</a></li></ul>
+                </li>
+                <li>
+                    <a href="#taylor-di-ordine-2" aria-label="Taylor di ordine 2">Taylor di ordine 2</a><ul>
+                        
+                <li>
+                    <a href="#resto-secondo-peano" aria-label="Resto secondo Peano">Resto secondo Peano</a></li>
+                <li>
+                    <a href="#resto-secondo-lagrange-univar" aria-label="Resto secondo Lagrange (univar)">Resto secondo Lagrange (univar)</a></li>
+                <li>
+                    <a href="#resto-secondo-lagrange-in-rn-multivar" aria-label="Resto secondo Lagrange in Rn (multivar)">Resto secondo Lagrange in Rn (multivar)</a></li>
+                <li>
+                    <a href="#polinomio-di-taylor" aria-label="Polinomio di Taylor">Polinomio di Taylor</a></li></ul>
+                </li>
+                <li>
+                    <a href="#forme-quadratiche" aria-label="Forme quadratiche">Forme quadratiche</a><ul>
+                        
+                <li>
+                    <a href="#segno-della-forma-quadratica" aria-label="Segno della forma quadratica">Segno della forma quadratica</a></li>
+                <li>
+                    <a href="#classificazione-del-segno-n-dimensionale" aria-label="Classificazione del segno n-dimensionale">Classificazione del segno n-dimensionale</a></li>
+                <li>
+                    <a href="#teorema-criterio-classificazione-2x2" aria-label="Teorema criterio classificazione 2x2">Teorema criterio classificazione 2x2</a></li>
+                <li>
+                    <a href="#caratteristica-positivit%c3%a0-negativit%c3%a0-della-forma-quadratica" aria-label="Caratteristica positività negatività della Forma Quadratica">Caratteristica positività negatività della Forma Quadratica</a></li>
+                <li>
+                    <a href="#condizione-sufficiente-per-minimo-e-massimo-e-sella" aria-label="Condizione sufficiente per minimo e massimo e sella">Condizione sufficiente per minimo e massimo e sella</a></li>
+                <li>
+                    <a href="#condizione-necessaria-per-minimo-e-massimo" aria-label="Condizione necessaria per minimo e massimo">Condizione necessaria per minimo e massimo</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 6
+Ripasso: May 18, 2022
+Ultima modifica: October 8, 2022 12:07 PM
+Primo Abbozzo: April 5, 2022 4:23 PM
+Stato: 🌕🌕🌕🌑🌑
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<p>074179</p>
+<ul>
+<li>gli utilizzi della matrice jacobiana</li>
+<li>Riguardarsi come la continuità finisce la dimostrazione di schwarz</li>
+<li>Rivedere i calcoli e l&rsquo;idea principale per taylor al secondo ordine di coso.</li>
+</ul>
+<h1 id="massimi-e-minimi-multivariabile">Massimi e Minimi multivariabile<a hidden class="anchor" aria-hidden="true" href="#massimi-e-minimi-multivariabile">#</a></h1>
+<h2 id="matrice-jacobiana">Matrice Jacobiana<a hidden class="anchor" aria-hidden="true" href="#matrice-jacobiana">#</a></h2>
+<p>È un modo per scrivere il gradiente di una funzione quando è in una certa forma.</p>
+<p>Data una funzione $f: \R^n \to \R^p$</p>
+<p>ossia per esempio $x=(x_1,&hellip;,x_n) \to(f_1(x),&hellip;,f_p(x))$</p>
+<p>Se le p funzioni di arrivo sono differenziabili, allora la matrice jacobiana è definita in questo modo:</p>
+<p>$$J_f(x) = \begin{pmatrix}
+\delta_{x_1} f_1(x) &amp; &hellip; &amp; \delta_{x_n} f_1(x)\
+. &amp; . &amp; . \
+\delta_{x_1} f_p(x) &amp; &hellip; &amp; \delta_{x_n} f_p(x)</p>
+<p>\end{pmatrix}$$</p>
+<p>Una matrice con p righe e n colonne, che rappresentano <strong>tutte le derivate parziali possibile</strong></p>
+<p><strong>Osservazione</strong></p>
+<p>Da una funzione differenziabile f(r(x)) in modo simile a quanto fatto prima, abbiamo che</p>
+<p>$J_f(r(t)) J_r(t)$ è uguale al prodotto scalare!</p>
+<p>$$
+(\delta_1f(r(t)), &hellip;, \delta_nf(r(t))) \cdot \begin{pmatrix}
+\delta_{s} r_1(t) \
+. \
+\delta_{s} r_n(t)
+\end{pmatrix}
+$$</p>
+<p>Ossia è proprio $\delta_t(f(r(t))$ il prodotto scalare, ossia $J_{f \cdot r}(t)$ e la cosa bella è che <strong>vale per dimensione qualsiasi</strong>. (vedere gli appunti lezione 11, ci dovrebbe essere l&rsquo;enunciato di questo).</p>
+<p><strong>Composizione di funzioni</strong></p>
+<p>Si può dimostrare che la Jacobiana si comporta bene per le composizione di funzioni ossia:</p>
+<p>E questo vale per funzioni definite per qualunque dimensione.</p>
+<p>$$
+J_{g \cdot f}(v)= J_g(f(v)) J_f(v)
+$$</p>
+<h3 id="studio-del-massimo-e-del-minimo">Studio del massimo e del minimo<a hidden class="anchor" aria-hidden="true" href="#studio-del-massimo-e-del-minimo">#</a></h3>
+<p>In più dimensioni non possiamo più applicare lo studio del segno della derivata come nella prima dimensione, in questo momento abbiamo più derivate, e non abbiamo nemmeno il concetto di funzione crescente. Vogliamo affidarci al concetto delle derivate seconde (concavità e convessità)</p>
+<p>Vedere che $f&rsquo;(x) = 0 \land f&rsquo;&rsquo;(x)&gt;0$ oppure minore. Andremo a generalizzare questa idea.</p>
+<h3 id="condizione-di-stazionarietà">Condizione di stazionarietà<a hidden class="anchor" aria-hidden="true" href="#condizione-di-stazionarietà">#</a></h3>
+<p>Andiamo a definire una condizione di stazionarietà a più dimensione, che ci sarà molto utile per trovare il minimo locale (o massimo locale).(è anche chiamato fermat, come ti ricordi qui <a href="//notes/teoremi-base-analisi">Teoremi Base Analisi</a>)</p>
+<p>sia $f:A \to \R, \bar{x} \in A$ è minimo locale, f è differenziabile in xbar, allora si ha che $\nabla f(\bar{x}) = 0$</p>
+<p>Quando il gradiente si annulla, quel punto in cui si annulla si chiama <strong>punto critico o stazionario</strong>.</p>
+<ul>
+<li>La stazionarietà non permette di distinguere massimi e minimi (valeva anche per R dim 1</li>
+</ul>
+<p><strong>Punto di sella</strong></p>
+<p>È la generalizzazione di un punto di flesso (in cui 2 derivata seconda si annullava).</p>
+<p>sia f una funzione ben definita differenziabile tale che il suo gradiente sia 0 in un punto a. Allora si dice che il punto a è di sella se esistono due punti per ogni intorno di a, tali per cui f(x0) &lt; f(a) &lt; f(x1).</p>
+<p>In pratica mi sta dicendo che comunque io mi avvicini a questo punto, riesco sempre a trovare un punto la cui immagine è minore, e riesco sempre a trovare un punto la cui immagine è maggiore.</p>
+<p>Questo è la terza possibilità, nel caso questo punto stazionario non sia né massimo né minimo.</p>
+<p><strong>Necessarietà della differenziabilità</strong></p>
+<p>Affinché valga la condizione di stazionarietà devono sempre esistere almeno le derivate parziali in OGNI direzione.</p>
+<p>Questo è utile per le considerazioni dell&rsquo;inverso, in quanto per f(x) = |x| , nel punto 0 non è differenziabile, ma è un punto di minimo.</p>
+<ul>
+<li>
+<p>Dimostrazione</p>
+<p>Sia f ben definita e a un punto di minimo locale, vogliamo dimostrare che ogni derivata parziale in questo punto sia 0. (ovvero che il gradiente sia 0).</p>
+<p>Consideriamo $g(t) = f(a + te_1)$, ovvero incrementato solamente nella direzione 1.</p>
+<p>Poiché f ha minimo in a, ho che per t=0 ho un minimo locale di g (dato che g è scritta in funzione di f).</p>
+<p>Ho che la derivata di g è la derivata parziale di f (per come è definita), quindi g è differenziabile poiché per ipotesi f è differenziabile. Per fermat, in quanto t=0 è un punto di minimo, ho che la derivata di g in t = 0 è 0, quindi applicando questa idea per ogni direzione ho che l&rsquo;intero gradiente è 0.</p>
+</li>
+</ul>
+<h3 id="derivata-seconda">Derivata seconda<a hidden class="anchor" aria-hidden="true" href="#derivata-seconda">#</a></h3>
+<p>Possiamo derivare parzialmente in più direzioni</p>
+<p><strong>Derivate seconde pure</strong> se derivo rispetto alla stessa variabile anche la seconda volta</p>
+<p><strong>Derivate seconde miste</strong> se derivo rispetto a una variabile differente.</p>
+<h2 id="matrice-hessiana">Matrice Hessiana<a hidden class="anchor" aria-hidden="true" href="#matrice-hessiana">#</a></h2>
+<p>Questa matrice contiene tutte le derivate seconde possibili per una certa funzione da Rn a R (sarà di dimensione n x n</p>
+<p>$$
+Hf(x) = \begin{pmatrix}
+\delta_{11} f(x) &amp; &hellip; &amp; \delta_{1n} f(x)\
+. &amp; . &amp; . \
+\delta_{n1} f(x) &amp; &hellip; &amp; \delta_{nn} f(x)</p>
+<p>\end{pmatrix}
+$$</p>
+<h3 id="teorema-di-schwarz">Teorema di Schwarz<a hidden class="anchor" aria-hidden="true" href="#teorema-di-schwarz">#</a></h3>
+<p>Sia f una funzione ben definita, con dominio multidimensionale.</p>
+<p>Siano tutte le derivate seconde ben definite.</p>
+<p>Allora $\forall ij \in {1,..,n}, i \neq j$ si ha che $\delta_{ij}f = \delta_{ji}f$, ossia è un altro modo per dire che la <strong>matrice hessiana è simmetrica</strong>.</p>
+<ul>
+<li>
+<p>Dimostrazione
+l&rsquo;idea principale è utilizzare qualcosa di simile alla differenziabilità per continuità e derivabilità parziale.
+Considero
+$g(h) = f(x + h, y+h) + f(x, y) - f(x + h,y) - f(x, y + h)$</p>
+<p>poi considero
+$u(t) = f(x + t, y+h) + f(x, y) - f(x + t,y) - f(x, y + h)$ e utilizzando lagrange due volte ottengo che
+$g(h) = \delta_{xy}f(x + ah, y + bh)h^2$</p>
+<ul>
+<li>Come usare Lagrange due volte
+Noto che $u(h) = g(h)$ e che $u(0) = 0$.
+Per lagrange noto che $u(h) - u(0) = h\cdot u&rsquo;(\theta_1 h)$ con theta da 0 a 1.
+Facendo la derivata prima di $u$ ottengo che è uguale a
+$\delta_x f(x + t, y+ h) - \delta_x f(x + t, y)$ perché il resto è costante in t.
+Utilizzando di nuovo taylor su questo (su y) ottengo che
+$$
+\delta_x f(x + t, y+ h) - \delta_x f(x + t, y) = h \delta_y(\delta_x f(x + t, y + \theta_2 y))
+$$
+mettendo tutto all&rsquo;inizio, ottengo che
+$g(h) = u(h) - u(0) = h^2 \delta_y(\delta_x f(x + \theta_1h, y + \theta_2 h))$</li>
+</ul>
+<p>Lo faccio ancora per il simmetrico  (cioè costruendomi una funzione v(t) che vari a seconda della y e mi trovo che
+$g(h) = \delta_{yx}f(x + ah, y + bh)h^2$</p>
+<p>Faccio il limite per h tendente a 0, dividendo per la stessa variabile, e trovo che sono esattamente uguali.
+cioè
+$\lim_{h \to 0} \dfrac{\delta_{yx}f(x + ah, y + bh)h^2}{h^2} = \lim_{h \to 0} \delta_{yx}f(x + ah, y + bh)=  \delta_{yx}f(x,y)$  l&rsquo;ultimo uguale è giustificabile per la continuità della funzione f (basta aprire e controllare 🙂).</p>
+</li>
+</ul>
+<h3 id="forma-hessiana">Forma Hessiana<a hidden class="anchor" aria-hidden="true" href="#forma-hessiana">#</a></h3>
+<p>Conoscendo le forme quadratiche, possiamo andare a definire una forma Hessiana di una funzione di classe $C^{2}$.</p>
+<p>La forma hessiana di una funzione di class $C^2$ è la funzione così definita:</p>
+<p>$h\to \langle Hf(x) h, h\rangle$</p>
+<h2 id="taylor-di-ordine-2">Taylor di ordine 2<a hidden class="anchor" aria-hidden="true" href="#taylor-di-ordine-2">#</a></h2>
+<h3 id="resto-secondo-peano">Resto secondo Peano<a hidden class="anchor" aria-hidden="true" href="#resto-secondo-peano">#</a></h3>
+<p>Questa è una analisi <strong>multivariabile</strong> vedere sotto per il caso univariabile col resto espresso in altro modo.</p>
+<p>Possiamo andare a definire una funzione di taylor per funzioni do ordine superiore, lo facciamo utilizzando la matrice hessiana (per definire la derivata seconda 😀)  Possiamo andare in teoria anche a definire formule di taylor di ordine superiore al 2 ma per questo corso finiamo qui. (probabilmente ci saranno matrici più complicate, e di dimensioni maggiori).</p>
+<p>Vogliamo dimostrare che $\forall v \in \R^n$</p>
+<p>$$
+f(w + tv) = f(w) + \langle\nabla f(w), tv\rangle + \dfrac{1}{2}\langle H(f(w)) tv, tv\rangle + o(|t^2|), \t \to 0_v, v\in Dominio
+$$</p>
+<ul>
+<li>
+<p>Osservazione paraboloide</p>
+<p>Scriviamolo in maltro modo:</p>
+<p>$f(w) = f(v) + \langle\nabla f(v), w - v\rangle + \dfrac{1}{2}\langle H(f(v)) w - v, w - v\rangle + o(|(w - v)^2|), w \to v$</p>
+<p>Questa è una funzione al secondo ordine in w, è un <strong>paraboloide</strong> in cui possiamo andare a cercare la miglior funzione in questa classe di funzioni quadratiche.</p>
+</li>
+<li>
+<p>Dimostrazione
+definiamo $g(t) = f(w + tv)$, la derivata è uguale a
+$g&rsquo;(t) = \delta_t f(r(t))$ con $r(t) = w + tv$ che per il teorema della derivata di funzioni composte è
+$\langle \nabla f(w + tv), v \rangle$
+Calcoliamo la derivata seconda di questo, ovvero si va ad ottenere: (praticamente sto applicando la 10.4.4 estensivamente.</p>
+<p>$$
+\sum \delta_t (\delta_k f) (r(t))v_k = \sum  \langle(\nabla\delta_k f) (r(t)), r&rsquo;(t)\rangle v_k \
+= \sum \langle(\nabla\delta_k f) (r(t)), v\rangle v_k = \sum\sum \delta_j \delta_k f(r(t) v_jv_k = \ \langle Hf(r(t))v,v\rangle
+$$</p>
+<p>In quanto $g: \R \to \R$ possiamo utilizzare taylor classico per affermare che</p>
+<p>$g(t) = g(0) + g&rsquo;(0) t + \dfrac{1}{2}g&rsquo;&rsquo;(0)t^2 + o(t^2)$, che per dimostrazione precedente, sostituendo pezzo per pezzo, si ottiene che</p>
+<p>$f(w + vt) = f(w) + \langle \nabla f(w), v \rangle t + \dfrac{1}{2}\langle Hf(w)v,v\rangle t^2 + o(t^2)$ il che finisce la dimostrazione</p>
+</li>
+</ul>
+<h3 id="resto-secondo-lagrange-univar"><strong>Resto secondo Lagrange (univar)</strong><a hidden class="anchor" aria-hidden="true" href="#resto-secondo-lagrange-univar">#</a></h3>
+<p>Questo è equivalente al precedente, col resto secondo Peano.</p>
+<p>Sia $f:\R \to \R$ f derivabile due volte, allora</p>
+<p>$\forall  x, \bar{x} \in \R , \exists c \in [x, \bar{x}]$ tale per cui</p>
+<p>$$
+f(x) = f(\bar{x}) + f&rsquo;(\bar{x})(x - \bar{x}) + f&rsquo;&rsquo;(c) \dfrac{(x - \bar{x}) ^2}{2}
+$$</p>
+<ul>
+<li>
+<p>Note sulla dimostrazione
+Noto che l&rsquo;unica cosa che cambia è la parte finale della somma, quindi vorrei in qualche modo dimostrare che queste due cose siano uguali.</p>
+<p>Io aggiungo e tolgo questo valore : (imprecisato) e riesco a dire la funzione ottenuta è un opiccolo per la continuità della derivata seconda. questo nella direzione lagrange $\implies$peano</p>
+<p>Non so esattamente cosa stia facendo in questo momento il prof. Quindi la ometto, dico solo che stranamente sta cercando dimostrare che esiste un valore $k \in R$ tale che</p>
+<p>$f(x) = f(\bar{x}) + f&rsquo;(\bar{x})(x - \bar{x}) + k{(x - \bar{x}) ^2}$ e lo dimostra utilizzando Rolle presente in <a href="//notes/teoremi-base-analisi">Teoremi Base Analisi</a> costruendosi una funzione che prenda la roba di sopra.</p>
+<p>Ossia mi creo $g(\bar{x}) = f(x) - f(\bar{x}) -f&rsquo;(\bar{x})(x - \bar{x}) - k{(x - \bar{x}) ^2}$
+In secondo momento calcolandosi il valore della derivata della funzione così creata si ottengono altri valori.</p>
+</li>
+<li>
+<p>Nel caso in cui derivata seconda è continua
+Allora posso dimostrare quanto sopra, semplicemente utilizzando la continuità della derivata seconda, perché cambiano di poco le due cose.</p>
+</li>
+</ul>
+<h3 id="resto-secondo-lagrange-in-rn-multivar"><strong>Resto secondo Lagrange in Rn (multivar)</strong><a hidden class="anchor" aria-hidden="true" href="#resto-secondo-lagrange-in-rn-multivar">#</a></h3>
+<p>Sia $A \subseteq \R^n$ aperto e  $f$ di classe $C^2(A)$ ovvero con le derivate seconde continue.</p>
+<p>Sia $a, a+h \in A$ e il segmento $[a, a+h] \subseteq A$ allora esiste $\theta \in (0,1)$ tale che</p>
+<p>$$
+f(a + h) = f(a) + \langle\nabla f(a), h\rangle + \dfrac{1}{2}\langle H(f(a + \theta h)) h, h\rangle
+$$</p>
+<ul>
+<li>
+<p>Dimostrazione</p>
+<p>considero la parametrizzazione data dalla funzione</p>
+<p>$g(t) = f(a + th)$, notiamo che $g(0) = f(a)$ e $g(1) = f(a + h)$ che sono le cose da cui eravamo partiti. se prendiamo $r(t) = a + th$ si ha che $g(t) = f(r(t))$ e allora possiamo utilizzare la derivata di funzioni composte e riscriverla.</p>
+<p>Poi si procede in modo equivalente alla dimostrazione del teorema di lagrange con resto di peano (però si parte con lagrange con resto lagrange in R).</p>
+</li>
+</ul>
+<h3 id="polinomio-di-taylor">Polinomio di Taylor<a hidden class="anchor" aria-hidden="true" href="#polinomio-di-taylor">#</a></h3>
+<p>È un taylor senza opiccolo, però di devi andare a cercare l&rsquo;appunto giusto.</p>
+<h2 id="forme-quadratiche">Forme quadratiche<a hidden class="anchor" aria-hidden="true" href="#forme-quadratiche">#</a></h2>
+<p>Queste cose sembrano essere un buon utilizzo della matrice hessiana.
+Comunque vediamo cosa sono:
+prendiamo una matrice $A \in \R^{n \times n}$ tale che sia simmetrica, consideriamo una funzione
+$q_A : \R ^n \to \R$ definita in questo modo :
+$q_A(h) =  \langle Ah, h\rangle = h^TAh$. Scopriremo che c&rsquo;è una equivalenza (forse isomorfismo) fra un polinomio di grado n e una matrice n per n.
+Si può dimostrare che è uguale a una forma quadrata questa matrice, questo perché
+$\sum^n_{k,j=1} a_{kj}h_jh_k = \sum^n_{k=1}a_k h^2_k + 2 \sum_{ 1\leq j &lt; k \leq n} a_{jk} h_j h_k$ ed è qualcosa di molto comodo perché questo non è altro che  (ricordando che $a_k$  è un modo semplice per scrivere $a_{kk}$</p>
+<p>$$
+\langle Ah, h\rangle = (a_1h_1 + &hellip;+ a_nh_n)^2
+$$</p>
+<p>Ma questo vale nel caso solo in cui $a_ia_k = a_{ik}$, da ricordare!. Comunque c&rsquo;è questa buonissima corrispondenza e ci piace molto.</p>
+<img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled">
+<h3 id="segno-della-forma-quadratica">Segno della forma quadratica<a hidden class="anchor" aria-hidden="true" href="#segno-della-forma-quadratica">#</a></h3>
+<img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 1.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 1">
+<p><strong>Positivo</strong>
+Se per ogni h diverso da zero la forma quadratica è sempre positiva
+esempio se ho solo numeri sulla diagonale, probabilmente è di segno positivo</p>
+<p><strong>Negativo</strong>
+Se per ogni h diverso da zero la forma quadratica è sempre negativa</p>
+<p><strong>Indefinita</strong>
+Se esistono due h diversi fra loro per cui la forma della prima è minore di 0, la forma della seconda è maggiore di zero.</p>
+<p><strong>Altro</strong>
+Ci sono anche altre caratterizzazione della forma quadratica.
+ad esempio q(h1, h2) = h2^2 non è né indefinita, né positiva questa è <strong>semidefinita</strong></p>
+<h3 id="classificazione-del-segno-n-dimensionale">Classificazione del segno n-dimensionale<a hidden class="anchor" aria-hidden="true" href="#classificazione-del-segno-n-dimensionale">#</a></h3>
+<p>Vogliamo una forma quadratica in Rn, con n≥3 ora.(fino ad ora abbiamo solamente considerato il caso in cui forma quadratica è 2).</p>
+<img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 2.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 2">
+<p><strong>Determinanti</strong></p>
+<p>Mi sono costruito molte sottomatrici.</p>
+<img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 3.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 3">
+<ul>
+<li>
+<p>Lavagna prof</p>
+  <img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 4.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 4">
+</li>
+</ul>
+<p><strong>Autovalori</strong></p>
+<img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 5.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 5">
+<h3 id="teorema-criterio-classificazione-2x2">Teorema criterio classificazione 2x2<a hidden class="anchor" aria-hidden="true" href="#teorema-criterio-classificazione-2x2">#</a></h3>
+<p>Consideriamo la matrice
+$$
+\begin{pmatrix}
+a &amp; b \
+b &amp; c \
+\end{pmatrix}
+$$
+Allora possiamo individuare i seguenti casi:</p>
+<p><strong>Positivo</strong>
+Una forma quadratica è positiva sse $a &gt; 0 \land ac - b^2 &gt; 0$</p>
+<p><strong>Negativa</strong>
+Una forma quadrata è negativa sse  $a &lt; 0 \land ac - b^2 &gt; 0$</p>
+<p><strong>Indefinita</strong>
+sse il determinante è negativo., se il determinante è 0 si dice che è una <strong>matrice singolare</strong>.</p>
+<ul>
+<li>
+<p>Dimostrazione primo caso
+vogliamo dimostrare un sse, andiamo per le due frecce.
+$\implies$
+Se pongo h = (1, 0) ottengo $a &gt; 0$ quindi deve essere così altrimenti assurdo.</p>
+<p>se pongo h = (h,1)  (nota questi due h sono diversi) ottengo $ah ^2 + 2bh + c$ che è sempre positivo quando il determinante è negativo, quindi verificato</p>
+<p>$\impliedby$
+Se $h_2 = 0$ ottengo $ah^2_1 &gt; 0$ vero perché a &gt; 0 e ho un quadrato in R</p>
+<p>Se $h_2 \neq 0$, allora raccogliendo un h2 e ponendo $e = \dfrac{h1}{h2}$, ottengo</p>
+<p>$q(h) = ae^2 + 2be + c &gt; 0$ (già diviso per h2 alla seconda), prendendo il determinante ho che è $b^2 - ac$ , che è sempre minore di 0, quindi sempre vera.</p>
+</li>
+</ul>
+<p><strong>Semidefinito</strong></p>
+<p>Quando ho il determinante che è 0</p>
+<h3 id="caratteristica-positività-negatività-della-forma-quadratica">Caratteristica positività negatività della Forma Quadratica<a hidden class="anchor" aria-hidden="true" href="#caratteristica-positività-negatività-della-forma-quadratica">#</a></h3>
+<p>Possiamo trovare una caratteristica fondante per le matrici positive e negative (sono uguali ma inverse, enunciamole).</p>
+<p>Sia $A = A ^t \in \mathbb{R} ^{n \times n}$  allora se $A$ è positivo si ha che  $\exists m &gt; 0$</p>
+<p>$\langle Ah, h\rangle \geq m \lvert h \rvert^2$</p>
+<ul>
+<li>
+<p>Hint di dimostrazione (osservazione)
+Questo è vero perché se consideriamo un $h \neq 0$, possiamo riscrivere l&rsquo;equazione in tesi come
+$\langle A \dfrac{h}{\lvert h \rvert}, \dfrac{h}{\lvert h \rvert}\rangle \geq m$, che è equivalente a dire che comunque prendo un vettore unitario, si ha che la forma quadratica è maggiore di un numero m.</p>
+</li>
+<li>
+<p>Dimostrazione
+Allora scrivo h con coordinate polari, apro A in dimensione 2 e raccolgo questo $r ^2$.
+Allora ho in tesi qualcosa di questo tipo
+$r ^2 f(\theta) \geq r^2 m$ e devo dire che esiste questo m.
+utilizziamo 2 cose per terminare.</p>
+<ol>
+<li>$r^2 f(\theta) &gt; 0$ in quanto la forma quadratica è positiva</li>
+<li>f è una funzione continua, e limitata in $[0, 2\pi] \in \R$, quindi possiamo usare weierstrass per concludere che esiste un minimo. è proprio questo il minimo!</li>
+</ol>
+<p>Concludo dicendo che $r^2 f(\theta) \geq r^2 m$ per ogni theta, in particolare il minimo è maggiore di 0 in quanto per ipotesi la hessiana è positiva, quindi ho finito qui</p>
+</li>
+<li>
+<p>Dimostrazione con autovalori</p>
+  <img src="/images/notes/image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 6.png" alt="image/universita/ex-notion/Massimi minimi multi-variabile/Untitled 6">
+</li>
+</ul>
+<h3 id="condizione-sufficiente-per-minimo-e-massimo-e-sella">Condizione sufficiente per minimo e massimo e sella<a hidden class="anchor" aria-hidden="true" href="#condizione-sufficiente-per-minimo-e-massimo-e-sella">#</a></h3>
+<p>Questa cosa ci piace per calcolare i punti di massimi e minimi!</p>
+<p><strong>Massimo</strong>
+Se il gradiente è 0 e la hessiana è positiva, ho un punto di massimo</p>
+<p><strong>Minimo</strong>
+Grandiente 0 e hessiana negativa, ho un punto di minimo.</p>
+<p><strong>Indefinita</strong>
+Se gradiente è 0 e la hessiana è indefinita è un punto di sella</p>
+<ul>
+<li>
+<p>Dimostrazione (minimo)</p>
+<p>Consideriamo una funzione $f :A \subseteq \R^n \to \R$  di classe $C^2$ consideriamo un punto $a \in A$ tale che $\nabla f(a) = 0$ e so che $Hf(a) &gt;0$.
+Voglio dimostrare che sia un minimo locale, ovvero che $\exists \delta &gt;0$  tale che
+$f(a + h) \geq f(a)$ per ogni $h \in B(0, \delta)$, ossia $|h| &lt; \delta$
+Espando con taylor, e utilizzo l&rsquo;ipotesi di punto critico e ottengo che
+$f(a + h) - f(a) = \dfrac{1}{2} \langle Hf(a),h,h \rangle + o(|h^2|)$ voglio dimostrare che per un delta opportuno RHS sia maggiore di 0, se ho questa cosa ho finito, in qualche modo voglio utilizzare la positività della matrice hessiana.</p>
+<p>Per il teorema caratterizzante della matrice della forma quadratica, so che
+$\exists m &gt;0 \in \R :\langle Hf(a),h,h \rangle \geq m \lvert h^{2} \rvert, \forall h \in \R^n$
+Allora continuando il ragionamento
+Ottengo che $\dfrac{1}{2} m \lvert h^{2} \rvert+ o(\lvert h^{2} \rvert) = \lvert h^{2} \rvert(\dfrac{m}{2} + \dfrac{o(\lvert h^{2} \rvert)}{\lvert h^{2} \rvert})$
+Ragioniamo ora sull&rsquo;o-piccolo.
+Allora per definizione di o piccolo, so che posso prendere questa cosa piccola quanto mi pare.
+In particolare scelgo un intorno in cui questo o piccolo sia compreso fra $m/4$, allora l&rsquo;intorno delta è definito da questo momento.
+Scelto questo intervallo allora finire la dimostrazione è veloce, ottengo che
+$$
+f(a + h) - f(a) \geq |h^2|(m/2 - m/4) \geq 0
+$$
+(abbiamo anche dimostrato che dipende da h) però è finito, questa cosa vale per ogni h nell&rsquo;intorno scelto sopra.</p>
+</li>
+</ul>
+<p><strong>Semidefinita</strong></p>
+<p>Nel caso in cui il determinante della hessiana è 0, non posso utilizzare i metodi precedenti, quindi in questo caso devo dividere il processo analizzando le derivate parziali.</p>
+<h3 id="condizione-necessaria-per-minimo-e-massimo">Condizione necessaria per minimo e massimo<a hidden class="anchor" aria-hidden="true" href="#condizione-necessaria-per-minimo-e-massimo">#</a></h3>
+<p>È molto simile alla condizione sufficiente, solo è abbiamo ora che la hessiana può anche essere semidefinita positiva.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="flecart.github.io/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on x"
+            href="https://x.com/intent/tweet/?text=Massimi%20minimi%20multi-variabile&amp;url=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f&amp;title=Massimi%20minimi%20multi-variabile&amp;summary=Massimi%20minimi%20multi-variabile&amp;source=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on reddit"
+            href="https://reddit.com/submit?url=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f&title=Massimi%20minimi%20multi-variabile">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on whatsapp"
+            href="https://api.whatsapp.com/send?text=Massimi%20minimi%20multi-variabile%20-%20flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on telegram"
+            href="https://telegram.me/share/url?text=Massimi%20minimi%20multi-variabile&amp;url=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Massimi minimi multi-variabile on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Massimi%20minimi%20multi-variabile&u=flecart.github.io%2fnotes%2fmassimi-minimi-multi-variabile%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

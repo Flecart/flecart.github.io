@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Teoria dei Tipi | X. A. Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No
+Elementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l&rsquo;assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono
+Vogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="http://localhost:1313/content/notes/teoria-dei-tipi/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/content/notes/teoria-dei-tipi/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Teoria dei Tipi" />
+<meta property="og:description" content="Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No
+Elementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l&rsquo;assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono
+Vogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/content/notes/teoria-dei-tipi/" />
+<meta property="og:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/images/papermod-cover.png" />
+<meta name="twitter:title" content="Teoria dei Tipi"/>
+<meta name="twitter:description" content="Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No
+Elementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l&rsquo;assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono
+Vogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "http://localhost:1313/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Teoria dei Tipi",
+      "item": "http://localhost:1313/content/notes/teoria-dei-tipi/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Teoria dei Tipi",
+  "name": "Teoria dei Tipi",
+  "description": "Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No\nElementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l\u0026rsquo;assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono\nVogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia.",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No\nElementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l’assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono\nVogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia. ma ancora è una definizione molto ampia. E di solito si può fare una analisi statica del comportamento del programma.\nUn altro modo per definirlo (questo molto più buono) è\nCollezioni di valori omogenei e rappresentabili e una serie di operazioni su di esse.\nOssia omogenei nel senso che hanno tutti certe proprietà, e rappresentabili perché effettivamente possiamo metterli in memoria (per esempio non posso avere come tipo i Reali in modo primitivo, perché non è rappresentabile).\nEsecuzione corretta, + ottimizzazione da parte del compilatore. Utilizzo dei tipi (4+) (!!!) 🟨—- Slide sull’utilizzo dei tipi organizzazione concettuale\nSlide astrazione\nSlide correttezza\nSlide implementazione\nProgettazione: posso descrivere in modo concettuale cosa fa il programma e aiutare a verificare la correttezza del programma, “separare logicamente elementi concettualmente diversi” (posso creare tipi per certi concetti e quindi ragionare meglio, pensa sviluppare solo in assembly!) Documentazione: ci danno informazioni in più riguardo il ruolo della variabile nel nostro programma. Una idea bella è parlare di tipi come se fossero commenti Astrazione: in fase di implementazione possono aiutare a gestire meglio il nostro progetto, solitamente attraverso interfacce (a questo tipo ho certe operazioni, non ho niente di sotto), ci permette di modulizzare e gestire meglio, ++manutentibilità, ++ comprensibilità del progetto. L’astrazione su un concetto di cambia il modo di ragionare riguardo l’implementazione, o l’idea sottostante comunque. Correttezza, possiamo utilizzare i tipi per avere errori di programmazione, quindi se faccio qualcosa con un tipo, io mi aspetto di ricevere altro. (ad esempio se mi aspetto che una funzione mi ritorni qualcosa, ma mi ritorna qualcosal’altro o non sempre quel tipo, posso darti errore staticamente parlando). Per cose di refactoring è molto comodo, se cambi un tipo e una strtutura vorresti cambiarla anche da altre parti (se lo fai tipo in python è molto più difficile per sto motivo che non ha tipi all’esterno). O per la cosa della safety, è impossibile sbagliare quando hai un buon sistema dei tipi (ti fa sbagliare in fase di compilazione lel, come Rust). Proprio per questa cosa che hai delle garanzie quando programmi, riesci a predire cosa ti ritorna e quindi predisci il modo con cui si comporta il programma. Possiamo dire che un programma è sicuro quando rispetta sempre i vincoli del suo tipo. Per lui C non ha la caratteristica della safety, quindi puoi andare oltre alle limitazioni di utilizzo del singolo tipo (tipo array puoi accedere anche fuori dal suo range, un tipo buono non dovrebbe permettere queste cose), si potrebbe considerare quindi weakly typed, ma è una cosa strana Implementazione: possiamo fare certe ottimizzazioni col sistema dei tipi. non servirebbero controlli dinamici per la sicurezza con un buon sistema dei tipi. Per esempio possiamo anche utilizzare offset per accedere in memoria quindi guadagniamo anche da quel punto di vista. Si migliora anche l’impatto che si ha sull quantità di memoria utilizzata, forse… non sono sicuro da questo. Tipo theorem provers e simili\nAltre applicazioni\nUn sistema di tipi (e, per estensione, un linguaggio) è sicuro relativamente ai tipi (o type safe) quando nessun programma può violare le distinzioni tra tipi definite in quel linguaggio. Detto in altri termini, un sistema di tipi è sicuro quando nessun programma durante l’esecuzione può generare un errore non segnalato che derivi da una violazione di tipo.\nDynamic and static typing 🟩— STATICO\nQuando il controllo dei tipi avviene a livello di struttura del testo. Solitamente queste informazioni sono poi rimosse nel file compilato, almenoché non serva per runnare.\nDato che eventuali errori sono individuati in tempo di compilazione, il prezzo in genere che si paga per un linguaggio statico è il tempo di sviluppo del linguaggio! Solitamente un compilatore che abbia static typing e che sia safe richiede molto molto più tempo.\nDINAMICO\nQuando i controlli di tipi è fatta a runtime, e quindi bisogna runnarlo per capire cosa runna. Questo aggiunge un leggero overhead, perché ho bisogno di un descrittore a runtime che contenga le informazioni sul tipo, e ci sia la verifica in questo momento.\nDato che dobbiamo eseguire per trovare un errore di tipo dinamico, questo errore potrebbe essere scoperto solo nella fase finale, quando il nostro prodotto è già in produzione, e ha clienti!\nImportante osservare che la divisione fra dinamico e inferred è indipendente al fatto che sia dinamic o static!\nManifest vs Inferred typing 🟩 La differenza fra manifest ed inferred typing riguarda la quantità di informazioni che il programmatore deve dare al compilatore per creare il sistema dei tipi\nL’inferred typing non è altro che un typing manifesto automatico, nel senso che il compilatore stesso riesce a capire che tipo stai dichiarando. Queste cose già esistono in c++ nuovo e anche golang Rust.\nInvece il manifest tiping è quando il programmatore va ad annotare ili tipo di tute le variabili.\nTipo estensionali o intensionali 🟩- Slide estensionali o intensionali\nINTENSIONALE\nQuando gli abitanti del tipo sono descritti secondo un predicato che è una proprietà che è soddisfatta da tutti gli abitanti.\nSalviamo molta memoria per tipi grossi e ci permette anche di rappresentare (fino a un certo punto i tipi infiniti).\nESTENSIONALE\nQuando si va a listare tutti gli abitanti nel nostro tipo, la stessa cosa che si fa con gli enums\nSistemi di tipi Caratterizzazione di base (4) (!) 🟨+ Tipi di base Poter definire nuovi tipi Controllo dei vincoli, che siano statici o dinamici non ci importa, ma ci importa che siano rispettati Computare sui tipi (equivalenza, compatibilità, inferenza dei tipi). Slide sistemi di tipi\nTipi di base 🟩 Sono i valori denotabili del linguaggio. Si dice abitante, una variabile che faccia parte di questo tipo. Cose come float, caratteri interi etc.\nVOID/UNIT, è un tipo di base che contiene solamente il singoletto, per questo è anche chiamato unit, in java per esempio è il NUll, mentre in C è il void (che però ha la differenza che non si può assegnare, perché starei assegnando il niente!), e che non si può assegnare. Solitamente è il valore delle funzioni che non ritornano nulla, utilizzato spesso per ritornare il controllo delle funzioni. In C void è utilizzato per distinguere procedure e funzioni e rende difficile fare le composizioni (che non so cosa sia), unit è per avere ancora funzioni, che deveono per forza avere un codominio non nullo.\nTIPI BOOLEANI\nChe hanno vero o falso come abitanti, e ho tutte le operazioni logiche, come congiunzione disgiunzione negazione etc. La cosa particolare è che utilizziamo un byte invece di un bit per rappresentare un bool, perché per accedere al valore è molto veloce se è allineato.\nTIPO CARATTERE\nSono i caratteri Unicode, oppure ascii,operazioni classiche sarebbero comparazione, comparazione (perché c’è un ordine fra i caratteri nell’encoding, come abbiamo detto in Codifica dei caratteri), e il resto è dipendente dal linguaggio.\nTIPI INTERI\nSolitamente spaziano fra $[-2^{r - 1}, 2 ^{r - 1} - 1 ]$hanno tutte le operazioni fra interi come uguaglianza, ordine, tutte le operazioni aritmetiche.\nTIPO REALE\nSono un subset dei reali, in particolare solamente i razionali rappresentabili, hanno stesse operazioni degli interi (importanti per ragioni di compatibilità e conversione con gli interi!), ricorda che ci sono fixed point or floating point representation. Abbiamo fatto principalmente floating point di IEEE745 in Calcolo di numeri finiti .\nFixed point slide\nTIPO COMPLESSO\nAnche questo, subset dei numeri complessi, stesse operazioni degli interi, con forse qualcosina in più.\nENUMS\nQuesto è il nostro primo tipo non di base, perché è un costruttore di tipo possiamo infatti dichiarare nuovi tipi, e enums sono un modo per farlo. In pratica si dichiara un nuovo tipo con definizione di abitanti appartenenti a questo.\nIn C non c’è differenza fra interi e enums, quindi non c’è una chiara differenziazione dei tipi, quindi difficile andare a checkare la correttezza fra i due.\nTipi composti Come si fa a definire alcuni tipi più complessi, composti utilizzando alcuni tipi primitivi?\nArrays Sono unacollezzione di elementi omogenei indexati da una chiave (questo mapping riesce a dare in un certo senso un ordine) (che non necessariamente devono essere degli interi, credo che su questa scia anche le hashtable sono classificati come tipo array).\nInfatti le mappe sono chiamate associative arrays.\nSi potrebbe considerare il costruttore di tipo, che prende in input un tipo e crea un array di una certra dimensione (quindi fa eccezzioni se provi ad accedere oltre) e crea un altro tipo, che è l’array di certa dimensione.\nEsempi di notazioni con array\nProprietà del tipo array\nOrdine di storage degli array (row column major)\nSe la grandezza dell’array è conosciuta a tempo di compilazione si può allocare in stack, altrimenti si mette in heap, e si utilizza un descrittore, chiamato dope vector per accederci sulla heap. Di solito in rust o golang sono gli slice\nEsempio di dope vector\nEcco tutte le informazioni per il descrittore :D, stride ci dice ogni quanto saltare per avere il prossimo elemento.\nCONTROLLO\nUna delle operazioni fondamentali affinché abbiamo un tipo di array che sia safe è il fatto check all’accesso, in modo da evitare out of bounds, è la cosa migliore che ho in termini di sicurezza.\nAltre operazioni utili sono assegnamento, confronto\nSets/Insiemi (3) Unici e orderless e omogenei sono gli elementi dei set. Quindi l’unica differenza è il fatto che siano unici e quindi siano tutti distinti fra di loro secondo l’operatore di uguaglianza.\nOperazioni importanti sono unione, intersezione, differenza, complemento, etc. tutte le operazioni belle sugli insiemi.\nUn esempio di operazioni fra i set sono unioni (e tutti gli amici degli insiemi) quindi per esempio se provo ad unire due insiemi con gli stessi elementi, restano gli stessi.\nAppartenenza, Unione, intersezione, complemento etc… IMPLEMENTAZIONE SETS\nL’implementazione più semplice dei set è avere un bitset, che il valore del bit ci dice se l’elemento è presente o meno in essa. Ma non funziona per sets che sono molto larghi. Quindi di solito si utilizzano gli hash tables per sti set.\nUn altro modo è utilizzare una hashset in pratica ogni valore ha una hash, e questo viene utilizzato per vedere se è presente o meno (spesso funzioni fra dominio a un mio)\nUn altro modo per fare set è utilizzare un albero binario, come fa C++ in set.\nReference Types NOTA: i puntatori sono abitanti di questi reference types, però non sono gli unici! (esempio URL, reference alla risorsa. Via di casa, reference alla tua casa).\nSono le reference a qualcosa! Questo permettono di creare strutture di dati ricorsive.\nOperazioni tipiche sono, creazione, check uguaglianza, dereferenziazione. Il pointer è l’implementazione più semplice di questo tipo di dato.\nCASI SPECIALI REFERENCE TYPES (3)\nSenza certe tipologie di checks, le references possono causare molti problemi, come le reference wild (quando ho dei pointer non inziializzati e quindi posso avere random della stack)\nPer questi è meglio sempre assegnare a Null per evitare questo, se non lo fa già il linguaggio.\ndangling (quando si riferisce ad elementi già liberati, o ci sono altre cose). Questo è principalmente causato dal fatto che solitamente sono soluzioni basso livello, che interfaccia praticamente direttamente sulla memoria.\nMemory leak, quando sto perdendo memoria, nel senso che non ho più nessuna reference, quando per esempio dislinko un puntatore, senza averla marcata come libera (quindi perdo un sacco di memoria, che non posso più allocare).\nOPERAZIONI CLASSICHE (4)\nSlide reference types\nCreazione di un certo referenze ad un oggetto\nDereferencing, cerco il dato puntato da questa referenza\nEquality, per vedere se è uguale la reference\nOPERAZIONI GENERALI CON I REFERENCES.\nVariabile referencing operator, in pratica vorrei che creasse una variabile che abbia come r-value la l-value di una certa variabile (descritto in Valutazione Espressioni), ossia il suo indirizzo o contenitore, la sua reference\nAllocazione e deallocazione dinamica, ma questa non è che dovrebbe essere operazione su questo tipo\nPower sets Questo sono i primi tipi che non abbiamo visto in un linguaggio di programmazione, alla fine è sempre un Sets/Insiemi, ma con qualche informazione in più.\nDefinizione di powerset P, partendo da un set iniziale S.\nQuesto soprattutto è un modo molto utile per rappresentare tuple, ossia coppie ordinate, molto naturali con dei powerset.\nOsservazione powerset per due\nCon l’osservazione di sopra abbiamo detto che la tupla definita in quel modo, che segue la definizione di kuratowsky in 3.1.1 Definizione di Kuratowsky, è un elemento del powerset del powerset, quello è proprio il prodotto cartesiano! Chiachiamo product types, o tipi prodotto come combinazioni una o più strutture (quindi non più omogeneo come prima)\nPAIRS AND TUPLES\nSlide pairs and tuples\nAbbiamo la stessa informazione con gli array (solo che possono non essere omogenei!) abbiamo sempre informazione sulla posizione, e un valore all’interno della posizione. La coppia generalizzata è una tupla.\nRECORDS\nSe astraiamo le tuple, aggiungendoci un nome per ogni tipo ad una certa posizione, allora abbiamo i records, che non sono altro che delle strutture.\nQuando andiamo a prendere un elemento stiamo facendo una proiezione monomorfa, perché da tutto quell’array di elementi stiamo andando a prenderne un singolo.\nPATTERN MATCHING\nQuesto è una struttura molto comune nei linguaggi funzionali, ma anche presente in rust. Sono buoni da poter definire all’interno di un tipo prodotto.\nSlide pattern matching\nPraticamente vorremmo fare una partizione completa degli abitanti di un tipo, per questo motivo posso fare una specie di casework completo per gestire in modo esplicito tutti i casi. Questa partizione è fatta in modo libero con delle regole :D.\nTIPI RICORSIVI\nQuesti tipi sono definiti per la prima volta grazie ai pairs (quelli con riferimento erano invece delle cose diverse, anche se concettualmente è simile). Possiamo definire che questo sia un tipo ricorsivo nel senso che si potrebbe descrivere come un powersets infinito (credo).\nDalla lezione ora mi sembra abbia detto che deve necessariamente avere una reference dello stesso tipo\nSum Types Slide introduttiva sum types\nI tipi di somma ci permettono di avere abitandi di più mondi.\nNell’esempio di sopra gli insiemi sono taggati per non confondere un elemento di un insieme con un altro! anche chiamato or types, choice types, tagged unions, union types, variant types, perché può assumere un inabitante a caso fra tutti i tipi che costituiscono questa unione.\nAbbiamo già visto le ENUMS che fanno cose simili, ossia può avere abitanti di tipi diversi, quindi stiamo comunque catturando la somma dei tipi. È interessante osservare che dal punto di vista teorico prendere un elemento di union implementato per enumerazione è simile a tirare fuori da un pacchetto.\nUNION DATATYPES\nCome in C, posso avere le union data types, in cui stessa zona di memoria posso metterci i dati che ho scelto (solo che non mi fa check statico a vedere cosa ci può stare!!), cioè a differenza degli enums, non ho il controllo dell’accesso, decido io come guardarlo.\nRECURSIVE TYPES\nAnche con i sum types posso andare a descrivere i tipi ricorsivi (solamente che alla fine invece di dire che Null è un inabidante delle reference, gli dico che è un abitante di qualcos’altro!) Questo mi rende molto carina la sua struttura (e mi permette anche pattern matchin senza nessun problema (è un modo più sicuro per aprire, dato che posso fare matching).\nSlide recursive types with sum\nFunction types Praticamente sono elementi di $A^B$, con B partenza A arrivo. L’operazione fondamentale di questi tipi sono l’applicazione.\n",
+  "wordCount" : "2619",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/content/notes/teoria-dei-tipi/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. A. Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="X. A. Huang&#39;s Blog (Alt + H)">X. A. Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Teoria dei Tipi
+    </h1>
+    <div class="post-meta">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#teoria-dei-tipi" aria-label="Teoria dei Tipi">Teoria dei Tipi</a><ul>
+                        
+                <li>
+                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#definizione-" aria-label="Definizione 🟩—">Definizione 🟩—</a></li>
+                <li>
+                    <a href="#utilizzo-dei-tipi-4----" aria-label="Utilizzo dei tipi (4&#43;) (!!!)  🟨—-">Utilizzo dei tipi (4+) (!!!)  🟨—-</a></li>
+                <li>
+                    <a href="#dynamic-and-static-typing-" aria-label="Dynamic and static typing 🟩—">Dynamic and static typing 🟩—</a></li>
+                <li>
+                    <a href="#manifest-vs-inferred-typing-" aria-label="Manifest vs Inferred typing 🟩">Manifest vs Inferred typing 🟩</a></li>
+                <li>
+                    <a href="#tipo-estensionali-o-intensionali--" aria-label="Tipo estensionali o intensionali 🟩-">Tipo estensionali o intensionali 🟩-</a></li></ul>
+                </li>
+                <li>
+                    <a href="#sistemi-di-tipi" aria-label="Sistemi di tipi">Sistemi di tipi</a><ul>
+                        
+                <li>
+                    <a href="#caratterizzazione-di-base-4--" aria-label="Caratterizzazione di base (4) (!) 🟨&#43;">Caratterizzazione di base (4) (!) 🟨+</a></li>
+                <li>
+                    <a href="#tipi-di-base-" aria-label="Tipi di base 🟩">Tipi di base 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#tipi-composti" aria-label="Tipi composti">Tipi composti</a><ul>
+                        
+                <li>
+                    <a href="#arrays" aria-label="Arrays">Arrays</a></li>
+                <li>
+                    <a href="#setsinsiemi-3" aria-label="Sets/Insiemi (3)">Sets/Insiemi (3)</a></li>
+                <li>
+                    <a href="#reference-types" aria-label="Reference Types">Reference Types</a></li>
+                <li>
+                    <a href="#power-sets" aria-label="Power sets">Power sets</a></li>
+                <li>
+                    <a href="#sum-types" aria-label="Sum Types">Sum Types</a></li>
+                <li>
+                    <a href="#function-types" aria-label="Function types">Function types</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 30
+Ripasso: June 6, 2023
+Ultima modifica: May 14, 2023 6:13 PM
+Primo Abbozzo: March 13, 2023 9:20 AM
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<h1 id="teoria-dei-tipi">Teoria dei Tipi<a hidden class="anchor" aria-hidden="true" href="#teoria-dei-tipi">#</a></h1>
+<h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
+<h3 id="definizione-">Definizione 🟩—<a hidden class="anchor" aria-hidden="true" href="#definizione-">#</a></h3>
+<blockquote>
+<p>Un metodo sintattico <strong>praticabile</strong> per dimostrare
+l&rsquo;assenza di determinati comportamenti del
+programma, fatto classificando le unità sintattiche in
+base ai tipi di valore che assumono</p>
+</blockquote>
+<p>Vogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia. ma ancora è una definizione molto ampia. E di solito si può fare una analisi statica del comportamento del programma.</p>
+<p>Un altro modo per definirlo (questo molto più buono) è</p>
+<blockquote>
+<p>Collezioni di valori omogenei e rappresentabili e una serie di operazioni su di esse.</p>
+</blockquote>
+<p>Ossia omogenei nel senso che hanno tutti certe proprietà, e rappresentabili perché effettivamente possiamo metterli in memoria (per esempio non posso avere come tipo i Reali in modo primitivo, perché non è rappresentabile).</p>
+<ul>
+<li>Esecuzione corretta, + ottimizzazione da parte del compilatore.</li>
+</ul>
+<h3 id="utilizzo-dei-tipi-4----">Utilizzo dei tipi (4+) (!!!)  🟨—-<a hidden class="anchor" aria-hidden="true" href="#utilizzo-dei-tipi-4----">#</a></h3>
+<ul>
+<li>
+<p>Slide sull&rsquo;utilizzo dei tipi organizzazione concettuale</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled">
+</li>
+<li>
+<p>Slide astrazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 1.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 1">
+</li>
+<li>
+<p>Slide correttezza</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 2.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 2">
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 3.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 3">
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 4.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 4">
+</li>
+<li>
+<p>Slide implementazione</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 5.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 5">
+</li>
+</ul>
+<ol>
+<li><strong>Progettazione</strong>: posso descrivere in modo <em>concettuale</em> cosa fa il programma e aiutare a verificare la correttezza del programma, “separare logicamente elementi concettualmente diversi” (posso creare tipi per certi concetti e quindi ragionare meglio, pensa sviluppare solo in assembly!) <strong>Documentazione</strong>: ci danno informazioni in più riguardo il ruolo della variabile nel nostro programma. Una idea bella è parlare di tipi come se fossero commenti</li>
+<li><strong>Astrazione</strong>: in fase di implementazione possono aiutare a gestire meglio il nostro progetto, solitamente attraverso interfacce (a questo tipo ho certe operazioni, non ho niente di sotto), ci permette di modulizzare e gestire meglio, ++manutentibilità, ++ comprensibilità del progetto.
+L’astrazione su un concetto di cambia il modo di ragionare riguardo l&rsquo;implementazione, o l’idea sottostante comunque.</li>
+<li><strong>Correttezza</strong>, possiamo utilizzare i tipi per avere errori di programmazione, quindi se faccio qualcosa con un tipo, io mi aspetto di ricevere altro. (ad esempio se mi aspetto che una funzione mi ritorni qualcosa, ma mi ritorna qualcosal’altro o non sempre quel tipo, posso darti errore staticamente parlando).
+Per cose di <strong>refactoring</strong> è molto comodo, se cambi un tipo e una strtutura vorresti cambiarla anche da altre parti (se lo fai tipo in python è molto più difficile per sto motivo che non ha tipi all’esterno).
+O per la cosa della <strong>safety</strong>, è impossibile sbagliare quando hai un buon sistema dei tipi (ti fa sbagliare in fase di compilazione lel, come Rust). Proprio per questa cosa che hai delle garanzie quando programmi, riesci a predire cosa ti ritorna e quindi predisci il modo con cui si comporta il programma. Possiamo dire che un programma è sicuro quando <strong>rispetta sempre i vincoli del suo tipo</strong>.
+Per lui C non ha la caratteristica della safety, quindi puoi andare oltre alle limitazioni di utilizzo del singolo tipo (tipo array puoi accedere anche fuori dal suo range, un tipo buono non dovrebbe permettere queste cose), si potrebbe considerare quindi weakly typed, ma è una cosa strana</li>
+<li><strong>Implementazione</strong>: possiamo fare certe ottimizzazioni col sistema dei tipi. non servirebbero controlli dinamici per la sicurezza con un buon sistema dei tipi. Per esempio possiamo anche utilizzare offset per accedere in memoria quindi guadagniamo anche da quel punto di vista.
+Si migliora anche l&rsquo;impatto che si ha sull quantità di memoria utilizzata, forse… non sono sicuro da questo.</li>
+</ol>
+<p>Tipo theorem provers e simili</p>
+<ul>
+<li>
+<p>Altre applicazioni</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 6.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 6">
+</li>
+</ul>
+<blockquote>
+<p>Un sistema di tipi (e, per estensione, un linguaggio) è sicuro relativamente ai tipi (o <em>type safe</em>) quando nessun programma può violare le distinzioni tra tipi definite in quel linguaggio. Detto in altri termini, un sistema di tipi è sicuro quando nessun programma durante l&rsquo;esecuzione può generare un errore non segnalato che derivi da una violazione di tipo.</p>
+</blockquote>
+<h3 id="dynamic-and-static-typing-">Dynamic and static typing 🟩—<a hidden class="anchor" aria-hidden="true" href="#dynamic-and-static-typing-">#</a></h3>
+<p><strong>STATICO</strong></p>
+<p>Quando il controllo dei tipi avviene a livello di struttura del testo. Solitamente queste informazioni sono poi rimosse nel file compilato, almenoché non serva per runnare.</p>
+<p>Dato che eventuali errori sono individuati in tempo di compilazione, il prezzo in genere che si paga per un linguaggio statico è il tempo di sviluppo del linguaggio! Solitamente un compilatore che abbia static typing e che sia safe richiede molto molto più tempo.</p>
+<p><strong>DINAMICO</strong></p>
+<p>Quando i controlli di tipi è fatta a runtime, e quindi bisogna runnarlo per capire cosa runna. Questo aggiunge un leggero overhead, perché ho bisogno di un descrittore a runtime che contenga le informazioni sul tipo, e ci sia la verifica in questo momento.</p>
+<p>Dato che dobbiamo eseguire per trovare un errore di tipo dinamico, questo errore potrebbe essere scoperto solo nella fase finale, quando il nostro prodotto è già in produzione, e ha clienti!</p>
+<p>Importante osservare che la divisione fra dinamico e inferred è indipendente al fatto che sia dinamic o static!</p>
+<h3 id="manifest-vs-inferred-typing-">Manifest vs Inferred typing 🟩<a hidden class="anchor" aria-hidden="true" href="#manifest-vs-inferred-typing-">#</a></h3>
+<p>La differenza fra manifest ed inferred typing riguarda la <strong>quantità di informazioni</strong> che il programmatore deve dare al compilatore per creare il sistema dei tipi</p>
+<p>L&rsquo;inferred typing non è altro che un typing manifesto automatico, nel senso che il compilatore stesso riesce a capire che tipo stai dichiarando. Queste cose già esistono in c++ nuovo e anche golang Rust.</p>
+<p>Invece il manifest tiping è quando il programmatore va ad annotare ili tipo di tute le variabili.</p>
+<h3 id="tipo-estensionali-o-intensionali--">Tipo estensionali o intensionali 🟩-<a hidden class="anchor" aria-hidden="true" href="#tipo-estensionali-o-intensionali--">#</a></h3>
+<ul>
+<li>
+<p>Slide estensionali o intensionali</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 7.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 7">
+</li>
+</ul>
+<p><strong>INTENSIONALE</strong></p>
+<p>Quando gli abitanti del tipo sono descritti secondo un <strong>predicato</strong> che è una proprietà che è soddisfatta da tutti gli abitanti.</p>
+<p>Salviamo molta memoria per tipi grossi e ci permette anche di rappresentare (fino a un certo punto i tipi infiniti).</p>
+<p><strong>ESTENSIONALE</strong></p>
+<p>Quando si va a listare tutti gli abitanti nel nostro tipo, la stessa cosa che si fa con gli enums</p>
+<h2 id="sistemi-di-tipi">Sistemi di tipi<a hidden class="anchor" aria-hidden="true" href="#sistemi-di-tipi">#</a></h2>
+<h3 id="caratterizzazione-di-base-4--">Caratterizzazione di base (4) (!) 🟨+<a hidden class="anchor" aria-hidden="true" href="#caratterizzazione-di-base-4--">#</a></h3>
+<ol>
+<li>Tipi di base</li>
+<li>Poter definire nuovi tipi</li>
+<li>Controllo dei vincoli, che siano statici o dinamici non ci importa, ma ci importa che siano rispettati</li>
+<li>Computare sui tipi (equivalenza, compatibilità, inferenza dei tipi).</li>
+</ol>
+<ul>
+<li>
+<p>Slide sistemi di tipi</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 8.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 8">
+</li>
+</ul>
+<h3 id="tipi-di-base-">Tipi di base 🟩<a hidden class="anchor" aria-hidden="true" href="#tipi-di-base-">#</a></h3>
+<p>Sono i <strong>valori denotabili del linguaggio</strong>. Si dice <strong>abitante</strong>, una variabile che faccia parte di questo tipo. Cose come float, caratteri interi etc.</p>
+<p><strong>VOID/UNIT</strong>, è un tipo di base che contiene solamente il singoletto, per questo è anche chiamato unit, in java per esempio è il NUll, mentre in C è il void (che però ha la differenza che non si può assegnare, perché starei assegnando il niente!), e che non si può assegnare. Solitamente è il valore delle funzioni che non ritornano nulla, utilizzato spesso per ritornare il controllo delle funzioni.
+In C void è utilizzato per distinguere procedure e funzioni e rende difficile fare le composizioni (che non so cosa sia), unit è per avere ancora funzioni, che deveono per forza avere un codominio non nullo.</p>
+<p><strong>TIPI BOOLEANI</strong></p>
+<p>Che hanno vero o falso come abitanti, e ho tutte le operazioni logiche, come congiunzione disgiunzione negazione etc. La cosa particolare è che utilizziamo un byte invece di un bit per rappresentare un bool, perché per accedere al valore è molto veloce se è allineato.</p>
+<p><strong>TIPO CARATTERE</strong></p>
+<p>Sono i caratteri Unicode, oppure ascii,operazioni classiche sarebbero comparazione, comparazione (perché  c’è un ordine fra i caratteri nell’encoding, come abbiamo detto in <a href="//notes/codifica-dei-caratteri">Codifica dei caratteri</a>), e il resto è dipendente dal linguaggio.</p>
+<p><strong>TIPI INTERI</strong></p>
+<p>Solitamente spaziano fra $[-2^{r - 1}, 2 ^{r - 1} - 1 ]$hanno tutte le operazioni fra interi come uguaglianza, ordine, tutte le operazioni aritmetiche.</p>
+<p><strong>TIPO REALE</strong></p>
+<p>Sono un subset dei reali, in particolare solamente i razionali rappresentabili, hanno stesse operazioni degli interi (importanti per ragioni di compatibilità e conversione con gli interi!), ricorda che ci sono fixed point or floating point representation. Abbiamo fatto principalmente floating point di IEEE745 in Calcolo di numeri finiti .</p>
+<ul>
+<li>
+<p>Fixed point slide</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 9.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 9">
+</li>
+</ul>
+<p><strong>TIPO COMPLESSO</strong></p>
+<p>Anche questo, subset dei numeri complessi, stesse operazioni degli interi, con forse qualcosina in più.</p>
+<p><strong>ENUMS</strong></p>
+<p>Questo è il nostro primo tipo non di base, perché è un costruttore di tipo possiamo infatti <strong>dichiarare nuovi tipi</strong>, e enums sono un modo per farlo. In pratica si dichiara un nuovo tipo  con definizione di abitanti appartenenti a questo.</p>
+<p>In C non c’è differenza fra interi e enums, quindi non c’è una chiara differenziazione dei tipi, quindi difficile andare a checkare la correttezza fra i due.</p>
+<h2 id="tipi-composti">Tipi composti<a hidden class="anchor" aria-hidden="true" href="#tipi-composti">#</a></h2>
+<p>Come si fa a definire alcuni tipi più complessi, composti utilizzando alcuni tipi primitivi?</p>
+<h3 id="arrays">Arrays<a hidden class="anchor" aria-hidden="true" href="#arrays">#</a></h3>
+<p>Sono unacollezzione di elementi <strong>omogenei</strong> indexati da una chiave (questo mapping riesce a dare in un certo senso un ordine) (che non necessariamente devono essere degli interi, credo che su questa scia anche le hashtable sono classificati come tipo array).</p>
+<p>Infatti le mappe sono chiamate <strong>associative arrays</strong>.</p>
+<p>Si potrebbe considerare il <strong>costruttore di tipo</strong>, che prende in input un tipo e crea un array di una certra dimensione (quindi fa eccezzioni se provi ad accedere oltre) e crea un altro tipo, che è l’array di certa dimensione.</p>
+<ul>
+<li>
+<p>Esempi di notazioni con array</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 10.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 10">
+</li>
+<li>
+<p>Proprietà del tipo array</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 11.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 11">
+</li>
+<li>
+<p>Ordine di storage degli array (row column major)</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 12.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 12">
+</li>
+</ul>
+<p>Se la grandezza dell’array è conosciuta a tempo di compilazione si può allocare in stack, altrimenti si mette in heap, e si utilizza un descrittore, chiamato <strong>dope vector</strong> per accederci sulla heap. Di solito in rust o golang sono gli slice</p>
+<ul>
+<li>
+<p>Esempio di dope vector</p>
+<p>Ecco tutte le informazioni per il descrittore :D, stride ci dice ogni quanto saltare per avere il prossimo elemento.</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 13.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 13">
+</li>
+</ul>
+<p><strong>CONTROLLO</strong></p>
+<p>Una delle operazioni fondamentali affinché abbiamo un tipo di array che sia safe è il fatto <strong>check</strong> <strong>all’accesso</strong>, in modo da evitare out of bounds, è la cosa migliore che ho in termini di sicurezza.</p>
+<p>Altre operazioni utili sono assegnamento, confronto</p>
+<h3 id="setsinsiemi-3">Sets/Insiemi (3)<a hidden class="anchor" aria-hidden="true" href="#setsinsiemi-3">#</a></h3>
+<p><strong>Unici e orderless e omogenei</strong> sono gli elementi dei set. Quindi l’unica differenza è il fatto che siano unici e quindi siano tutti distinti fra di loro secondo l’operatore di uguaglianza.</p>
+<p>Operazioni importanti sono unione, intersezione, differenza, complemento, etc. tutte le operazioni belle sugli insiemi.</p>
+<p>Un esempio di operazioni fra i set sono unioni (e tutti gli amici degli insiemi) quindi per esempio se provo ad unire due insiemi con gli stessi elementi, restano gli stessi.</p>
+<ul>
+<li>Appartenenza, Unione, intersezione, complemento etc…</li>
+</ul>
+<p><strong>IMPLEMENTAZIONE SETS</strong></p>
+<p>L’implementazione più semplice dei set è avere un <strong>bitset</strong>, che il valore del bit ci dice se l’elemento è presente o meno in essa. Ma non funziona per sets che sono molto larghi. Quindi di solito si utilizzano gli hash tables per sti set.</p>
+<p>Un altro modo è utilizzare una <strong>hashset</strong> in pratica ogni valore ha una hash, e questo viene utilizzato per vedere se è presente o meno (spesso funzioni fra dominio a un mio)</p>
+<p>Un altro modo per fare <strong>set</strong> è utilizzare un albero binario, come fa C++ in set.</p>
+<h3 id="reference-types">Reference Types<a hidden class="anchor" aria-hidden="true" href="#reference-types">#</a></h3>
+<p>NOTA: i puntatori sono abitanti di questi <strong>reference types</strong>, però non sono gli unici! (esempio URL, reference alla risorsa. Via di casa, reference alla tua casa).</p>
+<p>Sono le <strong>reference</strong> a qualcosa! Questo permettono di creare strutture di dati ricorsive.</p>
+<p>Operazioni tipiche sono, creazione, check uguaglianza, dereferenziazione. Il pointer è l’implementazione più semplice di questo tipo di dato.</p>
+<p><strong>CASI SPECIALI REFERENCE TYPES (3)</strong></p>
+<p>Senza certe tipologie di checks, le references possono causare molti problemi, come le reference <strong>wild</strong> (quando ho dei pointer non inziializzati e quindi posso avere random della stack)</p>
+<p>Per questi è meglio sempre assegnare a Null per evitare questo, se non lo fa già il linguaggio.</p>
+<p><strong>dangling</strong> (quando si riferisce ad elementi già liberati, o ci sono altre cose). Questo è principalmente causato dal fatto che solitamente sono soluzioni basso livello, che interfaccia praticamente direttamente sulla memoria.</p>
+<p><strong>Memory leak</strong>, quando sto perdendo memoria, nel senso che non ho più nessuna reference, quando per esempio dislinko un puntatore, senza averla marcata come libera (quindi perdo un sacco di memoria, che non posso più allocare).</p>
+<p><strong>OPERAZIONI CLASSICHE (4)</strong></p>
+<ul>
+<li>
+<p>Slide reference types</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 14.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 14">
+</li>
+</ul>
+<p><strong>Creazione</strong> di un certo referenze ad un oggetto</p>
+<p><strong>Dereferencing</strong>, cerco il dato puntato da questa referenza</p>
+<p><strong>Equality</strong>, per vedere se è uguale la reference</p>
+<p>OPERAZIONI GENERALI CON I REFERENCES.</p>
+<p><strong>Variabile referencing operator</strong>, in pratica vorrei che creasse una variabile che abbia come r-value la l-value di una certa variabile (descritto in <a href="//notes/valutazione-espressioni">Valutazione Espressioni</a>), ossia il suo indirizzo o contenitore, la sua reference</p>
+<p><strong>Allocazione e deallocazione dinamica</strong>, ma questa non è che dovrebbe essere operazione su questo tipo</p>
+<h3 id="power-sets">Power sets<a hidden class="anchor" aria-hidden="true" href="#power-sets">#</a></h3>
+<p>Questo sono i primi tipi che non abbiamo visto in un linguaggio di programmazione, alla fine è sempre un Sets/Insiemi, ma con qualche informazione in più.</p>
+<img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 15.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 15">
+<p>Definizione di powerset P, partendo da un set iniziale S.</p>
+<p>Questo soprattutto è un modo molto utile per rappresentare <strong>tuple</strong>, ossia coppie ordinate, molto naturali con dei powerset.</p>
+<ul>
+<li>
+<p>Osservazione powerset per due</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 16.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 16">
+</li>
+</ul>
+<p>Con l’osservazione di sopra abbiamo detto che la tupla definita in quel modo, che segue la definizione di kuratowsky in 3.1.1 Definizione di Kuratowsky, è un elemento del powerset del powerset, quello è proprio il prodotto cartesiano! Chiachiamo <strong>product types</strong>, o <strong>tipi prodotto</strong> come combinazioni una o più strutture (quindi non più omogeneo come prima)</p>
+<p><strong>PAIRS AND TUPLES</strong></p>
+<ul>
+<li>
+<p>Slide pairs and tuples</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 17.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 17">
+</li>
+</ul>
+<p>Abbiamo la stessa informazione con gli array (solo che possono non essere omogenei!) abbiamo sempre informazione sulla posizione, e un valore all’interno della posizione. La coppia generalizzata è una tupla.</p>
+<p><strong>RECORDS</strong></p>
+<p>Se astraiamo le tuple, aggiungendoci un nome per ogni tipo ad una certa posizione, allora abbiamo i records, che non sono altro che delle <strong>strutture</strong>.</p>
+<p>Quando andiamo a prendere un elemento stiamo facendo una <strong>proiezione monomorfa</strong>, perché da tutto quell’array di elementi stiamo andando a prenderne un singolo.</p>
+<p><strong>PATTERN MATCHING</strong></p>
+<p>Questo è una struttura molto comune nei linguaggi funzionali, ma anche presente in rust. Sono buoni da poter definire all’interno di un tipo prodotto.</p>
+<ul>
+<li>
+<p>Slide pattern matching</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 18.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 18">
+</li>
+</ul>
+<p>Praticamente vorremmo fare una partizione completa degli abitanti di un tipo, per questo motivo posso fare una specie di casework completo per gestire in modo esplicito tutti i casi. Questa partizione è fatta in modo libero con delle regole :D.</p>
+<p><strong>TIPI RICORSIVI</strong></p>
+<p>Questi tipi sono definiti per la prima volta grazie ai pairs (quelli con riferimento erano invece delle cose diverse, anche se concettualmente è simile). Possiamo definire che questo sia un tipo ricorsivo nel senso che si potrebbe descrivere come un powersets infinito (credo).</p>
+<p>Dalla lezione ora mi sembra abbia detto che deve necessariamente avere una <strong>reference</strong> dello stesso tipo</p>
+<h3 id="sum-types">Sum Types<a hidden class="anchor" aria-hidden="true" href="#sum-types">#</a></h3>
+<ul>
+<li>
+<p>Slide introduttiva sum types</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 19.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 19">
+</li>
+</ul>
+<p>I tipi di somma ci permettono di avere abitandi di più mondi.</p>
+<p>Nell’esempio di sopra gli insiemi sono taggati per non confondere un elemento di un insieme con un altro! anche chiamato <strong>or types, choice types, tagged unions, union types, variant types</strong>, perché può assumere un inabitante a caso fra tutti i tipi che costituiscono questa unione.</p>
+<p>Abbiamo già visto le <strong>ENUMS</strong> che fanno cose simili, ossia può avere abitanti di tipi diversi, quindi stiamo comunque catturando la somma dei tipi. È interessante osservare che dal punto di vista teorico prendere un elemento di union implementato per enumerazione è simile a tirare fuori da un pacchetto.</p>
+<p><strong>UNION DATATYPES</strong></p>
+<p>Come in C, posso avere le union data types, in cui stessa zona di memoria posso metterci i dati che ho scelto (solo che non mi fa check statico a vedere cosa ci può stare!!), cioè a differenza degli enums, non ho il controllo dell’accesso, decido io come guardarlo.</p>
+<p><strong>RECURSIVE TYPES</strong></p>
+<p>Anche con i sum types posso andare a descrivere i tipi ricorsivi (solamente che alla fine invece di dire che Null è un inabidante delle reference, gli dico che è un abitante di qualcos’altro!) Questo mi rende molto carina la sua struttura (e mi permette anche pattern matchin senza nessun problema (è un modo più sicuro per aprire, dato che posso fare matching).</p>
+<ul>
+<li>
+<p>Slide recursive types with sum</p>
+  <img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 20.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 20">
+</li>
+</ul>
+<h3 id="function-types">Function types<a hidden class="anchor" aria-hidden="true" href="#function-types">#</a></h3>
+<p>Praticamente sono elementi di  $A^B$, con B partenza A arrivo. L’operazione fondamentale di questi tipi sono <strong>l’applicazione</strong>.</p>
+<img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 21.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 21">
+<img src="/images/notes/image/universita/ex-notion/Teoria dei Tipi/Untitled 22.png" alt="image/universita/ex-notion/Teoria dei Tipi/Untitled 22">
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on x"
+            href="https://x.com/intent/tweet/?text=Teoria%20dei%20Tipi&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f&amp;title=Teoria%20dei%20Tipi&amp;summary=Teoria%20dei%20Tipi&amp;source=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f&title=Teoria%20dei%20Tipi">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on whatsapp"
+            href="https://api.whatsapp.com/send?text=Teoria%20dei%20Tipi%20-%20http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on telegram"
+            href="https://telegram.me/share/url?text=Teoria%20dei%20Tipi&amp;url=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Teoria dei Tipi on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Teoria%20dei%20Tipi&u=http%3a%2f%2flocalhost%3a1313%2fcontent%2fnotes%2fteoria-dei-tipi%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="http://localhost:1313/">X. A. Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

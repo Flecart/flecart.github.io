@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>k-esimo priority-q DSU | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="no-tags">
+<meta name="description" content="Ripasso Prox: 12 Ultima modifica: May 12, 2022 10:55 AM Primo Abbozzo: April 7, 2022 9:25 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso 7 Problema k-esimo Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
+7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="flecart.github.io/notes/k-esimo-priority-q-dsu/">
+<link crossorigin="anonymous" href="flecart.github.io/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="flecart.github.io/notes/k-esimo-priority-q-dsu/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="k-esimo priority-q DSU" />
+<meta property="og:description" content="Ripasso Prox: 12 Ultima modifica: May 12, 2022 10:55 AM Primo Abbozzo: April 7, 2022 9:25 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso 7 Problema k-esimo Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
+7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="flecart.github.io/notes/k-esimo-priority-q-dsu/" />
+<meta property="og:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="flecart.github.io/images/papermod-cover.png" />
+<meta name="twitter:title" content="k-esimo priority-q DSU"/>
+<meta name="twitter:description" content="Ripasso Prox: 12 Ultima modifica: May 12, 2022 10:55 AM Primo Abbozzo: April 7, 2022 9:25 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
+Elementi di ripasso 7 Problema k-esimo Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
+7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "k-esimo priority-q DSU",
+      "item": "flecart.github.io/notes/k-esimo-priority-q-dsu/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "k-esimo priority-q DSU",
+  "name": "k-esimo priority-q DSU",
+  "description": "Ripasso Prox: 12 Ultima modifica: May 12, 2022 10:55 AM Primo Abbozzo: April 7, 2022 9:25 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso 7 Problema k-esimo Questo documento è totalmente concentrato sull\u0026rsquo;analisi del problema della selezione del k-esimo elemento.\n7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi",
+  "keywords": [
+    "no-tags"
+  ],
+  "articleBody": "Ripasso Prox: 12 Ultima modifica: May 12, 2022 10:55 AM Primo Abbozzo: April 7, 2022 9:25 AM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No\nElementi di ripasso 7 Problema k-esimo Questo documento è totalmente concentrato sull’analisi del problema della selezione del k-esimo elemento.\n7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi\n7.1.1 Note sull’utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.\nEs: mostrare i primi k in ordine di rilevanza!\n7.2 Prime soluzioni Notiamo che possiamo riadattare le soluzioni ai problemi di ordinamento per trovare il k-esimo elemento.\n7.2.1 Selezione del minimo Questo è un algoritmo che va a modificare il selection sort (utilizzando la stessa idea per creare un subarray crescente).\nSlide\nFaccio k cicli per trovare i k minimi per circa n volte, anche se l’analisi esatta è data da questa sommatoria, che è qualcosa di simile, ma non esattamente quello.\n$\\sum_{i = n - k + 1} ^{n} i$\n7.2.2 HeapSelect Io utilizzo una heap per trovare i k-esimi minimi, praticamente sto facendo un heap sort, ma con l’altra heap, e sto espellendo piccoli elementi uno alla volta..\nSlide\nPiccole note sul costo (funziona se ordini inferiori!)\n7.2.3 QuickSelect Un primo approccio potrebbe essere utile cercare di ordinare l’array con questo e prendere il k-esimo elemento.\nPoi noto che posso sfruttare il divide e conquer di qucksort per sapere quanti elementi sono minori di k! ho principalmente 3 casi:\nPseudoalgo mio (molto a parole)\nho esattamente k - 1 elementi minori di x nel primo insieme dopo il partition, quindi ritorno x.\nHo meno elementi di k - 1 minori di x dopo il partition, quindi vado a cercare il k esimo in questo insieme qui.\nHo più elementi di k - 1 minori di x dopo il partition, vado a cercare l’offset corretto nell’altro insieme.\nPseudocodice di slide\nPseudocodice bandiera nazionale che serve qui\nAnalisi nel caso ottimo e pessimo (e medio)\nL’ottimo e pessimo è abbastanza facile perché si riconduce esattamente all’analisi di quicksort\nIn pratica O(n) nel caso migliore (perché ora ho una chiamata ricorsiva in meno)\nO(n2) nel caso peggiore perché è identico a quicksort.\nIl caso medio è un pò più difficile da analizzare, dimostreremo che è in O(n). vediamo perché\nAnalisi medio\nSupponiamo che scegliamo sempre la partizione sfavorevole (quindi da n/2 a n), allora la relazione di ricorrenza (supponendo distribuzione uniforme semplice di queste possibilità) ho\nPosso dimostrare utilizzando la sostituzione questo. fine\n8 Priority-Queue È di solito implementata con la Heap. Iniziamo a fare una descrizione di questa strututra\nAltre implementazioni che però non sono richieste ma interessanti\nBinomial Heap fibo-heap 8.1 Introduzione Questa struttura di dati sarà utile in seguito per algoritmi di grafi come Dijstra o Prim per il MST.\nQuesta struttura come la Heap (anche fattibile con fibo-heap o heap binomiali!), manterrà il minimo, non è esattamente FIFO o LIFO come stack e queue\n8.1.1 Interfaccia della struttura Insertion (log n) Deletion (log n) Creation (n) Slide delle operazioni\n8.1.2 Esempi di utilizzi Base per altri algoritmi (come Dijstra o Prim) Processing di pacchetti per il routing Qualunque posto in cui c’è bisogno di processare secondo un certo ordine 8.2 D-heap La differena con la heap normale è che questo è un albero che abbia d-rami.\nSlide di descrizione\n8.2.1 Altezza e Memorizzazione Lemma altezza della heap\nQuesta dimostrazione sull’altezza dell’heap è molto simile a tutti gli alberi binari. Come gli alberi binari possiamo memorizzarli facendo un offset sulla cella attuale!\nMemorizzazione della d-heap\nOperazioni helper importanti:\nSono molto utilizzate per le operazioni di delete, insertion e simili.\nMuovi alto e muovi basso\n8.2.2 Sunto dei costi e note L’unica operazione che può essere complessa è la deletion, in cui bisogna contemplare anche il bubble up (viene eseguito solo una volta questa oppure bubble down).\nRiassunto in slide\n9 Union-Find 9.1 Introduzione Questa struttura di dati ci sarà utile per gestire insiemi disgiunti\n9.1.1 Interfaccia della struttura Vedere se due elementi appartengono allo stesso insieme trovare il rappresentante Unire degli insiemi Slide interfaccia\nOgni insieme è indicato da uno e un solo rappresentante, un suo elemento che fa finta di essere l’insieme stesso. Questa è l’idea più importante per comprendere la rappresentazione di questa struttura di dati.\n9.1.2 Intuizione sull’utilizzo Ho un insieme di ingredienti che siano tutti separati, vorrei unirli con magari un certo ordine, creando delle nuove cose. E continuare a vedere se li ho già uniti o meno.\nAlla fine vedo l’unione degli elementi in questo modo\nEsempio di problema risolto con DSU\nSlide possibili implementazione (trattati subito dopo\n9.2 QuickFind Find in tempo costante e union in tempo lineare (possibile ammortizzare a tempo costante) 9.2.1 Metodi di rappresentazione (only lista) Un insieme è rappresentato tramite un albero di altezza UNO.\nQuesto è possibile tramite una lista concatenata, in cui ogni nodo punta sempre al nodo rappresentante.\nSlide rappresentazione tramite liste\nCi aggiungo io che si può utilizzare anche un semplice array e l’index come un pointer per creare tale struttura.\n9.2.2 Union e sunto delle operazioni L’union di due insiemi è una sovrascrittura del pointer del rappresentante dell’insieme che viene unito, come si può intuire nell’esempio di union.\nIl find è immediato, perché deve risalire di solamente un arco.\nEsempio di operazione di union\nRiassunto delle operazioni\n9.2.3 Euristica del peso (!!) Voglio cercare di limitare il tempo di unione di due insiemi.\nL’idea è unire l’insieme con meno figli a quello con di più. mi mantengo questa informazione sulla radice dell’albero.\nSlide dell’idea\nCosto di Union\nIl tempo resta lineare, però è almeno dimezzato l’upper bound del tempo necessario per fare questa operazione.\nCosto ammortizzato\nPosso osservare che per la proprietà sopra, se una foglia cambia radice l’insieme di arrivo è grande almeno il doppio dell’insieme precedente, questa proprietà mi permette di concludere che al massimo posso swappare log n volte.\nQuesto ragionamento mi permette di concludere un costo ammortizzato per questa operazione di union\nAnalisi union ammortizzato\nNotiamo che al massimo, in una union, $n/2$ elementi possono cambiare parente Quindi il caso pessimo di union in questo modo resta in $O(n)$, ma possiamo fare di meglio.\nNota: dopo n - 1 union, sto facendo union con se stesso, che non ha senso, quindi resto con n - 1, che è il caso pessimo d union).\n9.3 QuickUnion È una altra rappresentazione dell’union find, in cui è presente una foresta (uguale alla precedente, ma in questo caso posso avere anche altezza superiore a 1!)\n9.3.1 Introduzione alla struttura e implementazione (array) Slide sulla struttura\nSlide di rappresentazione dell’array\nSi utilizza il parent vector!\n9.3.2 Find e sunto delle operazioni Per union basta infatti prendere la radice del primo insieme e farla puntare alla radice dell’insieme in cui si vuole unire, invece che farlo puntare a sé stesso (fa questa ultima cosa perché era la radice)\nSlide di riassunto\n9.3.3 Euristica del rank (!!) Voglio cercare di limitare il tempo di ricerca del rappresentante. L’idea è nel momento di fare l’union, lo faccio scegliendo di unire l’elemento con rank minore (ovvero con altezza dell’albero minore) con quello maggiore.\nAnalisi caso pessimo\nUpper bound rank di x (dim)\nLa dimostrazione è abbastanza noiosa, basta che tengo in considerazione i tre casi: quando rank(a) = rank(b), quando è minore, e quando è maggiore, sapendo l’ipotesi induttiva, non dovrebbe essere tanto difficile concludere quanto voluto.\n(se ho una limitazione superiore all’altezza dell’albero allora è chiaro che il find è in log n.\nIn questo modo riesco proprio a creare un upper bound logaritmico al find, a differenza del costo ammortizzato di questo con l’euristica del peso in quickfind.\n",
+  "wordCount" : "1309",
+  "inLanguage": "en",
+  "image": "flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "flecart.github.io/notes/k-esimo-priority-q-dsu/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="flecart.github.io/flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      k-esimo priority-q DSU
+    </h1>
+    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
+                <li>
+                    <a href="#7-problema-k-esimo" aria-label="7 Problema k-esimo">7 Problema k-esimo</a><ul>
+                        
+                <li>
+                    <a href="#71-introduzione-al-problema" aria-label="7.1 Introduzione al problema">7.1 Introduzione al problema</a><ul>
+                        
+                <li>
+                    <a href="#711-note-sullutilizzo" aria-label="7.1.1 Note sull&rsquo;utilizzo">7.1.1 Note sull&rsquo;utilizzo</a></li></ul>
+                </li>
+                <li>
+                    <a href="#72-prime-soluzioni" aria-label="7.2 Prime soluzioni">7.2 Prime soluzioni</a><ul>
+                        
+                <li>
+                    <a href="#721-selezione-del-minimo" aria-label="7.2.1 Selezione del minimo">7.2.1 Selezione del minimo</a></li>
+                <li>
+                    <a href="#722-heapselect" aria-label="7.2.2 HeapSelect">7.2.2 HeapSelect</a></li>
+                <li>
+                    <a href="#723-quickselect" aria-label="7.2.3 QuickSelect">7.2.3 QuickSelect</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#8-priority-queue" aria-label="8 Priority-Queue">8 Priority-Queue</a><ul>
+                        
+                <li>
+                    <a href="#binomial-heap" aria-label="Binomial Heap">Binomial Heap</a><ul>
+                        
+                <li>
+                    <a href="#fibo-heap" aria-label="fibo-heap">fibo-heap</a></li></ul>
+                </li>
+                <li>
+                    <a href="#81-introduzione" aria-label="8.1 Introduzione">8.1 Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#811-interfaccia-della-struttura" aria-label="8.1.1 Interfaccia della struttura">8.1.1 Interfaccia della struttura</a></li>
+                <li>
+                    <a href="#812-esempi-di-utilizzi" aria-label="8.1.2 Esempi di utilizzi">8.1.2 Esempi di utilizzi</a></li></ul>
+                </li>
+                <li>
+                    <a href="#82-d-heap" aria-label="8.2 D-heap">8.2 D-heap</a><ul>
+                        
+                <li>
+                    <a href="#821-altezza-e-memorizzazione" aria-label="8.2.1 Altezza e Memorizzazione">8.2.1 Altezza e Memorizzazione</a></li>
+                <li>
+                    <a href="#822-sunto-dei-costi-e-note" aria-label="8.2.2 Sunto dei costi e note">8.2.2 Sunto dei costi e note</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#9-union-find" aria-label="9 Union-Find">9 Union-Find</a><ul>
+                        
+                <li>
+                    <a href="#91-introduzione" aria-label="9.1 Introduzione">9.1 Introduzione</a><ul>
+                        
+                <li>
+                    <a href="#911-interfaccia-della-struttura" aria-label="9.1.1 Interfaccia della struttura">9.1.1 Interfaccia della struttura</a></li>
+                <li>
+                    <a href="#912-intuizione-sullutilizzo" aria-label="9.1.2 Intuizione sull’utilizzo">9.1.2 Intuizione sull’utilizzo</a></li></ul>
+                </li>
+                <li>
+                    <a href="#92-quickfind" aria-label="9.2 QuickFind">9.2 QuickFind</a><ul>
+                        
+                <li>
+                    <a href="#921-metodi-di-rappresentazione--only-lista" aria-label="9.2.1 Metodi di rappresentazione  (only lista)">9.2.1 Metodi di rappresentazione  (only lista)</a></li>
+                <li>
+                    <a href="#922-union-e-sunto-delle-operazioni" aria-label="9.2.2 Union e sunto delle operazioni">9.2.2 Union e sunto delle operazioni</a></li>
+                <li>
+                    <a href="#923-euristica-del-peso-" aria-label="9.2.3 Euristica del peso (!!)">9.2.3 Euristica del peso (!!)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#93-quickunion" aria-label="9.3 QuickUnion">9.3 QuickUnion</a><ul>
+                        
+                <li>
+                    <a href="#931-introduzione-alla-struttura-e-implementazione-array" aria-label="9.3.1 Introduzione alla struttura e implementazione (array)">9.3.1 Introduzione alla struttura e implementazione (array)</a></li>
+                <li>
+                    <a href="#932-find-e-sunto-delle-operazioni" aria-label="9.3.2 Find e sunto delle operazioni">9.3.2 Find e sunto delle operazioni</a></li>
+                <li>
+                    <a href="#933-euristica-del-rank-" aria-label="9.3.3 Euristica del rank (!!)">9.3.3 Euristica del rank (!!)</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Ripasso Prox: 12
+Ultima modifica: May 12, 2022 10:55 AM
+Primo Abbozzo: April 7, 2022 9:25 AM
+Stato: 🌕🌕🌕🌕🌗
+Studi Personali: No</p>
+<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
+<h1 id="7-problema-k-esimo">7 Problema k-esimo<a hidden class="anchor" aria-hidden="true" href="#7-problema-k-esimo">#</a></h1>
+<p>Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.</p>
+<h2 id="71-introduzione-al-problema">7.1 Introduzione al problema<a hidden class="anchor" aria-hidden="true" href="#71-introduzione-al-problema">#</a></h2>
+<p>Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi</p>
+<h3 id="711-note-sullutilizzo">7.1.1 Note sull&rsquo;utilizzo<a hidden class="anchor" aria-hidden="true" href="#711-note-sullutilizzo">#</a></h3>
+<p>Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.</p>
+<p>Es: mostrare i primi k in ordine di rilevanza!</p>
+<h2 id="72-prime-soluzioni">7.2 Prime soluzioni<a hidden class="anchor" aria-hidden="true" href="#72-prime-soluzioni">#</a></h2>
+<p>Notiamo che possiamo riadattare le soluzioni ai problemi di ordinamento per trovare il k-esimo elemento.</p>
+<h3 id="721-selezione-del-minimo">7.2.1 Selezione del minimo<a hidden class="anchor" aria-hidden="true" href="#721-selezione-del-minimo">#</a></h3>
+<p>Questo è un algoritmo che va a modificare il selection sort (utilizzando la stessa idea per creare un subarray crescente).</p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled">
+<p>Faccio k cicli per trovare i k minimi per circa n volte, anche se l&rsquo;analisi esatta è data da questa sommatoria, che è qualcosa di simile, ma non esattamente quello.</p>
+<p>$\sum_{i = n - k + 1} ^{n} i$</p>
+</li>
+</ul>
+<h3 id="722-heapselect">7.2.2 HeapSelect<a hidden class="anchor" aria-hidden="true" href="#722-heapselect">#</a></h3>
+<p>Io utilizzo una heap per trovare i k-esimi minimi, praticamente sto facendo un heap sort, ma con l&rsquo;altra heap, e sto espellendo piccoli elementi uno alla volta..</p>
+<ul>
+<li>
+<p>Slide</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 1.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 1">
+</li>
+<li>
+<p>Piccole note sul costo (funziona se ordini inferiori!)</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 2.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 2">
+</li>
+</ul>
+<h3 id="723-quickselect">7.2.3 QuickSelect<a hidden class="anchor" aria-hidden="true" href="#723-quickselect">#</a></h3>
+<p>Un primo approccio potrebbe essere utile cercare di ordinare l&rsquo;array con questo e prendere il k-esimo elemento.</p>
+<p>Poi noto che posso sfruttare il divide e conquer di qucksort per sapere quanti elementi sono minori di k! ho principalmente 3 casi:</p>
+<ul>
+<li>
+<p>Pseudoalgo mio (molto a parole)</p>
+<p>ho esattamente k - 1 elementi minori di x nel primo insieme dopo il partition, quindi ritorno x.</p>
+<p>Ho meno elementi di k - 1 minori di x dopo il partition, quindi vado a cercare il k esimo in questo insieme qui.</p>
+<p>Ho più elementi di k - 1 minori di x dopo il partition, vado a cercare l&rsquo;offset corretto nell&rsquo;altro insieme.</p>
+</li>
+<li>
+<p>Pseudocodice di slide</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 3.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 3">
+</li>
+<li>
+<p>Pseudocodice bandiera nazionale che serve qui</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 4.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 4">
+</li>
+</ul>
+<p><strong>Analisi nel caso ottimo e pessimo (e medio)</strong></p>
+<p>L&rsquo;ottimo e pessimo è abbastanza facile perché si riconduce esattamente all&rsquo;analisi di quicksort</p>
+<p>In pratica O(n) nel caso migliore (perché ora ho una chiamata ricorsiva in meno)</p>
+<p>O(n2) nel caso peggiore perché è identico a quicksort.</p>
+<p>Il caso medio è un pò più difficile da analizzare, dimostreremo che è in O(n). vediamo perché</p>
+<ul>
+<li>
+<p>Analisi medio</p>
+<p>Supponiamo che scegliamo sempre la partizione sfavorevole (quindi da n/2 a n), allora la relazione di ricorrenza (supponendo distribuzione uniforme semplice di queste possibilità) ho</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 5.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 5">
+<p>Posso dimostrare utilizzando la sostituzione questo. fine</p>
+</li>
+</ul>
+<h1 id="8-priority-queue">8 Priority-Queue<a hidden class="anchor" aria-hidden="true" href="#8-priority-queue">#</a></h1>
+<p>È di solito implementata con la Heap. Iniziamo a fare una descrizione di questa strututra</p>
+<ul>
+<li>
+<p>Altre implementazioni che però non sono richieste ma interessanti</p>
+<h2 id="binomial-heap">Binomial Heap<a hidden class="anchor" aria-hidden="true" href="#binomial-heap">#</a></h2>
+<h3 id="fibo-heap">fibo-heap<a hidden class="anchor" aria-hidden="true" href="#fibo-heap">#</a></h3>
+</li>
+</ul>
+<h2 id="81-introduzione">8.1 Introduzione<a hidden class="anchor" aria-hidden="true" href="#81-introduzione">#</a></h2>
+<p>Questa struttura di dati sarà utile in seguito per algoritmi di grafi come Dijstra o Prim per il MST.</p>
+<p>Questa struttura come la Heap (anche fattibile con fibo-heap o heap binomiali!), <strong>manterrà il minimo,</strong> non è esattamente FIFO o LIFO come stack e queue</p>
+<h3 id="811-interfaccia-della-struttura">8.1.1 Interfaccia della struttura<a hidden class="anchor" aria-hidden="true" href="#811-interfaccia-della-struttura">#</a></h3>
+<ol>
+<li>Insertion (log n)</li>
+<li>Deletion (log n)</li>
+<li>Creation (n)</li>
+</ol>
+<ul>
+<li>
+<p>Slide delle operazioni</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 6.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 6">
+</li>
+</ul>
+<h3 id="812-esempi-di-utilizzi">8.1.2 Esempi di utilizzi<a hidden class="anchor" aria-hidden="true" href="#812-esempi-di-utilizzi">#</a></h3>
+<ol>
+<li>Base per altri algoritmi (come Dijstra o Prim)</li>
+<li>Processing di pacchetti per il routing</li>
+<li>Qualunque posto in cui c&rsquo;è bisogno di processare secondo un certo ordine</li>
+</ol>
+<h2 id="82-d-heap">8.2 D-heap<a hidden class="anchor" aria-hidden="true" href="#82-d-heap">#</a></h2>
+<p>La differena con la heap normale è che questo è un albero che abbia d-rami.</p>
+<ul>
+<li>
+<p>Slide di descrizione</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 7.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 7">
+</li>
+</ul>
+<h3 id="821-altezza-e-memorizzazione">8.2.1 Altezza e Memorizzazione<a hidden class="anchor" aria-hidden="true" href="#821-altezza-e-memorizzazione">#</a></h3>
+<ul>
+<li>
+<p>Lemma altezza della heap</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 8.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 8">
+</li>
+</ul>
+<p>Questa dimostrazione sull&rsquo;altezza dell&rsquo;heap è molto simile a tutti gli alberi binari. Come gli alberi binari possiamo memorizzarli facendo un offset sulla cella attuale!</p>
+<ul>
+<li>
+<p>Memorizzazione della d-heap</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 9.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 9">
+</li>
+</ul>
+<p><strong>Operazioni helper importanti:</strong></p>
+<p>Sono molto utilizzate per le operazioni di delete, insertion e simili.</p>
+<ul>
+<li>
+<p>Muovi alto e muovi basso</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 10.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 10">
+</li>
+</ul>
+<h3 id="822-sunto-dei-costi-e-note">8.2.2 Sunto dei costi e note<a hidden class="anchor" aria-hidden="true" href="#822-sunto-dei-costi-e-note">#</a></h3>
+<p>L&rsquo;unica operazione che può essere complessa è la deletion, in cui bisogna contemplare anche il bubble up (viene eseguito solo una volta questa oppure bubble down).</p>
+<ul>
+<li>
+<p>Riassunto in slide</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 11.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 11">
+</li>
+</ul>
+<h1 id="9-union-find">9 Union-Find<a hidden class="anchor" aria-hidden="true" href="#9-union-find">#</a></h1>
+<h2 id="91-introduzione">9.1 Introduzione<a hidden class="anchor" aria-hidden="true" href="#91-introduzione">#</a></h2>
+<p>Questa struttura di dati ci sarà utile per gestire <strong>insiemi disgiunti</strong></p>
+<h3 id="911-interfaccia-della-struttura">9.1.1 Interfaccia della struttura<a hidden class="anchor" aria-hidden="true" href="#911-interfaccia-della-struttura">#</a></h3>
+<ol>
+<li>Vedere se due elementi appartengono allo stesso insieme</li>
+<li>trovare il rappresentante</li>
+<li>Unire degli insiemi</li>
+</ol>
+<ul>
+<li>
+<p>Slide interfaccia</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 12.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 12">
+</li>
+</ul>
+<p>Ogni insieme è indicato da <strong>uno e un solo rappresentante</strong>, un suo elemento che fa finta di essere l&rsquo;insieme stesso. Questa è l&rsquo;idea più importante per comprendere la rappresentazione di questa struttura di dati.</p>
+<h3 id="912-intuizione-sullutilizzo">9.1.2 Intuizione sull’utilizzo<a hidden class="anchor" aria-hidden="true" href="#912-intuizione-sullutilizzo">#</a></h3>
+<p>Ho un insieme di ingredienti che siano tutti separati, vorrei <strong>unirli</strong> con magari un certo ordine, creando delle nuove cose. E continuare a vedere se li ho già uniti o meno.</p>
+<p>Alla fine vedo l&rsquo;unione degli elementi in questo modo</p>
+<ul>
+<li>
+<p>Esempio di problema risolto con DSU</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 13.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 13">
+</li>
+<li>
+<p>Slide possibili implementazione (trattati subito dopo</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 14.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 14">
+</li>
+</ul>
+<h2 id="92-quickfind">9.2 QuickFind<a hidden class="anchor" aria-hidden="true" href="#92-quickfind">#</a></h2>
+<ol>
+<li>Find in tempo costante e union in tempo lineare (possibile ammortizzare a tempo costante)</li>
+</ol>
+<h3 id="921-metodi-di-rappresentazione--only-lista">9.2.1 Metodi di rappresentazione  (only lista)<a hidden class="anchor" aria-hidden="true" href="#921-metodi-di-rappresentazione--only-lista">#</a></h3>
+<p>Un insieme è rappresentato tramite un albero di <strong>altezza UNO.</strong></p>
+<p>Questo è possibile tramite una lista concatenata, in cui ogni nodo punta sempre al nodo rappresentante.</p>
+<ul>
+<li>
+<p>Slide rappresentazione tramite liste</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 15.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 15">
+</li>
+</ul>
+<p>Ci aggiungo io che si può utilizzare anche un semplice array e l&rsquo;index come un pointer per creare tale struttura.</p>
+<h3 id="922-union-e-sunto-delle-operazioni">9.2.2 Union e sunto delle operazioni<a hidden class="anchor" aria-hidden="true" href="#922-union-e-sunto-delle-operazioni">#</a></h3>
+<p>L&rsquo;union di due insiemi è una sovrascrittura del pointer del rappresentante dell&rsquo;insieme che viene unito, come si può intuire nell&rsquo;esempio di union.</p>
+<p>Il find è immediato, perché deve risalire di solamente un arco.</p>
+<ul>
+<li>
+<p>Esempio di operazione di union</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 16.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 16">
+</li>
+<li>
+<p>Riassunto delle operazioni</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 17.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 17">
+</li>
+</ul>
+<h3 id="923-euristica-del-peso-">9.2.3 Euristica del peso (!!)<a hidden class="anchor" aria-hidden="true" href="#923-euristica-del-peso-">#</a></h3>
+<p>Voglio cercare di limitare il tempo di unione di due insiemi.</p>
+<p>L&rsquo;idea è unire l&rsquo;insieme con meno figli a quello con di più. mi mantengo questa informazione sulla radice dell&rsquo;albero.</p>
+<ul>
+<li>
+<p>Slide dell&rsquo;idea</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 18.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 18">
+</li>
+</ul>
+<p><strong>Costo di Union</strong></p>
+<p>Il tempo resta lineare, però è almeno dimezzato l&rsquo;upper bound del tempo necessario per fare questa operazione.</p>
+<p><strong>Costo ammortizzato</strong></p>
+<p>Posso osservare che per la proprietà sopra, se una foglia cambia radice l&rsquo;insieme di arrivo è grande almeno il doppio dell&rsquo;insieme precedente, questa proprietà mi permette di concludere che al massimo posso swappare log n volte.</p>
+<p>Questo ragionamento mi permette di concludere un costo ammortizzato per questa operazione di union</p>
+<ul>
+<li>
+<p>Analisi union ammortizzato</p>
+<p>Notiamo che al massimo, in una union, $n/2$ elementi possono cambiare parente Quindi il caso pessimo di union in questo modo resta in $O(n)$, ma possiamo fare di meglio.</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 19.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 19">
+<p>Nota: dopo n - 1 union, sto facendo union con se stesso, che non ha senso, quindi resto con n - 1, che è il caso pessimo d union).</p>
+</li>
+</ul>
+<h2 id="93-quickunion">9.3 QuickUnion<a hidden class="anchor" aria-hidden="true" href="#93-quickunion">#</a></h2>
+<p>È una altra rappresentazione dell&rsquo;union find, in cui è presente una foresta (uguale alla precedente, ma in questo caso posso avere anche altezza superiore a 1!)</p>
+<h3 id="931-introduzione-alla-struttura-e-implementazione-array">9.3.1 Introduzione alla struttura e implementazione (array)<a hidden class="anchor" aria-hidden="true" href="#931-introduzione-alla-struttura-e-implementazione-array">#</a></h3>
+<ul>
+<li>
+<p>Slide sulla struttura</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 20.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 20">
+</li>
+<li>
+<p>Slide di rappresentazione dell&rsquo;array</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 21.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 21">
+</li>
+</ul>
+<p>Si utilizza il <strong>parent vector!</strong></p>
+<h3 id="932-find-e-sunto-delle-operazioni">9.3.2 Find e sunto delle operazioni<a hidden class="anchor" aria-hidden="true" href="#932-find-e-sunto-delle-operazioni">#</a></h3>
+<p>Per union basta infatti prendere la radice del primo insieme e farla puntare alla radice dell&rsquo;insieme in cui si vuole unire, invece che farlo puntare a sé stesso (fa questa ultima cosa perché era la radice)</p>
+<ul>
+<li>
+<p>Slide di riassunto</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 22.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 22">
+</li>
+</ul>
+<h3 id="933-euristica-del-rank-">9.3.3 Euristica del rank (!!)<a hidden class="anchor" aria-hidden="true" href="#933-euristica-del-rank-">#</a></h3>
+<p>Voglio cercare di limitare il tempo di ricerca del rappresentante.  L&rsquo;idea è nel momento di fare l&rsquo;union, lo faccio scegliendo di unire l&rsquo;elemento con rank minore (ovvero con altezza dell&rsquo;albero minore) con quello maggiore.</p>
+<p><strong>Analisi caso pessimo</strong></p>
+<ul>
+<li>
+<p>Upper bound rank di x (dim)</p>
+  <img src="/images/notes/image/universita/ex-notion/k-esimo priority-q DSU/Untitled 23.png" alt="image/universita/ex-notion/k-esimo priority-q DSU/Untitled 23">
+<p>La dimostrazione è abbastanza noiosa, basta che tengo in considerazione i tre casi: quando rank(a) = rank(b), quando è minore, e quando è maggiore, sapendo l&rsquo;ipotesi induttiva, non dovrebbe essere tanto difficile concludere quanto voluto.</p>
+<p>(se ho una limitazione superiore all&rsquo;altezza dell&rsquo;albero allora è chiaro che il find è in log n.</p>
+</li>
+</ul>
+<p>In questo modo riesco proprio a creare un upper bound logaritmico al find, a differenza del costo ammortizzato di questo con l&rsquo;euristica del peso in quickfind.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="flecart.github.io/tags/no-tags/">No-Tags</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on x"
+            href="https://x.com/intent/tweet/?text=k-esimo%20priority-q%20DSU&amp;url=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f&amp;hashtags=no-tags">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f&amp;title=k-esimo%20priority-q%20DSU&amp;summary=k-esimo%20priority-q%20DSU&amp;source=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on reddit"
+            href="https://reddit.com/submit?url=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f&title=k-esimo%20priority-q%20DSU">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on whatsapp"
+            href="https://api.whatsapp.com/send?text=k-esimo%20priority-q%20DSU%20-%20flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on telegram"
+            href="https://telegram.me/share/url?text=k-esimo%20priority-q%20DSU&amp;url=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share k-esimo priority-q DSU on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=k-esimo%20priority-q%20DSU&u=flecart.github.io%2fnotes%2fk-esimo-priority-q-dsu%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
