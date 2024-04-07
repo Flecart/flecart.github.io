@@ -137,8 +137,8 @@ Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che poss
   "keywords": [
     
   ],
-  "articleBody": "Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \\dots$ gode della proprietà di Markov se vale:\n$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \\dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.\nDa un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente.\nLa catena di Markov È una successione di variabili aleatorie che possiede la proprietà di Markov. Solitamente lo rappresentiamo a grafi oppure tramite la matrice di transizione. A me piace più la versione a grafi\nCatena di 3 variabili Siano $X, Y, Z$ è chiaro che se viene formata la Catena di Markov $X \\to Y \\to Z$ allora deve valere $$ p(x, y, z) = p(x)p(y|x)p(z|y) $$ Altra cosa è che deve vare se e solo se $X, Z$ sono indipendenti, dato $Y$ ossia se vale $$ P(x, z|y) = P(x|y)P(z|y) $$ Che dovrebbe essere una conseguenza diretta della parte di sopra. Una altra osservazione è che se vale quella catena, vale anche l’inversa, ossia $Z \\to Y \\to X$.\nData processing inequality Se abbiamo una catena di Markov $X \\to Y \\to Z$ allora vale che $$ I(X ; Y) \\geq I(X; Z) $$ Perché una parte di computazione è possibile modellarlo con la catena di Markov. E mi sta dicendo che l’informazione comune all’input $X$ con l’output $Y$ o output $Z$ dopo seguente computazione viene sempre meno con più computazione, e anche che non aggiungo informazione con più computazione.\nDimostrazione\nDefinizioni Comuni Raggiungibilità Il nodo $j$ è raggiungibile da un nodo $i$ se esiste un numero di passi $m$, tale per cui $$ P_{ij}^{m} \u003e 0 $$ Molto più facile vedere sta cosa se lo rappresentiamo come un comunissimo grafo.\nClasse di stati Sono un insieme di stati tutti raggiungibili fra di loro (comunque presi due stati all’interno della classe, esiste un percorso che parte da uno e finisce sull’altro per dire).\nRecurrent vs Transient È recurrent se per ogni nodo, tutti i nodi raggiungibili da un nodo $i$ raggiungono anche il nodo $i$ stesso. Transient se non è recurrent Alcuni chiamano la recurrent come irreducible come in (Cover \u0026 Thomas 2012).\nPeriodic vs Aperiodic Sia $d$ il massimo comune divisore per tutti gli $m$ tali per cui vale $P_{ii}^{m} \u003e 0$ (ossia può raggiungere sé stesso con probabilità non nulla), allora è periodico se $m \\neq 0$ altrimenti è aperiodico.\nErgodic Markov Chain Una catena di markov si dice Ergodico se è recurrent e aperiodico.\nPossiamo avere un teoremino carino su queste tipologie di catene, ed è più o meno il motivo per cui si chiamano ergodiche, ossia che una particella che segue questa legge prima o poi va a visitare tutti gli stati una volta. Abbiamo come teorema: $$ P^{(M - 1)^{2} + 1}_{ij} \u003e 0 $$ Con $M$ il numero totale di stati, e $ij$ qualunque stato iniziale o finale. Dimostrazione è un esercizio\nUnichain Una catena che continiene una singola classe recurrent più alcuni stati transienti\nChapman-Kolmogorov Equation Alla fine è una relazione molto semplice, che deriva in modo facile dalle matrici di transizione, dice che Sia $P$ una matrice di transizione per un processo di Markov, allora $$ P^{n + m}_{ij} = \\sum_{k = 0}^{N} P_{ik}^{n} P_{kj}^{m} $$ Ossia posso moltiplicare matrici di transizione assieme per avere la probabilità di muovermi da uno stato $i$ a uno stato $j$ in $n + m$ passi.\nConvergenza Ha senso pensare che una catena di Markov converga nel proseguire delle transazioni.\nTeorema di convergenza per catene ergodiche Questo è un teorema importante.\nConvergenza per unichains ergodiche. Con rewards Vogliamo associare a ogni stato $i$ un reward $r_{i}$ Si può creare allora una altra variabile aleatoria che prende la variabile aleatoria di Markov $X_{i}$ e lo mappa a un reward. Quello che ci interessano di più sono le expectation dei rewards.\nNoi vogliamo il valore\n$$ E[R(X_{n})| X_{0} = i] = \\sum_{j}r_{j}P_{ij}^{n} $$ E per la proprietà di Markov credo sia la stessa cosa quando non parto da step 0.\nAggregate reward function Questo è definito anche come value functionin Reinforcement Learning, a introduction.\n$v_{i}(n) = E[R(X_{m}) + \\dots + R(X_{m + n - 1}) | X_{m} = i]$\nSe la catena è convergente, abbiamo che anche il value function è convergente a un valore preciso, ed è:\n$$ g = \\sum \\pi_{j}r_{j} = \\vec{\\pi} \\cdot \\vec{r} $$ Indipendentemente allo stato iniziale (che stupisce molto).\nReferences [1] Cover \u0026 Thomas “Elements of Information Theory” John Wiley \u0026 Sons 2012\n",
-  "wordCount" : "781",
+  "articleBody": "Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \\dots$ gode della proprietà di Markov se vale:\n$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \\dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.\nDa un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente.\nLa catena di Markov È una successione di variabili aleatorie che possiede la proprietà di Markov. Solitamente lo rappresentiamo a grafi oppure tramite la matrice di transizione. A me piace più la versione a grafi\nCatena di 3 variabili Siano $X, Y, Z$ è chiaro che se viene formata la Catena di Markov $X \\to Y \\to Z$ allora deve valere $$ p(x, y, z) = p(x)p(y|x)p(z|y) $$ Altra cosa è che deve vare se e solo se $X, Z$ sono indipendenti, dato $Y$ ossia se vale $$ P(x, z|y) = P(x|y)P(z|y) $$ Che dovrebbe essere una conseguenza diretta della parte di sopra. Una altra osservazione è che se vale quella catena, vale anche l’inversa, ossia $Z \\to Y \\to X$ .\nData processing inequality Se abbiamo una catena di Markov $X \\to Y \\to Z$ allora vale che $$ I(X ; Y) \\geq I(X; Z) $$ Perché una parte di computazione è possibile modellarlo con la catena di Markov. E mi sta dicendo che l’informazione comune all’input $X$ con l’output $Y$ o output $Z$ dopo seguente computazione viene sempre meno con più computazione, e anche che non aggiungo informazione con più computazione.\nDimostrazione\nDefinizioni Comuni Raggiungibilità Il nodo $j$ è raggiungibile da un nodo $i$ se esiste un numero di passi $m$ , tale per cui $$ P_{ij}^{m} \u003e 0 $$ Molto più facile vedere sta cosa se lo rappresentiamo come un comunissimo grafo.\nClasse di stati Sono un insieme di stati tutti raggiungibili fra di loro (comunque presi due stati all’interno della classe, esiste un percorso che parte da uno e finisce sull’altro per dire).\nRecurrent vs Transient È recurrent se per ogni nodo, tutti i nodi raggiungibili da un nodo $i$ raggiungono anche il nodo $i$ stesso. Transient se non è recurrent Alcuni chiamano la recurrent come irreducible come in (Cover \u0026 Thomas 2012).\nPeriodic vs Aperiodic Sia $d$ il massimo comune divisore per tutti gli $m$ tali per cui vale $P_{ii}^{m} \u003e 0$ (ossia può raggiungere sé stesso con probabilità non nulla), allora è periodico se $m \\neq 0$ altrimenti è aperiodico.\nErgodic Markov Chain Una catena di markov si dice Ergodico se è recurrent e aperiodico.\nPossiamo avere un teoremino carino su queste tipologie di catene, ed è più o meno il motivo per cui si chiamano ergodiche, ossia che una particella che segue questa legge prima o poi va a visitare tutti gli stati una volta. Abbiamo come teorema: $$ P^{(M - 1)^{2} + 1}_{ij} \u003e 0 $$ Con $M$ il numero totale di stati, e $ij$ qualunque stato iniziale o finale. Dimostrazione è un esercizio\nUnichain Una catena che continiene una singola classe recurrent più alcuni stati transienti\nChapman-Kolmogorov Equation Alla fine è una relazione molto semplice, che deriva in modo facile dalle matrici di transizione, dice che Sia $P$ una matrice di transizione per un processo di Markov, allora $$ P^{n + m}_{ij} = \\sum_{k = 0}^{N} P_{ik}^{n} P_{kj}^{m} $$ Ossia posso moltiplicare matrici di transizione assieme per avere la probabilità di muovermi da uno stato $i$ a uno stato $j$ in $n + m$ passi.\nConvergenza Ha senso pensare che una catena di Markov converga nel proseguire delle transazioni.\nTeorema di convergenza per catene ergodiche Questo è un teorema importante.\nConvergenza per unichains ergodiche. Con rewards Vogliamo associare a ogni stato $i$ un reward $r_{i}$ Si può creare allora una altra variabile aleatoria che prende la variabile aleatoria di Markov $X_{i}$ e lo mappa a un reward. Quello che ci interessano di più sono le expectation dei rewards.\nNoi vogliamo il valore\n$$ E[R(X_{n})| X_{0} = i] = \\sum_{j}r_{j}P_{ij}^{n} $$ E per la proprietà di Markov credo sia la stessa cosa quando non parto da step 0.\nAggregate reward function Questo è definito anche come value functionin Reinforcement Learning, a introduction.\n$v_{i}(n) = E[R(X_{m}) + \\dots + R(X_{m + n - 1}) | X_{m} = i]$ Se la catena è convergente, abbiamo che anche il value function è convergente a un valore preciso, ed è:\n$$ g = \\sum \\pi_{j}r_{j} = \\vec{\\pi} \\cdot \\vec{r} $$ Indipendentemente allo stato iniziale (che stupisce molto).\nReferences [1] Cover \u0026 Thomas “Elements of Information Theory” John Wiley \u0026 Sons 2012\n",
+  "wordCount" : "783",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -299,7 +299,9 @@ Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che poss
 
   <div class="post-content"><h3 id="introduzione-alle-catene-di-markov">Introduzione alle catene di Markov<a hidden class="anchor" aria-hidden="true" href="#introduzione-alle-catene-di-markov">#</a></h3>
 <h4 id="la-proprietà-di-markov">La proprietà di Markov<a hidden class="anchor" aria-hidden="true" href="#la-proprietà-di-markov">#</a></h4>
-<p>Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:</p>
+<p>Una sequenza di variabili aleatorie </p>
+$X_{1}, X_{2}, X_{3}, \dots$
+<p> gode della proprietà di Markov se vale:</p>
 $$
 P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1})
 $$
@@ -310,32 +312,56 @@ Ossia posso scordarmi tutta la <strong>storia precedente</strong>, mi interessa 
 <p>È una successione di variabili aleatorie che possiede la proprietà di Markov.
 Solitamente lo rappresentiamo a grafi oppure tramite la matrice di transizione. A me piace più la versione a grafi</p>
 <h4 id="catena-di-3-variabili">Catena di 3 variabili<a hidden class="anchor" aria-hidden="true" href="#catena-di-3-variabili">#</a></h4>
-<p>Siano $X, Y, Z$ è chiaro che se viene formata la Catena di Markov $X \to Y \to Z$ allora deve valere
+<p>Siano </p>
+$X, Y, Z$
+<p> è chiaro che se viene formata la Catena di Markov </p>
+$X \to Y \to Z$
+<p> allora deve valere
 </p>
 $$
 p(x, y, z) = p(x)p(y|x)p(z|y)
 $$
 <p>
-Altra cosa è che deve vare se e solo se $X, Z$ sono indipendenti, dato $Y$ ossia se vale
+Altra cosa è che deve vare se e solo se </p>
+$X, Z$
+<p> sono indipendenti, dato </p>
+$Y$
+<p> ossia se vale
 </p>
 $$
 P(x, z|y) = P(x|y)P(z|y)
 $$
 <p>
 Che dovrebbe essere una conseguenza diretta della parte di sopra.
-Una altra osservazione è che se vale quella catena, vale anche l&rsquo;inversa, ossia $Z \to Y \to X$.</p>
+Una altra osservazione è che se vale quella catena, vale anche l&rsquo;inversa, ossia </p>
+$Z \to Y \to X$
+<p>.</p>
 <h4 id="data-processing-inequality">Data processing inequality<a hidden class="anchor" aria-hidden="true" href="#data-processing-inequality">#</a></h4>
-<p>Se abbiamo una catena di Markov $X \to Y \to Z$ allora vale che
+<p>Se abbiamo una catena di Markov </p>
+$X \to Y \to Z$
+<p> allora vale che
 </p>
 $$
 I(X ; Y) \geq I(X; Z)
 $$
 <p>
-Perché una parte di computazione è possibile modellarlo con la catena di Markov. E mi sta dicendo che l&rsquo;informazione comune all&rsquo;input $X$ con  l&rsquo;output $Y$ o output $Z$ dopo seguente computazione viene sempre meno con più computazione, e anche che non aggiungo informazione con più computazione.</p>
+Perché una parte di computazione è possibile modellarlo con la catena di Markov. E mi sta dicendo che l&rsquo;informazione comune all&rsquo;input </p>
+$X$
+<p> con  l&rsquo;output </p>
+$Y$
+<p> o output </p>
+$Z$
+<p> dopo seguente computazione viene sempre meno con più computazione, e anche che non aggiungo informazione con più computazione.</p>
 <p><strong>Dimostrazione</strong></p>
 <h3 id="definizioni-comuni">Definizioni Comuni<a hidden class="anchor" aria-hidden="true" href="#definizioni-comuni">#</a></h3>
 <h4 id="raggiungibilità">Raggiungibilità<a hidden class="anchor" aria-hidden="true" href="#raggiungibilità">#</a></h4>
-<p>Il nodo $j$ è raggiungibile da un nodo $i$ se esiste un numero di passi $m$, tale per cui
+<p>Il nodo </p>
+$j$
+<p> è raggiungibile da un nodo </p>
+$i$
+<p> se esiste un numero di passi </p>
+$m$
+<p>, tale per cui
 </p>
 $$
 P_{ij}^{m} > 0
@@ -345,11 +371,23 @@ Molto più facile vedere sta cosa se lo rappresentiamo come un comunissimo <a hr
 <h4 id="classe-di-stati">Classe di stati<a hidden class="anchor" aria-hidden="true" href="#classe-di-stati">#</a></h4>
 <p>Sono un insieme di stati tutti raggiungibili fra di loro (comunque presi due stati all&rsquo;interno della classe, esiste un percorso che parte da uno e finisce sull&rsquo;altro per dire).</p>
 <h4 id="recurrent-vs-transient">Recurrent vs Transient<a hidden class="anchor" aria-hidden="true" href="#recurrent-vs-transient">#</a></h4>
-<p>È <em>recurrent</em> se per ogni nodo, tutti i nodi raggiungibili da un nodo $i$ raggiungono anche il nodo $i$ stesso.
+<p>È <em>recurrent</em> se per ogni nodo, tutti i nodi raggiungibili da un nodo </p>
+$i$
+<p> raggiungono anche il nodo </p>
+$i$
+<p> stesso.
 <em>Transient</em> se non è <em>recurrent</em>
 Alcuni chiamano la <em>recurrent</em> come <em>irreducible</em> come in <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X">(Cover &amp; Thomas 2012)</a>.</p>
 <h4 id="periodic-vs-aperiodic">Periodic vs Aperiodic<a hidden class="anchor" aria-hidden="true" href="#periodic-vs-aperiodic">#</a></h4>
-<p>Sia $d$ il massimo comune divisore per tutti gli $m$ tali per cui vale $P_{ii}^{m} &gt; 0$ (ossia può raggiungere sé stesso con probabilità non nulla), allora è periodico se $m \neq 0$ altrimenti è aperiodico.</p>
+<p>Sia </p>
+$d$
+<p> il massimo comune divisore per tutti gli </p>
+$m$
+<p> tali per cui vale </p>
+$P_{ii}^{m} > 0$
+<p> (ossia può raggiungere sé stesso con probabilità non nulla), allora è periodico se </p>
+$m \neq 0$
+<p> altrimenti è aperiodico.</p>
 <h4 id="ergodic-markov-chain">Ergodic Markov Chain<a hidden class="anchor" aria-hidden="true" href="#ergodic-markov-chain">#</a></h4>
 <p>Una catena di markov si dice Ergodico se è <em>recurrent</em> e <em>aperiodico</em>.</p>
 <p>Possiamo avere un teoremino carino su queste tipologie di catene, ed è più o meno il motivo per cui si chiamano ergodiche, ossia che una particella che segue questa legge prima o poi va a visitare tutti gli stati una volta.
@@ -359,26 +397,44 @@ $$
 P^{(M - 1)^{2} + 1}_{ij} > 0
 $$
 <p>
-Con $M$ il numero totale di stati, e $ij$ qualunque stato iniziale o finale. Dimostrazione è un esercizio</p>
+Con </p>
+$M$
+<p> il numero totale di stati, e </p>
+$ij$
+<p> qualunque stato iniziale o finale. Dimostrazione è un esercizio</p>
 <h4 id="unichain">Unichain<a hidden class="anchor" aria-hidden="true" href="#unichain">#</a></h4>
 <p>Una catena che continiene una <strong>singola</strong> classe <em>recurrent</em> più alcuni stati transienti</p>
 <h4 id="chapman-kolmogorov-equation">Chapman-Kolmogorov Equation<a hidden class="anchor" aria-hidden="true" href="#chapman-kolmogorov-equation">#</a></h4>
 <p>Alla fine è una relazione molto semplice, che deriva in modo facile dalle matrici di transizione, dice che
-Sia $P$ una matrice di transizione per un processo di Markov, allora
+Sia </p>
+$P$
+<p> una matrice di transizione per un processo di Markov, allora
 </p>
 $$
 P^{n + m}_{ij} = \sum_{k = 0}^{N} P_{ik}^{n} P_{kj}^{m}
 $$
 <p>
-Ossia posso moltiplicare matrici di transizione assieme per avere la probabilità di muovermi da uno stato $i$ a uno stato $j$ in $n + m$ passi.</p>
+Ossia posso moltiplicare matrici di transizione assieme per avere la probabilità di muovermi da uno stato </p>
+$i$
+<p> a uno stato </p>
+$j$
+<p> in </p>
+$n + m$
+<p> passi.</p>
 <h3 id="convergenza">Convergenza<a hidden class="anchor" aria-hidden="true" href="#convergenza">#</a></h3>
 <p>Ha senso pensare che una catena di Markov converga nel proseguire delle transazioni.</p>
 <h4 id="teorema-di-convergenza-per-catene-ergodiche">Teorema di convergenza per catene ergodiche<a hidden class="anchor" aria-hidden="true" href="#teorema-di-convergenza-per-catene-ergodiche">#</a></h4>
 <p>Questo è un teorema importante.</p>
 <h4 id="convergenza-per-unichains-ergodiche">Convergenza per unichains ergodiche.<a hidden class="anchor" aria-hidden="true" href="#convergenza-per-unichains-ergodiche">#</a></h4>
 <h3 id="con-rewards">Con rewards<a hidden class="anchor" aria-hidden="true" href="#con-rewards">#</a></h3>
-<p>Vogliamo associare a ogni stato $i$ un reward $r_{i}$
-Si può creare allora una altra variabile aleatoria che prende la variabile aleatoria di Markov $X_{i}$ e lo mappa a un reward.
+<p>Vogliamo associare a ogni stato </p>
+$i$
+<p> un reward </p>
+$r_{i}$
+<p>
+Si può creare allora una altra variabile aleatoria che prende la variabile aleatoria di Markov </p>
+$X_{i}$
+<p> e lo mappa a un reward.
 Quello che ci interessano di più sono le <strong>expectation dei rewards</strong>.</p>
 <p>Noi vogliamo il valore</p>
 $$
@@ -388,7 +444,7 @@ $$
 E per la proprietà di Markov credo sia la stessa cosa quando non parto da step 0.</p>
 <h4 id="aggregate-reward-function">Aggregate reward function<a hidden class="anchor" aria-hidden="true" href="#aggregate-reward-function">#</a></h4>
 <p>Questo è definito anche come <strong>value function</strong>in <a href="/notes/reinforcement-learning-a-introduction/">Reinforcement Learning, a introduction</a>.</p>
-<p>$v_{i}(n) = E[R(X_{m}) + \dots + R(X_{m + n - 1}) | X_{m} = i]$</p>
+$v_{i}(n) = E[R(X_{m}) + \dots + R(X_{m + n - 1}) | X_{m} = i]$
 <p>Se la catena è convergente, abbiamo che anche il value function è convergente a un valore preciso, ed è:</p>
 $$
 g = \sum \pi_{j}r_{j} = \vec{\pi} \cdot \vec{r}

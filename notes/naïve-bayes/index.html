@@ -134,8 +134,8 @@ Bayes ad alto livello 🟩 Da un punto di vista intuitivo non è altro che predi
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "Introduzione a Naïve Bayes Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.\nBayes ad alto livello 🟩 Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio Assunzioni principali per naïve Bayes 🟩 I sample di input sono condizionalmente indipendenti uno con l’altro. Questo permette di utilizzare questa ipotesi $$ P(X_{1}\\dots X_{n} | Y = y_{i}) = \\prod_{i}^{n} P(X_{i} | Y) $$ E permette di rendere la parte di inferenza anche molto semplice perché per classificare un caso basta prendere label con la probabilità maggiore. che è dato solamente dal numeratore durante la regola di Bayes. Tecnica generativa 🟩 La distinzione fra generativa e discriminativa è fatta in Introduction to machine learning. Ossia cerchiamo di capire come si distribuiscono i dati? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire $Y$ assumendo i dati esistenti di training.\nProva a capire $P(X|Y)$ diciamo e poi da questo si può ricalcolare $P(Y | X)$ grazie alla formula di Bayes una volta capito $P(X)$ e l’altro.\n$$ P(Y | X) = \\frac{P(X|Y)P(Y)}{P(X)} $$ Classificazione lineare Bayes 🟩- Si viene a scoprire che Naïve bayes alla fine fa classificazione lineare, che ci dice che è un modello molto molto semplice.\nConsideriamo $x_{i}$ e $Y$ booleani (sarà necessario per fare la nostra approssimazione), allora la nostra Naive Bayes classificherebbe 1 sse $$ \\frac{P(Y = 1, X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0, X_{1}\\dots X_{n} = \\vec{x})} = \\frac{P(Y = 1 | X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0 | X_{1}\\dots X_{n} = \\vec{x})}\\geq 1 $$ La prima uguaglianza di sopra è ottenuta osservando che $P(Y=1, X_{1}, \\dots, X_{n} = \\vec{x}) = P(Y=1 | X_{1}, \\dots, X_{n} = \\vec{x}) \\cdot P(X_{1}, \\dots, X_{n} = \\vec{x})$ E poi semplificando entrambi.\nPossiamo prendere il logaritmo e utilizzare l’ipotesi di essere condizionalmente indipendenti e abbiamo $$ \\log \\frac{P(Y=1)}{P(Y=0)} + \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} \\geq 0 $$ E usando un trucco lo facciamo diventare lineare (vedi slide 126)\nNotiamo che una funzione da booleani a booleani si può approssimare come\n$$ f(x) = x f(1) + (1 - x) f(0) $$ E quindi si può esprimere l’intera seconda somma a sinistra in un modo lineare, in quanto siamo rimasti in setting lineare. Poniamo $$ \\theta_{ik} = P(X_{i} = 1 | Y = y_{k}) $$ Non so in che modo possa essere estesa ad altri casi, ma nel caso booleano funziona Quindi unendo le due cose abbiamo:\n$$ \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} = \\sum_{i}x_{i} \\log \\frac{\\theta_{i1}}{\\theta_{i0}} + \\sum_{i} (1 - x_{i}) \\log \\frac{1 - \\theta_{i1}}{1- \\theta_{i0}} $$ Assumendo che $f(x) = \\log \\frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$ Vediamo da sopra che è lineare.\nCaso continuo Introduzione modellazione nel caso continuo 🟨+ Per ora abbiamo sempre assunto che le classi da predire fossero discreti, però si può utilizzare anche in un caso continuo, e in questo caso si usa una gaussiana.\nScegliamo una legge gaussiana perché naturalmente se sommiamo un sacco di distribuzioni, verrà che sarà una gaussiana. Legge dei grandi numeri, quindi è una fra le distribuzioni più naturali. È la distribuzione con entropia maggiore fra tutte le distribuzioni con data media e varianza. Se si hanno altre informazioni, sarebbe molto più sensato utilizzare una altra distribuzione, ma introdurrebbe un bias di un certo tipo. Metriche TP FP TN FN 🟩- Questa parte è molto importante per sapere quali metriche siano importanti, riguardo\nTrue positives False positives True Negatives False positives E con queste possiamo definire concetti come accuratezza, recall e precisione Inferenza nel caso continuo 🟩– Sembra molto simile a una Gaussian Mixture Models, perché alla fine è una interpolazione in un certo senso, solo che è motivato in modo diverso. Training nel caso continuo E probabilmente si può dimostrare, facendo un ragionamento come Maximum Likelihood extimate anche in questo caso. Algoritmo di fitting Si tratta quindi di creare tutti i parametri $\\theta_{ijk}$, anche se in questo momento non sto capendo in che modo Al fine di stimare questo usiamo maximum likelihood extimate. Guardare #Sul MLE sotto per capire in che modo sono stimati.\nStima P(Y) 🟩 Poniamo la cosa più banale, la stima di $P(Y = y_{i})$ è solamente la percentuale delle labels che abbiamo, ossia\n$$ \\pi_{i} = P(Y = y_{i}) = \\frac{\\#D(Y = y_{i})}{\\lvert D \\rvert} $$ Utilizziamo $\\pi$ per scrivere in modo più veloce la probabilità del singolo label.\nStima parametri P(X|Y) 🟩 Anche per questo caso andiamo a fare una cosa alla fine banale che è contare il numero dei training samples con quel label $$ \\theta_{ijk} = P(X = x_{ij} | Y = y_{k}) = \\frac{\\#D(X_{i} = x_{i,j} \\cap Y = y_{k})}{\\#D(Y=y_{k})} $$ Edge cases (2) 🟩- Probabilità id zero: Non vogliamo avere che $P(X_{i}|Y) = 0$ perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una stima, una cosa che fanno è aggiungere sempre almeno un esempio perché così non ho una probabilità nulla per tutto in questo caso.\nCasi non indipendenti Questo è molto difficile da gestire, dipende da come abbiamo generato i dati, quindi è esterna a questa fase di scelta del modello diciamo. Bayes è probabilmente non molto utile in questi casi, perché questo caso viola l’assunzione iniziale, si dovrebbe probabilmente fare preprocessing per cercare di limitare la dipendenza.\nSul Maximum Likelihood estimation Introduzione al problema C’è una parte teorica molto più interessante per quanto si tratta di maximum likelihood estimation. Andiamo a giustificare il motivo per cui stime molto semplici ed intuitive come quelli presenti in #Stima P(Y) e #Stima parametri P(X Y) possono funzionare. Ci chiediamo in questa istanza quale sia il caso più probabile ossia quello con maximum likelihood\nMLE su bernoulli 🟩 Supponiamo di avere $n$ lanci con una moneta unfair, ossia $p(X) \\neq 0.5$ di avere testa. Date certe osservazioni, quale è il valore più probabile di $P(X)$?\nConsideriamo $X^{n}$ la variabile aleatoria che misura il numero di 0 all’interno del nostro problema, allora questo segue la legge di Bernoulli.\n$$ P(X^{n} = \\alpha_{0} | \\theta) = \\binom{n}{\\alpha_{0}} \\theta^{\\alpha_{0}} (1 - \\theta)^{n-\\alpha_{0}} $$ Seguendo l’idea del più probabile quello che noi stiamo cercando è\n$$ \\hat{\\theta} = argmax_{\\theta} P(X^{n} = \\alpha_{0} | \\theta) $$ Soluzione problema analitico Prendiamo il logaritmo, che non cambia il nostro massimo, dato che è monotona, ma ci semplifica un sacco l’analisi\n$$ \\ln(\\theta^{\\alpha} (1- \\theta)^{n - \\alpha }) = \\alpha \\ln \\theta + (n- \\alpha) \\ln(1 - \\theta) $$ Derivando rispetto a $\\theta$ abbiamo che\n$$ \\frac{\\alpha}{\\theta} - \\frac{n - \\alpha}{1- \\theta} = \\frac{\\alpha - \\alpha \\theta - (n - \\alpha) \\theta}{\\theta (1 - \\theta)} $$ che è un massimo o un minimo se $$ \\alpha - \\alpha \\theta - (n - \\alpha) \\theta = 0 \\implies \\theta = \\frac{\\alpha}{n} $$ E se ben ricordiamo, $\\alpha$ non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.\n",
-  "wordCount" : "1203",
+  "articleBody": "Introduzione a Naïve Bayes Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.\nBayes ad alto livello 🟩 Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio Assunzioni principali per naïve Bayes 🟩 I sample di input sono condizionalmente indipendenti uno con l’altro. Questo permette di utilizzare questa ipotesi $$ P(X_{1}\\dots X_{n} | Y = y_{i}) = \\prod_{i}^{n} P(X_{i} | Y) $$ E permette di rendere la parte di inferenza anche molto semplice perché per classificare un caso basta prendere label con la probabilità maggiore. che è dato solamente dal numeratore durante la regola di Bayes. Tecnica generativa 🟩 La distinzione fra generativa e discriminativa è fatta in Introduction to machine learning. Ossia cerchiamo di capire come si distribuiscono i dati? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire $Y$ assumendo i dati esistenti di training.\nProva a capire $P(X|Y)$ diciamo e poi da questo si può ricalcolare $P(Y | X)$ grazie alla formula di Bayes una volta capito $P(X)$ e l’altro.\n$$ P(Y | X) = \\frac{P(X|Y)P(Y)}{P(X)} $$ Classificazione lineare Bayes 🟩- Si viene a scoprire che Naïve bayes alla fine fa classificazione lineare, che ci dice che è un modello molto molto semplice.\nConsideriamo $x_{i}$ e $Y$ booleani (sarà necessario per fare la nostra approssimazione), allora la nostra Naive Bayes classificherebbe 1 sse $$ \\frac{P(Y = 1, X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0, X_{1}\\dots X_{n} = \\vec{x})} = \\frac{P(Y = 1 | X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0 | X_{1}\\dots X_{n} = \\vec{x})}\\geq 1 $$ La prima uguaglianza di sopra è ottenuta osservando che $P(Y=1, X_{1}, \\dots, X_{n} = \\vec{x}) = P(Y=1 | X_{1}, \\dots, X_{n} = \\vec{x}) \\cdot P(X_{1}, \\dots, X_{n} = \\vec{x})$ E poi semplificando entrambi.\nPossiamo prendere il logaritmo e utilizzare l’ipotesi di essere condizionalmente indipendenti e abbiamo $$ \\log \\frac{P(Y=1)}{P(Y=0)} + \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} \\geq 0 $$ E usando un trucco lo facciamo diventare lineare (vedi slide 126)\nNotiamo che una funzione da booleani a booleani si può approssimare come\n$$ f(x) = x f(1) + (1 - x) f(0) $$ E quindi si può esprimere l’intera seconda somma a sinistra in un modo lineare, in quanto siamo rimasti in setting lineare. Poniamo $$ \\theta_{ik} = P(X_{i} = 1 | Y = y_{k}) $$ Non so in che modo possa essere estesa ad altri casi, ma nel caso booleano funziona Quindi unendo le due cose abbiamo:\n$$ \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} = \\sum_{i}x_{i} \\log \\frac{\\theta_{i1}}{\\theta_{i0}} + \\sum_{i} (1 - x_{i}) \\log \\frac{1 - \\theta_{i1}}{1- \\theta_{i0}} $$ Assumendo che $f(x) = \\log \\frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$ Vediamo da sopra che è lineare.\nCaso continuo Introduzione modellazione nel caso continuo 🟨+ Per ora abbiamo sempre assunto che le classi da predire fossero discreti, però si può utilizzare anche in un caso continuo, e in questo caso si usa una gaussiana.\nScegliamo una legge gaussiana perché naturalmente se sommiamo un sacco di distribuzioni, verrà che sarà una gaussiana. Legge dei grandi numeri, quindi è una fra le distribuzioni più naturali. È la distribuzione con entropia maggiore fra tutte le distribuzioni con data media e varianza. Se si hanno altre informazioni, sarebbe molto più sensato utilizzare una altra distribuzione, ma introdurrebbe un bias di un certo tipo. Metriche TP FP TN FN 🟩- Questa parte è molto importante per sapere quali metriche siano importanti, riguardo\nTrue positives False positives True Negatives False positives E con queste possiamo definire concetti come accuratezza, recall e precisione Inferenza nel caso continuo 🟩– Sembra molto simile a una Gaussian Mixture Models, perché alla fine è una interpolazione in un certo senso, solo che è motivato in modo diverso. Training nel caso continuo E probabilmente si può dimostrare, facendo un ragionamento come Maximum Likelihood extimate anche in questo caso. Algoritmo di fitting Si tratta quindi di creare tutti i parametri $\\theta_{ijk}$, anche se in questo momento non sto capendo in che modo Al fine di stimare questo usiamo maximum likelihood extimate. Guardare #Sul MLE sotto per capire in che modo sono stimati.\nStima P(Y) 🟩 Poniamo la cosa più banale, la stima di $P(Y = y_{i})$ è solamente la percentuale delle labels che abbiamo, ossia\n$$ \\pi_{i} = P(Y = y_{i}) = \\frac{\\#D(Y = y_{i})}{\\lvert D \\rvert} $$ Utilizziamo $\\pi$ per scrivere in modo più veloce la probabilità del singolo label.\nStima parametri P(X|Y) 🟩 Anche per questo caso andiamo a fare una cosa alla fine banale che è contare il numero dei training samples con quel label $$ \\theta_{ijk} = P(X = x_{ij} | Y = y_{k}) = \\frac{\\#D(X_{i} = x_{i,j} \\cap Y = y_{k})}{\\#D(Y=y_{k})} $$ Edge cases (2) 🟩- Probabilità id zero: Non vogliamo avere che $P(X_{i}|Y) = 0$ perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una stima, una cosa che fanno è aggiungere sempre almeno un esempio perché così non ho una probabilità nulla per tutto in questo caso.\nCasi non indipendenti Questo è molto difficile da gestire, dipende da come abbiamo generato i dati, quindi è esterna a questa fase di scelta del modello diciamo. Bayes è probabilmente non molto utile in questi casi, perché questo caso viola l’assunzione iniziale, si dovrebbe probabilmente fare preprocessing per cercare di limitare la dipendenza.\nSul Maximum Likelihood estimation Introduzione al problema C’è una parte teorica molto più interessante per quanto si tratta di maximum likelihood estimation. Andiamo a giustificare il motivo per cui stime molto semplici ed intuitive come quelli presenti in #Stima P(Y) e #Stima parametri P(X Y) possono funzionare. Ci chiediamo in questa istanza quale sia il caso più probabile ossia quello con maximum likelihood\nMLE su bernoulli 🟩 Supponiamo di avere $n$ lanci con una moneta unfair, ossia $p(X) \\neq 0.5$ di avere testa. Date certe osservazioni, quale è il valore più probabile di $P(X)$ ?\nConsideriamo $X^{n}$ la variabile aleatoria che misura il numero di 0 all’interno del nostro problema, allora questo segue la legge di Bernoulli.\n$$ P(X^{n} = \\alpha_{0} | \\theta) = \\binom{n}{\\alpha_{0}} \\theta^{\\alpha_{0}} (1 - \\theta)^{n-\\alpha_{0}} $$ Seguendo l’idea del più probabile quello che noi stiamo cercando è\n$$ \\hat{\\theta} = argmax_{\\theta} P(X^{n} = \\alpha_{0} | \\theta) $$ Soluzione problema analitico Prendiamo il logaritmo, che non cambia il nostro massimo, dato che è monotona, ma ci semplifica un sacco l’analisi\n$$ \\ln(\\theta^{\\alpha} (1- \\theta)^{n - \\alpha }) = \\alpha \\ln \\theta + (n- \\alpha) \\ln(1 - \\theta) $$ Derivando rispetto a $\\theta$ abbiamo che\n$$ \\frac{\\alpha}{\\theta} - \\frac{n - \\alpha}{1- \\theta} = \\frac{\\alpha - \\alpha \\theta - (n - \\alpha) \\theta}{\\theta (1 - \\theta)} $$ che è un massimo o un minimo se $$ \\alpha - \\alpha \\theta - (n - \\alpha) \\theta = 0 \\implies \\theta = \\frac{\\alpha}{n} $$ E se ben ricordiamo, $\\alpha$ non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.\n",
+  "wordCount" : "1204",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -305,20 +305,34 @@ E permette di rendere la parte di inferenza anche molto semplice perché per cla
 </ul>
 <h4 id="tecnica-generativa-">Tecnica generativa 🟩<a hidden class="anchor" aria-hidden="true" href="#tecnica-generativa-">#</a></h4>
 <p>La distinzione fra generativa e discriminativa è fatta in Introduction to machine learning.
-Ossia cerchiamo di capire <strong>come si distribuiscono i dati</strong>? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire $Y$ assumendo i dati esistenti di training.</p>
-<p>Prova a capire $P(X|Y)$ diciamo e poi da questo si può ricalcolare $P(Y | X)$ grazie alla formula di Bayes una volta capito $P(X)$ e l&rsquo;altro.</p>
+Ossia cerchiamo di capire <strong>come si distribuiscono i dati</strong>? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire </p>
+$Y$
+<p> assumendo i dati esistenti di training.</p>
+<p>Prova a capire </p>
+$P(X|Y)$
+<p> diciamo e poi da questo si può ricalcolare </p>
+$P(Y | X)$
+<p> grazie alla formula di Bayes una volta capito </p>
+$P(X)$
+<p> e l&rsquo;altro.</p>
 $$
 P(Y | X) = \frac{P(X|Y)P(Y)}{P(X)}
 $$
 <h4 id="classificazione-lineare-bayes--">Classificazione lineare Bayes 🟩-<a hidden class="anchor" aria-hidden="true" href="#classificazione-lineare-bayes--">#</a></h4>
 <p>Si viene a scoprire che Naïve bayes alla fine fa classificazione lineare, che ci dice che è un modello molto molto semplice.</p>
-<p>Consideriamo $x_{i}$ <strong>e</strong> $Y$ <strong>booleani</strong> (sarà necessario per fare la nostra approssimazione), allora la nostra Naive Bayes classificherebbe 1 sse
+<p>Consideriamo </p>
+$x_{i}$
+<p> <strong>e</strong> </p>
+$Y$
+<p> <strong>booleani</strong> (sarà necessario per fare la nostra approssimazione), allora la nostra Naive Bayes classificherebbe 1 sse
 </p>
 $$
 \frac{P(Y = 1, X_{1}\dots X_{n} = \vec{x})}{P(Y = 0, X_{1}\dots X_{n} = \vec{x})} = \frac{P(Y = 1 | X_{1}\dots X_{n} = \vec{x})}{P(Y = 0 | X_{1}\dots X_{n} = \vec{x})}\geq 1
 $$
 <p>
-La prima uguaglianza di sopra è ottenuta osservando che $P(Y=1, X_{1}, \dots, X_{n} = \vec{x}) = P(Y=1 | X_{1}, \dots, X_{n} = \vec{x}) \cdot P(X_{1}, \dots, X_{n} = \vec{x})$
+La prima uguaglianza di sopra è ottenuta osservando che </p>
+$P(Y=1, X_{1}, \dots, X_{n} = \vec{x}) = P(Y=1 | X_{1}, \dots, X_{n} = \vec{x}) \cdot P(X_{1}, \dots, X_{n} = \vec{x})$
+<p>
 E poi semplificando entrambi.</p>
 <p>Possiamo prendere il logaritmo e utilizzare l&rsquo;ipotesi di essere condizionalmente indipendenti e abbiamo
 </p>
@@ -343,7 +357,9 @@ $$
 \sum_{i} \log \frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} = \sum_{i}x_{i} \log \frac{\theta_{i1}}{\theta_{i0}} + \sum_{i} (1 - x_{i}) \log \frac{1 - \theta_{i1}}{1- \theta_{i0}}
 $$
 <p>
-Assumendo che $f(x) =  \log \frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$
+Assumendo che </p>
+$f(x) =  \log \frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$
+<p>
 Vediamo da sopra che è <strong>lineare</strong>.</p>
 <h3 id="caso-continuo">Caso continuo<a hidden class="anchor" aria-hidden="true" href="#caso-continuo">#</a></h3>
 <h4 id="introduzione-modellazione-nel-caso-continuo-">Introduzione modellazione nel caso continuo 🟨+<a hidden class="anchor" aria-hidden="true" href="#introduzione-modellazione-nel-caso-continuo-">#</a></h4>
@@ -379,11 +395,15 @@ Si tratta quindi di creare tutti i parametri $\theta_{ijk}$, anche se in questo 
 <p>Al fine di stimare questo usiamo <strong>maximum likelihood extimate</strong>.
 Guardare <a href="/notes/na%C3%AFve-bayes/#sul-mle">#Sul MLE</a> sotto per capire in che modo sono stimati.</p>
 <h4 id="stima-py-">Stima P(Y) 🟩<a hidden class="anchor" aria-hidden="true" href="#stima-py-">#</a></h4>
-<p>Poniamo la cosa più banale, la stima di $P(Y = y_{i})$ è solamente la percentuale delle labels che abbiamo, ossia</p>
+<p>Poniamo la cosa più banale, la stima di </p>
+$P(Y = y_{i})$
+<p> è solamente la percentuale delle labels che abbiamo, ossia</p>
 $$
 \pi_{i} = P(Y = y_{i}) = \frac{\#D(Y = y_{i})}{\lvert D \rvert}
 $$
-<p>Utilizziamo $\pi$ per scrivere in modo più veloce la probabilità del singolo label.</p>
+<p>Utilizziamo </p>
+$\pi$
+<p> per scrivere in modo più veloce la probabilità del singolo label.</p>
 <h4 id="stima-parametri-pxy-">Stima parametri P(X|Y) 🟩<a hidden class="anchor" aria-hidden="true" href="#stima-parametri-pxy-">#</a></h4>
 <p>Anche per questo caso andiamo a fare una cosa alla fine banale che  è <strong>contare il numero dei training samples con quel label</strong>
 </p>
@@ -392,7 +412,9 @@ $$
 $$
 <h4 id="edge-cases-2--">Edge cases (2) 🟩-<a hidden class="anchor" aria-hidden="true" href="#edge-cases-2--">#</a></h4>
 <p><strong>Probabilità id zero:</strong>
-Non vogliamo avere che $P(X_{i}|Y) = 0$ perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una <em>stima</em>, una cosa che fanno è aggiungere sempre <strong>almeno un esempio</strong> perché così non ho una probabilità nulla per tutto in questo caso.</p>
+Non vogliamo avere che </p>
+$P(X_{i}|Y) = 0$
+<p> perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una <em>stima</em>, una cosa che fanno è aggiungere sempre <strong>almeno un esempio</strong> perché così non ho una probabilità nulla per tutto in questo caso.</p>
 <p><strong>Casi non indipendenti</strong>
 Questo è molto difficile da gestire, dipende da come abbiamo generato i dati, quindi è esterna a questa fase di scelta del modello diciamo.
 Bayes è probabilmente non molto utile in questi casi, perché questo caso viola l&rsquo;assunzione iniziale, si dovrebbe probabilmente fare <strong>preprocessing</strong> per cercare di limitare la dipendenza.</p>
@@ -402,9 +424,17 @@ Bayes è probabilmente non molto utile in questi casi, perché questo caso viola
 Andiamo a giustificare il motivo per cui stime molto semplici ed intuitive come quelli presenti in <a href="/notes/na%C3%AFve-bayes/#stima-p(y)">#Stima P(Y)</a> e <a href="/notes/na%C3%AFve-bayes/#stima-parametri-p(x-y)">#Stima parametri P(X Y)</a> possono funzionare.
 Ci chiediamo in questa istanza <strong>quale sia il caso più probabile</strong> ossia quello con maximum likelihood</p>
 <h4 id="mle-su-bernoulli-">MLE su bernoulli 🟩<a hidden class="anchor" aria-hidden="true" href="#mle-su-bernoulli-">#</a></h4>
-<p>Supponiamo di avere $n$ lanci con una moneta unfair, ossia $p(X) \neq 0.5$ di avere testa.
-Date certe osservazioni, quale è il valore più probabile di $P(X)$?</p>
-<p>Consideriamo $X^{n}$ la variabile aleatoria che misura il numero di 0 all&rsquo;interno del nostro problema, allora questo <strong>segue la legge di Bernoulli</strong>.</p>
+<p>Supponiamo di avere </p>
+$n$
+<p> lanci con una moneta unfair, ossia </p>
+$p(X) \neq 0.5$
+<p> di avere testa.
+Date certe osservazioni, quale è il valore più probabile di </p>
+$P(X)$
+<p>?</p>
+<p>Consideriamo </p>
+$X^{n}$
+<p> la variabile aleatoria che misura il numero di 0 all&rsquo;interno del nostro problema, allora questo <strong>segue la legge di Bernoulli</strong>.</p>
 $$
 P(X^{n} = \alpha_{0} | \theta) = \binom{n}{\alpha_{0}} \theta^{\alpha_{0}} (1 - \theta)^{n-\alpha_{0}}
 $$
@@ -419,7 +449,9 @@ $$
 \ln(\theta^{\alpha} (1- \theta)^{n - \alpha }) = \alpha \ln \theta + (n- \alpha) \ln(1 - \theta)
 $$
 <p>
-Derivando rispetto a $\theta$ abbiamo che</p>
+Derivando rispetto a </p>
+$\theta$
+<p> abbiamo che</p>
 $$
 \frac{\alpha}{\theta}  - \frac{n - \alpha}{1-  \theta} = \frac{\alpha - \alpha \theta - (n - \alpha) \theta}{\theta (1 - \theta)}
 $$
@@ -429,7 +461,9 @@ che è un massimo o un minimo se
 $$
 \alpha - \alpha \theta - (n - \alpha) \theta = 0 \implies \theta = \frac{\alpha}{n}
 $$
-<p>E se ben ricordiamo, $\alpha$ non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.</p>
+<p>E se ben ricordiamo, </p>
+$\alpha$
+<p> non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.</p>
 
 
   </div>

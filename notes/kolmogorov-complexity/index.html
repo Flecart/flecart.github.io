@@ -134,8 +134,8 @@ Solomonoff lo ha trovato sul problema dell&rsquo;induzione all&rsquo;età di 38 
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Gran parte di quanto scrivo ora è tratto da (Li \u0026 Vitányi 2019). Chaitin, Kolmogorov e Solomonoff hanno elaborato il tema in modo indipendente e allo stesso tempo verso gli anni ‘60!\nSolomonoff lo ha trovato sul problema dell’induzione all’età di 38 anni, Kolmogorov invece era già tardi, ha già trovato gli assiomi della probabilità e poi nel 65 cerca randomness. Mentre Chaiten Information = Computation e non probabilità, nel 68 all’età di 19 anni. In AI teorico questo sembra un tema molto importante.\nCi sono degli esempi carini nella compressione di numeri naturali e stringhe binarie in Introduction to Algorithmic Information and Complexity.\nIntuizione Kolmogorov Per quanto ho capito io sulle motivazioni che sono state base alla creazione di questo concetto è il concetto che: per descrivere cose complesse c’è necessità di più parole. Questa idea molto intuitiva la possiamo tradurre da un punto informatico come il programma più corto per produrre un certo output.\nUn esempio classico è una comparazione fra una stringa 01010101010101 contro una altra del tipo 11101111111100101011110000010101. Intuitivamente potremmo dire che la prima stringa sia molto più semplice da descrivere rispetto alla seconda stringa, abbiamo però bisogno di un modo formale per descrivere questo concetto.\nFormalizzazione Definizione Kolmogorov Definiamo la complessità di Kolmogorov $K_{L}(\\omega )$ per un certo linguaggio di programmazione $L$ come la minima lunghezza del programma tale per cui se eseguita sulla macchina astratta di $L$ dia come output $\\omega$.\nQuesta definizione si può riscrivere come $$ C(x) = \\min_{p}\\left\\{ length(p) : U(p) = x \\right\\} $$ Ossia il programma più corto che se eseguito su una macchina di Turing completa ho $x$.\nNOTA: questa definizione seppur meno informale di prima, non è ancora quella formalmente accettata, però fa il suo per trasmettere l’idea, vedere il libro [^2] per definizione matematicamente corretta (e anche molto più astrusa)\nComplessità condizionale\nla complessità di Kolmogorov condizionale $K_{L}(\\omega | x)$ è la lunghezza minima di un programma che prende in input $x$ e produce in output $\\omega$. (si legge proprio come se fosse un qualcosa di condizionato)\nLEMMA Ora diventa chiaro che un programma che stampa una qualunque stringa, sia sufficiente per dare in output, per questo motivo vale che: $$ K(x) \\le \\lvert x \\rvert + c \\tag{1} $$ Dove $c$ è una costante per codificare le istruzioni per stampare. Più intuitivamente un programma di questo genere può stampare il carattere (dimostreremo in seguito, in #Teorema dell’invarianza che idea simile vale per ogni linguaggio)\nQuesto lemma giustifica anche la seguente definizione\nStringhe incomprimibili una stringa $\\omega$ si dice incomprimibile nel momento in cui $K(\\omega) = \\lvert \\omega \\rvert + O(1)$\nChe insieme all’upper bound di sopra, si avrà che è il massimo di complessità che può avere.\nKolmogorov condizionato Condizionato $K(A|B)$ significa che diamo alla nostra macchina di turing in input anche $B$ per codificare $A$. Puoi vedere subito che la complessità di $K(A|A)$ è $0$ perché la macchina di turing può non fare nulla $\\varepsilon$ è il programma diciamo, e avere subito un risultato. Intuitivamente avere qualcosa in più non fa altro che ridurre il codice necessario, quindi possiamo dire che $K(A|B) \\leq K(A)$. E qui si può creare anche una nozione di indipendenza.\nChain Rule Afferma che per qualunque oggetto vale che $$ K(A|B) \\geq K(A, B) - K(B) $$ Ossia la codifica di entrambi, sia $A$ che $B$ è necessariamente minore di codificare prima $B$ e poi usare questa per codificare $A$. Si può dimostrare ma intuitivamente questa legge sembra parlare in modo chiaro.\nQuesto vale se assumiamo che tutte le parole godano della Prefix Property Bottom-up Parser LR(1)Algorithmic Probability. Se non vale la regola diventa $$ C(s_{1}) \\leq C(s_{2}) + C(s_{1} | s_{2}) + O(\\log(C(s_{2}))) $$ Il motivo di questo $O$ grande strano è che\n$\\log(C(s_{2}))$ is the maximal length of the information needed to separate the program that computes $s_{2}$ from what comes next (as we cannot guarantee that this program is uniquely decodable, contrary to the prefix case).\nMa non lo ho capito ancora bene.\nIncomputabilità di Kolmogorov Dimostrazione: Supponiamo che sia computabile, allora abbiamo un programma $P$ che calcola il programma minimo. Ora possiamo usare questo programma per trovare una stringa la cui complessità di Kolmogorov sia più lunga di un certo $n$. Questo si può fare provando ad aggiungere roba (probabilmente qui mi serve un lemma che dice che è crescente stretto e non lasco). Ma la complessità di questa nuova stringa trovata deve essere uguale alla complessità di $n$, che gli dò in input! (più costante per la ricerca che ignoro per Kolmogorov). Questo significa che $K(n) \u003e n$ che è assurdo perché $K(n) \\approx \\log_{2}(n)$ che è strettamente minore di $n$.\nPossiamo però approssimare il valore, e per molte cose questo basta!\nKolmogorov complexity is an ideal notion that can be approximated, but that is not computable.\nUn pseudocodice di esempio per computare una cosa più complessa (anche se non ho la dimostrazione che fa quello che deve fare, perché in teoria credo può continuare in modo arbitrariamente lungo, solo che la probabilità che non finisca tende a 0)\ndef MoreComplex(n): i =1 while True: for m in range(2**i): s = bin(m)[2:] if cc(s) \u003e n: return s i += 1 Teorema dell’invarianza Questo è un teorema fondamentale (e anche di base) per quanto riguarda la definizione della teoria inerente a questa complessità. Ci permette di affermare che il concetto di complessità è indipendente dal linguaggio di programmazione utilizzato, e ci darà presto anche alcuni risultati interessanti sulla computabilità di questa funzione (in modo diverso rispetto alle classiche dimostrazioni che si possono trovare in teoria della computabilità). Quindi questo teorema è fondamentale per stabilire l’oggettività della proprietà. Così possiamo dire che è una proprietà dell’oggetto, non di come lo stai valutando. Quindi non dipende dalla capacità/architettura di chi sta valutando il linguaggio.\nSiano $L$ e $L^{’}$ due linguaggi Turing completi, allora per ogni stringa $\\omega$ si ha che $$K_{L}(\\omega) = K_{L^{'}}(\\omega) + O(1)\\tag{2}$$ Dimostrazione: Essendo $L$ e $L^{’}$ dei linguaggi Turing completi, allora posso scrivere un programma in $L^{’}$ che esegua la macchina astratta di $L$ e quindi mantenga tutta la semantica del linguaggio $L$ (vedere Macchine Astratte per la definizione di interprete).\nAllora si avrà che $$ K_{L^{'}}(w) = K_{L}(\\omega) + |I| \\tag{2.1} $$ ossia il costo per esprimere la complessità della string $\\omega$ in $L^{’}$ è equivalente al costo per esprimere il programma $p$ in $L$, ed eseguirlo con un interprete (che avrà una lunghezza finita, e costante una volta fissato i due linguaggi). L’interprete esiste perché stiamo usando macchine di Turing universali per la descrizione della lunghezza.\nNOTE: Grazie a questa proprietà da ora in poi potremo parlare di $K(\\omega)$ indipendentemente da linguaggio su cui è stato scritto, dato che tanto distano di una costante uno dall’altro.\nNOTE2: È una cosa molto curiosa il fatto che sia dipendente dall’osservatore, anche se abbiamo una differenza, perché cose importanti per qualcuno, sono codificate in modo differente da ognuno. Questo è un pensiero molto deep, e l’esempio della versione della macchina è chiaro.\nEsistenza di stringhe complesse Un risultato importante che sarà utile alla dimostrazione della non computabilità della funzione di complessità di Kolmogorov è la seguente:\u003e $$ \\forall n \\in \\mathbb{N}, \\exists \\omega : K(w) \\geq n $$ che è un risultato che non sembra avere molto senso perché ci sta dicendo che esistono delle stringhe di complessità infinita (forse queste stringhe sono quelle non computabili, perché il programma che lo descrive dovrebbe avere lunghezza infinita).\nDimostrazione: La dimostrazione di questo teorema non è altro che una applicazione del pigeonhole principle. In un certo senso salta fuori dalla relazione fra il finito e l’infinito, come quelle cose assurde che $2n$ è in bigezione con i numeri naturali. Siamo nel mondo di Turing, quindi i programmi saranno anch’esse delle stringhe binarie. Consideriamo tutti i programmi di lunghezza zero. Questo produrrà la stringa vuota, ossia la stringa di complessità zero. Supponiamo ora tutti i programmi di lunghezza uno. Al massimo potremo avere due stringhe con questa complessità. E così via. Intuitivamente: dato che il numero delle stringhe $\\omega$ che possono esistere sono infinite, anche i la lunghezza dei programmi utilizzati per generare queste stringhe sono infinite, perché banalmente un programma di lunghezza $n$ può generare al massimo $2^n$ stringhe diverse, un numero finito, anche se enormemente ampio.\nNon calcolabilità della funzione di Kolmogorov La funzione di Kolmogorov non è calcolabile su un macchina di Turing\nDimostrazione: Supponiamo che esista una macchina di Turing $M$ che prenda in input una stringa $\\omega$ e ritorni $K(\\omega)$. Utilizzeremo il teorema #Esistenza di stringhe complesse\nAllora utilizziamo questa macchina di Turing $M$ per costruirne una altra $M^{’}$ che si comporti in questo modo:\ninput n for each string w in alphabet: do if K(w) \u003e= n: return w done endfor In pratica vado a scorrere tutte le parole nell’alfabeto infinito, so che prima o poi troverò una stringa tale per cui $K(w) \\geq n$ perché ne abbiamo dimostrato l’esistenza precedentemente. Questa macchina allora descriverà la stringa $\\omega$ che viene in output, dato l’input $n$.\nMa allora abbiamo che $$ n \\leq K(\\omega) \\leq \\lvert \\langle M^{'}, n \\rangle \\rvert + O(1) = O(1) + \\lvert n \\rvert = O(1) + O(\\log(n)) = O(\\log(n)) $$ Ed è assurdo perché afferma che $O(n) \\leq O(\\log(n))$ che sarà vero per $n$ abbastanza alto.\nUpper bound con entropia Kolmogorov si può vedere come una cosa più generale dell’entropia di Shannon Entropy, si può vedere come una approssimazione di essa perché basta prendere $L \\approx \\log_{2}\\left( \\frac{1}{p} \\right)$ e si ha l’entropia Shannoniana. La cosa carina è che Kolmogorov ha senso anche in assenza di frequenze e probabilità.\nCose che non ho capito Per qualche motivo la complessità di un oggetto scende quando l’entropia è massima (ah, quando sono tutti uguali le probabilità, la complessità scende)\nParte vecchia dal libro di complexity Questo è il teorema fondamentale di questo campo, che ricordiamo prova a cercare di creare una teoria sulle descrizioni di minima lunghezza per qualcosa, questo dovrebbe essere in grado di risolvere il problema del limite della probabilità, e cose di teoria dell’informazione che non ho ancora ben compreso.\nComunque si è notato che si può definire una classe di equivalenza, e fra queste esiste una classe speciale che è quello di descrizione minima. Partiamo però dalla definizione di di complessità diciamo: $$ C_{f}(x) = min\\{l(p) : f(p) = n(x)\\} $$ $f$ è una macchina di turing.\nUna volta definito questo e creato un insieme fisso di macchine o funzioni si può estendere questo modello in classi di equivalenza, perché possiamo utilizzare $\\langle n, p \\rangle$ on $n$ l’index alla macchina corretta e $p$ il nostro programma (anche se non ho capito perché si assume che il programma sia comprensibile a qualunque macchina, e non ho capito perché la funzione la si può intendere come se fosse una macchina, questa è una parte di teorica che mi dovrei recuperare).\nComunque fatto questo, si può mostrare come data una sequenza contabile di funzioni $\\phi_{1}, \\phi_{2}, \\dots, \\phi_{n}$ allora posso andare a definirmi $\\phi_{n}(p) = \\phi_{0}(\\langle n, p \\rangle)$ anche se non ho capito cosa voglio dire qui, con $\\phi_{0}$ la funzione computata da una macchina di Turing universale $U$ . Indicheremo $$ C_{\\phi_{0}}(x) = C(x) $$ per ogni programma $x$.\nReferences [1] Li \u0026 Vitányi “An Introduction to Kolmogorov Complexity and Its Applications” Springer International Publishing 2019\n",
-  "wordCount" : "1892",
+  "articleBody": "Gran parte di quanto scrivo ora è tratto da (Li \u0026 Vitányi 2019). Chaitin, Kolmogorov e Solomonoff hanno elaborato il tema in modo indipendente e allo stesso tempo verso gli anni ‘60!\nSolomonoff lo ha trovato sul problema dell’induzione all’età di 38 anni, Kolmogorov invece era già tardi, ha già trovato gli assiomi della probabilità e poi nel 65 cerca randomness. Mentre Chaiten Information = Computation e non probabilità, nel 68 all’età di 19 anni. In AI teorico questo sembra un tema molto importante.\nCi sono degli esempi carini nella compressione di numeri naturali e stringhe binarie in Introduction to Algorithmic Information and Complexity.\nIntuizione Kolmogorov Per quanto ho capito io sulle motivazioni che sono state base alla creazione di questo concetto è il concetto che: per descrivere cose complesse c’è necessità di più parole. Questa idea molto intuitiva la possiamo tradurre da un punto informatico come il programma più corto per produrre un certo output.\nUn esempio classico è una comparazione fra una stringa 01010101010101 contro una altra del tipo 11101111111100101011110000010101. Intuitivamente potremmo dire che la prima stringa sia molto più semplice da descrivere rispetto alla seconda stringa, abbiamo però bisogno di un modo formale per descrivere questo concetto.\nFormalizzazione Definizione Kolmogorov Definiamo la complessità di Kolmogorov $K_{L}(\\omega )$ per un certo linguaggio di programmazione $L$ come la minima lunghezza del programma tale per cui se eseguita sulla macchina astratta di $L$ dia come output $\\omega$ .\nQuesta definizione si può riscrivere come $$ C(x) = \\min_{p}\\left\\{ length(p) : U(p) = x \\right\\} $$ Ossia il programma più corto che se eseguito su una macchina di Turing completa ho $x$ .\nNOTA: questa definizione seppur meno informale di prima, non è ancora quella formalmente accettata, però fa il suo per trasmettere l’idea, vedere il libro [^2] per definizione matematicamente corretta (e anche molto più astrusa)\nComplessità condizionale\nla complessità di Kolmogorov condizionale $K_{L}(\\omega | x)$ è la lunghezza minima di un programma che prende in input $x$ e produce in output $\\omega$ . (si legge proprio come se fosse un qualcosa di condizionato)\nLEMMA Ora diventa chiaro che un programma che stampa una qualunque stringa, sia sufficiente per dare in output, per questo motivo vale che: $$ K(x) \\le \\lvert x \\rvert + c \\tag{1} $$ Dove $c$ è una costante per codificare le istruzioni per stampare. Più intuitivamente un programma di questo genere può stampare il carattere (dimostreremo in seguito, in #Teorema dell’invarianza che idea simile vale per ogni linguaggio)\nQuesto lemma giustifica anche la seguente definizione\nStringhe incomprimibili una stringa $\\omega$ si dice incomprimibile nel momento in cui $K(\\omega) = \\lvert \\omega \\rvert + O(1)$ Che insieme all’upper bound di sopra, si avrà che è il massimo di complessità che può avere.\nKolmogorov condizionato Condizionato $K(A|B)$ significa che diamo alla nostra macchina di turing in input anche $B$ per codificare $A$ . Puoi vedere subito che la complessità di $K(A|A)$ è $0$ perché la macchina di turing può non fare nulla $\\varepsilon$ è il programma diciamo, e avere subito un risultato. Intuitivamente avere qualcosa in più non fa altro che ridurre il codice necessario, quindi possiamo dire che $K(A|B) \\leq K(A)$ . E qui si può creare anche una nozione di indipendenza.\nChain Rule Afferma che per qualunque oggetto vale che $$ K(A|B) \\geq K(A, B) - K(B) $$ Ossia la codifica di entrambi, sia $A$ che $B$ è necessariamente minore di codificare prima $B$ e poi usare questa per codificare $A$ . Si può dimostrare ma intuitivamente questa legge sembra parlare in modo chiaro.\nQuesto vale se assumiamo che tutte le parole godano della Prefix Property Bottom-up Parser LR(1)Algorithmic Probability. Se non vale la regola diventa $$ C(s_{1}) \\leq C(s_{2}) + C(s_{1} | s_{2}) + O(\\log(C(s_{2}))) $$ Il motivo di questo $O$ grande strano è che\n$\\log(C(s_{2}))$ is the maximal length of the information needed to separate the program that computes $s_{2}$ from what comes next (as we cannot guarantee that this program is uniquely decodable, contrary to the prefix case).\nMa non lo ho capito ancora bene.\nIncomputabilità di Kolmogorov Dimostrazione: Supponiamo che sia computabile, allora abbiamo un programma $P$ che calcola il programma minimo. Ora possiamo usare questo programma per trovare una stringa la cui complessità di Kolmogorov sia più lunga di un certo $n$ . Questo si può fare provando ad aggiungere roba (probabilmente qui mi serve un lemma che dice che è crescente stretto e non lasco). Ma la complessità di questa nuova stringa trovata deve essere uguale alla complessità di $n$ , che gli dò in input! (più costante per la ricerca che ignoro per Kolmogorov). Questo significa che $K(n) \u003e n$ che è assurdo perché $K(n) \\approx \\log_{2}(n)$ che è strettamente minore di $n$ .\nPossiamo però approssimare il valore, e per molte cose questo basta!\nKolmogorov complexity is an ideal notion that can be approximated, but that is not computable.\nUn pseudocodice di esempio per computare una cosa più complessa (anche se non ho la dimostrazione che fa quello che deve fare, perché in teoria credo può continuare in modo arbitrariamente lungo, solo che la probabilità che non finisca tende a 0)\ndef MoreComplex(n): i =1 while True: for m in range(2**i): s = bin(m)[2:] if cc(s) \u003e n: return s i += 1 Teorema dell’invarianza Questo è un teorema fondamentale (e anche di base) per quanto riguarda la definizione della teoria inerente a questa complessità. Ci permette di affermare che il concetto di complessità è indipendente dal linguaggio di programmazione utilizzato, e ci darà presto anche alcuni risultati interessanti sulla computabilità di questa funzione (in modo diverso rispetto alle classiche dimostrazioni che si possono trovare in teoria della computabilità). Quindi questo teorema è fondamentale per stabilire l’oggettività della proprietà. Così possiamo dire che è una proprietà dell’oggetto, non di come lo stai valutando. Quindi non dipende dalla capacità/architettura di chi sta valutando il linguaggio.\nSiano $L$ e $L^{'}$ due linguaggi Turing completi, allora per ogni stringa $\\omega$ si ha che $$K_{L}(\\omega) = K_{L^{'}}(\\omega) + O(1)\\tag{2}$$ Dimostrazione: Essendo $L$ e $L^{'}$ dei linguaggi Turing completi, allora posso scrivere un programma in $L^{'}$ che esegua la macchina astratta di $L$ e quindi mantenga tutta la semantica del linguaggio $L$ (vedere Macchine Astratte per la definizione di interprete).\nAllora si avrà che $$ K_{L^{'}}(w) = K_{L}(\\omega) + |I| \\tag{2.1} $$ ossia il costo per esprimere la complessità della string $\\omega$ in $L^{'}$ è equivalente al costo per esprimere il programma $p$ in $L$ , ed eseguirlo con un interprete (che avrà una lunghezza finita, e costante una volta fissato i due linguaggi). L’interprete esiste perché stiamo usando macchine di Turing universali per la descrizione della lunghezza.\nNOTE: Grazie a questa proprietà da ora in poi potremo parlare di $K(\\omega)$ indipendentemente da linguaggio su cui è stato scritto, dato che tanto distano di una costante uno dall’altro.\nNOTE2: È una cosa molto curiosa il fatto che sia dipendente dall’osservatore, anche se abbiamo una differenza, perché cose importanti per qualcuno, sono codificate in modo differente da ognuno. Questo è un pensiero molto deep, e l’esempio della versione della macchina è chiaro.\nEsistenza di stringhe complesse Un risultato importante che sarà utile alla dimostrazione della non computabilità della funzione di complessità di Kolmogorov è la seguente:\u003e $$ \\forall n \\in \\mathbb{N}, \\exists \\omega : K(w) \\geq n $$ che è un risultato che non sembra avere molto senso perché ci sta dicendo che esistono delle stringhe di complessità infinita (forse queste stringhe sono quelle non computabili, perché il programma che lo descrive dovrebbe avere lunghezza infinita).\nDimostrazione: La dimostrazione di questo teorema non è altro che una applicazione del pigeonhole principle. In un certo senso salta fuori dalla relazione fra il finito e l’infinito, come quelle cose assurde che $2n$ è in bigezione con i numeri naturali. Siamo nel mondo di Turing, quindi i programmi saranno anch’esse delle stringhe binarie. Consideriamo tutti i programmi di lunghezza zero. Questo produrrà la stringa vuota, ossia la stringa di complessità zero. Supponiamo ora tutti i programmi di lunghezza uno. Al massimo potremo avere due stringhe con questa complessità. E così via. Intuitivamente: dato che il numero delle stringhe $\\omega$ che possono esistere sono infinite, anche i la lunghezza dei programmi utilizzati per generare queste stringhe sono infinite, perché banalmente un programma di lunghezza $n$ può generare al massimo $2^n$ stringhe diverse, un numero finito, anche se enormemente ampio.\nNon calcolabilità della funzione di Kolmogorov La funzione di Kolmogorov non è calcolabile su un macchina di Turing\nDimostrazione: Supponiamo che esista una macchina di Turing $M$ che prenda in input una stringa $\\omega$ e ritorni $K(\\omega)$ . Utilizzeremo il teorema #Esistenza di stringhe complesse\nAllora utilizziamo questa macchina di Turing $M$ per costruirne una altra $M^{'}$ che si comporti in questo modo:\ninput n for each string w in alphabet: do if K(w) \u003e= n: return w done endfor In pratica vado a scorrere tutte le parole nell’alfabeto infinito, so che prima o poi troverò una stringa tale per cui $K(w) \\geq n$ perché ne abbiamo dimostrato l’esistenza precedentemente. Questa macchina allora descriverà la stringa $\\omega$ che viene in output, dato l’input $n$ .\nMa allora abbiamo che $$ n \\leq K(\\omega) \\leq \\lvert \\langle M^{'}, n \\rangle \\rvert + O(1) = O(1) + \\lvert n \\rvert = O(1) + O(\\log(n)) = O(\\log(n)) $$ Ed è assurdo perché afferma che $O(n) \\leq O(\\log(n))$ che sarà vero per $n$ abbastanza alto.\nUpper bound con entropia Kolmogorov si può vedere come una cosa più generale dell’entropia di Shannon Entropy, si può vedere come una approssimazione di essa perché basta prendere $L \\approx \\log_{2}\\left( \\frac{1}{p} \\right)$ e si ha l’entropia Shannoniana. La cosa carina è che Kolmogorov ha senso anche in assenza di frequenze e probabilità.\nCose che non ho capito Per qualche motivo la complessità di un oggetto scende quando l’entropia è massima (ah, quando sono tutti uguali le probabilità, la complessità scende)\nParte vecchia dal libro di complexity Questo è il teorema fondamentale di questo campo, che ricordiamo prova a cercare di creare una teoria sulle descrizioni di minima lunghezza per qualcosa, questo dovrebbe essere in grado di risolvere il problema del limite della probabilità, e cose di teoria dell’informazione che non ho ancora ben compreso.\nComunque si è notato che si può definire una classe di equivalenza, e fra queste esiste una classe speciale che è quello di descrizione minima. Partiamo però dalla definizione di di complessità diciamo: $$ C_{f}(x) = min\\{l(p) : f(p) = n(x)\\} $$ $f$ è una macchina di turing.\nUna volta definito questo e creato un insieme fisso di macchine o funzioni si può estendere questo modello in classi di equivalenza, perché possiamo utilizzare $\\langle n, p \\rangle$ on $n$ l’index alla macchina corretta e $p$ il nostro programma (anche se non ho capito perché si assume che il programma sia comprensibile a qualunque macchina, e non ho capito perché la funzione la si può intendere come se fosse una macchina, questa è una parte di teorica che mi dovrei recuperare).\nComunque fatto questo, si può mostrare come data una sequenza contabile di funzioni $\\phi_{1}, \\phi_{2}, \\dots, \\phi_{n}$ allora posso andare a definirmi $\\phi_{n}(p) = \\phi_{0}(\\langle n, p \\rangle)$ anche se non ho capito cosa voglio dire qui, con $\\phi_{0}$ la funzione computata da una macchina di Turing universale $U$ . Indicheremo $$ C_{\\phi_{0}}(x) = C(x) $$ per ogni programma $x$ .\nReferences [1] Li \u0026 Vitányi “An Introduction to Kolmogorov Complexity and Its Applications” Springer International Publishing 2019\n",
+  "wordCount" : "1905",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -295,7 +295,15 @@ Intuitivamente potremmo dire che la prima stringa sia molto più semplice da des
 <h2 id="formalizzazione">Formalizzazione<a hidden class="anchor" aria-hidden="true" href="#formalizzazione">#</a></h2>
 <h3 id="definizione-kolmogorov">Definizione Kolmogorov<a hidden class="anchor" aria-hidden="true" href="#definizione-kolmogorov">#</a></h3>
 <blockquote>
-<p>Definiamo la complessità di Kolmogorov $K_{L}(\omega )$ per un certo linguaggio di programmazione $L$ come la minima lunghezza del programma tale per cui se eseguita sulla macchina astratta di $L$ dia come output $\omega$.</p>
+<p>Definiamo la complessità di Kolmogorov </p>
+$K_{L}(\omega )$
+<p> per un certo linguaggio di programmazione </p>
+$L$
+<p> come la minima lunghezza del programma tale per cui se eseguita sulla macchina astratta di </p>
+$L$
+<p> dia come output </p>
+$\omega$
+<p>.</p>
 </blockquote>
 <p>Questa definizione si può riscrivere come
 </p>
@@ -303,11 +311,19 @@ $$
 C(x) = \min_{p}\left\{ length(p) : U(p) = x \right\} 
 $$
 <p>
-Ossia il programma più corto che se eseguito su una macchina di Turing completa ho $x$.</p>
+Ossia il programma più corto che se eseguito su una macchina di Turing completa ho </p>
+$x$
+<p>.</p>
 <p>NOTA: questa definizione seppur meno informale di prima, non è ancora quella formalmente accettata, però fa il suo per trasmettere l&rsquo;idea, vedere il libro [^2] per definizione matematicamente corretta (e anche molto più astrusa)</p>
 <p><strong>Complessità condizionale</strong></p>
 <blockquote>
-<p>la complessità di Kolmogorov condizionale $K_{L}(\omega | x)$ è la lunghezza minima di un programma che prende in input $x$ e produce in output $\omega$. (si legge proprio come se fosse un qualcosa di condizionato)</p>
+<p>la complessità di Kolmogorov condizionale </p>
+$K_{L}(\omega | x)$
+<p> è la lunghezza minima di un programma che prende in input </p>
+$x$
+<p> e produce in output </p>
+$\omega$
+<p>. (si legge proprio come se fosse un qualcosa di condizionato)</p>
 </blockquote>
 <p><strong>LEMMA</strong>
 Ora diventa chiaro che un programma che stampa una qualunque stringa, sia sufficiente per dare in output, per questo motivo vale che:
@@ -316,17 +332,36 @@ $$
 K(x) \le \lvert x \rvert  + c \tag{1}
 $$
 <p>
-Dove $c$ è una costante per codificare le istruzioni per stampare.
+Dove </p>
+$c$
+<p> è una costante per codificare le istruzioni per stampare.
 Più intuitivamente un programma di questo genere può stampare il carattere (dimostreremo in seguito, in <a href="/notes/kolmogorov-complexity/#teorema-dell-invarianza">#Teorema dell&rsquo;invarianza</a> che idea simile vale per ogni linguaggio)</p>
 <p>Questo lemma giustifica anche la seguente definizione</p>
 <h4 id="stringhe-incomprimibili">Stringhe incomprimibili<a hidden class="anchor" aria-hidden="true" href="#stringhe-incomprimibili">#</a></h4>
 <blockquote>
-<p>una stringa $\omega$ si dice <em>incomprimibile</em> nel momento in cui $K(\omega) = \lvert \omega \rvert + O(1)$</p>
+<p>una stringa </p>
+$\omega$
+<p> si dice <em>incomprimibile</em> nel momento in cui </p>
+$K(\omega) = \lvert \omega \rvert + O(1)$
 </blockquote>
 <p>Che insieme all&rsquo;upper bound di sopra, si avrà che è il massimo di complessità che può avere.</p>
 <h4 id="kolmogorov-condizionato">Kolmogorov condizionato<a hidden class="anchor" aria-hidden="true" href="#kolmogorov-condizionato">#</a></h4>
-<p>Condizionato $K(A|B)$ significa che diamo alla nostra macchina di turing in input anche $B$ per codificare $A$. Puoi vedere subito che la complessità di $K(A|A)$ è $0$ perché la macchina di turing può non fare nulla $\varepsilon$ è il programma diciamo, e avere subito un risultato.
-Intuitivamente avere qualcosa in più non fa altro che ridurre il codice necessario, quindi possiamo dire che $K(A|B) \leq K(A)$. E qui si può creare anche una nozione di indipendenza.</p>
+<p>Condizionato </p>
+$K(A|B)$
+<p> significa che diamo alla nostra macchina di turing in input anche </p>
+$B$
+<p> per codificare </p>
+$A$
+<p>. Puoi vedere subito che la complessità di </p>
+$K(A|A)$
+<p> è </p>
+$0$
+<p> perché la macchina di turing può non fare nulla </p>
+$\varepsilon$
+<p> è il programma diciamo, e avere subito un risultato.
+Intuitivamente avere qualcosa in più non fa altro che ridurre il codice necessario, quindi possiamo dire che </p>
+$K(A|B) \leq K(A)$
+<p>. E qui si può creare anche una nozione di indipendenza.</p>
 <h4 id="chain-rule">Chain Rule<a hidden class="anchor" aria-hidden="true" href="#chain-rule">#</a></h4>
 <p>Afferma che per qualunque oggetto vale che
 </p>
@@ -334,7 +369,15 @@ $$
 K(A|B) \geq K(A, B) - K(B)
 $$
 <p>
-Ossia la codifica di entrambi, sia $A$ che $B$ è necessariamente minore di codificare prima $B$ e poi usare questa per codificare $A$. Si può dimostrare ma intuitivamente questa legge sembra parlare in modo chiaro.</p>
+Ossia la codifica di entrambi, sia </p>
+$A$
+<p> che </p>
+$B$
+<p> è necessariamente minore di codificare prima </p>
+$B$
+<p> e poi usare questa per codificare </p>
+$A$
+<p>. Si può dimostrare ma intuitivamente questa legge sembra parlare in modo chiaro.</p>
 <p>Questo vale se assumiamo che tutte le parole godano della <em>Prefix Property</em> <a href="/notes/bottom-up-parser-lr1/">Bottom-up Parser LR(1)</a><a href="/notes/algorithmic-probability/">Algorithmic Probability</a>.
 Se non vale la regola diventa
 </p>
@@ -342,17 +385,34 @@ $$
 C(s_{1}) \leq C(s_{2}) + C(s_{1} | s_{2}) + O(\log(C(s_{2})))
 $$
 <p>
-Il motivo di questo $O$ grande strano è che</p>
+Il motivo di questo </p>
+$O$
+<p> grande strano è che</p>
 <blockquote>
-<p>$\log(C(s_{2}))$ is the maximal length of the information needed to separate the program that computes $s_{2}$  from what comes next (as we cannot guarantee that this program is uniquely decodable, contrary to the prefix case).</p>
+$\log(C(s_{2}))$
+<p> is the maximal length of the information needed to separate the program that computes </p>
+$s_{2}$
+<p>  from what comes next (as we cannot guarantee that this program is uniquely decodable, contrary to the prefix case).</p>
 </blockquote>
 <p>Ma non lo ho capito ancora bene.</p>
 <h4 id="incomputabilità-di-kolmogorov">Incomputabilità di Kolmogorov<a hidden class="anchor" aria-hidden="true" href="#incomputabilità-di-kolmogorov">#</a></h4>
 <p>Dimostrazione:
-Supponiamo che sia computabile, allora abbiamo un programma $P$ che calcola il programma minimo.
-Ora possiamo usare questo programma per trovare una stringa la cui complessità di Kolmogorov sia più lunga di un certo $n$. Questo si può fare provando ad aggiungere roba (probabilmente qui mi serve un lemma che dice che è crescente stretto e non lasco).
-Ma la complessità di questa nuova stringa trovata deve essere uguale alla complessità di $n$, che gli dò in input! (più costante per la ricerca che ignoro per Kolmogorov).
-Questo significa che $K(n) &gt; n$ che è assurdo perché $K(n) \approx \log_{2}(n)$ che è strettamente minore di $n$.</p>
+Supponiamo che sia computabile, allora abbiamo un programma </p>
+$P$
+<p> che calcola il programma minimo.
+Ora possiamo usare questo programma per trovare una stringa la cui complessità di Kolmogorov sia più lunga di un certo </p>
+$n$
+<p>. Questo si può fare provando ad aggiungere roba (probabilmente qui mi serve un lemma che dice che è crescente stretto e non lasco).
+Ma la complessità di questa nuova stringa trovata deve essere uguale alla complessità di </p>
+$n$
+<p>, che gli dò in input! (più costante per la ricerca che ignoro per Kolmogorov).
+Questo significa che </p>
+$K(n) > n$
+<p> che è assurdo perché </p>
+$K(n) \approx \log_{2}(n)$
+<p> che è strettamente minore di </p>
+$n$
+<p>.</p>
 <p>Possiamo però approssimare il valore, e per molte cose questo basta!</p>
 <blockquote>
 <p>Kolmogorov complexity is an ideal notion that can be approximated, but that is not computable.</p>
@@ -368,21 +428,47 @@ Questo significa che $K(n) &gt; n$ che è assurdo perché $K(n) \approx \log_{2}
 </span></span></code></pre></div><h3 id="teorema-dellinvarianza">Teorema dell&rsquo;invarianza<a hidden class="anchor" aria-hidden="true" href="#teorema-dellinvarianza">#</a></h3>
 <p>Questo è un teorema fondamentale (e anche di base) per quanto riguarda la definizione della teoria inerente a questa complessità. Ci permette di affermare che il concetto di complessità è <strong>indipendente dal linguaggio di programmazione utilizzato</strong>, e ci darà presto anche alcuni risultati interessanti sulla computabilità di questa funzione (in modo diverso rispetto alle classiche dimostrazioni che si possono trovare in teoria della computabilità). Quindi questo teorema è <em>fondamentale</em> per stabilire <strong>l&rsquo;oggettività</strong> della proprietà. Così possiamo dire che è una proprietà dell&rsquo;oggetto, non di come lo stai valutando. Quindi non dipende dalla capacità/architettura di chi sta valutando il linguaggio.</p>
 <blockquote>
-<p>Siano $L$ e $L^{&rsquo;}$ due linguaggi Turing completi, allora per ogni stringa $\omega$ si ha che </p>
+<p>Siano </p>
+$L$
+<p> e </p>
+$L^{'}$
+<p> due linguaggi Turing completi, allora per ogni stringa </p>
+$\omega$
+<p> si ha che </p>
 $$K_{L}(\omega) = K_{L^{'}}(\omega)  + O(1)\tag{2}$$
 </blockquote>
 <p><strong>Dimostrazione</strong>:
-Essendo $L$ e $L^{&rsquo;}$ dei linguaggi Turing completi, allora posso scrivere un programma in $L^{&rsquo;}$ che esegua la macchina astratta di $L$ e quindi mantenga tutta la semantica del linguaggio $L$ (vedere <a href="/notes/macchine-astratte/">Macchine Astratte</a> per la definizione di interprete).<br>
+Essendo </p>
+$L$
+<p> e </p>
+$L^{'}$
+<p> dei linguaggi Turing completi, allora posso scrivere un programma in </p>
+$L^{'}$
+<p> che esegua la macchina astratta di </p>
+$L$
+<p> e quindi mantenga tutta la semantica del linguaggio </p>
+$L$
+<p> (vedere <a href="/notes/macchine-astratte/">Macchine Astratte</a> per la definizione di interprete).<br>
 Allora si avrà che
 </p>
 $$
 K_{L^{'}}(w) = K_{L}(\omega) + |I| \tag{2.1}
 $$
 <p>
-ossia il costo per esprimere la complessità della string $\omega$ in $L^{&rsquo;}$ è equivalente al costo per esprimere il programma $p$ in $L$, ed eseguirlo con un interprete (che avrà una lunghezza finita, e costante una volta fissato i due linguaggi).
+ossia il costo per esprimere la complessità della string </p>
+$\omega$
+<p> in </p>
+$L^{'}$
+<p> è equivalente al costo per esprimere il programma </p>
+$p$
+<p> in </p>
+$L$
+<p>, ed eseguirlo con un interprete (che avrà una lunghezza finita, e costante una volta fissato i due linguaggi).
 L&rsquo;interprete esiste perché stiamo usando macchine di Turing universali per la descrizione della lunghezza.</p>
 <p>NOTE:
-Grazie a questa proprietà da ora in poi potremo parlare di  $K(\omega)$ <strong>indipendentemente da linguaggio</strong> su cui è stato scritto, dato che tanto distano di una costante uno dall&rsquo;altro.</p>
+Grazie a questa proprietà da ora in poi potremo parlare di  </p>
+$K(\omega)$
+<p> <strong>indipendentemente da linguaggio</strong> su cui è stato scritto, dato che tanto distano di una costante uno dall&rsquo;altro.</p>
 <p>NOTE2:
 È una cosa molto curiosa il fatto che sia dipendente dall&rsquo;osservatore, anche se abbiamo una differenza, perché cose importanti per qualcuno, sono codificate in modo differente da ognuno. Questo è un pensiero molto deep, e l&rsquo;esempio della versione della macchina è chiaro.</p>
 <h4 id="esistenza-di-stringhe-complesse">Esistenza di stringhe complesse<a hidden class="anchor" aria-hidden="true" href="#esistenza-di-stringhe-complesse">#</a></h4>
@@ -393,18 +479,36 @@ $$
 $$
 <p>che è un risultato che non sembra avere molto senso perché ci sta dicendo che esistono delle stringhe di complessità infinita (forse queste stringhe sono quelle non computabili, perché il programma che lo descrive dovrebbe avere lunghezza infinita).</p>
 <p><strong>Dimostrazione</strong>:
-La dimostrazione di questo teorema non è altro che una applicazione del pigeonhole principle. In un certo senso salta fuori dalla relazione fra il finito e l&rsquo;infinito, come quelle cose assurde che $2n$ è in bigezione con i numeri naturali.
+La dimostrazione di questo teorema non è altro che una applicazione del pigeonhole principle. In un certo senso salta fuori dalla relazione fra il finito e l&rsquo;infinito, come quelle cose assurde che </p>
+$2n$
+<p> è in bigezione con i numeri naturali.
 Siamo nel mondo di Turing, quindi i programmi saranno anch&rsquo;esse delle stringhe binarie.
 Consideriamo tutti i programmi di lunghezza zero. Questo produrrà la stringa vuota, ossia la stringa di complessità zero.
 Supponiamo ora tutti i programmi di lunghezza uno. Al massimo potremo avere due stringhe con questa complessità.
-E così via. Intuitivamente: dato che il numero delle stringhe $\omega$ che possono esistere sono infinite, anche i la lunghezza dei programmi utilizzati per generare queste stringhe sono infinite, perché banalmente un programma di lunghezza $n$ può generare al massimo $2^n$ stringhe diverse, un numero finito, anche se enormemente ampio.</p>
+E così via. Intuitivamente: dato che il numero delle stringhe </p>
+$\omega$
+<p> che possono esistere sono infinite, anche i la lunghezza dei programmi utilizzati per generare queste stringhe sono infinite, perché banalmente un programma di lunghezza </p>
+$n$
+<p> può generare al massimo </p>
+$2^n$
+<p> stringhe diverse, un numero finito, anche se enormemente ampio.</p>
 <h4 id="non-calcolabilità-della-funzione-di-kolmogorov">Non calcolabilità della funzione di Kolmogorov<a hidden class="anchor" aria-hidden="true" href="#non-calcolabilità-della-funzione-di-kolmogorov">#</a></h4>
 <blockquote>
 <p>La funzione di Kolmogorov non è calcolabile su un macchina di Turing</p>
 </blockquote>
 <p><strong>Dimostrazione</strong>:
-Supponiamo che esista una macchina di Turing $M$ che prenda in input una stringa $\omega$ e ritorni $K(\omega)$. Utilizzeremo il teorema <a href="/notes/kolmogorov-complexity/#esistenza-di-stringhe-complesse">#Esistenza di stringhe complesse</a></p>
-<p>Allora utilizziamo questa macchina di Turing $M$ per costruirne una altra $M^{&rsquo;}$ che si comporti in questo modo:</p>
+Supponiamo che esista una macchina di Turing </p>
+$M$
+<p> che prenda in input una stringa </p>
+$\omega$
+<p> e ritorni </p>
+$K(\omega)$
+<p>. Utilizzeremo il teorema <a href="/notes/kolmogorov-complexity/#esistenza-di-stringhe-complesse">#Esistenza di stringhe complesse</a></p>
+<p>Allora utilizziamo questa macchina di Turing </p>
+$M$
+<p> per costruirne una altra </p>
+$M^{'}$
+<p> che si comporti in questo modo:</p>
 <pre tabindex="0"><code>input n
 for each string w in alphabet:
 do
@@ -412,16 +516,28 @@ do
 		return w
 done
 endfor
-</code></pre><p>In pratica vado a scorrere tutte le parole nell&rsquo;alfabeto infinito, so che prima o poi troverò una stringa tale per cui $K(w) \geq n$ perché ne abbiamo dimostrato l&rsquo;esistenza precedentemente. Questa macchina allora descriverà la stringa $\omega$ che viene in output, dato l&rsquo;input $n$.</p>
+</code></pre><p>In pratica vado a scorrere tutte le parole nell&rsquo;alfabeto infinito, so che prima o poi troverò una stringa tale per cui </p>
+$K(w) \geq n$
+<p> perché ne abbiamo dimostrato l&rsquo;esistenza precedentemente. Questa macchina allora descriverà la stringa </p>
+$\omega$
+<p> che viene in output, dato l&rsquo;input </p>
+$n$
+<p>.</p>
 <p>Ma allora abbiamo che
 </p>
 $$
 n \leq K(\omega) \leq \lvert \langle M^{'}, n \rangle    \rvert + O(1) = O(1) + \lvert n \rvert = O(1) + O(\log(n)) = O(\log(n))  
 $$
-<p>Ed è assurdo perché afferma che $O(n) \leq O(\log(n))$ che sarà vero per $n$ abbastanza alto.</p>
+<p>Ed è assurdo perché afferma che </p>
+$O(n) \leq O(\log(n))$
+<p> che sarà vero per </p>
+$n$
+<p> abbastanza alto.</p>
 <h4 id="upper-bound-con-entropia">Upper bound con entropia<a hidden class="anchor" aria-hidden="true" href="#upper-bound-con-entropia">#</a></h4>
 <p>Kolmogorov si può vedere come una cosa più generale dell&rsquo;entropia di Shannon <a href="/notes/entropy/">Entropy</a>, si può vedere come una <strong>approssimazione di essa</strong> perché basta prendere
-$L \approx \log_{2}\left( \frac{1}{p} \right)$ e si ha l&rsquo;entropia Shannoniana.
+</p>
+$L \approx \log_{2}\left( \frac{1}{p} \right)$
+<p> e si ha l&rsquo;entropia Shannoniana.
 La cosa carina è che Kolmogorov ha senso anche in assenza di frequenze e probabilità.</p>
 <h2 id="cose-che-non-ho-capito">Cose che non ho capito<a hidden class="anchor" aria-hidden="true" href="#cose-che-non-ho-capito">#</a></h2>
 <p>Per qualche motivo la complessità di un oggetto scende quando l&rsquo;entropia è massima (ah, quando sono tutti uguali le probabilità, la complessità scende)</p>
@@ -432,14 +548,30 @@ La cosa carina è che Kolmogorov ha senso anche in assenza di frequenze e probab
 $$
  C_{f}(x) = min\{l(p) : f(p) = n(x)\}
 $$
-<p>
-$f$ è una macchina di turing.</p>
-<p>Una volta definito questo e creato un insieme fisso di <em>macchine</em> o funzioni si può estendere questo modello in classi di equivalenza, perché possiamo utilizzare $\langle n, p \rangle$ on $n$ l&rsquo;index alla macchina corretta e $p$ il nostro programma (anche se non ho capito perché si assume che il programma sia comprensibile a qualunque macchina, e non ho capito perché la funzione la si può intendere come se fosse una macchina, questa è una parte di teorica che mi dovrei recuperare).</p>
-<p>Comunque fatto questo, si può mostrare come data una sequenza contabile di funzioni $\phi_{1}, \phi_{2}, \dots, \phi_{n}$ allora posso andare a definirmi $\phi_{n}(p) = \phi_{0}(\langle n, p \rangle)$ anche se non ho capito cosa voglio dire qui, con $\phi_{0}$ la funzione computata da una macchina di Turing universale $U$ . Indicheremo </p>
+$f$
+<p> è una macchina di turing.</p>
+<p>Una volta definito questo e creato un insieme fisso di <em>macchine</em> o funzioni si può estendere questo modello in classi di equivalenza, perché possiamo utilizzare </p>
+$\langle n, p \rangle$
+<p> on </p>
+$n$
+<p> l&rsquo;index alla macchina corretta e </p>
+$p$
+<p> il nostro programma (anche se non ho capito perché si assume che il programma sia comprensibile a qualunque macchina, e non ho capito perché la funzione la si può intendere come se fosse una macchina, questa è una parte di teorica che mi dovrei recuperare).</p>
+<p>Comunque fatto questo, si può mostrare come data una sequenza contabile di funzioni </p>
+$\phi_{1}, \phi_{2}, \dots, \phi_{n}$
+<p> allora posso andare a definirmi </p>
+$\phi_{n}(p) = \phi_{0}(\langle n, p \rangle)$
+<p> anche se non ho capito cosa voglio dire qui, con </p>
+$\phi_{0}$
+<p> la funzione computata da una macchina di Turing universale </p>
+$U$
+<p> . Indicheremo </p>
 $$
 C_{\phi_{0}}(x) = C(x)
 $$
-<p> per ogni programma $x$.</p>
+<p> per ogni programma </p>
+$x$
+<p>.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p>[1] Li &amp; Vitányi <a href="http://link.springer.com/10.1007/978-3-030-11298-1">“An Introduction to Kolmogorov Complexity and Its Applications”</a> Springer International Publishing 2019</p>
 
