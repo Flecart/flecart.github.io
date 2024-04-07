@@ -63,19 +63,14 @@ Questa è una definizione è leggermente ambigua dato che non abbiamo una defini
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
-    onload="renderMathInElement(document.body);"></script>
+    onload="renderMathInElement(document.body,  {
+        delimiters: [
+            {left: '$$\n', right: '\n$$', display: true},
+            {left: '$', right: '$', display: false}
+        ]
+    });"></script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
-        });
-    });
-</script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
@@ -368,7 +363,7 @@ Studi Personali: No</p>
 <h3 id="definizione-di-comandi-">Definizione di comandi 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-di-comandi-">#</a></h3>
 <p>Per comando intendiamo una entità sintattica che quando valutata non necessariamente ritorna un valore, inoltre potrebbe fare un effetto collaterale. (NOTA: anche le espressioni possono avere effetto collaterale)</p>
 <p>Da questa definizione non sembra ci sia una differenza chiara con l’espressione. però concettualmente dovremmo tenerci in mente che un comando è qualcosa di utile per cambiare lo stato del programma, ossia alla fine del comando ho uno stato differente, quindi ho avuto un side effect, mentre una espressione è qualcosa che idealmente non dovrebbe avere side-effect, ma alla fine ritorna sempre un valore.</p>
-<p>Un esempio di side-effect del comando può essere la stampa a schermo, che avrò cambiato la zona memory mapped come descritto in <a href="//notes/note-sull%E2%80%99architettura">Note sull’architettura</a>.</p>
+<p>Un esempio di side-effect del comando può essere la stampa a schermo, che avrò cambiato la zona memory mapped come descritto in <a href="/notes/note-sullarchitettura/">Note sull’architettura</a>.</p>
 <p><strong>Stato computazione</strong> = valore di tutte le variabili nel programma in un certo momento (oppure memoria, boh), va a modificare questo l´effetto collaterale.</p>
 <h3 id="variabili-2-">Variabili (2) 🟩<a hidden class="anchor" aria-hidden="true" href="#variabili-2-">#</a></h3>
 <p>È importante tenere a mente che le variabili sono diverse rispetto a quelle definite in matematica, lì sono incognite che possono assumere valori in un certo insieme che <strong>non sono modificabili</strong>.</p>
@@ -454,7 +449,7 @@ Studi Personali: No</p>
 <p>I comandi iterativi sono necessari per la turing completezza del linguaggio</p>
 <p><strong>Iterazione indeterminata</strong></p>
 <p>Sono comandi come <code>while</code> o <code>repeat ... until</code>  oppure il do while. Ed è indeterminata perché prima dell&rsquo;esecuzione non so esattamente quante iterazioni andrò a fare. dal punto della macchina fisica è molto facile implementarlo, dato che basta un salto con un check, più facile da implementare di un for.</p>
-<p>Con, <code>if, ass, while</code> ho già un linguaggio turning completo! Esattamente come è descritto in <a href="//notes/fondamenti-teorica">Fondamenti teorica</a>.</p>
+<p>Con, <code>if, ass, while</code> ho già un linguaggio turning completo! Esattamente come è descritto in <a href="/notes/fondamenti-teorica/">Fondamenti teorica</a>.</p>
 <p><strong>Iterazione determinata</strong></p>
 <p>Queste sono tutte le iterazioni in cui conosciamo a priori il numero di iterazioni da compiere (a runtime, prima di cominciare l&rsquo;esecuzione del comando), per esempio <code>for</code> e <code>foreach</code> . Di solito credo che nell&rsquo;implementazione si può calcolare il numero di iterazioni</p>
 <p>Si può osservare che la iterazione determinata sia meno espressiva dell’iterazione indeterminata, però da un punto di vista pragmatico è molto utile perché mi compatta tutta la struttura che esisteva per l’iterazione indeterminata.</p>
@@ -494,7 +489,7 @@ $$</p>
 <p>Una chiamata di g in f di si dice “chiamata in coda” (o tail call) se
 f restituisce il valore restituito da g senza ulteriore computazione.</p>
 </blockquote>
-<p>Quando faccio una chiamata ricorsiva alla fine, prima di ritornare dalla funzione, allora posso ottimizzare tutto il discorso che abbiamo fatto sugli RdA in <a href="//notes/nomi-e-scope">Nomi e Scope</a>, perché non avrei bisogno di allocare un nuovo RdA, mi basta lo spazio attuale!</p>
+<p>Quando faccio una chiamata ricorsiva alla fine, prima di ritornare dalla funzione, allora posso ottimizzare tutto il discorso che abbiamo fatto sugli RdA in <a href="/notes/nomi-e-scope/">Nomi e Scope</a>, perché non avrei bisogno di allocare un nuovo RdA, mi basta lo spazio attuale!</p>
 <p>È una cosa molto particolare perché con questo riesco a implementare la ricorsione con memoria statica! Un singolo RdA.</p>
 <p>Tail recursion si ha quando l’ultima istruzione di ritorno <strong>non possiede computazioni aggiuntive</strong>, avendo questa proprietà, la chiamata della funzione può essere posta in modo che sovrascriva tutti i parametri, le variabili locali, con l&rsquo;indirizzo di ritorno e il valore di ritorno le stesse della funzione chaiamante.</p>
 <p>In pratica invece di far crescere continuamente la stack, posso fare in modo di utilizzare lo stesso record scrivendoci i nuovi parametri, un risparmio di memoria non da niente!</p>

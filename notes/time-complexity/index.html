@@ -61,19 +61,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
-    onload="renderMathInElement(document.body);"></script>
+    onload="renderMathInElement(document.body,  {
+        delimiters: [
+            {left: '$$\n', right: '\n$$', display: true},
+            {left: '$', right: '$', display: false}
+        ]
+    });"></script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
-        });
-    });
-</script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
@@ -281,7 +276,7 @@ if (!doNotTrack) {
 </div>
 
   <div class="post-content"><h2 id="introduction-to-time-complexity">Introduction to Time Complexity<a hidden class="anchor" aria-hidden="true" href="#introduction-to-time-complexity">#</a></h2>
-<p>This note will build upon know techniques of algorithms analysis explained in <a href="//notes/notazione-asintotica">Notazione Asintotica</a>.
+<p>This note will build upon know techniques of algorithms analysis explained in <a href="/notes/notazione-asintotica/">Notazione Asintotica</a>.
 We will need big-$O$ notation and $o$ notation.
 L&rsquo;idea è che il problema di decisione è decidibile se limito la lunghezza del teorema.
 Simile al <a href="https://en.wikipedia.org/wiki/Chaitin%27s_constant">numero di Chaitin</a>, che non è computabile, ma è approssimabile quanto si vuole. In un certo senso è computabile.
@@ -295,7 +290,7 @@ The general idea is to ask how the function $\varphi$ that maps the longest $n$ 
 </ul>
 <h3 id="influence-of-the-computational-model">Influence of the Computational Model<a hidden class="anchor" aria-hidden="true" href="#influence-of-the-computational-model">#</a></h3>
 <p>In Complexity Theory <strong>the choice of the formal model</strong> influences the complexity class of the model!
-This is different from the argument from computational theory of the <a href="//notes/la-macchina-di-turing#tesi-di-church-turing">Church Turing Thesis</a>, where it asserts that a function is Computable in every computational model. See 7.7 in <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a>.</p>
+This is different from the argument from computational theory of the <a href="/notes/la-macchina-di-turing/#tesi-di-church-turing">Church Turing Thesis</a>, where it asserts that a function is Computable in every computational model. See 7.7 in <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a>.</p>
 <h2 id="the-time-complexity-class">The Time Complexity Class<a hidden class="anchor" aria-hidden="true" href="#the-time-complexity-class">#</a></h2>
 <h3 id="definition-of-the-time-complexity-class">Definition of the Time Complexity Class<a hidden class="anchor" aria-hidden="true" href="#definition-of-the-time-complexity-class">#</a></h3>
 <blockquote>
@@ -312,7 +307,7 @@ NOTE: this is invariant with respect to the chosen coding system (if an algorith
 <h4 id="path-is-in-p">PATH is in P<a hidden class="anchor" aria-hidden="true" href="#path-is-in-p">#</a></h4>
 <p>We can prove that the language
 $\left{ \langle G, s, t \rangle \mid G \text{ is a graph that has a route from } s \text{ to } t \right}$
-is in $P$ class. (Just use <a href="//notes/grafi#bfs">Grafi#BFS</a> or <a href="//notes/grafi#dfs">Grafi#DFS</a>).</p>
+is in $P$ class. (Just use <a href="/notes/grafi/#bfs">Grafi#BFS</a> or <a href="/notes/grafi/#dfs">Grafi#DFS</a>).</p>
 <p>NOTE: we have worked assuming that the algorithm worked on the nodes, but usually TM work with bits, the thing is that there is a polynomial algo that converts that nodes into binary format, so it is not much of a big deal.</p>
 <h4 id="overview-of-problems-in-p">Overview of problems in $P$<a hidden class="anchor" aria-hidden="true" href="#overview-of-problems-in-p">#</a></h4>
 <img src="/images/notes/Time Complexity-20240321132710013.webp" alt="Time Complexity-20240321132710013">
@@ -321,7 +316,7 @@ is in $P$ class. (Just use <a href="//notes/grafi#bfs">Grafi#BFS</a> or <a href=
 $$
 EXP = \bigcup_{i\geq 1} TIME(2^{n^{i}})
 $$
-This class is common of the algorithms that use backtracking, for example <a href="//notes/csp-problems">CSP problems</a>. Or just brute-force search all the branches.</p>
+This class is common of the algorithms that use backtracking, for example <a href="/notes/csp-problems/">CSP problems</a>. Or just brute-force search all the branches.</p>
 <h3 id="non-deterministic-complexity-class">Non-deterministic Complexity Class<a hidden class="anchor" aria-hidden="true" href="#non-deterministic-complexity-class">#</a></h3>
 <p>Let $N$ be a non-deterministic decider then we have that a problem is in this complexity class, called $NTIME$ if the running time cost $f: \mathbb{N} \to \mathbb{N}$ is bounded by that (longest computational branch).
 The difference with <a href="/notes/time-complexity/#polynomial-complexity-class">#Polynomial Complexity Class</a> is that here we consider the length of a single branch, but we explore everything at the same time!</p>
@@ -339,7 +334,7 @@ Just</p>
 <li>Select a subset of nodes from $G$. Do it non deterministically.</li>
 <li>Verify if this subset is a complete graph. If yes add it to the solution set.</li>
 </ol>
-<p>We can prove that this is correct, and it works, but it is a non deterministic algorithm, so it isn&rsquo;t easily simulated by deterministic algorithms, even though we proved in <a href="//notes/estensioni-di-turing-e-altre-macchine">Estensioni di Turing e altre macchine</a> that from the computability point of view it is the same.</p>
+<p>We can prove that this is correct, and it works, but it is a non deterministic algorithm, so it isn&rsquo;t easily simulated by deterministic algorithms, even though we proved in <a href="/notes/estensioni-di-turing-e-altre-macchine/">Estensioni di Turing e altre macchine</a> that from the computability point of view it is the same.</p>
 <p><strong>Verifiable</strong>
 Given input the graph, and a subset, we need to</p>
 <ol>
