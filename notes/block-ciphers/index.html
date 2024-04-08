@@ -137,8 +137,8 @@ DES 56 bit 3DES 56*3 bit di chiave AES che può andare a 128, 196 o 256 Solitame
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "Utilizzano blocchi per cifra invece che stream generators.\nDES 56 bit 3DES 56*3 bit di chiave AES che può andare a 128, 196 o 256 Solitamente i stream ciphers studiati in OTP and Stream Ciphers sono più veloci. Data Encryption Standard 1974 da IBM su commissione di NSA in quel periodo era solamente fatta dalla intelligence, non c’era bisogno di comunicazioni per il pubblico in quel periodo.\n1977 - 1998 questo era lo standard per gli stati uniti. best studied cipher in the world! Oggi insicuro, esiste una sua variante 3DES che è più sicura, ma comunque rotto C’è una step di **creazione delle chiavi\nFeistel network Definizione Feistel 🟩 Definiziamo una funzione di feistel $f(L^{i - 1}, R^{i - 1}, K^{i}) \\to L^{i}, R^{i}$ la seguente:\nUno state $u^{i}$ è diviso in due parti, che vengono cifrati in questomodo: $$\n\\begin{cases} L^{i} = R^{i - 1}\\ R^{i} = L^{i - 1} \\oplus f(R^{i - 1}, K^{i}) \\end{cases} $$ Dove $f$ è una funzione invertibile, se si ha la chiave.\nInvertibilità di Feistel 🟩 La caratteristica bella è che data la chiave questo è facilmente invertibile, anche se $f$ potrebbe non esserlo. Infatti la seguente funzione inverte in modo facile $$ \\begin{cases} L^{i - 1} = R^{i} \\oplus f(L^{i}, K^{i})\\\\ R^{i - 1} = L^{i} \\end{cases} $$ Si può verificare in modo facile che funziona questo.\nFunzionamento DES 🟩 Quindi\nmapping iniziale $IP$ che crea $L^{0}R^{0}$ rounds di Feistel Poi output La decryption è simmetrica con la conoscenza della chiave.\n$f$ function in DES 🟨 Dove $A$ è il 32 bit plaintext e $J$ è la chiave.\nLe funzioni $S$ sono tra le più importanti per la sicurezza, perché resistono a certi tipi di attacchi conosciuti (che se riesco metto in questi appunti qui sotto). Sono in pratica una mappa di 4 bit e 2 bit a un 4 bit. Attacchi a DES 🟩 Gli attacchi maggiori (alcuni lo vengono anche come servizio commerciale) è semplicemente bruteforce perché la chiave di 56 bit usata non è che sia molto utile. (In un giorno te o rompe). Gli attacchi con known plaintext esistono, ma usano un insieme di dati non feasible. di $2^{40}$ coppie di plaintext-ciphertext.\nUnicità della chiave 🟩- È notabile osservare che è probabile sia in DES che AES che è molto probabile che sia unica la chiave usata per cifrare quello. Questa nota è utile per dire che se trovi quella chiave, probabilmente ti funziona anche per altre comunicazioni che utilizzano roba simile.\nAltre versioni di DES In modo semplice per renderlo più sicuro è il 3-DES in pratica DES applicato 3 volte, con chiave lunga il triplo, quindi più resistente a bruteforce.\nAttacco a 2-DES 🟩 Vorremmo trovare una coppia di chiavi $k_{1}, k_{2}$ tale che per cui $E(k_{2}, m) = D(k_{1}, c)$ ed è possibile con un meet in the middle, che dovrebbe diminuire lo spazio di ricerca. Conseguenza: Mi basta un $2 \\cdot 2^{56}$ non un $2^{112}$ per rompere la chiave con questo attacco. Per questo motivo uso un 3-DES che non permette di fare questo.\nDESX (non impo) Wikipedia.\nConsidero tre chiavi e considero $$ k_{1} \\oplus E(k_{2}, m\\oplus k_{3}) $$ In parole semplici ho due chiavi in più che uso per fare un xor prima di mandarlo in #Data Encryption standard normale. La cosa da notare è che non cresce la complessità di quanto ci si aspetta.\nAdvanced Encryption Standard Note storiche di AES Da un punto di vista storico è stata una competizione internazionale 1997 che poi è stata standardizzata nel 2000. Una conferenza per questo (in particolare al seconda) è stata fatta a Roma, cosa che era curiosa, solitamente non si faceva così). È stato scelto in base a\nSicurezza Costo implementazione Velocità hardware e software. Alla fine è un algoritmo molto parallelizzabile. Generazione della chiave 🟨- La lunghezza della chiave decide il numero di rounds, rispettivamente 10, 12, 14. In base al fatto che usiamo 128, 192, o 256. Vedere 4.6 di (Stinson 2005). Per l’algoritmo. La cosa è che avremo una chiave di 16 bytes in output per il numero di rounds.\nFunzionamento del cifrario 🟨- Definiamo le operazioni SubBytes (byte-by-byte substitution using an S-box) ShiftRows (a permutation, which cyclically shifts the last three rows in the State) MixColumns (substitution that uses Galois Fields, GF(2^8) arithmetic) Add Round key (bit-by-bit XOR with an expanded key L’immagine è sbagliata per la grandezza della chiave di input, per il resto è ok, buona schematizzazione del funzionamento.\nModes of operation Electronic Code Book (ECB) Il problema principale di questo metodo naïve è il fatto che posso vedere s e blocchi hanno avuto stesso input, perché non dipendono dalla posizione.\nQuesto non è semantically secure secondo note in OTP and Stream Ciphers#Semantic security (!)\nDeterministic Counter (DETCTR) In pratica creo stream di bytes a blocchi per cifrare Th: questo cipher è semanticamente sicuro se la funzione $F$ usata è sicura. Ossia ha un buone garanzie teoriche se esiste e trovo tale $F$ .\nCipher Block Chaining (CBC) Lo conosci.\nUna nota importante è che si può fare una analisi teorica, e sapere dopo quanti riusi di chiave è necessario cambiarla, al fine di mantenere garanzie di sicurezza.\nSe si guarda le slides possiamo avere un risultato, che è circa di $2^{48}$ blocchi per CBC. Si può fare la stessa analisi per #Data Encryption Standard\nNOTA: CBC non è sicuro con un choosen plaintext e la capacità di predire gli IV Come:\nScelgo come mio choosen plaintext $0$ così ho in pratica la versione criptata di $IV$. Poi mando $m_{0} = IV \\oplus IV_{2}$ e $m_{1} \\neq m_{0}$ , se $c(m_{0})$ è uguale al primo, allora ho indovinato il messaggio. Questo chiaramente dà advantage 1 e rompe la definizione (non so quanto praticamente utile) di semantic security. Una possibilità è usare un IV creato dalla cifrazione di un Nonce, così sei abbastanza sicuro che IV sia sicuro.\nCounter Mode (CTR) molto simile al counter mode per #Electronic Code Book (ECB) però ora abbiamo IV. Anche in questo caso possiamo usare una nonce based version.\nSubstitution-Permutation Networks (not required for exam) 2 componenti principali Abbiamo un box di sostituzione e un box di permutazione. La stringa iniziale viene divisa in molti blocchi di lunghezza $m$ , e in totale avrà lunghezza $lm$ . Con padding finale possibile. C’è un algoritmo abbastanza generale per questo genere di cifrari, che è il 4.1 in (Stinson 2005). la cosa carina è che queste funzioni alla fine sono molto semplici da implementare, sia in hardware e software. Non so bene su security garantuess\nKey generation and rounds In un unico round, viene encryptato molte volte (un round è fra 10-20 cicli di criptazione) si chiamano iterated ciphers, e dalla chiave iniziale vengono generate 16 chiavi, una per ogni round. Questo lo chiamiamo round function e la funzione che genera le chiavi per ogni round sono key schedule.\nPseudo random function Main definition Pseudo random permutation Solamente una pseudorandom-function tale per cui inizio e fine sono le stesse, quindi è bigettiva\nSecure PRF TODO:\nReferences [1] Stinson “Cryptography: Theory and Practice, Third Edition” CRC Press 2005\n",
-  "wordCount" : "1186",
+  "articleBody": "Utilizzano blocchi per cifra invece che stream generators.\nDES 56 bit 3DES 56*3 bit di chiave AES che può andare a 128, 196 o 256 Solitamente i stream ciphers studiati in OTP and Stream Ciphers sono più veloci. Data Encryption Standard 1974 da IBM su commissione di NSA in quel periodo era solamente fatta dalla intelligence, non c’era bisogno di comunicazioni per il pubblico in quel periodo.\n1977 - 1998 questo era lo standard per gli stati uniti. best studied cipher in the world! Oggi insicuro, esiste una sua variante 3DES che è più sicura, ma comunque rotto C’è una step di **creazione delle chiavi\nFeistel network Definizione Feistel 🟩 Definiziamo una funzione di feistel $f(L^{i - 1}, R^{i - 1}, K^{i}) \\to L^{i}, R^{i}$ la seguente:\nUno state $u^{i}$ è diviso in due parti, che vengono cifrati in questomodo: $$\n\\begin{cases} L^{i} = R^{i - 1}\\ R^{i} = L^{i - 1} \\oplus f(R^{i - 1}, K^{i}) \\end{cases} $$ Dove $f$ è una funzione invertibile, se si ha la chiave.\nInvertibilità di Feistel 🟩 La caratteristica bella è che data la chiave questo è facilmente invertibile, anche se $f$ potrebbe non esserlo. Infatti la seguente funzione inverte in modo facile $$ \\begin{cases} L^{i - 1} = R^{i} \\oplus f(L^{i}, K^{i})\\\\ R^{i - 1} = L^{i} \\end{cases} $$ Si può verificare in modo facile che funziona questo.\nFunzionamento DES 🟩 Quindi\nmapping iniziale $IP$ che crea $L^{0}R^{0}$ rounds di Feistel Poi output La decryption è simmetrica con la conoscenza della chiave.\n$f$ function in DES 🟨 Dove $A$ è il 32 bit plaintext e $J$ è la chiave.\nLe funzioni $S$ sono tra le più importanti per la sicurezza, perché resistono a certi tipi di attacchi conosciuti (che se riesco metto in questi appunti qui sotto). Sono in pratica una mappa di 4 bit e 2 bit a un 4 bit. Attacchi a DES 🟩 Gli attacchi maggiori (alcuni lo vengono anche come servizio commerciale) è semplicemente bruteforce perché la chiave di 56 bit usata non è che sia molto utile. (In un giorno te o rompe). Gli attacchi con known plaintext esistono, ma usano un insieme di dati non feasible. di $2^{40}$ coppie di plaintext-ciphertext.\nUnicità della chiave 🟩- È notabile osservare che è probabile sia in DES che AES che è molto probabile che sia unica la chiave usata per cifrare quello. Questa nota è utile per dire che se trovi quella chiave, probabilmente ti funziona anche per altre comunicazioni che utilizzano roba simile.\nAltre versioni di DES In modo semplice per renderlo più sicuro è il 3-DES in pratica DES applicato 3 volte, con chiave lunga il triplo, quindi più resistente a bruteforce.\nAttacco a 2-DES 🟩 Vorremmo trovare una coppia di chiavi $k_{1}, k_{2}$ tale che per cui $E(k_{2}, m) = D(k_{1}, c)$ ed è possibile con un meet in the middle, che dovrebbe diminuire lo spazio di ricerca. Conseguenza: Mi basta un $2 \\cdot 2^{56}$ non un $2^{112}$ per rompere la chiave con questo attacco. Per questo motivo uso un 3-DES che non permette di fare questo.\nDESX (non impo) Wikipedia.\nConsidero tre chiavi e considero $$ k_{1} \\oplus E(k_{2}, m\\oplus k_{3}) $$ In parole semplici ho due chiavi in più che uso per fare un xor prima di mandarlo in #Data Encryption standard normale. La cosa da notare è che non cresce la complessità di quanto ci si aspetta.\nAdvanced Encryption Standard Note storiche di AES Da un punto di vista storico è stata una competizione internazionale 1997 che poi è stata standardizzata nel 2000. Una conferenza per questo (in particolare al seconda) è stata fatta a Roma, cosa che era curiosa, solitamente non si faceva così). È stato scelto in base a\nSicurezza Costo implementazione Velocità hardware e software. Alla fine è un algoritmo molto parallelizzabile. Generazione della chiave 🟨- La lunghezza della chiave decide il numero di rounds, rispettivamente 10, 12, 14. In base al fatto che usiamo 128, 192, o 256. Vedere 4.6 di (Stinson 2005). Per l’algoritmo. La cosa è che avremo una chiave di 16 bytes in output per il numero di rounds.\nFunzionamento del cifrario 🟨- Definiamo le operazioni SubBytes (byte-by-byte substitution using an S-box) ShiftRows (a permutation, which cyclically shifts the last three rows in the State) MixColumns (substitution that uses Galois Fields, GF(2^8) arithmetic) Add Round key (bit-by-bit XOR with an expanded key L’immagine è sbagliata per la grandezza della chiave di input, per il resto è ok, buona schematizzazione del funzionamento.\nModes of operation Electronic Code Book (ECB) Il problema principale di questo metodo naïve è il fatto che posso vedere s e blocchi hanno avuto stesso input, perché non dipendono dalla posizione.\nQuesto non è semantically secure secondo note in OTP and Stream Ciphers#Semantic security (!)\nDeterministic Counter (DETCTR) In pratica creo stream di bytes a blocchi per cifrare Th: questo cipher è semanticamente sicuro se la funzione $F$ usata è sicura. Ossia ha un buone garanzie teoriche se esiste e trovo tale $F$.\nCipher Block Chaining (CBC) Lo conosci.\nUna nota importante è che si può fare una analisi teorica, e sapere dopo quanti riusi di chiave è necessario cambiarla, al fine di mantenere garanzie di sicurezza.\nSe si guarda le slides possiamo avere un risultato, che è circa di $2^{48}$ blocchi per CBC. Si può fare la stessa analisi per #Data Encryption Standard\nNOTA: CBC non è sicuro con un choosen plaintext e la capacità di predire gli IV Come:\nScelgo come mio choosen plaintext $0$ così ho in pratica la versione criptata di $IV$. Poi mando $m_{0} = IV \\oplus IV_{2}$ e $m_{1} \\neq m_{0}$ , se $c(m_{0})$ è uguale al primo, allora ho indovinato il messaggio. Questo chiaramente dà advantage 1 e rompe la definizione (non so quanto praticamente utile) di semantic security. Una possibilità è usare un IV creato dalla cifrazione di un Nonce, così sei abbastanza sicuro che IV sia sicuro.\nCounter Mode (CTR) molto simile al counter mode per #Electronic Code Book (ECB) però ora abbiamo IV. Anche in questo caso possiamo usare una nonce based version.\nSubstitution-Permutation Networks (not required for exam) 2 componenti principali Abbiamo un box di sostituzione e un box di permutazione. La stringa iniziale viene divisa in molti blocchi di lunghezza $m$, e in totale avrà lunghezza $lm$. Con padding finale possibile. C’è un algoritmo abbastanza generale per questo genere di cifrari, che è il 4.1 in (Stinson 2005). la cosa carina è che queste funzioni alla fine sono molto semplici da implementare, sia in hardware e software. Non so bene su security garantuess\nKey generation and rounds In un unico round, viene encryptato molte volte (un round è fra 10-20 cicli di criptazione) si chiamano iterated ciphers, e dalla chiave iniziale vengono generate 16 chiavi, una per ogni round. Questo lo chiamiamo round function e la funzione che genera le chiavi per ogni round sono key schedule.\nPseudo random function Main definition Pseudo random permutation Solamente una pseudorandom-function tale per cui inizio e fine sono le stesse, quindi è bigettiva\nSecure PRF TODO:\nReferences [1] Stinson “Cryptography: Theory and Practice, Third Edition” CRC Press 2005\n",
+  "wordCount" : "1183",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -347,25 +347,17 @@ Solitamente i stream ciphers studiati in <a href="/notes/otp-and-stream-ciphers/
 <p>C&rsquo;è una step di **creazione delle chiavi</p>
 <h4 id="feistel-network">Feistel network<a hidden class="anchor" aria-hidden="true" href="#feistel-network">#</a></h4>
 <h5 id="definizione-feistel--">Definizione Feistel  🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-feistel--">#</a></h5>
-<p>Definiziamo una funzione di feistel </p>
-$f(L^{i - 1}, R^{i - 1}, K^{i}) \to L^{i}, R^{i}$
-<p> la seguente:</p>
-<p>Uno state </p>
-$u^{i}$
-<p> è diviso in due parti, che vengono cifrati in questomodo:
+<p>Definiziamo una funzione di feistel $f(L^{i - 1}, R^{i - 1}, K^{i}) \to L^{i}, R^{i}$ la seguente:</p>
+<p>Uno state $u^{i}$ è diviso in due parti, che vengono cifrati in questomodo:
 $$</p>
 <p>\begin{cases}
 L^{i} = R^{i - 1}\
 R^{i} = L^{i - 1} \oplus  f(R^{i - 1}, K^{i})
 \end{cases}
 $$
-Dove </p>
-$f$
-<p> è una funzione invertibile, se si ha la chiave.</p>
+Dove $f$ è una funzione invertibile, se si ha la chiave.</p>
 <h5 id="invertibilità-di-feistel-">Invertibilità di Feistel 🟩<a hidden class="anchor" aria-hidden="true" href="#invertibilità-di-feistel-">#</a></h5>
-<p>La caratteristica bella è che <strong>data la chiave</strong> questo è facilmente invertibile, anche se </p>
-$f$
-<p> potrebbe non esserlo. Infatti la seguente funzione inverte in modo facile
+<p>La caratteristica bella è che <strong>data la chiave</strong> questo è facilmente invertibile, anche se $f$ potrebbe non esserlo. Infatti la seguente funzione inverte in modo facile
 </p>
 $$
 \begin{cases}
@@ -385,38 +377,24 @@ Si può verificare in modo facile che funziona questo.</p>
 <p>La decryption è simmetrica con la conoscenza della chiave.</p>
 <img src="/images/notes/Block Ciphers-20240305095533560.webp" alt="Block Ciphers-20240305095533560">
 <h4 id="f-function-in-des-">$f$ function in DES 🟨<a hidden class="anchor" aria-hidden="true" href="#f-function-in-des-">#</a></h4>
-<p>Dove </p>
-$A$
-<p> è il 32 bit plaintext e </p>
-$J$
-<p> è la chiave.</p>
+<p>Dove $A$ è il 32 bit plaintext e $J$ è la chiave.</p>
 <img src="/images/notes/Block Ciphers-20240305100001596.webp" alt="Block Ciphers-20240305100001596">
 Le funzioni $S$ sono tra le più importanti per la sicurezza, perché resistono a certi tipi di attacchi conosciuti (che se riesco metto in questi appunti qui sotto).
 Sono in pratica una mappa di 4 bit e 2 bit a un 4 bit.
 <h4 id="attacchi-a-des-">Attacchi a DES 🟩<a hidden class="anchor" aria-hidden="true" href="#attacchi-a-des-">#</a></h4>
 <p>Gli attacchi maggiori (alcuni lo vengono anche come servizio commerciale) è semplicemente <strong>bruteforce</strong> perché la chiave di 56 bit usata non è che sia molto utile.
 (In un giorno te o rompe).
-Gli attacchi con known plaintext esistono, ma usano un insieme di dati non feasible. di </p>
-$2^{40}$
-<p> coppie di plaintext-ciphertext.</p>
+Gli attacchi con known plaintext esistono, ma usano un insieme di dati non feasible. di $2^{40}$ coppie di plaintext-ciphertext.</p>
 <h4 id="unicità-della-chiave--">Unicità della chiave 🟩-<a hidden class="anchor" aria-hidden="true" href="#unicità-della-chiave--">#</a></h4>
 <p>È notabile osservare che è probabile sia in DES che AES che è molto probabile che sia unica la chiave usata per cifrare quello.
 Questa nota è utile per dire che se trovi quella chiave, probabilmente ti funziona anche per altre comunicazioni che utilizzano roba simile.</p>
 <h3 id="altre-versioni-di-des">Altre versioni di DES<a hidden class="anchor" aria-hidden="true" href="#altre-versioni-di-des">#</a></h3>
 <p>In modo semplice per renderlo più sicuro è il <strong>3-DES</strong> in pratica DES applicato 3 volte, con chiave lunga il triplo, quindi più resistente a bruteforce.</p>
 <h4 id="attacco-a-2-des-">Attacco a 2-DES 🟩<a hidden class="anchor" aria-hidden="true" href="#attacco-a-2-des-">#</a></h4>
-<p>Vorremmo trovare una coppia di chiavi </p>
-$k_{1}, k_{2}$
-<p> tale che per cui </p>
-$E(k_{2}, m) = D(k_{1}, c)$
-<p> ed è possibile con un meet in the middle, che dovrebbe diminuire lo spazio di ricerca.
+<p>Vorremmo trovare una coppia di chiavi $k_{1}, k_{2}$ tale che per cui $E(k_{2}, m) = D(k_{1}, c)$ ed è possibile con un meet in the middle, che dovrebbe diminuire lo spazio di ricerca.
 <img src="/images/notes/Block Ciphers-20240305112238931.webp" alt="Block Ciphers-20240305112238931">
 <strong>Conseguenza</strong>:
-Mi basta un </p>
-$2 \cdot 2^{56}$
-<p> non un </p>
-$2^{112}$
-<p> per rompere la chiave con questo attacco.
+Mi basta un $2 \cdot 2^{56}$ non un $2^{112}$ per rompere la chiave con questo attacco.
 Per questo motivo uso un 3-DES che non permette di fare questo.</p>
 <h4 id="desx-non-impo">DESX (non impo)<a hidden class="anchor" aria-hidden="true" href="#desx-non-impo">#</a></h4>
 <p><a href="https://en.wikipedia.org/wiki/DES-X">Wikipedia</a>.</p>
@@ -458,19 +436,13 @@ L&rsquo;immagine è sbagliata per la grandezza della chiave di input, per il res
 <h4 id="deterministic-counter-detctr">Deterministic Counter (DETCTR)<a hidden class="anchor" aria-hidden="true" href="#deterministic-counter-detctr">#</a></h4>
 <p>In pratica <strong>creo stream di bytes a blocchi</strong> per cifrare
 <img src="/images/notes/Block Ciphers-20240307111202941.webp" alt="Block Ciphers-20240307111202941"></p>
-<p><strong>Th:</strong> questo cipher è semanticamente sicuro se la funzione </p>
-$F$
-<p> usata è sicura.
-Ossia ha un buone garanzie teoriche se esiste e trovo tale </p>
-$F$
-<p>.</p>
+<p><strong>Th:</strong> questo cipher è semanticamente sicuro se la funzione $F$ usata è sicura.
+Ossia ha un buone garanzie teoriche se esiste e trovo tale $F$.</p>
 <h4 id="cipher-block-chaining-cbc">Cipher Block Chaining (CBC)<a hidden class="anchor" aria-hidden="true" href="#cipher-block-chaining-cbc">#</a></h4>
 <p>Lo conosci.</p>
 <img src="/images/notes/Block Ciphers-20240307115310428.webp" alt="Block Ciphers-20240307115310428">
 <p>Una nota importante è che si può fare una analisi teorica, e sapere <strong>dopo quanti riusi di chiave</strong> è necessario cambiarla, al fine di mantenere garanzie di sicurezza.</p>
-<p>Se si guarda le slides possiamo avere un risultato, che è circa di </p>
-$2^{48}$
-<p> blocchi per CBC. Si può fare la stessa analisi per <a href="/notes/block-ciphers/#data-encryption-standard">#Data Encryption Standard</a></p>
+<p>Se si guarda le slides possiamo avere un risultato, che è circa di $2^{48}$ blocchi per CBC. Si può fare la stessa analisi per <a href="/notes/block-ciphers/#data-encryption-standard">#Data Encryption Standard</a></p>
 <p><strong>NOTA:</strong> CBC non è sicuro con un choosen plaintext e la capacità di predire gli <em>IV</em>
 Come:</p>
 <ol>
@@ -486,11 +458,7 @@ Anche in questo caso possiamo usare una <strong>nonce based version</strong>.</p
 <h2 id="substitution-permutation-networks-not-required-for-exam">Substitution-Permutation Networks (not required for exam)<a hidden class="anchor" aria-hidden="true" href="#substitution-permutation-networks-not-required-for-exam">#</a></h2>
 <h4 id="2-componenti-principali">2 componenti principali<a hidden class="anchor" aria-hidden="true" href="#2-componenti-principali">#</a></h4>
 <p>Abbiamo un box di sostituzione e un box di permutazione.
-La stringa iniziale viene divisa in molti blocchi di lunghezza </p>
-$m$
-<p>, e in totale avrà lunghezza </p>
-$lm$
-<p>. Con padding finale possibile.
+La stringa iniziale viene divisa in molti blocchi di lunghezza $m$, e in totale avrà lunghezza $lm$. Con padding finale possibile.
 C&rsquo;è un algoritmo abbastanza generale per questo genere di cifrari, che è il 4.1 in <a href="https://books.google.it/books/about/Cryptography.html?id=FAPLBQAAQBAJ">(Stinson 2005)</a>.
 la cosa carina è che queste funzioni alla fine sono molto semplici da implementare, sia in hardware e software. Non so bene su security garantuess</p>
 <h4 id="key-generation-and-rounds">Key generation and rounds<a hidden class="anchor" aria-hidden="true" href="#key-generation-and-rounds">#</a></h4>

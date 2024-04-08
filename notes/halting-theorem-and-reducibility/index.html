@@ -134,8 +134,8 @@ Enunciato Halting theorem Questo è molto simile a quanto presente sul (Sipser 2
   "keywords": [
     "theoretical-computer-science"
   ],
-  "articleBody": "Halting theorem Questo è un problema fondamentale, che abbiamo trattato anche in Fondamenti teorica#Halting problem, ma qui lo ritrattiamo, perché così lo rifacciamo per bene. In parte è stato trattato anche al corso di Logica.\nEnunciato Halting theorem Questo è molto simile a quanto presente sul (Sipser 2012). Ossia consideriamo il linguaggio $$ HALT = \\left\\{ \\langle x, y \\rangle : y = code(M),M \\text{ si ferma su } x\\right\\} $$ Dimostrazione Halting theorem La parte del sì è facile perché basta eseguirlo e vedere che si ferma (quindi abbiamo una La macchina di Turing#La macchina di Turing universale. Se si ferma appartiene al linguaggio, altrimenti è la parte in cui diverge.\nDimostrazione non decidibilità Supponiamo sia decidibile e dimostriamo l’assurdo. Se esiste una macchina $f$ tale per cui decida quel linguaggio, $$ \\begin{cases} f(g, y) = 1, g(y) \\downarrow\\\\ \\\\ f(g, y) = 0, g(y) \\uparrow \\end{cases} $$ allora possiamo usare questa macchina per costruire un $h$ tale che per cui $$ \\begin{cases} h(g) = 1, f(g, g) = 0 \\\\ \\\\ h(g) = \\uparrow, f(g, g) = 1 \\end{cases} $$ Allora la computazione della funzione $h(h)$ genera un assurdo.\nIl motivo è che $h(h) = 1 \\iff f(h, h) = 0 \\iff h(h) = \\uparrow$ Questa cosa dovrebbe essere riscritta in modo $code$ per essere comprensibile da macchine di Turing.\nOpposto di Halting theorem Ossia vogliamo riconoscere il linguaggio $$ HALT^{-} = \\left\\{ \\langle x, y \\rangle : y \\not= code(M) \\cup y=code(M) \\cap M \\text{ non si ferma su } x\\right\\} $$ Si può dimostrare che questo problema non è nemmeno riconoscibile da nessuno!\nDimostrazione complemento di halting theorem Si ragiona anche qui per assurdo, se fosse riconoscibile, avremmo che Halting theorem principale sarebbe riconoscibile.\nMapping reducibility Definizione mapping reducibility Un linguaggio $L'$ è riducibile a un altro linguaggio $L$ se esiste una funzione computabile totale $f : \\Sigma^{*} \\to \\Sigma^{*}$ tale che valga $$ x \\in L' \\iff f(x) \\in L $$ E si scrive che $L' \\leq L$ Ossia posso mappare qualunque parola in $L'$ in una stringa in $L$ . È molto importante che sia computabile, perché è un modo di dire che non stiamo barando nella dimostrazione, e mi appoggio soltanto all’espressività dei due linguaggi.\nProprietà di decidibilità basilari Se $L$ è decidibile, allora $\\forall L': L'\\leq L$ è decidibile. Se $L'$ è indecidibile allora lo è anche $\\forall L: L' \\leq L$ perché altrimenti si avrebbe un assurdo Se $L$ è decidibile e $L'$ no allora $L' \\not \\leq L$ altrimenti assurdo per il primo punto. Ogni linguaggio decidibile è semplice Ossia se $L'$ è decidibile allora per ogni $L$ tale che $L \\neq \\emptyset$ e $L \\neq \\Sigma^{*}$ Si ha che $$ L' \\leq L $$ Dimostrazione: Dato che $L'$ è decidibile, esiste $g(x), \\forall x \\in \\Sigma^{*}$ tale che decide se $x$ appartiene o meno a quel linguaggio. Dato che $L$ è finito, esiste un $\\omega$ che non appartiene e un altro $v$ che appartiene. Allora costruisco la funzione $f$ così:\nRunno $g$, se appartiene, mappo a $v$ Se non appartiene mappo a $\\omega$. Ez. Indecidibilità su nastro vuoto NOTA: in ogni caso devo vedere se il codice della macchina è valido.\nDefinendo il linguaggio $$ ETH = \\left\\{ x \\in \\Sigma^{*}: x = code(\\mathcal{M}) \\text{ e } \\mathcal{M} \\text{ si ferma su } \\varepsilon \\right\\} $$ Per dimostrare ciò basta dimostrare che $HALT \\leq ETH$ Ossia dobbiamo costruire una funzione che mappa ogni stringa di $HALT$ in una di $ETH$ . Questo è molto semplice, solo definire qualche dettaglio (non banale) Indicibilità ogni input Definiamo il linguaggio $$ FL = \\left\\{ x \\in \\Sigma^{*} : x = code(\\mathcal{M}) \\text{ e } \\mathcal{M} \\text{ ferma su ogni input} \\right\\} $$ Anche questo si può dimostrare in maniera simile al precedente, con una mapping reduction. Questo è anche più semplice: Per ogni input $\\langle \\mathcal{M}, x \\rangle$ costruisco la seguente macchina\nLa macchina nuova prende un input $y$, la ignora per il momento, e simula $\\langle \\mathcal{M}, x \\rangle$. Se termina (e quindi appartiene a $HALT$) allora termino anche io ignorando l’input. Altrimenti divergo, e quindi non appartengo. Questa nuova macchina è bona. Quindi funziona l’indicibilità. Equivalence problem decidability $$ EQ = \\left\\{ \\langle y, x \\rangle \\in \\Sigma^{*} \\times \\Sigma^{*} : x = code(\\mathcal{M}), y = code(\\mathcal{M'}) \\text{ e } \\mathcal{M}, \\mathcal{M'} \\text{ hanno la stessa funzione parziale} \\right\\} $$ Anche in questo caso proviamo a ridurci al caso $FL$ . Sempre come prima, per input $\\langle \\mathcal{M}\\rangle$ mi costruisco questa macchina Equivalence problem recognizability Il linguaggio del problema di equivalenza non è nemmeno riconoscibile. Per fare ciò devo ridurre $HALT^{-}$ a questo EQ. Dimostro la riduzione $HALT \\iff EQ^{-}$ Nota sulla gerarchia Cosa curiosa è che $HALT$ è il suo opposto non sono comparabili. Mentre ci aspetteremmo che HALT sia più semplice. Una altra cosa curiosa è che EQ non è riconoscibile, e nemmeno il suo opposto lo è. z\nTuring riducibilità Definizione di oracolo 🟩 Dato un linguaggio $L$ e una stringa $x$ , l’oracolo mi dice in tempo finito se $x \\in L$ .\nDefinizione Turing-riducibilità 🟩 Dato un $L'$ , questo è Turing riducibile a $L$ , quindi $L' \\leq_{TM} L$ , se dato un oracolo per $L$ possiamo decidere $L'$ Mapping reducibility =\u003e Turing-riducibilità 🟩- Possiamo dimostrare in modo semplice che con Turing-riducibilità $HALT$ è riducibile a $HALT^{-}$ . Senza problemi. Mentre non posso farlo con Mapping reducibility.\nReferences [1] Sipser “Introduction to the Theory of Computation” Cengage Learning 2012\n",
-  "wordCount" : "915",
+  "articleBody": "Halting theorem Questo è un problema fondamentale, che abbiamo trattato anche in Fondamenti teorica#Halting problem, ma qui lo ritrattiamo, perché così lo rifacciamo per bene. In parte è stato trattato anche al corso di Logica.\nEnunciato Halting theorem Questo è molto simile a quanto presente sul (Sipser 2012). Ossia consideriamo il linguaggio $$ HALT = \\left\\{ \\langle x, y \\rangle : y = code(M),M \\text{ si ferma su } x\\right\\} $$ Dimostrazione Halting theorem La parte del sì è facile perché basta eseguirlo e vedere che si ferma (quindi abbiamo una La macchina di Turing#La macchina di Turing universale. Se si ferma appartiene al linguaggio, altrimenti è la parte in cui diverge.\nDimostrazione non decidibilità Supponiamo sia decidibile e dimostriamo l’assurdo. Se esiste una macchina $f$ tale per cui decida quel linguaggio, $$ \\begin{cases} f(g, y) = 1, g(y) \\downarrow\\\\ \\\\ f(g, y) = 0, g(y) \\uparrow \\end{cases} $$ allora possiamo usare questa macchina per costruire un $h$ tale che per cui $$ \\begin{cases} h(g) = 1, f(g, g) = 0 \\\\ \\\\ h(g) = \\uparrow, f(g, g) = 1 \\end{cases} $$ Allora la computazione della funzione $h(h)$ genera un assurdo.\nIl motivo è che $h(h) = 1 \\iff f(h, h) = 0 \\iff h(h) = \\uparrow$ Questa cosa dovrebbe essere riscritta in modo $code$ per essere comprensibile da macchine di Turing.\nOpposto di Halting theorem Ossia vogliamo riconoscere il linguaggio $$ HALT^{-} = \\left\\{ \\langle x, y \\rangle : y \\not= code(M) \\cup y=code(M) \\cap M \\text{ non si ferma su } x\\right\\} $$ Si può dimostrare che questo problema non è nemmeno riconoscibile da nessuno!\nDimostrazione complemento di halting theorem Si ragiona anche qui per assurdo, se fosse riconoscibile, avremmo che Halting theorem principale sarebbe riconoscibile.\nMapping reducibility Definizione mapping reducibility Un linguaggio $L'$ è riducibile a un altro linguaggio $L$ se esiste una funzione computabile totale $f : \\Sigma^{*} \\to \\Sigma^{*}$ tale che valga $$ x \\in L' \\iff f(x) \\in L $$ E si scrive che $L' \\leq L$ Ossia posso mappare qualunque parola in $L'$ in una stringa in $L$. È molto importante che sia computabile, perché è un modo di dire che non stiamo barando nella dimostrazione, e mi appoggio soltanto all’espressività dei due linguaggi.\nProprietà di decidibilità basilari Se $L$ è decidibile, allora $\\forall L': L'\\leq L$ è decidibile. Se $L'$ è indecidibile allora lo è anche $\\forall L: L' \\leq L$ perché altrimenti si avrebbe un assurdo Se $L$ è decidibile e $L'$ no allora $L' \\not \\leq L$ altrimenti assurdo per il primo punto. Ogni linguaggio decidibile è semplice Ossia se $L'$ è decidibile allora per ogni $L$ tale che $L \\neq \\emptyset$ e $L \\neq \\Sigma^{*}$ Si ha che $$ L' \\leq L $$ Dimostrazione: Dato che $L'$ è decidibile, esiste $g(x), \\forall x \\in \\Sigma^{*}$ tale che decide se $x$ appartiene o meno a quel linguaggio. Dato che $L$ è finito, esiste un $\\omega$ che non appartiene e un altro $v$ che appartiene. Allora costruisco la funzione $f$ così:\nRunno $g$, se appartiene, mappo a $v$ Se non appartiene mappo a $\\omega$. Ez. Indecidibilità su nastro vuoto NOTA: in ogni caso devo vedere se il codice della macchina è valido.\nDefinendo il linguaggio $$ ETH = \\left\\{ x \\in \\Sigma^{*}: x = code(\\mathcal{M}) \\text{ e } \\mathcal{M} \\text{ si ferma su } \\varepsilon \\right\\} $$ Per dimostrare ciò basta dimostrare che $HALT \\leq ETH$ Ossia dobbiamo costruire una funzione che mappa ogni stringa di $HALT$ in una di $ETH$. Questo è molto semplice, solo definire qualche dettaglio (non banale) Indicibilità ogni input Definiamo il linguaggio $$ FL = \\left\\{ x \\in \\Sigma^{*} : x = code(\\mathcal{M}) \\text{ e } \\mathcal{M} \\text{ ferma su ogni input} \\right\\} $$ Anche questo si può dimostrare in maniera simile al precedente, con una mapping reduction. Questo è anche più semplice: Per ogni input $\\langle \\mathcal{M}, x \\rangle$ costruisco la seguente macchina\nLa macchina nuova prende un input $y$, la ignora per il momento, e simula $\\langle \\mathcal{M}, x \\rangle$. Se termina (e quindi appartiene a $HALT$) allora termino anche io ignorando l’input. Altrimenti divergo, e quindi non appartengo. Questa nuova macchina è bona. Quindi funziona l’indicibilità. Equivalence problem decidability $$ EQ = \\left\\{ \\langle y, x \\rangle \\in \\Sigma^{*} \\times \\Sigma^{*} : x = code(\\mathcal{M}), y = code(\\mathcal{M'}) \\text{ e } \\mathcal{M}, \\mathcal{M'} \\text{ hanno la stessa funzione parziale} \\right\\} $$ Anche in questo caso proviamo a ridurci al caso $FL$. Sempre come prima, per input $\\langle \\mathcal{M}\\rangle$ mi costruisco questa macchina Equivalence problem recognizability Il linguaggio del problema di equivalenza non è nemmeno riconoscibile. Per fare ciò devo ridurre $HALT^{-}$ a questo EQ. Dimostro la riduzione $HALT \\iff EQ^{-}$\nNota sulla gerarchia Cosa curiosa è che $HALT$ è il suo opposto non sono comparabili. Mentre ci aspetteremmo che HALT sia più semplice. Una altra cosa curiosa è che EQ non è riconoscibile, e nemmeno il suo opposto lo è. z\nTuring riducibilità Definizione di oracolo 🟩 Dato un linguaggio $L$ e una stringa $x$, l’oracolo mi dice in tempo finito se $x \\in L$.\nDefinizione Turing-riducibilità 🟩 Dato un $L'$ , questo è Turing riducibile a $L$, quindi $L' \\leq_{TM} L$, se dato un oracolo per $L$ possiamo decidere $L'$\nMapping reducibility =\u003e Turing-riducibilità 🟩- Possiamo dimostrare in modo semplice che con Turing-riducibilità $HALT$ è riducibile a $HALT^{-}$. Senza problemi. Mentre non posso farlo con Mapping reducibility.\nReferences [1] Sipser “Introduction to the Theory of Computation” Cengage Learning 2012\n",
+  "wordCount" : "907",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -305,9 +305,7 @@ $$
 <p>La parte del sì è facile perché basta eseguirlo e vedere che si ferma (quindi abbiamo una <a href="/notes/la-macchina-di-turing/#la-macchina-di-turing-universale">La macchina di Turing#La macchina di Turing universale</a>. Se si ferma appartiene al linguaggio, altrimenti è la parte in cui diverge.</p>
 <p><strong>Dimostrazione non decidibilità</strong>
 Supponiamo sia decidibile e dimostriamo l&rsquo;assurdo.
-Se esiste una macchina </p>
-$f$
-<p> tale per cui decida quel linguaggio,
+Se esiste una macchina $f$ tale per cui decida quel linguaggio,
 </p>
 $$
 \begin{cases}
@@ -316,9 +314,7 @@ f(g, y) = 0, g(y) \uparrow
 \end{cases}
 $$
 <p>
-allora possiamo usare questa macchina per costruire un </p>
-$h$
-<p> tale che per cui
+allora possiamo usare questa macchina per costruire un $h$ tale che per cui
 </p>
 $$
 \begin{cases}
@@ -327,15 +323,9 @@ h(g) = \uparrow, f(g, g) = 1
 \end{cases}
 $$
 <p>
-Allora la computazione della funzione </p>
-$h(h)$
-<p> genera un assurdo.</p>
-<p>Il motivo è che </p>
-$h(h) = 1 \iff f(h, h) = 0 \iff h(h) = \uparrow$
-<p>
-Questa cosa dovrebbe essere riscritta in modo </p>
-$code$
-<p> per essere comprensibile da macchine di Turing.</p>
+Allora la computazione della funzione $h(h)$ genera un assurdo.</p>
+<p>Il motivo è che $h(h) = 1 \iff f(h, h) = 0 \iff h(h) = \uparrow$
+Questa cosa dovrebbe essere riscritta in modo $code$ per essere comprensibile da macchine di Turing.</p>
 <h4 id="opposto-di-halting-theorem">Opposto di Halting theorem<a hidden class="anchor" aria-hidden="true" href="#opposto-di-halting-theorem">#</a></h4>
 <p>Ossia vogliamo riconoscere il linguaggio
 </p>
@@ -349,26 +339,14 @@ Si può dimostrare che questo problema <strong>non è nemmeno riconoscibile</str
 <img src="/images/notes/Halting Theorem and Reducibility-20240306120459845.webp" alt="Halting Theorem and Reducibility-20240306120459845">
 <h3 id="mapping-reducibility">Mapping reducibility<a hidden class="anchor" aria-hidden="true" href="#mapping-reducibility">#</a></h3>
 <h4 id="definizione-mapping-reducibility">Definizione mapping reducibility<a hidden class="anchor" aria-hidden="true" href="#definizione-mapping-reducibility">#</a></h4>
-<p>Un linguaggio </p>
-$L'$
-<p> è riducibile a un altro linguaggio </p>
-$L$
-<p> se esiste una <strong>funzione computabile totale</strong> </p>
-$f : \Sigma^{*} \to \Sigma^{*}$
-<p> tale che valga
+<p>Un linguaggio $L'$ è riducibile a un altro linguaggio $L$ se esiste una <strong>funzione computabile totale</strong> $f : \Sigma^{*} \to \Sigma^{*}$ tale che valga
 </p>
 $$
 x \in L' \iff f(x) \in L
 $$
 <p>
-E si scrive che </p>
-$L' \leq L$
-<p>
-Ossia posso mappare qualunque parola in </p>
-$L'$
-<p> in una stringa in </p>
-$L$
-<p>.
+E si scrive che $L' \leq L$
+Ossia posso mappare qualunque parola in $L'$ in una stringa in $L$.
 È molto importante che sia computabile, perché è un modo di dire che non stiamo barando nella dimostrazione, e mi appoggio soltanto all&rsquo;espressività dei due linguaggi.</p>
 <h4 id="proprietà-di-decidibilità-basilari">Proprietà di decidibilità basilari<a hidden class="anchor" aria-hidden="true" href="#proprietà-di-decidibilità-basilari">#</a></h4>
 <ul>
@@ -377,36 +355,14 @@ $L$
 <li>Se $L$ è decidibile e $L'$ no allora $L' \not \leq L$ altrimenti assurdo per il primo punto.</li>
 </ul>
 <h4 id="ogni-linguaggio-decidibile-è-semplice">Ogni linguaggio decidibile è semplice<a hidden class="anchor" aria-hidden="true" href="#ogni-linguaggio-decidibile-è-semplice">#</a></h4>
-<p>Ossia se </p>
-$L'$
-<p> è decidibile allora per ogni </p>
-$L$
-<p> tale che </p>
-$L \neq \emptyset$
-<p> e </p>
-$L \neq \Sigma^{*}$
-<p> Si ha che
+<p>Ossia se $L'$ è decidibile allora per ogni $L$ tale che $L \neq \emptyset$ e $L \neq \Sigma^{*}$ Si ha che
 </p>
 $$
 L' \leq L
 $$
 <p><strong>Dimostrazione:</strong>
-Dato che </p>
-$L'$
-<p> è decidibile, esiste </p>
-$g(x), \forall x \in \Sigma^{*}$
-<p> tale che decide se </p>
-$x$
-<p> appartiene o meno a quel linguaggio. Dato che </p>
-$L$
-<p> è finito, esiste un </p>
-$\omega$
-<p> che non appartiene e un altro </p>
-$v$
-<p> che appartiene.
-Allora costruisco la funzione </p>
-$f$
-<p> così:</p>
+Dato che $L'$ è decidibile, esiste $g(x), \forall x \in \Sigma^{*}$ tale che decide se $x$ appartiene o meno a quel linguaggio. Dato che $L$ è finito, esiste un $\omega$ che non appartiene e un altro $v$ che appartiene.
+Allora costruisco la funzione $f$ così:</p>
 <ol>
 <li>Runno $g$, se appartiene, mappo a $v$</li>
 <li>Se non appartiene mappo a $\omega$.
@@ -420,14 +376,8 @@ $$
 ETH = \left\{ x \in \Sigma^{*}: x = code(\mathcal{M}) \text{ e } \mathcal{M} \text{ si ferma su } \varepsilon \right\} 
 $$
 <p>
-Per dimostrare ciò basta dimostrare che </p>
-$HALT \leq ETH$
-<p>
-Ossia dobbiamo costruire una funzione che mappa ogni stringa di </p>
-$HALT$
-<p> in una di </p>
-$ETH$
-<p>.
+Per dimostrare ciò basta dimostrare che $HALT \leq ETH$
+Ossia dobbiamo costruire una funzione che mappa ogni stringa di $HALT$ in una di $ETH$.
 Questo è molto semplice, solo definire qualche dettaglio (non banale)
 <img src="/images/notes/Halting Theorem and Reducibility-20240306125418004.webp" alt="Halting Theorem and Reducibility-20240306125418004"></p>
 <h4 id="indicibilità-ogni-input">Indicibilità ogni input<a hidden class="anchor" aria-hidden="true" href="#indicibilità-ogni-input">#</a></h4>
@@ -439,9 +389,7 @@ $$
 <p>
 Anche questo si può dimostrare in maniera simile al precedente, con una mapping reduction.
 Questo è anche più semplice:
-Per ogni input </p>
-$\langle \mathcal{M}, x \rangle$
-<p> costruisco la seguente macchina</p>
+Per ogni input $\langle \mathcal{M}, x \rangle$ costruisco la seguente macchina</p>
 <ol>
 <li>La macchina nuova prende un input $y$, la ignora per il momento, e simula $\langle \mathcal{M}, x \rangle$.</li>
 <li>Se termina (e quindi appartiene a $HALT$) allora termino anche io ignorando l&rsquo;input.</li>
@@ -453,54 +401,26 @@ $$
 EQ = \left\{ \langle y, x \rangle \in \Sigma^{*} \times \Sigma^{*} : x = code(\mathcal{M}), y = code(\mathcal{M'}) \text{ e } \mathcal{M}, \mathcal{M'} \text{ hanno la stessa funzione parziale} \right\} 
 $$
 <p>
-Anche in questo caso proviamo a ridurci al caso </p>
-$FL$
-<p>.
-Sempre come prima, per input </p>
-$\langle \mathcal{M}\rangle$
-<p> mi costruisco questa macchina
+Anche in questo caso proviamo a ridurci al caso $FL$.
+Sempre come prima, per input $\langle \mathcal{M}\rangle$ mi costruisco questa macchina
 <img src="/images/notes/Halting Theorem and Reducibility-20240306132502507.webp" alt="Halting Theorem and Reducibility-20240306132502507"></p>
 <h4 id="equivalence-problem-recognizability">Equivalence problem recognizability<a hidden class="anchor" aria-hidden="true" href="#equivalence-problem-recognizability">#</a></h4>
-<p>Il linguaggio del problema di equivalenza non è nemmeno riconoscibile. Per fare ciò devo ridurre </p>
-$HALT^{-}$
-<p> a questo EQ.
-Dimostro la riduzione </p>
-$HALT \iff EQ^{-}$
+<p>Il linguaggio del problema di equivalenza non è nemmeno riconoscibile. Per fare ciò devo ridurre $HALT^{-}$ a questo EQ.
+Dimostro la riduzione $HALT \iff EQ^{-}$</p>
 <img src="/images/notes/Halting Theorem and Reducibility-20240306133625876.webp" alt="Halting Theorem and Reducibility-20240306133625876">
 <h4 id="nota-sulla-gerarchia">Nota sulla gerarchia<a hidden class="anchor" aria-hidden="true" href="#nota-sulla-gerarchia">#</a></h4>
-<p>Cosa curiosa è che </p>
-$HALT$
-<p> è il suo opposto non sono comparabili. Mentre ci aspetteremmo che HALT sia più semplice.
+<p>Cosa curiosa è che $HALT$ è il suo opposto non sono comparabili. Mentre ci aspetteremmo che HALT sia più semplice.
 Una altra cosa curiosa è che EQ non è riconoscibile, e nemmeno il suo opposto lo è.
 z</p>
 <h3 id="turing-riducibilità">Turing riducibilità<a hidden class="anchor" aria-hidden="true" href="#turing-riducibilità">#</a></h3>
 <h4 id="definizione-di-oracolo-">Definizione di oracolo 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-di-oracolo-">#</a></h4>
-<p>Dato un linguaggio </p>
-$L$
-<p> e una stringa </p>
-$x$
-<p>, l&rsquo;oracolo mi dice in tempo finito se </p>
-$x \in L$
-<p>.</p>
+<p>Dato un linguaggio $L$ e una stringa $x$, l&rsquo;oracolo mi dice in tempo finito se $x \in L$.</p>
 <h4 id="definizione-turing-riducibilità-">Definizione Turing-riducibilità 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-turing-riducibilità-">#</a></h4>
 <blockquote>
-<p>Dato un  </p>
-$L'$
-<p> , questo è Turing riducibile a </p>
-$L$
-<p>, quindi </p>
-$L' \leq_{TM} L$
-<p>, se dato un oracolo per </p>
-$L$
-<p> possiamo decidere </p>
-$L'$
+<p>Dato un  $L'$ , questo è Turing riducibile a $L$, quindi $L' \leq_{TM} L$, se dato un oracolo per $L$ possiamo decidere $L'$</p>
 </blockquote>
 <h4 id="mapping-reducibility--turing-riducibilità--">Mapping reducibility =&gt; Turing-riducibilità 🟩-<a hidden class="anchor" aria-hidden="true" href="#mapping-reducibility--turing-riducibilità--">#</a></h4>
-<p>Possiamo dimostrare in modo semplice che con Turing-riducibilità </p>
-$HALT$
-<p> è riducibile a </p>
-$HALT^{-}$
-<p>. Senza problemi.
+<p>Possiamo dimostrare in modo semplice che con Turing-riducibilità $HALT$ è riducibile a $HALT^{-}$. Senza problemi.
 Mentre non posso farlo con Mapping reducibility.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p>[1] Sipser <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">“Introduction to the Theory of Computation”</a> Cengage Learning 2012</p>

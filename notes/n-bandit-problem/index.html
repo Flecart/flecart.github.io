@@ -134,8 +134,8 @@ Questo è un semplice problema, ma lo possiamo considerare un fulcro molto impor
   "keywords": [
     "reinforcement-learning"
   ],
-  "articleBody": "Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.\nQuesto è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.\nThe mathematical model Supponiamo che $\\{ \\mathcal{R}_{a} | a \\in \\mathcal{A}\\}$ dove $a$ è l’index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall’agente. $a$ è l’azione, ossia su quale slot machine possiamo andare a giocare. L’obiettivo è massimizzare il reward sul tempo, assumendo che $R_{t}$ sia il reward al tempo $t$ . Per farlo abbiamo bisogno di trovare una policy. Teniamo sempre le definizioni di action value, optimal value.\nDef: Regret, action value and optimal value Action value $q(a) = E[R_t | A_t = a]$ Optimal value $V = \\max_a q(a)$ Regret Ossia rappresenta quanto potremmo fare meglio. $$ \\Delta_{a} = v_{*} - q(a) $$ Total regret $$ L_{t} = \\sum_{n=1}^{t} \\Delta_{A_{n}} $$ Ossia tutti i regrets per l’azione del tempo\nSoluzioni classiche Accenno soluzioni (vecchio, da riguardare) I metodi presentati sono\nOptimistic initial value Mean-reward UCB choice Mean-reward\nVogliamo cercare di capire quale sia il valore nascosto all’interno di questi cosi. Possiamo supporre di avere un valore di default per ogni slot machine. Poi la strategia seguirà questo pseudo codice\ndef make_choice( extimate_r, # /*array of extimates*/, epsilon # /* exploration-exploitation balance */ ): x = random_sample from 0 to 1 // uniform distribution if (x \u003c= epsilon): // explore idx = random choice x from all r else: idx = argmax(extimate_r); return idx; Dopo aver fatto la scelta, cercheremo di aggiornare il valore del reward seguendo proprio la media, quindi\n$R_k = (r_k + \\dfrac{1}{(k -1)} R_{k - 1}) / k$ , con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina\n$$ R_k = R_{k - 1} + \\dfrac{1}{k}( r_k - R_{k - 1}) $$ Questo è il classico reinforcement learning per sta roba. UCB cambia solo nella selezione dell’indice da esplorare, che lo fa con la formula dipendente dal numero di esplorazioni fatte su questo, sugli altri nodi e simili.\nmentre il optimistic initial value è molto particolare, si assegna un valore molto ottimistico, poi 0 al valore epsilon per l’esplorazione, poi piano piano tutte le mosse scendono di valore, fin quando non diventano realistiche.\nGreedy solutions Estimate of the average $$ Q_t(a) = \\frac{\\sum_{n=1}^t I(A_n = a) R_n}{\\sum_{n=1}^t I(A_n = a)} $$ Questo si può fare anche in modo incrementale:\n$$ Q_{t}(A_{t})) = Q_{t- 1} (A_{t} + \\alpha_{t}(R_{t} - Q_{t - 1} (A_{t}))) $$ Dove l’ultima parte è un errore. e $\\alpha_{t} = \\frac{1}{N_{t}(A_{t})}$ Greedy solution La parte greedy prende solamente l’azione che massimizza il valore atteso per l’azione. Quindi $$ A_{t} = arg\\max_{a} Q_{t}(a) $$ Il problema è che questo non esplora. Potrebbe trovare il minimo e restare in quello perché la sua stima è quella.\nEpsilon greedy solution La epsilon greedy prova a risolvere questo, tenendo una probabilità di esplorare. Uniform $\\varepsilon$ , e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto. $$ \\pi_{t}(a) = \\begin{cases} (1 - e) + \\frac{e}{|A|} \u0026 \\text{if } Q(a) = \\max_b Q(b) \\\\ \\\\ \\frac{\\varepsilon}{\\lvert \\mathcal{A} \\rvert } \u0026 \\text{otherwise} \\end{cases} $$ Questo dovrebbe essere l’algoritmo utilizzato per Atari. Problema è che continua ad esplorare anche se ha raggiunto convergenza buona della stima\nGradient Based Policy search Action preferences proviamo a stimare $$ \\pi(a) = \\frac{e^{H_{t}(a)}}{\\sum_{b} e^{H_{t}(b)}} $$ Utile per avere distribuzioni di probabilità. Vogliamo trovare action preferences per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il $\\pi$ .\nAbbiamo quindi $$ \\theta_{t + 1} = \\theta_{t} + \\alpha \\nabla_{\\theta}\\mathbf{E}[R_{t} | \\pi_{\\theta_{t}}] $$ E ci permette di fare gradient ascent. Abbiamo un problema di come fare sample.\nUsiamo (Williams 1992). Chiamato anche Reinforce. Da quello e da questo punto della lezione deriviamo $$ \\nabla_{\\theta}\\mathbf{E}[R_{t}|\\theta] = \\nabla_{\\theta}\\mathbf{E}[R_{t}\\nabla_{\\theta}\\log \\pi_{\\theta}(A_{t})] $$ E si può fare classico gradient ascent con la parte dentro all’argomento.\nProviamo avere questo algoritmo per action preferences $$ H_{t+1}(a) = H_{t}(a) + \\alpha R_{T} \\frac{\\delta \\log\\pi_{t}(A_{t})}{\\delta H_{t}(a)} = H_{t}(a) + \\alpha R_{t} (\\mathbb{1}(a = A_{t}) - \\pi_{t}(a)) $$ È un esercizio provare a derivare questo cosa.\nThe upper confidence bound L’idea è\nSelezionare se l’azione è big reward Selezionare se l’azione non è ancora stata esplorata abbastanza Quindi come per il precedente, che vogliamo esplorare ancora, con la differenza che però vorremmo diminuire la possibilità nel caso fosse esplorata abbastanza\nL’algoritmo sembra poi molto simile ai greedy, solo che abbiamo una funzione di UCB in più. Logarithmic regret as upperbound! (Auer et al 2002 questa roba).\nHoeffding’s Inequality How wrong is our extimate? Consider $X_{1}, X_{2}, \\dots, X_{n}$ variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che $\\bar{X}$ ma media fino a $n$ , in un certo senso simile ai bounds che stavamo studiando in Central Limit Theorem and Law of Large Numbers. La differenza con Markov e Chebicheff è che qui scende in modo esponenziale.\n$$ p\\left(\\overline{X}_{n}+u\\leq\\mu\\right)\\leq\\,e^{-2n u^{2}} $$ Questo è un caso particolare in cui $b = 1, a = 0$ e funziona.\nPossiamo utilizzare questo teorema con $R_{t}$ , infatti possiamo vedere che $$ p(Q_{t}(a) + U_{t}(a) \\leq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ E vale per qualche motivo strano anche con la - $$ p(Q_{t}(a) - U_{t}(a) \\geq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ Questo teorema giustifica perché vogliamo scegliere il bound come questo valore:\n$$ U_{t}(a) = \\sqrt{ \\frac{-\\log p}{ 2N_{t}(a)} } $$ $p$ possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi $p = \\frac{1}{t}$ . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.\nLai and Robbins on Regret growth $$ \\lim_{ t \\to \\infty } L_{t} \\geq \\log t \\sum_{a| \\Delta_{a}} \\frac{\\Delta_{a}}{KL(\\mathcal{R}_{a} \\mid\\mid \\mathcal{R}_{a^{*}})} $$ Ossia il total regret è bounded sotto almeno logaritmica-mente! Quindi se riesco a boundarlo sopra ho la cosa tight.\nDerivation of the algorithm Consideriamo $L_{t}$ che è il total regret numero di volte che selezioniamo l’azione, per il regret atteso. $$ L_{t} = \\sum_{a} N_{t}(a) \\Delta_{a} $$ E vorremmo che questa cosa sia il più basso possibile affinché possa risultare utile. Supponiamo che sia bounded. Ossia che per ogni $a = a^{*}$ valga $N_{t}(a) \\Delta_{a} \\leq x_{a} \\log t$ .\nVorremmo trovare con una versione di UCB, che ci serve per selezionare l’azione.\nOra prendiamo $m \\leq t$ allora dovrebbe valere che $N_{m}(a) \\Delta_{a} \\leq x_{a} \\log m \\leq x_{a} \\log t$ Probability Matching and Thompson sampling Vogliamo scegliere l’azione che possa sembrare la migliore secondo la nostra credenza: $$ \\pi_{t}(a) = p\\left(q(a) = \\max_{a'}q(a') | \\mathcal{H}_{t - 1}\\right) $$ Per calcolare questo si può utilizzare Thompson sampling.\nSample $Q_{t}(a) ~~~ p_{t}q(a)$ Seleziona l’azione che massimizza $Q_{t}(a)$ per ogni $a$ all’interno di $\\mathcal{A}$. Questo si avvicina al limite teorico ottimo, quindi nice. Ma il problema è che non sono scalabili questi algoritmi. References [1] Williams “Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning” Machine Learning Vol. 8(3), pp. 229–256 1992\n",
-  "wordCount" : "1241",
+  "articleBody": "Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.\nQuesto è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.\nThe mathematical model Supponiamo che $\\{ \\mathcal{R}_{a} | a \\in \\mathcal{A}\\}$ dove $a$ è l’index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall’agente. $a$ è l’azione, ossia su quale slot machine possiamo andare a giocare. L’obiettivo è massimizzare il reward sul tempo, assumendo che $R_{t}$ sia il reward al tempo $t$. Per farlo abbiamo bisogno di trovare una policy. Teniamo sempre le definizioni di action value, optimal value.\nDef: Regret, action value and optimal value Action value $q(a) = E[R_t | A_t = a]$\nOptimal value $V = \\max_a q(a)$\nRegret Ossia rappresenta quanto potremmo fare meglio. $$ \\Delta_{a} = v_{*} - q(a) $$ Total regret $$ L_{t} = \\sum_{n=1}^{t} \\Delta_{A_{n}} $$ Ossia tutti i regrets per l’azione del tempo\nSoluzioni classiche Accenno soluzioni (vecchio, da riguardare) I metodi presentati sono\nOptimistic initial value Mean-reward UCB choice Mean-reward\nVogliamo cercare di capire quale sia il valore nascosto all’interno di questi cosi. Possiamo supporre di avere un valore di default per ogni slot machine. Poi la strategia seguirà questo pseudo codice\ndef make_choice( extimate_r, # /*array of extimates*/, epsilon # /* exploration-exploitation balance */ ): x = random_sample from 0 to 1 // uniform distribution if (x \u003c= epsilon): // explore idx = random choice x from all r else: idx = argmax(extimate_r); return idx; Dopo aver fatto la scelta, cercheremo di aggiornare il valore del reward seguendo proprio la media, quindi\n$R_k = (r_k + \\dfrac{1}{(k -1)} R_{k - 1}) / k$, con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina\n$$ R_k = R_{k - 1} + \\dfrac{1}{k}( r_k - R_{k - 1}) $$ Questo è il classico reinforcement learning per sta roba. UCB cambia solo nella selezione dell’indice da esplorare, che lo fa con la formula dipendente dal numero di esplorazioni fatte su questo, sugli altri nodi e simili.\nmentre il optimistic initial value è molto particolare, si assegna un valore molto ottimistico, poi 0 al valore epsilon per l’esplorazione, poi piano piano tutte le mosse scendono di valore, fin quando non diventano realistiche.\nGreedy solutions Estimate of the average $$ Q_t(a) = \\frac{\\sum_{n=1}^t I(A_n = a) R_n}{\\sum_{n=1}^t I(A_n = a)} $$ Questo si può fare anche in modo incrementale:\n$$ Q_{t}(A_{t})) = Q_{t- 1} (A_{t} + \\alpha_{t}(R_{t} - Q_{t - 1} (A_{t}))) $$ Dove l’ultima parte è un errore. e $\\alpha_{t} = \\frac{1}{N_{t}(A_{t})}$\nGreedy solution La parte greedy prende solamente l’azione che massimizza il valore atteso per l’azione. Quindi $$ A_{t} = arg\\max_{a} Q_{t}(a) $$ Il problema è che questo non esplora. Potrebbe trovare il minimo e restare in quello perché la sua stima è quella.\nEpsilon greedy solution La epsilon greedy prova a risolvere questo, tenendo una probabilità di esplorare. Uniform $\\varepsilon$, e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto. $$ \\pi_{t}(a) = \\begin{cases} (1 - e) + \\frac{e}{|A|} \u0026 \\text{if } Q(a) = \\max_b Q(b) \\\\ \\\\ \\frac{\\varepsilon}{\\lvert \\mathcal{A} \\rvert } \u0026 \\text{otherwise} \\end{cases} $$ Questo dovrebbe essere l’algoritmo utilizzato per Atari. Problema è che continua ad esplorare anche se ha raggiunto convergenza buona della stima\nGradient Based Policy search Action preferences proviamo a stimare $$ \\pi(a) = \\frac{e^{H_{t}(a)}}{\\sum_{b} e^{H_{t}(b)}} $$ Utile per avere distribuzioni di probabilità. Vogliamo trovare action preferences per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il $\\pi$.\nAbbiamo quindi $$ \\theta_{t + 1} = \\theta_{t} + \\alpha \\nabla_{\\theta}\\mathbf{E}[R_{t} | \\pi_{\\theta_{t}}] $$ E ci permette di fare gradient ascent. Abbiamo un problema di come fare sample.\nUsiamo (Williams 1992). Chiamato anche Reinforce. Da quello e da questo punto della lezione deriviamo $$ \\nabla_{\\theta}\\mathbf{E}[R_{t}|\\theta] = \\nabla_{\\theta}\\mathbf{E}[R_{t}\\nabla_{\\theta}\\log \\pi_{\\theta}(A_{t})] $$ E si può fare classico gradient ascent con la parte dentro all’argomento.\nProviamo avere questo algoritmo per action preferences $$ H_{t+1}(a) = H_{t}(a) + \\alpha R_{T} \\frac{\\delta \\log\\pi_{t}(A_{t})}{\\delta H_{t}(a)} = H_{t}(a) + \\alpha R_{t} (\\mathbb{1}(a = A_{t}) - \\pi_{t}(a)) $$ È un esercizio provare a derivare questo cosa.\nThe upper confidence bound L’idea è\nSelezionare se l’azione è big reward Selezionare se l’azione non è ancora stata esplorata abbastanza Quindi come per il precedente, che vogliamo esplorare ancora, con la differenza che però vorremmo diminuire la possibilità nel caso fosse esplorata abbastanza\nL’algoritmo sembra poi molto simile ai greedy, solo che abbiamo una funzione di UCB in più. Logarithmic regret as upperbound! (Auer et al 2002 questa roba).\nHoeffding’s Inequality How wrong is our extimate? Consider $X_{1}, X_{2}, \\dots, X_{n}$ variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che $\\bar{X}$ ma media fino a $n$, in un certo senso simile ai bounds che stavamo studiando in Central Limit Theorem and Law of Large Numbers. La differenza con Markov e Chebicheff è che qui scende in modo esponenziale.\n$$ p\\left(\\overline{X}_{n}+u\\leq\\mu\\right)\\leq\\,e^{-2n u^{2}} $$ Questo è un caso particolare in cui $b = 1, a = 0$ e funziona.\nPossiamo utilizzare questo teorema con $R_{t}$, infatti possiamo vedere che $$ p(Q_{t}(a) + U_{t}(a) \\leq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ E vale per qualche motivo strano anche con la - $$ p(Q_{t}(a) - U_{t}(a) \\geq q(a)) \\leq \\exp(-2N_{t}(a) U_{t}(a)^{2}) $$ Questo teorema giustifica perché vogliamo scegliere il bound come questo valore:\n$$ U_{t}(a) = \\sqrt{ \\frac{-\\log p}{ 2N_{t}(a)} } $$ $p$ possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi $p = \\frac{1}{t}$ . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.\nLai and Robbins on Regret growth $$ \\lim_{ t \\to \\infty } L_{t} \\geq \\log t \\sum_{a| \\Delta_{a}} \\frac{\\Delta_{a}}{KL(\\mathcal{R}_{a} \\mid\\mid \\mathcal{R}_{a^{*}})} $$ Ossia il total regret è bounded sotto almeno logaritmica-mente! Quindi se riesco a boundarlo sopra ho la cosa tight.\nDerivation of the algorithm Consideriamo $L_{t}$ che è il total regret numero di volte che selezioniamo l’azione, per il regret atteso. $$ L_{t} = \\sum_{a} N_{t}(a) \\Delta_{a} $$ E vorremmo che questa cosa sia il più basso possibile affinché possa risultare utile. Supponiamo che sia bounded. Ossia che per ogni $a = a^{*}$ valga $N_{t}(a) \\Delta_{a} \\leq x_{a} \\log t$ .\nVorremmo trovare con una versione di UCB, che ci serve per selezionare l’azione.\nOra prendiamo $m \\leq t$ allora dovrebbe valere che $N_{m}(a) \\Delta_{a} \\leq x_{a} \\log m \\leq x_{a} \\log t$\nProbability Matching and Thompson sampling Vogliamo scegliere l’azione che possa sembrare la migliore secondo la nostra credenza: $$ \\pi_{t}(a) = p\\left(q(a) = \\max_{a'}q(a') | \\mathcal{H}_{t - 1}\\right) $$ Per calcolare questo si può utilizzare Thompson sampling.\nSample $Q_{t}(a) ~~~ p_{t}q(a)$ Seleziona l’azione che massimizza $Q_{t}(a)$ per ogni $a$ all’interno di $\\mathcal{A}$. Questo si avvicina al limite teorico ottimo, quindi nice. Ma il problema è che non sono scalabili questi algoritmi. References [1] Williams “Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning” Machine Learning Vol. 8(3), pp. 229–256 1992\n",
+  "wordCount" : "1235",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -299,27 +299,15 @@ Questo è un semplice problema, ma lo possiamo considerare un fulcro molto impor
 <p>Supponiamo di stare giocando a n <strong>slot machine</strong> contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.</p>
 <p>Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning.</p>
 <h4 id="the-mathematical-model">The mathematical model<a hidden class="anchor" aria-hidden="true" href="#the-mathematical-model">#</a></h4>
-<p>Supponiamo che </p>
-$\{ \mathcal{R}_{a} | a \in \mathcal{A}\}$
-<p> dove </p>
-$a$
-<p> è l&rsquo;index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall&rsquo;agente.
-</p>
-$a$
-<p> è l&rsquo;azione, ossia su quale slot machine possiamo andare a giocare.
-L&rsquo;obiettivo è <strong>massimizzare il reward</strong> sul tempo, assumendo che </p>
-$R_{t}$
-<p> sia il reward al tempo </p>
-$t$
-<p>.
+<p>Supponiamo che $\{ \mathcal{R}_{a} | a \in \mathcal{A}\}$ dove $a$ è l&rsquo;index per una certa macchina, assumiamo che ogni slot machine abbia un certo reward non conosciuto dall&rsquo;agente.
+$a$ è l&rsquo;azione, ossia su quale slot machine possiamo andare a giocare.
+L&rsquo;obiettivo è <strong>massimizzare il reward</strong> sul tempo, assumendo che $R_{t}$ sia il reward al tempo $t$.
 Per farlo abbiamo bisogno di trovare una <strong>policy</strong>. Teniamo sempre le definizioni di <strong>action value</strong>, <strong>optimal value</strong>.</p>
 <h4 id="def-regret-action-value-and-optimal-value">Def: Regret, action value and optimal value<a hidden class="anchor" aria-hidden="true" href="#def-regret-action-value-and-optimal-value">#</a></h4>
 <p><strong>Action value</strong>
-</p>
-$q(a) = E[R_t | A_t = a]$
+$q(a) = E[R_t | A_t = a]$</p>
 <p><strong>Optimal value</strong>
-</p>
-$V = \max_a q(a)$
+$V = \max_a q(a)$</p>
 <p><strong>Regret</strong>
 Ossia rappresenta <em>quanto potremmo fare meglio</em>.
 </p>
@@ -357,8 +345,7 @@ Ossia tutti i regrets per l&rsquo;azione del tempo</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
 </span></span></code></pre></div><p>Dopo aver fatto la scelta, cercheremo di aggiornare il valore del reward seguendo proprio la media, quindi</p>
-$R_k = (r_k +  \dfrac{1}{(k -1)} R_{k - 1}) / k$
-<p>, con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina</p>
+<p>$R_k = (r_k +  \dfrac{1}{(k -1)} R_{k - 1}) / k$, con rk il reward attuale e quella il nuovo robo, anche se solitamente questa formula la si troverà scritta in questo modo, perché più carina</p>
 $$
 R_k = R_{k - 1} + \dfrac{1}{k}( r_k  - R_{k - 1})
 $$
@@ -376,8 +363,7 @@ Q_{t}(A_{t})) = Q_{t- 1} (A_{t} + \alpha_{t}(R_{t} - Q_{t - 1} (A_{t})))
 $$
 <p>
 Dove l&rsquo;ultima parte è un errore.
-e </p>
-$\alpha_{t} = \frac{1}{N_{t}(A_{t})}$
+e $\alpha_{t} = \frac{1}{N_{t}(A_{t})}$</p>
 <h4 id="greedy-solution">Greedy solution<a hidden class="anchor" aria-hidden="true" href="#greedy-solution">#</a></h4>
 <p>La parte greedy prende solamente l&rsquo;azione che massimizza il valore atteso per l&rsquo;azione.
 Quindi
@@ -389,9 +375,7 @@ $$
 Il problema è che questo non esplora. Potrebbe trovare il minimo e restare in quello perché la sua stima è quella.</p>
 <h4 id="epsilon-greedy-solution">Epsilon greedy solution<a hidden class="anchor" aria-hidden="true" href="#epsilon-greedy-solution">#</a></h4>
 <p>La epsilon greedy prova a risolvere questo, tenendo una probabilità di esplorare.
-Uniform </p>
-$\varepsilon$
-<p>, e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto.
+Uniform $\varepsilon$, e con questa probabilità si fa qualcosa random, e in questo modo si aggiorna il resto.
 </p>
 $$
 \pi_{t}(a) = 
@@ -409,9 +393,7 @@ $$
 \pi(a) = \frac{e^{H_{t}(a)}}{\sum_{b} e^{H_{t}(b)}}
 $$
 <p>
-Utile per avere distribuzioni di probabilità. Vogliamo trovare <strong>action preferences</strong> per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il </p>
-$\pi$
-<p>.</p>
+Utile per avere distribuzioni di probabilità. Vogliamo trovare <strong>action preferences</strong> per policies migliori. Questo ci permette di utilizzare gradient ascent per migliorare il $\pi$.</p>
 <p>Abbiamo quindi
 </p>
 $$
@@ -446,24 +428,14 @@ $$
 <strong>Logarithmic regret as upperbound!</strong> (Auer et al 2002 questa roba).</p>
 <h4 id="hoeffdings-inequality">Hoeffding&rsquo;s Inequality<a hidden class="anchor" aria-hidden="true" href="#hoeffdings-inequality">#</a></h4>
 <p>How wrong is our extimate?
-Consider </p>
-$X_{1}, X_{2}, \dots, X_{n}$
-<p> variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che  </p>
-$\bar{X}$
-<p> ma media fino a </p>
-$n$
-<p>, in un certo senso simile ai bounds che stavamo studiando in <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">Central Limit Theorem and Law of Large Numbers</a>.
+Consider $X_{1}, X_{2}, \dots, X_{n}$ variabili randomiche in 0, 1 con una certa media. rappresenteranno il nostro reward, e assumiamo che  $\bar{X}$ ma media fino a $n$, in un certo senso simile ai bounds che stavamo studiando in <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">Central Limit Theorem and Law of Large Numbers</a>.
 La differenza con Markov e Chebicheff è che qui scende in modo esponenziale.</p>
 $$
 p\left(\overline{X}_{n}+u\leq\mu\right)\leq\,e^{-2n u^{2}}
 $$
 <p>
-Questo è un caso particolare in cui </p>
-$b = 1, a = 0$
-<p> e funziona.</p>
-<p>Possiamo utilizzare questo teorema con </p>
-$R_{t}$
-<p>, infatti possiamo vedere che
+Questo è un caso particolare in cui $b = 1, a = 0$ e funziona.</p>
+<p>Possiamo utilizzare questo teorema con $R_{t}$, infatti possiamo vedere che
 </p>
 $$
 p(Q_{t}(a) + U_{t}(a) \leq q(a)) \leq \exp(-2N_{t}(a) U_{t}(a)^{2})
@@ -479,20 +451,16 @@ Questo teorema giustifica perché vogliamo scegliere il bound come questo valore
 $$
 U_{t}(a) = \sqrt{  \frac{-\log p}{ 2N_{t}(a)} }
 $$
-$p$
-<p> possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi
-</p>
-$p = \frac{1}{t}$
-<p> . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.</p>
+<p>
+$p$ possiamo stimarlo come il numero di volte che prendiamo quel valore nella nostra ricerca, quindi
+$p = \frac{1}{t}$ . Questo è la spiegazione teorica del perché il branch di esplorazione che abbiamo fatto durante il primo anno per il progetto di algoritmi funziona.</p>
 <h4 id="lai-and-robbins-on-regret-growth">Lai and Robbins on Regret growth<a hidden class="anchor" aria-hidden="true" href="#lai-and-robbins-on-regret-growth">#</a></h4>
 $$
 \lim_{ t \to \infty }  L_{t} \geq \log t \sum_{a| \Delta_{a}} \frac{\Delta_{a}}{KL(\mathcal{R}_{a} \mid\mid \mathcal{R}_{a^{*}})}
 $$
 <p>Ossia il <strong>total regret</strong> è bounded sotto almeno logaritmica-mente! Quindi se riesco a boundarlo sopra ho la cosa tight.</p>
 <h5 id="derivation-of-the-algorithm">Derivation of the algorithm<a hidden class="anchor" aria-hidden="true" href="#derivation-of-the-algorithm">#</a></h5>
-<p>Consideriamo </p>
-$L_{t}$
-<p> che è il <em>total regret</em> numero di volte che selezioniamo l&rsquo;azione, per il regret atteso.
+<p>Consideriamo $L_{t}$ che è il <em>total regret</em> numero di volte che selezioniamo l&rsquo;azione, per il regret atteso.
 </p>
 $$
 L_{t} = \sum_{a} N_{t}(a) \Delta_{a}
@@ -500,16 +468,9 @@ $$
 <p>
 E vorremmo che questa cosa sia il più basso possibile affinché possa risultare utile.
 Supponiamo che sia bounded.
-Ossia che per ogni </p>
-$a = a^{*}$
-<p> valga </p>
-$N_{t}(a) \Delta_{a} \leq x_{a} \log t$
-<p> .</p>
+Ossia che per ogni $a = a^{*}$ valga $N_{t}(a) \Delta_{a} \leq x_{a} \log t$ .</p>
 <p>Vorremmo trovare con una versione di UCB, che ci serve per selezionare l&rsquo;azione.</p>
-<p>Ora prendiamo </p>
-$m \leq t$
-<p> allora dovrebbe valere che </p>
-$N_{m}(a) \Delta_{a} \leq x_{a} \log m \leq x_{a} \log t$
+<p>Ora prendiamo $m \leq t$ allora dovrebbe valere che $N_{m}(a) \Delta_{a} \leq x_{a} \log m \leq x_{a} \log t$</p>
 <h4 id="probability-matching-and-thompson-sampling">Probability Matching and Thompson sampling<a hidden class="anchor" aria-hidden="true" href="#probability-matching-and-thompson-sampling">#</a></h4>
 <p>Vogliamo scegliere l&rsquo;azione che possa sembrare la migliore secondo la nostra credenza:
 </p>

@@ -134,8 +134,8 @@ Chebychev Bound Questa è una conseguenza abbastanza diretta sul bound precedent
   "keywords": [
     
   ],
-  "articleBody": "Bounds Markov Bound Questo bound è abbastanza banale se fatto da un punto di vista grafico, comunque afferma che $$ P(X \\geq y) \\leq \\frac{E[X]}{y} $$ Il motivo è che $$ yP(X \\geq y) = y\\int _{x =y}^{+\\infty} f(x) \\, dx \\leq \\int _{x=y}^{+\\infty} x f(x) \\, d \\leq \\int _{-\\infty}^{+\\infty}xf(x) \\, d = E[X] $$ Il che finisce la dimostrazione.\nChebychev Bound Questa è una conseguenza abbastanza diretta sul bound precedente: Afferma che $$ P(\\mid x - E[X] \\mid \\geq y) \\leq \\frac{\\sigma^{2}}{y^{2}} $$ E in pratica dice che all’infinito viene tutto compattata sul valore atteso La dimostrazione è abbastanza semplice, si sostituisce $(x - E[X])^{2}$ su $X$ di Markov e $\\varepsilon^{2}$ a $y$ e poi si dovrebbe già avere il risultato\nChernoff Bound Moments of random variable https://en.wikipedia.org/wiki/Moment-generating_function Per capire il significato di questo bound invece, è necessario prima capire cosa sia un moment generating function. È una funzione generale che crea i momenti di una variabile aleatoria. Un momento per una variabile aleatoria è descrivibile come n-esimo momento: $E[X^{n}]$ La funzione generatrice dei momenti è describile come: $$ M_{X}(\\lambda) = E[\\exp(\\lambda X)] $$ Il motivo per cui vale, è che con l’espansione di taylor, vedi Hopital, Taylor, Peano Possiamo estrarre in modo abbastanza semplice i momenti: Infatti: $$ e^{tX} = 1 + tX + \\frac{t^{2}X^{2}}{2!} + \\frac{t^{3}X^{3}}{3!} + \\dots $$ Quindi per esempio se volessimo il primo momento, prendiamo la derivata rispetto a $t$ e settiamo $t=0$ , perché la cosa molto bella è che i coefficienti si cancellano tutti, e l’unico termine che rimane senza $t$ è il momento cercato, per questo motivo estraiamo easy i momenti.\nDimostrazione Chernoff’s Bound Anche questa è una conseguenza abbastanza immediata di Markov, viene affermato che $$ P(Z \\geq t) \\leq \\inf_{s \u003e 0} e^{-st} M_{Z}(s) = \\inf_{s \u003e 0} e^{-st} E[e^{sZ}] $$ Guardandolo dall’altro in basso non ho idea del perché valga.\nLa dimostrazione avviene così $$ P(Z \\geq t) = P(e^{sZ} \\geq e^{st}) \\leq \\frac{E[e^{sZ}]}{e^{st}} $$ Dove $s$ è qualunque $s \u003e 0$ perché per quello la funzione resta crescente, e quindi la dimostrazione vale ancora. La cosa interessante di questo bound è che la probabilità che succeda scende in modo esponenziale.\nHoeffding’s Inequality L’enunciato è che se considero la somma delle classiche variabili aleatorie con stessa media varianza $S_{n}$ allora vale che, tale per cui con probabilità $1$ vale che $a_{i} \\leq X_{i} \\leq b_{i}$ $$ P(\\lvert S_{n} - \\mathbf{E}[S_{n}] \\rvert \\geq t) \\leq e^{-2t^{2}/\\sum(b_{i} - a_{i})^{2} } $$ Questo ci dice quanto velocemente la media converge nel valore atteso che ci aspettiamo per la legge dei grandi numeri\nLa dimostrazione di questo mi sembra abbastanza tecnica, c’è bisogno di guardare https://web.eecs.umich.edu/~cscott/past_courses/eecs598w14/notes/03_hoeffding.pdf Oppure https://cs229.stanford.edu/extra-notes/hoeffding.pdf.\nNon ho bene capito l’utilità se non nel caso Bernoulliano in cui sembra si semplifichi abbastanza questo.\nLaw of Large numbers Weak Law La dimostrazione di questo è molto semplice, basta avere Chebicheff\nQuesta è l’intuizione di quanto presente nell WLLN Abbiamo mean square convergence.\nAbbiamo che vale:\n$$ \\mathbb{P}\\left( \\left( \\frac{S_{n} - n\\bar{X}}{n} \\right)^{2} \u003e y \\right) \\leq \\frac{\\sigma^{2}_{X}}{ny} $$ E poi settando $y = \\varepsilon^{2}$ si può avere il risultato. Nella forma corretta. Vedere capitolo 1.5 in https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.\nSi può scrivere: $$ \\lim_{ n \\to \\infty } E \\left[ \\left( \\frac{S_{n}}{n} - \\bar{X} \\right)^{2} \\right] = 0 $$ In questo senso possiamo dire che la successione $S_{n}$ arriverà sempre alla media.\nRicordiamo che $S_{n} = X_{1} + X_{2} + \\dots + X_{n}$ . Dove tutte le variabili $X_{i}$ sono IID con media $\\bar{X}$ e varianza $\\sigma^{2}$ .\nWeak law without finite variance Potremo scrivere $$ \\lim_{ n \\to \\infty } \\mathbb{P}\\left( \\mid \\frac{S_{n}}{n} - E[X]\\mid \u003e \\varepsilon \\right) = 0 $$ Teorema 1.5.3 nelle note.\nConvergence types Per qualche motivo che non ho ancora capito è importante andare a distinguere tipologie di convergenza diverse fra di loro.\nConvergence in distribution Una sequenza di variabili aleatorie $Z_{1}, Z_{2}, \\dots$ converge in distribuzione se vale $$ \\lim_{ n \\to \\infty } F_{Z_{n}}(z) = F_{Z}(z) $$ Per ogni $z$ in cui $F_{Z}(z)$ è continua. Una sequenza di distribuzioni che converge a una distribuzione. Un esempio in cui questo vale è il central limit theorem in cui definiamo $$ Z_{n} = \\frac{S_{n} -n\\bar{X}}{\\sigma \\sqrt{ n }} $$ Converge alla normale, 0, 1 gaussiana. Un altro esempio è la weak law of large numbers, in cui $\\frac{S_{n}}{n}$ converge a $\\bar{X}$ .\nConvergence in probability Se prendiamo una sequenza $Z_{1}, Z_{2}, \\dots$ a $Z$ se vale $$ \\lim_{ n \\to \\infty } P(\\mid Z_{n} - Z\\mid \u003e \\varepsilon) = 0 $$ Vale anche qui l’esempio della WLLN.\nConvergence in mean square Una sequenza di $Z_{1}, Z_{2}, \\dots$ converge in mean square a $Z$ se vale $$ \\lim_{ n \\to \\infty } E[(Z_{n} - Z)^{2}] = 0 $$ La nota è che Mean Square -\u003e Convergence probability -\u003e Convergence in distribution.\nConvergence almost everywhere (Il prof. lo chiama with probability 1 e secondo lui serve sapere measure theory per poter comprendere la definizione originale).\nDefiniamo una sequenza $Z_{1}, Z_{2}, \\dots$ e $\\Omega$ il suo spazio campionatorio e sia $Z$ una altra variabile aleatoria, allora la sequenza converge con probabilità 1 se vale\n$$ \\mathbb{P}(\\{\\omega \\in \\Omega : \\lim_{ n \\to \\infty }Z_{n}(\\omega) = Z(\\omega) \\}) = 1 $$ Ossia, per definizione di variabile aleatoria $Z_{n}(\\omega)$ è un valore reale, queste sequenze di numeri reali a volte convergono, se convergono vogliamo che il valore sia esattamente $Z(\\omega)$ . Quello che vogliamo dire con questo è che la probabilità degli elementi dello spazio campionatorio che creano sequenze che convergono è uguale a 1.\nThe strong Law Central Limit Theorem The Bernoulli Case The theorem $$ \\lim_{ n \\to \\infty } \\left[ \\mathbb{P}\\left( \\frac{S_{n} - n\\bar{X}}{\\sqrt{ n }\\sigma} \\leq y \\right)\\right] = \\int_{-\\infty}^{y} \\frac{1}{\\sqrt{ 2\\pi }} \\exp\\left( -\\frac{x^{2}}{2} \\right) \\, dx $$ Ossia che la sequenza di variabili aleatorie $$ Z_{i} = \\frac{S_{i} - n\\bar{X}}{\\sqrt{i} \\sigma} $$ Convergerà alla gaussiana normale. È un motivo per cui è una distribuzione molto importante.\n",
-  "wordCount" : "990",
+  "articleBody": "Bounds Markov Bound Questo bound è abbastanza banale se fatto da un punto di vista grafico, comunque afferma che $$ P(X \\geq y) \\leq \\frac{E[X]}{y} $$ Il motivo è che $$ yP(X \\geq y) = y\\int _{x =y}^{+\\infty} f(x) \\, dx \\leq \\int _{x=y}^{+\\infty} x f(x) \\, d \\leq \\int _{-\\infty}^{+\\infty}xf(x) \\, d = E[X] $$ Il che finisce la dimostrazione.\nChebychev Bound Questa è una conseguenza abbastanza diretta sul bound precedente: Afferma che $$ P(\\mid x - E[X] \\mid \\geq y) \\leq \\frac{\\sigma^{2}}{y^{2}} $$ E in pratica dice che all’infinito viene tutto compattata sul valore atteso La dimostrazione è abbastanza semplice, si sostituisce $(x - E[X])^{2}$ su $X$ di Markov e $\\varepsilon^{2}$ a $y$ e poi si dovrebbe già avere il risultato\nChernoff Bound Moments of random variable https://en.wikipedia.org/wiki/Moment-generating_function Per capire il significato di questo bound invece, è necessario prima capire cosa sia un moment generating function. È una funzione generale che crea i momenti di una variabile aleatoria. Un momento per una variabile aleatoria è descrivibile come n-esimo momento: $E[X^{n}]$ La funzione generatrice dei momenti è describile come: $$ M_{X}(\\lambda) = E[\\exp(\\lambda X)] $$ Il motivo per cui vale, è che con l’espansione di taylor, vedi Hopital, Taylor, Peano Possiamo estrarre in modo abbastanza semplice i momenti: Infatti: $$ e^{tX} = 1 + tX + \\frac{t^{2}X^{2}}{2!} + \\frac{t^{3}X^{3}}{3!} + \\dots $$ Quindi per esempio se volessimo il primo momento, prendiamo la derivata rispetto a $t$e settiamo $t=0$, perché la cosa molto bella è che i coefficienti si cancellano tutti, e l’unico termine che rimane senza $t$ è il momento cercato, per questo motivo estraiamo easy i momenti.\nDimostrazione Chernoff’s Bound Anche questa è una conseguenza abbastanza immediata di Markov, viene affermato che $$ P(Z \\geq t) \\leq \\inf_{s \u003e 0} e^{-st} M_{Z}(s) = \\inf_{s \u003e 0} e^{-st} E[e^{sZ}] $$ Guardandolo dall’altro in basso non ho idea del perché valga.\nLa dimostrazione avviene così $$ P(Z \\geq t) = P(e^{sZ} \\geq e^{st}) \\leq \\frac{E[e^{sZ}]}{e^{st}} $$ Dove $s$ è qualunque $s \u003e 0$ perché per quello la funzione resta crescente, e quindi la dimostrazione vale ancora. La cosa interessante di questo bound è che la probabilità che succeda scende in modo esponenziale.\nHoeffding’s Inequality L’enunciato è che se considero la somma delle classiche variabili aleatorie con stessa media varianza $S_{n}$ allora vale che, tale per cui con probabilità $1$ vale che $a_{i} \\leq X_{i} \\leq b_{i}$ $$ P(\\lvert S_{n} - \\mathbf{E}[S_{n}] \\rvert \\geq t) \\leq e^{-2t^{2}/\\sum(b_{i} - a_{i})^{2} } $$ Questo ci dice quanto velocemente la media converge nel valore atteso che ci aspettiamo per la legge dei grandi numeri\nLa dimostrazione di questo mi sembra abbastanza tecnica, c’è bisogno di guardare https://web.eecs.umich.edu/~cscott/past_courses/eecs598w14/notes/03_hoeffding.pdf Oppure https://cs229.stanford.edu/extra-notes/hoeffding.pdf.\nNon ho bene capito l’utilità se non nel caso Bernoulliano in cui sembra si semplifichi abbastanza questo.\nLaw of Large numbers Weak Law La dimostrazione di questo è molto semplice, basta avere Chebicheff\nQuesta è l’intuizione di quanto presente nell WLLN Abbiamo mean square convergence.\nAbbiamo che vale:\n$$ \\mathbb{P}\\left( \\left( \\frac{S_{n} - n\\bar{X}}{n} \\right)^{2} \u003e y \\right) \\leq \\frac{\\sigma^{2}_{X}}{ny} $$ E poi settando $y = \\varepsilon^{2}$ si può avere il risultato. Nella forma corretta. Vedere capitolo 1.5 in https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.\nSi può scrivere: $$ \\lim_{ n \\to \\infty } E \\left[ \\left( \\frac{S_{n}}{n} - \\bar{X} \\right)^{2} \\right] = 0 $$ In questo senso possiamo dire che la successione $S_{n}$ arriverà sempre alla media.\nRicordiamo che $S_{n} = X_{1} + X_{2} + \\dots + X_{n}$. Dove tutte le variabili $X_{i}$ sono IID con media $\\bar{X}$ e varianza $\\sigma^{2}$.\nWeak law without finite variance Potremo scrivere $$ \\lim_{ n \\to \\infty } \\mathbb{P}\\left( \\mid \\frac{S_{n}}{n} - E[X]\\mid \u003e \\varepsilon \\right) = 0 $$ Teorema 1.5.3 nelle note.\nConvergence types Per qualche motivo che non ho ancora capito è importante andare a distinguere tipologie di convergenza diverse fra di loro.\nConvergence in distribution Una sequenza di variabili aleatorie $Z_{1}, Z_{2}, \\dots$ converge in distribuzione se vale $$ \\lim_{ n \\to \\infty } F_{Z_{n}}(z) = F_{Z}(z) $$ Per ogni $z$ in cui $F_{Z}(z)$ è continua. Una sequenza di distribuzioni che converge a una distribuzione. Un esempio in cui questo vale è il central limit theorem in cui definiamo $$ Z_{n} = \\frac{S_{n} -n\\bar{X}}{\\sigma \\sqrt{ n }} $$ Converge alla normale, 0, 1 gaussiana. Un altro esempio è la weak law of large numbers, in cui $\\frac{S_{n}}{n}$ converge a $\\bar{X}$.\nConvergence in probability Se prendiamo una sequenza $Z_{1}, Z_{2}, \\dots$ a $Z$ se vale $$ \\lim_{ n \\to \\infty } P(\\mid Z_{n} - Z\\mid \u003e \\varepsilon) = 0 $$ Vale anche qui l’esempio della WLLN.\nConvergence in mean square Una sequenza di $Z_{1}, Z_{2}, \\dots$ converge in mean square a $Z$ se vale $$ \\lim_{ n \\to \\infty } E[(Z_{n} - Z)^{2}] = 0 $$ La nota è che Mean Square -\u003e Convergence probability -\u003e Convergence in distribution.\nConvergence almost everywhere (Il prof. lo chiama with probability 1 e secondo lui serve sapere measure theory per poter comprendere la definizione originale).\nDefiniamo una sequenza $Z_{1}, Z_{2}, \\dots$ e $\\Omega$ il suo spazio campionatorio e sia $Z$ una altra variabile aleatoria, allora la sequenza converge con probabilità 1 se vale\n$$ \\mathbb{P}(\\{\\omega \\in \\Omega : \\lim_{ n \\to \\infty }Z_{n}(\\omega) = Z(\\omega) \\}) = 1 $$ Ossia, per definizione di variabile aleatoria $Z_{n}(\\omega)$ è un valore reale, queste sequenze di numeri reali a volte convergono, se convergono vogliamo che il valore sia esattamente $Z(\\omega)$. Quello che vogliamo dire con questo è che la probabilità degli elementi dello spazio campionatorio che creano sequenze che convergono è uguale a 1.\nThe strong Law Central Limit Theorem The Bernoulli Case The theorem $$ \\lim_{ n \\to \\infty } \\left[ \\mathbb{P}\\left( \\frac{S_{n} - n\\bar{X}}{\\sqrt{ n }\\sigma} \\leq y \\right)\\right] = \\int_{-\\infty}^{y} \\frac{1}{\\sqrt{ 2\\pi }} \\exp\\left( -\\frac{x^{2}}{2} \\right) \\, dx $$ Ossia che la sequenza di variabili aleatorie $$ Z_{i} = \\frac{S_{i} - n\\bar{X}}{\\sqrt{i} \\sigma} $$ Convergerà alla gaussiana normale. È un motivo per cui è una distribuzione molto importante.\n",
+  "wordCount" : "984",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -322,22 +322,12 @@ P(\mid x - E[X] \mid \geq y) \leq \frac{\sigma^{2}}{y^{2}}
 $$
 <p>
 E in pratica dice che all&rsquo;infinito viene tutto compattata sul valore atteso
-La dimostrazione è abbastanza semplice, si sostituisce </p>
-$(x - E[X])^{2}$
-<p> su </p>
-$X$
-<p> di Markov e </p>
-$\varepsilon^{2}$
-<p> a </p>
-$y$
-<p> e poi si dovrebbe già avere il risultato</p>
+La dimostrazione è abbastanza semplice, si sostituisce $(x - E[X])^{2}$ su $X$ di Markov e $\varepsilon^{2}$ a $y$ e poi si dovrebbe già avere il risultato</p>
 <h4 id="chernoff-bound">Chernoff Bound<a hidden class="anchor" aria-hidden="true" href="#chernoff-bound">#</a></h4>
 <h5 id="moments-of-random-variable">Moments of random variable<a hidden class="anchor" aria-hidden="true" href="#moments-of-random-variable">#</a></h5>
 <p><a href="https://en.wikipedia.org/wiki/Moment-generating_function">https://en.wikipedia.org/wiki/Moment-generating_function</a>
 Per capire il significato di questo bound invece, è necessario prima capire cosa sia un <strong>moment generating function</strong>. È una funzione generale che crea i momenti di una variabile aleatoria.
-Un momento per una variabile aleatoria è descrivibile come n-esimo momento: </p>
-$E[X^{n}]$
-<p>
+Un momento per una variabile aleatoria è descrivibile come n-esimo momento: $E[X^{n}]$
 La funzione generatrice dei momenti è describile come:
 </p>
 $$
@@ -352,13 +342,7 @@ $$
 e^{tX} = 1 + tX + \frac{t^{2}X^{2}}{2!} + \frac{t^{3}X^{3}}{3!} + \dots
 $$
 <p>
-Quindi per esempio se volessimo il primo momento, prendiamo la derivata rispetto a </p>
-$t$
-<p>e settiamo </p>
-$t=0$
-<p>, perché la cosa molto bella è che i coefficienti si cancellano tutti, e l&rsquo;unico termine che rimane senza </p>
-$t$
-<p> è il momento cercato, per questo motivo estraiamo easy i momenti.</p>
+Quindi per esempio se volessimo il primo momento, prendiamo la derivata rispetto a $t$e settiamo $t=0$, perché la cosa molto bella è che i coefficienti si cancellano tutti, e l&rsquo;unico termine che rimane senza $t$ è il momento cercato, per questo motivo estraiamo easy i momenti.</p>
 <h5 id="dimostrazione-chernoffs-bound">Dimostrazione Chernoff&rsquo;s Bound<a hidden class="anchor" aria-hidden="true" href="#dimostrazione-chernoffs-bound">#</a></h5>
 <p>Anche questa è una conseguenza abbastanza immediata di Markov, viene affermato che
 </p>
@@ -373,19 +357,11 @@ $$
 P(Z \geq t) = P(e^{sZ} \geq e^{st}) \leq \frac{E[e^{sZ}]}{e^{st}}
 $$
 <p>
-Dove </p>
-$s$
-<p> è qualunque </p>
-$s > 0$
-<p> perché per quello la funzione resta crescente, e quindi la dimostrazione vale ancora.
+Dove $s$ è qualunque $s > 0$ perché per quello la funzione resta crescente, e quindi la dimostrazione vale ancora.
 La cosa interessante di questo bound è che la probabilità che succeda <strong>scende in modo esponenziale</strong>.</p>
 <h4 id="hoeffdings-inequality">Hoeffding&rsquo;s Inequality<a hidden class="anchor" aria-hidden="true" href="#hoeffdings-inequality">#</a></h4>
-<p>L&rsquo;enunciato è che se considero la somma delle classiche variabili aleatorie con stessa media varianza </p>
-$S_{n}$
-<p> allora vale che, tale per cui con probabilità </p>
-$1$
-<p> vale che </p>
-$a_{i} \leq X_{i} \leq b_{i}$
+<p>L&rsquo;enunciato è che se considero la somma delle classiche variabili aleatorie con stessa media varianza $S_{n}$ allora vale che, tale per cui con probabilità $1$ vale che $a_{i} \leq X_{i} \leq b_{i}$
+</p>
 $$
 P(\lvert S_{n} - \mathbf{E}[S_{n}] \rvert  \geq t) \leq e^{-2t^{2}/\sum(b_{i} - a_{i})^{2} }
 $$
@@ -406,28 +382,16 @@ $$
 \mathbb{P}\left( \left(  \frac{S_{n} - n\bar{X}}{n} \right)^{2} > y \right) \leq \frac{\sigma^{2}_{X}}{ny}
 $$
 <p>
-E poi settando </p>
-$y = \varepsilon^{2}$
-<p> si può avere il risultato. Nella forma corretta. Vedere capitolo 1.5 in <a href="https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.">https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.</a></p>
+E poi settando $y = \varepsilon^{2}$ si può avere il risultato. Nella forma corretta. Vedere capitolo 1.5 in <a href="https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.">https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/mit6_262s11_chap01/.</a></p>
 <p>Si può scrivere:
 </p>
 $$
 \lim_{ n \to \infty } E \left[  \left( \frac{S_{n}}{n} - \bar{X} \right)^{2} \right] = 0 
 $$
 <p>
-In questo senso possiamo dire che la successione </p>
-$S_{n}$
-<p> arriverà sempre alla media.</p>
-<p>Ricordiamo che </p>
-$S_{n} = X_{1} + X_{2} + \dots + X_{n}$
-<p>.
-Dove tutte le variabili </p>
-$X_{i}$
-<p> sono IID con media </p>
-$\bar{X}$
-<p> e varianza </p>
-$\sigma^{2}$
-<p>.</p>
+In questo senso possiamo dire che la successione $S_{n}$ arriverà sempre alla media.</p>
+<p>Ricordiamo che $S_{n} = X_{1} + X_{2} + \dots + X_{n}$.
+Dove tutte le variabili $X_{i}$ sono IID con media $\bar{X}$ e varianza $\sigma^{2}$.</p>
 <h4 id="weak-law-without-finite-variance">Weak law without finite variance<a hidden class="anchor" aria-hidden="true" href="#weak-law-without-finite-variance">#</a></h4>
 <p>Potremo scrivere
 </p>
@@ -439,19 +403,13 @@ Teorema 1.5.3 nelle note.</p>
 <h3 id="convergence-types">Convergence types<a hidden class="anchor" aria-hidden="true" href="#convergence-types">#</a></h3>
 <p>Per qualche motivo che non ho ancora capito è importante andare a distinguere tipologie di convergenza diverse fra di loro.</p>
 <h4 id="convergence-in-distribution">Convergence in distribution<a hidden class="anchor" aria-hidden="true" href="#convergence-in-distribution">#</a></h4>
-<p>Una sequenza di variabili aleatorie </p>
-$Z_{1}, Z_{2}, \dots$
-<p> converge in distribuzione se vale
+<p>Una sequenza di variabili aleatorie $Z_{1}, Z_{2}, \dots$ converge in distribuzione se vale
 </p>
 $$
 \lim_{ n \to \infty } F_{Z_{n}}(z) = F_{Z}(z)
 $$
 <p>
-Per ogni </p>
-$z$
-<p> in cui </p>
-$F_{Z}(z)$
-<p> è continua. Una sequenza di distribuzioni che converge a una distribuzione.
+Per ogni $z$ in cui $F_{Z}(z)$ è continua. Una sequenza di distribuzioni che converge a una distribuzione.
 Un esempio in cui questo vale è il central limit theorem in cui definiamo
 </p>
 $$
@@ -459,28 +417,16 @@ Z_{n} = \frac{S_{n} -n\bar{X}}{\sigma \sqrt{ n }}
 $$
 <p>
 Converge alla normale, 0, 1 gaussiana.
-Un altro esempio è la weak law of large numbers, in cui </p>
-$\frac{S_{n}}{n}$
-<p> converge a </p>
-$\bar{X}$
-<p>.</p>
+Un altro esempio è la weak law of large numbers, in cui $\frac{S_{n}}{n}$ converge a $\bar{X}$.</p>
 <h4 id="convergence-in-probability">Convergence in probability<a hidden class="anchor" aria-hidden="true" href="#convergence-in-probability">#</a></h4>
-<p>Se prendiamo una sequenza </p>
-$Z_{1}, Z_{2}, \dots$
-<p> a </p>
-$Z$
-<p> se vale
+<p>Se prendiamo una sequenza $Z_{1}, Z_{2}, \dots$ a $Z$ se vale
 </p>
 $$
 \lim_{ n \to \infty } P(\mid Z_{n} - Z\mid > \varepsilon) = 0
 $$
 <p>Vale anche qui l&rsquo;esempio della WLLN.</p>
 <h4 id="convergence-in-mean-square">Convergence in mean square<a hidden class="anchor" aria-hidden="true" href="#convergence-in-mean-square">#</a></h4>
-<p>Una sequenza di </p>
-$Z_{1}, Z_{2}, \dots$
-<p> converge in mean square a </p>
-$Z$
-<p> se vale
+<p>Una sequenza di $Z_{1}, Z_{2}, \dots$ converge in mean square a $Z$ se vale
 </p>
 $$
 \lim_{ n \to \infty } E[(Z_{n} - Z)^{2}] = 0
@@ -489,22 +435,12 @@ $$
 La nota è che Mean Square -&gt; Convergence probability -&gt; Convergence in distribution.</p>
 <h4 id="convergence-almost-everywhere">Convergence almost everywhere<a hidden class="anchor" aria-hidden="true" href="#convergence-almost-everywhere">#</a></h4>
 <p>(Il prof. lo chiama <strong>with probability 1</strong> e secondo lui serve sapere measure theory per poter comprendere la definizione originale).</p>
-<p>Definiamo una sequenza </p>
-$Z_{1}, Z_{2}, \dots$
-<p> e </p>
-$\Omega$
-<p> il suo spazio campionatorio e sia </p>
-$Z$
-<p> una altra variabile aleatoria, allora la sequenza <strong>converge con probabilità 1 se vale</strong></p>
+<p>Definiamo una sequenza $Z_{1}, Z_{2}, \dots$ e $\Omega$ il suo spazio campionatorio e sia $Z$ una altra variabile aleatoria, allora la sequenza <strong>converge con probabilità 1 se vale</strong></p>
 $$
 \mathbb{P}(\{\omega \in \Omega : \lim_{ n \to \infty }Z_{n}(\omega) = Z(\omega) \}) = 1
 $$
 <p>
-Ossia, per definizione di variabile aleatoria </p>
-$Z_{n}(\omega)$
-<p> è un valore reale, queste sequenze di numeri reali a volte convergono, se convergono vogliamo che il valore sia esattamente </p>
-$Z(\omega)$
-<p>.
+Ossia, per definizione di variabile aleatoria $Z_{n}(\omega)$ è un valore reale, queste sequenze di numeri reali a volte convergono, se convergono vogliamo che il valore sia esattamente $Z(\omega)$.
 Quello che vogliamo dire con questo è che la probabilità degli elementi dello spazio campionatorio che creano sequenze che convergono è uguale a 1.</p>
 <h3 id="the-strong-law">The strong Law<a hidden class="anchor" aria-hidden="true" href="#the-strong-law">#</a></h3>
 <h2 id="central-limit-theorem">Central Limit Theorem<a hidden class="anchor" aria-hidden="true" href="#central-limit-theorem">#</a></h2>
