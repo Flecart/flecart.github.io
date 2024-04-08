@@ -7,8 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Object Detection | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Ultima modifica: April 16, 2023 4:23 PM Primo Abbozzo: April 8, 2023 9:34 AM Studi Personali: No
-Elementi di ripasso Object Detection Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
+<meta name="description" content="Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
 Object detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.
 In questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
@@ -90,8 +89,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Object Detection" />
-<meta property="og:description" content="Ultima modifica: April 16, 2023 4:23 PM Primo Abbozzo: April 8, 2023 9:34 AM Studi Personali: No
-Elementi di ripasso Object Detection Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
+<meta property="og:description" content="Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
 Object detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.
 In questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo." />
 <meta property="og:type" content="article" />
@@ -104,8 +102,7 @@ In questo caso la funzione di loss è un pò più difficile da definire, si util
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Object Detection"/>
-<meta name="twitter:description" content="Ultima modifica: April 16, 2023 4:23 PM Primo Abbozzo: April 8, 2023 9:34 AM Studi Personali: No
-Elementi di ripasso Object Detection Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
+<meta name="twitter:description" content="Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.
 Object detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.
 In questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo."/>
 
@@ -136,12 +133,12 @@ In questo caso la funzione di loss è un pò più difficile da definire, si util
   "@type": "BlogPosting",
   "headline": "Object Detection",
   "name": "Object Detection",
-  "description": "Ultima modifica: April 16, 2023 4:23 PM Primo Abbozzo: April 8, 2023 9:34 AM Studi Personali: No\nElementi di ripasso Object Detection Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.\nObject detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.\nIn questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo.",
+  "description": "Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.\nObject detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.\nIn questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo.",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Ultima modifica: April 16, 2023 4:23 PM Primo Abbozzo: April 8, 2023 9:34 AM Studi Personali: No\nElementi di ripasso Object Detection Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.\nObject detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.\nIn questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo.\nDeep object detection (2) Region proposals\nQuesta è una versione che prova a catturare le regioni di interesse all’interno della nostra immagine. (più o meno non sa cosa sia l’oggetto, ma sa che c’è qualcosa in quella zona). Poi questa regione di interesse è passata in un secondo step che va a riconoscere cosa è presente in quella immagine. (la regione di interesse era presente anche prima di CNN).\nSIngle shots\nQuesti sono più veloci dei precedenti, quindi sono buoni per applicazioni real time.\nYOLO You Only Look Once intro https://pjreddie.com/darknet/yolo/\nhttps://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109\nProva a trovare il bounding box con la predizione con una singola passata! CNN per individuare i boxes, poi algoritmicamente per cancellare i boxes.\nMain Idea FUNZIONAMENTO\nFa delle predizioni, che sono dei bounding box con dei labels (espressi attraverso una probabilità).\nDopo avevi un certo numero di neuroni dopo aver fatto downsampling (queste hanno visisione solamente di una zona limitata dell’immagine).\nL’idea principale è allenare il singolo neurone a riconoscere l’oggetto (wtf hoooow). E ignorare tutti i resti dei neuroni (si fa con una mask in qualche modo).\nOutput format Slide formato dell’output\nSi deve tenere molte informazioni (i punti, lo score, e un valore di score per tutte le classi).\nSolitamente si parte da un anchor box di dimensioni fisse (width e height). I valori di ritorno sono un displacement dal centro in entrambe le direzioni e un fattore di deformazione per ogni direzione.\nLoss function Localization loss function\nLa loss di localizzazione non è altro che una differenza\nNota: c’è una binary map, che che è in una cella e 0 in tutto il resto (questo per dire che il neurone vuole predire solamente quello che gli sta intorno, il resto lo ignora tutto).\nClassification loss\n!\n",
-  "wordCount" : "387",
+  "articleBody": "Introduction Semantic segmentation Vorremo trovare regioni che corrispondano a categorie diverse. E dividere in questo modo l’immagine secondo zone di informazione.\nObject detection Vogliamo trovare il più piccolo box che vada a contenere l’oggetto. Questo è fatto con il bounding box.\nIn questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione intersection over union con le aree, in pratica la percentuale di immagine comune diciamo.\nDeep object detection (2) Region proposals\nQuesta è una versione che prova a catturare le regioni di interesse all’interno della nostra immagine. (più o meno non sa cosa sia l’oggetto, ma sa che c’è qualcosa in quella zona). Poi questa regione di interesse è passata in un secondo step che va a riconoscere cosa è presente in quella immagine. (la regione di interesse era presente anche prima di CNN).\nSIngle shots\nQuesti sono più veloci dei precedenti, quindi sono buoni per applicazioni real time.\nYOLO You Only Look Once intro https://pjreddie.com/darknet/yolo/\nhttps://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109\nProva a trovare il bounding box con la predizione con una singola passata! CNN per individuare i boxes, poi algoritmicamente per cancellare i boxes.\nMain Idea FUNZIONAMENTO\nFa delle predizioni, che sono dei bounding box con dei labels (espressi attraverso una probabilità).\nDopo avevi un certo numero di neuroni dopo aver fatto downsampling (queste hanno visisione solamente di una zona limitata dell’immagine).\nL’idea principale è allenare il singolo neurone a riconoscere l’oggetto (wtf hoooow). E ignorare tutti i resti dei neuroni (si fa con una mask in qualche modo).\nOutput format Slide formato dell’output\nSi deve tenere molte informazioni (i punti, lo score, e un valore di score per tutte le classi).\nSolitamente si parte da un anchor box di dimensioni fisse (width e height). I valori di ritorno sono un displacement dal centro in entrambe le direzioni e un fattore di deformazione per ogni direzione.\nLoss function Localization loss function\nLa loss di localizzazione non è altro che una differenza\nNota: c’è una binary map, che che è in una cella e 0 in tutto il resto (questo per dire che il neurone vuole predire solamente quello che gli sta intorno, il resto lo ignora tutto).\nClassification loss\n!\n",
+  "wordCount" : "365",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -247,17 +244,12 @@ In questo caso la funzione di loss è un pò più difficile da definire, si util
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#elementi-di-ripasso" aria-label="Elementi di ripasso">Elementi di ripasso</a></li>
-                <li>
-                    <a href="#object-detection" aria-label="Object Detection">Object Detection</a><ul>
-                        
-                <li>
                     <a href="#introduction" aria-label="Introduction">Introduction</a><ul>
                         
                 <li>
                     <a href="#semantic-segmentation" aria-label="Semantic segmentation">Semantic segmentation</a></li>
                 <li>
-                    <a href="#object-detection-1" aria-label="Object detection">Object detection</a></li>
+                    <a href="#object-detection" aria-label="Object detection">Object detection</a></li>
                 <li>
                     <a href="#deep-object-detection-2" aria-label="Deep object detection (2)">Deep object detection (2)</a></li></ul>
                 </li>
@@ -276,21 +268,14 @@ In questo caso la funzione di loss è un pò più difficile da definire, si util
             </ul>
             </li>
             </ul>
-            </li>
-            </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><p>Ultima modifica: April 16, 2023 4:23 PM
-Primo Abbozzo: April 8, 2023 9:34 AM
-Studi Personali: No</p>
-<h1 id="elementi-di-ripasso">Elementi di ripasso<a hidden class="anchor" aria-hidden="true" href="#elementi-di-ripasso">#</a></h1>
-<h1 id="object-detection">Object Detection<a hidden class="anchor" aria-hidden="true" href="#object-detection">#</a></h1>
-<h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
 <h3 id="semantic-segmentation">Semantic segmentation<a hidden class="anchor" aria-hidden="true" href="#semantic-segmentation">#</a></h3>
 <p>Vorremo trovare <strong>regioni che corrispondano a categorie diverse</strong>. E dividere in questo modo l’immagine secondo zone di informazione.</p>
-<h3 id="object-detection-1">Object detection<a hidden class="anchor" aria-hidden="true" href="#object-detection-1">#</a></h3>
+<h3 id="object-detection">Object detection<a hidden class="anchor" aria-hidden="true" href="#object-detection">#</a></h3>
 <p>Vogliamo trovare <strong>il più piccolo box</strong> che vada a contenere l’oggetto. Questo è fatto con il <strong>bounding box</strong>.</p>
 <p>In questo caso la funzione di loss è un pò più difficile da definire, si utilizza la funzione <strong>intersection over union</strong> con le aree, in pratica la percentuale di immagine comune diciamo.</p>
 <h3 id="deep-object-detection-2">Deep object detection (2)<a hidden class="anchor" aria-hidden="true" href="#deep-object-detection-2">#</a></h3>
