@@ -9,7 +9,7 @@
 <meta name="keywords" content="🛡️cybersecurity">
 <meta name="description" content="Public Key Encryption We now define a formally what is a public key encryption
 Formal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where
-$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E$ the encryption algorithm, that takes the $pk$ and the message in input $D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input.">
+$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/asymmetric-cryptography/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -91,7 +91,7 @@ if (!doNotTrack) {
 <meta property="og:title" content="Asymmetric Cryptography" />
 <meta property="og:description" content="Public Key Encryption We now define a formally what is a public key encryption
 Formal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where
-$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E$ the encryption algorithm, that takes the $pk$ and the message in input $D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input." />
+$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/asymmetric-cryptography/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -104,7 +104,7 @@ $G$ is the generator for the private and public keys, from now on identified as 
 <meta name="twitter:title" content="Asymmetric Cryptography"/>
 <meta name="twitter:description" content="Public Key Encryption We now define a formally what is a public key encryption
 Formal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where
-$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E$ the encryption algorithm, that takes the $pk$ and the message in input $D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input."/>
+$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input."/>
 
 
 <script type="application/ld+json">
@@ -133,12 +133,12 @@ $G$ is the generator for the private and public keys, from now on identified as 
   "@type": "BlogPosting",
   "headline": "Asymmetric Cryptography",
   "name": "Asymmetric Cryptography",
-  "description": "Public Key Encryption We now define a formally what is a public key encryption\nFormal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where\n$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E$ the encryption algorithm, that takes the $pk$ and the message in input $D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input.",
+  "description": "Public Key Encryption We now define a formally what is a public key encryption\nFormal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where\n$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input.",
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "Public Key Encryption We now define a formally what is a public key encryption\nFormal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where\n$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E$ the encryption algorithm, that takes the $pk$ and the message in input $D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input. Now is this definition useful? i don’t think so! We can’t create theorems for it, too general I suppose. Is it clear? yes! I think this is the usefulness of maths in many occasions, it delivers some complex information in a concise and understandable manner.\nSome observations about Public Key Encryption Semantic security to Eavesdropping This is the same as explained in Advantage security explained in a previous section. We defined the advantage as the ability of the attacker to distinguish the original message. This is still exactly the same, see that section. (the only difference is that here we use public key encryption) Resistance against Many Time Pads We know that in the symmetric context in Block Ciphers and OTP and Stream Ciphers, it is often not secure to use the symmetric key to many times. (This is clearly true when we are talking about the OTP cipher).\nBut in the context of Asymmetric keys this notion is not true as the key is public, this key can be used as many times as the attacker wants. So he can reuse the key, while the cipher should still remain secure!\nTrapdoor functions Definition of Trapdoor functions This is a triple $G, F, F^{-1}$ very similar to the previous one (indeed it’s kinda the same definition) The only difference is that $F^{-1}$ is the inverse. This function is one-way, meaning it’s difficult to invert. And has a trapdoor meaning that by knowing the secret $sk$ it is easy to do so.\nSecure Trapdoor Functions 🟨- NOTE: direct use of $F$ and $F^{-1}$ to encrypt and decrypt using the created keys is not semantically secure. But I don’t know why.\nA trapdoor is secure if it’s difficult to invert without the knowledge of $sk$. See image Creating a PKE from Trapdoors 🟨– One Way Hash Algorithms These are different from Hash tables which is a datastructure!\nWe can see that One-Way hashes are a trapdors with $pk = sk$. Usually it is a function that takes a input of arbitrary length and outputs a limited string with some important properties.\nProperties of One Way Hash Algorithms 🟩- Easy to Evaluate: The hashing algorithm should be fast Hard to Reverse: There is no feasible algorithm to “reverse” a hash value, That is, given any hash value $h$, it is computationally infeasible to find any document $m$ such that $H(m) = h$. Hard to find Collisions: There is no feasible algorithm to find two or more input documents which are hashed into the same condensed output, That is, it is computationally infeasible to find any two documents $m_{2}, m_{2}$ such that $H(m_{1})= H(m_{2})$. Although, theoretical requirements say there are many many collisions. But the difficult thing is tampering, that is add some strings, make some modifications of the original messages such that that hash matches with others. A small change to a message should change the hash value so extensively that the new hash value appears uncorrelated with the old hash value RSA Cryptosystem Definition of the trapdoor function We define $F: \\mathbb{Z}^{*}_{\\mathbb{N}} \\to \\mathbb{Z}^{*}_{\\mathbb{N}}$ as $RSA(x) = x^{e}$ where $e$ is the public key generated by the key generation function and $N = pq$ is the private key, where $p, q$ are big primes.\nThen using Euler’s theorem we know how to compute $d$ such that $x^{ed} =x \\mod N$ where $d$ is the inverse modulo that, this is how we decrypt. How do we compute $d$? We use euler’s theorem, and find this $e\\cdot d = 1 \\mod \\varphi(N)$. and $e$ should be invertible with it is coprime with $N$ (true by construction).\nSecurity Analysis of RSA NOTE: normal RSA as defined above is not secure.\nSimple semantic security attack on RSA I can get back to the original message with a small effort. The percentage of success is high enough not to be negligible.\n#### Advantage notation for RSA We want the possibility to compute the $e$ root modulo $N$ to be small, and using the notion of advantage developed in [OTP and Stream Ciphers#Security with advantage](/notes/otp-and-stream-ciphers#security-with-advantage) we write $$ Pr\\left[ A(N, e, y) = y ^{1/e} \\right] \u003c \\varepsilon $$ Where $\\varepsilon$ is very small, **negligible** so to say, and $A$ is the $F$ trapdoor function used for RSA. Wiener’s attack (non fatto) This section is not useful for the exam, just for personal knowledge! If the private keys have certain properties, there exists some attacks, one example is the Wiener’s attack Low public exponent attack 🟩 Usually minimum that is used is 3. If 2 then the inverse is not guaranteed because $mcd(2, (p - 1) ( q - 1)) \\neq 1$ .\nThis is a stupid attack. Then the exponent is small enough, and it is not able to wrap the module, then the root is quite easy to achieve. This is why the recommended value is big, usually = $2^{16} + 1 = 65537$.\nUsually this is used to speed up encryption, it easier to compute. Other variants, like Elgamal have almost same time to encrypt and decrypt.\nComparison with symmetric keys AES key size RSA modulus size 80 bit 1024 bits 128 bits 3072 bits 256 bits 15360 bits We observe that RSA needs a lot more bits to ensure the same security! Side channel attacks these attacks do not directly attack the cipher, but the infrastructure or computing that it uses.\nTiming attack Can leak $d$ secret key by tracking the compute time. (Kocher 1997)\nPower attack Can leak $d$ by tracking power usage. (Kocher 1999)\nFaults attack Errors can leak $d$ somehow (don’t know!) (BDL 1997). In questa fase viene leakato il valore di $p$ che permette di ricostruire la chiave privata.\nKey generation ### Variations #### Elgamal🟨- Find $g$ and $p$ such that $g$ is primitive root modulo $p$. Some strange properties here. This means that $\\forall a, \\exists k : g^{k} = a \\mod p$. This is inspired from the [Key Exchange protocols#Diffie-Hellman Protocol](/notes/key-exchange-protocols#diffie-hellman-protocol). Then the first person chooses $a \\in \\left[ 0, p - 2 \\right]$ randomly and calculates $A = g^{a} \\mod p$ and the tuple $(p , g, A)$ is then considered as the public key. When someone wants to send a message $m$, he/she does this: Chooses a $b$ in exact manner as before. Computes $c = A^{b}m \\mod p$ and sends this c. The receiver computes the inverse for this exponent, and then inverts $g^{b} \\mod p$ to calculate the original message $m$. Notes on security -\u003e Discrete log problem. Efficiency -\u003e No, ciphertext needs that public key to be sent, which is usually long and expensive to calculate compared to AES.\nRabin cryptosystem🟨 we create $p,q$ such that their modulus $4$ is 3, probably for some nice properties I don’t know of… The advantage is that his security is prooved. Calculate $n = pq$ and this is the public key. When somebody wants to communicate, he just calculates\n$$ c = m^{2} \\mod n $$ And sends this, probably with this setting the properties of $p, q$ make that invertible, but not sure why. If you are curious try to understand why is this valid.\nDigital signatures The main idea is to cipher with the private key, so that it can be verifiable using the public. It was cited in Sicurezza delle reti times before. To overcome the burden to encrypt the whole text, usually only an hash is encrypted.\nAdvantages of Digital signatures Unforgeable Un-deniable by the signatory (if you have signed it, it was you!) Universally verifiable (everybody can verify it) Every doc’s signature is different. ",
-  "wordCount" : "1342",
+  "articleBody": "Public Key Encryption We now define a formally what is a public key encryption\nFormal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where\n$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input. Now is this definition useful? i don’t think so! We can’t create theorems for it, too general I suppose. Is it clear? yes! I think this is the usefulness of maths in many occasions, it delivers some complex information in a concise and understandable manner.\nSome observations about Public Key Encryption Semantic security to Eavesdropping This is the same as explained in Advantage security explained in a previous section. We defined the advantage as the ability of the attacker to distinguish the original message. This is still exactly the same, see that section. (the only difference is that here we use public key encryption) Resistance against Many Time Pads We know that in the symmetric context in Block Ciphers and OTP and Stream Ciphers, it is often not secure to use the symmetric key to many times. (This is clearly true when we are talking about the OTP cipher).\nBut in the context of Asymmetric keys this notion is not true as the key is public, this key can be used as many times as the attacker wants. So he can reuse the key, while the cipher should still remain secure!\nSharing a key It’s easy to share a key using this encryption scheme. Just send the secret key with the public key of this cipher!\nTrapdoor functions Definition of Trapdoor functions Trapdoor is generic function from $X \\to Y$. This is a triple $G, F, F^{-1}$ very similar to the previous one (indeed it’s kinda the same definition) The only difference is that $F^{-1}$ is the inverse. This function is one-way, meaning it’s difficult to invert. And has a trapdoor meaning that by knowing the secret $sk$ it is easy to do so. $F(pk, \\cdot)$ defines public encryption function, the other equivalent is the decryption.\nSecure Trapdoor Functions🟩– NOTE: direct use of $F$ and $F^{-1}$ to encrypt and decrypt using the created keys is not semantically secure. But I don’t know why.\nA trapdoor is secure if it’s difficult to invert without the knowledge of $sk$. (It’s difficult to invert the $x$) See image Creating a PKE from Trapdoors 🟨– One Way Hash Algorithms These are different from Hash tables which is a datastructure!\nWe can see that One-Way hashes are a trapdors with $pk = sk$. Usually it is a function that takes a input of arbitrary length and outputs a limited string with some important properties.\nProperties of One Way Hash Algorithms 🟩- Easy to Evaluate: The hashing algorithm should be fast Hard to Reverse: There is no feasible algorithm to “reverse” a hash value, That is, given any hash value $h$, it is computationally infeasible to find any document $m$ such that $H(m) = h$. Hard to find Collisions: There is no feasible algorithm to find two or more input documents which are hashed into the same condensed output, That is, it is computationally infeasible to find any two documents $m_{2}, m_{2}$ such that $H(m_{1})= H(m_{2})$. Although, theoretical requirements say there are many many collisions. But the difficult thing is tampering, that is add some strings, make some modifications of the original messages such that that hash matches with others. A small change to a message should change the hash value so extensively that the new hash value appears uncorrelated with the old hash value RSA Cryptosystem Definition of the trapdoor function We define $F: \\mathbb{Z}^{*}_{\\mathbb{N}} \\to \\mathbb{Z}^{*}_{\\mathbb{N}}$ as $RSA(x) = x^{e}$ where $e$ is the public key generated by the key generation function and $N = pq$ is the private key, where $p, q$ are big primes.\nThen using Euler’s theorem we know how to compute $d$ such that $x^{ed} =x \\mod N$ where $d$ is the inverse modulo that, this is how we decrypt. How do we compute $d$? We use euler’s theorem, and find this $e\\cdot d = 1 \\mod \\varphi(N)$. and $e$ should be invertible with it is coprime with $N$ (true by construction).\nRSA with trapdoors A secure implementation of RSA uses trapdoor functions like this: $x \\sim X$ this is the secret, we generate $y = RSA(x, e)$ with this, and encrypt the message with $k = H(x)$ and $c = H_{s}(k, m)$ and send $y$. The decryption step is similar to that presented to trapdoor functions.\nSecurity Analysis of RSA NOTE: normal RSA as defined above is not secure, the main reason is that it is deterministic, so we can have semantic security breaches.\nSimple semantic security attack on RSA I can get back to the original message with a small effort. The percentage of success is high enough not to be negligible. We have a $2^{40}$ attach on $2^{64}$ long messages.\n#### Advantage notation for RSA We want the possibility to compute the $e$ root modulo $N$ to be small, and using the notion of advantage developed in [OTP and Stream Ciphers#Security with advantage](/notes/otp-and-stream-ciphers#security-with-advantage) we write $$ Pr\\left[ A(N, e, y) = y ^{1/e} \\right] \u003c \\varepsilon $$ Where $\\varepsilon$ is very small, **negligible** so to say, and $A$ is the $F$ trapdoor function used for RSA. Wiener’s attack (non fatto) This section is not useful for the exam, just for personal knowledge! If the private keys have certain properties, there exists some attacks, one example is the Wiener’s attack, for example if the private key is too small. The concept is that this makes the search space quite small.\nLow public exponent attack 🟩 Usually minimum that is used is 3. If 2 then the inverse is not guaranteed because $mcd(2, (p - 1) ( q - 1)) \\neq 1$ .\nThis is a stupid attack. Then the exponent is small enough, and it is not able to wrap the module, then the root is quite easy to achieve. This is why the recommended value is big, usually = $2^{16} + 1 = 65537$.\nUsually this is used to speed up encryption, it easier to compute. Other variants, like Elgamal have almost same time to encrypt and decrypt.\nThe reduction problem In order to prove that the best solution is to factor n we should prove that Efficient algorithm for e’th roots mod $N$ implies having efficient algorithm for factoring $N$. There is some evidence that says this reduction exists (BV'98) but it is still an open problem. But as far as we know this is actually a hard problem.\nComparison with symmetric keys AES key size RSA modulus size 80 bit 1024 bits 128 bits 3072 bits 256 bits 15360 bits We observe that RSA needs a lot more bits to ensure the same security! Side channel attacks these attacks do not directly attack the cipher, but the infrastructure or computing that it uses.\nTiming attack Can leak $d$ secret key by tracking the compute time. (Kocher 1997)\nPower attack Can leak $d$ by tracking power usage. (Kocher 1999) Needs access to physical data.\nFaults attack Errors can leak $d$ somehow (don’t know!) (BDL 1997). In questa fase viene leakato il valore di $p$ che permette di ricostruire la chiave privata.\nKey generation First when you startup the entropy of $p$ is not so much, so it happens if two different firewalls generate a key, they are probably the same. So if you take the GCD of these, it is probable that they are the same. They factored 0.4% of all public https keys in this way. Which is a good number. This says that it is **crucial to add randomness before generating keys**. Variations Elgamal🟨- Find $g$ and $p$ such that $g$ is primitive root modulo $p$. Some strange properties here. This means that $\\forall a, \\exists k : g^{k} = a \\mod p$. This is inspired from the Key Exchange protocols#Diffie-Hellman Protocol. Then the first person chooses $a \\in \\left[ 0, p - 2 \\right]$ randomly and calculates $A = g^{a} \\mod p$ and the tuple $(p , g, A)$ is then considered as the public key. When someone wants to send a message $m$, he/she does this: Chooses a $b$ in exact manner as before. Computes $c = A^{b}m \\mod p$ and sends this c. The receiver computes the inverse for this exponent, and then inverts $g^{b} \\mod p$ to calculate the original message $m$.\nNotes on security -\u003e Discrete log problem. Efficiency -\u003e No, ciphertext needs that public key to be sent, which is usually long and expensive to calculate compared to AES.\nRabin cryptosystem🟨 we create $p,q$ such that their modulus $4$ is 3, probably for some nice properties I don’t know of… The advantage is that his security is prooved. Calculate $n = pq$ and this is the public key. When somebody wants to communicate, he just calculates\n$$ c = m^{2} \\mod n $$ And sends this, probably with this setting the properties of $p, q$ make that invertible, but not sure why. If you are curious try to understand why is this valid.\nDigital signatures The main idea is to cipher with the private key, so that it can be verifiable using the public. It was cited in Sicurezza delle reti times before. To overcome the burden to encrypt the whole text, usually only an hash is encrypted.\nAdvantages of Digital signatures Unforgeable Un-deniable by the signatory (if you have signed it, it was you!) Universally verifiable (everybody can verify it) Every doc’s signature is different. ",
+  "wordCount" : "1629",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -233,7 +233,7 @@ $G$ is the generator for the private and public keys, from now on identified as 
     <h1 class="post-title entry-hint-parent">
       Asymmetric Cryptography
     </h1>
-    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -254,7 +254,9 @@ $G$ is the generator for the private and public keys, from now on identified as 
                 <li>
                     <a href="#semantic-security-to-eavesdropping" aria-label="Semantic security to Eavesdropping">Semantic security to Eavesdropping</a></li>
                 <li>
-                    <a href="#resistance-against-many-time-pads" aria-label="Resistance against Many Time Pads">Resistance against Many Time Pads</a></li></ul>
+                    <a href="#resistance-against-many-time-pads" aria-label="Resistance against Many Time Pads">Resistance against Many Time Pads</a></li>
+                <li>
+                    <a href="#sharing-a-key" aria-label="Sharing a key">Sharing a key</a></li></ul>
                 </li></ul>
                 </li>
                 <li>
@@ -264,7 +266,7 @@ $G$ is the generator for the private and public keys, from now on identified as 
                     <a href="#definition-of-trapdoor-functions" aria-label="Definition of Trapdoor functions">Definition of Trapdoor functions</a><ul>
                         
                 <li>
-                    <a href="#secure-trapdoor-functions--" aria-label="Secure Trapdoor Functions 🟨-">Secure Trapdoor Functions 🟨-</a></li>
+                    <a href="#secure-trapdoor-functions--" aria-label="Secure Trapdoor Functions🟩&ndash;">Secure Trapdoor Functions🟩&ndash;</a></li>
                 <li>
                     <a href="#creating-a-pke-from-trapdoors---" aria-label="Creating a PKE from Trapdoors 🟨&ndash;">Creating a PKE from Trapdoors 🟨&ndash;</a></li></ul>
                 </li>
@@ -279,7 +281,11 @@ $G$ is the generator for the private and public keys, from now on identified as 
                     <a href="#rsa-cryptosystem" aria-label="RSA Cryptosystem">RSA Cryptosystem</a><ul>
                         
                 <li>
-                    <a href="#definition-of-the-trapdoor-function" aria-label="Definition of the trapdoor function">Definition of the trapdoor function</a></li>
+                    <a href="#definition-of-the-trapdoor-function" aria-label="Definition of the trapdoor function">Definition of the trapdoor function</a><ul>
+                        
+                <li>
+                    <a href="#rsa-with-trapdoors" aria-label="RSA with trapdoors">RSA with trapdoors</a></li></ul>
+                </li>
                 <li>
                     <a href="#security-analysis-of-rsa" aria-label="Security Analysis of RSA">Security Analysis of RSA</a><ul>
                         
@@ -289,6 +295,8 @@ $G$ is the generator for the private and public keys, from now on identified as 
                     <a href="#wieners-attack-non-fatto" aria-label="Wiener&rsquo;s attack (non fatto)">Wiener&rsquo;s attack (non fatto)</a></li>
                 <li>
                     <a href="#low-public-exponent-attack-" aria-label="Low public exponent attack 🟩">Low public exponent attack 🟩</a></li>
+                <li>
+                    <a href="#the-reduction-problem" aria-label="The reduction problem">The reduction problem</a></li>
                 <li>
                     <a href="#comparison-with-symmetric-keys" aria-label="Comparison with symmetric keys">Comparison with symmetric keys</a></li></ul>
                 </li>
@@ -302,7 +310,13 @@ $G$ is the generator for the private and public keys, from now on identified as 
                 <li>
                     <a href="#faults-attack" aria-label="Faults attack">Faults attack</a></li>
                 <li>
-                    <a href="#key-generation" aria-label="Key generation">Key generation</a></li>
+                    <a href="#key-generation" aria-label="Key generation">Key generation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#variations" aria-label="Variations">Variations</a><ul>
+                        
+                <li>
+                    <a href="#elgamal-" aria-label="Elgamal🟨-">Elgamal🟨-</a></li>
                 <li>
                     <a href="#rabin-cryptosystem" aria-label="Rabin cryptosystem🟨">Rabin cryptosystem🟨</a></li></ul>
                 </li></ul>
@@ -326,8 +340,8 @@ $G$ is the generator for the private and public keys, from now on identified as 
 <p>We define a 3-tuple formed as follows: $(G, E, D)$ where</p>
 <ul>
 <li>$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key)</li>
-<li>$E$ the encryption algorithm, that takes the $pk$ and the message in input</li>
-<li>$D$ the decryption algorithm, that takes the $sk$ and the cyphertext in input.</li>
+<li>$E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input</li>
+<li>$D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input.</li>
 </ul>
 <p>Now is this definition useful? i don&rsquo;t think so! We can&rsquo;t create theorems for it, too general I suppose. Is it clear? yes! I think this is the usefulness of maths in many occasions, it delivers some complex information in a concise and understandable manner.</p>
 <h3 id="some-observations-about-public-key-encryption">Some observations about Public Key Encryption<a hidden class="anchor" aria-hidden="true" href="#some-observations-about-public-key-encryption">#</a></h3>
@@ -338,12 +352,17 @@ We defined the advantage as the ability of the attacker to distinguish the origi
 <h4 id="resistance-against-many-time-pads">Resistance against Many Time Pads<a hidden class="anchor" aria-hidden="true" href="#resistance-against-many-time-pads">#</a></h4>
 <p>We know that in the symmetric context in <a href="/notes/block-ciphers/">Block Ciphers</a> and <a href="/notes/otp-and-stream-ciphers/">OTP and Stream Ciphers</a>, it is often not secure to use the symmetric key to many times. (This is clearly true when we are talking about the OTP cipher).</p>
 <p>But in the context of Asymmetric keys this notion is <em>not true</em> as the key is public, this key can be used as many times as the attacker wants. So he can reuse the key, while the cipher should still remain secure!</p>
+<h4 id="sharing-a-key">Sharing a key<a hidden class="anchor" aria-hidden="true" href="#sharing-a-key">#</a></h4>
+<p>It&rsquo;s easy to share a key using this encryption scheme.
+Just send the secret key with the public key of this cipher!</p>
 <h2 id="trapdoor-functions">Trapdoor functions<a hidden class="anchor" aria-hidden="true" href="#trapdoor-functions">#</a></h2>
 <h3 id="definition-of-trapdoor-functions">Definition of Trapdoor functions<a hidden class="anchor" aria-hidden="true" href="#definition-of-trapdoor-functions">#</a></h3>
-<p>This is a triple $G, F, F^{-1}$ very similar to the previous one (indeed it&rsquo;s kinda the same definition) The only difference is that $F^{-1}$ is the inverse. This function is one-way, meaning it&rsquo;s difficult to invert. And has a <strong>trapdoor</strong> meaning that by knowing the secret $sk$ it is easy to do so.</p>
-<h4 id="secure-trapdoor-functions--">Secure Trapdoor Functions 🟨-<a hidden class="anchor" aria-hidden="true" href="#secure-trapdoor-functions--">#</a></h4>
+<p>Trapdoor is generic function from $X \to Y$.
+This is a triple $G, F, F^{-1}$ very similar to the previous one (indeed it&rsquo;s kinda the same definition) The only difference is that $F^{-1}$ is the inverse. This function is one-way, meaning it&rsquo;s <strong>difficult to invert</strong>. And has a <strong>trapdoor</strong> meaning that by knowing the secret $sk$ it is easy to do so.
+$F(pk, \cdot)$ defines public encryption function, the other equivalent is the decryption.</p>
+<h4 id="secure-trapdoor-functions--">Secure Trapdoor Functions🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#secure-trapdoor-functions--">#</a></h4>
 <p>NOTE: direct use of $F$ and $F^{-1}$ to encrypt and decrypt using the created keys is not semantically secure. But I don&rsquo;t know why.</p>
-<p>A trapdoor is secure if it&rsquo;s difficult to invert without the knowledge of $sk$.
+<p>A trapdoor is secure if it&rsquo;s difficult to invert without the knowledge of $sk$. (It&rsquo;s difficult to invert the $x$)
 See image
 <img src="/images/notes/Asymmetric Cryptography-20240319111432568.jpg" alt="Asymmetric Cryptography-20240319111432568"></p>
 <h4 id="creating-a-pke-from-trapdoors---">Creating a PKE from Trapdoors 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#creating-a-pke-from-trapdoors---">#</a></h4>
@@ -370,10 +389,14 @@ Although, theoretical requirements say there are many many collisions. But the d
 <p>We define $F: \mathbb{Z}^{*}_{\mathbb{N}} \to \mathbb{Z}^{*}_{\mathbb{N}}$ as $RSA(x) = x^{e}$  where $e$ is the public key generated by the key generation function and $N = pq$ is the private key, where $p, q$ are big primes.</p>
 <p>Then using <a href="/notes/teorema-di-lagrange/#teorema-di-eulero">Euler&rsquo;s theorem</a> we know how to compute $d$ such that $x^{ed} =x \mod N$ where $d$ is the inverse modulo that, this is how we decrypt.
 How do we compute $d$? We use euler&rsquo;s theorem, and find this $e\cdot d = 1 \mod \varphi(N)$. and $e$ should be invertible with it is coprime with $N$ (true by construction).</p>
+<h4 id="rsa-with-trapdoors">RSA with trapdoors<a hidden class="anchor" aria-hidden="true" href="#rsa-with-trapdoors">#</a></h4>
+<p>A secure implementation of RSA uses trapdoor functions like this:
+$x \sim X$ this is the secret, we generate $y = RSA(x, e)$ with this, and encrypt the message with $k = H(x)$ and $c = H_{s}(k, m)$ and send $y$.
+The decryption step is similar to that presented to trapdoor functions.</p>
 <h3 id="security-analysis-of-rsa">Security Analysis of RSA<a hidden class="anchor" aria-hidden="true" href="#security-analysis-of-rsa">#</a></h3>
-<p>NOTE: normal RSA as defined above is not secure.</p>
+<p>NOTE: normal RSA as defined above is not secure, the main reason is that it is deterministic, so we can have semantic security breaches.</p>
 <h4 id="simple-semantic-security-attack-on-rsa">Simple semantic security attack on RSA<a hidden class="anchor" aria-hidden="true" href="#simple-semantic-security-attack-on-rsa">#</a></h4>
-<p>I can get back to the original message with a small effort. The percentage of success is high enough not to be negligible.</p>
+<p>I can get back to the original message with a small effort. The percentage of success is high enough not to be negligible. We have a $2^{40}$ attach on $2^{64}$ long messages.</p>
 <img src="/images/notes/Asymmetric Cryptography-20240319114920695.jpg" alt="Asymmetric Cryptography-20240319114920695">
 #### Advantage notation for RSA
 We want the possibility to compute the $e$ root modulo $N$ to be small, and using the notion of advantage developed in [OTP and Stream Ciphers#Security with advantage](/notes/otp-and-stream-ciphers#security-with-advantage) we write
@@ -383,13 +406,18 @@ $$
 Where $\varepsilon$ is very small, **negligible** so to say, and $A$ is the $F$ trapdoor function used for RSA.
 <h4 id="wieners-attack-non-fatto">Wiener&rsquo;s attack (non fatto)<a hidden class="anchor" aria-hidden="true" href="#wieners-attack-non-fatto">#</a></h4>
 <p>This section is not useful for the exam, just for personal knowledge!
-If the private keys have certain properties, there exists some attacks, one example is the Wiener&rsquo;s attack
-<img src="/images/notes/Asymmetric Cryptography-20240321101500213.webp" alt="Asymmetric Cryptography-20240321101500213"></p>
+If the private keys have certain properties, there exists some attacks, one example is the Wiener&rsquo;s attack, for example if the private key is too small.
+<img src="/images/notes/Asymmetric Cryptography-20240321101500213.webp" alt="Asymmetric Cryptography-20240321101500213">
+The concept is that this makes the search space quite small.</p>
 <h4 id="low-public-exponent-attack-">Low public exponent attack 🟩<a hidden class="anchor" aria-hidden="true" href="#low-public-exponent-attack-">#</a></h4>
 <p>Usually minimum that is used is 3. If 2 then the inverse is not guaranteed because $mcd(2, (p - 1) ( q - 1)) \neq 1$ .</p>
 <p>This is a stupid attack. Then the exponent is small enough, and it is not able to wrap the module, then the root is quite easy to achieve.
 This is why the <strong>recommended value</strong> is big, usually = $2^{16} + 1 = 65537$.</p>
 <p>Usually this is used to <strong>speed up</strong> encryption, it easier to compute. Other variants, like <em>Elgamal</em> have almost same time to encrypt and decrypt.</p>
+<h4 id="the-reduction-problem">The reduction problem<a hidden class="anchor" aria-hidden="true" href="#the-reduction-problem">#</a></h4>
+<p>In order to prove that the best solution is to factor n we should prove that
+Efficient algorithm for e&rsquo;th roots mod $N$ implies having efficient algorithm for factoring $N$. There is some evidence that says this reduction exists (BV'98) but it is still an open problem.
+But as far as we know this is actually a hard problem.</p>
 <h4 id="comparison-with-symmetric-keys">Comparison with symmetric keys<a hidden class="anchor" aria-hidden="true" href="#comparison-with-symmetric-keys">#</a></h4>
 <table>
 <thead>
@@ -422,22 +450,25 @@ This is why the <strong>recommended value</strong> is big, usually = $2^{16} + 1
 <h4 id="timing-attack">Timing attack<a hidden class="anchor" aria-hidden="true" href="#timing-attack">#</a></h4>
 <p>Can leak $d$ secret key by tracking the compute time. (Kocher 1997)</p>
 <h4 id="power-attack">Power attack<a hidden class="anchor" aria-hidden="true" href="#power-attack">#</a></h4>
-<p>Can leak $d$ by tracking power usage. (Kocher 1999)</p>
+<p>Can leak $d$ by tracking power usage. (Kocher 1999) Needs access to physical data.</p>
 <h4 id="faults-attack">Faults attack<a hidden class="anchor" aria-hidden="true" href="#faults-attack">#</a></h4>
 <p>Errors can leak $d$ somehow (don&rsquo;t know!) (BDL 1997).
 <img src="/images/notes/Asymmetric Cryptography-20240321110527763.webp" width="481" alt="Asymmetric Cryptography-20240321110527763">
 In questa fase viene leakato il valore di $p$ che permette di ricostruire la chiave privata.</p>
 <h4 id="key-generation">Key generation<a hidden class="anchor" aria-hidden="true" href="#key-generation">#</a></h4>
 <img src="/images/notes/Asymmetric Cryptography-20240321110517713.webp" alt="Asymmetric Cryptography-20240321110517713">
-### Variations
-#### Elgamal🟨-
-Find $g$ and $p$ such that $g$ is primitive root modulo $p$. Some strange properties here.
-This means that $\forall a, \exists k : g^{k} = a  \mod p$. This is inspired from the [Key Exchange protocols#Diffie-Hellman Protocol](/notes/key-exchange-protocols#diffie-hellman-protocol).
+First when you startup the entropy of $p$ is not so much, so it happens if two different firewalls generate a key, they are probably the same. So if you take the GCD of these, it is probable that they are the same.
+They factored 0.4% of all public https keys in this way. Which is a good number.
+This says that it is **crucial to add randomness before generating keys**.
+<h3 id="variations">Variations<a hidden class="anchor" aria-hidden="true" href="#variations">#</a></h3>
+<h4 id="elgamal-">Elgamal🟨-<a hidden class="anchor" aria-hidden="true" href="#elgamal-">#</a></h4>
+<p>Find $g$ and $p$ such that $g$ is primitive root modulo $p$. Some strange properties here.
+This means that $\forall a, \exists k : g^{k} = a  \mod p$. This is inspired from the <a href="/notes/key-exchange-protocols/#diffie-hellman-protocol">Key Exchange protocols#Diffie-Hellman Protocol</a>.
 Then the first person chooses $a \in \left[ 0, p - 2 \right]$ randomly and calculates $A = g^{a} \mod p$ and the tuple $(p , g, A)$ is then considered as the public key.
 When someone wants to send a message $m$, he/she does this:
 Chooses a $b$ in exact manner as before.
 Computes $c = A^{b}m \mod p$ and sends this c.
-The receiver computes the inverse for this exponent, and then inverts $g^{b} \mod p$ to calculate the original message $m$.
+The receiver computes the inverse for this exponent, and then inverts $g^{b} \mod p$ to calculate the original message $m$.</p>
 <p>Notes on security -&gt; <strong>Discrete log problem</strong>.
 Efficiency -&gt; No, ciphertext needs that public key to be sent, which is usually long and expensive to calculate compared to AES.</p>
 <h4 id="rabin-cryptosystem">Rabin cryptosystem🟨<a hidden class="anchor" aria-hidden="true" href="#rabin-cryptosystem">#</a></h4>
