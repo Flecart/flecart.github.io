@@ -8,7 +8,7 @@
 <title>Memory Corruption | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🛡️cybersecurity">
 <meta name="description" content="First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
-Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) Common attack vectors We use C, as it is the easiest way to show how this could be attacked.">
+Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data).">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/memory-corruption/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -89,7 +89,7 @@ if (!doNotTrack) {
 </script>
 <meta property="og:title" content="Memory Corruption" />
 <meta property="og:description" content="First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
-Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) Common attack vectors We use C, as it is the easiest way to show how this could be attacked." />
+Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/memory-corruption/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -101,7 +101,7 @@ Every new function call allocates a new block, with his local variables. How the
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Memory Corruption"/>
 <meta name="twitter:description" content="First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
-Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) Common attack vectors We use C, as it is the easiest way to show how this could be attacked."/>
+Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data)."/>
 
 
 <script type="application/ld+json">
@@ -130,12 +130,12 @@ Every new function call allocates a new block, with his local variables. How the
   "@type": "BlogPosting",
   "headline": "Memory Corruption",
   "name": "Memory Corruption",
-  "description": "First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that\nEvery new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) Common attack vectors We use C, as it is the easiest way to show how this could be attacked.",
+  "description": "First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that\nEvery new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data).",
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that\nEvery new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) Common attack vectors We use C, as it is the easiest way to show how this could be attacked.\nThe threat model Attacker’s goal: • Inject malicious code into a program and execute it • Gain all privileges and capabilities of the target program (e.g. setuid)\nSystem’s goal: prevent code injection • Integrity – program should execute faithfully, as programmer intended • Crashes should be handled gracefully\nAttacker’s capability: submit arbitrary input to the program • Environment variables • Command line parameters • Contents of files • Network data • Etc.\nStack smash example Some functions don't have boundary controls, for example `strcpy` or `gets` and are vulnerable to stack overflows. Common defenses Compiler Hardening These are just hardening attempts, which means it makes the attack more difficult, but still not impossible to execute.\nStack canaries Just a random string that is checked before returning. This allows you to check if there has been a stack overflow. Usually this can be bypassed if you can leak the value of the canary before-hand.\nNon executable stacks So you can’t execute the shell-code you have just wrote in the stack! :).\nOs hardening Some hardening at the OS level to prevent common exploits.\nAddress-Space Layout Randomization (ASLR) The location of the data and code are always randomized when the program is loaded. This makes it more difficult to have exploits jumping around the code! Example ROP attacks are more difficult. (ROP = Return-oriented-programming, method that allows you to control where the program jumps by overwriting return addresses.)\nSome rules Use memory safe languages Example: C is not memory safe, see Teoria dei Tipi. using safe languages allow you to have provable guarantees that the type is always respected and stuff like this!\nData vs Code You need to differentiate the data with the code. They are two very different things! Many different exploits use data to be interpreted as code, and thus have this bug.\nPatch! Patch as soon as you can. most of the vulnerabilities are discovered but then left to be, without been patched for a long time. (e.g. exploit kits for these vulnerabilities) Automatic patches are the best.\n",
-  "wordCount" : "434",
+  "articleBody": "First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that\nEvery new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data). Common attack vectors We use C, as it is the easiest way to show how this could be attacked.\nThe threat model Attacker’s goal:\nInject malicious code into a program and execute it (Return Object Programming) Gain all privileges and capabilities of the target program (e.g. setuid) System’s goal:\nprevent code injection Integrity – program should execute faithfully, as programmer intended Crashes should be handled gracefully Attacker’s capability:\nsubmit arbitrary input to the program Environment variables Command line parameters Contents of files Network data The thing is that it is highly variable. Stack smash example Some functions don't have boundary controls, for example `strcpy` or `gets` and are vulnerable to stack overflows. Common defenses Compiler Hardening These are just hardening attempts, which means it makes the attack more difficult, but still not impossible to execute.\nStack canaries Just a random string that is checked before returning. This allows you to check if there has been a stack overflow. Usually this can be bypassed if you can leak the value of the canary before-hand.\nNon executable stacks So you can’t execute the shell-code you have just wrote in the stack! :).\nOs hardening Some hardening at the OS level to prevent common exploits.\nAddress-Space Layout Randomization (ASLR) The location of the data and code are always randomized when the program is loaded. This makes it more difficult to have exploits jumping around the code! Example ROP attacks are more difficult. (ROP = Return-oriented-programming, method that allows you to control where the program jumps by overwriting return addresses.)\nSome rules Use memory safe languages Example: C is not memory safe, see Teoria dei Tipi. using safe languages allow you to have provable guarantees that the type is always respected and stuff like this!\nData vs Code You need to differentiate the data with the code. They are two very different things! Many different exploits use data to be interpreted as code, and thus have this bug.\nPatch! Patch as soon as you can. most of the vulnerabilities are discovered but then left to be, without been patched for a long time. (e.g. exploit kits for these vulnerabilities) Automatic patches are the best.\n",
+  "wordCount" : "449",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -290,13 +290,31 @@ The thing you have to remember is that</p>
 <li>Every new function call allocates a new block, with his local variables.</li>
 <li>How the calling parameters are stored in the stack</li>
 <li>How the heap is allocated (common heap algos are in <a href="/notes/gestione-della-memoria/">Gestione della memoria</a>)</li>
+<li>How the stack grows (and how it can overflow it, and overwriting important data).</li>
 </ul>
 <h2 id="common-attack-vectors">Common attack vectors<a hidden class="anchor" aria-hidden="true" href="#common-attack-vectors">#</a></h2>
 <p>We use C, as it is the easiest way to show how this could be attacked.</p>
 <h3 id="the-threat-model">The threat model<a hidden class="anchor" aria-hidden="true" href="#the-threat-model">#</a></h3>
-<p>Attacker’s goal: • Inject malicious code into a program and execute it • Gain all privileges and capabilities of the target program (e.g. setuid)</p>
-<p>System’s goal: prevent code injection • Integrity – program should execute faithfully, as programmer intended • Crashes should be handled gracefully</p>
-<p>Attacker’s capability: submit arbitrary input to the program • Environment variables • Command line parameters • Contents of files • Network data • Etc.</p>
+<p>Attacker’s goal:</p>
+<ul>
+<li>Inject malicious code into a program and execute it (Return Object Programming)</li>
+<li>Gain all privileges and capabilities of the target program (e.g. setuid)</li>
+</ul>
+<p>System’s goal:</p>
+<ul>
+<li>prevent code injection</li>
+<li>Integrity – program should execute faithfully, as programmer intended</li>
+<li>Crashes should be handled gracefully</li>
+</ul>
+<p>Attacker’s capability:</p>
+<ul>
+<li>submit arbitrary input to the program</li>
+<li>Environment variables</li>
+<li>Command line parameters</li>
+<li>Contents of files</li>
+<li>Network data
+The thing is that it is highly variable.</li>
+</ul>
 <h3 id="stack-smash-example">Stack smash example<a hidden class="anchor" aria-hidden="true" href="#stack-smash-example">#</a></h3>
 <img src="/images/notes/Memory Corruption-20240502114618100.webp" alt="Memory Corruption-20240502114618100">
 Some functions don't have boundary controls, for example `strcpy` or `gets` and are vulnerable to stack overflows.
