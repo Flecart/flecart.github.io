@@ -196,27 +196,17 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Convolutional NN
+    <h2 class="entry-hint-parent">Optimization methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction to convolutional NN The convolution operator 🟩- Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.
-Slides ed esempi (molto più chiaril)...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Convolutional NN" href="https://flecart.github.io/notes/convolutional-nn/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Legge di Gauss
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione alla legge di gauss Giustificazione con angoli solidi 🟨– Pagina 69 del Mazzoldi. Vogliamo chiederci quanto sia il flusso in qualunque superficie Da un punto di vista infinitesimo abbiamo che (perché il flusso è, intuitivamente, la parte perpendicolare rispetto la superficie che abbiamo) $$ d\Phi = \vec{E}\cdot \vec{dS} = \lvert \vec{E} \rvert \lvert \vec{dS} \rvert \cos \theta = \frac{1}{4\pi\varepsilon_{0}}\frac{1}{r^{2}} ds = \frac{Q}{4\pi\varepsilon}d\Omega $$ Il secondo passaggio è giustificabile andando su coordinate polari considerando l’angolo solido di un oggetto quindi non dovrebbe essere un problema....</p>
+    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
+Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
+Newton Raphson method Molte implementazioni in R usano questo metodo, è
+Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Legge di Gauss" href="https://flecart.github.io/notes/legge-di-gauss/"></a>
+  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -234,28 +224,43 @@ Elementi di ripasso Argomento https://groups.csail.mit.edu/tds/papers/Lynch/jacm
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Teorema di Rice
+    <h2 class="entry-hint-parent">Problemi di accoppiamento
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction to the Rice Theorem Ci sono molti teoremi che non possono essere decisi, vedere Halting Theorem and Reducibility. Qui andiamo a chiederci quale sia l’insieme dei problemi decidibili.
-Proprietà dei linguaggi TM🟩 Data una macchina $\mathcal{M}$ definiamo il suo linguaggio come $$ L_{\mathcal{M}} = \left\{ x \in \Sigma^{*}: \mathcal{M} \text{ accetta } x \right\} $$ Allora con questa definizione di linguaggio possiamo dire che una proprietà, ossia una funzione da tutti i $TM$ possibili a $\left\{ 0, 1 \right\}$ tale per cui se il linguaggio riconosciuto è lo stesso, ossia $$ L_{\mathcal{M}} = L_{\mathcal{M}&#39;} \implies P(\mathcal{M}) = P(\mathcal{M}&#39;) $$ Definiamo questa non triviale se esiste una macchina per cui è 0, e una per cui è 1 (ossia non è costante)....</p>
+    <p>I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.
+Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione....</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Teorema di Rice" href="https://flecart.github.io/notes/teorema-di-rice/"></a>
+  <a class="entry-link" aria-label="post link to Problemi di accoppiamento" href="https://flecart.github.io/notes/problemi-di-accoppiamento/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Plane
+    <h2 class="entry-hint-parent">Scheduler
     </h2>
   </header>
   <div class="entry-content">
-    <p>Ripasso Prox: 30 Ripasso: May 20, 2023 Ultima modifica: May 14, 2023 5:18 PM Primo Abbozzo: March 10, 2023 12:10 PM Stato: 🌕🌕🌕🌕🌗 Studi Personali: No
-Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo)....</p>
+    <p>Il suo scopo principale è gestire l’avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
+Solitamente il nome scheduler è solamente un gestore dell’avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
+Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
+Esempio gantt...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Scheduler" href="https://flecart.github.io/notes/scheduler/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Campo elettrico
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Intuizione del campo elettrostatico Elettrostatico vs elettrodinamico 🟩 Andiamo a chiamare elettrostatico perché nel nostro caso non si sta muovendo nessuna carica all’itnerno di questo campo.
+Proprietà del campo elettrostatico (5) 🟨 Le linee di forza in ogni punto dello spazio sono tangenti e concorde al campo in quel punto; le linee di forza si addensano dove l’intensità del campo e maggiore; le linee di forza non si incrociano mai, in quanto in ogni punto il campo è definito univocamente e non può avere due direzioni distinte....</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Campo elettrico" href="https://flecart.github.io/notes/campo-elettrico/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
