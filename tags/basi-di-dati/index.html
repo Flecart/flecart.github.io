@@ -181,29 +181,44 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Database logical design
+    <h2 class="entry-hint-parent">Structured Query Language
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione al design logico Conoscenze sul carico dell’applicazione, ossia se ha più read rispetto a writes per esempio, sono dei priors in pratica Un design concettuale spiegato in precedenza. E si avrà in output un design logico con anche un po’ di documentazione. bisogna in questa fase valutare la performance principalmente su indicatori, ossia una operazione quante istanze visiterà? Invece di garanzie sul numero di transazioni al secondo.
-Indicatori visti (2) Costo di una operazione: viene valutato in termini di numero di occorrenze di entità e associazioni che mediamente vanno visitate per rispondere a una operazione sulla base dì dati; questa schematizzazione è molto forte e, pur nelle semplici valutazioni che svilupperemo, sarà talvolta necessario riferirci a un criterio più fine; Occupazione di memoria: viene valutato in termini dello spazio di memoria (misurato per esempio in numero di byte) necessario per memorizzare i dati descritti dallo schema....</p>
+    <p>Data types Default data types 🟩 I tipi di dati sono
+Carattere numero data tempo intervallo di tempo booleano blob (binario) clob (carattere) Setting custom data types 🟩 Ma possono essere definiti anche tipi di dati custom, la sintassi è simile
+CREATE DOMAIN Grade AS SMALLINT DEFAULT NULL CHECK (value &gt;= 18 AND value &lt;= 30) Altering existing domains 🟩 In cui posso mettere anche dei check custom.
+DROP DOMAIN Per cancellare il domain lì presente...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Database logical design" href="https://flecart.github.io/notes/database-logical-design/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Structured Query Language" href="https://flecart.github.io/notes/structured-query-language/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Index, B-trees and hashes
+    <h2 class="entry-hint-parent">Normalizzazione dei database
     </h2>
   </header>
   <div class="entry-content">
-    <p>Indexes Trattiamo qui di alcuni metodi che sono utilizzati per costruire indici
-Introduction to indexes Gli indici sono una struttura di dati aggiuntiva che ci permette di ricercare più in fretta alcuni valori per le queries. In questa sezione proviamo ad approfondire in che modo possono essere costruite e gestite.
-Search keys 🟩 Sono in breve la cosa che vogliamo andare a cercare. Solitamente sono nella forma &lt;key, label&gt;, che ci permette di trovare in fretta il label, che si potrebbe intendere come il valore che noi stiamo provando a cercare....</p>
+    <p>Introduzione alla normalizzazione Perché si normalizza? 🟩 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità.
+Tipologie di anomalie (!) (4) 🟨&#43; Ridondanze, non vorrei avere la stessa informazione espressa più volte in troppi punti. Update non consistente, quando per aggiornare un singolo valore devo aggiornare moltissime altre tuple dipendenti da essa. Deletion non consistente, la presenza di certe entità è strettamente dipendente da presenza di altri, nell’esempio in questione sulle slides, se elimino tutti gli utenti, elimino anche i progetti su cui hanno partecipato, mentre invece dovrebbero essere separati....</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Index, B-trees and hashes" href="https://flecart.github.io/notes/index-b-trees-and-hashes/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Normalizzazione dei database" href="https://flecart.github.io/notes/normalizzazione-dei-database/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Advanced SQL
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Check function A volte può essere molto pesante, perché
+What does check do? Viene utilizzato per introdurre un constraint check per avere sicurezza su un range. Check e innestamenti 🟩- Può essere che certe implementazioni non permettano il check innestato, questo è una cosa molto pesante, perché ogni modifica deve andare a rifare la modifica ai subalterni, quindi questo è pesante pesante.
+Assertions 🟩– Sono dei check fatti al livello dello schema, quindi valgono sempre, e possono essere riutilizzati in table diversi credo....</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Advanced SQL" href="https://flecart.github.io/notes/advanced-sql/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -230,20 +245,6 @@ Relational Data Model: This is the most common data model and uses tables to rep
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to The Database Management System" href="https://flecart.github.io/notes/the-database-management-system/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Relational Algebra
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione all’algebra relazionale Confronto con relazioni matematiche Le relazioni come le intendiamo in database sono leggermente diverse rispetto a quelle presenti per le relazioni matematiche:
-Non conta l’ordine Ci sono gli attributi Per il resto se introduciamo questo sistema per tenere conto delle astrazioni, possiamo analizzarle matematicamente, e questo ci fornisce qualche sicurezza in più diciamo.
-Definition of tuples 🟩 Le relazioni sono esattamente quelle definite in matematica, però noi aggiungiamo anche gli attributi, in modo da poter considerare l’ordine delle colonne non importante....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Relational Algebra" href="https://flecart.github.io/notes/relational-algebra/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
