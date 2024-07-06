@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Syncronous model | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; che è importantissimo per comprendere questa parte.
+<meta name="description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; in Consensus protocols che è importantissimo per comprendere questa parte.
 Storia locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.
 Goal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti
 Consistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!">
@@ -90,7 +90,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Syncronous model" />
-<meta property="og:description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; che è importantissimo per comprendere questa parte.
+<meta property="og:description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; in Consensus protocols che è importantissimo per comprendere questa parte.
 Storia locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.
 Goal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti
 Consistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!" />
@@ -104,7 +104,7 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Syncronous model"/>
-<meta name="twitter:description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; che è importantissimo per comprendere questa parte.
+<meta name="twitter:description" content="Introduction Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; in Consensus protocols che è importantissimo per comprendere questa parte.
 Storia locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.
 Goal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti
 Consistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!"/>
@@ -136,12 +136,12 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
   "@type": "BlogPosting",
   "headline": "Syncronous model",
   "name": "Syncronous model",
-  "description": "Introduction Da ricordare il \u0026ldquo;The State Machine Replication (SMR) Problem\u0026rdquo; che è importantissimo per comprendere questa parte.\nStoria locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.\nGoal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti\nConsistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!",
+  "description": "Introduction Da ricordare il \u0026ldquo;The State Machine Replication (SMR) Problem\u0026rdquo; in Consensus protocols che è importantissimo per comprendere questa parte.\nStoria locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.\nGoal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti\nConsistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Introduction Da ricordare il “The State Machine Replication (SMR) Problem” che è importantissimo per comprendere questa parte.\nStoria locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.\nGoal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti\nConsistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!). Liveness che vogliamo dire che tutte le transazioni valide devono essere aggiunte alla fine Assunzioni per sincrono (4) Permissioned, ossia i nodi del nostro modello sono fissi, non possiamo averne di più, non possiamo averne di meno e sono conosciuti. Public key infrastructure, Ogni nodo ha una coppia pubblica e privata. Synchronous, esiste una sorta di stato globale, e tutti i nodi condividono questa informazione. 0, 1, … t. I messaggi sono tutti mandati bene, e arrivano esattamente uno step dopo. (mandato al tempo t, arriva a t + 1). Onestà di tutti i nodi (sarà droppato subito questa assunzione). 4’. Una percentuale dei nodi è bizantina.\nAltre di base trattate prima\nesistenza di internet Esistenza di crittografia Si può notare che le ultime due assunzioni sono le stesse più generali definite in Consensus protocols, andremo negli appunti in seguito solamente a rilassare alcune assunzioni di 1 e 2.\nLa 1 è stata storicamente molto sensata, dato che era pensata per database che comunicassero fra di loro, e chiaramente quello era un settings più controllato, per blockchain vorremmo anche provare rilassare questo.\nBizantine broadcast problem Questo è un problam molto simile a SMR, tanto che si potrà dimostrache che risolvere SMR si può ridurre a dimostrare BB. Andremo quindi a descrivere questo problema\nFaulty/Bizantine Nodes Alcuni nodi falliscono, anche se non intenzionalmente, per esempio con errori di hardware.\nUn nodo che non è onesto (comporta come si dovrebbe comportare) è faulty.\nMotivi di errore possibile\nCrash fault (errore del software oppure dell’hardware). Omission fault (in cui la trasmissione di informazione importante è fallita, può essere intenzionale o meno) Bizantine fault (un certo insieme di nodi fa come gli pare) È molto importante comprendere questo concetto, dato che sarà di base nell’analisi della costruzione di protocolli che funzionino per BB.\nIn modo intuitivo possiamo intendere un nodo come bizantino sse non si comporta come dovrebbe. E lì vengono descritte anche 3 cause per il suo non-comportamento corretto.\nDescrizione del problema Un nodo leader e n - 1 nodi non leader. Il leader ha una informazione privat a $v ^*$ che deve mandare a tutti.\nUna soluzione del problema deve soddisfare queste tre caratteristiche\nValidità ossia se il nodo sender (leader) è onesto, gli altri devono essere daccordo che il messaggio è $v^*$ Terminazione non di deve essere deadlock, i nodi devono terminare con qualche risultato. Agreement quando termina, tutti i nodi onesti devono essere d’accordo sullo stesso risultato. SMR si riduce a BB Prenderemo in questa soluzione l’idea presente in Round-Robin leaders, ad avere ad ogni momento un leader.\nAllora dato questo leader, utilizziamo BB con leader = sender, e gli altri nodi per mandare il messaggio privato.\nAllora questo algoritmo possiede sia liveness che consistency. Liveness per stesso motivo di prima, prima o poi un nodo diventa un leader, quindi riesce ad aggiungere la sua informazione privata.\nConsistency perché perla soluzione di BB, ogni nodo onesto alla fine sarà d’accordo su quanto deve aggiungere alla sua lista privata. In particolare se il leader è onesto sarà esattamente quanto mandato dal sender.\nSlides\nAlcune soluzioni Lazy SMR Se ogni nodo non comunicasse, ma aggiungesse alla propria lista privata la transazione, questo non funziona. Non c’è proprio la consistenza. Non ci si può aspettare che il nodo esterno, la transazione riesca a richiedere allo stesso tempo a tutti i nodi.\nDa qui concludiamo che i nodi devono comunicare fra di loro (che è una cosa molto banale).\nRound-Robin leaders Questà è una idea che ogni nodo diventa leader e si mette a coordinare i nodi a turni, in un certo senso è molto simile all’idea presente in Architettura e livelli 1, 2 riguardo le reti ad anello e il passaggio del testimone.\nFunzionamento\nI nodi diventano leader aseconda del tempo globale.\nIl nodo leader manda a tutti gli altri la sua lista, gli altri aggiungeranno al proprio alla fine, all’inizio metto le propria (quindi).\nCorrettezza\nSia consistenza sia liveness vengono soddisfatti. La liveness è soddisfatta perché prima o poi il nodo n sarà il leader, allora avrà l’occasione di aggiungere alla catena i suoi dati privati.\nLa consistenza viene soddisfatta perché sotto le assunzioni che abbiamo i messaggi vengono mandati e ricevuti esattamente in uno step di tempo, quindi ogni nodo riesce ad aggiungere alla sua lista privata quello che gli è di interesse.\nNecessità dell’onestà\nSe un nodo non onesto diventa leader, potrebbe mandare un pò della sua lista ad lacuni nodi e niente ad altro (omission fault) e quindi questo rompe tutta la consistenza! Quindi questo metodo funziona solamente nel caso in cui nessun nodo fallisca. Vorremmo però resiste anche al fallimento!\nDolev-Strong protocol L’idea generale di questo protocollo è capire se il sender è onesto o meno. Se si riesce a capire questa cosa, allora se è onesto prendo il suo valore, altrimenti metto bottom sulla mia pila\nConvincing messages Definizione in slide\nThe protocol Quel mandare cose è più o meno cercare di capire se il nodo sender ha mandato messaggi contraddittori.\nProof of correctness PKI (Hexagon proof) Pease, Shostak, and Lamport [PSL80], and later the proof was simplified by Fischer, Lynch, and Merritt [FLM85].\nQuesta è una dimostrazione molto importante per quanto riguarda questo modello. Mostra che ci sono delle limitazioni pesanti riguardanti il modello. Come si vedrà in seguito anche in Asynchronous model, ci saranno delle limitazioni in praticamente qualunque modello.\nEnunciato Siano n nodi all’interno di un modello a comunicazione sincrona in cui non è presente un setting PKI (chiave privata e pubblica), se i nodi bizantini sono $f \\geq n / 3$, allora non è possibile avere contemporaneamente terminazione, safety e liveness.\nDimostrazione Dimostreremo solamente il caso in cui n = 3, poi si dovrebbe estendere senza molto sforzo al caso maggiore generico.\nQuesta dimostrazione va a contraddizione. Supponiamo di avere un setting a 6 nodi come in figura\nI nodi F sono i sender, mentre M e L sono le altre cose.\nOra da notare è che il procollo può eseguire su questo sistema, cioè anche se era inteso per essere eseguito nel caso $n = 3$, le uniche cose di cui ha bisogno il protocollo è\nSapere se è un sender o meno Il messaggio da inviare se è il sender I suoi n - 2 vicini (quindi sapere a chi mandare). Quindi sotto queste assunzioni il protocollo può eseguire\nAllora andiamo a considerare 3 scenari possibili:\nScenario 1 F bizantino\nSupponiamo di essere in un sistema a 3, con L, M, F, ma F è il nodo bizantino. F dato che è bizantino può fare cose arbitrarie, in particolare facciamo finta che simuli i nodi F’, M’, L’, F collegati come di sopra.\nAllora dato che il nosto protocollo deve soddisfare consistenza, ossia tutti i nodi onesti devono finere per essere d’accordo su qualcosa, deve essere che nel sistema l’output di L = M\nScenario 2 L bizantino\nSistema a 3 dato da L, M, e F’, ma in questo caso ora il nodo M simula i nodi M, L, F, M’. Per validità del protocollo deve essere che L è d’accordo con l’output 1, del sender F’.\nScenario 3 M bizantino\nSimile al siste a tre nel primo caso, ora L simula L, F’, M’, L’. Quindi per validità M dà in output F.\nma allora bbiamo un assurdo perché L dovrebbe essere uguale a M, invece l’output è diverso. Quindi questo scenario non può succedere.\n",
-  "wordCount" : "1315",
+  "articleBody": "Introduction Da ricordare il “The State Machine Replication (SMR) Problem” in Consensus protocols che è importantissimo per comprendere questa parte.\nStoria locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.\nGoal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti\nConsistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!). Liveness che vogliamo dire che tutte le transazioni valide devono essere aggiunte alla fine Assunzioni per sincrono (4) Permissioned, ossia i nodi del nostro modello sono fissi, non possiamo averne di più, non possiamo averne di meno e sono conosciuti. Public key infrastructure, Ogni nodo ha una coppia pubblica e privata. Synchronous, esiste una sorta di stato globale, e tutti i nodi condividono questa informazione. 0, 1, … t. I messaggi sono tutti mandati bene, e arrivano esattamente uno step dopo. (mandato al tempo t, arriva a t + 1). Onestà di tutti i nodi (sarà droppato subito questa assunzione). 4’. Una percentuale dei nodi è bizantina.\nAltre di base trattate prima\nesistenza di internet Esistenza di crittografia Si può notare che le ultime due assunzioni sono le stesse più generali definite in Consensus protocols, andremo negli appunti in seguito solamente a rilassare alcune assunzioni di 1 e 2.\nLa 1 è stata storicamente molto sensata, dato che era pensata per database che comunicassero fra di loro, e chiaramente quello era un settings più controllato, per blockchain vorremmo anche provare rilassare questo.\nBizantine broadcast problem Questo è un problema molto simile a SMR, tanto che si potrà dimostra che che risolvere SMR si può ridurre a dimostrare BB. Andremo quindi a descrivere questo problema\nFaulty/Bizantine Nodes Alcuni nodi falliscono, anche se non intenzionalmente, per esempio con errori di hardware.\nUn nodo che non è onesto (comporta come si dovrebbe comportare) è faulty.\nFault types Crash fault (errore del software oppure dell’hardware). Omission fault (in cui la trasmissione di informazione importante è fallita, può essere intenzionale o meno) Omissione di send-receive O altro genere di omissione simile. Bizantine fault (un certo insieme di nodi fa come gli pare) È molto importante comprendere questo concetto, dato che sarà di base nell’analisi della costruzione di protocolli che funzionino per BB.\nIn modo intuitivo possiamo intendere un nodo come bizantino sse non si comporta come dovrebbe. E lì vengono descritte anche 3 cause per il suo non-comportamento corretto.\nDescrizione del problema Un nodo leader e n - 1 nodi non leader. Il leader ha una informazione privata $v ^*$ che deve mandare a tutti. Una soluzione del problema deve soddisfare queste tre caratteristiche\nValidità ossia se il nodo sender (leader) è onesto, gli altri devono essere d’accordo che il messaggio è $v^*$ Terminazione non di deve essere deadlock, i nodi devono terminare con qualche risultato. Agreement quando termina, tutti i nodi onesti devono essere d’accordo sullo stesso risultato. SMR si riduce a BB Prenderemo in questa soluzione l’idea presente in #Round-Robin leaders, ad avere ad ogni momento un leader.\nAllora dato questo leader, utilizziamo BB con leader = sender, e gli altri nodi per mandare il messaggio privato.\nAllora questo algoritmo possiede sia liveness che consistency. Liveness per stesso motivo di prima, prima o poi un nodo diventa un leader, quindi riesce ad aggiungere la sua informazione privata.\nConsistency perché perla soluzione di BB, ogni nodo onesto alla fine sarà d’accordo su quanto deve aggiungere alla sua lista privata. In particolare se il leader è onesto sarà esattamente quanto mandato dal sender.\nAlcune soluzioni Lazy SMR Se ogni nodo non comunicasse, ma aggiungesse alla propria lista privata la transazione, questo non funziona. Non c’è proprio la consistenza. Non ci si può aspettare che il nodo esterno, la transazione riesca a richiedere allo stesso tempo a tutti i nodi.\nDa qui concludiamo che i nodi devono comunicare fra di loro (che è una cosa molto banale).\nRound-Robin leaders Questà è una idea che ogni nodo diventa leader e si mette a coordinare i nodi a turni, in un certo senso è molto simile all’idea presente in Architettura e livelli 1, 2 riguardo le reti ad anello e il passaggio del testimone.\nFunzionamento I nodi diventano leader a seconda del tempo globale. Il nodo leader manda a tutti gli altri la sua lista, gli altri aggiungeranno al proprio alla fine, all’inizio metto le propria (quindi).\nCorrettezza Sia consistenza sia liveness vengono soddisfatti. La liveness è soddisfatta perché prima o poi il nodo n sarà il leader, allora avrà l’occasione di aggiungere alla catena i suoi dati privati.\nLa consistenza viene soddisfatta perché sotto le assunzioni che abbiamo i messaggi vengono mandati e ricevuti esattamente in uno step di tempo, quindi ogni nodo riesce ad aggiungere alla sua lista privata quello che gli è di interesse.\nNecessità dell’onestà Se un nodo non onesto diventa leader, potrebbe mandare un pò della sua lista ad lacuni nodi e niente ad altro (omission fault) e quindi questo rompe tutta la consistenza! Quindi questo metodo funziona solamente nel caso in cui nessun nodo fallisca. Vorremmo però resiste anche al fallimento!\nDolev-Strong protocol L’idea generale di questo protocollo è capire se il sender è onesto o meno. Se si riesce a capire questa cosa, allora se è onesto prendo il suo valore, altrimenti metto bottom sulla mia pila\nConvincing messages The protocol Quel mandare cose è più o meno cercare di capire se il nodo sender ha mandato messaggi contraddittori.\nProof of correctness PKI (Hexagon proof) Pease, Shostak, and Lamport [PSL80], and later the proof was simplified by Fischer, Lynch, and Merritt [FLM85].\nQuesta è una dimostrazione molto importante per quanto riguarda questo modello. Mostra che ci sono delle limitazioni pesanti riguardanti il modello. Come si vedrà in seguito anche in Asynchronous model, ci saranno delle limitazioni in praticamente qualunque modello.\nEnunciato Siano n nodi all’interno di un modello a comunicazione sincrona in cui non è presente un setting PKI (chiave privata e pubblica), se i nodi bizantini sono $f \\geq n / 3$, allora non è possibile avere contemporaneamente terminazione, safety e liveness.\nDimostrazione Dimostreremo solamente il caso in cui n = 3, poi si dovrebbe estendere senza molto sforzo al caso maggiore generico.\nQuesta dimostrazione va a contraddizione. Supponiamo di avere un setting a 6 nodi come in figura\nI nodi F sono i sender, mentre M e L sono le altre cose.\nOra da notare è che il protocollo può eseguire su questo sistema, cioè anche se era inteso per essere eseguito nel caso $n = 3$, le uniche cose di cui ha bisogno il protocollo è\nSapere se è un sender o meno Il messaggio da inviare se è il sender I suoi n - 2 vicini (quindi sapere a chi mandare). Quindi sotto queste assunzioni il protocollo può eseguire\nAllora andiamo a considerare 3 scenari possibili:\nScenario 1 F bizantino\nSupponiamo di essere in un sistema a 3, con L, M, F, ma F è il nodo bizantino. F dato che è bizantino può fare cose arbitrarie, in particolare facciamo finta che simuli i nodi F’, M’, L’, F collegati come di sopra.\nAllora dato che il nosto protocollo deve soddisfare consistenza, ossia tutti i nodi onesti devono finere per essere d’accordo su qualcosa, deve essere che nel sistema l’output di L = M\nScenario 2 L bizantino\nSistema a 3 dato da L, M, e F’, ma in questo caso ora il nodo M simula i nodi M, L, F, M’. Per validità del protocollo deve essere che L è d’accordo con l’output 1, del sender F’.\nScenario 3 M bizantino\nSimile al siste a tre nel primo caso, ora L simula L, F’, M’, L’. Quindi per validità M dà in output F.\nma allora abbiamo un assurdo perché L dovrebbe essere uguale a M, invece l’output è diverso. Quindi questo scenario non può succedere.\n",
+  "wordCount" : "1341",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -258,7 +258,11 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
                     <a href="#bizantine-broadcast-problem" aria-label="Bizantine broadcast problem">Bizantine broadcast problem</a><ul>
                         
                 <li>
-                    <a href="#faultybizantine-nodes" aria-label="Faulty/Bizantine Nodes">Faulty/Bizantine Nodes</a></li>
+                    <a href="#faultybizantine-nodes" aria-label="Faulty/Bizantine Nodes">Faulty/Bizantine Nodes</a><ul>
+                        
+                <li>
+                    <a href="#fault-types" aria-label="Fault types">Fault types</a></li></ul>
+                </li>
                 <li>
                     <a href="#descrizione-del-problema" aria-label="Descrizione del problema">Descrizione del problema</a></li>
                 <li>
@@ -270,7 +274,15 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
                 <li>
                     <a href="#lazy-smr" aria-label="Lazy SMR">Lazy SMR</a></li>
                 <li>
-                    <a href="#round-robin-leaders" aria-label="Round-Robin leaders">Round-Robin leaders</a></li></ul>
+                    <a href="#round-robin-leaders" aria-label="Round-Robin leaders">Round-Robin leaders</a><ul>
+                        
+                <li>
+                    <a href="#funzionamento" aria-label="Funzionamento">Funzionamento</a></li>
+                <li>
+                    <a href="#correttezza" aria-label="Correttezza">Correttezza</a></li>
+                <li>
+                    <a href="#necessit%c3%a0-dellonest%c3%a0" aria-label="Necessità dell&rsquo;onestà">Necessità dell&rsquo;onestà</a></li></ul>
+                </li></ul>
                 </li>
                 <li>
                     <a href="#dolev-strong-protocol" aria-label="Dolev-Strong protocol">Dolev-Strong protocol</a><ul>
@@ -298,7 +310,7 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
 </div>
 
   <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
-<p>Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; che è importantissimo per comprendere questa parte.</p>
+<p>Da ricordare il &ldquo;The State Machine Replication (SMR) Problem&rdquo; in <a href="/notes/consensus-protocols/">Consensus protocols</a> che è importantissimo per comprendere questa parte.</p>
 <ol>
 <li>Storia locale</li>
 <li>Transazioni al singolo noto</li>
@@ -332,63 +344,60 @@ Consistenza i nodi devono essere daccordo su quale transazione mettere prima e d
 <p>Si può notare che le ultime due assunzioni sono le stesse più generali definite in <a href="/notes/consensus-protocols/">Consensus protocols</a>, andremo negli appunti in seguito solamente a rilassare alcune assunzioni di 1 e 2.</p>
 <p>La 1 è stata storicamente molto sensata, dato che era pensata per database che comunicassero fra di loro, e chiaramente quello era un settings più controllato, per blockchain vorremmo anche provare rilassare questo.</p>
 <h2 id="bizantine-broadcast-problem">Bizantine broadcast problem<a hidden class="anchor" aria-hidden="true" href="#bizantine-broadcast-problem">#</a></h2>
-<p>Questo è un problam molto simile a SMR, tanto che si potrà dimostrache che risolvere SMR si può ridurre a dimostrare BB. Andremo quindi a descrivere questo problema</p>
+<p>Questo è un problema molto simile a SMR, tanto che si potrà dimostra che che risolvere SMR si può ridurre a dimostrare BB. Andremo quindi a descrivere questo problema</p>
 <h3 id="faultybizantine-nodes">Faulty/Bizantine Nodes<a hidden class="anchor" aria-hidden="true" href="#faultybizantine-nodes">#</a></h3>
 <p>Alcuni nodi falliscono, anche se non intenzionalmente, per esempio con errori di hardware.</p>
 <blockquote>
 <p>Un nodo che non è onesto (comporta come si dovrebbe comportare) è <strong>faulty</strong>.</p>
 </blockquote>
-<p><strong>Motivi di errore possibile</strong></p>
+<h4 id="fault-types">Fault types<a hidden class="anchor" aria-hidden="true" href="#fault-types">#</a></h4>
 <ol>
 <li>Crash fault (errore del software oppure dell’hardware).</li>
-<li>Omission fault (in cui la trasmissione di informazione importante è fallita, può essere intenzionale o meno)</li>
+<li>Omission fault (in cui la trasmissione di informazione importante è fallita, può essere intenzionale o meno)
+<ol>
+<li>Omissione di send-receive</li>
+<li>O altro genere di omissione simile.</li>
+</ol>
+</li>
 <li>Bizantine fault (un certo insieme di nodi fa come gli pare)</li>
 </ol>
-<p>È molto importante comprendere questo concetto, dato che sarà di base nell’analisi della costruzione di protocolli che funzionino per BB.</p>
+<p>È molto importante comprendere questo concetto, dato che sarà di base nell&rsquo;analisi della costruzione di protocolli che funzionino per BB.</p>
 <p>In modo intuitivo possiamo intendere un nodo come bizantino sse non si comporta come dovrebbe. E lì vengono descritte anche 3 cause per il suo non-comportamento corretto.</p>
 <h3 id="descrizione-del-problema">Descrizione del problema<a hidden class="anchor" aria-hidden="true" href="#descrizione-del-problema">#</a></h3>
-<p>Un nodo leader e n - 1 nodi non leader. Il leader ha una informazione privat a $v ^*$ che deve mandare a tutti.</p>
-<p>Una soluzione del problema deve soddisfare queste tre caratteristiche</p>
+<p>Un nodo leader e n - 1 nodi non leader. Il leader ha una informazione privata $v ^*$ che deve mandare a tutti.
+Una soluzione del problema deve soddisfare queste tre caratteristiche</p>
 <ol>
-<li><strong>Validità</strong> ossia se il nodo sender (leader) è onesto, gli altri devono essere daccordo che il messaggio è  $v^*$</li>
+<li><strong>Validità</strong> ossia se il nodo sender (leader) è onesto, gli altri devono essere d&rsquo;accordo che il messaggio è  $v^*$</li>
 <li><strong>Terminazione</strong> non di deve essere deadlock, i nodi devono terminare con qualche risultato.</li>
 <li><strong>Agreement</strong> quando termina, tutti i nodi onesti devono essere d’accordo sullo stesso risultato.</li>
 </ol>
 <h3 id="smr-si-riduce-a-bb">SMR si riduce a BB<a hidden class="anchor" aria-hidden="true" href="#smr-si-riduce-a-bb">#</a></h3>
-<p>Prenderemo in questa soluzione l’idea presente in Round-Robin leaders, ad avere ad ogni momento un leader.</p>
+<p>Prenderemo in questa soluzione l’idea presente in <a href="/notes/syncronous-model/#round-robin-leaders">#Round-Robin leaders</a>, ad avere ad ogni momento un leader.</p>
 <p>Allora dato questo leader, utilizziamo BB con leader = sender, e gli altri nodi per mandare il messaggio privato.</p>
 <p>Allora questo algoritmo possiede sia liveness che consistency. Liveness per stesso motivo di prima, prima o poi un nodo diventa un leader, quindi riesce ad aggiungere la sua informazione privata.</p>
 <p>Consistency perché perla soluzione di BB, ogni nodo onesto alla fine sarà d’accordo su quanto deve aggiungere alla sua lista privata. In particolare se il leader è onesto sarà esattamente quanto mandato dal sender.</p>
-<ul>
-<li>
-<p>Slides</p>
-  <img src="/images/notes/image/universita/ex-notion/Syncronous model/Untitled.png" alt="image/universita/ex-notion/Syncronous model/Untitled">
-  <img src="/images/notes/image/universita/ex-notion/Syncronous model/Untitled 1.png" alt="image/universita/ex-notion/Syncronous model/Untitled 1">
-</li>
-</ul>
+<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Syncronous model/Untitled.png&quot; alt=&quot;image/universita/ex-notion/Syncronous model/Untitled&quot;&gt;
+&lt;img src=&quot;/images/notes/image/universita/ex-notion/Syncronous model/Untitled 1.png&quot; alt=&quot;image/universita/ex-notion/Syncronous model/Untitled 1&quot;&gt;
+</code></pre>
 <h2 id="alcune-soluzioni">Alcune soluzioni<a hidden class="anchor" aria-hidden="true" href="#alcune-soluzioni">#</a></h2>
 <h3 id="lazy-smr">Lazy SMR<a hidden class="anchor" aria-hidden="true" href="#lazy-smr">#</a></h3>
 <p>Se ogni nodo non comunicasse, ma aggiungesse alla propria lista privata la transazione, questo non funziona. Non c’è proprio la consistenza. Non ci si può aspettare che il nodo esterno, la transazione riesca a richiedere allo stesso tempo a tutti i nodi.</p>
 <p>Da qui concludiamo che <strong>i nodi devono comunicare fra di loro</strong> (che è una cosa molto banale).</p>
 <h3 id="round-robin-leaders">Round-Robin leaders<a hidden class="anchor" aria-hidden="true" href="#round-robin-leaders">#</a></h3>
 <p>Questà è una idea che ogni nodo diventa <strong>leader</strong> e si mette a coordinare i nodi a turni, in un certo senso è molto simile all’idea presente in <a href="/notes/architettura-e-livelli-1-2/">Architettura e livelli 1, 2</a>  riguardo le reti ad anello e il passaggio del testimone.</p>
-<p><strong>Funzionamento</strong></p>
-<p>I nodi diventano leader aseconda del tempo globale.</p>
-<p>Il nodo leader manda a tutti gli altri la sua lista, gli altri aggiungeranno al proprio alla fine, all’inizio metto le propria (quindi).</p>
-<p><strong>Correttezza</strong></p>
+<h4 id="funzionamento">Funzionamento<a hidden class="anchor" aria-hidden="true" href="#funzionamento">#</a></h4>
+<p>I nodi diventano leader a seconda del tempo globale.
+Il nodo leader manda a tutti gli altri la sua lista, gli altri aggiungeranno al proprio alla fine, all’inizio metto le propria (quindi).</p>
+<h4 id="correttezza">Correttezza<a hidden class="anchor" aria-hidden="true" href="#correttezza">#</a></h4>
 <p>Sia consistenza sia liveness vengono soddisfatti. La liveness è soddisfatta perché prima o poi il nodo n sarà il leader, allora avrà l’occasione di aggiungere alla catena i suoi dati privati.</p>
 <p>La consistenza viene soddisfatta perché sotto le assunzioni che abbiamo i messaggi vengono mandati e ricevuti esattamente in uno step di tempo, quindi ogni nodo riesce ad aggiungere alla sua lista privata quello che gli è di interesse.</p>
-<p><strong>Necessità dell’onestà</strong></p>
+<h4 id="necessità-dellonestà">Necessità dell&rsquo;onestà<a hidden class="anchor" aria-hidden="true" href="#necessità-dellonestà">#</a></h4>
 <p>Se un nodo non onesto diventa leader, potrebbe mandare un pò della sua lista ad lacuni nodi e niente ad altro (omission fault) e quindi questo rompe tutta la consistenza! Quindi questo metodo funziona solamente nel caso in cui nessun nodo fallisca. Vorremmo però resiste anche al fallimento!</p>
 <h2 id="dolev-strong-protocol">Dolev-Strong protocol<a hidden class="anchor" aria-hidden="true" href="#dolev-strong-protocol">#</a></h2>
 <p>L’idea generale di questo protocollo è capire se il sender è onesto o meno. Se si riesce a capire questa cosa, allora se è onesto prendo il suo valore, altrimenti metto bottom sulla mia pila</p>
 <h3 id="convincing-messages">Convincing messages<a hidden class="anchor" aria-hidden="true" href="#convincing-messages">#</a></h3>
-<ul>
-<li>
-<p>Definizione in slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Syncronous model/Untitled 2.png" alt="image/universita/ex-notion/Syncronous model/Untitled 2">
-</li>
-</ul>
+<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Syncronous model/Untitled 2.png&quot; alt=&quot;image/universita/ex-notion/Syncronous model/Untitled 2&quot;&gt;
+</code></pre>
 <h3 id="the-protocol">The protocol<a hidden class="anchor" aria-hidden="true" href="#the-protocol">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Syncronous model/Untitled 3.png" alt="image/universita/ex-notion/Syncronous model/Untitled 3">
 <p>Quel mandare cose è più o meno cercare di capire se il nodo sender ha mandato messaggi contraddittori.</p>
@@ -404,7 +413,7 @@ Merritt [FLM85].</p>
 <p>Questa dimostrazione va a contraddizione. Supponiamo di avere un setting a 6 nodi come in figura</p>
 <img src="/images/notes/image/universita/ex-notion/Syncronous model/Untitled 4.png" alt="image/universita/ex-notion/Syncronous model/Untitled 4">
 <p>I nodi F sono i sender, mentre M e L sono le altre cose.</p>
-<p>Ora da notare è che <strong>il procollo può eseguire su questo sistema</strong>, cioè anche se era inteso per essere eseguito nel caso $n = 3$, le uniche cose di cui ha bisogno il protocollo è</p>
+<p>Ora da notare è che <strong>il protocollo può eseguire su questo sistema</strong>, cioè anche se era inteso per essere eseguito nel caso $n = 3$, le uniche cose di cui ha bisogno il protocollo è</p>
 <ol>
 <li>Sapere se è un sender o meno</li>
 <li>Il messaggio da inviare se è il sender</li>
@@ -419,7 +428,7 @@ Merritt [FLM85].</p>
 <p>Sistema a 3 dato da L, M, e F’, ma in questo caso ora il nodo M simula i nodi M, L, F, M’. Per validità del protocollo deve essere che L è d&rsquo;accordo con l’output 1, del sender F’.</p>
 <p><strong>Scenario 3 M bizantino</strong></p>
 <p>Simile al siste a tre nel primo caso, ora L simula L, F’, M’, L’. Quindi per validità M dà in output F.</p>
-<p>ma allora bbiamo un assurdo perché L dovrebbe essere uguale a M, invece l&rsquo;output è diverso. Quindi questo scenario non può succedere.</p>
+<p>ma allora abbiamo un assurdo perché L dovrebbe essere uguale a M, invece l&rsquo;output è diverso. Quindi questo scenario non può succedere.</p>
 
 
   </div>
