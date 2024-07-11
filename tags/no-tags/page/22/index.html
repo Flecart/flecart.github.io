@@ -181,74 +181,84 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Algebra lineare numerica
+    <h2 class="entry-hint-parent">Message Passing
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular....</p>
+    <p>ora abbiamo alcune primitive per passarci i messaggi, vogliamo creare metodo in modo che i processi si possano sincronizzare mandando messaggi.
+la memoria è sempre privata.
+Primitive Send e receive 🟩 Send
+Spedizione del messaggio input deve avere un identificato al processo su cui spedire. Se si vuole espandere si possono avere multicast e broadcasting ma non li studieremo in questo corso.
+Receive
+Ricevi messaggi
+Tassonomia dei message passing (!)🟩 Slide...</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Message Passing" href="https://flecart.github.io/notes/message-passing/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmi Concorrenti
+    <h2 class="entry-hint-parent">Partially synchronous model
     </h2>
   </header>
   <div class="entry-content">
-    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Serie
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Questo è un tentativo di aggiungere un argomento che non era presente quando abbiamo fatto il corso due anni fa. Inizio la scrittura il 2024-03-03. Questo non è stato trattano nel corso, ma è importante per molte cose. Quindi introduco questo appunto.
-Introduzione alle serie Le serie infinite sono dei mostri strani perché non si comportano spesso come dovrebbero.
-Limit Comparison Test Siano date due Successioni $a_{n}$ e $b_{n}$ sempre positive....</p>
+    <p>Ultima modifica: January 3, 2023 3:59 PM Primo Abbozzo: January 3, 2023 3:58 PM Studi Personali: No
+Elementi di ripasso Argomento https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf</p>
   </div>
   <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Serie" href="https://flecart.github.io/notes/serie/"></a>
+  <a class="entry-link" aria-label="post link to Partially synchronous model" href="https://flecart.github.io/notes/partially-synchronous-model/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Uniform Resource Identifier
+    <h2 class="entry-hint-parent">Gestione delle eccezioni
     </h2>
   </header>
   <div class="entry-content">
-    <p>Ripasso: May 14, 2023 Ultima modifica: June 17, 2023 11:54 PM Primo Abbozzo: February 24, 2023 1:33 PM Studi Personali: No
-Elementi di ripasso URI Sono stata LA vera invenzione di Berners Lee accennati in Storia del web. Il problema è avere un modo per identificare una risorsa in modo univoco sull’internet.
-Introduzione La risorsa 🟩 Una risorsa è qualunque struttura che sia oggetto di scambio tra applicazioni all’interno del World Wide Web....</p>
+    <p>Introduzione Metodi alternativi di gestione degli errori (3) 🟩 A volte le computazioni falliscono. Potremmo gestirle con i result come accennato in Polimorfismo, però diventa molto macchinoso fare tutte le funzioni che debbano inoltrare solamente delle results. bisogna trovare un modo più naturale. Ecco che arriva una gestione delle eccezioni direttamente nel linguaggio. Si tratta un sistema di comunicazione degli errori.
+ALTRI METODI
+Results, stile monadico, vedi sopra. definire dei valori eccezionali (questo si va spesso in C) Il chiamato dice al chiamante una cosa da chiamare quando fallisce....</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Uniform Resource Identifier" href="https://flecart.github.io/notes/uniform-resource-identifier/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Gestione delle eccezioni" href="https://flecart.github.io/notes/gestione-delle-eccezioni/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">CSS
+    <h2 class="entry-hint-parent">Integrali multi-dimensionali
     </h2>
   </header>
   <div class="entry-content">
-    <p>Cascading Style Sheets Inizialmente HTML era per la presentazione, abbiamo ancora un pò di attributi storici e tag storici per questa parte di presentazione descritto in HTML e Markup.
-Introduzione È un linguaggio indipendente per la descrizione della grafica. La cosa bella è iil fatto di essere indipendente, quindi è adatto a HTML, a XML e simili.
-Una cosa particolare è il cascading quindi il fatto che dichiarazioni più nuove sovrascrivano o espandino dichiarazione vecchie....</p>
+    <p>Andremo ad analizzare integrali di funzioni continue su insiemi semplici (domini normali) .
+Introduzione Y-semplice e regolarità È un insieme semplice di punti, in pratica, se considero un intervallo limitato e due funzioni definite in questo intervallo tale che una è sempre minore dell’altra, l’insieme y-semplice sono i punti compresi fra queste
+Definizione del libro Intuizione integrale Definizione del prof.
+Dato un insieme semplice A e una funzione continua $f:A \to R$ allora è ben definito l’integrale...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to CSS" href="https://flecart.github.io/notes/css/"></a>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Integrali multi-dimensionali" href="https://flecart.github.io/notes/integrali-multi-dimensionali/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Modulazione wireless
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Digital modulation 🟨 Slide introduzione
+Modulazione digitale: prendiamo un dato digitale e trasmesso con un segnale analogico, come le RF.
+ASK: amplitude shift keying
+FSK: frequency shift
+PSK: phase shift
+Questi sono i tre metodi principali, che dipendono dalle caratteristiche dell’onda descritte in Fisica del Wireless.
+TRE CARATTERISTICHE
+Power
+Resistenza interferenze. (robustezza)
+ANALOG MODULATION
+Per modulare un segnale analogico si utilizzano principalemente AM o FM, amplitude o frequency modulation, raramente si utilizza PM....</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Modulazione wireless" href="https://flecart.github.io/notes/modulazione-wireless/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
