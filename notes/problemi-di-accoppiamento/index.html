@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Problemi di accoppiamento | X. Angelo Huang&#39;s Blog</title>
-<meta name="keywords" content="no-tags">
+<meta name="keywords" content="📈optimization">
 <meta name="description" content="I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.
 Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
@@ -132,7 +132,7 @@ Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e
   "name": "Problemi di accoppiamento",
   "description": "I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.\nGrafo bipartito🟩 Un grafo bipartito è un insieme $(O \\cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione.",
   "keywords": [
-    "no-tags"
+    "📈optimization"
   ],
   "articleBody": "I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.\nGrafo bipartito🟩 Un grafo bipartito è un insieme $(O \\cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione.\nAccoppiamenti (lessico)🟩 Consideriamo $M$ archi che non abbiano nodi in comune, vogliamo cercare in questo senso di fare un accoppiamento fra i nodi di origine e i nodi di destinazione.\ndiciamo accoppiamento perfetto se tutti i nodi sono stati accoppiati\nArco di bottleneck è l’arco di costo massimo, che si dice costo di bottleneck.\nAccoppiamento di massima cardinalita Trasformazione del problema🟩 Vogliamo cercare di utilizzare gli algoritmi noti sui flussi di costo minimo e flusso massimo, algo di flusso massimo. In questo caso se giriamo il problema in modo opportuno possiamo renderlo un problema di flusso massimo\nCreo nuovo nodo fittizzio di origine e destinazione, in modo simile a quanto fatto in precedenza in Reti di flusso Capacità degli archi sono tutti 1, se c’è flusso lo prendo, altrimenti no. (in questo senso i flussi devono essere interi! Osservazioni sulla tipologia di path🟩 La path che viene in questo modo creata dovrà essere per forza alternanti, che vanno a rimbalzare fra i nodi interni!\nRicorda cosa sono gli archi interni e gli archi estermi.\nDato un insieme $M$ di tutti gli archi del nostro grafo bipartito che andiamo a prendere, consideriamo archi interni questi, ed archi estermi l’insieme $P - M$, con P tutti gli archi.\nChiaramente devo passare dalla sorgente alla destinazione, e lo posso fare solamente una volta per ecco che si può dire che\n$$ |P_e| - |P_i| = 1 $$ con Pe l’insieme degli archi esterni che prendo e Pi l’insieme degli archi interni che vado a prendere, vado poi solamente a considerare la cardinalità di questo robo.\nQuesta osservazione è importante per poter mettere in relazione molto stretta il fatto che i cammini aumentanti ↔ cammini alternanti con quella proprietà, perché in questo modo il cammino alternante inizia e finisce in un nodo esterno, cioè un nodo che non è mai stato utilizzato per l’accoppiamento.\nAccoppiamento di costo minimo Possiamo utilizzare gli algoritmi di MCMF per risolvere questo problema qui!\nImportante notare che gli accoppiamenti devono essere perfetti, ossia non ho nessun nodo libero.\nAccoppiamento di minimo bottleneck Anche qui deve esere fra tutti gli accopiamenti perfetti.\nIn questo caso si cerca di avere il minimo arco maggiore possibile, non per forza il minimo di costo.\n",
   "wordCount" : "452",
@@ -302,14 +302,14 @@ $$
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://flecart.github.io/tags/no-tags/">No-Tags</a></li>
+      <li><a href="https://flecart.github.io/tags/optimization/">📈Optimization</a></li>
     </ul>
 
 
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Problemi di accoppiamento on x"
-            href="https://x.com/intent/tweet/?text=Problemi%20di%20accoppiamento&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fproblemi-di-accoppiamento%2f&amp;hashtags=no-tags">
+            href="https://x.com/intent/tweet/?text=Problemi%20di%20accoppiamento&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fproblemi-di-accoppiamento%2f&amp;hashtags=%f0%9f%93%88optimization">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Fourier Series | X. Angelo Huang&#39;s Blog</title>
-<meta name="keywords" content="no-tags">
+<meta name="keywords" content="🔮real-analysis">
 <meta name="description" content="Intuition The most important observation that allows Fourier series approximation is that given $k = 1, 2, \dots$ we have that $$ \frac{1}{\sqrt{ 2\pi }}, \frac{\cos(kx)}{\sqrt{ \pi }}, \frac{\sin(kx)}{\sqrt{ \pi }}, \dots $$ Form a infinitely dimensional orthonormal basis given the integral relations $$ \int_{0}^{2\pi} (\sin (kx))^{2} \, dx = \int_{0}^{2\pi} (\cos(kx))^{2} \, dx = \pi $$ $$ \int_{0}^{2\pi}\sin(kx)\sin(hx) \, dx = \int_{0}^{2\pi}\cos(kx)\cos(hx) \, dx = 0 $$ And that $$ \int_{0}^{2\pi}\sin(kx)\cos(hx) \, dx = \int_{0}^{2\pi} \sin(kx) \, dx = \int_{0}^{2\pi}\cos(hx) \, dx = 0 $$ Proofs of the relations In this section we quickly prove why the above equations hold.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/fourier-series/">
@@ -129,7 +129,7 @@ if (!doNotTrack) {
   "name": "Fourier Series",
   "description": "Intuition The most important observation that allows Fourier series approximation is that given $k = 1, 2, \\dots$ we have that $$ \\frac{1}{\\sqrt{ 2\\pi }}, \\frac{\\cos(kx)}{\\sqrt{ \\pi }}, \\frac{\\sin(kx)}{\\sqrt{ \\pi }}, \\dots $$ Form a infinitely dimensional orthonormal basis given the integral relations $$ \\int_{0}^{2\\pi} (\\sin (kx))^{2} \\, dx = \\int_{0}^{2\\pi} (\\cos(kx))^{2} \\, dx = \\pi $$ $$ \\int_{0}^{2\\pi}\\sin(kx)\\sin(hx) \\, dx = \\int_{0}^{2\\pi}\\cos(kx)\\cos(hx) \\, dx = 0 $$ And that $$ \\int_{0}^{2\\pi}\\sin(kx)\\cos(hx) \\, dx = \\int_{0}^{2\\pi} \\sin(kx) \\, dx = \\int_{0}^{2\\pi}\\cos(hx) \\, dx = 0 $$ Proofs of the relations In this section we quickly prove why the above equations hold.",
   "keywords": [
-    "no-tags"
+    "🔮real-analysis"
   ],
   "articleBody": "Intuition The most important observation that allows Fourier series approximation is that given $k = 1, 2, \\dots$ we have that $$ \\frac{1}{\\sqrt{ 2\\pi }}, \\frac{\\cos(kx)}{\\sqrt{ \\pi }}, \\frac{\\sin(kx)}{\\sqrt{ \\pi }}, \\dots $$ Form a infinitely dimensional orthonormal basis given the integral relations $$ \\int_{0}^{2\\pi} (\\sin (kx))^{2} \\, dx = \\int_{0}^{2\\pi} (\\cos(kx))^{2} \\, dx = \\pi $$ $$ \\int_{0}^{2\\pi}\\sin(kx)\\sin(hx) \\, dx = \\int_{0}^{2\\pi}\\cos(kx)\\cos(hx) \\, dx = 0 $$ And that $$ \\int_{0}^{2\\pi}\\sin(kx)\\cos(hx) \\, dx = \\int_{0}^{2\\pi} \\sin(kx) \\, dx = \\int_{0}^{2\\pi}\\cos(hx) \\, dx = 0 $$ Proofs of the relations In this section we quickly prove why the above equations hold. First we all agree that $\\int_{0}^{2\\pi} \\sin(kx) \\, dx = \\int_{0}^{2\\pi} \\cos(hx) \\, dx = 0$ because their period divides $2\\pi$ and the sum of the area of a period is clearly 0. Or we can explicitly find the primitive and solve\n$$ \\int_{0}^{2\\pi} \\sin(kx) \\, dx = -\\frac{1}{k} \\cos(kx) \\bigg\\vert_{0}^{2\\pi} = 0 - 0 $$ Equivalently the other part with the cosine.\nFor the other relations we need to remember some trigonometric identities:\n$\\sin(kx)\\cos(hx) = \\frac{1}{2}\\left[ \\sin(kx + hx) + \\sin(kx - hx) \\right]$ And if we solve now the integral we can see that $$ \\int_{0}^{2\\pi} \\sin(kx) \\cos(hx) \\, dx = \\frac{1}{2} \\left[ \\int_{0}^{2\\pi} \\sin((k + h)x) \\, d + \\int_{0}^{2\\pi}\\sin((k - h)x) \\, dx \\right] $$ $$ = = \\frac{1}{2}\\left[ \\frac{-1}{k + h} \\cos((k + h)x)\\bigg\\vert_{0}^{2\\pi} + \\frac{-1}{k - h} \\cos((k - h)x) \\bigg\\vert_{0}^{2\\pi} \\right] = \\frac{1}{2} (0 + 0) $$ Same thing with the others but we use the identities $$ \\sin x \\cdot \\sin y = \\frac{1}{2}\\left[ \\cos(x - y) - \\cos(x + y) \\right] $$ And $$ \\cos x \\cdot \\cos y = \\frac{1}{2} \\left[ \\cos(x - y) + \\cos(x + y) \\right] $$ And then you can prove every relation.\nFourier Series This allows us to define the projection $S_{n}$ of every function $f$ onto that basis. Defined as $$ S_{n}f = \\sum_{i=0}^{2n} \\langle f, e_{i} \\rangle e_{i} $$ Which is explicitely: $$ S_{n}f(x) = \\left( \\int_{0}^{2n} \\frac{1}{\\sqrt{ 2\\pi }} f(t) \\, dt \\right) \\frac{1}{\\sqrt{ 2\\pi }} + \\sum_{k=1}^{n} \\left[ \\left( \\int_{0}^{2n} \\frac{\\cos(kt)}{\\sqrt{ \\pi }} f(t) \\, dt \\right) \\frac{\\cos(kx)}{\\sqrt{ \\pi }} + \\left( \\int_{0}^{2\\pi} \\frac{\\sin(kt)}{\\sqrt{ \\pi }}f(t) \\, dt \\right) \\frac{\\sin(kx)}{\\sqrt{ \\pi }} \\right] $$ Which could be rewritten as follows (called Fourier Series): $$ S_{n}f(x) = \\frac{1}{2}a_{0} + \\sum_{k=1}^{n}(a_{k}\\cos(kx) + b_{k}\\sin(kx)) $$ With $a_{k} = \\frac{1}{\\pi}\\int_{0}^{2\\pi} f(t) \\cos (kt) \\, dt$ and $b$ equivalently. these $a, b$ are called Fourier coefficients of $f$. We call $S_{n}f(x)$ nth Fourier sum\nProperties of the Fourier Series Norm of the Fourier Series We assert that $$ \\lVert S_{n} f \\rVert ^{2} = \\pi \\left[ \\frac{a_{0}^{2}}{2} + \\sum_{k = 1}^{n} (a_{k}^{2} + b_{k}^{2}) \\right] $$ In this case the definition of the norm squared is as follows: $$ \\lVert S_{n}f \\rVert^{2} = \\int_{0}^{2\\pi} \\lvert S_{n}f \\rvert ^{2} \\, dx $$ And then it is far easier to derive.\n",
   "wordCount" : "484",
@@ -355,14 +355,14 @@ And then it is far easier to derive.</p>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://flecart.github.io/tags/no-tags/">No-Tags</a></li>
+      <li><a href="https://flecart.github.io/tags/real-analysis/">🔮Real-Analysis</a></li>
     </ul>
 
 
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Fourier Series on x"
-            href="https://x.com/intent/tweet/?text=Fourier%20Series&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ffourier-series%2f&amp;hashtags=no-tags">
+            href="https://x.com/intent/tweet/?text=Fourier%20Series&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ffourier-series%2f&amp;hashtags=%f0%9f%94%aereal-analysis">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
