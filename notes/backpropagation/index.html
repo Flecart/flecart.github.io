@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Backpropagation | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="TODO">
+<meta name="description" content="Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Karpathy has a nice resource for this topic.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/backpropagation/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -87,7 +87,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Backpropagation" />
-<meta property="og:description" content="TODO" />
+<meta property="og:description" content="Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Karpathy has a nice resource for this topic." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/backpropagation/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -98,7 +98,7 @@ if (!doNotTrack) {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Backpropagation"/>
-<meta name="twitter:description" content="TODO"/>
+<meta name="twitter:description" content="Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Karpathy has a nice resource for this topic."/>
 
 
 <script type="application/ld+json">
@@ -127,12 +127,12 @@ if (!doNotTrack) {
   "@type": "BlogPosting",
   "headline": "Backpropagation",
   "name": "Backpropagation",
-  "description": "TODO",
+  "description": "Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Karpathy has a nice resource for this topic.",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "TODO\n",
-  "wordCount" : "1",
+  "articleBody": "Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Karpathy has a nice resource for this topic.\nA brief history of Backpropagation Backpropagation builds on some backbone ideas in mathematics and computer science.\nBuilding blocks of backpropagation go back a long time\nThe chain rule (Leibniz, 1676; L’Hôpital, 1696) Dynamic Programming (DP, Bellman, 1957) Minimisation of errors through gradient descent (Cauchy 1847, Hadamard, 1908) in the parameter space of complex, nonlinear, differentiable, multi-stage, NN-related systems (Kelley 1960; Bryson, 1961; Bryson and Denham, 1961; Pontryagin et al., 1961, …)\nExplicit, efficient error backpropagation (BP) in arbitrary, discrete, possibly sparsely connected, NN-like networks apparently was first described in 1970 by Finnish master student Seppo Linnainmaa\nOne of the first NN-specific applications of efficient BP was described by Werbos (1982)\nRumelhart, Hinton and William, 1986 significantly contributed to the popularization of BP for NNs as computers became faster.\nThe problem setting We have a dataset $D$ with input output pairs, we have a loss function $\\mathcal{L}$ and we want to find this $$ \\min_{\\theta} \\sum_{(x, y) \\in \\mathcal{D}} \\mathcal{L}(f(x ; \\theta), y) $$ A common tool is gradient descent but we need to compute the gradients for this algorithm. The astounding fact is that the speed of computing the gradients is same as a forward pass. In optimization classes computing the gradients is given for granted, while the algorithm itself is not trivial.\nIn the old times people would calculate the gradients by hand for every parameter. We need automatic differentiation and we will explain here how does it work.\nAutomatic Differentiation We will use a specific type of automatic differentiation, called reverse-mode. This is not all automatic because we need to know\nHow to decompose the whole function in easy parts Need to know the differential of the simple primitive functions that we use compute the forward pass. We can summarize the whole thing with this theorem: Reverse-mode automatic differentiation can compute the gradient of $f$ in the same time complexity as computing $f$\nThis will be a constructive theorem. First refresh some basis of analysis, see for example Limiti, Derivate, Hopital, Taylor, Peano, Calcolo differenziale, e Jacobians, and some notes about Computer Science i.e. Notazione Asintotica.\nComputational graphs A composite function is a function composed by a series of (nonlinear) functions. Hypergraph is a graph that allows hyperedges, which is a edge that branches into more than one node, or two edges that merge into one.\nFor example the $+$ is a hyper-edge with two parents. We need hyper edges because we need a kind of ordering.\nIt’s easy to see that we have an exponential number of paths in the computational graph when computing the derivative, because we need to account all possible paths where it can propagate! $$ \\frac{ \\partial y }{ \\partial x } = \\sum_{p \\in \\mathcal{P(i, j)}} \\prod_{(k, l) \\in p} \\frac{ \\partial z_{l} }{ \\partial z_{k} } $$ Meaning we need to find all paths from $i$ to $j$ and then use the chain rule to compute the gradient contribution for this path. And this algorithm is exponential in time complexity.\nThe forward pass We can write the forward pass of this algorithm in the following way: The backward pass We just to the backward pass, this example is explanatory: You can see that the derivative of $g$ to intermediate point is stored when doing the backpropagation part, and this makes it easy to propagate back step by step.\nTypes of Differentiation Numerical differentiation This is the form of differentiation that can treat the function actually as a black box, and you can prove bounds about this. You just try to compute the function many times with sensitivity analysis and assume the result is an approximation. The drawback is that this scales on the number of inputs, so it’s much more slower. $$ \\frac{ \\partial f(x, y, z) }{ \\partial z } \\approx \\frac{f(x, y, z + h) - f(x, y, z)}{h} $$ Symbolic differentiation This is what is done by engines like wolphram alpha, it computes the real derivative of the expression, but this is inefficient because in some cases there is repeated computation when the same expression compares in different parts. I don’t know how exactly is done by automatic differentiation, but probably you as a programmer need to write the function in some specific way.\nSupplementary notes With this notion of gradient flow, one can try to generalize this notion and create works like this (Du et al. 2023). Where the only thing needed is to have a semi-ring and then you can use the same algorithm for some interpretability analysis or similar.\nReferences [1] Du et al. “Generalizing Backpropagation for Gradient-Based Interpretability” 2023\n",
+  "wordCount" : "836",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,12 +227,136 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Backpropagation
     </h1>
-    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
-  <div class="post-content"><p>TODO</p>
+        <div class="inner"><ul><ul><ul><ul>
+                <li>
+                    <a href="#a-brief-history-of-backpropagation" aria-label="A brief history of Backpropagation">A brief history of Backpropagation</a></li></ul>
+                    
+                <li>
+                    <a href="#the-problem-setting" aria-label="The problem setting">The problem setting</a></li>
+                <li>
+                    <a href="#automatic-differentiation" aria-label="Automatic Differentiation">Automatic Differentiation</a><ul>
+                        
+                <li>
+                    <a href="#computational-graphs" aria-label="Computational graphs">Computational graphs</a></li>
+                <li>
+                    <a href="#the-forward-pass" aria-label="The forward pass">The forward pass</a></li>
+                <li>
+                    <a href="#the-backward-pass" aria-label="The backward pass">The backward pass</a></li></ul>
+                </li>
+                <li>
+                    <a href="#types-of-differentiation" aria-label="Types of Differentiation">Types of Differentiation</a><ul>
+                        
+                <li>
+                    <a href="#numerical-differentiation" aria-label="Numerical differentiation">Numerical differentiation</a></li>
+                <li>
+                    <a href="#symbolic-differentiation" aria-label="Symbolic differentiation">Symbolic differentiation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#supplementary-notes" aria-label="Supplementary notes">Supplementary notes</a></li></ul>
+                    </ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Backpropagation is perhaps the most important algorithm of the 21th century. It is used everywhere in machine learning. It has also connected to computing marginal distributions. This is the motivation why all machine learning scientists, all data scientists should understand this algorithm very well.
+An important observation is that this algorithm is <strong>linear</strong>: the time complexity is the same as the forward pass.
+<a href="https://youtu.be/VMj-3S1tku0?si=wRCObFw7woZTwU56">Karpathy</a> has a nice resource for this topic.</p>
+<h4 id="a-brief-history-of-backpropagation">A brief history of Backpropagation<a hidden class="anchor" aria-hidden="true" href="#a-brief-history-of-backpropagation">#</a></h4>
+<p>Backpropagation builds on some backbone ideas in mathematics and computer science.</p>
+<ul>
+<li>
+<p>Building blocks of backpropagation go back a long time</p>
+<ul>
+<li>The chain rule (Leibniz, 1676; L&rsquo;Hôpital, 1696)</li>
+<li>Dynamic Programming (DP, Bellman, 1957)</li>
+<li>Minimisation of errors through gradient descent (Cauchy 1847, Hadamard, 1908)</li>
+</ul>
+</li>
+<li>
+<p>in the parameter space of complex, nonlinear, differentiable, multi-stage, NN-related systems (Kelley 1960; Bryson, 1961; Bryson and Denham, 1961; Pontryagin et al., 1961, &hellip;)</p>
+</li>
+<li>
+<p>Explicit, efficient error backpropagation (BP) in arbitrary, discrete, possibly sparsely connected, NN-like networks apparently was first described in 1970 by Finnish master student Seppo Linnainmaa</p>
+</li>
+<li>
+<p>One of the first NN-specific applications of efficient BP was described by Werbos (1982)</p>
+</li>
+<li>
+<p>Rumelhart, Hinton and William, 1986 significantly contributed to the popularization of BP for NNs as computers became faster.</p>
+</li>
+</ul>
+<h3 id="the-problem-setting">The problem setting<a hidden class="anchor" aria-hidden="true" href="#the-problem-setting">#</a></h3>
+<p>We have a dataset $D$ with input output pairs, we have a loss function $\mathcal{L}$ and we want to find this
+</p>
+$$
+\min_{\theta} \sum_{(x, y) \in \mathcal{D}} \mathcal{L}(f(x ; \theta), y)
+$$
+<p>
+A common tool is <strong>gradient descent</strong> but we need to compute the gradients for this algorithm. The astounding fact is that the speed of computing the gradients is same as a forward pass.
+In optimization classes computing the gradients is given for granted, while the algorithm itself is not trivial.</p>
+<p>In the old times people would calculate the gradients by hand for every parameter.
+We need <strong>automatic differentiation</strong> and we will explain here how does it work.</p>
+<h3 id="automatic-differentiation">Automatic Differentiation<a hidden class="anchor" aria-hidden="true" href="#automatic-differentiation">#</a></h3>
+<p>We will use a specific type of automatic differentiation, called <strong>reverse-mode</strong>. This is not all automatic because we need to know</p>
+<ul>
+<li>How to decompose the whole function in easy parts</li>
+<li>Need to know the differential of the simple <em>primitive</em> functions that we use compute the forward pass.
+We can summarize the whole thing with this theorem:</li>
+</ul>
+<blockquote>
+<p><em>Reverse-mode</em> automatic differentiation can compute the gradient of $f$ in the same time complexity as computing $f$</p>
+</blockquote>
+<p>This will be a constructive theorem.
+First refresh some basis of analysis, see for example <a href="/notes/limiti/">Limiti</a>, <a href="/notes/derivate/">Derivate</a>, <a href="/notes/hopital-taylor-peano/">Hopital, Taylor, Peano</a>, <a href="/notes/calcolo-differenziale/">Calcolo differenziale</a>, e Jacobians, and some notes about Computer Science i.e. <a href="/notes/notazione-asintotica/">Notazione Asintotica</a>.</p>
+<h4 id="computational-graphs">Computational graphs<a hidden class="anchor" aria-hidden="true" href="#computational-graphs">#</a></h4>
+<p>A composite function is a function composed by a series of (nonlinear) functions.
+Hypergraph is a graph that allows hyperedges, which is a edge that branches into more than one node, or two edges that merge into one.</p>
+<img src="/images/notes/Backpropagation-20240812112848923.webp" alt="Backpropagation-20240812112848923">
+<p>For example the $+$ is a hyper-edge with two parents. We need hyper edges because we need a kind of ordering.</p>
+<p>It&rsquo;s easy to see that we have an <em>exponential</em> number of paths in the computational graph when computing the derivative, because we need to account <em>all possible paths</em> where it can propagate!
+</p>
+$$
+\frac{ \partial y }{ \partial x } = \sum_{p \in \mathcal{P(i, j)}} \prod_{(k, l) \in p} \frac{ \partial z_{l} }{ \partial z_{k} } 
+$$
+<p>
+Meaning we need to find all paths from $i$ to $j$ and then use the chain rule to compute the gradient contribution for this path. And this algorithm is exponential in time complexity.</p>
+<h4 id="the-forward-pass">The forward pass<a hidden class="anchor" aria-hidden="true" href="#the-forward-pass">#</a></h4>
+<p>We can write the forward pass of this algorithm in the following way:
+<img src="/images/notes/Backpropagation-20240812120011527.webp" alt="Backpropagation-20240812120011527"></p>
+<h4 id="the-backward-pass">The backward pass<a hidden class="anchor" aria-hidden="true" href="#the-backward-pass">#</a></h4>
+<p>We just to the backward pass, this example is explanatory:
+<img src="/images/notes/Backpropagation-20240812121212094.webp" alt="Backpropagation-20240812121212094">
+You can see that the derivative of $g$ to intermediate point is stored when doing the backpropagation part, and this makes it easy to propagate back step by step.</p>
+<h3 id="types-of-differentiation">Types of Differentiation<a hidden class="anchor" aria-hidden="true" href="#types-of-differentiation">#</a></h3>
+<h4 id="numerical-differentiation">Numerical differentiation<a hidden class="anchor" aria-hidden="true" href="#numerical-differentiation">#</a></h4>
+<p>This is the form of differentiation that can treat the function actually as a <strong>black box</strong>, and you can prove bounds about this. You just try to compute the function many times with sensitivity analysis and assume the result is an approximation.
+The drawback is that this scales on the number of inputs, so it&rsquo;s much more slower.
+</p>
+$$
+\frac{ \partial f(x, y, z) }{ \partial z }  \approx \frac{f(x, y, z + h) - f(x, y, z)}{h}
+$$
+<h4 id="symbolic-differentiation">Symbolic differentiation<a hidden class="anchor" aria-hidden="true" href="#symbolic-differentiation">#</a></h4>
+<p>This is what is done by engines like wolphram alpha, it computes the real derivative of the expression, but this is inefficient because in some cases there is repeated computation when the same expression compares in different parts.
+I don&rsquo;t know how exactly is done by automatic differentiation, but probably you as a programmer need to write the function in some specific way.</p>
+<h3 id="supplementary-notes">Supplementary notes<a hidden class="anchor" aria-hidden="true" href="#supplementary-notes">#</a></h3>
+<p>With this notion of gradient flow, one can try to generalize this notion and create works like this <a href="http://arxiv.org/abs/2307.03056">(Du et al. 2023)</a>.
+Where the only thing needed is to have a semi-ring and then you can use the same algorithm for some interpretability analysis or similar.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Du et al. <a href="http://arxiv.org/abs/2307.03056">“Generalizing Backpropagation for Gradient-Based Interpretability”</a>  2023</p>
 
 
   </div>
