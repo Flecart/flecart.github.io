@@ -196,65 +196,75 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">The Database Management System
+    <h2 class="entry-hint-parent">Strutture di dati elementari
     </h2>
   </header>
   <div class="entry-content">
-    <p>Struttura del DBMS Introduzione ai DBMS Schema riassuntivo #### Operazioni classiche Ci stiamo chiedendo, come facciamo a descrivere i processi che portano alla comprensione della query e della retrieval degli elementi utili? Questo deve fare il DBMS, ossia capace di - Aggiornare tuple - Trovare tuple - Gestire gli accessi - Gestire accessi concorrenti? ### Query processor #### Query compiler (3) 🟩 - Parsing (crea l&#39;albero di derivazione per la nostra query) - Pre-processing (fa check semantici sulla query) - Optimization, si occupa lui di migliorare L&#39;ottimizzazione #### Execution engine 🟩 Esegue l&#39;effettiva computazione per la query, ed è il punto d&#39;incontro col resto (indexes, e logging per dire) Esegue il piano di esecuzione che probabilmente un livello superiore ha calcolato Interagisce con tutti gli altri componenti del db (ad esempio Log per transazioni e durabilità, buffer e scheduler delle operazioni prolly)....</p>
+    <p>3.1 Introduzione 3.1.1 Cosa sono Le strutture di dati si interessano solamente di come memorizzare i dati, non necessariamente va a memorizzare un tipo di dato concreto.
+Quindi &#43; sul come - sul cosa.
+3.1.2 Prototipo e implementazione Avevamo introdotto la differenza fra algoritmo e programma all’inizio del corso, andiamo ora a definire la differenza fra prototipo e implementazione:
+Prototipo:
+va a fare una descrizione dei metodi che deve avere una determinata struttura di dati....</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to The Database Management System" href="https://flecart.github.io/notes/the-database-management-system/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Strutture di dati elementari" href="https://flecart.github.io/notes/strutture-di-dati-elementari/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bias Variance Trade-off
+    <h2 class="entry-hint-parent">Autoencoders
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test....</p>
+    <p>In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono
+Introduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder....</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Autoencoders" href="https://flecart.github.io/notes/autoencoders/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">CSP problems
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Costraint Satisfaction Problems.
+Definizione Caratteristiche Variabili Dominio per ogni variabile Costraints per ogni variabile Queste tre sono elementi che definiscono un problema di soddisfazione delle restrizioni, una soluzione è un assegnamento di variabili che soddisfi ogni restrizioone e sia all’interno del dominio
+Consistenza Vogliamo andare a limitare il dominio valutando le consistenze possibili
+Consistenza del punto Si può dire che un punto sia consistente se le sue variabili possibili non viola nessuna restrizione unaria: eg....</p>
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bias Variance Trade-off" href="https://flecart.github.io/notes/bias-variance-trade-off/"></a>
+  <a class="entry-link" aria-label="post link to CSP problems" href="https://flecart.github.io/notes/csp-problems/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Limiti
+    <h2 class="entry-hint-parent">Index, B-trees and hashes
     </h2>
   </header>
   <div class="entry-content">
-    <p>Riguardare Successioni per avere primo attacco sui limiti
-4.1 Limiti finiti al finito 4.1.1 Intorno sferico Dato l’insieme $\mathbb{R}$ si definisce l’intorno sferico aperto di $x \in \mathbb{R}$ di raggio $r \in \mathbb{R}$ l’insieme $I_r(x) = (x -r, x &#43; r)$ questa nozione è molto importante per definire il limite. Lo useremo subito su un punto di accumulazione
-4.1.2 Punto di accumulazione Un punto di accumulazione $x$ di un insieme $A \subseteq \mathbb{R}$ è un punto tale per cui mi posso avvicinare in modo indefinito in quel punto....</p>
+    <p>Indexes Trattiamo qui di alcuni metodi che sono utilizzati per costruire indici
+Introduction to indexes Gli indici sono una struttura di dati aggiuntiva che ci permette di ricercare più in fretta alcuni valori per le queries. In questa sezione proviamo ad approfondire in che modo possono essere costruite e gestite.
+Search keys 🟩 Sono in breve la cosa che vogliamo andare a cercare. Solitamente sono nella forma &lt;key, label&gt;, che ci permette di trovare in fretta il label, che si potrebbe intendere come il valore che noi stiamo provando a cercare....</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Limiti" href="https://flecart.github.io/notes/limiti/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Index, B-trees and hashes" href="https://flecart.github.io/notes/index-b-trees-and-hashes/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Memory of the Brain
+    <h2 class="entry-hint-parent">Introduction to statistical learning
     </h2>
   </header>
   <div class="entry-content">
-    <p>La memoria e l’apprendimento Breve classificazione Basata sulla consapevolezza Basata sul tempo Basata sulla funzione Importanza della dimensione temporale Memoria a breve termine Memoria a lungo termine Anatomia della memoria nel cervello Il caso di H. M. </p>
+    <p>#statistics
+Introduzione This is a short introduction to statistical learning, made with the help of the book ISLP (mi sento positivo ad affrontare la lettura di questo libro, ora che sta in python non lo vedo più come un libro solamente per statistici)
+statistical learning refers to a set of approaches for estimating $f$ .
+Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo....</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Memory of the Brain" href="https://flecart.github.io/notes/memory-of-the-brain/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">N-Bandit Problem
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.
-Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning....</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to N-Bandit Problem" href="https://flecart.github.io/notes/n-bandit-problem/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduction to statistical learning" href="https://flecart.github.io/notes/introduction-to-statistical-learning/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
