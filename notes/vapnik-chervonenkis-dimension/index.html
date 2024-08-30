@@ -5,13 +5,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Introduction to statistical learning | X. Angelo Huang&#39;s Blog</title>
+<title>Vapnik-Chervonenkis Dimension | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Introduzione This is a short introduction to statistical learning, made with the help of the book (James et al. 2023).
-statistical learning refers to a set of approaches for estimating $f$ .
-Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo. Per inferenza significa il miglior modello f per predire Y che conosciamo.">
+<meta name="description" content="This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz &amp; Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable.
+This set of note is still a work in progress. But it&rsquo;s very important for statistical learning theory.
+We have that if $\lvert \mathcal{H} \rvert &lt; \infty \implies vc(\mathcal{H} \rvert) \leq \log_{2} \lvert \mathcal{H}$ Example: if $\mathcal{H}$ is the set of linear classifiers on $\mathbb{R}^{d}$ then we have that the dimension is $d &#43; 1$.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
-<link rel="canonical" href="https://flecart.github.io/notes/introduction-to-statistical-learning/">
+<link rel="canonical" href="https://flecart.github.io/notes/vapnik-chervonenkis-dimension/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
@@ -20,7 +20,7 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
 <link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/introduction-to-statistical-learning/">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/vapnik-chervonenkis-dimension/">
 <noscript>
     <style>
         #theme-toggle,
@@ -88,12 +88,12 @@ if (!doNotTrack) {
 	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
 }
 </script>
-<meta property="og:title" content="Introduction to statistical learning" />
-<meta property="og:description" content="Introduzione This is a short introduction to statistical learning, made with the help of the book (James et al. 2023).
-statistical learning refers to a set of approaches for estimating $f$ .
-Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo. Per inferenza significa il miglior modello f per predire Y che conosciamo." />
+<meta property="og:title" content="Vapnik-Chervonenkis Dimension" />
+<meta property="og:description" content="This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz &amp; Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable.
+This set of note is still a work in progress. But it&rsquo;s very important for statistical learning theory.
+We have that if $\lvert \mathcal{H} \rvert &lt; \infty \implies vc(\mathcal{H} \rvert) \leq \log_{2} \lvert \mathcal{H}$ Example: if $\mathcal{H}$ is the set of linear classifiers on $\mathbb{R}^{d}$ then we have that the dimension is $d &#43; 1$." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/introduction-to-statistical-learning/" />
+<meta property="og:url" content="https://flecart.github.io/notes/vapnik-chervonenkis-dimension/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta property="article:section" content="notes" />
 
@@ -101,10 +101,10 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Introduction to statistical learning"/>
-<meta name="twitter:description" content="Introduzione This is a short introduction to statistical learning, made with the help of the book (James et al. 2023).
-statistical learning refers to a set of approaches for estimating $f$ .
-Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo. Per inferenza significa il miglior modello f per predire Y che conosciamo."/>
+<meta name="twitter:title" content="Vapnik-Chervonenkis Dimension"/>
+<meta name="twitter:description" content="This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz &amp; Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable.
+This set of note is still a work in progress. But it&rsquo;s very important for statistical learning theory.
+We have that if $\lvert \mathcal{H} \rvert &lt; \infty \implies vc(\mathcal{H} \rvert) \leq \log_{2} \lvert \mathcal{H}$ Example: if $\mathcal{H}$ is the set of linear classifiers on $\mathbb{R}^{d}$ then we have that the dimension is $d &#43; 1$."/>
 
 
 <script type="application/ld+json">
@@ -121,8 +121,8 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Introduction to statistical learning",
-      "item": "https://flecart.github.io/notes/introduction-to-statistical-learning/"
+      "name": "Vapnik-Chervonenkis Dimension",
+      "item": "https://flecart.github.io/notes/vapnik-chervonenkis-dimension/"
     }
   ]
 }
@@ -131,14 +131,14 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Introduction to statistical learning",
-  "name": "Introduction to statistical learning",
-  "description": "Introduzione This is a short introduction to statistical learning, made with the help of the book (James et al. 2023).\nstatistical learning refers to a set of approaches for estimating $f$ .\nUtilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo. Per inferenza significa il miglior modello f per predire Y che conosciamo.",
+  "headline": "Vapnik-Chervonenkis Dimension",
+  "name": "Vapnik-Chervonenkis Dimension",
+  "description": "This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz \u0026amp; Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable. This set of note is still a work in progress. But it\u0026rsquo;s very important for statistical learning theory. We have that if $\\lvert \\mathcal{H} \\rvert \u003c \\infty \\implies vc(\\mathcal{H} \\rvert) \\leq \\log_{2} \\lvert \\mathcal{H}$ Example: if $\\mathcal{H}$ is the set of linear classifiers on $\\mathbb{R}^{d}$ then we have that the dimension is $d + 1$.",
   "keywords": [
     
   ],
-  "articleBody": "Introduzione This is a short introduction to statistical learning, made with the help of the book (James et al. 2023).\nstatistical learning refers to a set of approaches for estimating $f$ .\nUtilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e inferenza. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo. Per inferenza significa il miglior modello f per predire Y che conosciamo.\nNel primo caso la funzione migliore $f$ potrebbe benissimo restare sconosciuta, ci importa solamente che predica con accuratezza, mentre nel secondo caso vorremmo anche conoscere $f$.\nIn un certo senso l’inferenza ci permette di calcolare una specie di legge fisica, (è incorretto chiamarlo in questo modo, ma credo dia l’idea), ossia permette la comprensione del perché avendo questi input, potrò avere quei output. NOTA: avendo questa comprensione potrei anche fare predizioni su dati che non esistono, credo.\nErrore riducibile e irriducibile Questo è un concetto statistico abbastanza nuovo, utile per parlare di stima di modelli statistici. Supponiamo di avere una serie di dati solitamente indicati con $X$ , vogliamo con questi andare a predire la variabile dipendente $Y$. Solitamente andiamo anche ad introdurre un errore rappresentato con $\\varepsilon$ . Questo è un errore indipendente da $X$, ossia non possiamo predirlo utilizzando X.\nLa branca dell’apprendimento statistico vuole utilizzare X per andare a predire Y. Però il meglio che può fare resterebbe sempre solamente una funzione $f$ che abbia quell’errore che lo faccia variare. Quell’errore potrebbe essere dovuto a informazioni che non conosciamo oppure solamente a cose che non possono essere misurate (elementi che sono principalmente dovuti al caso, che difficilmente avremmo potuto utilizzare per misurarlo)\nFormalizzazione di sopra Tutto si potrebbe formalizzare con questo ragionamento $$ E[Y - \\hat{Y}]^2 = E[(f(X) + \\varepsilon) - \\hat{f}(X)]^2 = [f(X) - \\hat{f}(X)]^2 + var(\\varepsilon) = \\text{ bias }^{2} + var(\\varepsilon) $$ Osservando che X è una costante in questo caso, e ci interessa solamente la varianza. Si potrebbe intendere che la prima parte è un errore riducibile (può essere fino a 0), mentre la varianza dell’errore è parte di errore irriducibile.\nTipologie di modelli Principalmente esistono due tipologie di modelli, proveremo a parlarne estensivamente qui sotto:\nModelli parametrici L’inferenza/predizione con questo genere di modelli si fa in due step:\nScelta del modello (lineare? Quadratico? rete neurale? allora architettura della rete) Algoritmo di scelta dei parametri del modello Vedere sul libro pagina 31 per degli esempi. La caratteristica negativa di questo è che è fortemente dipendente dal nostro modello scelto, che non sempre può risultare essere la migliore per stimare la funzione che abbiamo:\nThe potential disadvantage of a parametric approach is that the model we choose will usually not match the true unknown form of $f$ .\nModelli non parametrici Non-parametric methods do not make explicit assumptions about the functional form of $f$ . Instead they seek an estimate of $f$ that gets as close to the data points as possible without being too rough or wiggly.\nUn esempio di questo genere di modelli potrebbero essere splines, che sono molto più variabili di un modello parametrico\nVantaggio principale sui parametrici by avoiding the assumption of a particular functional form for f , they have the potential to accurately fit a wider range of possible shapes for f .\nSvantaggio principale Dato che non devo imparare solamente dei parametri, ho bisogno di molto più dati affinché io sia accurato nella predizione\nReferences [1] James et al. “An Introduction to Statistical Learning: With Applications in Python” Springer International Publishing 2023\n",
-  "wordCount" : "586",
+  "articleBody": "This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz \u0026 Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable.\nThis set of note is still a work in progress. But it’s very important for statistical learning theory.\nWe have that if $\\lvert \\mathcal{H} \\rvert \u003c \\infty \\implies vc(\\mathcal{H} \\rvert) \\leq \\log_{2} \\lvert \\mathcal{H}$ Example: if $\\mathcal{H}$ is the set of linear classifiers on $\\mathbb{R}^{d}$ then we have that the dimension is $d + 1$.\nif $vc(\\mathcal{H}) \u003c \\infty \\implies E_{m}(\\mathcal{H}) = \\sqrt{ vc(\\mathcal{H} / m) }$ which means every finite hypothesis set is learnable. $m$ is the size of our training set.\nEven if $vc(\\mathcal{H}) = \\infty$ there exists a class $C \u003e 0$ that makes it to be learnable. But I did not understood the details.\nReferences [1] Shalev-Shwartz \u0026 Ben-David “Understanding Machine Learning: From Theory to Algorithms” Cambridge University Press 2014\n",
+  "wordCount" : "150",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -148,7 +148,7 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://flecart.github.io/notes/introduction-to-statistical-learning/"
+    "@id": "https://flecart.github.io/notes/vapnik-chervonenkis-dimension/"
   },
   "publisher": {
     "@type": "Organization",
@@ -231,9 +231,9 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
     <h1 class="post-title entry-hint-parent">
-      Introduction to statistical learning
+      Vapnik-Chervonenkis Dimension
     </h1>
-    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -242,34 +242,7 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
-                        
-                <li>
-                    <a href="#utilizzi-del-statistical-learning" aria-label="Utilizzi del statistical learning">Utilizzi del statistical learning</a></li></ul>
-                </li>
-                <li>
-                    <a href="#errore-riducibile-e-irriducibile" aria-label="Errore riducibile e irriducibile">Errore riducibile e irriducibile</a><ul>
-                        
-                <li>
-                    <a href="#formalizzazione-di-sopra" aria-label="Formalizzazione di sopra">Formalizzazione di sopra</a></li></ul>
-                </li>
-                <li>
-                    <a href="#tipologie-di-modelli" aria-label="Tipologie di modelli">Tipologie di modelli</a><ul>
-                        
-                <li>
-                    <a href="#modelli-parametrici" aria-label="Modelli parametrici">Modelli parametrici</a></li>
-                <li>
-                    <a href="#modelli-non-parametrici" aria-label="Modelli non parametrici">Modelli non parametrici</a><ul>
-                        
-                <li>
-                    <a href="#vantaggio-principale-sui-parametrici" aria-label="Vantaggio principale sui parametrici">Vantaggio principale sui parametrici</a></li>
-                <li>
-                    <a href="#svantaggio-principale" aria-label="Svantaggio principale">Svantaggio principale</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
+        <div class="inner"><ul>
                 <li>
                     <a href="#references" aria-label="References">References</a>
                 </li>
@@ -278,56 +251,14 @@ Utilizzi del statistical learning Solitamente sono due gli utilizzi Predizione e
     </details>
 </div>
 
-  <div class="post-content"><h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
-<p>This is a short introduction to statistical learning, made with the help of the book <a href="https://link.springer.com/10.1007/978-3-031-38747-0">(James et al. 2023)</a>.</p>
-<blockquote>
-<p>statistical learning refers to a set of approaches for estimating $f$ .</p>
-</blockquote>
-<h3 id="utilizzi-del-statistical-learning">Utilizzi del statistical learning<a hidden class="anchor" aria-hidden="true" href="#utilizzi-del-statistical-learning">#</a></h3>
-<p>Solitamente sono due gli utilizzi <strong>Predizione</strong> e <strong>inferenza</strong>. Per predizione intendiamo il miglior modello che possa produrre le Y che ancora non conosciamo.
-Per inferenza significa il miglior modello f per predire Y che conosciamo.</p>
-<p>Nel primo caso la funzione migliore $f$ potrebbe benissimo restare sconosciuta, ci importa solamente che predica con accuratezza, mentre nel secondo caso vorremmo anche conoscere $f$.</p>
-<p>In un certo senso l&rsquo;inferenza ci permette di calcolare una specie di <em>legge fisica</em>, (è incorretto chiamarlo in questo modo, ma credo dia l&rsquo;idea), ossia permette la comprensione del <em>perché</em> avendo questi input, potrò avere quei output. NOTA: avendo questa comprensione potrei anche fare predizioni su dati che non esistono, credo.</p>
-<h2 id="errore-riducibile-e-irriducibile">Errore riducibile e irriducibile<a hidden class="anchor" aria-hidden="true" href="#errore-riducibile-e-irriducibile">#</a></h2>
-<p>Questo è un concetto statistico abbastanza nuovo, utile per parlare di stima di modelli statistici.
-Supponiamo di avere una serie di dati solitamente indicati con $X$ , vogliamo con questi andare a predire la variabile dipendente $Y$. Solitamente andiamo anche ad introdurre un errore rappresentato con $\varepsilon$ . Questo è un errore <strong>indipendente da $X$</strong>, ossia non possiamo predirlo utilizzando X.</p>
-<p>La branca dell&rsquo;apprendimento statistico vuole utilizzare X per andare a predire Y. Però il meglio che può fare resterebbe sempre solamente una funzione $f$ che abbia quell&rsquo;errore che lo faccia variare. Quell&rsquo;errore potrebbe essere dovuto a informazioni che non conosciamo oppure solamente a cose che non possono essere misurate (elementi che sono principalmente dovuti al caso, che difficilmente avremmo potuto utilizzare per misurarlo)</p>
-<h3 id="formalizzazione-di-sopra">Formalizzazione di sopra<a hidden class="anchor" aria-hidden="true" href="#formalizzazione-di-sopra">#</a></h3>
-<p>Tutto si potrebbe formalizzare con questo ragionamento
-</p>
-$$
-E[Y - \hat{Y}]^2 = E[(f(X) + \varepsilon) - \hat{f}(X)]^2 = [f(X) - \hat{f}(X)]^2 + var(\varepsilon) = \text{ bias }^{2} + var(\varepsilon)
-$$
-<p>
-Osservando che X è una costante in questo caso, e ci interessa solamente la varianza.
-Si potrebbe intendere che la prima parte è un errore riducibile (può essere fino a 0), mentre la varianza dell&rsquo;errore è parte di errore irriducibile.</p>
-<h2 id="tipologie-di-modelli">Tipologie di modelli<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-modelli">#</a></h2>
-<p>Principalmente esistono due tipologie di modelli, proveremo a parlarne estensivamente qui sotto:</p>
-<h3 id="modelli-parametrici">Modelli parametrici<a hidden class="anchor" aria-hidden="true" href="#modelli-parametrici">#</a></h3>
-<p>L&rsquo;inferenza/predizione con questo genere di modelli si fa in due step:</p>
-<ol>
-<li>Scelta del modello (lineare? Quadratico? rete neurale? allora architettura della rete)</li>
-<li>Algoritmo di scelta dei parametri del modello
-Vedere sul libro pagina 31 per degli esempi.</li>
-</ol>
-<p>La caratteristica negativa di questo è che è fortemente dipendente dal nostro modello scelto, che non sempre può risultare essere la migliore per stimare la funzione che abbiamo:</p>
-<blockquote>
-<p>The potential disadvantage of a parametric approach is that the model we choose will usually not match the true unknown form of $f$ .</p>
-</blockquote>
-<h3 id="modelli-non-parametrici">Modelli non parametrici<a hidden class="anchor" aria-hidden="true" href="#modelli-non-parametrici">#</a></h3>
-<blockquote>
-<p>Non-parametric methods do not make explicit assumptions about the functional form of $f$ . Instead t<em>hey seek an estimate of $f$ that gets as close to the data points as possible without being too rough or wiggly</em>.</p>
-</blockquote>
-<p>Un esempio di questo genere di modelli potrebbero essere splines, che sono molto più variabili di un modello parametrico</p>
-<h4 id="vantaggio-principale-sui-parametrici">Vantaggio principale sui parametrici<a hidden class="anchor" aria-hidden="true" href="#vantaggio-principale-sui-parametrici">#</a></h4>
-<blockquote>
-<p>by avoiding the assumption of a particular functional form for f , they have the potential
-to accurately fit a wider range of possible shapes for f .</p>
-</blockquote>
-<h4 id="svantaggio-principale">Svantaggio principale<a hidden class="anchor" aria-hidden="true" href="#svantaggio-principale">#</a></h4>
-<p>Dato che non devo imparare solamente dei parametri, ho bisogno di molto più dati affinché io sia accurato nella predizione</p>
+  <div class="post-content"><p>This note will introduce the ideas presented by Vapnik, presented in (Shalev-Shwartz &amp; Ben-David 2014) chapter 6. Briefly this says that infinite-size classes are indeed learnable.</p>
+<p>This set of note is still a work in progress. But it&rsquo;s very important for statistical learning theory.</p>
+<p>We have that if $\lvert  \mathcal{H} \rvert < \infty \implies vc(\mathcal{H} \rvert) \leq \log_{2} \lvert \mathcal{H}$
+Example: if $\mathcal{H}$ is the set of linear classifiers on $\mathbb{R}^{d}$ then we have that the dimension is $d + 1$.</p>
+<p>if $vc(\mathcal{H}) < \infty \implies E_{m}(\mathcal{H}) = \sqrt{ vc(\mathcal{H} / m) }$ which means every <strong>finite</strong> hypothesis set is <em>learnable</em>. $m$ is the size of our training set.</p>
+<p>Even if $vc(\mathcal{H}) = \infty$ there exists a class $C > 0$ that makes it to be learnable. But I did not understood the details.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] James et al. <a href="https://link.springer.com/10.1007/978-3-031-38747-0">“An Introduction to Statistical Learning: With Applications in Python”</a> Springer International Publishing 2023</p>
+<p>[1] Shalev-Shwartz &amp; Ben-David “Understanding Machine Learning: From Theory to Algorithms” Cambridge University Press 2014</p>
 
 
   </div>
@@ -339,8 +270,8 @@ to accurately fit a wider range of possible shapes for f .</p>
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on x"
-            href="https://x.com/intent/tweet/?text=Introduction%20to%20statistical%20learning&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f&amp;hashtags=">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on x"
+            href="https://x.com/intent/tweet/?text=Vapnik-Chervonenkis%20Dimension&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f&amp;hashtags=">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
@@ -348,8 +279,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f&amp;title=Introduction%20to%20statistical%20learning&amp;summary=Introduction%20to%20statistical%20learning&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f&amp;title=Vapnik-Chervonenkis%20Dimension&amp;summary=Vapnik-Chervonenkis%20Dimension&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -357,8 +288,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f&title=Introduction%20to%20statistical%20learning">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f&title=Vapnik-Chervonenkis%20Dimension">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -366,8 +297,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
@@ -375,8 +306,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on whatsapp"
-            href="https://api.whatsapp.com/send?text=Introduction%20to%20statistical%20learning%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on whatsapp"
+            href="https://api.whatsapp.com/send?text=Vapnik-Chervonenkis%20Dimension%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
@@ -384,8 +315,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on telegram"
-            href="https://telegram.me/share/url?text=Introduction%20to%20statistical%20learning&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on telegram"
+            href="https://telegram.me/share/url?text=Vapnik-Chervonenkis%20Dimension&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f">
             <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
@@ -393,8 +324,8 @@ to accurately fit a wider range of possible shapes for f .</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Introduction to statistical learning on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=Introduction%20to%20statistical%20learning&u=https%3a%2f%2fflecart.github.io%2fnotes%2fintroduction-to-statistical-learning%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Vapnik-Chervonenkis Dimension on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Vapnik-Chervonenkis%20Dimension&u=https%3a%2f%2fflecart.github.io%2fnotes%2fvapnik-chervonenkis-dimension%2f">
             <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
                 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
                 <path
