@@ -196,70 +196,71 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Problemi di accoppiamento
+    <h2 class="entry-hint-parent">The Database Management System
     </h2>
   </header>
   <div class="entry-content">
-    <p>I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.
-Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione....</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Problemi di accoppiamento" href="https://flecart.github.io/notes/problemi-di-accoppiamento/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Recurrent Neural Networks
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione ai RNN Vorremmo costruire un modello che fosse in grado di predire delle cose che dipendono da vecchie sequenze (quindi un network che abbia in un qualche senso la memoria di un coso passato).
-Riassunto in slide Formalizzazione del network Stato interno La differenza principale col percettrone è la presenza di uno stato interno nascosto, che continua a trasformarsi a seconda degli input, lo chiamiamo interno perché non è dato in output, ma viene se...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Recurrent Neural Networks" href="https://flecart.github.io/notes/recurrent-neural-networks/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Replication and consistency
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Replication and consistency Introduzione Ci sono due vantaggi principali nella replicazione dei dati
-Velocità Vicinanza geografica (quindi meno tempo ad andare a tornare) Maggiore computazione, quindi avere molti più processori che cercano di offrire lo stesso servizio. Affidabilità Così se una sede diventa corrotta, posso avere abbondanza, avere una copia da una altra parte, così non perdo le informazioni! Se una macchina cade in errore, ho altre macchine che lo sostituiscono!...</p>
+    <p>Struttura del DBMS Introduzione ai DBMS Schema riassuntivo #### Operazioni classiche Ci stiamo chiedendo, come facciamo a descrivere i processi che portano alla comprensione della query e della retrieval degli elementi utili? Questo deve fare il DBMS, ossia capace di - Aggiornare tuple - Trovare tuple - Gestire gli accessi - Gestire accessi concorrenti? ### Query processor #### Query compiler (3) 🟩 - Parsing (crea l&#39;albero di derivazione per la nostra query) - Pre-processing (fa check semantici sulla query) - Optimization, si occupa lui di migliorare L&#39;ottimizzazione #### Execution engine 🟩 Esegue l&#39;effettiva computazione per la query, ed è il punto d&#39;incontro col resto (indexes, e logging per dire) Esegue il piano di esecuzione che probabilmente un livello superiore ha calcolato Interagisce con tutti gli altri componenti del db (ad esempio Log per transazioni e durabilità, buffer e scheduler delle operazioni prolly)....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Replication and consistency" href="https://flecart.github.io/notes/replication-and-consistency/"></a>
+  <a class="entry-link" aria-label="post link to The Database Management System" href="https://flecart.github.io/notes/the-database-management-system/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Strutture di dati elementari
+    <h2 class="entry-hint-parent">Bag of words
     </h2>
   </header>
   <div class="entry-content">
-    <p>3.1 Introduzione 3.1.1 Cosa sono Le strutture di dati si interessano solamente di come memorizzare i dati, non necessariamente va a memorizzare un tipo di dato concreto.
-Quindi &#43; sul come - sul cosa.
-3.1.2 Prototipo e implementazione Avevamo introdotto la differenza fra algoritmo e programma all’inizio del corso, andiamo ora a definire la differenza fra prototipo e implementazione:
-Prototipo:
-va a fare una descrizione dei metodi che deve avere una determinata struttura di dati....</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Strutture di dati elementari" href="https://flecart.github.io/notes/strutture-di-dati-elementari/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">System Design
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>NOTA: tolgo dalle note perché non mi sembra importante.
-Introduction to system design Packages vs diagrams 🟩- Packages fisica implementazione, perché è una cosa utile per lo sviluppo Diagrams logica visualizzazione perché aiuta solamente a comprendere meglio come funziona il sistema in toto. Components What is a component (3) 🟨 È una entità totalmente indipendente che funziona a sé, un esempio è il dll, dynamically loaded libraries presente nei sistemi di windows....</p>
+    <p>Bag of words only takes into account the count of the words inside a document, ignoring all the syntax and boundaries. This method is very common for email classifications techniques.
+Introduzione a bag of words Faremo una introduzione di applicazione di Naïve Bayes applicato alla classificazione di documenti.
+Setting del problema 🟨&#43; Questo è una parte che è importante nel caso volessimo fare document classification. e simili, In questa brevissima introduzione cerchiamo di calcolare $$ \theta_{i, \text{word}, l} = P(X_{i} = \text{word} | Y = l) $$ Ossia quanto è probabile che una parola sia word, che appaia alla posizione i, data la categoria $l$ del documento Assumendo che non dipenda dalla posizione posso solamente contare le parole per documento fregandomene della posizione, questa è l’idea che ha portato ai primi approcci in questo campo....</p>
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to System Design" href="https://flecart.github.io/notes/system-design/"></a>
+  <a class="entry-link" aria-label="post link to Bag of words" href="https://flecart.github.io/notes/bag-of-words/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Livello di Rete
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Reti di Reti Le parti importanti per questo sono Data Plane e Control Plane (che ha saltato quasi tutto, ma almeno dijkstra lo dovresti fare bene)
+Introduzione (puoi skippare 🟩) La puoi skipppare perché tratta in modo molto generare parti che saranno trattati in modo più approfondito in seguito. La parte importante forse è il riassunto di cosa faccia questo livello.
+Discussione rete locale globale Slide
+No, non è possible creare una connessione globale utilizzando le tecnologie locali, come hub, switch e simili, perché causerebbe flooding e impedirebbe scalabilità e crescita dinamica che è classica della rete...</p>
+  </div>
+  <footer class="entry-footer">26 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Livello di Rete" href="https://flecart.github.io/notes/livello-di-rete/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Transformers
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>TODO. Positional encoding We need to keep positional information about the contents. Th: High dimensional unit vectors are almost always orthogonal This theorem states that given $a, b \in \mathbb{R}^{n}$, and $\lVert a \rVert = \lVert b \rVert = 1$ we have that it is highly probable that $a \cdot b &lt; \varepsilon$. For a small epsilon. This is not exactly a formal proof (we haven’t formalized the idea of highly probable)....</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Transformers" href="https://flecart.github.io/notes/transformers/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Autovalori e Autovettori
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Ha senso solamente parlare di autovettori quando si ha una applicazione lineare con stesso dominio e stesso codominio.
+Vorremmo trovare una buona matrice che sia diagonale.
+6.1 Diagonalizzabilità 6.1.1 Definizione per funzione e matrice Questo perché vorrei una base in cui si abbia un matrice diagonale. (quindi probabilmente P è una matrice identità).
+Perché ci piacciono le matrici diagonali
+Se ho una matrice diagonale, si ha che l’applicazione lineare è un semplice scaling dei vettori della base....</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Autovalori e Autovettori" href="https://flecart.github.io/notes/autovalori-e-autovettori/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
