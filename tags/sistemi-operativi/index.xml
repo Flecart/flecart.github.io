@@ -13,6 +13,32 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/sistemi-operativi/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Programmi Concorrenti</title>
+      <link>https://flecart.github.io/notes/programmi-concorrenti/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/programmi-concorrenti/</guid>
+      <description>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;pthread.h&amp;gt; void test(void *s) { for (int i = 0; i &amp;lt; 10; i++) { printf(&amp;#34;%s\n&amp;#34;, s); for (int j = 0; j &amp;lt; 100000000; j++); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;amp;t1, NULL, (void *)test, &amp;#34;Uno&amp;#34;); pthread_create(&amp;amp;t2, NULL, (void *)test, &amp;#34;Due&amp;#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:</description>
+    </item>
+    <item>
+      <title>Filesystem</title>
+      <link>https://flecart.github.io/notes/filesystem/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/filesystem/</guid>
+      <description>Perché filesystem? Questa è l&amp;rsquo;idea presa dall&amp;rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
+L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l&amp;rsquo;accesso.
+Informazioni dei files (5+) 🟨 Il file è l’unità logica di memorizzazione. il formato che c&amp;rsquo;è dentro è gestito dall&amp;rsquo;applicazione, non dal file system!</description>
+    </item>
+    <item>
+      <title>Memoria virtuale</title>
+      <link>https://flecart.github.io/notes/memoria-virtuale/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/memoria-virtuale/</guid>
+      <description>Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&amp;rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
+caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.</description>
+    </item>
+    <item>
       <title>Architettura software del OS</title>
       <link>https://flecart.github.io/notes/architettura-software-del-os/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -22,13 +48,12 @@ Ma se sei un programmatore OS ti interessa capire le componenti principali dell�
 Slide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante</description>
     </item>
     <item>
-      <title>Paginazione e segmentazione</title>
-      <link>https://flecart.github.io/notes/paginazione-e-segmentazione/</link>
+      <title>Introduzione SO</title>
+      <link>https://flecart.github.io/notes/introduzione-so/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/paginazione-e-segmentazione/</guid>
-      <description>Memoria sistema Operativo Guradare Memoria virtuale Per vedere come vengono rimpiazzate le pagine
-In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)
-MMU Controlla se l’accesso di memoria è bono o meno. (traduzione fra indirizzo logico e fisico)</description>
+      <guid>https://flecart.github.io/notes/introduzione-so/</guid>
+      <description>Scopi del sistema operativo 🟩 Un sistema operativo è una astrazione sul HW che permette di
+Gestire l’esecuzione di più programmi assieme (concorrenza), tramite virtualizzazione CPU e Memoria Gestire le risorse (Quindi I/O, RAM, Memoria, Networking) Fornisce una interfaccia di programmazione (API) molto più generale e potente, in grado di astrarre da dettagli di livello basso, vicini all’Hardware (come device drivers). Quindi in breve il SO è n programma che crea un ambiente civile per i programmi in cui interagire, e facilita molto il lavoro al programmatore per la sua interfaccia nuova.</description>
     </item>
     <item>
       <title>Processi e thread</title>
@@ -41,12 +66,51 @@ Processi Il process control block è la struttura di dati principali da comprend
 Ha una tabella dei file aperti, che sono dei file descriptor (all&amp;rsquo;interno della propria struttura di dati), riferiti a una tabella dell&amp;rsquo;interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria.</description>
     </item>
     <item>
-      <title>Introduzione SO</title>
-      <link>https://flecart.github.io/notes/introduzione-so/</link>
+      <title>Monitor</title>
+      <link>https://flecart.github.io/notes/monitor/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/introduzione-so/</guid>
-      <description>Scopi del sistema operativo 🟩 Un sistema operativo è una astrazione sul HW che permette di
-Gestire l’esecuzione di più programmi assieme (concorrenza), tramite virtualizzazione CPU e Memoria Gestire le risorse (Quindi I/O, RAM, Memoria, Networking) Fornisce una interfaccia di programmazione (API) molto più generale e potente, in grado di astrarre da dettagli di livello basso, vicini all’Hardware (come device drivers). Quindi in breve il SO è n programma che crea un ambiente civile per i programmi in cui interagire, e facilita molto il lavoro al programmatore per la sua interfaccia nuova.</description>
+      <guid>https://flecart.github.io/notes/monitor/</guid>
+      <description>Questo è un modo di più alto livello per creare programmazione concorrente.
+Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
+Elementi costituenti 🟩 Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
+E possono modificare dati locali solo tramite chiamate a sue procedure</description>
+    </item>
+    <item>
+      <title>Gestione delle risorse</title>
+      <link>https://flecart.github.io/notes/gestione-delle-risorse/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/gestione-delle-risorse/</guid>
+      <description>Gestione delle risorse Introduzione Definizione classe, fungibilità Classe di risorse sono un insieme di risorse fra loro equivalenti (nel senso che uno può rimpiazzare l’uso dell&amp;rsquo;altro), anche detti fungibili.
+Statico o dinamico Anche in economia ci sono tali definizioni! Queste risorse possono essere allocate staticamente o dinamicamente, in modo simile a quanto abbiamo detto in Gestione della memoria.
+Statico quando già in fase di compilazione del processo, o di avviamento del processo gli dò la memoria, e quella sarà per tutti il tempo della sua vita.</description>
+    </item>
+    <item>
+      <title>Scheduler</title>
+      <link>https://flecart.github.io/notes/scheduler/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/scheduler/</guid>
+      <description>Il suo scopo principale è gestire l&amp;rsquo;avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
+Solitamente il nome scheduler è solamente un gestore dell&amp;rsquo;avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
+Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
+Esempio gantt</description>
+    </item>
+    <item>
+      <title>Paginazione e segmentazione</title>
+      <link>https://flecart.github.io/notes/paginazione-e-segmentazione/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/paginazione-e-segmentazione/</guid>
+      <description>Memoria sistema Operativo Guradare Memoria virtuale Per vedere come vengono rimpiazzate le pagine
+In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)
+MMU Controlla se l’accesso di memoria è bono o meno. (traduzione fra indirizzo logico e fisico)</description>
+    </item>
+    <item>
+      <title>Note sull’architettura</title>
+      <link>https://flecart.github.io/notes/note-sullarchitettura/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/note-sullarchitettura/</guid>
+      <description>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
+Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
+Slide Interrupt Hardware e software</description>
     </item>
     <item>
       <title>Message Passing</title>
@@ -62,43 +126,6 @@ Ricevi messaggi
 Tassonomia dei message passing (!)🟩 Slide</description>
     </item>
     <item>
-      <title>Gestione delle risorse</title>
-      <link>https://flecart.github.io/notes/gestione-delle-risorse/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/gestione-delle-risorse/</guid>
-      <description>Gestione delle risorse Introduzione Definizione classe, fungibilità Classe di risorse sono un insieme di risorse fra loro equivalenti (nel senso che uno può rimpiazzare l’uso dell&amp;rsquo;altro), anche detti fungibili.
-Statico o dinamico Anche in economia ci sono tali definizioni! Queste risorse possono essere allocate staticamente o dinamicamente, in modo simile a quanto abbiamo detto in Gestione della memoria.
-Statico quando già in fase di compilazione del processo, o di avviamento del processo gli dò la memoria, e quella sarà per tutti il tempo della sua vita.</description>
-    </item>
-    <item>
-      <title>Monitor</title>
-      <link>https://flecart.github.io/notes/monitor/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/monitor/</guid>
-      <description>Questo è un modo di più alto livello per creare programmazione concorrente.
-Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
-Elementi costituenti 🟩 Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
-E possono modificare dati locali solo tramite chiamate a sue procedure</description>
-    </item>
-    <item>
-      <title>Filesystem</title>
-      <link>https://flecart.github.io/notes/filesystem/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/filesystem/</guid>
-      <description>Perché filesystem? Questa è l&amp;rsquo;idea presa dall&amp;rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
-L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l&amp;rsquo;accesso.
-Informazioni dei files (5+) 🟨 Il file è l’unità logica di memorizzazione. il formato che c&amp;rsquo;è dentro è gestito dall&amp;rsquo;applicazione, non dal file system!</description>
-    </item>
-    <item>
-      <title>Programmi Concorrenti</title>
-      <link>https://flecart.github.io/notes/programmi-concorrenti/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/programmi-concorrenti/</guid>
-      <description>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;pthread.h&amp;gt; void test(void *s) { for (int i = 0; i &amp;lt; 10; i++) { printf(&amp;#34;%s\n&amp;#34;, s); for (int j = 0; j &amp;lt; 100000000; j++); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;amp;t1, NULL, (void *)test, &amp;#34;Uno&amp;#34;); pthread_create(&amp;amp;t2, NULL, (void *)test, &amp;#34;Due&amp;#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:</description>
-    </item>
-    <item>
       <title>Devices OS</title>
       <link>https://flecart.github.io/notes/devices-os/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -107,33 +134,6 @@ Esempio mini-programma rallentamento
 Slide categorizzazione I/O
 Blocchi o caratteri 🟩- Slide devices blocchi o caratteri
 Tecniche di gestione devices (4) 🟨- Buffering Possiamo mettere un buffer per favorire la comunicazione fra i devices. la cos amigliore che fa è creare maggiore efficienza. Un altro motivo è la velocità diversa di consumo.</description>
-    </item>
-    <item>
-      <title>Memoria virtuale</title>
-      <link>https://flecart.github.io/notes/memoria-virtuale/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/memoria-virtuale/</guid>
-      <description>Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&amp;rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
-caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.</description>
-    </item>
-    <item>
-      <title>Note sull’architettura</title>
-      <link>https://flecart.github.io/notes/note-sullarchitettura/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/note-sullarchitettura/</guid>
-      <description>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
-Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
-Slide Interrupt Hardware e software</description>
-    </item>
-    <item>
-      <title>Scheduler</title>
-      <link>https://flecart.github.io/notes/scheduler/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/scheduler/</guid>
-      <description>Il suo scopo principale è gestire l&amp;rsquo;avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
-Solitamente il nome scheduler è solamente un gestore dell&amp;rsquo;avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
-Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
-Esempio gantt</description>
     </item>
   </channel>
 </rss>
