@@ -7,7 +7,8 @@
 <meta name="robots" content="index, follow">
 <title>Cloud Storage | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📓big-data">
-<meta name="description" content="Cloud Storage - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/cloud-storage/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -87,7 +88,8 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Cloud Storage" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/cloud-storage/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -98,7 +100,8 @@ if (!doNotTrack) {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Cloud Storage"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data."/>
 
 
 <script type="application/ld+json">
@@ -127,12 +130,12 @@ if (!doNotTrack) {
   "@type": "BlogPosting",
   "headline": "Cloud Storage",
   "name": "Cloud Storage",
-  "description": "",
+  "description": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don\u0026rsquo;t have a step where we have to extract the data.",
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don’t have a step where we have to extract the data. The drawback is when we need to modify, because we will have many consistencies. This is what the professors in the first database course says filesystems are not a good thing, see Introduction to databases.\nObject storage principles We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:\nBlack-box objects Flat and global key-value model (trivial model, easy to access) Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Scaling principles Scaling vertically There are two ways of scaling, scaling vertically or horizontally. Scaling Up concerns in building better machines, building better algorithms and being more efficient with what exactly we have.\nScaling horizontally There is a physical limit of number of computers in a data-center (100k seems to be the hard limit), its because of the energy requirements and the cooling requirements of the datacenter. Zürich’s datacenter consumes as much energy as an airport. And we have about 1-200 cores in a single computer of a datacenter.\nWe also have a limit for RAM and local storage. Respectively about 0.016-24TB of RAM and 1-30TB of storage. Its unthinkable that the RAM memory has the same order of magnitude of local storage. This is because in memory databases are becoming more common (they are usually faster, lower latency).\nWe also have a bandwidth of 1-200Gbit/s for a single server on an Ethernet cable.\nWe have standardized rack units for every server, storage and routers, they are usually connected together by switches and similar networking thingies.\nAmazon S3 Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created amazon web services. Now they are selling these abstractions: Amazon S3 stands for simple storage service.\nWith S3 every document is identified by a bucket id and a object id, which could be maximum 5 TB (probably physical constraints of the file). The buckets can uniquely identify that in the world.\nWe will talk now about Service Level Agreements which are important to understand the contract part of using cloud services.\nScalability We have 100 buckets per account that could be extended on request.\nDurability We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.\nAvailability We have an availability of 99.99% which means maximum of 1h for a year. Usually it’s useful to remember the percentages of availability:\n99% 4 days/year\n99.9% 9 hours/year\n99.99% 53 minutes/year\n99.999% 6 minutes/year\n99.9999% 32 seconds/year\n99.99999% 4 seconds/year\nResponse time Legally it’s hard to guarantee average speeds. So they guarantee that in $99.9\\%$ of the cases they have a response lower than $300 ms$, in other cases its higher.\nAccessing a resource We use Uniform Resource Identifier to identify the resource we want to access, and the usually send a REST request to modify, delete or get it.\nThis is an example of a S3 bucket [http://bucket.s3.amazonaws.com/object-name](http://bucket.s3.amazonaws.com/object-name`) (if you want to access the bucket, just remove the object identifier!). We can have operations like PUT, GET, DELETE for Buckets and objects.\nAzure Blob Storage ",
+  "wordCount" : "642",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,11 +230,107 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Cloud Storage
     </h1>
-    <div class="post-meta">0 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#paradigms-of-data-storage" aria-label="Paradigms of data storage">Paradigms of data storage</a><ul>
+                        
+                <li>
+                    <a href="#etl-framework" aria-label="ETL framework">ETL framework</a></li>
+                <li>
+                    <a href="#data-lakes" aria-label="Data Lakes">Data Lakes</a></li>
+                <li>
+                    <a href="#object-storage-principles" aria-label="Object storage principles">Object storage principles</a></li></ul>
+                </li>
+                <li>
+                    <a href="#scaling-principles" aria-label="Scaling principles">Scaling principles</a><ul>
+                        
+                <li>
+                    <a href="#scaling-vertically" aria-label="Scaling vertically">Scaling vertically</a></li>
+                <li>
+                    <a href="#scaling-horizontally" aria-label="Scaling horizontally">Scaling horizontally</a></li></ul>
+                </li>
+                <li>
+                    <a href="#amazon-s3" aria-label="Amazon S3">Amazon S3</a><ul>
+                        
+                <li>
+                    <a href="#scalability" aria-label="Scalability">Scalability</a></li>
+                <li>
+                    <a href="#durability" aria-label="Durability">Durability</a></li>
+                <li>
+                    <a href="#availability" aria-label="Availability">Availability</a></li>
+                <li>
+                    <a href="#response-time" aria-label="Response time">Response time</a></li>
+                <li>
+                    <a href="#accessing-a-resource" aria-label="Accessing a resource">Accessing a resource</a></li></ul>
+                </li>
+                <li>
+                    <a href="#azure-blob-storage" aria-label="Azure Blob Storage">Azure Blob Storage</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h3 id="paradigms-of-data-storage">Paradigms of data storage<a hidden class="anchor" aria-hidden="true" href="#paradigms-of-data-storage">#</a></h3>
+<h4 id="etl-framework">ETL framework<a hidden class="anchor" aria-hidden="true" href="#etl-framework">#</a></h4>
+<p>This is the classical database approach:
+We load the data in the database and let the underlying system handle it.</p>
+<h4 id="data-lakes">Data Lakes<a hidden class="anchor" aria-hidden="true" href="#data-lakes">#</a></h4>
+<p>We just store the data in the <strong>filesystem</strong> and we just see them as files.  This is very good when we just need to <em>read the data</em>. Called also <em>in situ</em> because we don&rsquo;t have a step where we have to extract the data. The drawback is when we need to <em>modify</em>, because we will have many consistencies.
+This is what the professors in the first database course says filesystems are not a good thing, see <a href="/notes/introduction-to-databases/">Introduction to databases</a>.</p>
+<h4 id="object-storage-principles">Object storage principles<a hidden class="anchor" aria-hidden="true" href="#object-storage-principles">#</a></h4>
+<p>We don&rsquo;t want the hierarchy that is common in <a href="/notes/filesystem/">Filesystem</a>s, so we need to simplify that and have these four principles:</p>
+<ol>
+<li>Black-box objects</li>
+<li>Flat and global key-value model (trivial model, easy to access)</li>
+<li>Flexible metadata</li>
+<li>Commodity hardware (the battery idea of Tesla until 2017).</li>
+</ol>
+<h3 id="scaling-principles">Scaling principles<a hidden class="anchor" aria-hidden="true" href="#scaling-principles">#</a></h3>
+<h4 id="scaling-vertically">Scaling vertically<a hidden class="anchor" aria-hidden="true" href="#scaling-vertically">#</a></h4>
+<p>There are two ways of scaling, scaling vertically or horizontally.
+Scaling Up concerns in building better machines, building better algorithms and being more efficient with what exactly we have.</p>
+<h4 id="scaling-horizontally">Scaling horizontally<a hidden class="anchor" aria-hidden="true" href="#scaling-horizontally">#</a></h4>
+<p>There is a physical limit of number of computers in a data-center (100k seems to be the hard limit), its because of the energy requirements and the cooling requirements of the datacenter. Zürich&rsquo;s datacenter consumes as much energy as an airport.
+And we have about 1-200 cores in a single computer of a datacenter.</p>
+<p>We also have a limit for RAM and local storage. Respectively about 0.016-24TB of RAM and 1-30TB of storage. Its unthinkable that the RAM memory has the same order of magnitude of local storage. This is because in memory databases are becoming more common (they are usually faster, lower latency).</p>
+<p>We also have a bandwidth of 1-200Gbit/s for a single server on an Ethernet cable.</p>
+<p>We have standardized rack units for every server, storage and routers, they are usually connected together by switches and similar networking thingies.</p>
+<h3 id="amazon-s3">Amazon S3<a hidden class="anchor" aria-hidden="true" href="#amazon-s3">#</a></h3>
+<p>Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created <em>amazon web services</em>. Now they are selling these abstractions: Amazon S3 stands for <em>simple storage service</em>.</p>
+<p>With S3 every document is identified by a <strong>bucket id</strong> and a <strong>object id</strong>, which could be maximum 5 TB (probably physical constraints of the file). The buckets can <em>uniquely</em> identify that in the world.</p>
+<p>We will talk now about <strong>Service Level Agreements</strong> which are important to understand the contract part of using cloud services.</p>
+<h4 id="scalability">Scalability<a hidden class="anchor" aria-hidden="true" href="#scalability">#</a></h4>
+<p>We have 100 buckets per account that could be extended on request.</p>
+<h4 id="durability">Durability<a hidden class="anchor" aria-hidden="true" href="#durability">#</a></h4>
+<p>We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.</p>
+<h4 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h4>
+<p>We have an availability of 99.99% which means maximum of 1h for a year. Usually it&rsquo;s useful to remember the percentages of availability:</p>
+<p>99% 4 days/year<br>
+99.9% 9 hours/year<br>
+99.99% 53 minutes/year<br>
+99.999% 6 minutes/year<br>
+99.9999% 32 seconds/year<br>
+99.99999% 4 seconds/year</p>
+<h4 id="response-time">Response time<a hidden class="anchor" aria-hidden="true" href="#response-time">#</a></h4>
+<p>Legally it&rsquo;s hard to guarantee average speeds. So they guarantee that in $99.9\%$ of the cases they have a response lower than $300 ms$, in other cases its higher.</p>
+<h4 id="accessing-a-resource">Accessing a resource<a hidden class="anchor" aria-hidden="true" href="#accessing-a-resource">#</a></h4>
+<p>We use <a href="/notes/uniform-resource-identifier/">Uniform Resource Identifier</a> to identify the resource we want to access, and the usually send a <a href="/notes/http-e-rest/">REST</a> request to modify, delete or get it.</p>
+<p>This is an example of a S3 bucket <code>[http://bucket.s3.amazonaws.com/object-name</code>](<a href="http://bucket.s3.amazonaws.com/object-name%60">http://bucket.s3.amazonaws.com/object-name`</a>) (if you want to access the bucket, just remove the object identifier!).
+We can have operations like PUT, GET, DELETE for Buckets and objects.</p>
+<h3 id="azure-blob-storage">Azure Blob Storage<a hidden class="anchor" aria-hidden="true" href="#azure-blob-storage">#</a></h3>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
