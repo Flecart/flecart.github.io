@@ -181,74 +181,71 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Filesystem
+    <h2 class="entry-hint-parent">Memoria virtuale
     </h2>
   </header>
   <div class="entry-content">
-    <p>Perché filesystem? Questa è l’idea presa dall’archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
-L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l’accesso.
-Informazioni dei files (5&#43;) 🟨 Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!...</p>
+    <p>Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L’idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
+caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo....</p>
   </div>
   <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Filesystem" href="https://flecart.github.io/notes/filesystem/"></a>
+  <a class="entry-link" aria-label="post link to Memoria virtuale" href="https://flecart.github.io/notes/memoria-virtuale/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Scheduler
+    <h2 class="entry-hint-parent">Architettura software del OS
     </h2>
   </header>
   <div class="entry-content">
-    <p>Il suo scopo principale è gestire l’avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
-Solitamente il nome scheduler è solamente un gestore dell’avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
-Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
-Esempio gantt...</p>
+    <p>A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).
+Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
+Slide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante...</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Scheduler" href="https://flecart.github.io/notes/scheduler/"></a>
+  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Architettura software del OS" href="https://flecart.github.io/notes/architettura-software-del-os/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Gestione delle risorse
+    <h2 class="entry-hint-parent">Note sull’architettura
     </h2>
   </header>
   <div class="entry-content">
-    <p>Gestione delle risorse Introduzione Definizione classe, fungibilità Classe di risorse sono un insieme di risorse fra loro equivalenti (nel senso che uno può rimpiazzare l’uso dell’altro), anche detti fungibili.
-Statico o dinamico Anche in economia ci sono tali definizioni! Queste risorse possono essere allocate staticamente o dinamicamente, in modo simile a quanto abbiamo detto in Gestione della memoria.
-Statico quando già in fase di compilazione del processo, o di avviamento del processo gli dò la memoria, e quella sarà per tutti il tempo della sua vita....</p>
+    <p>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
+Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
+Slide Interrupt Hardware e software...</p>
   </div>
   <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gestione delle risorse" href="https://flecart.github.io/notes/gestione-delle-risorse/"></a>
+  <a class="entry-link" aria-label="post link to Note sull’architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmi Concorrenti
+    <h2 class="entry-hint-parent">Processi e thread
     </h2>
   </header>
   <div class="entry-content">
-    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
+    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
+Slide schema generale tabelle
+Processi Il process control block è la struttura di dati principali da comprendere.
+Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Monitor
+    <h2 class="entry-hint-parent">Introduzione SO
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questo è un modo di più alto livello per creare programmazione concorrente.
-Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
-Elementi costituenti 🟩 Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
-E possono modificare dati locali solo tramite chiamate a sue procedure...</p>
+    <p>Scopi del sistema operativo 🟩 Un sistema operativo è una astrazione sul HW che permette di
+Gestire l’esecuzione di più programmi assieme (concorrenza), tramite virtualizzazione CPU e Memoria Gestire le risorse (Quindi I/O, RAM, Memoria, Networking) Fornisce una interfaccia di programmazione (API) molto più generale e potente, in grado di astrarre da dettagli di livello basso, vicini all’Hardware (come device drivers). Quindi in breve il SO è n programma che crea un ambiente civile per i programmi in cui interagire, e facilita molto il lavoro al programmatore per la sua interfaccia nuova....</p>
   </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Monitor" href="https://flecart.github.io/notes/monitor/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduzione SO" href="https://flecart.github.io/notes/introduzione-so/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

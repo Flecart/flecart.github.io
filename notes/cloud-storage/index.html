@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Cloud Storage | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📓big-data">
-<meta name="description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+<meta name="description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it. We won&rsquo;t talk much about this but this is the general concept!
 Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/cloud-storage/">
@@ -88,7 +88,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Cloud Storage" />
-<meta property="og:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+<meta property="og:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it. We won&rsquo;t talk much about this but this is the general concept!
 Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/cloud-storage/" />
@@ -100,7 +100,7 @@ Data Lakes We just store the data in the filesystem and we just see them as file
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Cloud Storage"/>
-<meta name="twitter:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.
+<meta name="twitter:description" content="Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it. We won&rsquo;t talk much about this but this is the general concept!
 Data Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don&rsquo;t have a step where we have to extract the data."/>
 
 
@@ -130,12 +130,12 @@ Data Lakes We just store the data in the filesystem and we just see them as file
   "@type": "BlogPosting",
   "headline": "Cloud Storage",
   "name": "Cloud Storage",
-  "description": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don\u0026rsquo;t have a step where we have to extract the data.",
+  "description": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it. We won\u0026rsquo;t talk much about this but this is the general concept!\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don\u0026rsquo;t have a step where we have to extract the data.",
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it.\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don’t have a step where we have to extract the data. The drawback is when we need to modify, because we will have many consistencies. This is what the professors in the first database course says filesystems are not a good thing, see Introduction to databases.\nObject storage principles We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:\nBlack-box objects Flat and global key-value model (trivial model, easy to access) Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Scaling principles Scaling vertically There are two ways of scaling, scaling vertically or horizontally. Scaling Up concerns in building better machines, building better algorithms and being more efficient with what exactly we have.\nScaling horizontally There is a physical limit of number of computers in a data-center (100k seems to be the hard limit), its because of the energy requirements and the cooling requirements of the datacenter. Zürich’s datacenter consumes as much energy as an airport. And we have about 1-200 cores in a single computer of a datacenter.\nWe also have a limit for RAM and local storage. Respectively about 0.016-24TB of RAM and 1-30TB of storage. Its unthinkable that the RAM memory has the same order of magnitude of local storage. This is because in memory databases are becoming more common (they are usually faster, lower latency).\nWe also have a bandwidth of 1-200Gbit/s for a single server on an Ethernet cable.\nWe have standardized rack units for every server, storage and routers, they are usually connected together by switches and similar networking thingies.\nAmazon S3 Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created amazon web services. Now they are selling these abstractions: Amazon S3 stands for simple storage service.\nWith S3 every document is identified by a bucket id and a object id, which could be maximum 5 TB (probably physical constraints of the file). The buckets can uniquely identify that in the world.\nWe will talk now about Service Level Agreements which are important to understand the contract part of using cloud services.\nScalability We have 100 buckets per account that could be extended on request.\nDurability We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.\nAvailability We have an availability of 99.99% which means maximum of 1h for a year. Usually it’s useful to remember the percentages of availability:\n99% 4 days/year\n99.9% 9 hours/year\n99.99% 53 minutes/year\n99.999% 6 minutes/year\n99.9999% 32 seconds/year\n99.99999% 4 seconds/year\nResponse time Legally it’s hard to guarantee average speeds. So they guarantee that in $99.9\\%$ of the cases they have a response lower than $300 ms$, in other cases its higher.\nAccessing a resource We use Uniform Resource Identifier to identify the resource we want to access, and the usually send a REST request to modify, delete or get it.\nThis is an example of a S3 bucket [http://bucket.s3.amazonaws.com/object-name](http://bucket.s3.amazonaws.com/object-name`) (if you want to access the bucket, just remove the object identifier!). We can have operations like PUT, GET, DELETE for Buckets and objects.\nAzure Blob Storage ",
-  "wordCount" : "642",
+  "articleBody": "Paradigms of data storage ETL framework This is the classical database approach: We load the data in the database and let the underlying system handle it. We won’t talk much about this but this is the general concept!\nData Lakes We just store the data in the filesystem and we just see them as files. This is very good when we just need to read the data. Called also in situ because we don’t have a step where we have to extract the data. The drawback is when we need to modify, because we will have many consistencies. Another drawback of filesystems is that they cannot scale to handle billions of files.\nThis is what the professors in the first database course says Filesystem are not a good thing, see Introduction to databases.\nObject storage principles We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:\nBlack-box objects Flat and global key-value model (trivial model, easy to access) Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Scaling principles Scaling vertically There are two ways of scaling, scaling vertically or horizontally. Scaling Up concerns in building better machines, building better algorithms and being more efficient with what exactly we have.\nScaling horizontally Scaling horizontally is the simple idea of adding more things, it could be more computers, more ram, more disk, more CPUs. But these have some physiscal limits that we should need to keep track of.\nThere is a physical limit of number of computers in a data-center (1k to 100k which seems to be the hard limit constrained by energy and cooling requirements). Zürich’s datacenter consumes as much energy as an airport. And we have about 1-200 cores in a single computer of a datacenter.\nWe also have a limit for RAM and local storage. Respectively about 0.016-24TB of RAM and 1-30TB of storage. Its unthinkable that the RAM memory has the same order of magnitude of local storage. This is because in memory databases are becoming more common (they are usually faster, lower latency).\nWe also have a bandwidth of 1-200Gbit/s for a single server on an Ethernet cable.\nWe have standardized rack units for every server, storage and routers, they are usually connected together by switches and similar networking thingies. Usually we have 1-4 rack units for a server\nObject Stores Object storage usages Object storages are useful to store things that are usually read-intensive. Some examples are\nStatic websites Images, Videos or video chunks Big files that are usually only to read (e.g. datasets). Service Level Agreements (4) We will talk now about Service Level Agreements which are important to understand the contract part of using cloud services.\nScalability We have 100 buckets per account that could be extended on request.\nDurability We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.\nAvailability We have an availability of 99.99% which means maximum of 1h for a year. Usually it’s useful to remember the percentages of availability:\n99% 4 days/year\n99.9% 9 hours/year\n99.99% 53 minutes/year\n99.999% 6 minutes/year\n99.9999% 32 seconds/year\n99.99999% 4 seconds/year\nResponse time Legally it’s hard to guarantee average speeds. So they guarantee that in $99.9\\%$ of the cases they have a response lower than $300 ms$, in other cases its higher. Amazon S3 Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created amazon web services. Now they are selling these abstractions: Amazon S3 stands for simple storage service.\nS3 Document Identification With S3 every document is identified by a bucket id and a object id, which could be maximum 5 TB (probably physical constraints of the file). The buckets can uniquely identify that in the world.\nWe don’t know how S3 works underneath, they have not published it.\nStorage Classes The cost of the storage service changes with the frequency of the access. For example amazon Glacier has a very high latency (hours to get the files), but its cost is quite low. This should be used for example for backups! With these applications we don’t care if the answer is in seconds. Hours is fine.\nAccessing a resource We use Uniform Resource Identifier to identify the resource we want to access, and the usually send a REST request to modify, delete or get it.\nThis is an example of a S3 bucket [http://bucket.s3.amazonaws.com/object-name](http://bucket.s3.amazonaws.com/object-name`) (if you want to access the bucket, just remove the object identifier!). We can have operations like PUT, GET, DELETE for Buckets and objects.\nAzure Blob Storage In this section we will describe the service provided by Azure cloud on cloud storage.\nAzure Document Identification Azure blob storage needs 3 id to identify a document:\nAccount Container (bucket equivalent) Blob (document id equivalent) Object APIs And we can divide the files into blocks which support a higher size.\nBlocks are for data. Append are for logs because they are optimized to append stuff. Page are for in memory virtual machines Stamps They have stamps which are 10-20 racks with 18 storage nodes each (30PB of data). Usually kept below 80% data (if not warning), else they could buy more storage or move data elsewhere.\nReplication(2) They also have replication of the data (intra-stamp replication) then they asynchronously replicate it to other stamps.\nRegions (2) As with AWS, they have regions to optimize for latency and be resistant to natural catastrophes\nKey-value stores S3 is far more slower than typical database systems to store and query the data. 100ms agains 1-9ms. So two orders of difference! Too high latency! Key value stores (aka associative arrays, we use map datastructure) solve this problem and can be adapted to be used as a database system.\nLimitations compared to S3 and Azure Blob Storage Yet, this brings some drawbacks: We have the values to be far smaller, about 400kb of data (this is what Dynamo does) and we cannot store metadata. It has some basic APIs to get and put the document, with a given key or value (in reality there is also a context variable).\nCharacteristics of Key-value stores This is designed for performance and scalability, but it gives up consistency for eventual consistency. This is usually a simpler version, but it doesn’t have the same features as more complex data storage systems, as relational database management systems.\nUsually these are used for shopping carts for a very large online shop, another is for storing likes and comments on social media\nDesign principles of Key-value stores (4) Incremental stability new nodes can join the system at any time, and nodes can leave the system at any time, sometimes gracefully, sometimes in a sudden crash. But we don’t need to have too many nodes to crash, which is not the scope of our course.\nSymmetry No node is particular in any way, the nodes are similar to one and another. They run the same code.\nDecentralization There is no leader or orchestrator in the network. Note that symmetric protocols could elect a leader nonetheless, while in this case we have the strict requirement not to have a leader.\nHeterogeneity the nodes may have different CPU power, amounts of memory, etc.\nChord protocol This is based on a distributed hashing protocol. We use hashes because they have some properties to be robust against failures of some kind, which I have not understood.\nWith this protocol, every node has an ID. For example a code in $2^{128}$. If we have a key $k$ this is assigned to a position on the ring. Then from this position we follow the ring clockwise until we find a node, this node should handle the value of this key.\nJoin, Leave and Crash When a node joins, the should take the responsibility of part of the data in front of him in a clockwise fashion. When a node leaves, it should give responsibility of part of the data to the node in front of him. Clearly this is not possible when we have a crash, this is why we need redundancy, which is easily done by having 2-range redundancy.\nPreference lists This solves the problem of finding the actual node that has the data we are querying for. We have distributed algorithms that make the nodes agree on this preference list which is just knowing what machine is responsible for what interval range. We have the theoretical necessity that $R + W \u003e N$ but i still have not understood this.\nAdvantages and disadvantages Pros:\nHighly scalable Robust to failure Self-organizing. I don’t know if the above properties are exclusive, but they are nice Cons:\nOnly lookup, no search (obvious) No data-integrity (we don’t have a way to check for integrity constraints) Security issues (Need to understand this) ",
+  "wordCount" : "1522",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ Data Lakes We just store the data in the filesystem and we just see them as file
     <h1 class="post-title entry-hint-parent">
       Cloud Storage
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -239,7 +239,7 @@ Data Lakes We just store the data in the filesystem and we just see them as file
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul>
                 <li>
                     <a href="#paradigms-of-data-storage" aria-label="Paradigms of data storage">Paradigms of data storage</a><ul>
                         
@@ -257,24 +257,67 @@ Data Lakes We just store the data in the filesystem and we just see them as file
                     <a href="#scaling-vertically" aria-label="Scaling vertically">Scaling vertically</a></li>
                 <li>
                     <a href="#scaling-horizontally" aria-label="Scaling horizontally">Scaling horizontally</a></li></ul>
-                </li>
+                </li></ul>
+                    
+                <li>
+                    <a href="#object-stores" aria-label="Object Stores">Object Stores</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#object-storage-usages" aria-label="Object storage usages">Object storage usages</a></li></ul>
+                    
+                <li>
+                    <a href="#service-level-agreements-4" aria-label="Service Level Agreements (4)">Service Level Agreements (4)</a></li>
                 <li>
                     <a href="#amazon-s3" aria-label="Amazon S3">Amazon S3</a><ul>
                         
                 <li>
-                    <a href="#scalability" aria-label="Scalability">Scalability</a></li>
+                    <a href="#s3-document-identification" aria-label="S3 Document Identification">S3 Document Identification</a></li>
                 <li>
-                    <a href="#durability" aria-label="Durability">Durability</a></li>
-                <li>
-                    <a href="#availability" aria-label="Availability">Availability</a></li>
-                <li>
-                    <a href="#response-time" aria-label="Response time">Response time</a></li>
+                    <a href="#storage-classes" aria-label="Storage Classes">Storage Classes</a></li>
                 <li>
                     <a href="#accessing-a-resource" aria-label="Accessing a resource">Accessing a resource</a></li></ul>
                 </li>
                 <li>
-                    <a href="#azure-blob-storage" aria-label="Azure Blob Storage">Azure Blob Storage</a>
+                    <a href="#azure-blob-storage" aria-label="Azure Blob Storage">Azure Blob Storage</a><ul>
+                        
+                <li>
+                    <a href="#azure-document-identification" aria-label="Azure Document Identification">Azure Document Identification</a></li>
+                <li>
+                    <a href="#object-apis" aria-label="Object APIs">Object APIs</a></li>
+                <li>
+                    <a href="#stamps" aria-label="Stamps">Stamps</a></li>
+                <li>
+                    <a href="#replication2" aria-label="Replication(2)">Replication(2)</a></li>
+                <li>
+                    <a href="#regions-2" aria-label="Regions (2)">Regions (2)</a></li></ul>
+                </li></ul>
                 </li>
+                <li>
+                    <a href="#key-value-stores" aria-label="Key-value stores">Key-value stores</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#limitations-compared-to-s3-and-azure-blob-storage" aria-label="Limitations compared to S3 and Azure Blob Storage">Limitations compared to S3 and Azure Blob Storage</a></li>
+                <li>
+                    <a href="#characteristics-of-key-value-stores" aria-label="Characteristics of Key-value stores">Characteristics of Key-value stores</a></li>
+                <li>
+                    <a href="#design-principles-of-key-value-stores-4" aria-label="Design principles of Key-value stores (4)">Design principles of Key-value stores (4)</a></li></ul>
+                    
+                <li>
+                    <a href="#chord-protocol" aria-label="Chord protocol">Chord protocol</a><ul>
+                        
+                <li>
+                    <a href="#join-leave-and-crash" aria-label="Join, Leave and Crash">Join, Leave and Crash</a></li>
+                <li>
+                    <a href="#preference-lists" aria-label="Preference lists">Preference lists</a></li>
+                <li>
+                    <a href="#advantages-and-disadvantages" aria-label="Advantages and disadvantages">Advantages and disadvantages</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
             </ul>
         </div>
     </details>
@@ -283,10 +326,11 @@ Data Lakes We just store the data in the filesystem and we just see them as file
   <div class="post-content"><h3 id="paradigms-of-data-storage">Paradigms of data storage<a hidden class="anchor" aria-hidden="true" href="#paradigms-of-data-storage">#</a></h3>
 <h4 id="etl-framework">ETL framework<a hidden class="anchor" aria-hidden="true" href="#etl-framework">#</a></h4>
 <p>This is the classical database approach:
-We load the data in the database and let the underlying system handle it.</p>
+We load the data in the database and let the underlying system handle it. We won&rsquo;t talk much about this but this is the general concept!</p>
 <h4 id="data-lakes">Data Lakes<a hidden class="anchor" aria-hidden="true" href="#data-lakes">#</a></h4>
 <p>We just store the data in the <strong>filesystem</strong> and we just see them as files.  This is very good when we just need to <em>read the data</em>. Called also <em>in situ</em> because we don&rsquo;t have a step where we have to extract the data. The drawback is when we need to <em>modify</em>, because we will have many consistencies.
-This is what the professors in the first database course says filesystems are not a good thing, see <a href="/notes/introduction-to-databases/">Introduction to databases</a>.</p>
+Another drawback of filesystems is that they <strong>cannot scale to handle billions of files</strong>.</p>
+<p>This is what the professors in the first database course says <a href="/notes/filesystem/">Filesystem</a> are not a good thing, see <a href="/notes/introduction-to-databases/">Introduction to databases</a>.</p>
 <h4 id="object-storage-principles">Object storage principles<a hidden class="anchor" aria-hidden="true" href="#object-storage-principles">#</a></h4>
 <p>We don&rsquo;t want the hierarchy that is common in <a href="/notes/filesystem/">Filesystem</a>s, so we need to simplify that and have these four principles:</p>
 <ol>
@@ -300,34 +344,132 @@ This is what the professors in the first database course says filesystems are no
 <p>There are two ways of scaling, scaling vertically or horizontally.
 Scaling Up concerns in building better machines, building better algorithms and being more efficient with what exactly we have.</p>
 <h4 id="scaling-horizontally">Scaling horizontally<a hidden class="anchor" aria-hidden="true" href="#scaling-horizontally">#</a></h4>
-<p>There is a physical limit of number of computers in a data-center (100k seems to be the hard limit), its because of the energy requirements and the cooling requirements of the datacenter. Zürich&rsquo;s datacenter consumes as much energy as an airport.
+<p>Scaling horizontally is the simple idea of adding more things, it could be more computers, more ram, more disk, more CPUs. But these have some physiscal limits that we should need to keep track of.</p>
+<p>There is a physical limit of number of computers in a data-center (1k to 100k which seems to be the hard limit constrained by energy and cooling requirements). Zürich&rsquo;s datacenter consumes as much energy as an airport.
 And we have about 1-200 cores in a single computer of a datacenter.</p>
 <p>We also have a limit for RAM and local storage. Respectively about 0.016-24TB of RAM and 1-30TB of storage. Its unthinkable that the RAM memory has the same order of magnitude of local storage. This is because in memory databases are becoming more common (they are usually faster, lower latency).</p>
 <p>We also have a bandwidth of 1-200Gbit/s for a single server on an Ethernet cable.</p>
-<p>We have standardized rack units for every server, storage and routers, they are usually connected together by switches and similar networking thingies.</p>
-<h3 id="amazon-s3">Amazon S3<a hidden class="anchor" aria-hidden="true" href="#amazon-s3">#</a></h3>
-<p>Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created <em>amazon web services</em>. Now they are selling these abstractions: Amazon S3 stands for <em>simple storage service</em>.</p>
-<p>With S3 every document is identified by a <strong>bucket id</strong> and a <strong>object id</strong>, which could be maximum 5 TB (probably physical constraints of the file). The buckets can <em>uniquely</em> identify that in the world.</p>
+<p>We have standardized <strong>rack</strong> units for every server, storage and routers, they are usually connected together by <em>switches</em> and similar networking thingies. Usually we have 1-4 rack units for a server</p>
+<h2 id="object-stores">Object Stores<a hidden class="anchor" aria-hidden="true" href="#object-stores">#</a></h2>
+<h4 id="object-storage-usages">Object storage usages<a hidden class="anchor" aria-hidden="true" href="#object-storage-usages">#</a></h4>
+<p>Object storages are useful to store things that are usually read-intensive. Some examples are</p>
+<ul>
+<li>Static websites</li>
+<li>Images, Videos or video chunks</li>
+<li>Big files that are usually only to read (e.g. datasets).</li>
+</ul>
+<h3 id="service-level-agreements-4">Service Level Agreements (4)<a hidden class="anchor" aria-hidden="true" href="#service-level-agreements-4">#</a></h3>
 <p>We will talk now about <strong>Service Level Agreements</strong> which are important to understand the contract part of using cloud services.</p>
-<h4 id="scalability">Scalability<a hidden class="anchor" aria-hidden="true" href="#scalability">#</a></h4>
-<p>We have 100 buckets per account that could be extended on request.</p>
-<h4 id="durability">Durability<a hidden class="anchor" aria-hidden="true" href="#durability">#</a></h4>
-<p>We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.</p>
-<h4 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h4>
-<p>We have an availability of 99.99% which means maximum of 1h for a year. Usually it&rsquo;s useful to remember the percentages of availability:</p>
+<ul>
+<li>
+<p><strong>Scalability</strong>
+We have 100 buckets per account that could be extended on request.</p>
+</li>
+<li>
+<p><strong>Durability</strong>
+We lose 1 in a $10^{11}$ objects during a year, which is quite strong (so there is still a possibility that the object is lost). This is useful for the lawyers because they can offer a guarantee. If this is not respected then people can sue them.</p>
+</li>
+<li>
+<p><strong>Availability</strong>
+We have an availability of 99.99% which means maximum of 1h for a year. Usually it&rsquo;s useful to remember the percentages of availability:</p>
+</li>
+</ul>
 <p>99% 4 days/year<br>
 99.9% 9 hours/year<br>
 99.99% 53 minutes/year<br>
 99.999% 6 minutes/year<br>
 99.9999% 32 seconds/year<br>
 99.99999% 4 seconds/year</p>
-<h4 id="response-time">Response time<a hidden class="anchor" aria-hidden="true" href="#response-time">#</a></h4>
-<p>Legally it&rsquo;s hard to guarantee average speeds. So they guarantee that in $99.9\%$ of the cases they have a response lower than $300 ms$, in other cases its higher.</p>
+<ul>
+<li><strong>Response time</strong>
+Legally it&rsquo;s hard to guarantee average speeds. So they guarantee that in $99.9\%$ of the cases they have a response lower than $300 ms$, in other cases its higher.</li>
+</ul>
+<h3 id="amazon-s3">Amazon S3<a hidden class="anchor" aria-hidden="true" href="#amazon-s3">#</a></h3>
+<p>Amazon used to sell books, then they started to rent cloud services because they had too many machines that most of the time they were not using. This was a big win from an economical point of view. They created <em>amazon web services</em>. Now they are selling these abstractions: Amazon S3 stands for <em>simple storage service</em>.</p>
+<h4 id="s3-document-identification">S3 Document Identification<a hidden class="anchor" aria-hidden="true" href="#s3-document-identification">#</a></h4>
+<p>With S3 every document is identified by a <strong>bucket id</strong> and a <strong>object id</strong>, which could be maximum 5 TB (probably physical constraints of the file). The buckets can <em>uniquely</em> identify that in the world.</p>
+<p>We don&rsquo;t know how S3 works underneath, they have not published it.</p>
+<h4 id="storage-classes">Storage Classes<a hidden class="anchor" aria-hidden="true" href="#storage-classes">#</a></h4>
+<p>The cost of the storage service changes with the frequency of the access. For example <strong>amazon Glacier</strong> has a very high latency (hours to get the files), but its cost is quite low. This should be used for example for backups! With these applications we don&rsquo;t care if the answer is in seconds. Hours is fine.</p>
 <h4 id="accessing-a-resource">Accessing a resource<a hidden class="anchor" aria-hidden="true" href="#accessing-a-resource">#</a></h4>
 <p>We use <a href="/notes/uniform-resource-identifier/">Uniform Resource Identifier</a> to identify the resource we want to access, and the usually send a <a href="/notes/http-e-rest/">REST</a> request to modify, delete or get it.</p>
 <p>This is an example of a S3 bucket <code>[http://bucket.s3.amazonaws.com/object-name</code>](<a href="http://bucket.s3.amazonaws.com/object-name%60">http://bucket.s3.amazonaws.com/object-name`</a>) (if you want to access the bucket, just remove the object identifier!).
 We can have operations like PUT, GET, DELETE for Buckets and objects.</p>
 <h3 id="azure-blob-storage">Azure Blob Storage<a hidden class="anchor" aria-hidden="true" href="#azure-blob-storage">#</a></h3>
+<p>In this section we will describe the service provided by Azure cloud on cloud storage.</p>
+<h4 id="azure-document-identification">Azure Document Identification<a hidden class="anchor" aria-hidden="true" href="#azure-document-identification">#</a></h4>
+<p>Azure blob storage needs <em>3</em> id to identify a document:</p>
+<ul>
+<li>Account</li>
+<li>Container (bucket equivalent)</li>
+<li>Blob (document id equivalent)</li>
+</ul>
+<h4 id="object-apis">Object APIs<a hidden class="anchor" aria-hidden="true" href="#object-apis">#</a></h4>
+<p>And we can divide the files into <strong>blocks</strong> which support a higher size.</p>
+<ul>
+<li>Blocks are for <em>data</em>.</li>
+<li>Append are for <em>logs</em> because they are optimized to append stuff.</li>
+<li>Page are for <em>in memory virtual machines</em></li>
+</ul>
+<h4 id="stamps">Stamps<a hidden class="anchor" aria-hidden="true" href="#stamps">#</a></h4>
+<p>They have <strong>stamps</strong> which are 10-20 racks with 18 storage nodes each (30PB of data). Usually kept below 80% data (if not warning), else they could buy more storage or move data elsewhere.</p>
+<h4 id="replication2">Replication(2)<a hidden class="anchor" aria-hidden="true" href="#replication2">#</a></h4>
+<p>They also have replication of the data (intra-stamp replication) then they asynchronously replicate it to other stamps.</p>
+<h4 id="regions-2">Regions (2)<a hidden class="anchor" aria-hidden="true" href="#regions-2">#</a></h4>
+<p>As with AWS, they have regions to optimize for latency and be resistant to natural catastrophes</p>
+<h2 id="key-value-stores">Key-value stores<a hidden class="anchor" aria-hidden="true" href="#key-value-stores">#</a></h2>
+<p>S3 is far more slower than typical database systems to store and query the data. 100ms agains 1-9ms. So two orders of difference! <em>Too high latency!</em>
+Key value stores (aka associative arrays, we use map datastructure) solve this problem and can be adapted to be used as a database system.</p>
+<h4 id="limitations-compared-to-s3-and-azure-blob-storage">Limitations compared to S3 and Azure Blob Storage<a hidden class="anchor" aria-hidden="true" href="#limitations-compared-to-s3-and-azure-blob-storage">#</a></h4>
+<p>Yet, this brings some drawbacks:
+We have the values to be far smaller, about 400kb of data (this is what Dynamo does) and we <em>cannot store metadata</em>.
+It has some basic APIs to get and put the document, with a given key or value (in reality there is also a context variable).</p>
+<h4 id="characteristics-of-key-value-stores">Characteristics of Key-value stores<a hidden class="anchor" aria-hidden="true" href="#characteristics-of-key-value-stores">#</a></h4>
+<p>This is designed for <strong>performance and scalability</strong>, but it <em>gives up</em> consistency for <strong>eventual consistency</strong>. This is usually a <strong>simpler</strong> version, but it doesn&rsquo;t have the same features as more complex data storage systems, as relational database management systems.</p>
+<p>Usually these are used for shopping carts for a very large online shop, another is for storing likes and comments on social media</p>
+<h4 id="design-principles-of-key-value-stores-4">Design principles of Key-value stores (4)<a hidden class="anchor" aria-hidden="true" href="#design-principles-of-key-value-stores-4">#</a></h4>
+<ul>
+<li>
+<p><strong>Incremental stability</strong>
+new nodes can join the system at any time, and nodes can leave the system at any time, sometimes gracefully, sometimes in a sudden crash. But we don&rsquo;t need to have too many nodes to crash, which is not the scope of our course.</p>
+</li>
+<li>
+<p><strong>Symmetry</strong>
+No node is particular in any way, the nodes are similar to one and another. <em>They run the same code</em>.</p>
+</li>
+<li>
+<p><strong>Decentralization</strong>
+There is no leader or orchestrator in the network. Note that symmetric protocols could elect a leader nonetheless, while in this case we have the strict requirement not to have a leader.</p>
+</li>
+<li>
+<p><strong>Heterogeneity</strong>
+the nodes may have different CPU power, amounts of memory, etc.</p>
+</li>
+</ul>
+<h3 id="chord-protocol">Chord protocol<a hidden class="anchor" aria-hidden="true" href="#chord-protocol">#</a></h3>
+<p>This is based on a <strong>distributed hashing protocol</strong>. We use hashes because they have some properties to be robust against failures of some kind, which I have not understood.</p>
+<p>With this protocol, every node has an ID. For example a code in $2^{128}$. If we have a key $k$ this is assigned to a position on the ring. Then from this position we follow the ring clockwise until we find a node, this node should handle the value of this key.</p>
+<h4 id="join-leave-and-crash">Join, Leave and Crash<a hidden class="anchor" aria-hidden="true" href="#join-leave-and-crash">#</a></h4>
+<p>When a node joins, the should take the responsibility of part of the data in front of him in a clockwise fashion.
+When a node leaves, it should give responsibility of part of the data to the node in front of him. Clearly this is not possible when we have a crash, this is why we need <em>redundancy</em>, which is easily done by having <em>2-range</em> redundancy.</p>
+<h4 id="preference-lists">Preference lists<a hidden class="anchor" aria-hidden="true" href="#preference-lists">#</a></h4>
+<p>This solves the problem of finding the actual node that has the data we are querying for.
+We have distributed algorithms that make the nodes agree on this preference list which is just knowing what machine is responsible for what interval range.
+We have the theoretical necessity that $R + W > N$  but i still have not understood this.</p>
+<h4 id="advantages-and-disadvantages">Advantages and disadvantages<a hidden class="anchor" aria-hidden="true" href="#advantages-and-disadvantages">#</a></h4>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Highly scalable</li>
+<li>Robust to failure</li>
+<li>Self-organizing.
+I don&rsquo;t know if the above properties are exclusive, but they are nice</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Only lookup, no search (obvious)</li>
+<li>No data-integrity (we don&rsquo;t have a way to check for integrity constraints)</li>
+<li>Security issues (Need to understand this)</li>
+</ul>
 
 
   </div>
