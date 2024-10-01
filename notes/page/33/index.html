@@ -196,74 +196,72 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Monitor
+    <h2 class="entry-hint-parent">Memory Corruption
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questo è un modo di più alto livello per creare programmazione concorrente.
-Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
-Elementi costituenti 🟩 Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
-E possono modificare dati locali solo tramite chiamate a sue procedure...</p>
+    <p>First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
+Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data)....</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Monitor" href="https://flecart.github.io/notes/monitor/"></a>
+  <a class="entry-link" aria-label="post link to Memory Corruption" href="https://flecart.github.io/notes/memory-corruption/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Proximal Polixy Optimization
+    <h2 class="entry-hint-parent">Optimization methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>This documents attempts to briefly present the algorithm and some experiments found online about it. The following repo seems to be a good resource: here.
-Usually, PPO is explained as an actor critic framework. This means there is an agent that acts on the environment, and then there is a critic that collects the feedback from the environment. The main idea about this framework is to select a policy that is similar, so that it is less probable that a bad policy, a very different policy from the original is selected....</p>
+    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
+Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
+Newton Raphson method Molte implementazioni in R usano questo metodo, è
+Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Proximal Polixy Optimization" href="https://flecart.github.io/notes/proximal-polixy-optimization/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Sentiment Analysis
+    <h2 class="entry-hint-parent">Simplesso e B&amp;B
     </h2>
   </header>
   <div class="entry-content">
-    <p>Sentiment analysis is one of the oldest tasks in natural language processing. In this note we will introduce some examples and terminology, some key problems in the field and a simple model that we can understand by just knowing Backpropagation Log Linear Models and the Softmax Function.
-We say:
-Polarity: the orientation of the sentiment. Subjectivity: if it expresses personal feelings. See demo
-Some applications: Businesses use sentiment analysis to understand if users are happy or not with their product....</p>
+    <p>Algoritmo del simplesso Ricerca della direzione migliore Ricerca dello step Pseudocodice Slide
+B sono gli indici di partenza, poi questi vengono aggiornati
+In riga 5 vado a checkare se ho direzioni di crescita possibili, se è tutto positivo non ne ho.
+in riga 6, si sceglie il più piccol per evitare loop.
+L’idea in generale va in questo modo
+Cerco di trovare il duale e confrontarlo con la x attuale Se sono uguali, allora ho trovato l’ottimo ed esco Altrimenti cerco una direzione di crescita che sia anche ammissibile Continuo fino a trovare un vertice, se ho il vertice allora mi muovo lì e riapplico, altrimenti è illimitata, se non esiste un vertice....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Sentiment Analysis" href="https://flecart.github.io/notes/sentiment-analysis/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Simplesso e B&amp;B" href="https://flecart.github.io/notes/simplesso-e-bb/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Softmax Function
+    <h2 class="entry-hint-parent">The Database Management System
     </h2>
   </header>
   <div class="entry-content">
-    <p>Softmax is one of the most important functions for neural networks. It also has some interesting properties that we list here. This function is part of The Exponential Family.
-Definition of the function The softmax function is usually defined as follows:
-$$ \text{ softmax } (h, y, T) = \frac{\exp\left( \frac{h_{y}}{T} \right)}{\sum_{y&#39; \in \mathcal{Y}} \exp\left( \frac{h_{y&#39;}}{T} \right)} $$ The softmax takes the vector $\vec{h}$ into a simplex which is useful for categorical distributions....</p>
+    <p>Struttura del DBMS Introduzione ai DBMS Schema riassuntivo #### Operazioni classiche Ci stiamo chiedendo, come facciamo a descrivere i processi che portano alla comprensione della query e della retrieval degli elementi utili? Questo deve fare il DBMS, ossia capace di - Aggiornare tuple - Trovare tuple - Gestire gli accessi - Gestire accessi concorrenti? ### Query processor #### Query compiler (3) 🟩 - Parsing (crea l&#39;albero di derivazione per la nostra query) - Pre-processing (fa check semantici sulla query) - Optimization, si occupa lui di migliorare L&#39;ottimizzazione #### Execution engine 🟩 Esegue l&#39;effettiva computazione per la query, ed è il punto d&#39;incontro col resto (indexes, e logging per dire) Esegue il piano di esecuzione che probabilmente un livello superiore ha calcolato Interagisce con tutti gli altri componenti del db (ad esempio Log per transazioni e durabilità, buffer e scheduler delle operazioni prolly)....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Softmax Function" href="https://flecart.github.io/notes/softmax-function/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to The Database Management System" href="https://flecart.github.io/notes/the-database-management-system/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Storia del web
+    <h2 class="entry-hint-parent">Tokenization
     </h2>
   </header>
   <div class="entry-content">
-    <p>Guerre dei browser Prima guerra ~1995
-Fra netscape, una forma di rete (?) che poi viene ripresa da firefox da Mozilla, dopo che è stato mandato in bancarotta da Microsoft (che ha ancora con IE una grandissima fetta del mercato in questo primo periodo).
-Secondo periodo di guerra ~2010
-Quando arriva chrome, che vuole creare un browser che risolva tutti i problemi per creare integrazioni sui browser di altre aziende), mentre IE ha perso interesse per nuove features, che in questo periodo sono capi del proprio mercato....</p>
+    <p>Introduction to tokenization Tokenization is the process of converting normal strings into small little pieces that could be fed into one of our models. It usually comes from a tradition in programming languages, as we can see in Automi e Regexp where we define a specific token to have a known pattern, usually recognized by regular expressions.
+There have been historically been many approaches to tokenization, let’s see a few:...</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Storia del web" href="https://flecart.github.io/notes/storia-del-web/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Tokenization" href="https://flecart.github.io/notes/tokenization/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
