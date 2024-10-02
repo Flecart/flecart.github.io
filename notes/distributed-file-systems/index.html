@@ -134,8 +134,8 @@ Desiderata of distributed file systems In this case we have a Filesystem. In 200
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesiderata of distributed file systems In this case we have a Filesystem. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of fault tolerance. We need to detect these errors so we need monitoring and error detection and we would like the system to be self-regulatory and have the ability of automatic recovery\nEfficiency in operations We want to be efficient in\nScanning the file Appending information to file atomically So that we can have a temporary place for intermediate data or sensors or logs. This needs to be very efficient for appends. Immutability is ok in this case. Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck.\nHadoop Primarily:\n• Distributed File System (HDFS)\n• MapReduce\n• Wide column store (HBase)\nStarting form 188 in 2006 when the filesystem has been developed, now it should handle more about 100k files, about 600PB of data!\nWe will start first by looking at the logical model and then to the physical model, following Codd’s data independence idea (Codd 1970).\nThe logical model In this case we have a file hierarchy. And we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in Cloud Storage#Object Stores, which are seen as a single big object. These documents have a far larger block size, usually of 64-128MB. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don’t have fragmentation on the filesystem. This is because on a network cable having many files takes more time than a single bigger file, because of the latency.\nThe architecture With HDFS we have a centralized architecture where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.\nWhen we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won’t use it, see Devices OS#RAID for more information.\nStructure of the NameNode Memory Mapping of file -\u003e Block. Tracking block locations More in particular:\nthe file namespace, that is, the hierarchy of directory names and file names, as well as any access control (ACL) information similar to Unix-based systems. a mapping from each file to the list of its blocks. Each block, in this list, is represented with a 64-bit identifier; the content of the blocks is not on the NameNode. Blocks are local files. a mapping from each block, represented with its 64-bit identifier, to the locations of its replicas, that is, the list of the DataNodes that store a copy of this block. The physical model References [1] Codd “A Relational Model of Data for Large Shared Data Banks” Communications of the ACM Vol. 13(6), pp. 377–387 1970\n",
-  "wordCount" : "544",
+  "articleBody": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesiderata of distributed file systems In this case we have a Filesystem. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of fault tolerance. We need to detect these errors so we need monitoring and error detection and we would like the system to be self-regulatory and have the ability of automatic recovery\nEfficiency in operations We want to be efficient in\nScanning the file Appending information to file atomically So that we can have a temporary place for intermediate data or sensors or logs. This needs to be very efficient for appends. Immutability is ok in this case. Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck. This is why the Distributed File System that we will be studying is optimized for high-throughput data processing rather than low-latency access to small files.\nHadoop Primarily:\n• Distributed File System (HDFS)\n• MapReduce\n• Wide column store (HBase)\nStarting form 188 in 2006 when the filesystem has been developed, now it should handle more about 100k files, about 600PB of data!\nWe will start first by looking at the logical model and then to the physical model, following Codd’s data independence idea (Codd 1970).\nThe logical model In this case we have a file hierarchy. And we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in Cloud Storage#Object Stores, which are seen as a single big object. These documents have a far larger block size, usually of 64-128MB. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don’t have fragmentation on the filesystem. This is because on a network cable having many files takes more time than a single bigger file, because of the latency.\nThe architecture With HDFS we have a centralized architecture where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.\nWhen we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won’t use it, see Devices OS#RAID for more information.\nThe physical model Structure of the NameNode Memory Mapping of file -\u003e Block. Tracking block locations More in particular:\nthe file namespace, that is, the hierarchy of directory names and file names, as well as any access control (ACL) information similar to Unix-based systems. a mapping from each file to the list of its blocks. Each block, in this list, is represented with a 64-bit identifier; the content of the blocks is not on the NameNode. Blocks are local files. a mapping from each block, represented with its 64-bit identifier, to the locations of its replicas, that is, the list of the DataNodes that store a copy of this block. The NameNode never initiates connection with the DataNode. It can just answer to DataNodes’ heartbeats.\nStructure of the DataNode One important fact that the DataNode has to handle are the heartbeats. These are small communications that the DataNode sends to the NameNode to make known that everything is all right (peculiar observation is that also human communication frequency has something related to this), this heartbeat could sometimes also contain information about storage of blocks, like the ACKs for successful storage. It can also contain notification of block corruptions. This is usually done once every 3 seconds but can be configured. Along side this pattern, the DataNode also sends every six hours (configurable) a full report of every block that it contains.\nAnother responsibility of the DataNode is the replication pipeline. When it receives a file, it should replicate it to the other nodes.\nThe file systems operations Read The client asks the NameNode for the blocks and DataNodes. The NameNode answers with the list of each block of the file and the DataNodes that store it ordered from distance to the client. Then the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn. Write This operations is a little bit more complex and needs many machines to be organized with each other:\nThe client asks the NameNode for each block a series of DataNodes with which he can initialize connection. Then client instructs the given DataNodes to create the replication pipeline Then client sends the block and waits for acks by the DataNodes This is done for every block of the file, when it’s finished the client tells the NameNode to release the lock. After a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client. Then if one gets corrupted the NameNode automatically regulates the replicas Replication strategy Blocks are replicated with some general guidelines in mind. There is first a notion of distance from nodes that is defined by a physical connection distance: if the two nodes are in the same rack then the distance is 2, if they are in different racks then the distance id 4. There is a general guideline that each node should have at maximum a single replica, and each rack should have at maximum two replicas.\nAddressing the single point of failure If the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don’t have a way to recover the mappings between the block ids and the files. For this reason a snapshot is usually created. We also need to balance the creation of snapshots and the number of updates. It would be quite infeasible to create a whole new snapshot after every update, yet at the same time we need to track every change to avoid to lose any. This brings up the use of logs for every change. There are also other proposals for merging the logs to the snapshot, so that it would not take half an hour to restart the NameNode in the case of a crash, these are called standby NameNodes that keep track of the current mappings between block ids and files.\nReferences [1] Codd “A Relational Model of Data for Large Shared Data Banks” Communications of the ACM Vol. 13(6), pp. 377–387 1970\n",
+  "wordCount" : "1119",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ Desiderata of distributed file systems In this case we have a Filesystem. In 200
     <h1 class="post-title entry-hint-parent">
       Distributed file systems
     </h1>
-    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -253,12 +253,28 @@ Desiderata of distributed file systems In this case we have a Filesystem. In 200
                     <a href="#the-logical-model" aria-label="The logical model">The logical model</a><ul>
                         
                 <li>
-                    <a href="#the-architecture" aria-label="The architecture">The architecture</a></li>
-                <li>
-                    <a href="#structure-of-the-namenode" aria-label="Structure of the NameNode">Structure of the NameNode</a></li></ul>
+                    <a href="#the-architecture" aria-label="The architecture">The architecture</a></li></ul>
                 </li>
                 <li>
-                    <a href="#the-physical-model" aria-label="The physical model">The physical model</a></li></ul>
+                    <a href="#the-physical-model" aria-label="The physical model">The physical model</a><ul>
+                        
+                <li>
+                    <a href="#structure-of-the-namenode" aria-label="Structure of the NameNode">Structure of the NameNode</a></li>
+                <li>
+                    <a href="#structure-of-the-datanode" aria-label="Structure of the DataNode">Structure of the DataNode</a></li>
+                <li>
+                    <a href="#the-file-systems-operations" aria-label="The file systems operations">The file systems operations</a><ul>
+                        
+                <li>
+                    <a href="#read" aria-label="Read">Read</a></li>
+                <li>
+                    <a href="#write" aria-label="Write">Write</a></li></ul>
+                </li>
+                <li>
+                    <a href="#replication-strategy" aria-label="Replication strategy">Replication strategy</a></li>
+                <li>
+                    <a href="#addressing-the-single-point-of-failure" aria-label="Addressing the single point of failure">Addressing the single point of failure</a></li></ul>
+                </li></ul>
                 </li></ul>
                     
                 <li>
@@ -279,7 +295,8 @@ Desiderata of distributed file systems In this case we have a Filesystem. In 200
 <li>Appending information to file <strong>atomically</strong>
 So that we can have a temporary place for intermediate data or sensors or logs. This needs to be very efficient for appends. Immutability is ok in this case.</li>
 </ul>
-<p>Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck.</p>
+<p>Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck.
+This is why the Distributed File System that we will be studying is optimized for high-throughput data processing rather than low-latency access to small files.</p>
 <h2 id="hadoop">Hadoop<a hidden class="anchor" aria-hidden="true" href="#hadoop">#</a></h2>
 <p>Primarily:<br>
 • Distributed File System (HDFS)<br>
@@ -295,6 +312,7 @@ This is because on a network cable having many files takes more time than a sing
 <h4 id="the-architecture">The architecture<a hidden class="anchor" aria-hidden="true" href="#the-architecture">#</a></h4>
 <p>With HDFS we have a <strong>centralized architecture</strong> where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.</p>
 <p>When we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won&rsquo;t use it, see <a href="/notes/devices-os/#raid">Devices OS#RAID</a> for more information.</p>
+<h3 id="the-physical-model">The physical model<a hidden class="anchor" aria-hidden="true" href="#the-physical-model">#</a></h3>
 <h4 id="structure-of-the-namenode">Structure of the NameNode<a hidden class="anchor" aria-hidden="true" href="#structure-of-the-namenode">#</a></h4>
 <ol>
 <li>Memory</li>
@@ -313,7 +331,37 @@ blocks is not on the NameNode. <em>Blocks are local files</em>.</li>
 to the <strong>locations of its replicas</strong>, that is, the list of the DataNodes
 that store a copy of this block.</li>
 </ul>
-<h3 id="the-physical-model">The physical model<a hidden class="anchor" aria-hidden="true" href="#the-physical-model">#</a></h3>
+<p>The NameNode <strong>never initiates</strong> connection with the DataNode. It can just answer to DataNodes&rsquo; heartbeats.</p>
+<h4 id="structure-of-the-datanode">Structure of the DataNode<a hidden class="anchor" aria-hidden="true" href="#structure-of-the-datanode">#</a></h4>
+<p>One important fact that the DataNode has to handle are the <strong>heartbeats</strong>. These are small communications that the DataNode sends to the NameNode to make known that everything is all right (peculiar observation is that also human communication frequency has something related to this), this heartbeat could sometimes also contain information about storage of blocks, like the ACKs for successful storage. It can also contain notification of block corruptions.
+This is usually done once every <strong>3 seconds</strong> but can be configured.
+Along side this pattern, the DataNode also sends every <strong>six hours</strong> (configurable) a full report of every block that it contains.</p>
+<p>Another responsibility of the DataNode is the <strong>replication pipeline</strong>. When it receives a file, it should replicate it to the other nodes.</p>
+<h4 id="the-file-systems-operations">The file systems operations<a hidden class="anchor" aria-hidden="true" href="#the-file-systems-operations">#</a></h4>
+<h5 id="read">Read<a hidden class="anchor" aria-hidden="true" href="#read">#</a></h5>
+<ul>
+<li>The client asks the NameNode for the blocks and DataNodes.</li>
+<li>The NameNode answers with the list of each block of the file and the DataNodes that store it ordered from distance to the client.</li>
+<li>Then the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn.</li>
+</ul>
+<h5 id="write">Write<a hidden class="anchor" aria-hidden="true" href="#write">#</a></h5>
+<p>This operations is a little bit more complex and needs many machines to be organized with each other:</p>
+<ul>
+<li>The client asks the NameNode for each block a series of DataNodes with which he can initialize connection.</li>
+<li>Then client instructs the given DataNodes to create the replication pipeline</li>
+<li>Then client sends the block and waits for acks by the DataNodes</li>
+<li>This is done for every block of the file, when it&rsquo;s finished the client tells the NameNode to release the lock.</li>
+<li>After a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client.</li>
+<li>Then if one gets corrupted the NameNode automatically regulates the replicas</li>
+</ul>
+<h4 id="replication-strategy">Replication strategy<a hidden class="anchor" aria-hidden="true" href="#replication-strategy">#</a></h4>
+<p>Blocks are replicated with some general guidelines in mind. There is first a notion of distance from nodes that is defined by a physical connection distance: if the two nodes are in the same rack then the distance is 2, if they are in different racks then the distance id 4.
+There is a general guideline that each node should have at maximum a single replica, and each rack should have at maximum two replicas.</p>
+<h4 id="addressing-the-single-point-of-failure">Addressing the single point of failure<a hidden class="anchor" aria-hidden="true" href="#addressing-the-single-point-of-failure">#</a></h4>
+<p>If the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don&rsquo;t have a way to recover the mappings between the block ids and the files.
+For this reason a <strong>snapshot</strong> is usually created. We also need to balance the creation of snapshots and the number of updates. It would be quite infeasible to create a whole new snapshot after every update, yet at the same time we need to track every change to avoid to lose any.
+This brings up the use of <strong>logs</strong> for every change.
+There are also other proposals for merging the logs to the snapshot, so that it would not take half an hour to restart the NameNode in the case of a crash, these are called <strong>standby NameNodes</strong> that keep track of the current mappings between block ids and files.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p>[1] Codd <a href="https://dl.acm.org/doi/10.1145/362384.362685">“A Relational Model of Data for Large Shared Data Banks”</a> Communications of the ACM Vol. 13(6), pp. 377&ndash;387 1970</p>
 
