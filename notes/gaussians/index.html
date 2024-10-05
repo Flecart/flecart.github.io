@@ -131,8 +131,8 @@ if (!doNotTrack) {
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Gaussians are one of the most important probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Expectation Maximization algorithm. The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)\nThe Density Function The single variable gaussian is as follows: $$ \\mathcal{N}(\\mu, \\sigma) = \\frac{1}{2\\pi \\sqrt{ \\sigma }} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) $$ This can be generalized for the multi variable case\nSome properties of Gaussians The conditional Gaussian If we have $X,Y$ which are jointly Gaussian, then the distribution $p(X = x \\mid Y = y)$ is a gaussian with the following mean and variance:\n$$ \\mu_{X \\mid Y = y} = \\mu_{X} + \\Sigma_{XY} \\Sigma_{YY}^{-1}(y - \\mu_{Y}) $$ And $$ \\Sigma_{X \\mid Y} = \\Sigma_{XX} - \\Sigma_{XY} \\Sigma^{-1}_{YY} \\Sigma_{YX} $$ The proof is presented in section 2.3 of (Bishop 2006)\nSums of Gaussians are Gaussian This is easily provable, if we have $X \\sim \\mathcal{N}(\\mu_{X}, \\Sigma_{X})$ and a compatible distribution $Y \\sim \\mathcal{N}(\\mu_{Y}, \\Sigma_{Y})$ then we have that the distribution $X +Y = \\mathcal{N} (\\mu_{X} + \\mu_{Y}, \\Sigma_{X} + \\Sigma_{Y})$\nProduct of Gaussians are Gaussian This is a little more difficult to detail, see this chatgpt response.\nGaussian distribution and linear models There is a close connection between linear models and the Gaussian distribution. This is linked to the properties of the sum and product of those gaussians.\nMarginals are gaussians One can prove that any finite marginals of Gaussians are still multivariate Gaussians.\nGaussian characteristic function One can prove that the characteristic function for Gaussians is\n$$ \\mathbb{E}[itX] = \\exp\\left( \\mu it - \\frac{1}{2} t^{T} \\Sigma t \\right) $$ Properties to remember Compact representation of high dimensional joint distributions: instead of using $2^{n}$ variables we just need $n^{2}$. Closed form inference (I think about the conjugacy of itself.) References [1] Bishop “Pattern Recognition and Machine Learning” Springer 2006\n",
-  "wordCount" : "343",
+  "articleBody": "Gaussians are one of the most important probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Expectation Maximization algorithm. The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)\nThe Density Function The single variable Gaussian is as follows: $$ \\mathcal{N}(\\mu, \\sigma) = \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) $$ This can be generalized for the multi variable case $$ \\mathcal{N}(\\mu, \\Sigma) = \\frac{1}{\\sqrt{ 2\\pi \\lvert \\Sigma \\rvert } } \\exp\\left( -\\frac{1}{2} (x - \\mu)^{T} \\Sigma^{-1} (x - \\mu) \\right) $$ Integral is 1 We now prove that the integral of the Gaussian PDF is 1, this is a requirements needed to be considered a probability distribution function.\nFirst, let’s prove a famous equality: $$ I = \\int_{-\\infty}^{\\infty} \\exp( - x^{2}) \\, dx = \\sqrt{ \\pi } $$ This is kinda surprising, we need some care to prove it: $$ \\begin{align} \\\\ I^{2} = \\int_{-\\infty}^{\\infty} \\exp( - x^{2} - y^{2}) \\, dx dy \\\\ = \\int_{0}^{2\\pi} \\int_{0}^{\\infty} r\\exp( - r^{2}) \\, dr d\\theta \\\\ = -\\frac{2\\pi}{2} \\exp(-r^{2}) \\bigg\\vert_{0}^{\\infty} = \\pi \\\\ \\implies I = \\sqrt{ \\pi } \\end{align} $$ This is quite interesting. If we do the same derivation with $\\exp\\left( - \\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right)$, first doing a change of variables $y = (x - \\mu)$ where we have $dy = dx$, then doing another change of variables $z = \\frac{y}{\\sqrt{ 2 \\sigma^{2} }}$ where we get $\\sqrt{ 2\\sigma^{2} }dz = dy$ now we have the same integral, plus an added constant multiplicative term. So we have\n$$ \\int _{-\\infty}^{\\infty} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) \\, dx = \\sqrt{ 2\\sigma^{2} } \\int _{-\\infty}^{\\infty} \\exp(-z^{2})\\, dz = \\sqrt{ 2\\pi \\sigma^{2}} $$ Which finishes the derivation of the normalizing term.\nSome properties of Gaussians The conditional Gaussian If we have $X,Y$ which are jointly Gaussian, then the distribution $p(X = x \\mid Y = y)$ is a gaussian with the following mean and variance:\n$$ \\mu_{X \\mid Y = y} = \\mu_{X} + \\Sigma_{XY} \\Sigma_{YY}^{-1}(y - \\mu_{Y}) $$ And $$ \\Sigma_{X \\mid Y} = \\Sigma_{XX} - \\Sigma_{XY} \\Sigma^{-1}_{YY} \\Sigma_{YX} $$ The proof is presented in section 2.3 of (Bishop 2006)\nSums of Gaussians are Gaussian This is easily provable, if we have $X \\sim \\mathcal{N}(\\mu_{X}, \\Sigma_{X})$ and a compatible distribution $Y \\sim \\mathcal{N}(\\mu_{Y}, \\Sigma_{Y})$ then we have that the distribution $X +Y = \\mathcal{N} (\\mu_{X} + \\mu_{Y}, \\Sigma_{X} + \\Sigma_{Y})$\nProduct of Gaussians are Gaussian This is a little more difficult to detail, see this chatgpt response.\nGaussian distribution and linear models There is a close connection between linear models and the Gaussian distribution. This is linked to the properties of the sum and product of those gaussians.\nMarginals are gaussians One can prove that any finite marginals of Gaussians are still multivariate Gaussians.\nGaussian characteristic function Characteristic functions are sometimes useful to prove that two distributions are the same as each other. One can prove that the characteristic function for Gaussians is\n$$ \\mathbb{E}[\\exp(itX)] = \\exp\\left( \\mu it - \\frac{1}{2} t^{T} \\Sigma t \\right) $$ Let’s prove the uni-variate case, we will see that it will be exactly this value. We need to compute the value: $$ \\mathbb{E}[\\exp(itX)] = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx $$ The idea is to complete the square, and the by knowing the value of the integral of the completed square, we simplify. $$ \\begin{align} \\\\ \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx \\\\ = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} - 2\\mu it\\sigma^{2} + \\sigma^{4}t^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\cdot \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\end{align} $$ Properties to remember Compact representation of high dimensional joint distributions: instead of using $2^{n}$ variables we just need $n^{2}$. Closed form inference (I think about the conjugacy of itself.) References [1] Bishop “Pattern Recognition and Machine Learning” Springer 2006\n",
+  "wordCount" : "719",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,7 +227,7 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Gaussians
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -236,10 +236,13 @@ if (!doNotTrack) {
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul><ul><ul>
+        <div class="inner"><ul><ul><ul>
                 <li>
-                    <a href="#the-density-function" aria-label="The Density Function">The Density Function</a></li></ul>
-                    
+                    <a href="#the-density-function" aria-label="The Density Function">The Density Function</a><ul>
+                        
+                <li>
+                    <a href="#integral-is-1" aria-label="Integral is 1">Integral is 1</a></li></ul>
+                </li>
                 <li>
                     <a href="#some-properties-of-gaussians" aria-label="Some properties of Gaussians">Some properties of Gaussians</a><ul>
                         
@@ -271,14 +274,44 @@ if (!doNotTrack) {
   <div class="post-content"><p>Gaussians are one of the most important probability distributions.
 They arise naturally in the <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">law of large numbers</a> and have some nice properties that we will briefly present and prove here in this note. They are also quite common for <a href="/notes/gaussian-processes/">Gaussian Processes</a> and the <a href="/notes/expectation-maximization/">Expectation Maximization</a> algorithm.
 The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)</p>
-<h4 id="the-density-function">The Density Function<a hidden class="anchor" aria-hidden="true" href="#the-density-function">#</a></h4>
-<p>The single variable gaussian is as follows:
+<h3 id="the-density-function">The Density Function<a hidden class="anchor" aria-hidden="true" href="#the-density-function">#</a></h3>
+<p>The single variable Gaussian is as follows:
 </p>
 $$
-\mathcal{N}(\mu, \sigma) = \frac{1}{2\pi \sqrt{ \sigma }} \exp\left( -\frac{(x - \mu)^{2}}{2\sigma^{2}} \right)
+\mathcal{N}(\mu, \sigma) = \frac{1}{\sqrt{ 2\pi } \sigma} \exp\left( -\frac{(x - \mu)^{2}}{2\sigma^{2}} \right)
 $$
 <p>
-This can be generalized for the multi variable case</p>
+This can be generalized for the multi variable case
+</p>
+$$
+\mathcal{N}(\mu, \Sigma) = \frac{1}{\sqrt{ 2\pi \lvert \Sigma \rvert } } \exp\left( -\frac{1}{2} (x - \mu)^{T} \Sigma^{-1} (x - \mu) \right)
+$$
+<h4 id="integral-is-1">Integral is 1<a hidden class="anchor" aria-hidden="true" href="#integral-is-1">#</a></h4>
+<p>We now prove that the integral of the Gaussian PDF is 1, this is a requirements needed to be considered a probability distribution function.</p>
+<p>First, let&rsquo;s prove a famous equality:
+</p>
+$$
+I = \int_{-\infty}^{\infty} \exp( - x^{2}) \, dx = \sqrt{ \pi } 
+$$
+<p>
+This is kinda surprising, we need some care to prove it:
+</p>
+$$
+\begin{align}
+ \\
+I^{2} = \int_{-\infty}^{\infty} \exp( - x^{2} - y^{2}) \, dx dy  \\
+= \int_{0}^{2\pi} \int_{0}^{\infty} r\exp( - r^{2}) \, dr d\theta \\
+= -\frac{2\pi}{2}  \exp(-r^{2}) \bigg\vert_{0}^{\infty} = \pi \\
+\implies I = \sqrt{ \pi }
+\end{align}
+$$
+<p>This is quite interesting.
+If we do the same derivation with $\exp\left( - \frac{(x - \mu)^{2}}{2\sigma^{2}} \right)$, first doing a change of variables $y = (x - \mu)$ where we have  $dy = dx$, then doing another change of variables $z = \frac{y}{\sqrt{ 2 \sigma^{2} }}$ where we get $\sqrt{ 2\sigma^{2} }dz = dy$ now we have the same integral, plus an added constant multiplicative term. So we have</p>
+$$
+\int _{-\infty}^{\infty} \exp\left( -\frac{(x - \mu)^{2}}{2\sigma^{2}} \right) \, dx = \sqrt{ 2\sigma^{2} }  \int _{-\infty}^{\infty} \exp(-z^{2})\, dz = \sqrt{ 2\pi  \sigma^{2}}
+$$
+<p>
+Which finishes the derivation of the normalizing term.</p>
 <h3 id="some-properties-of-gaussians">Some properties of Gaussians<a hidden class="anchor" aria-hidden="true" href="#some-properties-of-gaussians">#</a></h3>
 <h4 id="the-conditional-gaussian">The conditional Gaussian<a hidden class="anchor" aria-hidden="true" href="#the-conditional-gaussian">#</a></h4>
 <p>If we have $X,Y$ which are jointly Gaussian, then the distribution $p(X = x \mid Y = y)$ is a gaussian with the following mean and variance:</p>
@@ -301,9 +334,28 @@ $$
 <h4 id="marginals-are-gaussians">Marginals are gaussians<a hidden class="anchor" aria-hidden="true" href="#marginals-are-gaussians">#</a></h4>
 <p>One can prove that any finite marginals of Gaussians are still multivariate Gaussians.</p>
 <h4 id="gaussian-characteristic-function">Gaussian characteristic function<a hidden class="anchor" aria-hidden="true" href="#gaussian-characteristic-function">#</a></h4>
-<p>One can prove that the characteristic function for Gaussians is</p>
+<p>Characteristic functions are sometimes useful to prove that two distributions are the same as each other.
+One can prove that the characteristic function for Gaussians is</p>
 $$
-\mathbb{E}[itX] = \exp\left( \mu it - \frac{1}{2} t^{T} \Sigma t \right)
+\mathbb{E}[\exp(itX)] = \exp\left( \mu it - \frac{1}{2} t^{T} \Sigma t \right)
+$$
+<p>Let&rsquo;s prove the uni-variate case, we will see that it will be exactly this value.
+We need to compute the value:
+</p>
+$$
+\mathbb{E}[\exp(itX)] = \int _{-\infty}^{\infty} \frac{1}{\sqrt{ 2\pi } \sigma} \exp\left( -\frac{(x - \mu)^{2}}{2\sigma^{2}} + itx \right) \, dx 
+$$
+<p>
+The idea is to complete the square, and the by knowing the value of the integral of the completed square, we simplify.
+</p>
+$$
+\begin{align}
+ \\
+ \int _{-\infty}^{\infty} \frac{1}{\sqrt{ 2\pi } \sigma} \exp\left( -\frac{(x - \mu)^{2}}{2\sigma^{2}} + itx \right) \, dx  \\
+=  \int _{-\infty}^{\infty} \frac{1}{\sqrt{ 2\pi } \sigma} \exp\left( -\frac{(x - (\mu + \sigma^{2}it))^{2} - 2\mu it\sigma^{2} + \sigma^{4}t^{2} }{2\sigma^{2}}  \right) \, dx  \\
+= \exp\left( \mu it - \frac{1}{2} \sigma^{2}t^{2} \right) \cdot \int _{-\infty}^{\infty} \frac{1}{\sqrt{ 2\pi } \sigma} \exp\left( -\frac{(x - (\mu + \sigma^{2}it))^{2} }{2\sigma^{2}}  \right) \, dx  \\
+= \exp\left( \mu it - \frac{1}{2} \sigma^{2}t^{2} \right)
+\end{align}
 $$
 <h4 id="properties-to-remember">Properties to remember<a hidden class="anchor" aria-hidden="true" href="#properties-to-remember">#</a></h4>
 <ul>

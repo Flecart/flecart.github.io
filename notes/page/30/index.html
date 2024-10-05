@@ -196,69 +196,77 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Tokenization
+    <h2 class="entry-hint-parent">Markov Chains
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction to tokenization Tokenization is the process of converting normal strings into small little pieces that could be fed into one of our models. It usually comes from a tradition in programming languages, as we can see in Automi e Regexp where we define a specific token to have a known pattern, usually recognized by regular expressions.
-There have been historically been many approaches to tokenization, let’s see a few:...</p>
+    <p>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
+$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
+Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente....</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Markov Chains" href="https://flecart.github.io/notes/markov-chains/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Massimi minimi multi-variabile
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Matrice Jacobiana È un modo per scrivere il gradiente di una funzione quando è in una certa forma.
+Data una funzione $f: \mathbb{R}^n \to \mathbb{R}^p$ ossia per esempio $x=(x_1,...,x_n) \to(f_1(x),...,f_p(x))$ Se le p funzioni di arrivo sono differenziabili, allora la matrice Jacobiana è definita in questo modo:
+$$J_f(x) = \begin{pmatrix} \delta_{x_1} f_1(x) &amp; … &amp; \delta_{x_n} f_1(x)\ . &amp; . &amp; . \ \delta_{x_1} f_p(x) &amp; … &amp; \delta_{x_n} f_p(x)...</p>
+  </div>
+  <footer class="entry-footer">14 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Massimi minimi multi-variabile" href="https://flecart.github.io/notes/massimi-minimi-multi-variabile/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Relazioni di Ricorrenza
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Iterazione Questo metodo semplicemente consiste di calcolare tutte le operazioni e scriverlo con una notazione asintotica.
+slide
+Sostituzione (induzione) slide
+Analisi della relazione di ricorrenza di fibonacci
+Si può dimostrare utilizzando l’induzione che una relazione di questo tipo
+$$ T(n) = \begin{cases} O(1) \\ T(n-1) &#43; T(n-2) &#43; 1 \end{cases} $$ Si trova che è $O(2^n), \Omega(2^{n/2})$
+Analisi finale.
+Si può creare una stima corretta, utilizzando la formula per il calcolo di fibonacci (che dimostri facendo osservazioni su una funzione generatrice di essa, una serie infinita)....</p>
+  </div>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Relazioni di Ricorrenza" href="https://flecart.github.io/notes/relazioni-di-ricorrenza/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Teorema di Rice
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduction to the Rice Theorem Ci sono molti teoremi che non possono essere decisi, vedere Halting Theorem and Reducibility. Qui andiamo a chiederci quale sia l’insieme dei problemi decidibili.
+Proprietà dei linguaggi TM🟩 Data una macchina $\mathcal{M}$ definiamo il suo linguaggio come $$ L_{\mathcal{M}} = \left\{ x \in \Sigma^{*}: \mathcal{M} \text{ accetta } x \right\} $$ Allora con questa definizione di linguaggio possiamo dire che una proprietà, ossia una funzione da tutti i $TM$ possibili a $\left\{ 0, 1 \right\}$ tale per cui se il linguaggio riconosciuto è lo stesso, ossia $$ L_{\mathcal{M}} = L_{\mathcal{M}&#39;} \implies P(\mathcal{M}) = P(\mathcal{M}&#39;) $$ Definiamo questa non triviale se esiste una macchina per cui è 0, e una per cui è 1 (ossia non è costante)....</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Tokenization" href="https://flecart.github.io/notes/tokenization/"></a>
+  <a class="entry-link" aria-label="post link to Teorema di Rice" href="https://flecart.github.io/notes/teorema-di-rice/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bayesian learning
+    <h2 class="entry-hint-parent">The RLHF pipeline
     </h2>
   </header>
   <div class="entry-content">
-    <p>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression Let’s start with a classical regression. In this setting we need to estimate a model that is generated from this kind of data: $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty....</p>
+    <p>https://huyenchip.com/2023/05/02/rlhf.html è un blog post che lo descrive in modo abbastanza dettagliato e buono.
+Introduzione a RLHF Questo è il processo che è quasi la migliore per la produzione di LLM moderni (maggior parte si basano su questo per dire).
+Struttura generale Si può dire che RLHF si divida in 3 parti fondamentali
+Completion il modello viene allenato a completare parole dal web,solitamente è molto inutile Fine tuning per le singole task, per esempio riassumere, rispondere in certo modo etc....</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bayesian learning" href="https://flecart.github.io/notes/bayesian-learning/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">CSS
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Cascading Style Sheets Inizialmente HTML era per la presentazione, abbiamo ancora un pò di attributi storici e tag storici per questa parte di presentazione descritto in HTML e Markup.
-Introduzione È un linguaggio indipendente per la descrizione della grafica. La cosa bella è iil fatto di essere indipendente, quindi è adatto a HTML, a XML e simili.
-Una cosa particolare è il cascading quindi il fatto che dichiarazioni più nuove sovrascrivano o espandino dichiarazione vecchie....</p>
-  </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to CSS" href="https://flecart.github.io/notes/css/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Inner product spaces
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This set of notes tries to fix what I haven’t learned in 2021 course in algebra. It’s about inner product spaces. A good online reference on the topic is wilkinson.
-Definitions Inner product space We define the vector space $V$ to be a inner product space, if we define a inner product operator ($\langle \cdot, \cdot \rangle : V \times V \to R$) such that the following are valid:
-It is linear on both arguments: $$ \langle \alpha x_{1} &#43; \beta x_{2}, y \rangle = \alpha \langle x_{1}, y \rangle &#43; \beta \langle x_{2}, y \rangle $$ It is a symmetric operator: $\langle x, y \rangle = \langle y, x \rangle$ It is positive definite that is we have $\forall x \in V: \langle x, x \rangle \geq 0$ with equality only if $x = \boldsymbol{0}$ An example of such operator is the classical cosine distance which is just the angle, or euclidean distance....</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Inner product spaces" href="https://flecart.github.io/notes/inner-product-spaces/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Cauchy-Schwarz Inequality
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This note briefly states and proves one of the most famous inequalities in geometry/analysis.
-Theorem Statement Given $2n$ real numbers (you can see these two also as $n$ dimensional vectors), such as $x_{1}, \dots, x_{n}$ and $y_{1}, \dots, y_{n}$ then we have that $$ \left( \sum_{i = 1}^{n} x_{i}y_{i} \right) ^{2} \leq \left( \sum_{i= 1}^{n} x^{2}_{i} \right) \left( \sum_{i = 1}^{n} y^{2}_{i} \right) $$ In vectorial form we can rewrite this as $$ \lvert \langle u, v \rangle \rvert ^{2} \leq \langle u, u \rangle \cdot \langle v, v \rangle $$ with $u = \left( x_{1}, \dots, x_{n} \right)$ and $v = \left( y_{1}, \dots, y_{n} \right)$ and the $\langle \cdot, \cdot \rangle$ operator is the inner product....</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cauchy-Schwarz Inequality" href="https://flecart.github.io/notes/cauchy-schwarz-inequality/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to The RLHF pipeline" href="https://flecart.github.io/notes/the-rlhf-pipeline/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
