@@ -196,73 +196,71 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Compression Algorithms
+    <h2 class="entry-hint-parent">Programmi Concorrenti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Lempel-Ziv-Welch Algorithm Introduzione sul funzionamento Primo scan con un dizionario indexato dei singoli caratteri Poi viene cercato di raggruppare caratteri a coppie. Se una coppia è già presente nel dizionario, allora aggiungo al dizionario una cosa più lunga e metto un code diverso Esempio di sopra. La cosa carina è che il dizionario si può ricostruire in fase di decoding.
-Tutti gli altri, tipo zip, gzip, png si basano poi su questa idea....</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Compression Algorithms" href="https://flecart.github.io/notes/compression-algorithms/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Garbage Collection
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>On dangling pointers Tombstones 🟩 Slides tombstones
-Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.
-Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.
-Keys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria, che è doppio...</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Garbage Collection" href="https://flecart.github.io/notes/garbage-collection/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Randomness
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione alla Randomicità Questo è principalmente basato su (Li &amp; Vitányi 2019) Capito 1.9 Sembra che la nozione di random sia alla fine una cosa molto profonda. Per esempio, un caso lampante che le definizioni non funzionano nel caso di numeri trascendenti è che catalogano i numeri di $\pi$ come se fossero casuali, mentre in realtà possono essere trovati mediante procedimenti precisi. È una distinzione filosoficamente molto interessante.
-Alla fine sembra ci sia un link molto diretto con la crittografia, si può vedere (Stinson 2005)....</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Randomness" href="https://flecart.github.io/notes/randomness/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Teoria assiomatica degli insiemi
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>2.1 Elementi di base 2.1.1 Definizione e caratteristiche Tutto è un insieme (su questo si basa la maggior parte della matematica) Efficace nella descrizione degli oggetti (infiniti è ez), ma non è efficiente nel calcolo in quanto non dà nessun indizio sul’implementazione in memoria o sul modo per calcolarlo, c’è solo una associazione Si può concludere che per l’informatico non serve a molto questa teoria, ma è la base per la matematica....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Teoria assiomatica degli insiemi" href="https://flecart.github.io/notes/teoria-assiomatica-degli-insiemi/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Top-down Parser
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Top-down Algoritmo di parsing 🟩 Slide
-Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
-Esempio di esecuzione
-Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
-$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
-Slide
-Si può rendere molto più efficiente con un valore di lookahead....</p>
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Teorema di Lagrange
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Classi laterali Dimostrazione dei lemmi sopra. La cosa interessante di questa parte è possiamo usare una classe laterale per partizionare il gruppo iniziale!
+Il teorema di Lagrange Dividere significa che **partiziona** l&#39;insieme iniziale in alcuni insiemi distinti. L&#39;insieme $G:H$ è l&#39;insieme che contiene tutti i cosets, credo. Dimostrazione
+|G:H| = |G|/|H| |a| divide |G| Ossia un corollario dopo il teorema di Lagrange. La cosa citata è dimostrata in Gruppi ciclici e permutazioni#Criterio $a {i} = a {j}$....</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Teorema di Lagrange" href="https://flecart.github.io/notes/teorema-di-lagrange/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Classical Cyphers
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.
+Classifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field
+Cryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale....</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Classical Cyphers" href="https://flecart.github.io/notes/classical-cyphers/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Kolmogorov complexity
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Gran parte di quanto scrivo ora è tratto da (Li &amp; Vitányi 2019). Chaitin, Kolmogorov e Solomonoff hanno elaborato il tema in modo indipendente e allo stesso tempo verso gli anni ‘60!
+Solomonoff lo ha trovato sul problema dell’induzione all’età di 38 anni, Kolmogorov invece era già tardi, ha già trovato gli assiomi della probabilità e poi nel 65 cerca randomness. Mentre Chaiten Information = Computation e non probabilità, nel 68 all’età di 19 anni....</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Kolmogorov complexity" href="https://flecart.github.io/notes/kolmogorov-complexity/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Logistic Regression
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.
+Introduzione al problema Supponiamo che
+$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$ NOTA! la varianza non dipende dalle feature!...</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Logistic Regression" href="https://flecart.github.io/notes/logistic-regression/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
