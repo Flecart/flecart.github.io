@@ -181,34 +181,6 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Architettura software del OS
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).
-Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
-Slide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante...</p>
-  </div>
-  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Architettura software del OS" href="https://flecart.github.io/notes/architettura-software-del-os/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Filesystem
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Perché filesystem? Questa è l’idea presa dall’archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
-L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l’accesso.
-Informazioni dei files (5&#43;) 🟨 Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!...</p>
-  </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Filesystem" href="https://flecart.github.io/notes/filesystem/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">Processi e thread
     </h2>
   </header>
@@ -220,6 +192,35 @@ Ha una tabella dei file aperti, che sono dei file descriptor (all’interno dell
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Devices OS
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Devices Categorizzazione (6)🟨- Trasferimento dei dati Accesso al device sinfonia del trasferimento condivisone fra processi Velocità del trasferimento I/O direction (scrittura o lettura) Vediamo che molte caratteristiche sono riguardo il trasferimento
+Slide categorizzazione I/O
+Blocchi o caratteri 🟩- Slide devices blocchi o caratteri
+Tecniche di gestione devices (4) 🟨- Buffering Possiamo mettere un buffer per favorire la comunicazione fra i devices. la cos amigliore che fa è creare maggiore efficienza. Un altro motivo è la velocità diversa di consumo....</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Devices OS" href="https://flecart.github.io/notes/devices-os/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
