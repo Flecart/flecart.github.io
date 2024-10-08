@@ -181,61 +181,59 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bottom-up Parser LR(0)
+    <h2 class="entry-hint-parent">Gruppi
     </h2>
   </header>
   <div class="entry-content">
-    <p>Descrivo ora alcune domande utili per ripasso:
-Quali sono schematicmente quali sono le operazioni migliori per un parser top-down? Cosa è un prefisso viabile? Quali sono i conflitti possibli, e come risolverli… Non sai nemmeno definire inmodo formale cosa sia un item Bottom up Intro shift-reduce e LR 🟩 Slide
-In breve:
-Shift = simbolo terminale messo nella stack Riduzione utilizzando una produzione LR = dettura da Sinistra, creazione della stringa da destra (derivazione rightmost) Algoritmo classico 🟨&#43; Quello che credo che intendevo per questo algoritmo classico è quello non deterministico, nel senso che prova a fare backtracking, finché non ha finito tutte le possibilità, oppure trova la derivazione giusta....</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bottom-up Parser LR(0)" href="https://flecart.github.io/notes/bottom-up-parser-lr0/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Gestione delle eccezioni
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione Metodi alternativi di gestione degli errori (3) 🟩 A volte le computazioni falliscono. Potremmo gestirle con i result come accennato in Polimorfismo, però diventa molto macchinoso fare tutte le funzioni che debbano inoltrare solamente delle results. bisogna trovare un modo più naturale. Ecco che arriva una gestione delle eccezioni direttamente nel linguaggio. Si tratta un sistema di comunicazione degli errori.
-ALTRI METODI
-Results, stile monadico, vedi sopra. definire dei valori eccezionali (questo si va spesso in C) Il chiamato dice al chiamante una cosa da chiamare quando fallisce....</p>
+    <p>Definizione gruppo Qualunque insieme più operazione tale per cui:
+Esistenza dell’inverso per ogni elemento $\forall g \in G, \exists g^{-1} \in G : gg^{-1} = e$ Esistenza di un elemento neutro $\exists e \in G: \forall g \in G, eg = g$ Associatività: $(gh)f = g(hf)$ Closure: $\forall g, h \in G \implies gh \in G$ Unicità dell’elemento neutro Supponiamo di avere un gruppo $G$ e due elementi neutri $e, f$ Allora abbiamo che $ae = a = af$ però se moltiplichiamo per l’inversa abbiamo che $a^{-1}ae = a^{-1}af \implies e = f$...</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gestione delle eccezioni" href="https://flecart.github.io/notes/gestione-delle-eccezioni/"></a>
+  <a class="entry-link" aria-label="post link to Gruppi" href="https://flecart.github.io/notes/gruppi/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">l’intelligenza
+    <h2 class="entry-hint-parent">Optimization methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questi appunti sono stati scritti leggendo il (Russell &amp; Norvig 2009).
-1 Introduzione L’intelligenza artificiale è un campo in velocissima espansione, con già un mercato enorme di un trillion dollars.
-Inoltre il suo campo di studi spazia da moltissimi campi, è per questo che quasi potresti considerarla universale.
-1.1 L’intelligenza artificiale 1.1.1 Cosa è (2) Nel tempo si è cercato di definire con esattezza cosa sia l’intelligenza artificiale. In generare si è basato su alcuni parametri cardine ossia:...</p>
+    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
+Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
+Newton Raphson method Molte implementazioni in R usano questo metodo, è
+Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to l’intelligenza" href="https://flecart.github.io/notes/lintelligenza/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Planning automatico
+    <h2 class="entry-hint-parent">Problemi di ricerca
     </h2>
   </header>
   <div class="entry-content">
-    <p>Planning Automatico Vogliamo andare a creare un programma che sia in grado di creare un piano per fare una azione, andiamo in questo capitolo gli algoritmi storicamente migliori adatti a risolvere questo problema
-Il problema di pianificazione Andiamo a rappresentare il nostro problema di pianificazione con un linguaggio molto simile alla Logica del Primo ordine.
-È il PDDL ossia il Planning domain definition language
-PDDL Questo linguaggio è definito da...</p>
+    <p>2 Problemi di ricerca In questa prima parte si tratta di ricerca semplice, ossia si utilizza un modello basato su obiettivi, di struttura atomica, in un ambiente che risulti singolo-agente, episodico, totalmente osservabile, deterministico, statico, discreto, conosciuto.
+2.1 Il problema Vogliamo cercare di enunciare in un modo che possa essere formale, senza nessuna ambiguità il concetto di problema di ricerca.
+2.1.1 Framework di soluzione Individuiamo 4 fasi principali per un problema di ricerca, questo è un framework molto generico....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Planning automatico" href="https://flecart.github.io/notes/planning-automatico/"></a>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Problemi di ricerca" href="https://flecart.github.io/notes/problemi-di-ricerca/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Sezioni Critiche
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Ripasso Prox: 80 Ripasso: May 21, 2023 Ultima modifica: March 12, 2023 10:00 AM Primo Abbozzo: October 8, 2022 11:30 AM Stato: 🌕🌕🌕🌕🌑 Studi Personali: No
+Elementi di ripasso 2 Sezioni Critiche Introduzione La parte di un programma che utilizza una o più risorse condivise viene detta sezione critica (critical section, o CS)
+Andiamo in questa altra parte a valutare certe soluzioni:
+Programma d’esempio 🟩 Vorremmo garantire che a = b invariante....</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Sezioni Critiche" href="https://flecart.github.io/notes/sezioni-critiche/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
