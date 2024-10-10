@@ -181,42 +181,18 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Inverse Transform
+    <h2 class="entry-hint-parent">Accept Reject algorithm
     </h2>
   </header>
   <div class="entry-content">
-    <p>How can we transform a uniform into a random variable? It is true that we have $$ F(x) = \int _{-\infty}^{x} f(t) \, dt $$ A volte la densità non è definita, mentre la funzione cumulativa lo è , per questo spesso cominciamo a definire partendo dalla definizione.
-Suppose we have a $x \sim F_{X}(x)$ where $F$ is a cumulative distribution function, same thing, we just need to take the set, normal cumulative distribution function that we saw a lot in other courses....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Inverse Transform" href="https://flecart.github.io/notes/inverse-transform/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Probabilita condizionata e indipendenza
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Condizionata Definizione 🟩 Andiamo a definire una probabilità di un evento $A$, condizionata a un evento non nullo $B$, come
-$$ P(A|B) = \dfrac{P(A\cap B)}{P(B)} $$ Questo è la cosa fondamentale per poter considerare cose come bayes perché in questo modo abbiamo una certa relazione fra causa ed effetto e anche il contrario! Cosa che ci piace molto molto molto.
-La definizione di sopra è un probabilità 🟩 Dimostrazione mia...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Probabilita condizionata e indipendenza" href="https://flecart.github.io/notes/probabilita-condizionata-e-indipendenza/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Scelta del PO
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>La cosa che rende il PO diverso rispetto agli sviluppatori è la conoscenza delle necessità del cliente. Questo permette di prioritizzare del task e capire in che modo dovrebbe essere il prodotto finale. In questo modo si crea una vision del prodotto. Pensiamo che il PO debba condividere questa informazione e prendere decisioni di gruppo.
-Domande da fare: La user interface, come sembra il wireframe? Pensavamo di utilizzare i social solamente per i login, pensavate di utilizzare anche per altro durante il gioco?...</p>
+    <p>Some useful links Main results: https://jblevins.org/notes/accept-reject
+Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
+La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
+Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
+Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density....</p>
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Scelta del PO" href="https://flecart.github.io/notes/scelta-del-po/"></a>
+  <a class="entry-link" aria-label="post link to Accept Reject algorithm" href="https://flecart.github.io/notes/accept-reject-algorithm/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -234,15 +210,47 @@ Esistenza dell’inverso per ogni elemento $\forall g \in G, \exists g^{-1} \in 
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Linguaggi liberi e PDA
+    <h2 class="entry-hint-parent">Top-down Parser
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa parte del nostro percorso nei linguaggi di programmazione proviamo ad espandere NFA e DFA in modo che possano riconoscere linguaggi come $ww^r | w \in \{a, b\}^*$ , con r maggiore o uguale a zero (r per dire che è il contrario di w) (questo linguaggio per il pumping lemma).
-Push-down automata Introduzione automi a pila (7)🟩 – L’idea principale per espandere gli NFA è il concetto di stato o memoria, avere quindi una stack o pila può rendere molto più espressivo queste entità....</p>
+    <p>Top-down Algoritmo di parsing 🟩 Slide
+Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
+Esempio di esecuzione
+Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
+$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
+Slide
+Si può rendere molto più efficiente con un valore di lookahead....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Linguaggi liberi e PDA" href="https://flecart.github.io/notes/linguaggi-liberi-e-pda/"></a>
+  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Attention
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This note tries to summarize what I think I know about the attention architecture in Transformers. First introduced in (Bahdanau et al. 2014). Attention is an architecture used in Transformers to encode a soft version of dictionaries. Usually it is called self-attention when everything we want is just trying to change the values of the $X$ with a value. This value is called attention weight.
+In standard attention based architectures the self-attention layer is computed as follows....</p>
+  </div>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Attention" href="https://flecart.github.io/notes/attention/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Explainability of CNN
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduction Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.
+Visualizzazione dei hidden layers Slide visualization
+Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa....</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Explainability of CNN" href="https://flecart.github.io/notes/explainability-of-cnn/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
