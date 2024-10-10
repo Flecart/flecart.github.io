@@ -131,8 +131,8 @@ if (!doNotTrack) {
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Gaussians are one of the most important probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Expectation Maximization algorithm. The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)\nThe Density Function The single variable Gaussian is as follows: $$ \\mathcal{N}(\\mu, \\sigma) = \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) $$ This can be generalized for the multi variable case $$ \\mathcal{N}(\\mu, \\Sigma) = \\frac{1}{\\sqrt{ 2\\pi \\lvert \\Sigma \\rvert } } \\exp\\left( -\\frac{1}{2} (x - \\mu)^{T} \\Sigma^{-1} (x - \\mu) \\right) $$ Integral is 1 We now prove that the integral of the Gaussian PDF is 1, this is a requirements needed to be considered a probability distribution function.\nFirst, let’s prove a famous equality: $$ I = \\int_{-\\infty}^{\\infty} \\exp( - x^{2}) \\, dx = \\sqrt{ \\pi } $$ This is kinda surprising, we need some care to prove it: $$ \\begin{align} \\\\ I^{2} = \\int_{-\\infty}^{\\infty} \\exp( - x^{2} - y^{2}) \\, dx dy \\\\ = \\int_{0}^{2\\pi} \\int_{0}^{\\infty} r\\exp( - r^{2}) \\, dr d\\theta \\\\ = -\\frac{2\\pi}{2} \\exp(-r^{2}) \\bigg\\vert_{0}^{\\infty} = \\pi \\\\ \\implies I = \\sqrt{ \\pi } \\end{align} $$ This is quite interesting. If we do the same derivation with $\\exp\\left( - \\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right)$, first doing a change of variables $y = (x - \\mu)$ where we have $dy = dx$, then doing another change of variables $z = \\frac{y}{\\sqrt{ 2 \\sigma^{2} }}$ where we get $\\sqrt{ 2\\sigma^{2} }dz = dy$ now we have the same integral, plus an added constant multiplicative term. So we have\n$$ \\int _{-\\infty}^{\\infty} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) \\, dx = \\sqrt{ 2\\sigma^{2} } \\int _{-\\infty}^{\\infty} \\exp(-z^{2})\\, dz = \\sqrt{ 2\\pi \\sigma^{2}} $$ Which finishes the derivation of the normalizing term.\nSome properties of Gaussians The conditional Gaussian If we have $X,Y$ which are jointly Gaussian, then the distribution $p(X = x \\mid Y = y)$ is a gaussian with the following mean and variance:\n$$ \\mu_{X \\mid Y = y} = \\mu_{X} + \\Sigma_{XY} \\Sigma_{YY}^{-1}(y - \\mu_{Y}) $$ And $$ \\Sigma_{X \\mid Y} = \\Sigma_{XX} - \\Sigma_{XY} \\Sigma^{-1}_{YY} \\Sigma_{YX} $$ The proof is presented in section 2.3 of (Bishop 2006)\nSums of Gaussians are Gaussian This is easily provable, if we have $X \\sim \\mathcal{N}(\\mu_{X}, \\Sigma_{X})$ and a compatible distribution $Y \\sim \\mathcal{N}(\\mu_{Y}, \\Sigma_{Y})$ then we have that the distribution $X +Y = \\mathcal{N} (\\mu_{X} + \\mu_{Y}, \\Sigma_{X} + \\Sigma_{Y})$\nProduct of Gaussians are Gaussian This is a little more difficult to detail, see this chatgpt response.\nGaussian distribution and linear models There is a close connection between linear models and the Gaussian distribution. This is linked to the properties of the sum and product of those gaussians.\nMarginals are gaussians One can prove that any finite marginals of Gaussians are still multivariate Gaussians.\nGaussian characteristic function Characteristic functions are sometimes useful to prove that two distributions are the same as each other. One can prove that the characteristic function for Gaussians is\n$$ \\mathbb{E}[\\exp(itX)] = \\exp\\left( \\mu it - \\frac{1}{2} t^{T} \\Sigma t \\right) $$ Let’s prove the uni-variate case, we will see that it will be exactly this value. We need to compute the value: $$ \\mathbb{E}[\\exp(itX)] = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx $$ The idea is to complete the square, and the by knowing the value of the integral of the completed square, we simplify. $$ \\begin{align} \\\\ \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx \\\\ = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} - 2\\mu it\\sigma^{2} + \\sigma^{4}t^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\cdot \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\end{align} $$ Properties to remember Compact representation of high dimensional joint distributions: instead of using $2^{n}$ variables we just need $n^{2}$. Closed form inference (I think about the conjugacy of itself.) References [1] Bishop “Pattern Recognition and Machine Learning” Springer 2006\n",
-  "wordCount" : "719",
+  "articleBody": "Gaussians are one of the most important probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Expectation Maximization algorithm. The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)\nThe Density Function The single variable Gaussian is as follows: $$ \\mathcal{N}(\\mu, \\sigma) = \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) $$ This can be generalized for the multi variable case $$ \\mathcal{N}(\\mu, \\Sigma) = \\frac{1}{\\sqrt{ 2\\pi \\lvert \\Sigma \\rvert } } \\exp\\left( -\\frac{1}{2} (x - \\mu)^{T} \\Sigma^{-1} (x - \\mu) \\right) $$ Integral is 1 We now prove that the integral of the Gaussian PDF is 1, this is a requirements needed to be considered a probability distribution function.\nFirst, let’s prove a famous equality: $$ I = \\int_{-\\infty}^{\\infty} \\exp( - x^{2}) \\, dx = \\sqrt{ \\pi } $$ This is kinda surprising, we need some care to prove it: $$ \\begin{align} \\\\ I^{2} = \\int_{-\\infty}^{\\infty} \\exp( - x^{2} - y^{2}) \\, dx dy \\\\ = \\int_{0}^{2\\pi} \\int_{0}^{\\infty} r\\exp( - r^{2}) \\, dr d\\theta \\\\ = -\\frac{2\\pi}{2} \\exp(-r^{2}) \\bigg\\vert_{0}^{\\infty} = \\pi \\\\ \\implies I = \\sqrt{ \\pi } \\end{align} $$ This is quite interesting. If we do the same derivation with $\\exp\\left( - \\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right)$, first doing a change of variables $y = (x - \\mu)$ where we have $dy = dx$, then doing another change of variables $z = \\frac{y}{\\sqrt{ 2 \\sigma^{2} }}$ where we get $\\sqrt{ 2\\sigma^{2} }dz = dy$ now we have the same integral, plus an added constant multiplicative term. So we have\n$$ \\int _{-\\infty}^{\\infty} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} \\right) \\, dx = \\sqrt{ 2\\sigma^{2} } \\int _{-\\infty}^{\\infty} \\exp(-z^{2})\\, dz = \\sqrt{ 2\\pi \\sigma^{2}} $$ Which finishes the derivation of the normalizing term.\nSome properties of Gaussians The conditional Gaussian If we have $X,Y$ which are jointly Gaussian, then the distribution $p(X = x \\mid Y = y)$ is a gaussian with the following mean and variance:\n$$ \\mu_{X \\mid Y = y} = \\mu_{X} + \\Sigma_{XY} \\Sigma_{YY}^{-1}(y - \\mu_{Y}) $$ And $$ \\Sigma_{X \\mid Y} = \\Sigma_{XX} - \\Sigma_{XY} \\Sigma^{-1}_{YY} \\Sigma_{YX} $$ The proof is presented in section 2.3 of (Bishop 2006)\nSums of Gaussians are Gaussian This is easily provable, if we have $X \\sim \\mathcal{N}(\\mu_{X}, \\Sigma_{X})$ and a compatible distribution $Y \\sim \\mathcal{N}(\\mu_{Y}, \\Sigma_{Y})$ then we have that the distribution $X +Y = \\mathcal{N} (\\mu_{X} + \\mu_{Y}, \\Sigma_{X} + \\Sigma_{Y})$\nProduct of Gaussians are Gaussian This is a little more difficult to detail, see this chatgpt response.\nGaussian distribution and linear models There is a close connection between linear models and the Gaussian distribution. This is linked to the properties of the sum and product of those gaussians.\nMarginals are Gaussians One can prove that any finite marginals of Gaussians are still multivariate Gaussians.\nLet’s now write a closed for for this. Let’s assume we have these two random variables: $$ p(A, B) = \\begin{bmatrix} A \\\\ B \\end{bmatrix} \\sim \\mathcal{N}(\\mu, \\Sigma) $$ Where: $$ \\mu = \\begin{bmatrix} \\mu_{A} \\\\ \\mu_{B} \\end{bmatrix}, \\Sigma = \\begin{bmatrix} \\Sigma_{AA} \u0026 \\Sigma_{AB} \\\\ \\Sigma_{BA} \u0026 \\Sigma_{BB} \\end{bmatrix} $$ We want to find the value of $p(A)$ and of $p(B \\mid A)$. To prove this it is useful to remember the value of the following matrix: $$ \\Sigma^{-1} = V = \\begin{bmatrix} V_{11} \u0026 V_{12} \\\\ V_{21} \u0026 V_{22} \\end{bmatrix} = \\begin{bmatrix} I \u0026 V_{12}V_{22}^{-1} \\\\ 0 \u0026 I \\end{bmatrix} \\cdot \\begin{bmatrix} V_{11} - V_{12}V_{22}^{-1}V_{21} \u0026 0 \\\\ 0 \u0026 V_{22} \\end{bmatrix} \\cdot \\begin{bmatrix} I \u0026 0 \\\\ V_{22}^{-1}V_{21} \u0026 I \\end{bmatrix} $$ Then the inverse $(ABC)^{-1} = C^{-1}B^{-1}A^{-1}$ which is equal to: $$ V^{-1} =\n\\begin{bmatrix} I \u0026 0 \\\nV_{22}^{-1}V_{21} \u0026 I \\end{bmatrix} \\cdot \\begin{bmatrix} (V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1} \u0026 0 \\ 0 \u0026 V_{22}^{-1} \\end{bmatrix} \\cdot\\begin{bmatrix} I \u0026 -V_{12}V_{22}^{-1} \\ 0 \u0026 I \\end{bmatrix} = \\begin{bmatrix} (V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1} \u0026 -\\Sigma_{11}V_{12}V_{22}^{-1} \\ -\\Sigma_{11}V_{22}^{-1}V_{22} \u0026 V_{22}^{-1}(V_{12}V_{22}^{-1}V_{21}\\Sigma_{11} + 1) \\end{bmatrix} $$ One can note now with the inverse thing that $V_{22} = (\\Sigma_{22} - \\Sigma_{21}\\Sigma^{-1}_{11}\\Sigma_{12})^{-1}$ This allows to write $V_{12}$ nicely as $$ \\Sigma_{12} = -\\Sigma_{11}V_{12}V_{22}^{-1} \\implies V_{12} = -\\Sigma_{11}\\Sigma_{12}^{-1} V_{22}^{-1} =-\\Sigma_{11}\\Sigma_{12}^{-1} (\\Sigma_{22} - \\Sigma_{21}\\Sigma^{-1}{11}\\Sigma{12} $$ Because then it is easily invertible and one can observe that $\\Sigma_{11} = (V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1}$, this is used for the marginalization calculation. One can find in this manner that $$ A \\sim \\mathcal{N}(\\mu_{A}, \\Sigma_{AA}) $$ And that $$ B \\mid A \\sim \\mathcal{N}(\\mu_{B} - V_{BB}^{-1}V_{AB} (A - \\mu_{A}), V_{BB}) $$ If you are a student ad ETH watch [this](https://video.ethz.ch/lectures/d-infk/2024/autumn/263-5210-00L/0d924ef2-af34-4cb1-96cb-ba9a63c1f15b.html) for the derivation, minute 46. Rewriting with the above properties for $V_{BB}$ and $V_{AB}$ we obtain: $$ B \\mid A \\sim \\mathcal{N}(\\mu_{B} + \\Sigma_{21}\\Sigma_{11}^{-1}(A - \\mu_{A}),\\Sigma_{22} - \\Sigma_{21}\\Sigma^{-1}{11}\\Sigma{12}) $$ Which is a ok form, but very very long to derive. Gaussian characteristic function Characteristic functions are sometimes useful to prove that two distributions are the same as each other. One can prove that the characteristic function for Gaussians is\n$$ \\mathbb{E}[\\exp(itX)] = \\exp\\left( \\mu it - \\frac{1}{2} t^{T} \\Sigma t \\right) $$ Let’s prove the uni-variate case, we will see that it will be exactly this value. We need to compute the value: $$ \\mathbb{E}[\\exp(itX)] = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx $$ The idea is to complete the square, and the by knowing the value of the integral of the completed square, we simplify. $$ \\begin{align} \\\\ \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - \\mu)^{2}}{2\\sigma^{2}} + itx \\right) \\, dx \\\\ = \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} - 2\\mu it\\sigma^{2} + \\sigma^{4}t^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\cdot \\int _{-\\infty}^{\\infty} \\frac{1}{\\sqrt{ 2\\pi } \\sigma} \\exp\\left( -\\frac{(x - (\\mu + \\sigma^{2}it))^{2} }{2\\sigma^{2}} \\right) \\, dx \\\\ = \\exp\\left( \\mu it - \\frac{1}{2} \\sigma^{2}t^{2} \\right) \\end{align} $$ Properties to remember Compact representation of high dimensional joint distributions: instead of using $2^{n}$ variables we just need $n^{2}$. Closed form inference (I think about the conjugacy of itself.) References [1] Bishop “Pattern Recognition and Machine Learning” Springer 2006\n",
+  "wordCount" : "1036",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,7 +227,7 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Gaussians
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -255,7 +255,7 @@ if (!doNotTrack) {
                 <li>
                     <a href="#gaussian-distribution-and-linear-models" aria-label="Gaussian distribution and linear models">Gaussian distribution and linear models</a></li>
                 <li>
-                    <a href="#marginals-are-gaussians" aria-label="Marginals are gaussians">Marginals are gaussians</a></li>
+                    <a href="#marginals-are-gaussians" aria-label="Marginals are Gaussians">Marginals are Gaussians</a></li>
                 <li>
                     <a href="#gaussian-characteristic-function" aria-label="Gaussian characteristic function">Gaussian characteristic function</a></li>
                 <li>
@@ -331,8 +331,89 @@ $$
 <p>This is a little more difficult to detail, see <a href="https://chatgpt.com/share/66f58324-ed18-8009-a72b-30da0c7c0f63">this</a> chatgpt response.</p>
 <h4 id="gaussian-distribution-and-linear-models">Gaussian distribution and linear models<a hidden class="anchor" aria-hidden="true" href="#gaussian-distribution-and-linear-models">#</a></h4>
 <p>There is a close connection between linear models and the Gaussian distribution. This is linked to the properties of the sum and product of those gaussians.</p>
-<h4 id="marginals-are-gaussians">Marginals are gaussians<a hidden class="anchor" aria-hidden="true" href="#marginals-are-gaussians">#</a></h4>
+<h4 id="marginals-are-gaussians">Marginals are Gaussians<a hidden class="anchor" aria-hidden="true" href="#marginals-are-gaussians">#</a></h4>
 <p>One can prove that any finite marginals of Gaussians are still multivariate Gaussians.</p>
+<p>Let&rsquo;s now write a closed for for this.
+Let&rsquo;s assume we have these two random variables:
+</p>
+$$
+p(A, B) = \begin{bmatrix}
+A \\
+B
+\end{bmatrix} \sim
+\mathcal{N}(\mu, \Sigma)
+$$
+<p>
+Where:
+</p>
+$$
+\mu = \begin{bmatrix}
+\mu_{A} \\
+\mu_{B}
+\end{bmatrix}, \Sigma = \begin{bmatrix}
+ \Sigma_{AA}  &  \Sigma_{AB} \\
+\Sigma_{BA}  &  \Sigma_{BB}
+\end{bmatrix}
+$$
+<p>We want to find the value of $p(A)$ and of $p(B \mid A)$.
+To prove this it is useful to remember the value of the following matrix:
+</p>
+$$
+\Sigma^{-1} = V = \begin{bmatrix}
+V_{11}  & V_{12} \\
+V_{21} & V_{22}
+\end{bmatrix} = \begin{bmatrix}
+I  &  V_{12}V_{22}^{-1} \\
+0  & I
+\end{bmatrix} \cdot \begin{bmatrix}
+V_{11} - V_{12}V_{22}^{-1}V_{21}  & 0 \\
+0  &  V_{22} 
+\end{bmatrix} \cdot \begin{bmatrix}
+I  & 0 \\
+V_{22}^{-1}V_{21}  &  I
+\end{bmatrix}
+$$
+<p>
+Then the inverse $(ABC)^{-1} = C^{-1}B^{-1}A^{-1}$ which is equal to:
+$$
+V^{-1} =</p>
+<p>\begin{bmatrix}
+I  &amp; 0 \</p>
+<ul>
+<li>V_{22}^{-1}V_{21}  &amp;  I
+\end{bmatrix} \cdot
+\begin{bmatrix}
+(V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1}  &amp; 0 \
+0  &amp;  V_{22}^{-1}
+\end{bmatrix}  \cdot\begin{bmatrix}
+I  &amp;  -V_{12}V_{22}^{-1} \
+0  &amp; I
+\end{bmatrix} = \begin{bmatrix}
+(V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1}   &amp;  -\Sigma_{11}V_{12}V_{22}^{-1}  \
+-\Sigma_{11}V_{22}^{-1}V_{22}  &amp; V_{22}^{-1}(V_{12}V_{22}^{-1}V_{21}\Sigma_{11} + 1)
+\end{bmatrix}
+$$
+One can note now with the inverse thing that $V_{22} = (\Sigma_{22} - \Sigma_{21}\Sigma^{-1}_{11}\Sigma_{12})^{-1}$ This allows to write $V_{12}$ nicely as
+$$
+\Sigma_{12} = -\Sigma_{11}V_{12}V_{22}^{-1} \implies V_{12} = -\Sigma_{11}\Sigma_{12}^{-1} V_{22}^{-1}
+=-\Sigma_{11}\Sigma_{12}^{-1} (\Sigma_{22} - \Sigma_{21}\Sigma^{-1}<em>{11}\Sigma</em>{12}
+$$
+Because then it is easily invertible and one can observe that $\Sigma_{11} = (V_{11} - V_{12}V_{22}^{-1}V_{21})^{-1}$, this is used for the marginalization calculation.
+One can find in this manner that 
+$$
+A \sim \mathcal{N}(\mu_{A}, \Sigma_{AA})
+$$
+And that
+$$
+B \mid A \sim \mathcal{N}(\mu_{B} - V_{BB}^{-1}V_{AB} (A - \mu_{A}), V_{BB})
+$$
+If you are a student ad ETH watch [this](https://video.ethz.ch/lectures/d-infk/2024/autumn/263-5210-00L/0d924ef2-af34-4cb1-96cb-ba9a63c1f15b.html) for the derivation, minute 46.
+Rewriting with the above properties for $V_{BB}$ and $V_{AB}$ we obtain:
+$$
+B \mid A \sim \mathcal{N}(\mu_{B} + \Sigma_{21}\Sigma_{11}^{-1}(A - \mu_{A}),\Sigma_{22} - \Sigma_{21}\Sigma^{-1}<em>{11}\Sigma</em>{12})
+$$
+Which is a ok form, but very very long to derive.</li>
+</ul>
 <h4 id="gaussian-characteristic-function">Gaussian characteristic function<a hidden class="anchor" aria-hidden="true" href="#gaussian-characteristic-function">#</a></h4>
 <p>Characteristic functions are sometimes useful to prove that two distributions are the same as each other.
 One can prove that the characteristic function for Gaussians is</p>
