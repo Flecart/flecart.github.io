@@ -131,8 +131,8 @@ if (!doNotTrack) {
   "keywords": [
     "💬natural-language-processing"
   ],
-  "articleBody": "In order to understand language models we need to understand structured prediction. If you are familiar with Sentiment Analysis, where given an input text we need to classify it in a binary manner, in this case the output space usually scales in an exponential manner. The output has some structure, for example it could be a tree, it could be a set of words etc… This usually needs an intersection between statistics and computer science.\nDefinition of a language model A language model is defined as a distribution over a $\\Sigma^{*}$ (See Descrizione linguaggio for the Kleene star and the alphabet). So it assigns probabilities to $y \\in \\Sigma^{*}$. Remember: every element in $\\Sigma^{*}$ is finite. This is important.\nBut we need to be careful about some details. As $\\Sigma^{*}$ is an infinite set it’s not trivial to define a probability distribution over it. This motivates us to have two other definitions\nGlobally normalized language models We define a scoring function $\\Sigma^{*} \\to \\mathbb{R}$ and the normalize it over all $y \\in \\Sigma^{*}$. We define a scoring function $s$. Then we can do the following:\n$$ p(y) := \\frac{\\exp(-s(y))}{\\sum_{y' \\in \\Sigma^{*}} \\exp(- s(y'))} := \\frac{1}{Z} \\exp(- s(y)) $$ The $Z$ is a sum over an infinite set, which is often difficult to compute. Sometimes it is computable instead. Other problem is that the normalizer sometimes doesn’t converge. These are also sometimes called energy based LMs.\nLocally normalized language models In this case, we try to take advantage of the structure of the strings, which is just a concatenation of the elements in an alphabet. Another advantage is not calculating the hideous partition function. We need a $EOS$ token and $BOS$ token in this case. Those are needed to model the starting symbol and the end symbol. Locally normalized language models model the conditional distribution $p(y \\mid \\boldsymbol{y})$ which means given a string $\\boldsymbol{y} \\in \\Sigma^{*}$ try to predict $y \\in \\Sigma$.\nGiven this model, then it is easy to define the probability of a string $\\boldsymbol{y} = y_{1}y_{2}\\dots y_{n}$ then we have $$ p(\\boldsymbol{y}) = p(y_{1} \\mid BOS) p(y_{2} \\mid BOS y_{1}) \\dots p(y_{n} \\mid \\boldsymbol{y}_{",
-  "wordCount" : "356",
+  "articleBody": "In order to understand language models we need to understand structured prediction. If you are familiar with Sentiment Analysis, where given an input text we need to classify it in a binary manner, in this case the output space usually scales in an exponential manner. The output has some structure, for example it could be a tree, it could be a set of words etc… This usually needs an intersection between statistics and computer science.\nDefinition of a language model A language model is defined as a distribution over a $\\Sigma^{*}$ (See Descrizione linguaggio for the Kleene star and the alphabet). So it assigns probabilities to $y \\in \\Sigma^{*}$. Remember: every element in $\\Sigma^{*}$ is finite. This is important.\nBut we need to be careful about some details. As $\\Sigma^{*}$ is an infinite set it’s not trivial to define a probability distribution over it. This motivates us to have two other definitions\nGlobally normalized language models 🟩 We define a scoring function $\\Sigma^{*} \\to \\mathbb{R}$ and the normalize it over all $y \\in \\Sigma^{*}$. We define a scoring function $s$. Then we can do the following:\n$$ p(y) := \\frac{\\exp(-s(y))}{\\sum_{y' \\in \\Sigma^{*}} \\exp(- s(y'))} := \\frac{1}{Z} \\exp(- s(y)) $$ The $Z$ is a sum over an infinite set, which is often difficult to compute. Sometimes it is computable instead, the negative is for historical purposes: more similar to physics models Other problem is that the normalizer sometimes doesn’t converge. These are also sometimes called energy based LMs.\nLocally normalized language models 🟩– In this case, we try to take advantage of the structure of the strings, which is just a concatenation of the elements in an alphabet. Another advantage is not calculating the hideous partition function. We need a $EOS$ token and $BOS$ token in this case. Those are needed to model the starting symbol and the end symbol. Locally normalized language models model the conditional distribution $p(y \\mid \\boldsymbol{y})$ which means given a string $\\boldsymbol{y} \\in \\Sigma^{*}$ try to predict $y \\in \\Sigma$.\nGiven this model, then it is easy to define the probability of a string $\\boldsymbol{y} = y_{1}y_{2}\\dots y_{n}$ then we have $$ p(\\boldsymbol{y}) = p(y_{1} \\mid BOS) p(y_{2} \\mid BOS y_{1}) \\dots p(y_{n} \\mid \\boldsymbol{y}_{",
+  "wordCount" : "369",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -241,20 +241,28 @@ if (!doNotTrack) {
                     <a href="#definition-of-a-language-model" aria-label="Definition of a language model">Definition of a language model</a><ul>
                         
                 <li>
-                    <a href="#globally-normalized-language-models" aria-label="Globally normalized language models">Globally normalized language models</a></li>
+                    <a href="#globally-normalized-language-models-" aria-label="Globally normalized language models 🟩">Globally normalized language models 🟩</a></li>
                 <li>
-                    <a href="#locally-normalized-language-models" aria-label="Locally normalized language models">Locally normalized language models</a></li>
+                    <a href="#locally-normalized-language-models---" aria-label="Locally normalized language models 🟩&ndash;">Locally normalized language models 🟩&ndash;</a></li>
                 <li>
-                    <a href="#tightness-of-language-models" aria-label="Tightness of language models">Tightness of language models</a></li></ul>
+                    <a href="#tightness-of-language-models-" aria-label="Tightness of language models 🟩">Tightness of language models 🟩</a></li></ul>
                 </li></ul>
                     
                 <li>
                     <a href="#n-gram-models" aria-label="N-gram models">N-gram models</a><ul>
+                        <ul>
                         
                 <li>
-                    <a href="#the-n-gram-assumption" aria-label="The n-gram assumption">The n-gram assumption</a></li>
+                    <a href="#the-n-gram-assumption-" aria-label="The n-gram assumption 🟩">The n-gram assumption 🟩</a></li></ul>
+                    
                 <li>
-                    <a href="#a-naive-implementation" aria-label="A naive implementation">A naive implementation</a></li>
+                    <a href="#a-naive-implementation" aria-label="A naive implementation">A naive implementation</a><ul>
+                        
+                <li>
+                    <a href="#number-of-contexes" aria-label="Number of contexes">Number of contexes</a></li>
+                <li>
+                    <a href="#a-representation-of-the-naive-tree" aria-label="A representation of the naive tree">A representation of the naive tree</a></li></ul>
+                </li>
                 <li>
                     <a href="#the-neural-n-gram-language" aria-label="The Neural n-gram language">The Neural n-gram language</a><ul>
                         
@@ -263,7 +271,7 @@ if (!doNotTrack) {
                 <li>
                     <a href="#the-architecture" aria-label="The architecture">The architecture</a></li>
                 <li>
-                    <a href="#summary-of-the-key-points" aria-label="Summary of the key points">Summary of the key points</a></li></ul>
+                    <a href="#summary-of-the-key-points-" aria-label="Summary of the key points 🟨">Summary of the key points 🟨</a></li></ul>
                 </li></ul>
                 </li></ul>
                     
@@ -282,16 +290,16 @@ if (!doNotTrack) {
 <p>A language model is defined as a distribution over a $\Sigma^{*}$ (See <a href="/notes/descrizione-linguaggio/">Descrizione linguaggio</a> for the Kleene star and the alphabet).
 So it <em>assigns probabilities</em> to $y \in \Sigma^{*}$. Remember: every element in $\Sigma^{*}$ is <strong>finite</strong>. This is important.</p>
 <p>But we need to be careful about some details. As $\Sigma^{*}$ is an infinite set it&rsquo;s not trivial to define a probability distribution over it. This motivates us to have two other definitions</p>
-<h4 id="globally-normalized-language-models">Globally normalized language models<a hidden class="anchor" aria-hidden="true" href="#globally-normalized-language-models">#</a></h4>
+<h4 id="globally-normalized-language-models-">Globally normalized language models 🟩<a hidden class="anchor" aria-hidden="true" href="#globally-normalized-language-models-">#</a></h4>
 <p>We define a <strong>scoring function</strong> $\Sigma^{*} \to \mathbb{R}$ and the normalize it over all $y \in \Sigma^{*}$.
 We define a scoring function $s$. Then we can do the following:</p>
 $$
 p(y) := \frac{\exp(-s(y))}{\sum_{y' \in \Sigma^{*}} \exp(- s(y'))} := \frac{1}{Z} \exp(- s(y))
 $$
 <p>
-The $Z$ is a sum over an <em>infinite</em> set, which is often difficult to compute. Sometimes it is computable instead.
+The $Z$ is a sum over an <em>infinite</em> set, which is often difficult to compute. Sometimes it is computable instead, the negative is for historical purposes: more similar to physics models
 Other problem is that the normalizer sometimes <strong>doesn&rsquo;t converge</strong>. These are also sometimes called <em>energy based LMs</em>.</p>
-<h4 id="locally-normalized-language-models">Locally normalized language models<a hidden class="anchor" aria-hidden="true" href="#locally-normalized-language-models">#</a></h4>
+<h4 id="locally-normalized-language-models---">Locally normalized language models 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#locally-normalized-language-models---">#</a></h4>
 <p>In this case, we try to take advantage of the structure of the strings, which is just a concatenation of the elements in an alphabet. Another advantage is not calculating the hideous partition function.
 We need a $EOS$ token and $BOS$ token in this case. Those are needed to model the starting symbol and the end symbol.
 Locally normalized language models model the <strong>conditional distribution</strong> $p(y \mid \boldsymbol{y})$ which means given a string $\boldsymbol{y} \in \Sigma^{*}$ try to predict $y \in \Sigma$.</p>
@@ -305,7 +313,7 @@ This can be cleanly though as a path in a weighted prefix tree (trie), as in the
 <img src="/images/notes/Language Models-20240908111619636.webp" alt="Language Models-20240908111619636">
 In many cases where we have a structured prediction we can do something similar as the tree above.</p>
 <p>Let&rsquo;s consider a now a particular case: suppose a path in the prefix tree doesn&rsquo;t have a <strong>EOS</strong> token. Then we have that sometimes the language model produces a infinite sequence of token. We say that we have <strong>deficient</strong> distributions, this is not a probability distribution anymore.</p>
-<h4 id="tightness-of-language-models">Tightness of language models<a hidden class="anchor" aria-hidden="true" href="#tightness-of-language-models">#</a></h4>
+<h4 id="tightness-of-language-models-">Tightness of language models 🟩<a hidden class="anchor" aria-hidden="true" href="#tightness-of-language-models-">#</a></h4>
 <p>With a <strong>tight</strong> locally normalized language model we have the sum of probability of every path sums to 1.
 With non-tight it is possible that we lose some probability to infinite structures.
 It is possible to impose tightness: just set $p(EOS \mid \text{ parent}) > \varepsilon > 0$ for some $\varepsilon$.</p>
@@ -319,7 +327,7 @@ It is possible to impose tightness: just set $p(EOS \mid \text{ parent}) > \vare
 <p>In modern systems the following three models are the most famous ones for defining Language Models: n-gram models, recurrent neural networks and <a href="/notes/transformers/">Transformers</a>.</p>
 <p>\</p>
 <h2 id="n-gram-models">N-gram models<a hidden class="anchor" aria-hidden="true" href="#n-gram-models">#</a></h2>
-<h3 id="the-n-gram-assumption">The n-gram assumption<a hidden class="anchor" aria-hidden="true" href="#the-n-gram-assumption">#</a></h3>
+<h4 id="the-n-gram-assumption-">The n-gram assumption 🟩<a hidden class="anchor" aria-hidden="true" href="#the-n-gram-assumption-">#</a></h4>
 <p>The main idea for n-gram language models is to <strong>limit the length of the context</strong>: in this case it is not infinite but $n - 1$, meaning we only see the previous $n - 1$ tokens and not everything.
 Intuitively, words that are distant do not influence the current word as much as a closer. A clear drawback concerns the cases where presence of long distant relationships is important, but this is not so common.</p>
 <p>We call this limited context window the <strong>n-gram assumption</strong>. In formula we have:
@@ -328,11 +336,20 @@ $$
 p(y_{t} \mid \boldsymbol{y}_{<t}) = p(y_{t} \mid y_{t - n + 1} \dots y _{t - 1} )
 $$
 <p>
-So we have a finite amount of available history.
+So we have a finite amount of available history, this is somewhat similar to the <strong>Markov assumption</strong>, see <a href="/notes/markov-chains/">Markov Chains</a>.
 This assumption also changes the probability of a entire string, which is now limited in context for every token.</p>
+<p>It&rsquo;s very easy to make n-gram language models tight, we just need the probability of $EOS$ for every history to be $> 0$.</p>
+<p>This is usually a lot of context to encode!
+</p>
+$$
+\text{Number of contexes } =\sum_{j = 0}^{n - 1}\lvert \Sigma \rvert ^{j}
+$$
+<p>
+Depending on the number of BOS tokens at the start. This is a quite high number of models!</p>
 <h3 id="a-naive-implementation">A naive implementation<a hidden class="anchor" aria-hidden="true" href="#a-naive-implementation">#</a></h3>
-<p>A simple solution is just define a different probability distribution for every possible context of size $n - 1$. But you can observe that this explodes exponentially: we have $\lvert \Sigma  \rvert ^{n - 1}$ distributions if we assume full padding.
-But there is even something more, there could be a single BOS padding, double BOS padding etc.
+<p>A simple solution is just define a <em>different probability distribution for every possible context</em> of size $n - 1$. But you can observe that this explodes exponentially: we have $\lvert \Sigma  \rvert ^{n - 1}$ distributions if we assume full padding.</p>
+<h4 id="number-of-contexes">Number of contexes<a hidden class="anchor" aria-hidden="true" href="#number-of-contexes">#</a></h4>
+<p>But there is even something more, there could be a single BOS padding, double BOS padding etc.
 So the number of contexts is
 </p>
 $$
@@ -340,15 +357,16 @@ CTS = \lvert \Sigma \rvert ^{n - 1} + \lvert \Sigma \rvert ^{n - 2} \dots \lvert
 $$
 <p>
 And the number of parameters for every conditional distribution is in the size of the alphabet we want to produce, so it is $\lvert \Sigma \rvert \cdot CTS$ which is a lot if $n$ is big. This makes feasible only 2 or 3 grams.</p>
+<h4 id="a-representation-of-the-naive-tree">A representation of the naive tree<a hidden class="anchor" aria-hidden="true" href="#a-representation-of-the-naive-tree">#</a></h4>
 <p>Here we can clearly observe the exponential growth of the weighted prefix tree:
 <img src="/images/notes/Language Models-20240908122320194.webp" alt="Language Models-20240908122320194"></p>
 <h3 id="the-neural-n-gram-language">The Neural n-gram language<a hidden class="anchor" aria-hidden="true" href="#the-neural-n-gram-language">#</a></h3>
-<p>We have observed how the naive implementation explodes exponentially. This makes that model often impractical and motivates the researcher to look for more efficient methods to estimate the conditional distribution used to model the language.
+<p>We have observed how the naive implementation explodes exponentially. This makes that model often impractical and motivates the researcher to look for more efficient methods to estimate the conditional distribution used to model the language. This model was from a Paper in 2001 conference, later JMLR journal version in 2003 (Bengio et al. 2003), it was the first language model that actually worked well.
 One simple idea that we will describe now is <strong>weight sharing</strong></p>
 <h4 id="weight-sharing">Weight sharing<a hidden class="anchor" aria-hidden="true" href="#weight-sharing">#</a></h4>
-<p>The naive implementation has too many parameters. This is mainly caused by different representations of the context, which drives the number of needed parameters exponentially. An idea is to encode the context into a fixed size embedding, let&rsquo;s say $h \in \mathbb{R}^{d}$ and do the same for the current word $v(y)$ and then define the probability in the following manner:</p>
+<p>The naive implementation has too many parameters. This is mainly caused by different representations of the context, which drives the number of needed parameters exponentially. An idea is to encode the context into a fixed size embedding, let&rsquo;s say $h_{t} = enc(\boldsymbol{y}_{<t}) \in \mathbb{R}^{d}$ and do the same for the current word $v(y)$ and then define the probability in the following manner:</p>
 $$
-p(y_{t} \mid \boldsymbol{y}_{<t}) = \frac{\exp(v(y_{t}) \cdot h)}{\sum_{y' \in \Sigma} \exp(v(y_{t}) \cdot h)}
+p(y_{t} \mid \boldsymbol{y}_{<t}) = \frac{\exp(v(y_{t}) \cdot h_{t})}{\sum_{y' \in \Sigma} \exp(v(y_{t}) \cdot h_{T})}
 $$
 <p>
 Similar idea to <a href="/notes/log-linear-models/">Log Linear Models</a> discussed in previous lessons, applied again in different manner.
@@ -361,7 +379,7 @@ This gives us just the parameters to learn the embedding, which is free of choic
 <p>If we use an MLP with shared parameters, we can reduce the number of parameters and, hopefully, increase the ability of the model to generalize</p>
 </blockquote>
 <p>We are using a single MLP to estimate many many conditional distributions!</p>
-<h4 id="summary-of-the-key-points">Summary of the key points<a hidden class="anchor" aria-hidden="true" href="#summary-of-the-key-points">#</a></h4>
+<h4 id="summary-of-the-key-points-">Summary of the key points 🟨<a hidden class="anchor" aria-hidden="true" href="#summary-of-the-key-points-">#</a></h4>
 <p>As described in section 1.1 of (Bengio et al. 2003), the whole idea behind this method can be summarized in three clean points:</p>
 <ol>
 <li>Associate with each word in the vocabulary a word embedding (a real-valued vector in $\mathbb{R}^{m}$)
