@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Anomaly Detection | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here). The main difference between this and classification is that here we have no classes.
+<meta name="description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here). The main difference between this and classification is that here we have no classes.
 Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, x_{n} \right\} \subseteq \mathcal{N} \subseteq \mathcal{X} = \mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it&rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/anomaly-detection/">
@@ -88,7 +88,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Anomaly Detection" />
-<meta property="og:description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here). The main difference between this and classification is that here we have no classes.
+<meta property="og:description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here). The main difference between this and classification is that here we have no classes.
 Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, x_{n} \right\} \subseteq \mathcal{N} \subseteq \mathcal{X} = \mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it&rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/anomaly-detection/" />
@@ -100,7 +100,7 @@ Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Anomaly Detection"/>
-<meta name="twitter:description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here). The main difference between this and classification is that here we have no classes.
+<meta name="twitter:description" content="Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here). The main difference between this and classification is that here we have no classes.
 Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, x_{n} \right\} \subseteq \mathcal{N} \subseteq \mathcal{X} = \mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it&rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not."/>
 
 
@@ -130,12 +130,12 @@ Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, 
   "@type": "BlogPosting",
   "headline": "Anomaly Detection",
   "name": "Anomaly Detection",
-  "description": "Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here). The main difference between this and classification is that here we have no classes.\nSetting of the problem Let\u0026rsquo;s say we have a set $X = \\left\\{ x_{1}, \\dots, x_{n} \\right\\} \\subseteq \\mathcal{N} \\subseteq \\mathcal{X} = \\mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it\u0026rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not.",
+  "description": "Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here). The main difference between this and classification is that here we have no classes.\nSetting of the problem Let\u0026rsquo;s say we have a set $X = \\left\\{ x_{1}, \\dots, x_{n} \\right\\} \\subseteq \\mathcal{N} \\subseteq \\mathcal{X} = \\mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it\u0026rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not.",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here). The main difference between this and classification is that here we have no classes.\nSetting of the problem Let’s say we have a set $X = \\left\\{ x_{1}, \\dots, x_{n} \\right\\} \\subseteq \\mathcal{N} \\subseteq \\mathcal{X} = \\mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it’s quite complex, so we need an approximation to say whether if a set is normal or not. We need a function $\\phi : \\mathcal{X} \\to \\left\\{ 0, 1 \\right\\}$ with $\\phi(x) = 1 \\iff x \\not \\in \\mathcal{N}$. We want to project this high dimensional space to a low dimensional space and the use mixture of gaussians. For some reason (you need to understand this fact, it’s important) if you project high dimensional random variables to a low dimension one, this resembles Gaussians, and it’s a sign of losing information. Projection Pursuit measures the non-gaussianity in low dimension space, this tells us that in high dimension there is for sure a structure which might be interesting. After we have fitted this gaussian, we can have an anomaly score.\nVariance tells us something about informativeness. We need to maximize the variance when we project. We also need to choose the correct abstraction, we need to have a trade-off between tractability and fidelity. We need to choose the function $\\pi : \\mathbb{R}^{D} \\to \\mathbb{R}^{d}$ with $d \\ll D$. An easy way to maximize variance id Principal Component Analysis$. After we had this, we need to use Expectation Maximization algorithm to fit the gaussians.\n",
-  "wordCount" : "293",
+  "articleBody": "Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here). The main difference between this and classification is that here we have no classes.\nSetting of the problem Let’s say we have a set $X = \\left\\{ x_{1}, \\dots, x_{n} \\right\\} \\subseteq \\mathcal{N} \\subseteq \\mathcal{X} = \\mathbb{R}^{d}$ We say this set is the normal set, and $X$ are our samples but it’s quite complex, so we need an approximation to say whether if a set is normal or not. We need a function $\\phi : \\mathcal{X} \\to \\left\\{ 0, 1 \\right\\}$ with $\\phi(x) = 1 \\iff x \\not \\in \\mathcal{N}$. We want to project this high dimensional space to a low dimensional space and the use mixture of gaussians. For some reason (you need to understand this fact, it’s important) if you project high dimensional random variables to a low dimension one, this resembles Gaussians, and it’s a sign of losing information. Projection Pursuit measures the non-gaussianity in low dimension space, this tells us that in high dimension there is for sure a structure which might be interesting. After we have fitted this gaussian, we can have an anomaly score.\nNormal solution approach The standard pipeline for this kind of problem is\nDimensionality reduction Clustering approach to determine the probability of the various data points Variance tells us something about informativeness. We need to maximize the variance when we project. We also need to choose the correct abstraction, we need to have a trade-off between tractability and fidelity. We need to choose the function $\\pi : \\mathbb{R}^{D} \\to \\mathbb{R}^{d}$ with $d \\ll D$. An easy way to maximize variance id Principal Component Analysis$. After we had this, we need to use Expectation Maximization algorithm to fit the gaussians.\n",
+  "wordCount" : "318",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -241,20 +241,28 @@ Setting of the problem Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, 
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#setting-of-the-problem" aria-label="Setting of the problem">Setting of the problem</a>
+                    <a href="#setting-of-the-problem" aria-label="Setting of the problem">Setting of the problem</a></li>
+                <li>
+                    <a href="#normal-solution-approach" aria-label="Normal solution approach">Normal solution approach</a>
                 </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><p>Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviours for law (no Orwell here).
+  <div class="post-content"><p>Anomaly detection is a problem in machine learning that is of a big interest in industry. For example a bank needs to identify problems in transactions, doctors need it to see illness, or suspicious behaviors for law (no Orwell here).
 The main difference between this and classification is that here we have no classes.</p>
 <h4 id="setting-of-the-problem">Setting of the problem<a hidden class="anchor" aria-hidden="true" href="#setting-of-the-problem">#</a></h4>
 <p>Let&rsquo;s say we have a set $X = \left\{ x_{1}, \dots, x_{n} \right\} \subseteq \mathcal{N} \subseteq \mathcal{X} = \mathbb{R}^{d}$  We say this set is the normal set, and $X$ are our samples but it&rsquo;s quite complex, so we need an approximation to say whether if a set is normal or not.
 We need a function $\phi : \mathcal{X} \to \left\{ 0, 1 \right\}$ with $\phi(x) = 1 \iff x \not \in \mathcal{N}$.
 We want to project this high dimensional space to a low dimensional space and the use mixture of gaussians. For some reason (you need to understand this fact, it&rsquo;s important) if you project high dimensional random variables to a low dimension one, this resembles Gaussians, and it&rsquo;s a sign of losing information. Projection Pursuit measures the non-gaussianity in low dimension space, this tells us that in high dimension there is for sure a <em>structure</em> which might be interesting.
 After we have fitted this gaussian, we can have an <strong>anomaly score</strong>.</p>
+<h4 id="normal-solution-approach">Normal solution approach<a hidden class="anchor" aria-hidden="true" href="#normal-solution-approach">#</a></h4>
+<p>The standard pipeline for this kind of problem is</p>
+<ul>
+<li>Dimensionality reduction</li>
+<li>Clustering approach to determine the probability of the various data points</li>
+</ul>
 <p>Variance tells us something about <em>informativeness</em>. We need to maximize the variance when we project. We also need to choose the correct abstraction, we need to have a trade-off between tractability and fidelity.
 We need to choose the function $\pi : \mathbb{R}^{D} \to \mathbb{R}^{d}$ with $d \ll D$. An easy way to maximize variance id <a href="/notes/principal-component-analysis/">Principal Component Analysis</a>$.
 After we had this, we need to use <a href="/notes/expectation-maximization/">Expectation Maximization</a> algorithm to fit the gaussians.</p>
