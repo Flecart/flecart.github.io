@@ -137,8 +137,8 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\n",
-  "wordCount" : "152",
+  "articleBody": "Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\nKalman Inference In the exercise session we have discussed about the Kalman gain\nThat is\nGiven the belief that $X_{t} \\mid y_{1:t} = \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t})$ Then the posterior $X_{t+1} \\mid y_{1:t+1} =\\sim \\mathcal{N}(\\mu_{t+1}, \\sigma^{2}_{t + 1})$ where $$ \\begin{align} \\\\ \\mu_{t + 1} \u0026= \\mu_{t} + K_{t + 1}(y_{t + 1} - \\mu_{t}) \\\\ \\sigma^{2}_{t + 1} \u0026= (1 - K_{t+1})(\\sigma^{2}_{t} + \\sigma^{2}_{x}) \\end{align} $$ Where $K_{t+1} = (\\sigma^{2}_{x} + \\sigma^{2}_{t}) / (\\sigma^{2}_{x} + \\sigma^{2}_{t} + \\sigma^{2}_{y})$ So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.\n",
+  "wordCount" : "263",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -233,10 +233,23 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
     <h1 class="post-title entry-hint-parent">
       Kalman Filters
     </h1>
-    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#kalman-inference" aria-label="Kalman Inference">Kalman Inference</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
 
   <div class="post-content"><p>Kalman Filters are defined as follows:</p>
 <p>We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a <em>motion model</em> and a <em>sensor model</em>:</p>
@@ -254,6 +267,22 @@ $$
 p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \mid x_{1}) \prod_{i = 2}^{t} p(x_{i} \mid x_{i - 1}) p(y_{i} \mid x_{i})
 $$
 <p>One can also observe that the classic <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> is a special case of Kalman Filters.</p>
+<h4 id="kalman-inference">Kalman Inference<a hidden class="anchor" aria-hidden="true" href="#kalman-inference">#</a></h4>
+<p>In the exercise session we have discussed about the <strong>Kalman gain</strong></p>
+<p>That is</p>
+<p>Given the belief that $X_{t} \mid y_{1:t} = \mathcal{N}(\mu_{t}, \sigma^{2}_{t})$
+Then the posterior $X_{t+1} \mid y_{1:t+1} =\sim \mathcal{N}(\mu_{t+1}, \sigma^{2}_{t + 1})$ where
+</p>
+$$
+\begin{align}
+ \\
+\mu_{t + 1} &= \mu_{t} + K_{t + 1}(y_{t + 1} - \mu_{t}) \\ 
+\sigma^{2}_{t + 1} &= (1 - K_{t+1})(\sigma^{2}_{t} + \sigma^{2}_{x})
+\end{align}
+$$
+<p>
+Where $K_{t+1} = (\sigma^{2}_{x} + \sigma^{2}_{t}) /  (\sigma^{2}_{x} + \sigma^{2}_{t} + \sigma^{2}_{y})$
+So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.</p>
 
 
   </div>
