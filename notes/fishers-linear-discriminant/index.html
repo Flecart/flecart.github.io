@@ -5,13 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Asymptotic Equipartition Property | X. Angelo Huang&#39;s Blog</title>
-<meta name="keywords" content="✏information-theory">
-<meta name="description" content="Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon&rsquo;s source coding theorem see here
-Enunciato AEP Data una serie di variabili aleatorie $X_{1}, X_{2}, \dots$ i.i.d. $\sim p(x)$ se vale che $$ -\frac{1}{n} \log p(X_{1}, X_{2}, \dots, X_{n}) \to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).
-Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).">
+<title>Fisher&#39;s Linear Discriminant | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="machinelearning">
+<meta name="description" content="Fisher&rsquo;s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance. Let&rsquo;s consider these two classes of points and let&rsquo;s set $$ m_{j} = \frac{1}{N_{j}}\sum_{i : y_{i} = j} x_{i} $$ Which is just the mean of our cluster. Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
-<link rel="canonical" href="https://flecart.github.io/notes/asymptotic-equipartition-property/">
+<link rel="canonical" href="https://flecart.github.io/notes/fishers-linear-discriminant/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
@@ -20,7 +18,7 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).">
 <link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/asymptotic-equipartition-property/">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/fishers-linear-discriminant/">
 <noscript>
     <style>
         #theme-toggle,
@@ -88,12 +86,10 @@ if (!doNotTrack) {
 	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
 }
 </script>
-<meta property="og:title" content="Asymptotic Equipartition Property" />
-<meta property="og:description" content="Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon&rsquo;s source coding theorem see here
-Enunciato AEP Data una serie di variabili aleatorie $X_{1}, X_{2}, \dots$ i.i.d. $\sim p(x)$ se vale che $$ -\frac{1}{n} \log p(X_{1}, X_{2}, \dots, X_{n}) \to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).
-Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)." />
+<meta property="og:title" content="Fisher&#39;s Linear Discriminant" />
+<meta property="og:description" content="Fisher&rsquo;s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance. Let&rsquo;s consider these two classes of points and let&rsquo;s set $$ m_{j} = \frac{1}{N_{j}}\sum_{i : y_{i} = j} x_{i} $$ Which is just the mean of our cluster. Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/asymptotic-equipartition-property/" />
+<meta property="og:url" content="https://flecart.github.io/notes/fishers-linear-discriminant/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta property="article:section" content="notes" />
 
@@ -101,10 +97,8 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)." 
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Asymptotic Equipartition Property"/>
-<meta name="twitter:description" content="Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon&rsquo;s source coding theorem see here
-Enunciato AEP Data una serie di variabili aleatorie $X_{1}, X_{2}, \dots$ i.i.d. $\sim p(x)$ se vale che $$ -\frac{1}{n} \log p(X_{1}, X_{2}, \dots, X_{n}) \to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).
-Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/>
+<meta name="twitter:title" content="Fisher&#39;s Linear Discriminant"/>
+<meta name="twitter:description" content="Fisher&rsquo;s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance. Let&rsquo;s consider these two classes of points and let&rsquo;s set $$ m_{j} = \frac{1}{N_{j}}\sum_{i : y_{i} = j} x_{i} $$ Which is just the mean of our cluster. Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$."/>
 
 
 <script type="application/ld+json">
@@ -121,8 +115,8 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Asymptotic Equipartition Property",
-      "item": "https://flecart.github.io/notes/asymptotic-equipartition-property/"
+      "name": "Fisher's Linear Discriminant",
+      "item": "https://flecart.github.io/notes/fishers-linear-discriminant/"
     }
   ]
 }
@@ -131,14 +125,14 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Asymptotic Equipartition Property",
-  "name": "Asymptotic Equipartition Property",
-  "description": "Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon\u0026rsquo;s source coding theorem see here\nEnunciato AEP Data una serie di variabili aleatorie $X_{1}, X_{2}, \\dots$ i.i.d. $\\sim p(x)$ se vale che $$ -\\frac{1}{n} \\log p(X_{1}, X_{2}, \\dots, X_{n}) \\to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).\nUn modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).",
+  "headline": "Fisher's Linear Discriminant",
+  "name": "Fisher\u0027s Linear Discriminant",
+  "description": "Fisher\u0026rsquo;s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance. Let\u0026rsquo;s consider these two classes of points and let\u0026rsquo;s set $$ m_{j} = \\frac{1}{N_{j}}\\sum_{i : y_{i} = j} x_{i} $$ Which is just the mean of our cluster. Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$.",
   "keywords": [
-    "✏information-theory"
+    "machinelearning"
   ],
-  "articleBody": "Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon’s source coding theorem see here\nEnunciato AEP Data una serie di variabili aleatorie $X_{1}, X_{2}, \\dots$ i.i.d. $\\sim p(x)$ se vale che $$ -\\frac{1}{n} \\log p(X_{1}, X_{2}, \\dots, X_{n}) \\to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).\nUn modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).\nPer un certo $N$ tenderà all’infinito. $$ \\left\\lvert \\frac{1}{N} H_{\\delta}(X^{N}) - H(x) \\right\\rvert \\leq \\varepsilon $$ Ossia a grandi linee: dato una variabile aleatoria $X$ e $N$ estrazioni della stessa, possiamo comprimere questa sequenza in $NH(X)$.\nDimostrazione Principalmente sorvolata, ma utilizza cose simili a Central Limit Theorem and Law of Large Numbers, e una idea simile a Monte carlo Methods per le probabilità. In realtà nella prima formulazione è un concetto molto semplice il motivo per cui funziona.\n$$ -\\frac{1}{n} \\log p(X_{1}, \\dots, X_{n}) = -\\frac{1}{n} \\sum_{i=1}^{n}\\log p(X_{i}) \\to -\\mathbf{E}[\\log p(X)] = H(X) $$ La cosa principale da comprendere è come ci può essere questo fenomeno con convergenza in probabilità, che è una nozione più che altro tecnica per questo discorso.\nTypical sets Elements in the typical set have roughly the same probability.\nQuesto insieme è un oggetto matematico che ha delle proprietà interessanti, viene corretto analizzarlo dopo che si ha AEP, perché in breve la sua esistenza è giustificata da quello. È l’insieme delle sequenze $(x_{1}, x_{2}, \\dots , x_{n})$ prese da una distribuzione $p(x)$ sempre uguale tale per cui valga $$ 2^{-n(H(X) + \\varepsilon)} \\leq p(x_{1}, x_{2}, \\dots, x_{n}) \\leq 2^{-n(H(X) - \\varepsilon)} $$ Il motivo per cui abbiamo le cose strane all’esponente è proprio la definizione di convergenza in probabilità data. (basta che le espandi) Ossia il fatto che $$ P\\left( \\left\\lvert -\\frac{1}{n} \\log p(x_{1}, x_{2}, \\dots, x_{n}) - H(X) \\right\\rvert \u003e \\varepsilon \\right) = 0, n \\to +\\infty $$ Se si espande quanto è presente dentro si ottiene quel bound di sopra.\nProprietà Vedi 3.1.2 di (Cover \u0026 Thomas 2012).\nIl risultato importante è che possiamo rappresentare sequenze di $X^{n}$ in media usando $nH(X)$ bits, senza perdita di informazione.\nReferences [1] Cover \u0026 Thomas “Elements of Information Theory” John Wiley \u0026 Sons 2012\n[2] MacKay “Information Theory, Inference and Learning Algorithms” Cambridge University Press 2003\n",
-  "wordCount" : "391",
+  "articleBody": "Fisher’s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance. Let’s consider these two classes of points and let’s set $$ m_{j} = \\frac{1}{N_{j}}\\sum_{i : y_{i} = j} x_{i} $$ Which is just the mean of our cluster. Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$. If we consider the simple case where we have two classes, then we would like to maximize the distance $m_{2} - m_{1}$, and setting the constraint $\\lVert w \\rVert = 1$ because we only care about the direction, we find that $w$ is maximized proportionally to $m_{2} - m_{1}$. This is easy with Lagrange Multipliers, we are just setting this maximization problem: $$ \\arg\\max_{w} w^{T}(m_{2} - m_{1}) + \\lambda \\lVert w \\rVert _{2}^{2} $$ But the problem with this formulation is that we could have some strong overlap in the projected domain, due to non diagonal covariances in the class distribution. We would also like to minimize the within class variance during the projection, so that we can better separate the two values.\nLet’s set the interclass variances after our linear projection to be $$ s_{i}^{2} = \\sum_{n \\in \\mathcal{C}_{i}} (w^{T}x_{n} - w^{T}m_{n})^{2} $$ We simply compute the interclass variance and divide, getting the Fisher discriminant\n$$ J(w) = \\frac{w^{T}(m_{2} - m_{1})^{2}w}{s_{1}^{2} + s_{2}^{2}} = \\frac{w^{T}S_{B}w}{w^{T}S_{I}w} $$ The lower part is the sum of the within class variances, while the upper part is the between class covariance.\nNow, if we do some calculus we find that the best solution is $w \\propto S^{-1}_{w}(m_{2} - m_{1})$\nReferences [1] Bishop “Pattern Recognition and Machine Learning” Springer 2006\n",
+  "wordCount" : "302",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -148,7 +142,7 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://flecart.github.io/notes/asymptotic-equipartition-property/"
+    "@id": "https://flecart.github.io/notes/fishers-linear-discriminant/"
   },
   "publisher": {
     "@type": "Organization",
@@ -231,7 +225,7 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
     <h1 class="post-title entry-hint-parent">
-      Asymptotic Equipartition Property
+      Fisher&#39;s Linear Discriminant
     </h1>
     <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
@@ -242,21 +236,7 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#enunciato-aep" aria-label="Enunciato AEP">Enunciato AEP</a><ul>
-                        
-                <li>
-                    <a href="#dimostrazione" aria-label="Dimostrazione">Dimostrazione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#typical-sets" aria-label="Typical sets">Typical sets</a><ul>
-                        
-                <li>
-                    <a href="#propriet%c3%a0" aria-label="Proprietà">Proprietà</a></li></ul>
-                </li></ul>
-                    </ul>
-                    
+        <div class="inner"><ul>
                 <li>
                     <a href="#references" aria-label="References">References</a>
                 </li>
@@ -265,68 +245,53 @@ Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003)."/
     </details>
 </div>
 
-  <div class="post-content"><p>Sembra essere molto simile a <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">Central Limit Theorem and Law of Large Numbers</a> però per <a href="/notes/entropy/">Entropy</a>.
-This is also called <strong>Shannon&rsquo;s source coding theorem</strong> see <a href="https://www.youtube.com/watch?v=0SxJl5G2bp0&list=PLruBu5BI5n4aFpG32iMbdWoRVAA-Vcso6&index=3&ab_channel=JakobFoerster">here</a></p>
-<h3 id="enunciato-aep">Enunciato AEP<a hidden class="anchor" aria-hidden="true" href="#enunciato-aep">#</a></h3>
-<p>Data una serie di variabili aleatorie $X_{1}, X_{2}, \dots$ i.i.d. $\sim p(x)$ se vale che
+  <div class="post-content"><p>Fisher&rsquo;s Linear Discriminant is a simple idea used to linearly classify our data.
+<img src="/images/notes/Fisher's Linear Discriminant-20241031125847321.webp" alt="Fisher's Linear Discriminant-20241031125847321"></p>
+<p>The image above, taken from (Bishop 2006), is the summary of the idea. We want to maximize the distance from the centers, while minimizing the interclass variance.
+Let&rsquo;s consider these two classes of points and let&rsquo;s set
 </p>
 $$
--\frac{1}{n} \log p(X_{1}, X_{2}, \dots, X_{n}) \to H(X)
+m_{j} = \frac{1}{N_{j}}\sum_{i : y_{i} = j} x_{i}
 $$
 <p>
-in probability (la definizione data in <a href="/notes/central-limit-theorem-and-law-of-large-numbers/#convergence-in-probability">Central Limit Theorem and Law of Large Numbers#Convergence in probability</a>).</p>
-<p>Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).</p>
-<p>Per un certo $N$ tenderà all&rsquo;infinito.
+Which is just the mean of our cluster.
+Then if we consider a linear projection with $w$ the projected mean would be $w^{T}m_{j}$ over every class $j$.
+If we consider the simple case where we have two classes, then we would like to maximize the distance $m_{2} - m_{1}$, and setting the constraint $\lVert w \rVert = 1$ because we only care about the direction, we find that $w$ is maximized proportionally to $m_{2} - m_{1}$. This is easy with <a href="/notes/lagrange-multipliers/">Lagrange Multipliers</a>, we are just setting this maximization problem:
 </p>
 $$
-\left\lvert  \frac{1}{N} H_{\delta}(X^{N}) - H(x)  \right\rvert \leq \varepsilon
-$$
-<p>Ossia a grandi linee: dato una variabile aleatoria $X$ e $N$ estrazioni della stessa, possiamo comprimere questa sequenza in $NH(X)$.</p>
-<h4 id="dimostrazione">Dimostrazione<a hidden class="anchor" aria-hidden="true" href="#dimostrazione">#</a></h4>
-<p>Principalmente sorvolata, ma utilizza cose simili a <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">Central Limit Theorem and Law of Large Numbers</a>, e una idea simile a <a href="/notes/monte-carlo-methods/">Monte carlo Methods</a> per le probabilità.
-In realtà nella prima formulazione è un concetto molto semplice il motivo per cui funziona.</p>
-$$
--\frac{1}{n} \log p(X_{1}, \dots, X_{n}) = -\frac{1}{n} \sum_{i=1}^{n}\log p(X_{i}) \to -\mathbf{E}[\log p(X)] = H(X)
+\arg\max_{w} w^{T}(m_{2} - m_{1}) + \lambda \lVert w \rVert _{2}^{2}
 $$
 <p>
-La cosa principale da comprendere è come ci può essere questo fenomeno con convergenza in <strong>probabilità</strong>, che è una nozione più che altro tecnica per questo discorso.</p>
-<h3 id="typical-sets">Typical sets<a hidden class="anchor" aria-hidden="true" href="#typical-sets">#</a></h3>
-<p>Elements in the typical set have roughly the <strong>same probability</strong>.</p>
-<p>Questo insieme è un oggetto matematico che ha delle proprietà interessanti, viene corretto analizzarlo dopo che si ha AEP, perché in breve la sua esistenza è giustificata da quello.
-È l&rsquo;insieme delle sequenze $(x_{1}, x_{2}, \dots , x_{n})$ prese da una distribuzione $p(x)$ sempre uguale tale per cui valga
+But the problem with this formulation is that we could have some strong overlap in the projected domain, due to non diagonal covariances in the class distribution. We would also like to minimize the within class variance during the projection, so that we can better separate the two values.</p>
+<p>Let&rsquo;s set the interclass variances after our linear projection to be
 </p>
 $$
-2^{-n(H(X) + \varepsilon)} \leq p(x_{1}, x_{2}, \dots, x_{n}) \leq 2^{-n(H(X) - \varepsilon)}
+s_{i}^{2} = \sum_{n \in \mathcal{C}_{i}} (w^{T}x_{n} - w^{T}m_{n})^{2}
 $$
 <p>
-Il motivo per cui abbiamo le cose strane all&rsquo;esponente è proprio la definizione di convergenza in probabilità data. (basta che le espandi)
-Ossia il fatto che
-</p>
+We simply compute the interclass variance and divide, getting the Fisher discriminant</p>
 $$
-P\left( \left\lvert  -\frac{1}{n} \log p(x_{1}, x_{2}, \dots, x_{n}) - H(X)  \right\rvert  > \varepsilon \right) = 0, n \to +\infty
+J(w) = \frac{w^{T}(m_{2} - m_{1})^{2}w}{s_{1}^{2} + s_{2}^{2}} = \frac{w^{T}S_{B}w}{w^{T}S_{I}w}
 $$
 <p>
-Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
-<h4 id="proprietà">Proprietà<a hidden class="anchor" aria-hidden="true" href="#proprietà">#</a></h4>
-<p>Vedi 3.1.2 di <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X">(Cover &amp; Thomas 2012)</a>.</p>
-<p>Il risultato importante è che possiamo rappresentare sequenze di $X^{n}$ in media usando $nH(X)$ bits, senza perdita di informazione.</p>
+The lower part is the sum of the within class variances, while the upper part is the between class covariance.</p>
+<p>Now, if we do some calculus we find that the best solution is $w \propto  S^{-1}_{w}(m_{2} - m_{1})$</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] Cover &amp; Thomas <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X">“Elements of Information Theory”</a> John Wiley &amp; Sons 2012</p>
-<p>[2] MacKay “Information Theory, Inference and Learning Algorithms” Cambridge University Press 2003</p>
+<p>[1] Bishop “Pattern Recognition and Machine Learning” Springer 2006</p>
 
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://flecart.github.io/tags/information-theory/">✏Information-Theory</a></li>
+      <li><a href="https://flecart.github.io/tags/machinelearning/">Machinelearning</a></li>
     </ul>
 
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on x"
-            href="https://x.com/intent/tweet/?text=Asymptotic%20Equipartition%20Property&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f&amp;hashtags=%e2%9c%8finformation-theory">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on x"
+            href="https://x.com/intent/tweet/?text=Fisher%27s%20Linear%20Discriminant&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f&amp;hashtags=machinelearning">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
@@ -334,8 +299,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f&amp;title=Asymptotic%20Equipartition%20Property&amp;summary=Asymptotic%20Equipartition%20Property&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f&amp;title=Fisher%27s%20Linear%20Discriminant&amp;summary=Fisher%27s%20Linear%20Discriminant&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -343,8 +308,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f&title=Asymptotic%20Equipartition%20Property">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f&title=Fisher%27s%20Linear%20Discriminant">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -352,8 +317,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
@@ -361,8 +326,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on whatsapp"
-            href="https://api.whatsapp.com/send?text=Asymptotic%20Equipartition%20Property%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on whatsapp"
+            href="https://api.whatsapp.com/send?text=Fisher%27s%20Linear%20Discriminant%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
@@ -370,8 +335,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on telegram"
-            href="https://telegram.me/share/url?text=Asymptotic%20Equipartition%20Property&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on telegram"
+            href="https://telegram.me/share/url?text=Fisher%27s%20Linear%20Discriminant&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f">
             <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
@@ -379,8 +344,8 @@ Se si espande quanto è presente dentro si ottiene quel bound di sopra.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Asymptotic Equipartition Property on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=Asymptotic%20Equipartition%20Property&u=https%3a%2f%2fflecart.github.io%2fnotes%2fasymptotic-equipartition-property%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Fisher&#39;s Linear Discriminant on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Fisher%27s%20Linear%20Discriminant&u=https%3a%2f%2fflecart.github.io%2fnotes%2ffishers-linear-discriminant%2f">
             <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
                 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
                 <path
