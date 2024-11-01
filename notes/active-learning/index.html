@@ -137,8 +137,8 @@ Setting Given a safe exploration space $S$, an interesting space $A$ and all pos
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "TODO\nActive Learning concerns methods to decide where in the domain we should sample to obtain the most useful information. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used.\nSetting Given a safe exploration space $S$, an interesting space $A$ and all possible space $\\mathcal{X}$ and a dataset $\\left\\{ (x_{i}, y_{i}) \\right\\} \\subseteq S \\times \\mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.\nInformation transductive learning This is an idea of Hübotter 2024\nBatch Active Learning 🟥 Safe Bayesian Optimization ",
-  "wordCount" : "118",
+  "articleBody": "TODO\nActive Learning concerns methods to decide where in the domain we should sample to obtain the most useful information. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used.\nSetting Given a safe exploration space $S$, an interesting space $A$ and all possible space $\\mathcal{X}$ and a dataset $\\left\\{ (x_{i}, y_{i}) \\right\\} \\subseteq S \\times \\mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.\nSo we want to collect the most representative sample under constrained budgeting.\nInformation transductive learning This is an idea of Hübotter 2024 The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$.\n$$ x_{n} = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) $$ If we assume that $f$ is a Gaussian Processes then the mutual information is interpretable as minimizing general posterior variance:\n$$ \\begin{align} x_{n} \u0026 = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) \\\\ \u0026 = \\arg \\max_{x \\in S} H(f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}) - H(f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}) \\\\ \\\\ \u0026 = \\arg \\max_{x \\in S} \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2} \\right) - \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\frac{1}{2} \\log \\left( \\frac{\\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2}}{\\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2}} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\end{align} $$ Batch Active Learning 🟥 Safe Bayesian Optimization ",
+  "wordCount" : "292",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -233,7 +233,7 @@ Setting Given a safe exploration space $S$, an interesting space $A$ and all pos
     <h1 class="post-title entry-hint-parent">
       Active Learning
     </h1>
-    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -261,8 +261,23 @@ Setting Given a safe exploration space $S$, an interesting space $A$ and all pos
 <p>Active Learning concerns methods to decide where in the domain we should sample to obtain the most useful information. In this setting, we are interested in the concept of <strong>usefulness of information</strong>. One of our main goals is to <em>reduce uncertainty</em>, thus, <a href="/notes/entropy/">Entropy</a>-based (mutual information) methods are often used.</p>
 <h3 id="setting">Setting<a hidden class="anchor" aria-hidden="true" href="#setting">#</a></h3>
 <p>Given a safe exploration space $S$, an interesting space $A$ and all possible space $\mathcal{X}$ and a dataset $\left\{ (x_{i}, y_{i}) \right\} \subseteq S \times \mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.</p>
+<p>So we want to collect the most representative sample under constrained budgeting.</p>
 <h3 id="information-transductive-learning">Information transductive learning<a hidden class="anchor" aria-hidden="true" href="#information-transductive-learning">#</a></h3>
-<p>This is an idea of Hübotter 2024</p>
+<p>This is an idea of Hübotter 2024
+The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$.</p>
+$$
+x_{n}  = \arg \max_{x \in S} I(f_{\mathcal{A}};  y_{x} \mid \mathcal{D}_{n - 1})
+$$
+<p>If we assume that $f$ is a <a href="/notes/gaussian-processes/">Gaussian Processes</a> then the mutual information is interpretable as minimizing general posterior variance:</p>
+$$
+\begin{align}
+x_{n}  &  = \arg \max_{x \in S} I(f_{\mathcal{A}};  y_{x} \mid \mathcal{D}_{n - 1}) \\
+ & = \arg \max_{x \in S} H(f_{\mathcal{A}} \mid \mathcal{D}_{n - 1}) - H(f_{\mathcal{A}} \mid y_{x}, \mathcal{D}_{n - 1}) \\ \\
+ & = \arg \max_{x \in S} \frac{1}{2} \log \left( 2 \pi e \sigma_{f_{\mathcal{A}} \mid \mathcal{D}_{n - 1}}^{2} \right) - \frac{1}{2} \log \left( 2 \pi e \sigma_{f_{\mathcal{A}} \mid y_{x}, \mathcal{D}_{n - 1}}^{2} \right) \\  \\
+ & = \arg \min_{x \in S} \frac{1}{2} \log \left( \frac{\sigma_{f_{\mathcal{A}} \mid y_{x}, \mathcal{D}_{n - 1}}^{2}}{\sigma_{f_{\mathcal{A}} \mid \mathcal{D}_{n - 1}}^{2}} \right) \\  \\
+ &  = \arg \min_{x \in S} \sigma_{f_{\mathcal{A}} \mid y_{x}, \mathcal{D}_{n - 1}}^{2}
+\end{align}
+$$
 <h3 id="batch-active-learning-">Batch Active Learning 🟥<a hidden class="anchor" aria-hidden="true" href="#batch-active-learning-">#</a></h3>
 <h3 id="safe-bayesian-optimization">Safe Bayesian Optimization<a hidden class="anchor" aria-hidden="true" href="#safe-bayesian-optimization">#</a></h3>
 

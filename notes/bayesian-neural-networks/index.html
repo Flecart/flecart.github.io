@@ -9,10 +9,7 @@
 <meta name="keywords" content="">
 <meta name="description" content="TODO
 Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-Re-parametrization trick TODO
-Gradient descent with variational estimate TODO
-SWAG TODO
-Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy is the same as the probability, interpretable as a confidence score, of its prediction.">
+We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bayesian-neural-networks/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -94,10 +91,7 @@ if (!doNotTrack) {
 <meta property="og:title" content="Bayesian neural networks" />
 <meta property="og:description" content="TODO
 Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-Re-parametrization trick TODO
-Gradient descent with variational estimate TODO
-SWAG TODO
-Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy is the same as the probability, interpretable as a confidence score, of its prediction." />
+We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/bayesian-neural-networks/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -110,10 +104,7 @@ Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy 
 <meta name="twitter:title" content="Bayesian neural networks"/>
 <meta name="twitter:description" content="TODO
 Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-Re-parametrization trick TODO
-Gradient descent with variational estimate TODO
-SWAG TODO
-Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy is the same as the probability, interpretable as a confidence score, of its prediction."/>
+We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models."/>
 
 
 <script type="application/ld+json">
@@ -142,12 +133,12 @@ Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy 
   "@type": "BlogPosting",
   "headline": "Bayesian neural networks",
   "name": "Bayesian neural networks",
-  "description": "TODO Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO Re-parametrization trick TODO Gradient descent with variational estimate TODO SWAG TODO Calibration Expected Calibration Error A well calibrated model\u0026rsquo;s accuracy is the same as the probability, interpretable as a confidence score, of its prediction.",
+  "description": "TODO Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.",
   "keywords": [
     
   ],
-  "articleBody": "TODO\nRobbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO\nRe-parametrization trick TODO\nGradient descent with variational estimate TODO\nSWAG TODO\nCalibration Expected Calibration Error A well calibrated model’s accuracy is the same as the probability, interpretable as a confidence score, of its prediction. Mathematically we say that a model is calibrated if $$ \\mathbb{E}_{p \\sim \\hat{P}} [\\lvert \\mathbb{P}(\\hat{Y} = Y \\mid \\hat{P} = p) - p \\rvert ] = 0 $$ With $\\hat{Y}$ the predictions of the model and $\\hat{P}$ its confidences and $Y$ is the true label.\nUsually it’s quite difficult to have the exact estimates, so we do some heuristics to calculate this value. We divide the model’s predictions into bins based on the confidence score. Let’s say we defide all the space in $[0, 1]$ into $m$ bins. Then we say that the empirical accuracy score in the bin is $$ \\text{acc}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\mathbb{I}(\\hat{Y}_{i} = Y_{i}) $$ where $N_{b}$ is the number of samples in the bin and $\\mathbb{I}$ is the indicator function. Then we can calculate the expected calibration error as And the confidence score is $$ \\text{conf}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\hat{P}_{i} $$ Then we can calculate the expected calibration error (ECE) as $$ \\text{ECE} = \\sum_{b = 1}^{m} \\frac{N_{b}}{N} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Sometimes we are also interested in the Maximum Calibration Error defined as $$ \\text{MCE} = \\max_{b} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Techniques for improving calibration ",
-  "wordCount" : "280",
+  "articleBody": "TODO\nRobbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO\nWe want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models. Usually, in some datasets also the variance changes with the input; this is called heteroskedastic noise. This justifies models in the following form:\n$$ p(y \\mid \\boldsymbol{x}, \\theta) = \\mathcal{N}(u; f_{1}(\\boldsymbol{x}, \\theta), \\exp(f_{2}(\\boldsymbol{x}, \\theta))) $$ where $f_{1}$ and $f_{2}$ are neural networks and $\\theta$ are the weights of the neural network. We use neural networks to predict mean and variance. We use the $\\exp$ function to ensure that the variance is always positive.\nFrom a practical point of view, this machinery is quite good at estimating variance in regions where data is present (same thing in heteroskedastic settings!), while it is overconfident in zones without data, often collapsing the variance.\nMap estimate for bayesian NN Assume a prior $p(\\theta) \\sim \\mathcal{N}(\\theta; 0, \\lambda^{-1})$ and the above parametrization of the likelihood function, let’s derive the posterior distribution, that is $p(\\theta \\mid y, \\boldsymbol{x})$. TODO: We notice that while in the Bayesian Linear Regression the normalization constant is disregarded, here it is dependent on the $\\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.\nPrediction with Bayesian Neural Networks We see that prediction is just averaging over the predictions of different networks sampled from the approximate distribution that we derived from the variational inference of the weights. Some formalization could help in clearing this out.\n$$ \\begin{align} p(y^{} \\mid x^{}, x_{1:n}, y_{1:n}) \\ \u0026 = \\int p(y^{} \\mid x^{}, \\theta) p(\\theta \\mid x_{1:n}, y_{1:n}) d\\theta \\ \u0026 = \\mathbb{E}{\\theta \\sim p(\\cdot \\mid x{1:n}, y_{1:n})} [p(y^{} \\mid x^{}, \\theta)]) \\ \\text{Using Variational Inf.}\u0026 \\approx \\mathbb{E}{{\\theta \\sim q(\\theta)}} [p(y^{} \\mid x^{}, \\theta)] \\\n\\text{Monte Carlo }\u0026 \\approx \\frac{1}{S} \\sum_{s = 1}^{S} p(y^{} \\mid x^{}, \\theta_{s}) \\end{align} $$ The variational is usually the approximation that is introducing the most errors.\nWe can also estimate the mean and variance of our prediction: TODO\nStoring weights We have seen in the previous paragraph that we just need to sample $S$ weights and average the predictions of every network that we get. But this comes at the cost of storing the $S$ weights. One idea is subsampling: we store some intermediate weights or predictions and use those for the final inference.\nAnother idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution. This is just the idea of SWA-Gaussians, presented (Maddox et al. 2019).\nDropout as Variational Inference Dropout and dropconnect can be seen as a special case of variational inference. It seems we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.\nOne thing is using dropout during prediction to obtain uncertainty estimates. This is called Monte Carlo Dropout.\nProbabilistic Ensembles We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.\nWe can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.\nRe-parametrization trick TODO\nGradient descent with variational estimate TODO\nCalibration Well calibrated models have a similar accuracy to the confidence of their predictions. This is a very important property for many applications, especially in medical fields. For example, if a model is well calibrated, if it is secure on a prediction, it can leave the burden from the doctors, who would just manually check the hard ones.\nExpected Calibration Error A well calibrated model’s accuracy is the same as the probability, interpretable as a confidence score, of its prediction. Mathematically we say that a model is calibrated if $$ \\mathbb{E}_{p \\sim \\hat{P}} [\\lvert \\mathbb{P}(\\hat{Y} = Y \\mid \\hat{P} = p) - p \\rvert ] = 0 $$ With $\\hat{Y}$ the predictions of the model and $\\hat{P}$ its confidences and $Y$ is the true label. So we would like to have $$ \\mathbb{P}(\\hat{Y} = y \\mid \\hat{P} = p) = p $$ Usually it’s quite difficult to have the exact estimates, so we do some heuristics to calculate this value. We divide the model’s predictions into bins based on the confidence score. Let’s say we defide all the space in $[0, 1]$ into $m$ bins. Then we say that the empirical accuracy score in the bin is $$ \\text{acc}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\mathbb{I}(\\hat{Y}_{i} = Y_{i}) $$ where $N_{b}$ is the number of samples in the bin and $\\mathbb{I}$ is the indicator function. Then we can calculate the expected calibration error as And the confidence score is $$ \\text{conf}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\hat{P}_{i} $$ Then we can calculate the expected calibration error (ECE) as $$ \\text{ECE} = \\sum_{b = 1}^{m} \\frac{N_{b}}{N} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Sometimes we are also interested in the Maximum Calibration Error defined as $$ \\text{MCE} = \\max_{b} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Techniques for improving calibration There are many techniques to improve calibration. One of the most used is temperature scaling. This is just a scaling of the logits of the model.\nAnother technique is Platt scaling. This is a logistic regression on the model’s output logits, interpretable as confidence scores.\nReferences [1] Maddox et al. “A Simple Baseline for Bayesian Uncertainty in Deep Learning” 2019\n",
+  "wordCount" : "968",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -242,7 +233,7 @@ Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy 
     <h1 class="post-title entry-hint-parent">
       Bayesian neural networks
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -251,7 +242,7 @@ Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy 
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul><ul>
                 <li>
                     <a href="#robbins-moro-algorithm" aria-label="Robbins-Moro Algorithm">Robbins-Moro Algorithm</a></li>
                 <li>
@@ -260,22 +251,33 @@ Calibration Expected Calibration Error A well calibrated model&rsquo;s accuracy 
                 <li>
                     <a href="#the-idea" aria-label="The Idea">The Idea</a></li>
                 <li>
+                    <a href="#map-estimate-for-bayesian-nn" aria-label="Map estimate for bayesian NN">Map estimate for bayesian NN</a></li>
+                <li>
+                    <a href="#prediction-with-bayesian-neural-networks" aria-label="Prediction with Bayesian Neural Networks">Prediction with Bayesian Neural Networks</a></li>
+                <li>
+                    <a href="#storing-weights" aria-label="Storing weights">Storing weights</a></li>
+                <li>
+                    <a href="#dropout-as-variational-inference" aria-label="Dropout as Variational Inference">Dropout as Variational Inference</a></li>
+                <li>
+                    <a href="#probabilistic-ensembles" aria-label="Probabilistic Ensembles">Probabilistic Ensembles</a></li>
+                <li>
                     <a href="#re-parametrization-trick" aria-label="Re-parametrization trick">Re-parametrization trick</a></li>
                 <li>
                     <a href="#gradient-descent-with-variational-estimate" aria-label="Gradient descent with variational estimate">Gradient descent with variational estimate</a></li></ul>
                 </li>
                 <li>
-                    <a href="#swag" aria-label="SWAG">SWAG</a></li>
-                <li>
-                    <a href="#calibration" aria-label="Calibration">Calibration</a></li>
-                <li>
-                    <a href="#expected-calibration-error" aria-label="Expected Calibration Error">Expected Calibration Error</a><ul>
+                    <a href="#calibration" aria-label="Calibration">Calibration</a><ul>
                         
                 <li>
-                    <a href="#techniques-for-improving-calibration" aria-label="Techniques for improving calibration">Techniques for improving calibration</a>
+                    <a href="#expected-calibration-error" aria-label="Expected Calibration Error">Expected Calibration Error</a></li>
+                <li>
+                    <a href="#techniques-for-improving-calibration" aria-label="Techniques for improving calibration">Techniques for improving calibration</a></li></ul>
+                </li></ul>
+                    </ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
                 </li>
-            </ul>
-            </li>
             </ul>
         </div>
     </details>
@@ -293,14 +295,52 @@ $$
 <h3 id="bayesian-neural-networks">Bayesian Neural Networks<a hidden class="anchor" aria-hidden="true" href="#bayesian-neural-networks">#</a></h3>
 <h4 id="the-idea">The Idea<a hidden class="anchor" aria-hidden="true" href="#the-idea">#</a></h4>
 <p>TODO</p>
+<p>We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.
+Usually, in some datasets also the variance changes with the input; this is called heteroskedastic noise.
+This justifies models in the following form:</p>
+$$
+p(y \mid \boldsymbol{x}, \theta) = \mathcal{N}(u; f_{1}(\boldsymbol{x}, \theta), \exp(f_{2}(\boldsymbol{x}, \theta)))
+$$
+<p>
+where $f_{1}$ and $f_{2}$ are neural networks and $\theta$ are the weights of the neural network.
+We use neural networks to predict mean and variance. We use the $\exp$ function to ensure that the variance is always positive.</p>
+<p>From a practical point of view, this machinery is quite good at estimating variance in regions where data is present (same thing in heteroskedastic settings!), while it is overconfident in zones without data, often collapsing the variance.</p>
+<h4 id="map-estimate-for-bayesian-nn">Map estimate for bayesian NN<a hidden class="anchor" aria-hidden="true" href="#map-estimate-for-bayesian-nn">#</a></h4>
+<p>Assume a prior $p(\theta) \sim \mathcal{N}(\theta; 0, \lambda^{-1})$ and the above parametrization of the likelihood function, let&rsquo;s derive the posterior distribution, that is $p(\theta \mid y, \boldsymbol{x})$.
+TODO:
+We notice that while in the <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> the normalization constant is disregarded, here it is dependent on the $\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.</p>
+<h4 id="prediction-with-bayesian-neural-networks">Prediction with Bayesian Neural Networks<a hidden class="anchor" aria-hidden="true" href="#prediction-with-bayesian-neural-networks">#</a></h4>
+<p>We see that prediction is just averaging over the predictions of different networks sampled from the approximate distribution that we derived from the variational inference of the weights. Some formalization could help in clearing this out.</p>
+<p>$$
+\begin{align}
+p(y^{<em>} \mid x^{</em>}, x_{1:n}, y_{1:n})   \
+&amp; = \int p(y^{<em>} \mid x^{</em>}, \theta) p(\theta \mid x_{1:n}, y_{1:n}) d\theta \
+&amp;  = \mathbb{E}<em>{\theta \sim p(\cdot \mid x</em>{1:n}, y_{1:n})} [p(y^{<em>} \mid x^{</em>}, \theta)]) \
+\text{Using Variational Inf.}&amp; \approx \mathbb{E}<em>{</em>{\theta \sim q(\theta)}} [p(y^{<em>} \mid x^{</em>}, \theta)] \</p>
+<p>\text{Monte Carlo }&amp;  \approx \frac{1}{S} \sum_{s = 1}^{S} p(y^{<em>} \mid x^{</em>}, \theta_{s})
+\end{align}
+$$
+The variational is usually the approximation that is introducing the most errors.</p>
+<p>We can also estimate the mean and variance of our prediction:
+TODO</p>
+<h4 id="storing-weights">Storing weights<a hidden class="anchor" aria-hidden="true" href="#storing-weights">#</a></h4>
+<p>We have seen in the previous paragraph that we just need to sample $S$ weights and average the predictions of every network that we get. But this comes at the cost of storing the $S$ weights.
+One idea is <strong>subsampling</strong>: we store some intermediate weights or predictions and use those for the final inference.</p>
+<p>Another idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution.
+This is just the idea of SWA-Gaussians, presented <a href="http://arxiv.org/abs/1902.02476">(Maddox et al. 2019)</a>.</p>
+<h4 id="dropout-as-variational-inference">Dropout as Variational Inference<a hidden class="anchor" aria-hidden="true" href="#dropout-as-variational-inference">#</a></h4>
+<p>Dropout and dropconnect can be seen as a special case of variational inference. It seems we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.</p>
+<p>One thing is using dropout during prediction to obtain uncertainty estimates. This is called <strong>Monte Carlo Dropout</strong>.</p>
+<h4 id="probabilistic-ensembles">Probabilistic Ensembles<a hidden class="anchor" aria-hidden="true" href="#probabilistic-ensembles">#</a></h4>
+<p>We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.</p>
+<p>We can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.</p>
 <h4 id="re-parametrization-trick">Re-parametrization trick<a hidden class="anchor" aria-hidden="true" href="#re-parametrization-trick">#</a></h4>
 <p>TODO</p>
 <h4 id="gradient-descent-with-variational-estimate">Gradient descent with variational estimate<a hidden class="anchor" aria-hidden="true" href="#gradient-descent-with-variational-estimate">#</a></h4>
 <p>TODO</p>
-<h3 id="swag">SWAG<a hidden class="anchor" aria-hidden="true" href="#swag">#</a></h3>
-<p>TODO</p>
 <h3 id="calibration">Calibration<a hidden class="anchor" aria-hidden="true" href="#calibration">#</a></h3>
-<h3 id="expected-calibration-error">Expected Calibration Error<a hidden class="anchor" aria-hidden="true" href="#expected-calibration-error">#</a></h3>
+<p>Well calibrated models have a similar accuracy to the confidence of their predictions. This is a very important property for many applications, especially in medical fields. For example, if a model is well calibrated, if it is secure on a prediction, it can leave the burden from the doctors, who would just manually check the hard ones.</p>
+<h4 id="expected-calibration-error">Expected Calibration Error<a hidden class="anchor" aria-hidden="true" href="#expected-calibration-error">#</a></h4>
 <p>A well calibrated model&rsquo;s accuracy is the same as the probability, interpretable as a confidence score, of its prediction.
 Mathematically we say that a model is calibrated if
 </p>
@@ -308,7 +348,12 @@ $$
 \mathbb{E}_{p \sim \hat{P}} [\lvert \mathbb{P}(\hat{Y} = Y \mid \hat{P} = p) - p \rvert ] = 0
 $$
 <p>
-With $\hat{Y}$ the predictions of the model and $\hat{P}$ its confidences and $Y$ is the true label.</p>
+With $\hat{Y}$ the predictions of the model and $\hat{P}$ its confidences and $Y$ is the true label.
+So we would like to have
+</p>
+$$
+\mathbb{P}(\hat{Y} = y \mid \hat{P} = p) = p
+$$
 <p>Usually it&rsquo;s quite difficult to have the exact estimates, so we do some heuristics to calculate this value.
 We divide the model&rsquo;s predictions into bins based on the confidence score. Let&rsquo;s say we defide all the space in $[0, 1]$ into $m$ bins. Then we say that the empirical accuracy score in the bin is
 </p>
@@ -335,6 +380,10 @@ $$
 \text{MCE} = \max_{b} \lvert \text{acc}(b) - \text{conf}(b) \rvert
 $$
 <h4 id="techniques-for-improving-calibration">Techniques for improving calibration<a hidden class="anchor" aria-hidden="true" href="#techniques-for-improving-calibration">#</a></h4>
+<p>There are many techniques to improve calibration. One of the most used is <strong>temperature scaling</strong>. This is just a scaling of the logits of the model.</p>
+<p>Another technique is <strong>Platt scaling</strong>. This is a logistic regression on the model&rsquo;s output logits, interpretable as confidence scores.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Maddox et al. <a href="http://arxiv.org/abs/1902.02476">“A Simple Baseline for Bayesian Uncertainty in Deep Learning”</a>  2019</p>
 
 
   </div>
