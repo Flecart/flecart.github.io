@@ -181,61 +181,59 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Problemi di ricerca
+    <h2 class="entry-hint-parent">Optimization methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>2 Problemi di ricerca In questa prima parte si tratta di ricerca semplice, ossia si utilizza un modello basato su obiettivi, di struttura atomica, in un ambiente che risulti singolo-agente, episodico, totalmente osservabile, deterministico, statico, discreto, conosciuto.
-2.1 Il problema Vogliamo cercare di enunciare in un modo che possa essere formale, senza nessuna ambiguità il concetto di problema di ricerca.
-2.1.1 Framework di soluzione Individuiamo 4 fasi principali per un problema di ricerca, questo è un framework molto generico....</p>
-  </div>
-  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Problemi di ricerca" href="https://flecart.github.io/notes/problemi-di-ricerca/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Linguaggi Deterministici e DPDA
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>DPDA Definizione (2)🟩 La definizione di DPDA è molto simile a quella trattata in Linguaggi liberi e PDA, con solo costraints sulla deterministicità, che si traducono in due condizioni:
-Al massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack Se ho una transizione senza leggere, posso avere solo quella Slide
-Linguaggio libero deterministico Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per stato finale....</p>
+    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
+Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
+Newton Raphson method Molte implementazioni in R usano questo metodo, è
+Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Linguaggi Deterministici e DPDA" href="https://flecart.github.io/notes/linguaggi-deterministici-e-dpda/"></a>
+  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Algebra lineare numerica
+    <h2 class="entry-hint-parent">LR(k) e YACC
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular....</p>
+    <p>LR(k) Grammatiche LR(k) 🟩 Anche in questo caso proviamo a generalizzare il concetto dei pirmi k caratteri, in modo da generalizzare in qualche senso il concetto di LR(k), quindi andiamo a modificare la closure considerando ora first k
+Per ricordarti come si calcolava first k, andare a guardare Top-down Parser
+il problema che poi diventa pratico riguardo questo è l’impossibilità di gestire stringhe lunghezza k che sono una assurdità (esponenziale per la lunghezza)...</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to LR(k) e YACC" href="https://flecart.github.io/notes/lrk-e-yacc/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Fondamenti teorica
+    <h2 class="entry-hint-parent">Bottom-up Parser LR(1)
     </h2>
   </header>
   <div class="entry-content">
-    <p>https://virtuale.unibo.it/pluginfile.php/1295166/mod_resource/content/0/Lez18-Gorrieri.pdf
-Halting problem Questo asserisce che non esiste nessun programma che sia in grado di decidere la terminazione di un altro programma
-Questo è un problema che ci è interessante perché vorremmo costruire un compilatore che sia in grado di osservare tutti gli errori possibili del programma. Come vedremo tra poco la risposta sarà negativa.
-Dimostrazione tesi 🟨&#43;&#43; Supponiamo che questo programma esista, lo chiamiamo check(P) che restituisce 0 se termina 1 se non termina, allora devo poter essere in grado di scrivere un programma di questo genere...</p>
+    <p>Si può osservare che per il parser costruito in Bottom-up Parser LR(0), non riesce a riconoscere di linguaggi semplici come $L = \{a, ab\}$.
+Esempio di quanto detto Parser SLR(1) Questi parser qui utilizzano l’idea del look ahead ampiamente utilizzata in Top-down Parser, per escludere molte produzioni.
+La s sta per simple, perché utilizza una idea semplice :D, credo ahah boh.
+Riduzione con follow 🟩 noi vogliamo ridurre solamente se ho follow corretto il terminale finale della stringa....</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Fondamenti teorica" href="https://flecart.github.io/notes/fondamenti-teorica/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Bottom-up Parser LR(1)" href="https://flecart.github.io/notes/bottom-up-parser-lr1/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Inverse Transform
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>How can we transform a uniform into a random variable? It is true that we have $$ F(x) = \int _{-\infty}^{x} f(t) \, dt $$ A volte la densità non è definita, mentre la funzione cumulativa lo è , per questo spesso cominciamo a definire partendo dalla definizione.
+Suppose we have a $x \sim F_{X}(x)$ where $F$ is a cumulative distribution function, same thing, we just need to take the set, normal cumulative distribution function that we saw a lot in other courses....</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Inverse Transform" href="https://flecart.github.io/notes/inverse-transform/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
