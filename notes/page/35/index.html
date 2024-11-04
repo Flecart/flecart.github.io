@@ -196,74 +196,87 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Divergenza e Circuitazione
+    <h2 class="entry-hint-parent">Replication and consistency
     </h2>
   </header>
   <div class="entry-content">
-    <p>Scalare Scalare e gradiente 🟩 Un campo scalare assegna a ogni punto dello spazio un valore reale, quindi è naturalmente rappresentabile tramite una funzione $$ \varphi(x, y, z) : \mathbb{R}^{3} \to \mathbb{R} $$ Un esempio abbastanza naturale è il gradiente del valore scalare che si indica con $$\vec{\nabla}\varphi = ( \frac{\delta\varphi}{\delta x}, \frac{\delta\varphi}{\delta y}, \frac{\delta\varphi}{\delta z}) = \frac{\delta\varphi}{\delta x} \hat{i} &#43; \frac{\delta\varphi}{\delta y} \hat{j} &#43; \frac{\delta\varphi}{\delta z} \hat{k}$$ Se consideriamo il gradiente da solo è un campo vettoriale (dice la direzione della derivata multidimensionale)....</p>
+    <p>Replication and consistency Introduzione Ci sono due vantaggi principali nella replicazione dei dati
+Velocità Vicinanza geografica (quindi meno tempo ad andare a tornare) Maggiore computazione, quindi avere molti più processori che cercano di offrire lo stesso servizio. Affidabilità Così se una sede diventa corrotta, posso avere abbondanza, avere una copia da una altra parte, così non perdo le informazioni! Se una macchina cade in errore, ho altre macchine che lo sostituiscono!...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Divergenza e Circuitazione" href="https://flecart.github.io/notes/divergenza-e-circuitazione/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Replication and consistency" href="https://flecart.github.io/notes/replication-and-consistency/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Log Linear Models
+    <h2 class="entry-hint-parent">Semafori
     </h2>
   </header>
   <div class="entry-content">
-    <p>Log Linear Models can be considered the most basic model used in natural languages. The main idea is to try to model the correlations of our data, or how the posterior $p(y \mid x)$ varies, where $x$ is our single data point features and $y$ are the labels of interest. This is a form of generalization because contextualized events (x, y) with similar descriptions tend to have similar probabilities.
-These kinds of models are so common that it has been discovered in many fields (and thus assuming different names): some of the most famous are Gibbs distributions, undirected graphical models, Markov Random Fields or Conditional Random Fields, exponential models, and (regularized) maximum entropy models....</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Log Linear Models" href="https://flecart.github.io/notes/log-linear-models/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Memory Corruption
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
-Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data)....</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Memory Corruption" href="https://flecart.github.io/notes/memory-corruption/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Poisson processes
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>I processi di Poisson sono dei processi stocastici, interpretabili come collezione indicizzata dal tempo di variabili aleatorie. Esempi semplici sono una uniforme, altri più complessi potrebbe essere una catena di Markov (see Markov Chains) (utile per modellare cammini randomici) o quella di Poisson spiegata qui. Introduzione ai processi di Poisson Arrival processes Sia una sequenza di variabili aleatorie $0 &lt; S_{1} &lt; S_{2} &lt; \dots$ (il fatto che sia positivo significa che per ogni elemento del dominio vale che quell’elemento è &lt;, non so se mi sono spiegato....</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Poisson processes" href="https://flecart.github.io/notes/poisson-processes/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Polimorfismo
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione Monoforfo 🟩 Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.
-Slide monomorfismo
-Polimorfismo Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).
-Tipologie di Polimorfismo (3) 🟩 Slide tipologie di monomorfismo...</p>
+    <p>Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
+Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
+due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo
+Primitive dei semafori 🟩- Il semaforo solitamente è una variabile intera non negativa....</p>
   </div>
   <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Polimorfismo" href="https://flecart.github.io/notes/polimorfismo/"></a>
+  <a class="entry-link" aria-label="post link to Semafori" href="https://flecart.github.io/notes/semafori/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Syncronous model
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduction Da ricordare il “The State Machine Replication (SMR) Problem” in Consensus protocols che è importantissimo per comprendere questa parte.
+Storia locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.
+Goal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti
+Consistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!...</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Syncronous model" href="https://flecart.github.io/notes/syncronous-model/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Modulazione wireless
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Digital modulation 🟨 Slide introduzione
+Modulazione digitale: prendiamo un dato digitale e trasmesso con un segnale analogico, come le RF.
+ASK: amplitude shift keying
+FSK: frequency shift
+PSK: phase shift
+Questi sono i tre metodi principali, che dipendono dalle caratteristiche dell’onda descritte in Fisica del Wireless.
+TRE CARATTERISTICHE
+Power
+Resistenza interferenze. (robustezza)
+ANALOG MODULATION
+Per modulare un segnale analogico si utilizzano principalemente AM o FM, amplitude o frequency modulation, raramente si utilizza PM....</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Modulazione wireless" href="https://flecart.github.io/notes/modulazione-wireless/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">N-Bandit Problem
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Impostazione del problema Supponiamo di stare giocando a n slot machine contemporaneamente. Queste macchine hanno internamente un valore di reward che non conosciamo. Ad ogni step possiamo scegliere una singola macchina e andare a tirare la sua leva. Riceviamo il valore del reward nascosto con un pò di rumore. Vogliamo capire nel lungo quale sia la strategia che possa dare migliore reward medio possibile.
+Questo è un semplice problema, ma lo possiamo considerare un fulcro molto importante per poter comprendere il problema del reinforcement learning....</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to N-Bandit Problem" href="https://flecart.github.io/notes/n-bandit-problem/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://flecart.github.io/notes/page/34/">
-      «&nbsp;Prev&nbsp;34/63
+      «&nbsp;Prev&nbsp;34/62
     </a>
-    <a class="next" href="https://flecart.github.io/notes/page/36/">Next&nbsp;36/63&nbsp;»
+    <a class="next" href="https://flecart.github.io/notes/page/36/">Next&nbsp;36/62&nbsp;»
     </a>
   </nav>
 </footer>
