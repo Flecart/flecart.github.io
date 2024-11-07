@@ -137,8 +137,8 @@ Consider a criminal trial with three suspects, A, B, and C. The collected eviden
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam’s Razor, i.e. the principle of parsimony.\nLet’s start with a simple example taken from Andreas Kraus’s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:\nConsider a criminal trial with three suspects, A, B, and C. The collected evidence shows that suspect C can not have committed the crime, however it does not yield any information about sus- pects A and B. Clearly, any distribution respecting the data must assign zero probability of having committed the crime to suspect C. However, any distribution interpolating between (1, 0, 0) and (0, 1, 0) respects the data. The principle of indifference suggests that the desired distribution is $(\\frac{1}{2}, \\frac{1}{2}, 0)$, and indeed, any alterna- tive distribution seems unreasonable.\nThe maximum entropy principle, elaborated by Jaynes (1968) asserts that if there are more distributions that could be used to fit a problem, use the one that assumes less information as possible, so that it maximizes the entropy. $$ H[p] = \\mathbb{E}_{x \\sim p}[-\\log p(x)] $$ One nice thing about Gaussians is that this distribution has the maximum entropy between all distributions with known mean and variance. So we can say that it’s the distribution that assumes less information.\n",
-  "wordCount" : "229",
+  "articleBody": "The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam’s Razor, i.e. the principle of parsimony.\nLet’s start with a simple example taken from Andreas Kraus’s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:\nConsider a criminal trial with three suspects, A, B, and C. The collected evidence shows that suspect C can not have committed the crime, however it does not yield any information about sus- pects A and B. Clearly, any distribution respecting the data must assign zero probability of having committed the crime to suspect C. However, any distribution interpolating between (1, 0, 0) and (0, 1, 0) respects the data. The principle of indifference suggests that the desired distribution is $(\\frac{1}{2}, \\frac{1}{2}, 0)$, and indeed, any alterna- tive distribution seems unreasonable.\nThe maximum entropy principle, elaborated by Jaynes (1968) asserts that if there are more distributions that could be used to fit a problem, use the one that assumes less information as possible, so that it maximizes the entropy. $$ H[p] = \\mathbb{E}_{x \\sim p}[-\\log p(x)] $$ Gaussian as Maximum Entropy Distribution One nice thing about Gaussians is that this distribution has the maximum entropy between all distributions with known mean and variance. So we can say that it’s the distribution that assumes less information: it’s the distribution that best applies Occam’s Razor.\nLet’s say $f \\sim \\mathcal{N}(f; \\mu, \\Sigma)$ and assume we have another distribution $g$ with the same mean and variance. Then we can say that $f$ is the distribution that maximizes the entropy.\nLet’s consider first the cross entropy between $f$ and $g$, we will prove that this is equal to the entropy of $f$. $$ H[g\\mid f] = \\mathbb{E}_{x \\sim g}[-\\log f(x)] = \\mathbb{E}_{x\\sim f}[-\\log f(x)] = H[f] $$ To prove this you should see that in the computation of the entropy for the Gaussians we just need the first two moments (i.e. mean and variance) Then we see that $$ KL(g \\mid f) = H[g \\mid f] - H[g] = H[f] - H[g] \\implies H[f] \\geq H[g] $$ For every possible distribution with same mean and Variance.\n",
+  "wordCount" : "371",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -236,7 +236,20 @@ Consider a criminal trial with three suspects, A, B, and C. The collected eviden
     <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#gaussian-as-maximum-entropy-distribution" aria-label="Gaussian as Maximum Entropy Distribution">Gaussian as Maximum Entropy Distribution</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
 
   <div class="post-content"><p>The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam&rsquo;s Razor, i.e. the principle of parsimony.</p>
 <p>Let&rsquo;s start with a simple example taken from Andreas Kraus&rsquo;s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:</p>
@@ -256,7 +269,23 @@ tive distribution seems unreasonable.</p>
 $$
 H[p] = \mathbb{E}_{x \sim p}[-\log p(x)]
 $$
-<p>One nice thing about <a href="/notes/gaussians/">Gaussians</a> is that this distribution has the maximum entropy between all distributions with known mean and variance. So we can say that it&rsquo;s the distribution that assumes less information.</p>
+<h4 id="gaussian-as-maximum-entropy-distribution">Gaussian as Maximum Entropy Distribution<a hidden class="anchor" aria-hidden="true" href="#gaussian-as-maximum-entropy-distribution">#</a></h4>
+<p>One nice thing about <a href="/notes/gaussians/">Gaussians</a> is that this distribution has the maximum entropy between all distributions with known mean and variance. So we can say that it&rsquo;s the distribution that assumes less information: it&rsquo;s the distribution that best applies Occam&rsquo;s Razor.</p>
+<p>Let&rsquo;s say $f \sim \mathcal{N}(f; \mu, \Sigma)$ and assume we have another distribution $g$ with the same mean and variance. Then we can say that $f$ is the distribution that maximizes the entropy.</p>
+<p>Let&rsquo;s consider first the cross entropy between $f$ and $g$, we will prove that this is equal to the entropy of $f$.
+</p>
+$$
+H[g\mid f] = \mathbb{E}_{x \sim g}[-\log f(x)] = \mathbb{E}_{x\sim f}[-\log f(x)] = H[f]
+$$
+<p>
+To prove this you should see that in the computation of the entropy for the Gaussians we just need the first two moments (i.e. mean and variance)
+Then we see that
+</p>
+$$
+KL(g \mid f) = H[g \mid f] - H[g] = H[f] - H[g] \implies H[f] \geq H[g]
+$$
+<p>
+For every possible distribution with same mean and Variance.</p>
 
 
   </div>

@@ -181,45 +181,46 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmi Concorrenti
+    <h2 class="entry-hint-parent">Paginazione e segmentazione
     </h2>
   </header>
   <div class="entry-content">
-    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
+    <p>Memoria sistema Operativo Guradare Memoria virtuale Per vedere come vengono rimpiazzate le pagine
+In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)
+MMU Controlla se l’accesso di memoria è bono o meno. (traduzione fra indirizzo logico e fisico)...</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Paginazione e segmentazione" href="https://flecart.github.io/notes/paginazione-e-segmentazione/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Processi e thread
+    <h2 class="entry-hint-parent">Scheduler
     </h2>
   </header>
   <div class="entry-content">
-    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
-Slide schema generale tabelle
-Processi Il process control block è la struttura di dati principali da comprendere.
-Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria....</p>
+    <p>Il suo scopo principale è gestire l’avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
+Solitamente il nome scheduler è solamente un gestore dell’avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
+Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
+Esempio gantt...</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Scheduler" href="https://flecart.github.io/notes/scheduler/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Architettura software del OS
+    <h2 class="entry-hint-parent">Monitor
     </h2>
   </header>
   <div class="entry-content">
-    <p>A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).
-Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
-Slide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante...</p>
+    <p>Questo è un modo di più alto livello per creare programmazione concorrente.
+Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
+Elementi costituenti 🟩 Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
+E possono modificare dati locali solo tramite chiamate a sue procedure...</p>
   </div>
-  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Architettura software del OS" href="https://flecart.github.io/notes/architettura-software-del-os/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Monitor" href="https://flecart.github.io/notes/monitor/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
