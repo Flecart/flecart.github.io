@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Active Learning | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning, ➕probabilistic-artificial-intelligence">
-<meta name="description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.">
+<meta name="description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/active-learning/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -87,7 +87,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Active Learning" />
-<meta property="og:description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly." />
+<meta property="og:description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/active-learning/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -98,7 +98,7 @@ if (!doNotTrack) {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Active Learning"/>
-<meta name="twitter:description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly."/>
+<meta name="twitter:description" content="Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly."/>
 
 
 <script type="application/ld+json">
@@ -127,12 +127,12 @@ if (!doNotTrack) {
   "@type": "BlogPosting",
   "headline": "Active Learning",
   "name": "Active Learning",
-  "description": "Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.",
+  "description": "Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.",
   "keywords": [
     "machinelearning", "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.\nSetting Given a safe exploration space $S$, an interesting space $A$ and all possible space $\\mathcal{X}$ and a dataset $\\left\\{ (x_{i}, y_{i}) \\right\\} \\subseteq S \\times \\mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.\nSo we want to collect the most representative sample under constrained budgeting.\nWe can divide the setting in Active Learning as solving two problems:\nQuantifying the concept of utility of a sample. Finding the best sample to select. Utility of samples One idea from Entropy is the concept of mutual Information: how much observing $Y$ reduces the uncertainty of $X$. It is defined as: $$ I(X; Y) = \\underbrace{H(X)}_{ \\begin{align} \\text{Uncertainty of } X \\\\ \\text{ before observing Y} \\end{align}}- \\underbrace{H(X \\mid Y)}_{\\text{ After observing } Y} $$ Information Gain in Linear Regression First we define the notion of marginal gain: $$ \\Delta_{F}(x \\mid A) = F(A \\cup \\left\\{ x \\right\\}) - F(A) $$ This measures the gain of adding $x$ to the set $A$ for a certain function $F$.\nTODO\nThe result will be $$ \\begin{align} I(X, Y) = \\frac{1}{2} \\log (I + \\sigma_{p}^{-2}\\Sigma) \\end{align} $$ Where $X \\sim \\mathcal{N}(x; \\mu, \\Sigma)$ and $Y = X + \\varepsilon, \\varepsilon \\sim\\mathcal{N}(\\varepsilon; 0, \\sigma^{-2}_{p}I)$.\nChoosing the best solution One way is just greedily adding the best solution (in a manner similar to the next section). TODO: write formalization.\nThis will lead to uncertainty sampling we sample the point where our epistemic uncertainty is maximum.\nSubmodularity of Mutual Information Mutual Information is submodular, meaning it satisfies the following relationship: Given $A \\subseteq B \\subseteq S$ and $x \\in S \\setminus B$: $$ F(A \\cup \\left\\{ x \\right\\}) - F(A) \\geq F(B \\cup \\left\\{ x \\right\\}) - F(B) $$ Using the above definition of marginal gain, we can write this as: $$ \\Delta_{F}(x \\mid A) \\geq \\Delta_{F}(x \\mid B) $$ Informative sampling for classification TODO\nAcquisition functions Upper Confidence Bound Other Acquisition functions Probability improvement or expected improvement.\nThompson Sampling TODO: I have no idea how this works\nInformation transductive learning This is an idea of Hübotter 2024\nMain Ideas The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$.\n$$ x_{n} = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) $$ If we assume that $f$ is a Gaussian Processes then the mutual information is interpretable as minimizing general posterior variance:\n$$ \\begin{align} x_{n} \u0026 = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) \\\\ \u0026 = \\arg \\max_{x \\in S} H(f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}) - H(f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}) \\\\ \\\\ \u0026 = \\arg \\max_{x \\in S} \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2} \\right) - \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\frac{1}{2} \\log \\left( \\frac{\\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2}}{\\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2}} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\end{align} $$ Core: The GP regression TODO:\nBatch Active Learning 🟥 Safe Bayesian Optimization ",
-  "wordCount" : "608",
+  "articleBody": "Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.\nSetting Given a safe exploration space $S$, an interesting space $A$ and all possible space $\\mathcal{X}$ and a dataset $\\left\\{ (x_{i}, y_{i}) \\right\\} \\subseteq S \\times \\mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.\nSo we want to collect the most representative sample under constrained budgeting.\nWe can divide the setting in Active Learning as solving two problems:\nQuantifying the concept of utility of a sample. Finding the best sample to select. Utility of samples One idea from Entropy is the concept of mutual Information: how much observing $Y$ reduces the uncertainty of $X$. It is defined as: $$ I(X; Y) = \\underbrace{H(X)}_{ \\begin{align} \\text{Uncertainty of } X \\\\ \\text{ before observing Y} \\end{align}}- \\underbrace{H(X \\mid Y)}_{\\text{ After observing } Y} $$ Information Gain in Linear Regression First we define the notion of marginal gain: $$ \\Delta_{F}(x \\mid A) = F(A \\cup \\left\\{ x \\right\\}) - F(A) $$ This measures the gain of adding $x$ to the set $A$ for a certain function $F$.\nTODO\nThe result will be $$ \\begin{align} I(X, Y) = \\frac{1}{2} \\log (I + \\sigma_{p}^{-2}\\Sigma) \\end{align} $$ Where $X \\sim \\mathcal{N}(x; \\mu, \\Sigma)$ and $Y = X + \\varepsilon, \\varepsilon \\sim\\mathcal{N}(\\varepsilon; 0, \\sigma^{-2}_{p}I)$.\nChoosing the best solution One way is just greedily adding the best solution (in a manner similar to the next section). TODO: write formalization.\nThis will lead to uncertainty sampling we sample the point where our epistemic uncertainty is maximum.\nSubmodularity of Mutual Information Mutual Information is submodular, meaning it satisfies the following relationship: Given $A \\subseteq B \\subseteq S$ and $x \\in S \\setminus B$: $$ F(A \\cup \\left\\{ x \\right\\}) - F(A) \\geq F(B \\cup \\left\\{ x \\right\\}) - F(B) $$ Using the above definition of marginal gain, we can write this as: $$ \\Delta_{F}(x \\mid A) \\geq \\Delta_{F}(x \\mid B) $$ This property just says that the gain of adding a point to a small set is higher than adding it to a bigger set.\nGreedy optimization Greedy mutual information optimization The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$. The objective of the greedy solution will be $$ x_{n} = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) $$ We would like to have the maximum gain on information possible. We can define this to be $$ \\arg\\max_{x \\in D} I(f_{\\mathcal{A}}; y_{x + D_{n - 1}} ) - I(f_{\\mathcal{A}}; y_{D_{n - 1}}) $$ With some simple calculation we find that this objective is exactly the above objective. This is also the marginal gain that we described above.\nIf we assume that $f$ is a Gaussian Processes then the mutual information is interpretable as minimizing general posterior variance:\n$$ \\begin{align} x_{n} \u0026 = \\arg \\max_{x \\in S} I(f_{\\mathcal{A}}; y_{x} \\mid \\mathcal{D}_{n - 1}) \\\\ \u0026 = \\arg \\max_{x \\in S} H(f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}) - H(f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}) \\\\ \\\\ \u0026 = \\arg \\max_{x \\in S} \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2} \\right) - \\frac{1}{2} \\log \\left( 2 \\pi e \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\frac{1}{2} \\log \\left( \\frac{\\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2}}{\\sigma_{f_{\\mathcal{A}} \\mid \\mathcal{D}_{n - 1}}^{2}} \\right) \\\\ \\\\ \u0026 = \\arg \\min_{x \\in S} \\sigma_{f_{\\mathcal{A}} \\mid y_{x}, \\mathcal{D}_{n - 1}}^{2} \\end{align} $$ It’s easy to interpret: we just want to sample the point were the uncertainty is maximized!\nGreedy optimization bounds Nemhauser et al 78 showed a lower bound on the greedy optimization of a submodular function. The bound is: $$ F(S_{T}) \\geq \\left( 1 - \\frac{1}{e} \\right) \\max_{T } F(T) $$ Using the notation for mutual information introduced above. This says that greedy uncertainty sampling is at least $1 - 1/e$ of the optimal solution, which is near optimal. The important theoretical step for this is the submodularity of mutual information. We will not provide that here.\nDrawbacks of greedy optimization In heteroscedastic settings, what we should minimize is actually the ratio between the epistemic uncertainty and the aleatoric uncertainty, always choosing for the maximum epistemic uncertainty is not guaranteed to be the most informative choice. But with greedy, we can’t distinguish them cleanly (for some reason I didn’t understood). In the homoscedastic setting, though, it is quite good.\nActive Learning for classification This is also called BALD.\nInformative sampling for classification $$ x_{n+1} = \\arg \\max_{x \\in S} I(\\theta; y_{x}\\mid x_{1:t}) = \\arg \\max_{x \\in S} H(y_{x} \\mid x_{1:t}) - H(y_{x} \\mid x_{1:t}, \\theta) $$ We can use approximate inference, like Variational Inference or Monte Carlo Methods to obtain approximations of the above. Entropy of the average prediction vs average of the entropies of the predictions.\nAcquisition functions Upper Confidence Bound Other Acquisition functions Probability improvement or expected improvement.\nThompson Sampling TODO: I have no idea how this works\nInformation transductive learning This is an idea of Hübotter 2024\nThe GP regression TODO:\nBatch Active Learning 🟥 Safe Bayesian Optimization ",
+  "wordCount" : "933",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,7 +227,7 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Active Learning
     </h1>
-    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -247,7 +247,21 @@ if (!doNotTrack) {
                 <li>
                     <a href="#choosing-the-best-solution" aria-label="Choosing the best solution">Choosing the best solution</a></li>
                 <li>
-                    <a href="#submodularity-of-mutual-information" aria-label="Submodularity of Mutual Information">Submodularity of Mutual Information</a></li>
+                    <a href="#submodularity-of-mutual-information" aria-label="Submodularity of Mutual Information">Submodularity of Mutual Information</a></li></ul>
+                </li>
+                <li>
+                    <a href="#greedy-optimization" aria-label="Greedy optimization">Greedy optimization</a><ul>
+                        
+                <li>
+                    <a href="#greedy-mutual-information-optimization" aria-label="Greedy mutual information optimization">Greedy mutual information optimization</a></li>
+                <li>
+                    <a href="#greedy-optimization-bounds" aria-label="Greedy optimization bounds">Greedy optimization bounds</a></li>
+                <li>
+                    <a href="#drawbacks-of-greedy-optimization" aria-label="Drawbacks of greedy optimization">Drawbacks of greedy optimization</a></li></ul>
+                </li>
+                <li>
+                    <a href="#active-learning-for-classification" aria-label="Active Learning for classification">Active Learning for classification</a><ul>
+                        
                 <li>
                     <a href="#informative-sampling-for-classification" aria-label="Informative sampling for classification">Informative sampling for classification</a></li></ul>
                 </li>
@@ -265,9 +279,7 @@ if (!doNotTrack) {
                     <a href="#information-transductive-learning" aria-label="Information transductive learning">Information transductive learning</a><ul>
                         
                 <li>
-                    <a href="#main-ideas" aria-label="Main Ideas">Main Ideas</a></li>
-                <li>
-                    <a href="#core-the-gp-regression" aria-label="Core: The GP regression">Core: The GP regression</a></li></ul>
+                    <a href="#the-gp-regression" aria-label="The GP regression">The GP regression</a></li></ul>
                 </li>
                 <li>
                     <a href="#batch-active-learning-" aria-label="Batch Active Learning 🟥">Batch Active Learning 🟥</a></li>
@@ -279,7 +291,8 @@ if (!doNotTrack) {
     </details>
 </div>
 
-  <div class="post-content"><p>Active Learning concerns methods to decide how to sample the most useful information in a specific domain. In this setting, we are interested in the concept of <strong>usefulness of information</strong>. One of our main goals is to <em>reduce uncertainty</em>, thus, <a href="/notes/entropy/">Entropy</a>-based (mutual information) methods are often used.
+  <div class="post-content"><p>Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model?
+In this setting, we are interested in the concept of <strong>usefulness of information</strong>. One of our main goals is to <em>reduce uncertainty</em>, thus, <a href="/notes/entropy/">Entropy</a>-based (mutual information) methods are often used.
 For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.</p>
 <h3 id="setting">Setting<a hidden class="anchor" aria-hidden="true" href="#setting">#</a></h3>
 <p>Given a safe exploration space $S$, an interesting space $A$ and all possible space $\mathcal{X}$ and a dataset $\left\{ (x_{i}, y_{i}) \right\} \subseteq S \times \mathbb{R}$ we want to find the best points that we would like to sample in $S$ to maximize the information we can get about $A$.</p>
@@ -334,21 +347,24 @@ Using the above definition of marginal gain, we can write this as:
 $$
 \Delta_{F}(x \mid A) \geq \Delta_{F}(x \mid B)
 $$
-<h4 id="informative-sampling-for-classification">Informative sampling for classification<a hidden class="anchor" aria-hidden="true" href="#informative-sampling-for-classification">#</a></h4>
-<p>TODO</p>
-<h3 id="acquisition-functions">Acquisition functions<a hidden class="anchor" aria-hidden="true" href="#acquisition-functions">#</a></h3>
-<h4 id="upper-confidence-bound">Upper Confidence Bound<a hidden class="anchor" aria-hidden="true" href="#upper-confidence-bound">#</a></h4>
-<h4 id="other-acquisition-functions">Other Acquisition functions<a hidden class="anchor" aria-hidden="true" href="#other-acquisition-functions">#</a></h4>
-<p>Probability improvement or expected improvement.</p>
-<h4 id="thompson-sampling">Thompson Sampling<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling">#</a></h4>
-<p>TODO: I have no idea how this works</p>
-<h3 id="information-transductive-learning">Information transductive learning<a hidden class="anchor" aria-hidden="true" href="#information-transductive-learning">#</a></h3>
-<p>This is an idea of Hübotter 2024</p>
-<h4 id="main-ideas">Main Ideas<a hidden class="anchor" aria-hidden="true" href="#main-ideas">#</a></h4>
-<p>The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$.</p>
+<p>
+This property just says that the gain of adding a point to a small set is higher than adding it to a bigger set.</p>
+<h3 id="greedy-optimization">Greedy optimization<a hidden class="anchor" aria-hidden="true" href="#greedy-optimization">#</a></h3>
+<h4 id="greedy-mutual-information-optimization">Greedy mutual information optimization<a hidden class="anchor" aria-hidden="true" href="#greedy-mutual-information-optimization">#</a></h4>
+<p>The main idea is to find the point $x$ in our safe space that maximizes mutual information with the interesting space $A$.
+The objective of the <strong>greedy solution</strong> will be
+</p>
 $$
 x_{n}  = \arg \max_{x \in S} I(f_{\mathcal{A}};  y_{x} \mid \mathcal{D}_{n - 1})
 $$
+<p>We would like to have the maximum gain on information possible. We can define this to be
+</p>
+$$
+\arg\max_{x \in D} I(f_{\mathcal{A}};  y_{x + D_{n - 1}} ) - I(f_{\mathcal{A}};  y_{D_{n - 1}})
+$$
+<p>
+With some simple calculation we find that this objective is exactly the above objective.
+This is also the marginal gain that we described above.</p>
 <p>If we assume that $f$ is a <a href="/notes/gaussian-processes/">Gaussian Processes</a> then the mutual information is interpretable as minimizing general posterior variance:</p>
 $$
 \begin{align}
@@ -359,7 +375,39 @@ x_{n}  &  = \arg \max_{x \in S} I(f_{\mathcal{A}};  y_{x} \mid \mathcal{D}_{n - 
  &  = \arg \min_{x \in S} \sigma_{f_{\mathcal{A}} \mid y_{x}, \mathcal{D}_{n - 1}}^{2}
 \end{align}
 $$
-<h4 id="core-the-gp-regression">Core: The GP regression<a hidden class="anchor" aria-hidden="true" href="#core-the-gp-regression">#</a></h4>
+<p>It&rsquo;s easy to interpret: we just want to sample the point were the uncertainty is maximized!</p>
+<h4 id="greedy-optimization-bounds">Greedy optimization bounds<a hidden class="anchor" aria-hidden="true" href="#greedy-optimization-bounds">#</a></h4>
+<p>Nemhauser et al 78 showed a lower bound on the greedy optimization of a submodular function. The bound is:
+</p>
+$$
+F(S_{T}) \geq  \left( 1 - \frac{1}{e} \right) \max_{T } F(T)
+$$
+<p>
+Using the notation for mutual information introduced above.
+This says that greedy uncertainty sampling is at least $1 - 1/e$ of the optimal solution, which is <em>near optimal</em>. The important theoretical step for this is the submodularity of mutual information.
+We will not provide that here.</p>
+<h4 id="drawbacks-of-greedy-optimization">Drawbacks of greedy optimization<a hidden class="anchor" aria-hidden="true" href="#drawbacks-of-greedy-optimization">#</a></h4>
+<p>In heteroscedastic settings, what we should minimize is actually the ratio between the epistemic uncertainty and the aleatoric uncertainty, always choosing for the maximum epistemic uncertainty is not guaranteed to be the most informative choice.
+But with greedy, we can&rsquo;t distinguish them cleanly (for some reason I didn&rsquo;t understood).
+In the homoscedastic setting, though, it is quite good.</p>
+<h3 id="active-learning-for-classification">Active Learning for classification<a hidden class="anchor" aria-hidden="true" href="#active-learning-for-classification">#</a></h3>
+<p>This is also called BALD.</p>
+<h4 id="informative-sampling-for-classification">Informative sampling for classification<a hidden class="anchor" aria-hidden="true" href="#informative-sampling-for-classification">#</a></h4>
+$$
+x_{n+1} = \arg \max_{x \in S} I(\theta; y_{x}\mid x_{1:t}) = \arg \max_{x \in S} H(y_{x} \mid x_{1:t}) - H(y_{x} \mid x_{1:t}, \theta)
+$$
+<p>
+We can use approximate inference, like <a href="/notes/variational-inference/">Variational Inference</a> or <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a> to obtain approximations of the above.
+Entropy of the average prediction vs average of the entropies of the predictions.</p>
+<h3 id="acquisition-functions">Acquisition functions<a hidden class="anchor" aria-hidden="true" href="#acquisition-functions">#</a></h3>
+<h4 id="upper-confidence-bound">Upper Confidence Bound<a hidden class="anchor" aria-hidden="true" href="#upper-confidence-bound">#</a></h4>
+<h4 id="other-acquisition-functions">Other Acquisition functions<a hidden class="anchor" aria-hidden="true" href="#other-acquisition-functions">#</a></h4>
+<p>Probability improvement or expected improvement.</p>
+<h4 id="thompson-sampling">Thompson Sampling<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling">#</a></h4>
+<p>TODO: I have no idea how this works</p>
+<h3 id="information-transductive-learning">Information transductive learning<a hidden class="anchor" aria-hidden="true" href="#information-transductive-learning">#</a></h3>
+<p>This is an idea of Hübotter 2024</p>
+<h4 id="the-gp-regression">The GP regression<a hidden class="anchor" aria-hidden="true" href="#the-gp-regression">#</a></h4>
 <p>TODO:</p>
 <h3 id="batch-active-learning-">Batch Active Learning 🟥<a hidden class="anchor" aria-hidden="true" href="#batch-active-learning-">#</a></h3>
 <h3 id="safe-bayesian-optimization">Safe Bayesian Optimization<a hidden class="anchor" aria-hidden="true" href="#safe-bayesian-optimization">#</a></h3>
