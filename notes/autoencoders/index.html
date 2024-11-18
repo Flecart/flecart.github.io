@@ -134,8 +134,8 @@ Introduzione agli autoencoders L&rsquo;idea degli autoencoders è rappresentare 
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono\nIntroduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder. Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all’originale. Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione. Possiamo infatti osservare che se spazio latente = spazio originale, loss di ricostruzione = 0 perché basta imparare l’identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all’originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c’è una leggera perdita in questo senso.\nProprietà interessanti Vogliamo in un certo senso imporre una regolarità nello spazio latente perché questo ci permette di esprimere in un modo più coerente da quanto ci attendiamo le cose dello spazio:\nSe prendiamo un punto vicino a un encoding noto, ci aspettiamo che sia simile al punto stesso Se prendiamo un punto del nostro spazio latente ci aspettiamo che dia qualcosa di sensato Rispettivamente queste proprietà sono state chiamate continuità e completezza.\nVariational Auto-Encoders Intuizione L’idea sembra avere uno spazio regolarizzato, ossia un $z \\sim \\mathcal{N}(\\mu, \\sigma^{2}I)$ con $\\sigma$ vettore di dimensione spazio latente e $\\mu$ degli offset che rappresentano media. Quindi il decoder parametrizzato secondo $\\theta$ dovrà essere in una forma dipendente da questa.\nInsieme a questo utilizziamo anche un encoder parametrizzato con $\\phi$ che dovrà darci indicazioni su $z$, per esempio media e varianza.\nSecondo Murphy-1, Questo dovrebbe essere molto simile a un lavoro di uno 95, vedi capitolo su VAE in que libro.\nLa formulazione dei VAE sembra molto simile ai Factor Analysis. Che è una caratterizzazione di un certo tipo sia spazio latente che quello normale.\nSetting del problema In questo senso vogliamo cercare di regolarizzare il nostro spazio latente assumendo che $$ p(x | z) \\sim \\mathrm{N}(media, varianza) $$ Ossia i samples della parte condizionata nello spazio latente non sono altro che una media e varianza dipendenti solo dalla parte condizionale, mentre $p(z) = N(0, 1)$ multidimensionale (quindi varianza $I$)\nELBO e derivazione Se assumiamo questo, allora la loss di Kullback-Leibler diventa abbastanza carina, perché infatti abbiamo che\n$$ KL(q_{x}(z), p(z|x)) = E_{x \\sim q_{x} }(\\log(q_{x}(z))) - E_{x \\sim q_{x}}\\left(\\log( \\frac{p(x, z)}{p(x)}) \\right) $$ $$ = E_{x \\sim q_{x}}(\\log(q_{x}(z))) - E_{x \\sim q_{x}}(\\log(p(x, z))) + E_{z \\sim q_{x}}(\\log(p(x))) = E_{z \\sim q_{x}}(\\log(p(x))) - E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(x, z)}{q_{x}(z)} \\right) \\right) $$ Ora le ultime due si chiamano rispettivamente **evidence** e **ELBO** che sta per Evidence Lower Bound Notiamo che la evidence non dipende da $z$, infatti avremmo che $$ E_{z \\sim q_{x}}(p(x)) = \\int {-\\infty}^{+\\infty} q{x}(z) p(x) , dz = p(x) \\int {-\\infty}^{+\\infty} q{x}(z) dz = p(x) $$ Quindi se vogliamo minimizzare la divergenza, ci basta Massimizzare ELBO nel nostro caso.\nEsplicitazione di ELBO Possiamo lavorare ancora di più su ELBO, provando ad esplicitarne alcuni valori, infatti possiamo considerare\n$$ ELBO = E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(x, z)}{q_{x}(z)} \\right) \\right) =E_{z \\sim q_{x}}\\left( \\log\\left( p(x|z) \\right) \\right) + E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(z)}{q_{x}(z)} \\right) \\right) $$ $$ = E_{z \\sim q_{x}}\\left( \\log\\left( p(x|z) \\right) \\right) - KL(q_{x}(z), p(z)) $$ Ossia abbiamo il secondo termine che prova a regolarizzare la distribuzione $q$ trovata, e il primo termine che è un maximum likelihood, simile a quanto trovato per Naïve Bayes nel corso di Asperti. Questo è la nostra loss per il VAE.\nOra l’ultimo passo sarebbe come esplicitare ELBO in modo che possa essere implementato come loss di una net?\nDerivazione della loss per VAE Vedere qui, è calcolosa, ma molto carina, e ti permette di impratichirti con gaussiane multivariabili.\nAlla fine si avrà come risultato:\n$$ KL(q_{x}(z), p(z)) = -\\frac{1}{2} \\sum_{j=1}^{J}(1 + \\log \\sigma^{2}_{j} - \\mu^{2}_{j} - \\sigma^{2}_{j}) $$ Derivazione di KL per la loss Vedere https://mr-easy.github.io/2020-04-16-kl-divergence-between-2-gaussian-distributions/. E poi sostituire. Per l’expectation della forma quadratica vedere qui https://statproofbook.github.io/P/mean-qf.html.\nAllora, sappiamo che $p(z) = \\mathcal{N}(0, \\mathcal{I})$ quindi ha una forma ben nota, dovremo cercare di fare questa piccolissima derivazione.\n",
-  "wordCount" : "745",
+  "articleBody": "In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono\nIntroduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder. Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all’originale. Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione. Possiamo infatti osservare che se spazio latente = spazio originale, loss di ricostruzione = 0 perché basta imparare l’identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all’originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c’è una leggera perdita in questo senso.\nThree desiderata Informative: it should be possible to reconstruct the original image. Disentangle: features inside the representation space should be cleanly separated Robust: if the input is similar, then we would like the representation to be close. First Ideas This idea was from Lisker 1988. We would like the encoding and the original input space to share more information as possible: if $Z = \\text{enc}(X)$ then we would like to maximize the mutual information between $Z$ and $X$. This is also called the Infomax principle.\nThe drawback is that this method does not produce disentangled neither robust representations.\nProprietà interessanti Vogliamo in un certo senso imporre una regolarità nello spazio latente perché questo ci permette di esprimere in un modo più coerente da quanto ci attendiamo le cose dello spazio:\nSe prendiamo un punto vicino a un encoding noto, ci aspettiamo che sia simile al punto stesso Se prendiamo un punto del nostro spazio latente ci aspettiamo che dia qualcosa di sensato Rispettivamente queste proprietà sono state chiamate continuità e completezza.\nVariational Auto-Encoders Intuizione L’idea sembra avere uno spazio regolarizzato, ossia un $z \\sim \\mathcal{N}(\\mu, \\sigma^{2}I)$ con $\\sigma$ vettore di dimensione spazio latente e $\\mu$ degli offset che rappresentano media. Quindi il decoder parametrizzato secondo $\\theta$ dovrà essere in una forma dipendente da questa. Questo è un prior che segue un approccio di genere generativo.\nInsieme a questo utilizziamo anche un encoder parametrizzato con $\\phi$ che dovrà darci indicazioni su $z$, per esempio media e varianza.\nSecondo Murphy-1, Questo dovrebbe essere molto simile a un lavoro di uno 95, vedi capitolo su VAE in que libro.\nLa formulazione dei VAE sembra molto simile ai Factor Analysis. Che è una caratterizzazione di un certo tipo sia spazio latente che quello normale.\nGeneral framework Quello che andiamo a fare è computare una rappresentazione $p_{\\theta}(z \\mid x)$ dove $z$ è il nostro spazio latente con un certo prior (questo è un posterior), e poi rigenerare con un $p_{\\theta'}(x \\mid z)$ che è la nostra likelihood.\nSetting del problema In questo senso vogliamo cercare di regolarizzare il nostro spazio latente assumendo che $$ p(x | z) \\sim \\mathrm{N}(media, varianza) $$ Ossia i samples della parte condizionata nello spazio latente non sono altro che una media e varianza dipendenti solo dalla parte condizionale, mentre $p(z) = N(0, 1)$ multidimensionale (quindi varianza $I$)\nELBO e derivazione Per trattare ELBO, andare a rivedersi le note inVariational Inference. Se assumiamo questo, allora la loss di Kullback-Leibler diventa abbastanza carina, perché infatti abbiamo che\n$$ KL(q_{x}(z), p(z|x)) = E_{x \\sim q_{x} }(\\log(q_{x}(z))) - E_{x \\sim q_{x}}\\left(\\log( \\frac{p(x, z)}{p(x)}) \\right) $$ $$ = E_{x \\sim q_{x}}(\\log(q_{x}(z))) - E_{x \\sim q_{x}}(\\log(p(x, z))) + E_{z \\sim q_{x}}(\\log(p(x))) = E_{z \\sim q_{x}}(\\log(p(x))) - E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(x, z)}{q_{x}(z)} \\right) \\right) $$ Ora le ultime due si chiamano rispettivamente **evidence** e **ELBO** che sta per Evidence Lower Bound Notiamo che la evidence non dipende da $z$, infatti avremmo che $$ E_{z \\sim q_{x}}(p(x)) = \\int {-\\infty}^{+\\infty} q{x}(z) p(x) , dz = p(x) \\int {-\\infty}^{+\\infty} q{x}(z) dz = p(x) $$ Quindi se vogliamo minimizzare la divergenza, ci basta Massimizzare ELBO nel nostro caso.\nEsplicitazione di ELBO Possiamo lavorare ancora di più su ELBO, provando ad esplicitarne alcuni valori, infatti possiamo considerare\n$$ ELBO = E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(x, z)}{q_{x}(z)} \\right) \\right) =E_{z \\sim q_{x}}\\left( \\log\\left( p(x|z) \\right) \\right) + E_{z \\sim q_{x}}\\left( \\log\\left( \\frac{p(z)}{q_{x}(z)} \\right) \\right) $$ $$ = E_{z \\sim q_{x}}\\left( \\log\\left( p(x|z) \\right) \\right) - KL(q_{x}(z), p(z)) $$ Ossia abbiamo il secondo termine che prova a regolarizzare la distribuzione $q$ trovata, e il primo termine che è un maximum likelihood, simile a quanto trovato per Naïve Bayes nel corso di Asperti. Questo è la nostra loss per il VAE.\nOra l’ultimo passo sarebbe come esplicitare ELBO in modo che possa essere implementato come loss di una net?\nDerivazione della loss per VAE Vedere qui, è calcolosa, ma molto carina, e ti permette di impratichirti con gaussiane multi-variabili.\nAlla fine si avrà come risultato:\n$$ KL(q_{x}(z), p(z)) = -\\frac{1}{2} \\sum_{j=1}^{J}(1 + \\log \\sigma^{2}_{j} - \\mu^{2}_{j} - \\sigma^{2}_{j}) $$ Derivazione di KL per la loss vedere Gaussians\nPer l’expectation della forma quadratica vedere qui https://statproofbook.github.io/P/mean-qf.html.\nAllora, sappiamo che $p(z) = \\mathcal{N}(0, \\mathcal{I})$ quindi ha una forma ben nota, dovremo cercare di fare questa piccolissima derivazione.\nTraining di VAE ",
+  "wordCount" : "906",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ Introduzione agli autoencoders L&rsquo;idea degli autoencoders è rappresentare 
     <h1 class="post-title entry-hint-parent">
       Autoencoders
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -241,7 +241,13 @@ Introduzione agli autoencoders L&rsquo;idea degli autoencoders è rappresentare 
 
         <div class="inner"><ul><ul>
                 <li>
-                    <a href="#introduzione-agli-autoencoders" aria-label="Introduzione agli autoencoders">Introduzione agli autoencoders</a></li>
+                    <a href="#introduzione-agli-autoencoders" aria-label="Introduzione agli autoencoders">Introduzione agli autoencoders</a><ul>
+                        
+                <li>
+                    <a href="#three-desiderata" aria-label="Three desiderata">Three desiderata</a></li>
+                <li>
+                    <a href="#first-ideas" aria-label="First Ideas">First Ideas</a></li></ul>
+                </li>
                 <li>
                     <a href="#propriet%c3%a0-interessanti" aria-label="Proprietà interessanti">Proprietà interessanti</a></li></ul>
                     
@@ -249,7 +255,11 @@ Introduzione agli autoencoders L&rsquo;idea degli autoencoders è rappresentare 
                     <a href="#variational-auto-encoders" aria-label="Variational Auto-Encoders">Variational Auto-Encoders</a><ul>
                         
                 <li>
-                    <a href="#intuizione" aria-label="Intuizione">Intuizione</a></li>
+                    <a href="#intuizione" aria-label="Intuizione">Intuizione</a><ul>
+                        
+                <li>
+                    <a href="#general-framework" aria-label="General framework">General framework</a></li></ul>
+                </li>
                 <li>
                     <a href="#setting-del-problema" aria-label="Setting del problema">Setting del problema</a></li>
                 <li>
@@ -258,7 +268,9 @@ Introduzione agli autoencoders L&rsquo;idea degli autoencoders è rappresentare 
                 <li>
                     <a href="#esplicitazione-di-elbo" aria-label="Esplicitazione di ELBO">Esplicitazione di ELBO</a></li>
                 <li>
-                    <a href="#derivazione-della-loss-per-vae" aria-label="Derivazione della loss per VAE">Derivazione della loss per VAE</a>
+                    <a href="#derivazione-della-loss-per-vae" aria-label="Derivazione della loss per VAE">Derivazione della loss per VAE</a></li>
+                <li>
+                    <a href="#training-di-vae" aria-label="Training di VAE">Training di VAE</a>
                 </li>
             </ul>
             </li>
@@ -279,6 +291,16 @@ Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, 
 Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione.
 Possiamo infatti osservare che se <strong>spazio latente = spazio originale, loss di ricostruzione = 0</strong> perché basta imparare l&rsquo;identità.
 In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all&rsquo;originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c&rsquo;è una leggera perdita in questo senso.</p>
+<h4 id="three-desiderata">Three desiderata<a hidden class="anchor" aria-hidden="true" href="#three-desiderata">#</a></h4>
+<ul>
+<li><strong>Informative</strong>: it should be possible to reconstruct the original image.</li>
+<li><strong>Disentangle</strong>: features inside the representation space should be cleanly separated</li>
+<li><strong>Robust</strong>: if the input is similar, then we would like the representation to be close.</li>
+</ul>
+<h4 id="first-ideas">First Ideas<a hidden class="anchor" aria-hidden="true" href="#first-ideas">#</a></h4>
+<p>This idea was from Lisker 1988. We would like the encoding and the original input space to share more information as possible:
+if $Z = \text{enc}(X)$ then we would like to maximize the mutual information between $Z$ and $X$. This is also called the Infomax principle.</p>
+<p>The drawback is that this method does not produce disentangled neither robust representations.</p>
 <h3 id="proprietà-interessanti">Proprietà interessanti<a hidden class="anchor" aria-hidden="true" href="#proprietà-interessanti">#</a></h3>
 <p>Vogliamo in un certo senso imporre una <strong>regolarità nello spazio latente</strong> perché questo ci permette di esprimere in un modo più coerente da quanto ci attendiamo le cose dello spazio:</p>
 <ol>
@@ -290,10 +312,12 @@ In questo senso si può dire che diventa sensato solo quando lo spazio originale
 <h3 id="intuizione">Intuizione<a hidden class="anchor" aria-hidden="true" href="#intuizione">#</a></h3>
 <p>L&rsquo;idea sembra avere uno spazio regolarizzato, ossia un
 $z \sim \mathcal{N}(\mu, \sigma^{2}I)$ con $\sigma$ vettore di dimensione spazio latente e $\mu$ degli offset che rappresentano media.
-Quindi il decoder parametrizzato secondo $\theta$ dovrà essere in una forma dipendente da questa.</p>
+Quindi il decoder parametrizzato secondo $\theta$ dovrà essere in una forma dipendente da questa. Questo è un <em>prior</em> che segue un approccio di genere generativo.</p>
 <p>Insieme a questo utilizziamo anche un encoder parametrizzato con $\phi$ che dovrà darci indicazioni su $z$, per esempio media e varianza.</p>
 <p>Secondo Murphy-1, Questo dovrebbe essere molto simile a un lavoro di uno 95, vedi capitolo su VAE in que libro.</p>
 <p>La formulazione dei VAE sembra molto simile ai Factor Analysis. Che è una caratterizzazione di un certo tipo sia spazio latente che quello normale.</p>
+<h4 id="general-framework">General framework<a hidden class="anchor" aria-hidden="true" href="#general-framework">#</a></h4>
+<p>Quello che andiamo a fare è computare una <strong>rappresentazione</strong> $p_{\theta}(z \mid x)$ dove $z$ è il nostro spazio latente con un certo prior (questo è un posterior),  e poi rigenerare con un $p_{\theta'}(x \mid z)$ che è la nostra likelihood.</p>
 <h3 id="setting-del-problema">Setting del problema<a hidden class="anchor" aria-hidden="true" href="#setting-del-problema">#</a></h3>
 <p>In questo senso vogliamo cercare di regolarizzare il nostro spazio latente assumendo che
 </p>
@@ -303,7 +327,8 @@ $$
 <p>
 Ossia i samples della parte condizionata nello spazio latente non sono altro che una media e varianza dipendenti solo dalla parte condizionale, mentre $p(z) = N(0, 1)$ multidimensionale (quindi varianza $I$)</p>
 <h3 id="elbo-e-derivazione">ELBO e derivazione<a hidden class="anchor" aria-hidden="true" href="#elbo-e-derivazione">#</a></h3>
-<p>Se assumiamo questo, allora la loss di Kullback-Leibler diventa abbastanza carina, perché infatti abbiamo che</p>
+<p>Per trattare ELBO, andare a rivedersi le note in<a href="/notes/variational-inference/">Variational Inference</a>.
+Se assumiamo questo, allora la loss di Kullback-Leibler diventa abbastanza carina, perché infatti abbiamo che</p>
 <h1 id="klq_xz-pzx--e_x-sim-q_x-logq_xz---e_x-sim-q_xleftlog-fracpx-zpx-right">$$
 KL(q_{x}(z), p(z|x)) = E_{x \sim q_{x} }(\log(q_{x}(z))) - E_{x \sim q_{x}}\left(\log( \frac{p(x, z)}{p(x)}) \right)</h1>
 $$
@@ -333,17 +358,16 @@ $$
 Questo è la nostra loss per il VAE.</p>
 <p>Ora l&rsquo;ultimo passo sarebbe come esplicitare ELBO in modo che possa essere implementato come loss di una net?</p>
 <h4 id="derivazione-della-loss-per-vae">Derivazione della loss per VAE<a hidden class="anchor" aria-hidden="true" href="#derivazione-della-loss-per-vae">#</a></h4>
-<p>Vedere <a href="https://mbernste.github.io/posts/vae/#appendix-derivation-of-the-kl-divergence-term-when-the-variational-posterior-and-prior-are-gaussian">qui</a>, è calcolosa, ma molto carina, e ti permette di impratichirti con gaussiane multivariabili.</p>
+<p>Vedere <a href="https://mbernste.github.io/posts/vae/#appendix-derivation-of-the-kl-divergence-term-when-the-variational-posterior-and-prior-are-gaussian">qui</a>, è calcolosa, ma molto carina, e ti permette di impratichirti con gaussiane multi-variabili.</p>
 <p>Alla fine si avrà come risultato:</p>
 $$
 KL(q_{x}(z), p(z)) = -\frac{1}{2} \sum_{j=1}^{J}(1 + \log \sigma^{2}_{j} - \mu^{2}_{j} - \sigma^{2}_{j})
 $$
 <p>
-<strong>Derivazione di KL</strong> per la loss
-Vedere <a href="https://mr-easy.github.io/2020-04-16-kl-divergence-between-2-gaussian-distributions/.">https://mr-easy.github.io/2020-04-16-kl-divergence-between-2-gaussian-distributions/.</a>
-E poi sostituire.
-Per l&rsquo;expectation della forma quadratica vedere qui <a href="https://statproofbook.github.io/P/mean-qf.html.">https://statproofbook.github.io/P/mean-qf.html.</a></p>
+<strong>Derivazione di KL</strong> per la loss vedere <a href="/notes/gaussians/">Gaussians</a></p>
+<p>Per l&rsquo;expectation della forma quadratica vedere qui <a href="https://statproofbook.github.io/P/mean-qf.html.">https://statproofbook.github.io/P/mean-qf.html.</a></p>
 <p>Allora, sappiamo che $p(z) = \mathcal{N}(0, \mathcal{I})$ quindi ha una forma ben nota, dovremo cercare di fare questa piccolissima derivazione.</p>
+<h4 id="training-di-vae">Training di VAE<a hidden class="anchor" aria-hidden="true" href="#training-di-vae">#</a></h4>
 
 
   </div>
