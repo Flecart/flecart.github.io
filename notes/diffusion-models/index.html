@@ -7,7 +7,9 @@
 <meta name="robots" content="index, follow">
 <title>Diffusion Models | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="Introduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder ">
+<meta name="description" content="Diffusion models random motion. It was first analyzed by Brown.
+The Diffusion Process Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
+Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/diffusion-models/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -87,7 +89,9 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Diffusion Models" />
-<meta property="og:description" content="Introduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder " />
+<meta property="og:description" content="Diffusion models random motion. It was first analyzed by Brown.
+The Diffusion Process Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
+Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/diffusion-models/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -98,7 +102,9 @@ if (!doNotTrack) {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Diffusion Models"/>
-<meta name="twitter:description" content="Introduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder "/>
+<meta name="twitter:description" content="Diffusion models random motion. It was first analyzed by Brown.
+The Diffusion Process Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
+Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning."/>
 
 
 <script type="application/ld+json">
@@ -127,12 +133,12 @@ if (!doNotTrack) {
   "@type": "BlogPosting",
   "headline": "Diffusion Models",
   "name": "Diffusion Models",
-  "description": "Introduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder ",
+  "description": "Diffusion models random motion. It was first analyzed by Brown.\nThe Diffusion Process Let\u0026rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.\nConcentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning.",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "Introduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder ",
-  "wordCount" : "62",
+  "articleBody": "Diffusion models random motion. It was first analyzed by Brown.\nThe Diffusion Process Let’s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.\nConcentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning. Let’s call this concentration $C_{i}(t)$. Then the number of particles at a certain time step and position is $n_{i}(t) = Nc_{i}(t)$\nMarkov Process We consider we have the above concentration process, we would like to determine the evolution process. Then we have the following relation: $$ C_{i}(t + 1) = C_{i - 1}(t)q + C_{i + 1}(t)p + (1 - q - p) C_{i}(t) $$ This defines a markov process, see Markov Processes, where the value of a certain timestamp depends on the previous ones. We can also interpret this as a certain recurrence relation. We observe that the difference of $$ C_{i}(t + 1) - C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ From the Markov Process we can have the master equation, from which we take the Fokker Plank equation. Somehow, we can interpret the temporal difference as the sum of a first derivative and of a second derivative. The first derivative tells us a preferred direction of diffusion (drift,) the second tells us how fast it is (diffusion). No idea how.\nGoing into continuous time Let’s assume we have an update time of $\\Delta t$. We say $\\tau$ is the time scale of the system (measure of time in the system), we define $\\tau$ such that $\\tau / \\Delta t$ is the number of the updates. We can now redefine the updated probabilities with this notion of time. $p'= p \\Delta t / \\tau$ and equivalently $q'$. Then the continuous markov process is $$ C_{i}(t + \\Delta t) - C_{i}(t) = \\frac{p' - q'}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p' + q'}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ If we consider the limit $\\Delta t \\to 0$ then we have that $$ \\tau \\frac{d}{dt} C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ This is the master equation. Having a continuous time just changes the probability of jumping, this is the relation that allows us to have continuous updates (so if we don’t have a full time, we have just a fraction of the probability of jumping). This should be the master equation for a diffusion process.\nContinuous Space We do another rescaling of the probability $p´ = p (\\Delta x / \\delta )^{2}$ then rewriting everything we get the continuous space equation. We use the square because the mean squared displacement (variance) grows linearly with time. Then we get $$ \\frac{ \\partial }{ \\partial t } C(x, t) = D \\frac{ \\partial^{2} }{ \\partial x^{2} } C(x, t) $$ Where $D$ is our diffusion coefficient. We do a fourier transform in space and we get an ordinary differential equation in time, which is solvable.\nSolution for the diffusion process One can see that the following equation is a solution for the above problem: $$ C(x, t) = \\frac{1}{\\sqrt{ \\pi 4 D t }} e^{-x^{2} / 4Dt} $$ One can solve this just by brute force, or one fancier method is passing into the fourier space, where the equation is simpler to treat.\nIntroduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution The Reverse Decoder ",
+  "wordCount" : "691",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -227,7 +233,7 @@ if (!doNotTrack) {
     <h1 class="post-title entry-hint-parent">
       Diffusion Models
     </h1>
-    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -236,7 +242,22 @@ if (!doNotTrack) {
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#the-diffusion-process" aria-label="The Diffusion Process">The Diffusion Process</a><ul>
+                        
+                <li>
+                    <a href="#concentration" aria-label="Concentration">Concentration</a></li>
+                <li>
+                    <a href="#markov-process" aria-label="Markov Process">Markov Process</a></li>
+                <li>
+                    <a href="#going-into-continuous-time" aria-label="Going into continuous time">Going into continuous time</a></li>
+                <li>
+                    <a href="#continuous-space" aria-label="Continuous Space">Continuous Space</a></li>
+                <li>
+                    <a href="#solution-for-the-diffusion-process" aria-label="Solution for the diffusion process">Solution for the diffusion process</a></li></ul>
+                </li></ul>
+                    
                 <li>
                     <a href="#introduction-to-diffusion-models" aria-label="Introduction to Diffusion Models">Introduction to Diffusion Models</a><ul>
                         
@@ -260,7 +281,65 @@ if (!doNotTrack) {
     </details>
 </div>
 
-  <div class="post-content"><h2 id="introduction-to-diffusion-models">Introduction to Diffusion Models<a hidden class="anchor" aria-hidden="true" href="#introduction-to-diffusion-models">#</a></h2>
+  <div class="post-content"><p>Diffusion models random motion. It was first analyzed by Brown.</p>
+<h3 id="the-diffusion-process">The Diffusion Process<a hidden class="anchor" aria-hidden="true" href="#the-diffusion-process">#</a></h3>
+<p>Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.</p>
+<h4 id="concentration">Concentration<a hidden class="anchor" aria-hidden="true" href="#concentration">#</a></h4>
+<p>We would like to know the <strong>concentration</strong> of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning.
+Let&rsquo;s call this concentration $C_{i}(t)$. Then the number of particles at a certain time step and position is $n_{i}(t) = Nc_{i}(t)$</p>
+<h4 id="markov-process">Markov Process<a hidden class="anchor" aria-hidden="true" href="#markov-process">#</a></h4>
+<p>We consider we have the above concentration process, we would like to determine the evolution process.
+Then we have the following relation:
+</p>
+$$
+C_{i}(t + 1) = C_{i - 1}(t)q + C_{i + 1}(t)p + (1 - q - p) C_{i}(t)
+$$
+<p>
+This defines a markov process, see Markov Processes, where the value of a certain timestamp depends on the previous ones. We can also interpret this as a certain recurrence relation.
+We observe that the difference of
+</p>
+$$
+C_{i}(t + 1) - C_{i}(t) = \frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t))
+$$
+<p>
+From the Markov Process we can have the master equation, from which we take the Fokker Plank equation.
+Somehow, we can interpret the temporal difference as the sum of a first derivative and of a second derivative. The first derivative tells us a preferred direction of diffusion (<strong>drift</strong>,) the second tells us how fast it is (<strong>diffusion</strong>).
+No idea how.</p>
+<h4 id="going-into-continuous-time">Going into continuous time<a hidden class="anchor" aria-hidden="true" href="#going-into-continuous-time">#</a></h4>
+<p>Let&rsquo;s assume we have an update time of $\Delta t$. We say $\tau$ is the time scale of the system (measure of time in the system), we define $\tau$ such that $\tau / \Delta t$ is the number of the updates.
+We can now redefine the updated probabilities with this notion of time. $p'= p \Delta t / \tau$ and equivalently $q'$.
+Then the continuous markov process is
+</p>
+$$
+C_{i}(t + \Delta t) - C_{i}(t) = \frac{p' - q'}{2}  (C_{i + 1}(t) - C_{i - 1}(t)) + \frac{p' + q'}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t))
+$$
+<p>
+If we consider the limit $\Delta t \to 0$ then we have that
+</p>
+$$
+\tau \frac{d}{dt}  C_{i}(t) = \frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t))
+$$
+<p>
+This is the master equation. Having a continuous time just changes the probability of jumping, this is the relation that allows us to have continuous updates (so if we don&rsquo;t have a full time, we have just a fraction of the probability of jumping). This should be the master equation for a diffusion process.</p>
+<h4 id="continuous-space">Continuous Space<a hidden class="anchor" aria-hidden="true" href="#continuous-space">#</a></h4>
+<p>We do another rescaling of the probability $p´ = p (\Delta x / \delta )^{2}$ then rewriting everything we get the continuous space equation. We use the square because the mean squared displacement (variance) grows linearly with time.
+Then we get
+</p>
+$$
+\frac{ \partial  }{ \partial t }  C(x, t) = D \frac{ \partial^{2}  }{ \partial x^{2} } C(x, t)
+$$
+<p>
+Where $D$ is our diffusion coefficient.
+We do a fourier transform in space and we get an ordinary differential equation in time, which is solvable.</p>
+<h4 id="solution-for-the-diffusion-process">Solution for the diffusion process<a hidden class="anchor" aria-hidden="true" href="#solution-for-the-diffusion-process">#</a></h4>
+<p>One can see that the following equation is a solution for the above problem:
+</p>
+$$
+C(x, t) = \frac{1}{\sqrt{ \pi 4 D t }} e^{-x^{2} / 4Dt}
+$$
+<p>
+One can solve this just by brute force, or one fancier method is passing into the fourier space, where the equation is simpler to treat.</p>
+<h2 id="introduction-to-diffusion-models">Introduction to Diffusion Models<a hidden class="anchor" aria-hidden="true" href="#introduction-to-diffusion-models">#</a></h2>
 <h3 id="the-forward-encoder">The Forward Encoder<a hidden class="anchor" aria-hidden="true" href="#the-forward-encoder">#</a></h3>
 <ul>
 <li>What is the link to <a href="/notes/autoencoders/">Autoencoders</a>?</li>
