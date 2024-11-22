@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Markov Processes | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="➕probabilistic-artificial-intelligence">
+<meta name="description" content="Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
+Markov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.">
+<meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="https://flecart.github.io/notes/markov-processes/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/markov-processes/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Markov Processes" />
+<meta property="og:description" content="Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
+Markov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://flecart.github.io/notes/markov-processes/" />
+<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
+<meta property="article:section" content="notes" />
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
+<meta name="twitter:title" content="Markov Processes"/>
+<meta name="twitter:description" content="Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
+Markov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Markov Processes",
+      "item": "https://flecart.github.io/notes/markov-processes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markov Processes",
+  "name": "Markov Processes",
+  "description": "Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.\nMarkov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \\in \\mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.",
+  "keywords": [
+    "➕probabilistic-artificial-intelligence"
+  ],
+  "articleBody": "Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.\nMarkov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \\in \\mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.\nNormalmente poche cose nel mondo reale si possono dire puramente Markoviane, però non si può negare che è un modello molto buono di partenza come modello di decisione.\nma potremmo sempre rendere Markoviano creando una nuova variabile che ci rappresenta tutta la storia (è qualcosa che non ho capito molto bene, ma credo si possa fare senza probbi).\nMarkov processes 🟨- Possiamo andare a definire un processo markoviano come un insieme di stati e il modello di transizione probabilistico: $(S, P)$, una coppia di stati e tutto il modello di transizione. mi sembra di aver letto che un processo markoviano sia molto buono per studiare i moti browniani in fisica. Praticamente a random abbiamo che ogni punto si può muovere\nEsempio di processo markoviano\nMarkov Reward Processes Quando andiamo a parlare di processo markoviano con reward indichiamo che associamo una funzione valore $V(s)$ che restituisce un certo valore a ogni stato. Di solito questo valore ci è ignoto agli agenti che seguono il modello, quindi diventa un buon problema con questa impostazione provare a stimare il valore dello stato in seguito a numerose osservazioni. Solitamente non vogliamo considerare tutti i reward con lo stesso peso. Vorremmo avere anche a disposizione un parametro che ci indichi quanto siano importanti i reward subito di ora, e i reward nel futuro. Con questo indichiamo un discount factor $\\gamma$\nUn tale processo viene formalizzato tramite una quadrupla $S, P, R,\\gamma$, con s stati possibili, P il modello di transizione e R la funzione che ritorna il reward per ogni stato.\nState Value Function 🟩 Solitamente viene definito state value function:\n$$ V(s) = \\mathbb{E}[R_t + \\gamma R_{t + 1} + \\gamma^2 R_{t + 2} + ... | s = s _{t}] $$ La parte dentro il valore atteso è solitamente indicata con $G_t$.\nPolicy evaluation 🟩 Metodi di estimazione della funzione valore:\nAbbiamo abbastanza metodi per stimare il valore della funzione: metodi di sampling, metodi diretti (analitici) e metodi basati su programmazione dinamica.\nRiguardo i metodi di sampling questi sono i più dinamici, nel senso che permettono l’applicazione a più problemi possibili, in generale hanno una precisione che va nell’ordine dell $\\dfrac{1}{\\sqrt {n}}$ anche se non so su quali basi in particolare.\nI metodi diretti sono leggermente più lenti, perché si tratta di risolvere l’inversa della matrice, cosa che va in $O(n^3)$. Il motivo di questo è che possiamo sfruttare la proprietà di V\nBellman expectation equation Possiamo dire che\n$$ V_k(s_t) = \\mathbb{E}[R_t + \\gamma G_{t + 1} | s = s _{t}] = R(s) + \\gamma \\sum_{s'}P(s'|s)V_{k -1}(s') = (R + \\gamma P V_{k - 1})(s) $$ E scritto sfruttando il valore atteso abbiamo: $$ V^{\\pi}{k}(x) = R(x) + \\gamma \\mathbb{E}{x’ \\mid x, \\pi(x)}[V_{k - 1}(x’)]\n$$\nChe può essere estesa per policy stocastiche come: $$ V^{\\pi}_{k}(x) = \\mathbb{E}_{a \\sim \\pi}[R(x, a) + \\gamma \\mathbb{E}_{x' \\mid x, a}[V_{k - 1}(x')]]] $$ Una nota è che questa è stazionaria quindi avremo alla fine che $V_{k} = V_{k - 1}$ se continuiamo per tanto. Questa osservazione permette di sviluppare un algoritmo iterativo per stimare il $V$ fino a convergenza (sul perché converge sicuramente guardare altro, probabilmente idea degli operatori di bellman può essere utile)\nFixed point iteration Il punto di convergenza è unico grazie al teorema del punto fisso di Banach, che abbiamo incontrato per la prima volta in Equazioni non lineari.\nAlgoritmo iterativo per valutazione della MRP\nL’algoritmo di sopra si può anche scrivere in forma matriciale: $$ V^{\\pi}_{t} = R^{\\pi} + \\gamma P^{\\pi}V^{\\pi}_{t-1} $$ Una volta settato un $V^{\\pi}_{0}$ iniziale.\nAnalytic solution Utilizzando la stessa proprietà (solamente ora scritta in modo analitico, possiamo risolverlo come se fosse una matrice. Se la matrice è invertibile, che per qualche motivo è vero se $\\gamma \\in [0, 1)$ allora questo è un approccio matematicamente molto pulito e fattibile. Nella pratica, però, la matrice $P$ è molto grande, e sparsa, dato che si raggiungono un numero limitato di stati, dato uno stato iniziale.\nMarkov Decision Process Questo è molto simile alla Markov Reward Processes, solo che ora introduciamo una policy, ossia una funzione che ci dica quanto è probabile compiere una certa azione in un certo stato, in pratica aggiungiamo la possibilità di avere azioni ai Markov Reward Processes, allora otteniamo i MDP. Questi modelli sono utilizzati per modellare decisioni sequenziali finite.\n$(S, A, P, R, \\gamma)$, ossia ora abbiamo sia stato, sia azione possibile e la funzione di transizione deve contare entrambi: $P(\\cdot | s, a)$, mentre le reward sono ancora come prima.\n$S$ l’insieme finito o infinito numerabile di stati possibili $A$ l’insieme di azioni possibili $P$ probabilità di raggiungere un certo stato, dato uno stato iniziale e una azione, solitamente modellati come $P(x' \\mid x, a)$ come arrivare a stato $x'$ da $x$ con azione $a$. Questa è un genere di approccio Markoviano, perché dipende solamente dallo stato precedente. $R$ reward di uno stato. Talvolta il reward stesso di una azione in un certo stato può essere rumoroso (noisy). $\\gamma$: decadimento del reward. È da notare che se possediamo una policy, allora possiamo ridurci al caso di Markov Reward Process, infatti possiamo dire che\n$$ \\begin{align} R^\\pi(s) = \\sum_{a \\in A}\\pi(a | s)R(s) \\\\ P^\\pi(s'|s) = \\sum_{a \\in A} \\pi(a | s) P(s'|s, a) \\end{align} $$ Notiamo che MDP assumono che lo stato sia totalmente osservabile. Ma normalmente gli stati sono solamente accessibili tramite sensori, quindi si può dire che gli stati sono parzialmente osservabili. Questo è un problema che si chiama POMDP. L’immagine seguente riassume questi concetti brevemente: Modelling reward È interessante modellare il concetto di expected return come $\\mathbb{E}\\left[ \\sum_{t= 1}^{T} r_{t} \\right]$, con orizzonte finito, dato che tagliamo i rewards oltre un certo time step. Questo è quello che stiamo cercando di massimizzare. Solitamente è anche scritto mettendo in considerazione di discounted rewards: $$ \\max \\mathbb{E} \\left[ \\sum_{t = 0}^{\\infty} \\gamma^{t}r_{t} \\right] $$ Si potrebbero interpretare come una sorta di Markov Chains, con labels negli edge di transizione (quindi potremmo riutilizzare la nozione di Ipergrafo fatta per Backpropagation forse) Comunque a seconda se la funzione di transizione sia deterministica, ossia da uno stato dia una azione, oppure probabilistica, possiamo definire effettivamente la Markov Chains sottostante: $$ \\begin{align} \\\nP(x’ \\mid x) = P(x’ \\mid x , \\pi(x)) \u0026 \\text{ se deterministica} \\ P(x’ \\mid x) = \\sum_{a \\in \\mathcal{A}} \\pi(a \\mid x)P(x’ \\mid x, a) \u0026 \\text{ se probabilistica} \\ \\end{align}\n$$\nQuindi data una policy possiamo utilizzare gli argomenti fatti di sopra e riuscire a dare una valutazione di essa\nPolicy Evaluation Bellman backup Algoritmo iterativo DP per policy evaluation With vector notation, we can define the bellman backup as follows:\n$$ \\begin{align} \\\\ B: \\mathbb{R}^{n} \\to \\mathbb{R}^{n} \\\\ B(V)(s) = R(s) + \\gamma \\sum_{s'} P(s'|s)V(s') \\\\ \\end{align} $$ Bellman backup is a contraction We can prove that bellman backup is a contraction, which is useful to prove that the iteration converges. We can use this bellman backup operator to find an iterative algorithm to estimate the value of a single state.\n$$ \\begin{align} \\lvert BV - BV' \\rvert_{\\infty} \u0026 = \\lvert R + \\gamma PV - R - \\gamma PV' \\rvert_{\\infty} \\\\ \u0026= \\gamma \\lvert PV - PV' \\rvert_{\\infty} \\\\ \u0026 = \\gamma \\lvert V - V' \\rvert_{\\infty} \\\\ \\end{align} $$ Where for the last equality we used Jensen on the max operator, which is convex.\nPolicy Search Cerchiamo ora la policy migliore possibile da applicare a un MDP, questo è il problema del policy control ora che sappiamo come fare policy evaluation è il momento giusto per introdurre soluzioni a questo problema.\nUna soluzione naïve è semplicemente enumerare tutte le policy e utilizzare l’algoritmo di policy evaluation, poi andare a vedere quale sia la migliore. Questo è molto dispendioso perché assumendo che posso applicare tutto l’insieme di azioni a tutti gli stati ho potenzialmente $|S|^{|A|}$ policy possibili, che sono troppi.\nÈ bene, raggiunti questo punto, provare a introdurre alcune definizioni utili.\nDefinitions: state-action-value, optimal value policy Sia $\\pi$ una policy e $V^\\pi$ la evaluation di quella policy, allora possiamo andare a definire la state-action-value function in questo modo:\n$$ Q^{\\pi}(s, a) = R(s, a) + \\gamma \\sum_{s'} P(s'|s, a)V^\\pi(s') $$ ossia ci dice più o meno il valore atteso dell’azione a un certo stato!\nPossiamo anche definire la policy migliore:\n$$ \\pi^*(s) = \\arg\\max_{\\pi} V^\\pi(s) $$ Ossia è la policy che rende massimo il valore in qualunque stato!\nBellman’s theorem A policy is optimal if and only if for all states $s$ it holds that: $$ \\pi^*(s) = \\arg\\max_a Q(s, a) $$ Which means that the optimal policy is greedy with respect to the state-action value function. This is the same as the Characterization of optimal policies explained layer\nPolicy iteration The algorithm Una volta creato una policy iteration, è una cosa molto sensata andare a definire una nuova policy $\\pi_{k + 1}$ definita in questo modo:\n$$ \\forall s, \\pi_{k + 1}(s) = \\arg\\max_a Q(s, a) $$ Ossia andiamo proprio a crearci una nuova policy, cercando di rendere maggiore possibile il valore atteso a fare una certa azione a uno stato, in modo greedy! Riusciremo a dimostrare che $\\forall s, V^{\\pi_{k + 1}}(s) \\geq V^{\\pi_{k}}(s)$\nIn formule, possiamo caratterizzare l’algoritmo in modo molto semplice:\nInitialize $V^{\\pi}(s)$ and $\\pi(s)$ Repeat until convergence: Policy evaluation: $V^{\\pi} \\leftarrow V^{\\pi}$ Policy improvement: $\\pi \\leftarrow \\pi$ Monotonicity of policy iteration Si nota che una policy induce un value, che induce una policy migliore, quindi si può provare a reiterare questo algoritmo fino a convergenza.\nDimostrazione dal (Sutton \u0026 Barto 2018)\nl’idea principalmente è prendere sempre il massimo volta dopo volta, e dimostrarlo per induzione in pratica… Anche non ho capito come formalizzare e non ho capito se posso trarne vantaggi didattici nella formalizzazione di questa merda\nCharacterization of Optimal policies One very important result is, by bellman: every optimal policy satisfies the relation $$ V^{*}(x) = \\max_{a} \\left[ Q^{*}(x, a) = \\max_{a} R(x, a) + \\gamma \\sum_{x'} P(x' \\mid x, a)V^{*}(x') \\right] $$ This is another fixed point, an observation that we can use for another contraction operator which guarantees convergence. This is an optimality condition.\nValue Iteration The idea L’idea di value iteration è sostituirla subito, cioè non stare a sviluppare fino in fondo la value evaluation, ma aggiornare la policy subito dopo appena si ha il valore.\nPseudo-codice value iteration Note: the above could also be written in terms of state-action value $Q(s, a)$. One can prove that this algorithm is also $\\varepsilon-$optimal.\nBellman update operator The bellman update is defines as:\n$$ \\begin{align} B: \\mathbb{R}^{n} \\to \\mathbb{R}^{n} \\\\ B(V)(s) = \\max_{a} R(s, a) + \\gamma \\sum_{s'} P(s'|s, a)V(s') \\end{align} $$ This operator yields a value function over all states $s$ and returns a new value function. If we found a fixed point for this function, then we know that is the optimal value function that satisfies the Bellman theorem, which implies we have reached the best policy possible for this fixed case.\nSi può dimostrare che questo operatore è una contrazione, quindi value iteration converge qualunque sia il punto di partenza\nCon questo operatore, possiamo anche riscrivere in modo migliore la policy evaluation\nSlide Bellman update is a contraction Proof of contraction of bellman operator\nReferences [1] Sutton \u0026 Barto “Reinforcement Learning: An Introduction” A Bradford Book 2018\n",
+  "wordCount" : "1952",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/notes/markov-processes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Markov Processes
+    </h1>
+    <div class="post-meta">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul><ul>
+                <li>
+                    <a href="#markov-property-" aria-label="Markov property 🟩">Markov property 🟩</a></li>
+                <li>
+                    <a href="#markov-processes--" aria-label="Markov processes 🟨-">Markov processes 🟨-</a></li>
+                <li>
+                    <a href="#markov-reward-processes" aria-label="Markov Reward Processes">Markov Reward Processes</a><ul>
+                        
+                <li>
+                    <a href="#state-value-function-" aria-label="State Value Function 🟩">State Value Function 🟩</a></li>
+                <li>
+                    <a href="#policy-evaluation-" aria-label="Policy evaluation 🟩">Policy evaluation 🟩</a></li>
+                <li>
+                    <a href="#bellman-expectation-equation" aria-label="Bellman expectation equation">Bellman expectation equation</a></li>
+                <li>
+                    <a href="#fixed-point-iteration" aria-label="Fixed point iteration">Fixed point iteration</a></li>
+                <li>
+                    <a href="#analytic-solution" aria-label="Analytic solution">Analytic solution</a></li></ul>
+                </li>
+                <li>
+                    <a href="#markov-decision-process" aria-label="Markov Decision Process">Markov Decision Process</a><ul>
+                        
+                <li>
+                    <a href="#modelling-reward" aria-label="Modelling reward">Modelling reward</a></li></ul>
+                </li>
+                <li>
+                    <a href="#policy-evaluation" aria-label="Policy Evaluation">Policy Evaluation</a><ul>
+                        
+                <li>
+                    <a href="#bellman-backup" aria-label="Bellman backup">Bellman backup</a></li>
+                <li>
+                    <a href="#bellman-backup-is-a-contraction" aria-label="Bellman backup is a contraction">Bellman backup is a contraction</a></li></ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#policy-search" aria-label="Policy Search">Policy Search</a><ul>
+                        
+                <li>
+                    <a href="#definitions-state-action-value-optimal-value-policy" aria-label="Definitions: state-action-value, optimal value policy">Definitions: state-action-value, optimal value policy</a><ul>
+                        
+                <li>
+                    <a href="#bellmans-theorem" aria-label="Bellman&rsquo;s theorem">Bellman&rsquo;s theorem</a></li></ul>
+                </li>
+                <li>
+                    <a href="#policy-iteration" aria-label="Policy iteration">Policy iteration</a><ul>
+                        
+                <li>
+                    <a href="#the-algorithm" aria-label="The algorithm">The algorithm</a></li>
+                <li>
+                    <a href="#monotonicity-of-policy-iteration" aria-label="Monotonicity of policy iteration">Monotonicity of policy iteration</a></li>
+                <li>
+                    <a href="#characterization-of-optimal-policies" aria-label="Characterization of Optimal policies">Characterization of Optimal policies</a></li></ul>
+                </li>
+                <li>
+                    <a href="#value-iteration" aria-label="Value Iteration">Value Iteration</a><ul>
+                        
+                <li>
+                    <a href="#the-idea" aria-label="The idea">The idea</a></li></ul>
+                </li>
+                <li>
+                    <a href="#bellman-update-operator" aria-label="Bellman update operator">Bellman update operator</a><ul>
+                        
+                <li>
+                    <a href="#bellman-update-is-a-contraction" aria-label="Bellman update is a contraction">Bellman update is a contraction</a></li></ul>
+                </li></ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di <a href="/notes/markov-chains/">Markov Chains</a> prima di approcciare questo capitolo.</p>
+<h3 id="markov-property-">Markov property 🟩<a hidden class="anchor" aria-hidden="true" href="#markov-property-">#</a></h3>
+<p>Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.</p>
+<p>Normalmente poche cose nel mondo reale si possono dire puramente Markoviane, però non si può negare che è un modello molto buono di partenza come modello di decisione.</p>
+<p>ma potremmo sempre rendere Markoviano creando una nuova variabile che ci rappresenta tutta la storia (è qualcosa che non ho capito molto bene, ma credo si possa fare senza probbi).</p>
+<h3 id="markov-processes--">Markov processes 🟨-<a hidden class="anchor" aria-hidden="true" href="#markov-processes--">#</a></h3>
+<p>Possiamo andare a definire un processo markoviano come un insieme di stati e il modello di transizione probabilistico: $(S, P)$, una coppia di stati e tutto il modello di transizione. mi sembra di aver letto che un processo markoviano sia molto buono per studiare i moti browniani in fisica. Praticamente a random abbiamo che ogni punto si può muovere</p>
+<ul>
+<li>
+<p>Esempio di processo markoviano</p>
+  <img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 1.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 1">
+</li>
+</ul>
+<h3 id="markov-reward-processes">Markov Reward Processes<a hidden class="anchor" aria-hidden="true" href="#markov-reward-processes">#</a></h3>
+<p>Quando andiamo a parlare di processo markoviano con reward indichiamo che associamo una funzione valore $V(s)$ che restituisce un certo valore a ogni stato. Di solito questo valore ci è ignoto agli agenti che seguono il modello, quindi diventa un buon problema con questa impostazione provare a stimare il valore dello stato in seguito a numerose osservazioni. Solitamente non vogliamo considerare tutti i reward con lo stesso peso. Vorremmo avere anche a disposizione un parametro che ci indichi quanto siano importanti i reward subito di ora, e i reward nel futuro. Con questo indichiamo un <strong>discount factor</strong> $\gamma$</p>
+<p>Un tale processo viene formalizzato tramite una quadrupla   $S, P, R,\gamma$, con s stati possibili, P il modello di transizione e R la funzione che ritorna il reward per ogni stato.</p>
+<h4 id="state-value-function-">State Value Function 🟩<a hidden class="anchor" aria-hidden="true" href="#state-value-function-">#</a></h4>
+<p>Solitamente viene definito <strong>state value function:</strong></p>
+$$
+V(s) = \mathbb{E}[R_t + \gamma R_{t + 1} + \gamma^2 R_{t + 2} + ... |  s = s _{t}]
+$$
+<p>La parte dentro il valore atteso è solitamente indicata con $G_t$.</p>
+<h4 id="policy-evaluation-">Policy evaluation 🟩<a hidden class="anchor" aria-hidden="true" href="#policy-evaluation-">#</a></h4>
+<p><strong>Metodi di estimazione della funzione valore:</strong></p>
+<p>Abbiamo abbastanza metodi per stimare il valore della funzione: metodi di sampling, metodi diretti (analitici) e metodi basati su programmazione dinamica.</p>
+<p>Riguardo i metodi di sampling questi sono i più dinamici, nel senso che permettono l’applicazione a più problemi possibili, in generale hanno una precisione che va nell&rsquo;ordine dell $\dfrac{1}{\sqrt {n}}$ anche se non so su quali basi in particolare.</p>
+<p>I metodi diretti sono leggermente più lenti, perché si tratta di risolvere l’inversa della matrice, cosa che va in $O(n^3)$. Il motivo di questo è che possiamo <strong>sfruttare la proprietà di V</strong></p>
+<h4 id="bellman-expectation-equation">Bellman expectation equation<a hidden class="anchor" aria-hidden="true" href="#bellman-expectation-equation">#</a></h4>
+<p>Possiamo dire che</p>
+$$
+V_k(s_t) = \mathbb{E}[R_t + \gamma G_{t + 1}  |  s = s _{t}] = R(s)  + \gamma \sum_{s'}P(s'|s)V_{k -1}(s') = (R + \gamma P V_{k - 1})(s)
+$$
+<p>
+E scritto sfruttando il valore atteso abbiamo:
+$$
+V^{\pi}<em>{k}(x) = R(x) + \gamma \mathbb{E}</em>{x&rsquo; \mid x, \pi(x)}[V_{k - 1}(x&rsquo;)]</p>
+<p>$$</p>
+<p>Che può essere estesa per policy stocastiche come:
+</p>
+$$
+V^{\pi}_{k}(x) = \mathbb{E}_{a \sim \pi}[R(x, a) + \gamma \mathbb{E}_{x' \mid x, a}[V_{k - 1}(x')]]]
+$$
+<p>Una nota è che questa è <strong>stazionaria</strong> quindi avremo alla fine che $V_{k} = V_{k - 1}$ se continuiamo per tanto.
+Questa osservazione permette di sviluppare un algoritmo iterativo per stimare il $V$ fino a convergenza (sul perché converge sicuramente guardare altro, probabilmente idea degli operatori di bellman può essere utile)</p>
+<h4 id="fixed-point-iteration">Fixed point iteration<a hidden class="anchor" aria-hidden="true" href="#fixed-point-iteration">#</a></h4>
+<p>Il punto di convergenza è <em>unico</em> grazie al <strong>teorema del punto fisso di Banach</strong>, che abbiamo incontrato per la prima volta in  <a href="/notes/equazioni-non-lineari/">Equazioni non lineari</a>.</p>
+<ul>
+<li>
+<p>Algoritmo iterativo per valutazione della MRP</p>
+  <img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 2.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 2">
+</li>
+</ul>
+<p>L&rsquo;algoritmo di sopra si può anche scrivere in forma matriciale:
+</p>
+$$
+V^{\pi}_{t} = R^{\pi} + \gamma P^{\pi}V^{\pi}_{t-1}
+$$
+<p>
+Una volta settato un $V^{\pi}_{0}$ iniziale.</p>
+<h4 id="analytic-solution">Analytic solution<a hidden class="anchor" aria-hidden="true" href="#analytic-solution">#</a></h4>
+<p>Utilizzando la stessa proprietà (solamente ora scritta in modo analitico, possiamo risolverlo come se fosse una matrice. Se la matrice è invertibile, che per qualche motivo è vero se $\gamma \in [0, 1)$ allora questo è un approccio matematicamente molto pulito e fattibile. Nella pratica, però, la matrice $P$ è molto grande, e <em>sparsa</em>, dato che si raggiungono un numero limitato di stati, dato uno stato iniziale.</p>
+<img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 3.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 3">
+<h3 id="markov-decision-process">Markov Decision Process<a hidden class="anchor" aria-hidden="true" href="#markov-decision-process">#</a></h3>
+<p>Questo è molto simile alla Markov Reward Processes, solo che ora introduciamo una policy, ossia una funzione che ci dica quanto è probabile compiere una certa azione in un certo stato, in pratica aggiungiamo la possibilità di avere <strong>azioni</strong> ai Markov Reward Processes, allora otteniamo i MDP. Questi modelli sono utilizzati per modellare decisioni sequenziali <strong>finite</strong>.</p>
+<p>$(S, A, P, R, \gamma)$, ossia ora abbiamo sia stato, sia azione possibile e la funzione di transizione deve contare entrambi: $P(\cdot | s, a)$, mentre le reward sono ancora come prima.</p>
+<ul>
+<li>$S$ l’insieme finito o infinito numerabile di stati possibili</li>
+<li>$A$ l’insieme di azioni possibili</li>
+<li>$P$ probabilità di raggiungere un certo stato, dato uno stato iniziale e una azione, solitamente modellati come $P(x' \mid x, a)$ come arrivare a stato $x'$ da $x$ con azione $a$. Questa è un genere di approccio Markoviano, perché dipende solamente dallo stato precedente.</li>
+<li>$R$ reward di uno stato. Talvolta il reward stesso di una azione in un certo stato può essere rumoroso (<em>noisy</em>).</li>
+<li>$\gamma$: decadimento del reward.</li>
+</ul>
+<p>È da notare che se possediamo una policy, allora possiamo ridurci al caso di Markov Reward Process, infatti possiamo dire che</p>
+$$
+\begin{align}
+R^\pi(s) = \sum_{a \in A}\pi(a | s)R(s) \\
+P^\pi(s'|s) = \sum_{a \in A}  \pi(a | s) P(s'|s, a)
+\end{align}
+$$
+<p>
+Notiamo che MDP assumono che lo stato sia <strong>totalmente osservabile</strong>. Ma normalmente gli stati sono solamente accessibili tramite sensori, quindi si può dire che gli stati sono <strong>parzialmente osservabili</strong>. Questo è un problema che si chiama <strong>POMDP</strong>.
+L&rsquo;immagine seguente riassume questi concetti brevemente:
+<img src="/images/notes/Markov Processes-20241105222301179.webp" width="537" alt="Markov Processes-20241105222301179"></p>
+<h4 id="modelling-reward">Modelling reward<a hidden class="anchor" aria-hidden="true" href="#modelling-reward">#</a></h4>
+<p>È interessante modellare il concetto di <em>expected return</em> come $\mathbb{E}\left[ \sum_{t= 1}^{T} r_{t} \right]$, con <strong>orizzonte finito</strong>, dato che tagliamo i rewards oltre un certo time step. Questo è quello che stiamo cercando di massimizzare.
+Solitamente è anche scritto mettendo in considerazione di <em>discounted rewards</em>:
+</p>
+$$
+\max \mathbb{E} \left[ \sum_{t = 0}^{\infty} \gamma^{t}r_{t} \right]
+$$
+<p>
+Si potrebbero interpretare come una sorta di Markov Chains, con labels negli edge di transizione (quindi potremmo riutilizzare la nozione di Ipergrafo fatta per <a href="/notes/backpropagation/">Backpropagation</a> forse)
+Comunque a seconda se la funzione di transizione sia deterministica, ossia da uno stato dia una azione, oppure probabilistica, possiamo definire effettivamente la <a href="/notes/markov-chains/">Markov Chains</a> sottostante:
+$$
+\begin{align} \</p>
+<p>P(x&rsquo; \mid x) = P(x&rsquo; \mid x , \pi(x))  &amp; \text{ se deterministica}  \
+P(x&rsquo; \mid x)  = \sum_{a \in \mathcal{A}} \pi(a \mid x)P(x&rsquo; \mid x, a) &amp; \text{ se probabilistica} \
+\end{align}</p>
+<p>$$</p>
+<p>Quindi data una policy possiamo utilizzare gli argomenti fatti di sopra e <strong>riuscire a dare una valutazione di essa</strong></p>
+<h3 id="policy-evaluation">Policy Evaluation<a hidden class="anchor" aria-hidden="true" href="#policy-evaluation">#</a></h3>
+<h4 id="bellman-backup">Bellman backup<a hidden class="anchor" aria-hidden="true" href="#bellman-backup">#</a></h4>
+<ul>
+<li>Algoritmo iterativo DP per policy evaluation
+<img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 4.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 4"></li>
+</ul>
+<p>With vector notation, we can define the bellman backup as follows:</p>
+$$
+\begin{align}
+ \\
+B: \mathbb{R}^{n} \to \mathbb{R}^{n} \\ 
+B(V)(s) = R(s) + \gamma \sum_{s'} P(s'|s)V(s') \\
+\end{align}
+$$
+<h4 id="bellman-backup-is-a-contraction">Bellman backup is a contraction<a hidden class="anchor" aria-hidden="true" href="#bellman-backup-is-a-contraction">#</a></h4>
+<p>We can prove that bellman backup is a contraction, which is useful to prove that the iteration converges.
+We can use this bellman backup operator to find an iterative algorithm to estimate the value of a single state.</p>
+$$
+\begin{align}
+\lvert BV - BV' \rvert_{\infty}  & = \lvert R + \gamma PV - R - \gamma PV' \rvert_{\infty}  \\
+ &= \gamma \lvert PV - PV' \rvert_{\infty}  \\
+ & = \gamma \lvert V - V' \rvert_{\infty}  \\
+\end{align}
+$$
+<p>
+Where  for the last equality we used Jensen on the max operator, which is convex.</p>
+<h2 id="policy-search">Policy Search<a hidden class="anchor" aria-hidden="true" href="#policy-search">#</a></h2>
+<p>Cerchiamo ora la policy migliore possibile da applicare a un MDP, questo è il problema del <strong>policy control</strong> ora che sappiamo come fare <strong>policy evaluation</strong> è il momento giusto per introdurre soluzioni a questo problema.</p>
+<p>Una soluzione <strong>naïve</strong> è semplicemente enumerare tutte le policy e utilizzare l’algoritmo di policy evaluation, poi andare a vedere quale sia la migliore. Questo è molto dispendioso perché assumendo che posso applicare tutto l’insieme di azioni a tutti gli stati ho potenzialmente $|S|^{|A|}$ policy possibili, che sono troppi.</p>
+<p>È bene, raggiunti questo punto, provare a introdurre alcune definizioni utili.</p>
+<h3 id="definitions-state-action-value-optimal-value-policy">Definitions: state-action-value, optimal value policy<a hidden class="anchor" aria-hidden="true" href="#definitions-state-action-value-optimal-value-policy">#</a></h3>
+<p>Sia $\pi$ una policy e $V^\pi$ la evaluation di quella policy, allora possiamo andare a definire la <strong>state-action-value</strong> function in questo modo:</p>
+$$
+Q^{\pi}(s, a) = R(s, a) + \gamma \sum_{s'} P(s'|s, a)V^\pi(s')
+$$
+<p>ossia ci dice più o meno il valore atteso dell’azione a un certo stato!</p>
+<p>Possiamo anche definire la policy migliore:</p>
+$$
+\pi^*(s) = \arg\max_{\pi} V^\pi(s)
+$$
+<p>Ossia è la policy che rende massimo il valore in qualunque stato!</p>
+<h4 id="bellmans-theorem">Bellman&rsquo;s theorem<a hidden class="anchor" aria-hidden="true" href="#bellmans-theorem">#</a></h4>
+<p>A policy is optimal if and only if for all states $s$ it holds that:
+</p>
+$$
+\pi^*(s) = \arg\max_a Q(s, a)
+$$
+<p>
+Which means that the optimal policy is greedy with respect to the state-action value function.
+This is the same as the Characterization of optimal policies explained layer</p>
+<h3 id="policy-iteration">Policy iteration<a hidden class="anchor" aria-hidden="true" href="#policy-iteration">#</a></h3>
+<h4 id="the-algorithm">The algorithm<a hidden class="anchor" aria-hidden="true" href="#the-algorithm">#</a></h4>
+<p>Una volta creato una policy iteration, è una cosa molto sensata andare a definire una nuova policy $\pi_{k + 1}$ definita in questo modo:</p>
+$$
+\forall s, \pi_{k + 1}(s) = \arg\max_a Q(s, a)
+$$
+<p>Ossia andiamo proprio a crearci una nuova policy, cercando di rendere maggiore possibile il valore atteso a fare una certa azione a uno stato, in modo <em>greedy</em>! Riusciremo a dimostrare che $\forall s, V^{\pi_{k + 1}}(s) \geq V^{\pi_{k}}(s)$</p>
+<p>In formule, possiamo caratterizzare l&rsquo;algoritmo in modo molto semplice:</p>
+<ol>
+<li>Initialize $V^{\pi}(s)$ and $\pi(s)$</li>
+<li>Repeat until convergence:
+<ol>
+<li>Policy evaluation: $V^{\pi} \leftarrow V^{\pi}$</li>
+<li>Policy improvement: $\pi \leftarrow \pi$</li>
+</ol>
+</li>
+</ol>
+<h4 id="monotonicity-of-policy-iteration">Monotonicity of policy iteration<a hidden class="anchor" aria-hidden="true" href="#monotonicity-of-policy-iteration">#</a></h4>
+<p>Si nota che una policy induce un value, che induce una policy migliore, quindi si può provare a reiterare questo algoritmo fino a convergenza.</p>
+<ul>
+<li>
+<p>Dimostrazione dal (Sutton &amp; Barto 2018)</p>
+  <img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 5.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 5">
+<p>l’idea principalmente è prendere sempre il massimo volta dopo volta, e dimostrarlo per induzione in pratica… Anche non ho capito come formalizzare e non ho capito se posso trarne vantaggi didattici nella formalizzazione di questa merda</p>
+</li>
+</ul>
+<h4 id="characterization-of-optimal-policies">Characterization of Optimal policies<a hidden class="anchor" aria-hidden="true" href="#characterization-of-optimal-policies">#</a></h4>
+<p>One very important result is, by bellman: every optimal policy satisfies the relation
+</p>
+$$
+V^{*}(x) = \max_{a} \left[  Q^{*}(x, a) = \max_{a} R(x, a) + \gamma \sum_{x'} P(x' \mid x, a)V^{*}(x') \right]
+$$
+<p>
+This is another fixed point, an observation that we can use for another contraction operator which guarantees convergence.
+This is an <em>optimality condition</em>.</p>
+<h3 id="value-iteration">Value Iteration<a hidden class="anchor" aria-hidden="true" href="#value-iteration">#</a></h3>
+<h4 id="the-idea">The idea<a hidden class="anchor" aria-hidden="true" href="#the-idea">#</a></h4>
+<p>L’idea di value iteration è sostituirla subito, cioè non stare a sviluppare fino in fondo la value evaluation, ma aggiornare la policy subito dopo appena si ha il valore.</p>
+<ul>
+<li>Pseudo-codice value iteration
+<img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 6.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 6"></li>
+</ul>
+<p>Note: the above could also be written in terms of state-action value $Q(s, a)$. One can prove that this algorithm is also $\varepsilon-$optimal.</p>
+<h3 id="bellman-update-operator">Bellman update operator<a hidden class="anchor" aria-hidden="true" href="#bellman-update-operator">#</a></h3>
+<p>The bellman update is defines as:</p>
+$$
+\begin{align}
+B: \mathbb{R}^{n} \to \mathbb{R}^{n} \\ 
+B(V)(s) = \max_{a} R(s, a) + \gamma \sum_{s'} P(s'|s, a)V(s')
+\end{align}
+$$
+<p>
+This operator <em>yields</em> a value function over all states $s$ and returns a new value function.
+If we found a fixed point for this function, then we know that is the optimal value function that satisfies the Bellman theorem, which implies we have reached the best policy possible for this fixed case.</p>
+<p>Si può dimostrare che questo operatore è una contrazione, quindi value iteration converge qualunque sia il punto di partenza</p>
+<p>Con questo operatore, possiamo anche riscrivere in modo migliore la <strong>policy evaluation</strong></p>
+<ul>
+<li>Slide
+<img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 8.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 8"></li>
+</ul>
+<h4 id="bellman-update-is-a-contraction">Bellman update is a contraction<a hidden class="anchor" aria-hidden="true" href="#bellman-update-is-a-contraction">#</a></h4>
+<ul>
+<li>
+<p>Proof of contraction of bellman operator</p>
+  <img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 9.png" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled 9">
+</li>
+</ul>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Sutton &amp; Barto “Reinforcement Learning: An Introduction” A Bradford Book 2018</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://flecart.github.io/tags/probabilistic-artificial-intelligence/">➕Probabilistic-Artificial-Intelligence</a></li>
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on x"
+            href="https://x.com/intent/tweet/?text=Markov%20Processes&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f&amp;hashtags=%e2%9e%95probabilistic-artificial-intelligence">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f&amp;title=Markov%20Processes&amp;summary=Markov%20Processes&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f&title=Markov%20Processes">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on whatsapp"
+            href="https://api.whatsapp.com/send?text=Markov%20Processes%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on telegram"
+            href="https://telegram.me/share/url?text=Markov%20Processes&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Markov Processes on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Markov%20Processes&u=https%3a%2f%2fflecart.github.io%2fnotes%2fmarkov-processes%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
