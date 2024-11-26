@@ -196,67 +196,73 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Relazioni fra insiemi
+    <h2 class="entry-hint-parent">Neural Networks
     </h2>
   </header>
   <div class="entry-content">
-    <p>Coppia ordinata Definizione di Kuratowsky Una coppia ordinata è definita dall’insieme
-$$ \langle X, Y \rangle = \{X, \{X, Y\}\} $$ È quindi chiaro che due coppie ordinate sono uguali fra di loro nel caso in cui gli elementi sono uguali ma anche la loro posizione sono uguali
-Teorema caratterizzazione delle coppie
-Definizione di Wiener $$ (X,Y) := \{\{\{X\}, \varnothing\}, \{\{Y\}\}\} $$ Definizione di Hausdorff $$ (X,Y) := \{\{X, 1\}, \{X,2\}\} $$ Proprietà fondamentale coppie ordinate Due coppie ordinate si dicono uguali se e solo se il primo elemento dei due sono uguali e la stessa cosa per il secondo...</p>
+    <p>Introduction: a neuron I am lazy, so I’m skipping the introduction for this set of notes. Look at Andrew Ng’s Coursera course for this part. Historical notes are (Rosenblatt 1958). One can view a perceptron to be a Log Linear Models with the temperature of the softmax that goes to 0 (so that it is an argmax). Trained with a stochastic gradient descent with a batch of 1 (this is called the perceptron update rule)....</p>
   </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Relazioni fra insiemi" href="https://flecart.github.io/notes/relazioni-fra-insiemi/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Neural Networks" href="https://flecart.github.io/notes/neural-networks/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Topological Spaces
+    <h2 class="entry-hint-parent">Programmi Concorrenti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction to topological spaces We want now to extend the idea of continuity presented in limits, which is a function $f : E^{n} \to E^{n}$ is continuous if given $x$ then $\forall\varepsilon &gt; 0$ $\exists \delta$ such that $\forall y : \lVert y -x \rVert &lt; \delta \implies \lVert f(y) - f(x) \rVert &lt; \varepsilon$. But we want to get rid of the idea of distance, and base our definition on the idea of neighborhoods, which in $E^{n}$ are just spherical radius centered around a point....</p>
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Topological Spaces" href="https://flecart.github.io/notes/topological-spaces/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Dipolo elettrico
+    <h2 class="entry-hint-parent">TLS-SSL protocol
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questo problema è stato trattato in modo un po’ più semplificato (nel caso in cui la carica era esattamente a metà in Campo elettrico#Dipolo elettrico). Questo problema è stato storico, utilizzato per analizzare l’atomo.
-Potenziale del dipolo elettrico 🟩– Per il principio di sovrapposizione possiamo affermare che $$ V(P) = V_{r^{&#43;}} &#43; V_{r^{-}} = \frac{q}{4\pi\varepsilon_{0}}\left( \frac{1}{r^{&#43;}} - \frac{1}{r^{-}} \right) $$ Ora possiamo fare certe approssimazioni, supponendo che $r \gg a$ con $r$ la congiungente fra il centro del dipolo e il nostro punto e $a$ la distanza fra le cariche, possiamo affermare che $$ r^{&#43;} - r^{-} = -a \cos \theta $$ Sappiamo che l’angolo è lo stesso (più o meno), perché sappiamo che i due reggi sono ora paralleli (come assunsione di semplificazione) Inoltre abbiamo che $r^{&#43;}r^{-} = r^{2}$ perché il punto è molto lontano allora possiamo affermare che $$ \left( \frac{1}{r^{&#43;}} - \frac{1}{r^{-}} \right) = \frac{a\cos \theta}{r^{2}} $$ a $$ V(P) = \frac{1}{4\pi\varepsilon_{0}}\frac{qa\cos \theta}{r^{2}} = \frac{1}{4\pi\varepsilon_{0}}\frac{P\cos \theta}{r^{2}} = \frac{1}{4\pi\varepsilon_{0}} \frac{\vec{P}\cdot \hat{r}}{r^{2}} $$ Direttamente proporzionale al momento di tipolo Inversamente proporzionale al quadrato del raggio....</p>
+    <p>First time we talked about this was in Sicurezza delle reti#Protocollo SSL But that was a simple toy model.
+Secure Socket Layer Secure socket Layer and TLS add security (see security principles in Theoretical Notions of Security) on the transport layers, whereas IPSec protocol adds it to the network level. So this works on a higher level of abstraction following the ISO OSI framework Architettura e livelli 1, 2#Livelli ISO/OSI....</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Dipolo elettrico" href="https://flecart.github.io/notes/dipolo-elettrico/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to TLS-SSL protocol" href="https://flecart.github.io/notes/tls-ssl-protocol/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Introduction to Information Theory
+    <h2 class="entry-hint-parent">Top-down Parser
     </h2>
   </header>
   <div class="entry-content">
-    <p>The course will be more about the the quantization, talking about lossless and lossy compression (how many bits will be needed to describe something? This is not a CS course so it will not be so much algorithmically focused course), then we will talk about channel and capacity and DMC things. Most of the things explained in the Lapidoth course will be theoretical there will be some heavy maths.
-The professor starts with some mathy definitions (not very important, just that the $\mathbb{E}[ \cdot]$ needs a domain to be defined, so notations like $\mathbb{E}[x]$ do not make sense, while $\mathbb{E}[g(x)]$ do make sense because $g(x) : \mathcal{X} \to \mathbb{R}$)....</p>
+    <p>Top-down Algoritmo di parsing 🟩 Slide
+Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
+Esempio di esecuzione
+Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
+$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
+Slide
+Si può rendere molto più efficiente con un valore di lookahead....</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Introduction to Information Theory" href="https://flecart.github.io/notes/introduction-to-information-theory/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Language Models
+    <h2 class="entry-hint-parent">Algebra dei tipi
     </h2>
   </header>
   <div class="entry-content">
-    <p>In order to understand language models we need to understand structured prediction. If you are familiar with Sentiment Analysis, where given an input text we need to classify it in a binary manner, in this case the output space usually scales in an exponential manner. The output has some structure, for example it could be a tree, it could be a set of words etc… This usually needs an intersection between statistics and computer science....</p>
+    <p>Equivalenza dei tipi (2) 🟩 Quando possiamo dire che due tipi siano uguali? Solitamente vengono utilizzati due metodi:
+Equivalenza Nominale Quando un nuono tipo introduce un nuovo nome diverso fra tutti i presenti. Credo così vada golang. Quindi in questo caso si può dire che un tipo è equivalente solamente a sé stesso.
+Vogliamo fare in questo modo perché se definiamo un nuovo tipo solitamente dovrebbe avere funzioni diverse, quindi è giusto che sia diverso da uqello iniziale....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Language Models" href="https://flecart.github.io/notes/language-models/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Algebra dei tipi" href="https://flecart.github.io/notes/algebra-dei-tipi/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
