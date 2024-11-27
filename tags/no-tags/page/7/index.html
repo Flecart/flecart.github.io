@@ -181,29 +181,49 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Optimization methods
+    <h2 class="entry-hint-parent">Top-down Parser
     </h2>
   </header>
   <div class="entry-content">
-    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
-Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
-Newton Raphson method Molte implementazioni in R usano questo metodo, è
-Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
+    <p>Top-down Algoritmo di parsing 🟩 Slide
+Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
+Esempio di esecuzione
+Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
+$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
+Slide
+Si può rendere molto più efficiente con un valore di lookahead....</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Function approximation
+    <h2 class="entry-hint-parent">Linguaggi liberi e PDA
     </h2>
   </header>
   <div class="entry-content">
-    <p>We have enormous state functions, having a generic approssimation could really help! We want to use a differentiable value function so that we can use gradient descent to optimize it, for example a good way of loss would be $$ J(w) = \mathbb{E}_\pi[(V^\pi(s) - \hat{V}^\pi(s;w))^2] $$ The second one is parametrized with $w$. There are two ways (recuperali!) MC policy or Time differential (that is boostrapped, instead the Monte carlo uses a full simulation in order to know what to use)....</p>
+    <p>In questa parte del nostro percorso nei linguaggi di programmazione proviamo ad espandere NFA e DFA in modo che possano riconoscere linguaggi come $ww^r | w \in \{a, b\}^*$ , con r maggiore o uguale a zero (r per dire che è il contrario di w) (questo linguaggio per il pumping lemma).
+Grammatiche libere da contesto Conosciute come context-free grammars, possiamo definirle in modo matematico come una tupla $$ G = \langle \mathcal{N}, S, \Sigma, \mathcal{R} \rangle $$ Dove $\mathcal{N}$ sono i non terminali, $S$ è il non terminale iniziale, $\Sigma$ sono l’alfabeto dei simboli finali e $\mathcal{R}$ le relazioni possibili....</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Function approximation" href="https://flecart.github.io/notes/function-approximation/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Linguaggi liberi e PDA" href="https://flecart.github.io/notes/linguaggi-liberi-e-pda/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Accept Reject algorithm
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Some useful links Main results: https://jblevins.org/notes/accept-reject
+Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
+La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
+Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
+Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density....</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Accept Reject algorithm" href="https://flecart.github.io/notes/accept-reject-algorithm/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -221,31 +241,14 @@ Capisaldi🟩 Incapsulazione Astrazione Ereditarietà Dispatch dinamico Costrutt
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Costraint Satisfaction Problems
+    <h2 class="entry-hint-parent">Function approximation
     </h2>
   </header>
   <div class="entry-content">
-    <p>Definizione Caratteristiche Variabili Dominio per ogni variabile Costraints per ogni variabile Queste tre sono elementi che definiscono un problema di soddisfazione delle restrizioni, una soluzione è un assegnamento di variabili che soddisfi ogni restrizioone e sia all’interno del dominio
-Consistenza Vogliamo andare a limitare il dominio valutando le consistenze possibili
-Consistenza del punto Si può dire che un punto sia consistente se le sue variabili possibili non viola nessuna restrizione unaria: eg....</p>
+    <p>We have enormous state functions, having a generic approssimation could really help! We want to use a differentiable value function so that we can use gradient descent to optimize it, for example a good way of loss would be $$ J(w) = \mathbb{E}_\pi[(V^\pi(s) - \hat{V}^\pi(s;w))^2] $$ The second one is parametrized with $w$. There are two ways (recuperali!) MC policy or Time differential (that is boostrapped, instead the Monte carlo uses a full simulation in order to know what to use)....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Costraint Satisfaction Problems" href="https://flecart.github.io/notes/costraint-satisfaction-problems/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Planning automatico
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Planning Automatico Vogliamo andare a creare un programma che sia in grado di creare un piano per fare una azione, andiamo in questo capitolo gli algoritmi storicamente migliori adatti a risolvere questo problema
-Il problema di pianificazione Andiamo a rappresentare il nostro problema di pianificazione con un linguaggio molto simile alla Logica del Primo ordine.
-È il PDDL ossia il Planning domain definition language
-PDDL Questo linguaggio è definito da...</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Planning automatico" href="https://flecart.github.io/notes/planning-automatico/"></a>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Function approximation" href="https://flecart.github.io/notes/function-approximation/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
