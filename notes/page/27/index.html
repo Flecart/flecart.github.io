@@ -196,31 +196,29 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Kalman Filters
+    <h2 class="entry-hint-parent">Dipolo elettrico
     </h2>
   </header>
   <div class="entry-content">
-    <p>Kalman Filters are defined as follows:
-We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} &amp; F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} &amp; H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state....</p>
+    <p>Questo problema è stato trattato in modo un po’ più semplificato (nel caso in cui la carica era esattamente a metà in Campo elettrico#Dipolo elettrico). Questo problema è stato storico, utilizzato per analizzare l’atomo.
+Potenziale del dipolo elettrico 🟩– Per il principio di sovrapposizione possiamo affermare che $$ V(P) = V_{r^{&#43;}} &#43; V_{r^{-}} = \frac{q}{4\pi\varepsilon_{0}}\left( \frac{1}{r^{&#43;}} - \frac{1}{r^{-}} \right) $$ Ora possiamo fare certe approssimazioni, supponendo che $r \gg a$ con $r$ la congiungente fra il centro del dipolo e il nostro punto e $a$ la distanza fra le cariche, possiamo affermare che $$ r^{&#43;} - r^{-} = -a \cos \theta $$ Sappiamo che l’angolo è lo stesso (più o meno), perché sappiamo che i due reggi sono ora paralleli (come assunsione di semplificazione) Inoltre abbiamo che $r^{&#43;}r^{-} = r^{2}$ perché il punto è molto lontano allora possiamo affermare che $$ \left( \frac{1}{r^{&#43;}} - \frac{1}{r^{-}} \right) = \frac{a\cos \theta}{r^{2}} $$ a $$ V(P) = \frac{1}{4\pi\varepsilon_{0}}\frac{qa\cos \theta}{r^{2}} = \frac{1}{4\pi\varepsilon_{0}}\frac{P\cos \theta}{r^{2}} = \frac{1}{4\pi\varepsilon_{0}} \frac{\vec{P}\cdot \hat{r}}{r^{2}} $$ Direttamente proporzionale al momento di tipolo Inversamente proporzionale al quadrato del raggio....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Kalman Filters" href="https://flecart.github.io/notes/kalman-filters/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Dipolo elettrico" href="https://flecart.github.io/notes/dipolo-elettrico/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Metodi di Discesa
+    <h2 class="entry-hint-parent">Ensemble Methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione ai metodi di discesa. Generali sui metodi di discesa Vogliamo creare algoritmi che riescano a trovare i punti di minimo delle funzioni non vincolate.
-In generale si trova un punto stazionario (condizioni necessarie) ma non è garantito lo stato ottimo.
-Solitamente sono divisi in first order methods in cui viene considerata solamente la derivata prima della funzione. E cose di metodi superiori.
-Condizioni di arresto classiche (2) 🟩- Slide...</p>
+    <p>The idea of ensemble methods goes back to Sir Francis Galton. In 787, he noted that although not every single person got the right value, the average estimate of a crowd of people predicted quite well.
+The main idea of ensemble methods is to combine relatively weak classifiers into a highly accurate predictor.
+The motivation for boosting was a procedure that combines the outputs of many “weak” classifiers to produce a powerful “committee....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Metodi di Discesa" href="https://flecart.github.io/notes/metodi-di-discesa/"></a>
+  <a class="entry-link" aria-label="post link to Ensemble Methods" href="https://flecart.github.io/notes/ensemble-methods/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -240,33 +238,30 @@ Mary programs the homework [in the ETH computer laboratory] Mary programs the ho
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Tarjan e MCMF
+    <h2 class="entry-hint-parent">Programmi Concorrenti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questa sezione la tengo separata rispetto agli altri per favorire lo studio, così questa roba nuova la ripasso più spesso, in seguito si può accorpare.
-Goldberg Tarjan/Push-relabel Questo algoritmo è importante perché introduce ragionamenti sul minimo locale che possa alla fine essere ricomposto come soluzione globale.
-Questa lezione youtube lo spiega da Dio
-Preflusso 🟩 Slide
-La parte nuova di questa cosa è che i vincoli di bilanciamento possono diventare una disuguaglianza....</p>
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Tarjan e MCMF" href="https://flecart.github.io/notes/tarjan-e-mcmf/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">The RLHF pipeline
+    <h2 class="entry-hint-parent">Requisiti e backlog del software
     </h2>
   </header>
   <div class="entry-content">
-    <p>https://huyenchip.com/2023/05/02/rlhf.html è un blog post che lo descrive in modo abbastanza dettagliato e buono.
-Introduzione a RLHF Questo è il processo che è quasi la migliore per la produzione di LLM moderni (maggior parte si basano su questo per dire).
-Struttura generale Si può dire che RLHF si divida in 3 parti fondamentali
-Completion il modello viene allenato a completare parole dal web,solitamente è molto inutile Fine tuning per le singole task, per esempio riassumere, rispondere in certo modo etc....</p>
+    <p>Introduzione sui requisiti del software Note introduttive In linguaggio naturale (dizionario) 🟥&#43; Sono tutte le qualità necessarie per uno scopo ben determinato.
+Secondo il prof. I requisiti sono dei desideri ossia ciò che idealmente vorresti riguardo qualcosa (nel nostro caso il software). Ma credo sia anche una tendenza italiana di fare le cose meglio possibile senza mai soddisfare tutto
+Functional requirements 🟩 Sono ciò che permetterà di fare il sistema...</p>
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to The RLHF pipeline" href="https://flecart.github.io/notes/the-rlhf-pipeline/"></a>
+  <a class="entry-link" aria-label="post link to Requisiti e backlog del software" href="https://flecart.github.io/notes/requisiti-e-backlog-del-software/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
