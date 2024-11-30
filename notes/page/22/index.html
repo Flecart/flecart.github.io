@@ -196,67 +196,72 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Note sull’architettura
+    <h2 class="entry-hint-parent">Norme e Condizionamento
     </h2>
   </header>
   <div class="entry-content">
-    <p>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
-Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
-Slide Interrupt Hardware e software...</p>
+    <p>Errore inerente Bisogna cercare di generalizzare il concetto di errore e lo si fa con la norma
+Norma vettoriale È una funzione da $f: \mathbb{R}^n \to \mathbb{R}$ indicata con due barrette, questa funzione mi dà un concetto di distanza.
+Proprietà della norma Si definisce una norma una funzione che soddisfa queste proprietà
+$\lVert x \rVert \geq 0$ per ogni $x \in \mathbb{R}^{n}$ $\lVert x \rVert = 0 \iff x = 0$ $\lVert \alpha x \rVert = \lvert \alpha \rvert \lVert x \rVert$ per ogni $x \in \mathbb{R}^{n}$ e $\alpha \in \mathbb{R}$ Vale la disuguaglianza triangolare, ossia $\forall x, y \in \mathbb{R}^{n}, \lVert x &#43; y \rVert \leq \lVert x \rVert &#43; \lVert y \rVert$....</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Note sull’architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Norme e Condizionamento" href="https://flecart.github.io/notes/norme-e-condizionamento/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Control Plane
+    <h2 class="entry-hint-parent">Porte Logiche
     </h2>
   </header>
   <div class="entry-content">
-    <p>Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
-Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c’è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve....</p>
+    <p>In questa nota andiamo a trattare argomenti come tabelle di verità. Mappe di Karnaugh. E piccolissima introduzione ai circuiti integrati.
+Boole Un signor Boole ha creato le basi dell’algebra booleana su cui si basano le porte logiche dei computer moderni.
+Tabelle di verità Le tabelle di verità sono sufficienti per descrivere il funzionamento di una porta logica.
+Questa cosa è possibile grazie alla limitatezza delle funzioni all’interno dell’insieme $\{0,1\}$ dominio di partenza e fine dell’algebra booleana....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Porte Logiche" href="https://flecart.github.io/notes/porte-logiche/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Control Plane" href="https://flecart.github.io/notes/control-plane/"></a>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Derivate
+    <h2 class="entry-hint-parent">Proximal Policy Optimization
     </h2>
   </header>
   <div class="entry-content">
-    <p>5.1 Geometria introduttiva 5.1.1 Tangente e pendenza Si può trovare la relazione fra la pendenza della retta e la tangente.
-Possiamo analizzare la retta dal punto di vista analitico, della formula e si può dimostrare che data una retta nella forma $y = mx &#43; q$ $m$ è la pendenza della retta.
-5.1.2 Formula generale delle rette Dati qualunque due punti .$(x_1, y_1), (x_2, y_2)$ possiamo dire che la pendenza è esprimibile come...</p>
+    <p>(Schulman et al. 2017) è uno degli articoli principali che praticamente hanno dato via al campo. Anche questo è buono per Policy gradients:
+https://lilianweng.github.io/posts/2018-04-08-policy-gradient/
+Introduzione a PPO References [1] Schulman et al. “Proximal Policy Optimization Algorithms” 2017</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Derivate" href="https://flecart.github.io/notes/derivate/"></a>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Proximal Policy Optimization" href="https://flecart.github.io/notes/proximal-policy-optimization/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Backpropagation
+    <h2 class="entry-hint-parent">Cammini
     </h2>
   </header>
   <div class="entry-content">
-    <p>Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover....</p>
+    <p>1.1 Il cammino minimo 1.1.1 Definizione e caratteristiche 1.1.2 Costi negativi Sono cose molto brutte 1.1.3 Cammino minimo semplice Costruzione di cammini minimi 1.2 Vertici 1.2.1 definizione distanza fra due vertici Costo del cammino minimo che li connette Condizione di bellman Albero dei cammini minimi Rilassamento Definizione Si va a vedere dove non funziona la disuguaglianza triangolare, se localmente non funziona ovvero se per esempio succede $D_{xu} &#43; \omega(u,y) &lt; D_{xy}$ per qualche vertice all’interno del grafo, so di per certo che la distanza $D_{xy}$ non è una distanza, quindi possiamo riassegnarla in modo che verifichi la disuguaglianza...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Backpropagation" href="https://flecart.github.io/notes/backpropagation/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Divergenza e Circuitazione
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Scalare Scalare e gradiente 🟩 Un campo scalare assegna a ogni punto dello spazio un valore reale, quindi è naturalmente rappresentabile tramite una funzione $$ \varphi(x, y, z) : \mathbb{R}^{3} \to \mathbb{R} $$ Un esempio abbastanza naturale è il gradiente del valore scalare che si indica con $$\vec{\nabla}\varphi = ( \frac{\delta\varphi}{\delta x}, \frac{\delta\varphi}{\delta y}, \frac{\delta\varphi}{\delta z}) = \frac{\delta\varphi}{\delta x} \hat{i} &#43; \frac{\delta\varphi}{\delta y} \hat{j} &#43; \frac{\delta\varphi}{\delta z} \hat{k}$$ Se consideriamo il gradiente da solo è un campo vettoriale (dice la direzione della derivata multidimensionale)....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Divergenza e Circuitazione" href="https://flecart.github.io/notes/divergenza-e-circuitazione/"></a>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cammini" href="https://flecart.github.io/notes/cammini/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
