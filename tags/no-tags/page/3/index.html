@@ -181,70 +181,77 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Accept Reject algorithm
+    <h2 class="entry-hint-parent">Linguaggi Deterministici e DPDA
     </h2>
   </header>
   <div class="entry-content">
-    <p>Some useful links Main results: https://jblevins.org/notes/accept-reject
-Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
-La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
-Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
-Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density....</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Accept Reject algorithm" href="https://flecart.github.io/notes/accept-reject-algorithm/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Function approximation
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>We have enormous state functions, having a generic approssimation could really help! We want to use a differentiable value function so that we can use gradient descent to optimize it, for example a good way of loss would be $$ J(w) = \mathbb{E}_\pi[(V^\pi(s) - \hat{V}^\pi(s;w))^2] $$ The second one is parametrized with $w$. There are two ways (recuperali!) MC policy or Time differential (that is boostrapped, instead the Monte carlo uses a full simulation in order to know what to use)....</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Function approximation" href="https://flecart.github.io/notes/function-approximation/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Hello World
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>First blog post</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Hello World" href="https://flecart.github.io/hello-world/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Semplificazione grammatiche
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Gestione del non determinismo Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.
-Semplificazione grammatiche (5) Slide
-No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all’infinito!) No produzioni unitarie, così evito cicli in cui da A derivo sé stesso. No simboli inutili No ricorsione sinistra (divergenza per top-down) Fattorizzazione della grammatica Eliminazione delel produzioni nulle Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono....</p>
+    <p>DPDA Definizione (2)🟩 La definizione di DPDA è molto simile a quella trattata in Linguaggi liberi e PDA, con solo costraints sulla deterministicità, che si traducono in due condizioni:
+Al massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack Se ho una transizione senza leggere, posso avere solo quella Slide
+Linguaggio libero deterministico Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per stato finale....</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Semplificazione grammatiche" href="https://flecart.github.io/notes/semplificazione-grammatiche/"></a>
+  <a class="entry-link" aria-label="post link to Linguaggi Deterministici e DPDA" href="https://flecart.github.io/notes/linguaggi-deterministici-e-dpda/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Circuit Motifs
+    <h2 class="entry-hint-parent">Top-down Parser
     </h2>
   </header>
   <div class="entry-content">
-    <p>Work like (Luo 2021) show that our brain has naturally some types of circuits, which can be classified mainly as 4 types as described in (Wang et al.):
-References [1] Luo “Architectures of Neuronal Circuits” Science Vol. 373(6559), pp. eabg7285 2021
-[2] Wang et al. “CircuitNet: A Generic Neural Network to Realize Universal Circuit Motif Modeling”</p>
+    <p>Top-down Algoritmo di parsing 🟩 Slide
+Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
+Esempio di esecuzione
+Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
+$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
+Slide
+Si può rendere molto più efficiente con un valore di lookahead....</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Fondamenti teorica
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>https://virtuale.unibo.it/pluginfile.php/1295166/mod_resource/content/0/Lez18-Gorrieri.pdf
+Halting problem Questo asserisce che non esiste nessun programma che sia in grado di decidere la terminazione di un altro programma
+Questo è un problema che ci è interessante perché vorremmo costruire un compilatore che sia in grado di osservare tutti gli errori possibili del programma. Come vedremo tra poco la risposta sarà negativa.
+Dimostrazione tesi 🟨&#43;&#43; Supponiamo che questo programma esista, lo chiamiamo check(P) che restituisce 0 se termina 1 se non termina, allora devo poter essere in grado di scrivere un programma di questo genere...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Fondamenti teorica" href="https://flecart.github.io/notes/fondamenti-teorica/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Proximal Polixy Optimization
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This documents attempts to briefly present the algorithm and some experiments found online about it. The following repo seems to be a good resource: here.
+Usually, PPO is explained as an actor critic framework. This means there is an agent that acts on the environment, and then there is a critic that collects the feedback from the environment. The main idea about this framework is to select a policy that is similar, so that it is less probable that a bad policy, a very different policy from the original is selected....</p>
   </div>
   <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Circuit Motifs" href="https://flecart.github.io/notes/circuit-motifs/"></a>
+  <a class="entry-link" aria-label="post link to Proximal Polixy Optimization" href="https://flecart.github.io/notes/proximal-polixy-optimization/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Bottom-up Parser LR(1)
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Si può osservare che per il parser costruito in Bottom-up Parser LR(0), non riesce a riconoscere di linguaggi semplici come $L = \{a, ab\}$.
+Esempio di quanto detto Parser SLR(1) Questi parser qui utilizzano l’idea del look ahead ampiamente utilizzata in Top-down Parser, per escludere molte produzioni.
+La s sta per simple, perché utilizza una idea semplice :D, credo ahah boh.
+Riduzione con follow 🟩 noi vogliamo ridurre solamente se ho follow corretto il terminale finale della stringa....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Bottom-up Parser LR(1)" href="https://flecart.github.io/notes/bottom-up-parser-lr1/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

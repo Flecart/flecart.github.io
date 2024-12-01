@@ -7,10 +7,9 @@
 <meta name="robots" content="index, follow">
 <title>Diffusion Models | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="Diffusion models random motion. It was first analyzed by Brown.
+<meta name="description" content="Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
 The Diffusion Process This note follows original Einstein&rsquo;s presentation, here we have a simplifyed version.
-Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
-Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position.">
+Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/diffusion-models/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -90,10 +89,9 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Diffusion Models" />
-<meta property="og:description" content="Diffusion models random motion. It was first analyzed by Brown.
+<meta property="og:description" content="Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
 The Diffusion Process This note follows original Einstein&rsquo;s presentation, here we have a simplifyed version.
-Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
-Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position." />
+Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/diffusion-models/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -104,10 +102,9 @@ Concentration We would like to know the concentration of particles after a numbe
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Diffusion Models"/>
-<meta name="twitter:description" content="Diffusion models random motion. It was first analyzed by Brown.
+<meta name="twitter:description" content="Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
 The Diffusion Process This note follows original Einstein&rsquo;s presentation, here we have a simplifyed version.
-Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
-Concentration We would like to know the concentration of particles after a number of fixed steps at a certain position."/>
+Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$."/>
 
 
 <script type="application/ld+json">
@@ -136,12 +133,12 @@ Concentration We would like to know the concentration of particles after a numbe
   "@type": "BlogPosting",
   "headline": "Diffusion Models",
   "name": "Diffusion Models",
-  "description": "Diffusion models random motion. It was first analyzed by Brown.\nThe Diffusion Process This note follows original Einstein\u0026rsquo;s presentation, here we have a simplifyed version.\nLet\u0026rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.\nConcentration We would like to know the concentration of particles after a number of fixed steps at a certain position.",
+  "description": "Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).\nThe Diffusion Process This note follows original Einstein\u0026rsquo;s presentation, here we have a simplifyed version.\nLet\u0026rsquo;s suppose we have a particle at $t = 0$ at some position $i$.",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "Diffusion models random motion. It was first analyzed by Brown.\nThe Diffusion Process This note follows original Einstein’s presentation, here we have a simplifyed version.\nLet’s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.\nConcentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning. Let’s call this concentration $C_{i}(t)$. Then the number of particles at a certain time step and position is $n_{i}(t) = Nc_{i}(t)$\nMarkov Process We consider we have the above concentration process, we would like to determine the evolution process. Then we have the following relation: $$ C_{i}(t + 1) = C_{i - 1}(t)q + C_{i + 1}(t)p + (1 - q - p) C_{i}(t) $$ This defines a Markov process, see Markov Processes, where the value of a certain timestamp depends on the previous ones. We can also interpret this as a certain recurrence relation. We observe that the difference of $$ C_{i}(t + 1) - C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ From the Markov Process we can have the master equation, from which we take the Fokker Plank equation. Somehow, we can interpret the temporal difference as the sum of a first derivative and of a second derivative. The first derivative tells us a preferred direction of diffusion (drift,) the second tells us how fast it is (diffusion). No idea how.\nGoing into continuous time Let’s assume we have an update time of $\\Delta t$ (so smaller time deltas imply more frequent updates). We say $\\tau$ is the time scale of the system (measure of time in the system), we define $\\tau$ such that $\\tau / \\Delta t$ is the number of the updates. We can now redefine the updated probabilities with this notion of time. $p'= p \\Delta t / \\tau$ and equivalently $q'$. Then the continuous Markov process is $$ C_{i}(t + \\Delta t) - C_{i}(t) = \\frac{p' - q'}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p' + q'}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ If we consider the limit $\\Delta t \\to 0$ then we have that $$ \\tau \\frac{d}{dt} C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ This is the master equation. Having a continuous time just changes the probability of jumping, this is the relation that allows us to have continuous updates (so if we don’t have a full time, we have just a fraction of the probability of jumping). This should be the master equation for a diffusion process.\nContinuous Space We do another re-scaling of the probability $p´ = p (\\Delta x / \\delta )^{2}$ then rewriting everything we get the continuous space equation. We use the square because the mean squared displacement (variance) grows linearly with time. Then we get $$ \\frac{ \\partial }{ \\partial t } C(x, t) = D \\frac{ \\partial^{2} }{ \\partial x^{2} } C(x, t) $$ Where $D$ is our diffusion coefficient. We do a Fourier transform in space and we get an ordinary differential equation in time, which is solvable. Take a look for the next section.\nSolution for the diffusion process One can see that the following equation is a solution for the above problem: $$ C(x, t) = \\frac{1}{\\sqrt{ \\pi 4 D t }} e^{-x^{2} / 4Dt} $$ One can solve this just by brute force, or one fancier method is passing into the fourier space, where the equation is simpler to treat. In fact, the Fourier transform of the function $f(x, t)$ is $$ F(k, t) = \\int e^{-ikx}f(x, t) \\, dx $$ And it’s inverse is $$ f(x, t) = \\int e^{ikx}F(k, t) \\, dk $$ If we apply the Fourier Transform we are getting the following: $$ \\begin{align} \\frac{d}{dt} \\int e^{-ikx}C(x, t) \\, dx = D \\int e^{-ikx} \\frac{ \\partial^{2} }{ \\partial x^{2} } C(x, t) \\, dx \\\\ \\frac{d}{dt} F(k, t) = -Dk^{2}F(k, t) \\end{align} $$ Where the right hand side is derived through a double integration by parts.\nIntroduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule Variance of the input. Why do we use such noise schedule? What is the underlying property that we will have? Diffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution Derive the closed form of the reverse conditional distribution We need to know the original starting image. The intuition is that it is simpler to have it if we want to invert. Next we will prove that even if we don’t have it, we can still invert, just step by step. The Reverse Decoder Using small variance schedules We show now briefly that having small variance schedules then we can prove that the distribution $q(z_{t - 1}\\mid z_{t}) \\approx \\mathcal{N}(z_{t- 1}; z_{t},\\beta_{t}I)$.\nWe first use bayes rule: $$ q(\\mathbf{z}_{t-1} | \\mathbf{z}_t) = \\frac{q(\\mathbf{z}_t | \\mathbf{z}_{t-1}) q(\\mathbf{z}_{t-1})}{q(\\mathbf{z}_t)}. $$ Then take the log and expand Taylor to the second element to correct the mean and variance elements for the first one.\n$\\log q(\\mathbf{z}_{t-1}) \\approx \\log q(\\mathbf{z}_t) + (\\mathbf{z}_{t-1} - \\mathbf{z}_t)^\\top \\nabla_{\\mathbf{z}_{t-1}} \\log q(\\mathbf{z}_t) + \\frac{1}{2} (\\mathbf{z}_{t-1} - \\mathbf{z}_t)^\\top \\nabla^2_{\\mathbf{z}_{t-1}} \\log q(\\mathbf{z}_t) (\\mathbf{z}_{t-1} - \\mathbf{z}_t).$\nTraining the Decoder TODO:\n",
-  "wordCount" : "942",
+  "articleBody": "Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).\nThe Diffusion Process This note follows original Einstein’s presentation, here we have a simplifyed version.\nLet’s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.\nConcentration We would like to know the concentration of particles after a number of fixed steps at a certain position. Then we would like to know the same thing if we extend the idea to a certain number of starting particles at the beginning. Let’s call this concentration $C_{i}(t)$. Then the number of particles at a certain time step and position is $n_{i}(t) = Nc_{i}(t)$\nMarkov Process We consider we have the above concentration process, we would like to determine the evolution process. Then we have the following relation: $$ C_{i}(t + 1) = C_{i - 1}(t)q + C_{i + 1}(t)p + (1 - q - p) C_{i}(t) $$ This defines a Markov process, see Markov Processes, where the value of a certain timestamp depends on the previous ones. We can also interpret this as a certain recurrence relation. We observe that the difference of $$ C_{i}(t + 1) - C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ From the Markov Process we can have the master equation, from which we take the Fokker Plank equation. Somehow, we can interpret the temporal difference as the sum of a first derivative and of a second derivative. The first derivative tells us a preferred direction of diffusion (drift,) the second tells us how fast it is (diffusion). No idea how.\nGoing into continuous time Let’s assume we have an update time of $\\Delta t$ (so smaller time deltas imply more frequent updates). We say $\\tau$ is the time scale of the system (measure of time in the system), we define $\\tau$ such that $\\tau / \\Delta t$ is the number of the updates. We can now redefine the updated probabilities with this notion of time. $p'= p \\Delta t / \\tau$ and equivalently $q'$. Then the continuous Markov process is $$ C_{i}(t + \\Delta t) - C_{i}(t) = \\frac{p' - q'}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p' + q'}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ If we consider the limit $\\Delta t \\to 0$ then we have that $$ \\tau \\frac{d}{dt} C_{i}(t) = \\frac{p - q}{2} (C_{i + 1}(t) - C_{i - 1}(t)) + \\frac{p + q}{2}(C_{i + 1}(t) - 2C_{i}(t) + C_{i - 1}(t)) $$ This is the master equation. Having a continuous time just changes the probability of jumping, this is the relation that allows us to have continuous updates (so if we don’t have a full time, we have just a fraction of the probability of jumping). This should be the master equation for a diffusion process.\nContinuous Space We do another re-scaling of the probability $p´ = p (\\Delta x / \\delta )^{2}$ then rewriting everything we get the continuous space equation. We use the square because the mean squared displacement (variance) grows linearly with time. Then we get $$ \\frac{ \\partial }{ \\partial t } C(x, t) = D \\frac{ \\partial^{2} }{ \\partial x^{2} } C(x, t) $$ Where $D$ is our diffusion coefficient. We do a Fourier transform in space and we get an ordinary differential equation in time, which is solvable. Take a look for the next section.\nSolution for the diffusion process One can see that the following equation is a solution for the above problem: $$ C(x, t) = \\frac{1}{\\sqrt{ \\pi 4 D t }} e^{-x^{2} / 4Dt} $$ One can solve this just by brute force, or one fancier method is passing into the fourier space, where the equation is simpler to treat. In fact, the Fourier transform of the function $f(x, t)$ is $$ F(k, t) = \\int e^{-ikx}f(x, t) \\, dx $$ And it’s inverse is $$ f(x, t) = \\int e^{ikx}F(k, t) \\, dk $$ If we apply the Fourier Transform we are getting the following: $$ \\begin{align} \\frac{d}{dt} \\int e^{-ikx}C(x, t) \\, dx = D \\int e^{-ikx} \\frac{ \\partial^{2} }{ \\partial x^{2} } C(x, t) \\, dx \\\\ \\frac{d}{dt} F(k, t) = -Dk^{2}F(k, t) \\end{align} $$ Where the right hand side is derived through a double integration by parts.\nIntroduction to Diffusion Models The Forward Encoder What is the link to Autoencoders? Noise Schedule The noise schedule of diffusion models is set as follows: $$ z_{t} = \\sqrt{ 1 - \\beta_{t} } z_{t - 1} + \\sqrt{\\beta_{t}} \\epsilon_{t}$$ And $z_{0} = x$ where $\\forall t, 0 \u003c \\beta_{t} \u003c 1$ and $\\epsilon_{t} \\sim \\mathcal{N}(0, I)$. So now we have $z_{t} \\sim \\mathcal{N}(z_{t}; \\sqrt{ 1 - \\beta_{t} }z_{t - 1}, \\beta_{t}I)$ If we suppose $z_{t - 1}$ is a Gaussian random variable with mean $\\mu_{t - 1}$ and variance $\\Sigma_{t - 1}^{2}$ then we observe that in the limit it converges to a Gaussian with mean $0$ and variance $I$, given noises. This choice is made with the idea that if we can invert the process, then generating a new sample from the data manifold is just sampling from the normal Gaussian and then applying the inverse noise transformation many many times.\nWe can write a closed form for the forward process: $$ z_{t} = \\sqrt{ \\alpha_{t} } z_{0} + \\sqrt{1 - \\alpha_{t}} \\epsilon $$ Where $\\alpha_{t} = \\prod_{i = 1}^{t} (1 - \\beta_{i})$, this is possible as we are matching the mean and variance of the resulting distribution. Now we can write $z_{t} \\sim \\mathcal{N}(z_{t}; \\sqrt{ \\alpha_{t} } z_{0}, (1 - \\alpha_{t})I)$.\nDiffusion Kernel Write the close form Why is this usually useful? Closed reverse conditional distribution\\ We will use now the same tricks present in Bayesian Linear Regression for computing closed forms of Gaussian distributions.\nWe use Bayesian rule to get the reverse conditional distribution: $$ q(z_{t - 1} \\mid z_{t}, x) = \\frac{q(z_{t} \\mid z_{t - 1}, x) q(z_{t - 1} \\mid x)}{q(z_{t} \\mid x)} $$ Now observe: the denominator is just a normalization constant that does not depend over $z_{t - 1}$, and $q(z_{t} \\mid z_{t - 1}, x) = q(z_{t} \\mid z_{t - 1})$ by Markov Property (see Markov Chains), now we can play with the Gaussians and derive the closed form of the distribution. Let’s take a deep look inside the $\\exp$ after we have done the product. As with Bayesian Linear Regression, we would like to rewrite it in the form $x^{T}\\Sigma^{-1}x - 2 \\mu^{T}\\Sigma^{-1}x + \\text{ const}$ as we know that the product still resembles a Gaussian, and needs to be normalized.\nSo we have: $$ \\begin{align} \\log q(z_{t - 1} \\mid z_{t}, x) \u0026 \\propto (z_{t - 1} - \\sqrt{ a_{t - 1} }x)^{T} \\frac{1}{1 - \\alpha_{t - 1}} (z_{t - 1} - \\sqrt{ a_{t - 1} }x) + (z_{t} - \\sqrt{ 1 - \\beta_{t} }z_{t - 1})^{T} \\frac{1}{\\beta_{t}} (z_{t} - \\sqrt{ 1 - \\beta_{t} }z_{t - 1}) \\\\ \u0026 = \\frac{1}{1 - \\alpha_{t - 1}} z_{t - 1}^{T}z_{t - 1} - 2 \\frac{1}{1 - \\alpha_{t - 1}} z_{t - 1}^{T}\\sqrt{ a_{t - 1} }x- 2 \\frac{1}{\\beta_{t}} z_{t}^{T}\\sqrt{ 1 - \\beta_{t} }z_{t - 1} + \\frac{1}{\\beta_{t}} z_{t - 1}^{T}z_{t - 1} + \\text{const} \\\\ \u0026= z^{T}_{t - 1}\\left( \\frac{1}{ 1 - \\alpha_{t - 1}} + \\frac{1 - \\beta_{t}}{\\beta_{t}} \\right) z_{t - 1} - 2 z^{T}_{t - 1} \\left( \\frac{ \\sqrt{ a_{t - 1} }}{1 - \\alpha_{t - 1}}x + \\frac{\\sqrt{ 1 - \\beta_{t} }}{\\beta_{t}} z_{t} \\right) + \\text{const} \\end{align} $$ And then we can see that: $$ \\sigma_{t - 1}^{2} = \\left( \\frac{1}{ 1 - \\alpha_{t - 1}} + \\frac{1 - \\beta_{t}}{\\beta_{t}} \\right)^{-1} = \\frac{\\beta_{t}(1 - \\alpha_{t - 1})}{1 - \\alpha_{t}} $$ And that: $$ \\begin{align} \\mu_{t - 1} = m(x, z_{t})\u0026= \\sigma_{t - 1}^{2} \\left( \\frac{1}{1 - \\alpha_{t - 1}} \\sqrt{ a_{t - 1} }x + \\frac{\\sqrt{ 1 - \\beta_{t} }}{\\beta_{t}}z_{t} \\right) \\\\ \u0026= \\frac{\\beta_{t}(1 - \\alpha_{t - 1})}{1 - \\alpha_{t}} \\left( \\frac{1}{1 - \\alpha_{t - 1}} \\sqrt{ a_{t - 1} }x +\\frac{\\sqrt{ 1 - \\beta_{t} }}{\\beta_{t}}z_{t} \\right) \\\\ \u0026= \\frac{\\beta_{t}}{1 - \\alpha_{t}} \\sqrt{ a_{t - 1} }x + \\frac{ \\sqrt{ 1 - \\beta_{t} }}{1 - \\alpha_{t}} (1 - \\alpha_{t- 1})z_{t} \\end{align} $$ If we revert the noise update as: $$ x = \\frac{1}{\\sqrt{ \\alpha_{t} }} z_{t} - \\frac{\\sqrt{1 - \\alpha_{t}}}{\\sqrt{ \\alpha_{t} }} \\epsilon $$ Then we can rewrite the posterior mean as: $$ \\mu_{t - 1} = \\frac{1}{\\sqrt{ 1 - \\beta_{t} }} \\left( z_{t} - \\frac{\\beta_{t}}{\\sqrt{ 1 - \\alpha_{t} }}\\varepsilon_{t} \\right) $$ We will observe in a successive section how this form could be useful to train the reverse decoder.\nThe Reverse Decoder Using small variance schedules We show now briefly that having small variance schedules then we can prove that the distribution $q(z_{t - 1}\\mid z_{t}) \\approx \\mathcal{N}(z_{t- 1}; z_{t},\\beta_{t}I)$.\nWe first use bayes rule: $$ q(\\mathbf{z}_{t-1} | \\mathbf{z}_t) = \\frac{q(\\mathbf{z}_t | \\mathbf{z}_{t-1}) q(\\mathbf{z}_{t-1})}{q(\\mathbf{z}_t)}. $$ Then take the log and expand Taylor to the second element to correct the mean and variance elements for the first one.\n$\\log q(\\mathbf{z}_{t-1}) \\approx \\log q(\\mathbf{z}_t) + (\\mathbf{z}_{t-1} - \\mathbf{z}_t)^\\top \\nabla_{\\mathbf{z}_{t-1}} \\log q(\\mathbf{z}_t) + \\frac{1}{2} (\\mathbf{z}_{t-1} - \\mathbf{z}_t)^\\top \\nabla^2_{\\mathbf{z}_{t-1}} \\log q(\\mathbf{z}_t) (\\mathbf{z}_{t-1} - \\mathbf{z}_t).$\nThe Loss Function We will use ideas from Variational Inference. We will attempt to approximate the real inverse distribution $p$ with one of the variational family of Gaussians $q$, and maximize for the ELBO (see linked note for details).\nWe will see that the loss function is the following: $$ \\mathcal{L}(w) = \\mathbb{E}{q} \\left[ \\sum{t = 2}^{T} \\ln \\frac{p(z_{t - 1} \\mid z_{t}, w)}{q(z_{t - 1} \\mid z_{t}, w)} + \\ln p(x \\mid z_{1}, w) \\right]\n$$\nThis can be rewritten in a form closer to Variational Autoencoders, studied in Autoencoders, where we have a reconstruction term with a consistency term.\nWith some quite nice manipulations (difficult and long manipulations!), we can rewrite the loss function as: $$ \\mathcal{L}(w) = -\\sum_{t = 1}^{T} \\lVert g(\\sqrt{ a_{t} }x + \\sqrt{ 1 - \\alpha_{t} }\\varepsilon_{t}, w, t) - \\varepsilon_{t} \\rVert ^{2} $$ Where $g$ is the neural network that we are using to approximate the reverse conditional distribution. And $t = 1$ is the special condition for the reconstruction term, and the rest is the consistency term, all in one in this case.\nTraining the Decoder Sampling from the diffusion Stable Diffusion References [1] Ho et al. “Denoising Diffusion Probabilistic Models” 2020\n",
+  "wordCount" : "1784",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -236,7 +233,7 @@ Concentration We would like to know the concentration of particles after a numbe
     <h1 class="post-title entry-hint-parent">
       Diffusion Models
     </h1>
-    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -245,7 +242,7 @@ Concentration We would like to know the concentration of particles after a numbe
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul>
+        <div class="inner"><ul><ul><ul>
                 <li>
                     <a href="#the-diffusion-process" aria-label="The Diffusion Process">The Diffusion Process</a><ul>
                         
@@ -272,7 +269,7 @@ Concentration We would like to know the concentration of particles after a numbe
                 <li>
                     <a href="#diffusion-kernel" aria-label="Diffusion Kernel">Diffusion Kernel</a></li>
                 <li>
-                    <a href="#closed-reverse-conditional-distribution" aria-label="Closed reverse conditional distribution">Closed reverse conditional distribution</a></li></ul>
+                    <a href="#closed-reverse-conditional-distribution" aria-label="Closed reverse conditional distribution\">Closed reverse conditional distribution\</a></li></ul>
                 </li>
                 <li>
                     <a href="#the-reverse-decoder" aria-label="The Reverse Decoder">The Reverse Decoder</a><ul>
@@ -280,18 +277,25 @@ Concentration We would like to know the concentration of particles after a numbe
                 <li>
                     <a href="#using-small-variance-schedules" aria-label="Using small variance schedules">Using small variance schedules</a></li>
                 <li>
-                    <a href="#training-the-decoder" aria-label="Training the Decoder">Training the Decoder</a>
+                    <a href="#the-loss-function" aria-label="The Loss Function">The Loss Function</a></li>
+                <li>
+                    <a href="#training-the-decoder" aria-label="Training the Decoder">Training the Decoder</a></li>
+                <li>
+                    <a href="#sampling-from-the-diffusion" aria-label="Sampling from the diffusion">Sampling from the diffusion</a></li></ul>
+                </li></ul>
                 </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
+                <li>
+                    <a href="#stable-diffusion" aria-label="Stable Diffusion">Stable Diffusion</a></li></ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><p>Diffusion models random motion. It was first analyzed by Brown.</p>
+  <div class="post-content"><p>Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to <a href="http://arxiv.org/abs/2006.11239">(Ho et al. 2020)</a>.</p>
 <h3 id="the-diffusion-process">The Diffusion Process<a hidden class="anchor" aria-hidden="true" href="#the-diffusion-process">#</a></h3>
 <p>This <a href="https://arxiv.org/pdf/cond-mat/0701242">note</a> follows original Einstein&rsquo;s presentation, here we have a simplifyed version.</p>
 <p>Let&rsquo;s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.</p>
@@ -377,20 +381,74 @@ Where the right hand side is derived through a double integration by parts.</p>
 <li>What is the link to <a href="/notes/autoencoders/">Autoencoders</a>?</li>
 </ul>
 <h4 id="noise-schedule">Noise Schedule<a hidden class="anchor" aria-hidden="true" href="#noise-schedule">#</a></h4>
-<ul>
-<li>Variance of the input.</li>
-<li>Why do we use such noise schedule? What is the underlying property that we will have?</li>
-</ul>
+<p>The noise schedule of diffusion models is set as follows:
+</p>
+$$
+z_{t} = \sqrt{ 1 - \beta_{t} } z_{t - 1} + \sqrt{\beta_{t}} \epsilon_{t}$$
+<p>
+And $z_{0} = x$ where $\forall t, 0 < \beta_{t} < 1$ and $\epsilon_{t} \sim \mathcal{N}(0, I)$.
+So now we have $z_{t} \sim \mathcal{N}(z_{t}; \sqrt{ 1 - \beta_{t} }z_{t - 1}, \beta_{t}I)$
+If we suppose $z_{t - 1}$ is a <a href="/notes/gaussians/">Gaussian</a> random variable with mean $\mu_{t - 1}$ and variance $\Sigma_{t - 1}^{2}$  then we observe that in the limit it converges to a Gaussian with mean $0$ and variance $I$, given noises.
+This choice is made with the idea that if we can invert the process, then generating a new sample from the data manifold is just sampling from the normal Gaussian and then applying the inverse noise transformation many many times.</p>
+<p>We can write a closed form for the forward process:
+</p>
+$$
+z_{t} = \sqrt{ \alpha_{t} }  z_{0} + \sqrt{1 - \alpha_{t}} \epsilon
+$$
+<p>
+Where $\alpha_{t} = \prod_{i = 1}^{t} (1 - \beta_{i})$, this is possible as we are matching the mean and variance of the resulting distribution.
+Now we can write $z_{t} \sim \mathcal{N}(z_{t}; \sqrt{ \alpha_{t} }  z_{0}, (1 - \alpha_{t})I)$.</p>
 <h4 id="diffusion-kernel">Diffusion Kernel<a hidden class="anchor" aria-hidden="true" href="#diffusion-kernel">#</a></h4>
 <ul>
 <li>Write the close form</li>
 <li>Why is this usually useful?</li>
 </ul>
-<h4 id="closed-reverse-conditional-distribution">Closed reverse conditional distribution<a hidden class="anchor" aria-hidden="true" href="#closed-reverse-conditional-distribution">#</a></h4>
-<ul>
-<li>Derive the closed form of the reverse conditional distribution</li>
-<li>We need to know the original starting image. The intuition is that it is simpler to have it if we want to invert. Next we will prove that even if we don&rsquo;t have it, we can still invert, just step by step.</li>
-</ul>
+<h4 id="closed-reverse-conditional-distribution">Closed reverse conditional distribution\<a hidden class="anchor" aria-hidden="true" href="#closed-reverse-conditional-distribution">#</a></h4>
+<p>We will use now the same tricks present in <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> for computing closed forms of Gaussian distributions.</p>
+<p>We use Bayesian rule to get the reverse conditional distribution:
+</p>
+$$
+q(z_{t - 1} \mid z_{t}, x) = \frac{q(z_{t} \mid z_{t - 1}, x) q(z_{t - 1} \mid x)}{q(z_{t} \mid x)}
+$$
+<p>
+Now observe: the denominator is just a normalization constant that does not depend over $z_{t - 1}$, and $q(z_{t} \mid z_{t - 1}, x) = q(z_{t} \mid z_{t - 1})$ by Markov Property (see <a href="/notes/markov-chains/">Markov Chains</a>), now we can play with the Gaussians and derive the closed form of the distribution.
+Let&rsquo;s take a deep look inside the $\exp$ after we have done the product. As with <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a>, we would like to rewrite it in the form $x^{T}\Sigma^{-1}x - 2 \mu^{T}\Sigma^{-1}x + \text{ const}$ as we know that the product still resembles a Gaussian, and needs to be normalized.</p>
+<p>So we have:
+</p>
+$$
+\begin{align}
+\log q(z_{t - 1} \mid z_{t}, x) & \propto  (z_{t - 1} - \sqrt{ a_{t - 1} }x)^{T} \frac{1}{1 - \alpha_{t - 1}} (z_{t - 1} - \sqrt{ a_{t - 1} }x) +  (z_{t} - \sqrt{ 1 - \beta_{t} }z_{t - 1})^{T} \frac{1}{\beta_{t}} (z_{t} - \sqrt{ 1 - \beta_{t} }z_{t - 1})  \\
+& = \frac{1}{1 - \alpha_{t - 1}} z_{t - 1}^{T}z_{t - 1} - 2 \frac{1}{1 - \alpha_{t - 1}} z_{t - 1}^{T}\sqrt{ a_{t - 1} }x- 2 \frac{1}{\beta_{t}} z_{t}^{T}\sqrt{ 1 - \beta_{t} }z_{t - 1} + \frac{1}{\beta_{t}} z_{t - 1}^{T}z_{t - 1} + \text{const} \\
+&= z^{T}_{t - 1}\left( \frac{1}{ 1 - \alpha_{t - 1}} + \frac{1 - \beta_{t}}{\beta_{t}} \right) z_{t - 1} - 2 z^{T}_{t - 1} \left( \frac{ \sqrt{ a_{t - 1} }}{1 - \alpha_{t - 1}}x + \frac{\sqrt{ 1 - \beta_{t} }}{\beta_{t}} z_{t} \right) + \text{const}
+\end{align}
+$$
+<p>And then we can see that:
+</p>
+$$
+\sigma_{t - 1}^{2} = \left( \frac{1}{ 1 - \alpha_{t - 1}} + \frac{1 - \beta_{t}}{\beta_{t}} \right)^{-1} = \frac{\beta_{t}(1 - \alpha_{t - 1})}{1 - \alpha_{t}}
+$$
+<p>
+And that:
+</p>
+$$
+\begin{align}
+\mu_{t - 1} = m(x, z_{t})&= \sigma_{t - 1}^{2} \left( \frac{1}{1 - \alpha_{t - 1}} \sqrt{ a_{t - 1} }x + \frac{\sqrt{ 1 - \beta_{t} }}{\beta_{t}}z_{t} \right) \\
+&= \frac{\beta_{t}(1 - \alpha_{t - 1})}{1 - \alpha_{t}} \left( \frac{1}{1 - \alpha_{t - 1}} \sqrt{ a_{t - 1} }x +\frac{\sqrt{ 1 - \beta_{t} }}{\beta_{t}}z_{t} \right)  \\
+&= \frac{\beta_{t}}{1 - \alpha_{t}} \sqrt{ a_{t - 1} }x + \frac{ \sqrt{ 1 - \beta_{t} }}{1 - \alpha_{t}} (1 - \alpha_{t- 1})z_{t} 
+\end{align}
+$$
+<p>If we revert the noise update as:
+</p>
+$$
+x = \frac{1}{\sqrt{ \alpha_{t} }} z_{t} - \frac{\sqrt{1 - \alpha_{t}}}{\sqrt{ \alpha_{t} }} \epsilon
+$$
+<p>Then we can rewrite the posterior mean as:
+</p>
+$$
+\mu_{t - 1} = \frac{1}{\sqrt{ 1 - \beta_{t} }} \left( z_{t} - \frac{\beta_{t}}{\sqrt{ 1 - \alpha_{t} }}\varepsilon_{t} \right) 
+$$
+<p>
+We will observe in a successive section how this form could be useful to train the reverse decoder.</p>
 <h3 id="the-reverse-decoder">The Reverse Decoder<a hidden class="anchor" aria-hidden="true" href="#the-reverse-decoder">#</a></h3>
 <h4 id="using-small-variance-schedules">Using small variance schedules<a hidden class="anchor" aria-hidden="true" href="#using-small-variance-schedules">#</a></h4>
 <p>We show now briefly that having small variance schedules then we can prove that the distribution
@@ -403,8 +461,30 @@ $$
 <p>
 Then take the log and expand Taylor to the second element to correct the mean and variance elements for the first one.</p>
 <p>$\log q(\mathbf{z}_{t-1}) \approx \log q(\mathbf{z}_t) + (\mathbf{z}_{t-1} - \mathbf{z}_t)^\top \nabla_{\mathbf{z}_{t-1}} \log q(\mathbf{z}_t) + \frac{1}{2} (\mathbf{z}_{t-1} - \mathbf{z}_t)^\top \nabla^2_{\mathbf{z}_{t-1}} \log q(\mathbf{z}_t) (\mathbf{z}_{t-1} - \mathbf{z}_t).$</p>
+<h4 id="the-loss-function">The Loss Function<a hidden class="anchor" aria-hidden="true" href="#the-loss-function">#</a></h4>
+<p>We will use ideas from <a href="/notes/variational-inference/">Variational Inference</a>. We will attempt to approximate the real inverse distribution $p$ with one of the variational family of Gaussians $q$, and maximize for the ELBO (see linked note for details).</p>
+<p>We will see that the loss function is the following:
+$$
+\mathcal{L}(w) = \mathbb{E}<em>{q} \left[ \sum</em>{t = 2}^{T} \ln \frac{p(z_{t - 1} \mid z_{t}, w)}{q(z_{t - 1} \mid z_{t}, w)} + \ln p(x \mid z_{1}, w) \right]</p>
+<p>$$</p>
+<p>This can be rewritten in a form closer to Variational Autoencoders, studied in <a href="/notes/autoencoders/">Autoencoders</a>, where we have a reconstruction term with a consistency term.</p>
+<p>With some quite nice manipulations (difficult and long manipulations!), we can rewrite the loss function as:
+</p>
+$$
+\mathcal{L}(w) = -\sum_{t = 1}^{T} \lVert g(\sqrt{ a_{t} }x + \sqrt{ 1 - \alpha_{t} }\varepsilon_{t}, w, t) - \varepsilon_{t} \rVert ^{2}
+$$
+<p>
+Where $g$ is the neural network that we are using to approximate the reverse conditional distribution.
+And $t = 1$ is the special condition for the reconstruction term, and the rest is the consistency term, all in one in this case.</p>
 <h4 id="training-the-decoder">Training the Decoder<a hidden class="anchor" aria-hidden="true" href="#training-the-decoder">#</a></h4>
-<p>TODO:</p>
+<p><img loading="lazy" src="/notes/diffusion-models-20241201211812630.webp" alt="From Deep Learning with Bishop book"  />
+</p>
+<h4 id="sampling-from-the-diffusion">Sampling from the diffusion<a hidden class="anchor" aria-hidden="true" href="#sampling-from-the-diffusion">#</a></h4>
+<p><img loading="lazy" src="/notes/diffusion-models-20241201214123170.webp" alt="Algorithm from Bishop book"  />
+</p>
+<h2 id="stable-diffusion">Stable Diffusion<a hidden class="anchor" aria-hidden="true" href="#stable-diffusion">#</a></h2>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Ho et al. <a href="http://arxiv.org/abs/2006.11239">“Denoising Diffusion Probabilistic Models”</a>  2020</p>
 
 
   </div>
