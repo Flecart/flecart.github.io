@@ -181,20 +181,6 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Maximum Entropy Principle
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam’s Razor, i.e. the principle of parsimony.
-Let’s start with a simple example taken from Andreas Kraus’s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:
-Consider a criminal trial with three suspects, A, B, and C. The collected evidence shows that suspect C can not have committed the crime, however it does not yield any information about sus- pects A and B....</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Maximum Entropy Principle" href="https://flecart.github.io/notes/maximum-entropy-principle/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">Tabular Reinforcement Learning
     </h2>
   </header>
@@ -208,29 +194,41 @@ A Classical Dilemma We have seen something similar also in Active Learning when 
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Markov Chains
+    <h2 class="entry-hint-parent">Kalman Filters
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
-$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
-Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente....</p>
+    <p>Kalman Filters are defined as follows:
+We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
+$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} &amp; F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} &amp; H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state....</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Markov Chains" href="https://flecart.github.io/notes/markov-chains/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Kalman Filters" href="https://flecart.github.io/notes/kalman-filters/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Markov Processes
+    <h2 class="entry-hint-parent">Variational Inference
     </h2>
   </header>
   <div class="entry-content">
-    <p>Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
-Markov property 🟩 Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente....</p>
+    <p>With variational inference we want to find a good approximation of the posterior distribution from which it is easy to sample. The objective is to approximate the posterior with a simpler one, because sometimes the prior or likelihood are difficult to compute. $$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$ For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation....</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Bayesian Linear Regression
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
+Classical Linear regression Let’s start with a classical regression. In this setting we need to estimate a model that is generated from this kind of data: $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty....</p>
   </div>
   <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Markov Processes" href="https://flecart.github.io/notes/markov-processes/"></a>
+  <a class="entry-link" aria-label="post link to Bayesian Linear Regression" href="https://flecart.github.io/notes/bayesian-linear-regression/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
