@@ -196,16 +196,30 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">General SWE principles
+    <h2 class="entry-hint-parent">Equazioni non lineari
     </h2>
   </header>
   <div class="entry-content">
-    <p>This small note sections tries to fix 5 important concepts in software engineering
-Sub-system and modules 🟩 We need to differentiate from sub-system, which is a part of a system that tries to achieve some objective, and a module, which is more language specific way of saying imported file, or set of functions or classes.
-Information hiding 🟩 This is a very important principle present in object oriented programming. Within this philosophy we should be able to access only public methods or data, this allows the construction of abstractions that allow us to think at a higher level....</p>
+    <p>Per trovare i zeri di una funzione continua non lineare non esistono alcuni metodi diretti che ci portano subito a una soluzione. Per questo motivo andremo ad analizzare molteplici pasis iterativi per trovare i zeri di una funzione.
+La discussione di convergenza di ordine p è stata già discussa qui Note introduttive convergenza e iterazione , per quanto riguarda i metodi iterativi per risolvere sistemi di equazioni lineari
+Globale e local Ricordiamo di Norme e Condizionamento, in cui il condizoinamento era più o meno una stima di quanto cambia la soluzione quando cambia brevemente l’input....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to General SWE principles" href="https://flecart.github.io/notes/general-swe-principles/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Equazioni non lineari" href="https://flecart.github.io/notes/equazioni-non-lineari/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Gestione della memoria
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Memoria statica Elementi in memoria statica (4) 🟩- Variabili globali Istruzioni macchina Costanti (Variabili locali, paramentri e ritorno di funzione?) Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).
+Quindi se vogliamo
+Avere funzioni ricorsive Potere allocare e deallocare variabili in modo dinamico Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico....</p>
+  </div>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Gestione della memoria" href="https://flecart.github.io/notes/gestione-della-memoria/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -223,41 +237,29 @@ Questo lemma è molto interessante perché mette in relazione il finito (le succ
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Logica Proposizionale
+    <h2 class="entry-hint-parent">Problemi di accoppiamento
     </h2>
   </header>
   <div class="entry-content">
-    <p>Con la logica proposizionale studiamo le denotazioni che hanno un valore di verità, ovvero deve essere una sentenza assertiva. Studio solamente le connotazioni che hanno una capacità denotativa, in quanto è solo quello ch emi importa.
-6.1 La sintassi Vengono qui definite le produzioni che valgono in ogni singolo mondo.
-$$ F ::= \top|\bot|A|B|...|\not F| F \wedge F| F \vee F| F \implies F $$ Questa è la BNF della nostra sintassi....</p>
+    <p>I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.
+Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione....</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Logica Proposizionale" href="https://flecart.github.io/notes/logica-proposizionale/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Problemi di accoppiamento" href="https://flecart.github.io/notes/problemi-di-accoppiamento/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Neural Networks
+    <h2 class="entry-hint-parent">Programmi Concorrenti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction: a neuron I am lazy, so I’m skipping the introduction for this set of notes. Look at Andrew Ng’s Coursera course for this part. Historical notes are (Rosenblatt 1958). One can view a perceptron to be a Log Linear Models with the temperature of the softmax that goes to 0 (so that it is an argmax). Trained with a stochastic gradient descent with a batch of 1 (this is called the perceptron update rule)....</p>
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Neural Networks" href="https://flecart.github.io/notes/neural-networks/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Randomness
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione alla Randomicità Questo è principalmente basato su (Li &amp; Vitányi 2019) Capito 1.9 Sembra che la nozione di random sia alla fine una cosa molto profonda. Per esempio, un caso lampante che le definizioni non funzionano nel caso di numeri trascendenti è che catalogano i numeri di $\pi$ come se fossero casuali, mentre in realtà possono essere trovati mediante procedimenti precisi. È una distinzione filosoficamente molto interessante.
-Alla fine sembra ci sia un link molto diretto con la crittografia, si può vedere (Stinson 2005)....</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Randomness" href="https://flecart.github.io/notes/randomness/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
