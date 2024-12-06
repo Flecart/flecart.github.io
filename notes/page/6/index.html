@@ -196,73 +196,74 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bottom-up Parser LR(0)
+    <h2 class="entry-hint-parent">Tarjan e MCMF
     </h2>
   </header>
   <div class="entry-content">
-    <p>Descrivo ora alcune domande utili per ripasso:
-Quali sono schematicmente quali sono le operazioni migliori per un parser top-down? Cosa è un prefisso viabile? Quali sono i conflitti possibli, e come risolverli… Non sai nemmeno definire inmodo formale cosa sia un item Bottom up Intro shift-reduce e LR 🟩 Slide
-In breve:
-Shift = simbolo terminale messo nella stack Riduzione utilizzando una produzione LR = dettura da Sinistra, creazione della stringa da destra (derivazione rightmost) Algoritmo classico 🟨&#43; Quello che credo che intendevo per questo algoritmo classico è quello non deterministico, nel senso che prova a fare backtracking, finché non ha finito tutte le possibilità, oppure trova la derivazione giusta....</p>
+    <p>Questa sezione la tengo separata rispetto agli altri per favorire lo studio, così questa roba nuova la ripasso più spesso, in seguito si può accorpare.
+Goldberg Tarjan/Push-relabel Questo algoritmo è importante perché introduce ragionamenti sul minimo locale che possa alla fine essere ricomposto come soluzione globale.
+Questa lezione youtube lo spiega da Dio
+Preflusso 🟩 Slide
+La parte nuova di questa cosa è che i vincoli di bilanciamento possono diventare una disuguaglianza....</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Tarjan e MCMF" href="https://flecart.github.io/notes/tarjan-e-mcmf/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Top-down Parser
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Top-down Algoritmo di parsing 🟩 Slide
+Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
+Esempio di esecuzione
+Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
+$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
+Slide
+Si può rendere molto più efficiente con un valore di lookahead....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bottom-up Parser LR(0)" href="https://flecart.github.io/notes/bottom-up-parser-lr0/"></a>
+  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Minimi quadrati
+    <h2 class="entry-hint-parent">Compression Algorithms
     </h2>
   </header>
   <div class="entry-content">
-    <p>Note matematiche introduttive Vettori ortonormali 🟩 Questa parte è fatto molto meglio in Inner product spaces.
-Due vettori si dicono ortonormali se $vv^T = ||v|| = 1$ e sono ortogonali, ossia $v_i v^T_j = 0$ con i e j diversi fra di loro
-Matrici ortogonale (4) 🟩- Matrici si dicono ortonomali se le sue colonne sono vettori sono ortonormali
-Matrici ortonormali sono isometrie, cioè mantengono le distanze. Queste matrici sono tutte non singolari e quadrate per definizione La sua inversa è ortogonale La sua inversa è uguale alla trasposta slide Proprietà matrice ortonormale...</p>
+    <p>Lempel-Ziv-Welch Algorithm Introduzione sul funzionamento Primo scan con un dizionario indexato dei singoli caratteri Poi viene cercato di raggruppare caratteri a coppie. Se una coppia è già presente nel dizionario, allora aggiungo al dizionario una cosa più lunga e metto un code diverso Esempio di sopra. La cosa carina è che il dizionario si può ricostruire in fase di decoding.
+Tutti gli altri, tipo zip, gzip, png si basano poi su questa idea....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Minimi quadrati" href="https://flecart.github.io/notes/minimi-quadrati/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Compression Algorithms" href="https://flecart.github.io/notes/compression-algorithms/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Structured Query Language
+    <h2 class="entry-hint-parent">Divergenza e Circuitazione
     </h2>
   </header>
   <div class="entry-content">
-    <p>Little bits of history It was invented in 1970 in Almaden (San Jose) by IBM (Don Chamberlin, Raymond Boyce worked on this) for the first relational database, called system R. Then for copyright issues it hasn’t been called SEQUEL, so they branded it as SQL.
-SQL is a declarative language With declaratives language there is a separation between what I call the intentionality and the actual process. In declarative languages we just say what we want the result to be, and don’t care what the actual implementation is like....</p>
+    <p>Scalare Scalare e gradiente 🟩 Un campo scalare assegna a ogni punto dello spazio un valore reale, quindi è naturalmente rappresentabile tramite una funzione $$ \varphi(x, y, z) : \mathbb{R}^{3} \to \mathbb{R} $$ Un esempio abbastanza naturale è il gradiente del valore scalare che si indica con $$\vec{\nabla}\varphi = ( \frac{\delta\varphi}{\delta x}, \frac{\delta\varphi}{\delta y}, \frac{\delta\varphi}{\delta z}) = \frac{\delta\varphi}{\delta x} \hat{i} &#43; \frac{\delta\varphi}{\delta y} \hat{j} &#43; \frac{\delta\varphi}{\delta z} \hat{k}$$ Se consideriamo il gradiente da solo è un campo vettoriale (dice la direzione della derivata multidimensionale)....</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Structured Query Language" href="https://flecart.github.io/notes/structured-query-language/"></a>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Divergenza e Circuitazione" href="https://flecart.github.io/notes/divergenza-e-circuitazione/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Variational Inference
+    <h2 class="entry-hint-parent">Introduction to Advanced Machine Learning
     </h2>
   </header>
   <div class="entry-content">
-    <p>With variational inference we want to find a good approximation of the posterior distribution from which it is easy to sample. The objective is to approximate the posterior with a simpler one, because sometimes the prior or likelihood are difficult to compute. $$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$ For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation....</p>
+    <p>Introduction to the course Machine learning offers a new way of thinking about reality: rather than attempting to directly capture a fragment of reality, as many traditional sciences have done, we elevate to the meta-level and strive to create an automated method for capturing it.
+This first lesson will be more philosophical in nature. We are witnessing a paradigm shift in the sense described by Thomas Kuhn in his theory of scientific revolutions....</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Accept Reject algorithm
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Some useful links Main results: https://jblevins.org/notes/accept-reject
-Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
-La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
-Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
-Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density....</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Accept Reject algorithm" href="https://flecart.github.io/notes/accept-reject-algorithm/"></a>
+  <footer class="entry-footer">15 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduction to Advanced Machine Learning" href="https://flecart.github.io/notes/introduction-to-advanced-machine-learning/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
