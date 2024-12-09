@@ -196,72 +196,69 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Probabilistic Turing Machines
+    <h2 class="entry-hint-parent">Garbage Collection
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduction to the probabilistic Turing Machine Most of real phenomena are better comprehended by a probabilistic view. This pushes to build a formal model that takes probability into account
-Def: Probabilistic TM Take a non deterministic TM La macchina di Turing. At each step there is a fair coin-flip that has two legal branches. So the probability of a certain branch is $$ \mathbb{P}(b) = 2^{-k} $$ Where $k$ is the length of the branch....</p>
+    <p>On dangling pointers Tombstones 🟩 Slides tombstones
+Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.
+Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.
+Keys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria, che è doppio...</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Probabilistic Turing Machines" href="https://flecart.github.io/notes/probabilistic-turing-machines/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Garbage Collection" href="https://flecart.github.io/notes/garbage-collection/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Processi e thread
+    <h2 class="entry-hint-parent">Interpolazione
     </h2>
   </header>
   <div class="entry-content">
-    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
-Slide schema generale tabelle
-Processi Il process control block è la struttura di dati principali da comprendere.
-Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria....</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">R e Intervalli
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>2.1 Necessità e caratteristiche di R 2.1.1 Radici di N non perfetti e Q $\sqrt{n} \in \mathbb{Q} \implies n \text{ è quadrato perfetto}$
-Fai lemma della divisibilità fra due numeri
-Lemma: Dati $m,n,l$ tali che $MCD(m,l)=1$ e $l | m n$ allora allora $l | n$ Questo si risolve con ragionamenti sui fattori di m e n. Per dimostrare che è razionale la radice di solamente una radice perfetta parto da un numero razionale, faccio certi ragionamenti e scoprirò alla fine che il numero deve essere una radice perfetta....</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to R e Intervalli" href="https://flecart.github.io/notes/r-e-intervalli/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Teoria dei Tipi
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Ripasso Prox: 30 Ripasso: June 6, 2023 Ultima modifica: May 14, 2023 6:13 PM Primo Abbozzo: March 13, 2023 9:20 AM Studi Personali: No
-Elementi di ripasso Teoria dei Tipi Introduzione Definizione 🟩— Un metodo sintattico praticabile per dimostrare l’assenza di determinati comportamenti del programma, fatto classificando le unità sintattiche in base ai tipi di valore che assumono
-Vogliamo che fosse praticabile nel senso che effettivamente lo possiamo implementare, cioè ci permettono di avere certe tipologie di garanzia....</p>
-  </div>
-  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Teoria dei Tipi" href="https://flecart.github.io/notes/teoria-dei-tipi/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Vettore potenziale
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione al vettore potenziale Definizione vettore potenziale 🟩 Possiamo sempre scrivere il campo $\vec{B}$ come $$ \vec{B} = \vec{\nabla} \times \vec{A} $$ Con un campo vettoriale a caso $\vec{A}$, vedremo che questo campo avrà qualche utilità per fare i calcoli.
-Possiamo notare che soddisfa la proprietà dell campo solenoidale citato in Magnetismo, infatti
-$$ \vec{\nabla} \cdot \vec{B} = \vec{\nabla} \cdot (\vec{\nabla} \times \vec{A}) = 0 $$ Perché sappiamo che la divergenza del rotore (questo operatore dico) è sempre nullo per ragioni di Cauchy, se ne parla in Divergenza e Circuitazione....</p>
+    <p>Vogliamo in questa sezione andare ad indagare la costruzione di funzioni che passano in tutti i punti che vogliamo, appunto interpolare. La funzione è molto simile alla regressione trattata in Minimi quadrati (con il metodo della regressione, chiamato anche approssimazione ai minimi quadrati).
+Quindi mentre la precedente voleva andare a minimizzare l’errore, questo attuale va a creare proprio da 0 la funzione che ci passa sempre.
+Introduzione Andremo a creare una funzione f tale che per ogni x in input si abbia esattamente la y in output...</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Vettore potenziale" href="https://flecart.github.io/notes/vettore-potenziale/"></a>
+  <a class="entry-link" aria-label="post link to Interpolazione" href="https://flecart.github.io/notes/interpolazione/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Introduction to Algorithmic Information and Complexity
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Quick introduction Si assume che la descrizione più intelligente di un qualcosa è la stringa più corta che descrive quella, un po’ forse è arbitrario, perché minore complessità, non è detto che sia direttamente relazionata con la difficoltà di descriverla.
+Nel caso di AIT, diciamo che una cosa random non è compressibile, altrimenti posso scriverla in modo più compatto. È importante stabilire che l’alfabeto che abbiamo per rappresentare qualcosa è fissato a priori....</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduction to Algorithmic Information and Complexity" href="https://flecart.github.io/notes/introduction-to-algorithmic-information-and-complexity/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Model-free Reinforcement Learning
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p></p>
+  </div>
+  <footer class="entry-footer">0 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Model-free Reinforcement Learning" href="https://flecart.github.io/notes/model-free-reinforcement-learning/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Problemi di accoppiamento
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I problem idi accoppiamento sono abbastanza comuni per ottimizzazione a grafi. In questa serie di note andiamo a trattare brevemente i problemi principali, con un accenno veloce ad alcuni algoritmi di soluzione per esse.
+Grafo bipartito🟩 Un grafo bipartito è un insieme $(O \cup D), (A)$ di nodi e di archi. Tutti i nodi sono o fra i nodi di origine oppure fra i nodi di destinazione, e gli archi sono solamente collegati fra nodi di origine e nodi di destinazione....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Problemi di accoppiamento" href="https://flecart.github.io/notes/problemi-di-accoppiamento/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
