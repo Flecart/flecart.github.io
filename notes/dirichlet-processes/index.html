@@ -134,8 +134,8 @@ The Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "The DP (Dirichlet Processes) is part of family of models called non-parametric models. Non parametric models concern learning models with potentially infinite number of parameters. One of the classical application is unsupervised techniques like clustering. Intuitively, clustering concerns in finding compact subsets of data, i.e. finding groups of points in the space that are particularly close by some measure.\nThe Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a generalization of the Beta distribution. It is defined as: $$ \\text{Dir}(\\rho_{1}, \\dots \\rho_{k};\\alpha_{1}, \\dots, \\alpha_{k}) = \\frac{1}{B(\\alpha)} \\prod_{i = 1}^{k} \\rho_{i}^{\\alpha_{i} - 1} $$ Where $B(\\alpha) = \\frac{\\prod_{i = 1}^{k} \\Gamma(\\alpha_{i})}{\\Gamma(\\sum_{i = 1}^{k} \\alpha_{i})}$ is the normalization constant. And $\\rho_{i} \\in [0, 1]$ and $\\sum_{i = 1}^{k} \\rho_{i} = 1$. The $\\Gamma$ function is defined as $$ \\Gamma(x) = \\int_{0}^{\\infty} t^{x - 1} e^{-t} dt $$ And it is has the nice property of $\\Gamma(x + 1) = x \\Gamma(x)$ and $\\Gamma(1) = 1$, this is why we can see this distribution as a generalization of the factorial. The important thing to note about this distribution is that it is the conjugate prior of the multinomial distribution. See here. So, if we have a multinomial distribution with a Dirichlet prior, then the posterior is also a Dirichlet distribution. This allows us to sort of update our prior with the data we have, which is a nice property for bayesian inference. You can learn more about prior updates in Bayesian Linear Regression.\nDP effectively defines a conjugate prior for arbitrary measurable spaces.\nDefinition of the process A Dirichlet Process is a distribution over probability measures $G: \\Theta \\to \\mathbb{R}^{+}$. It is defined as: $$ G \\sim DP(\\alpha, H) $$ Where given a partition of our sample space $\\Theta$ into a countable number of disjoint sets $\\Theta_{1}, \\Theta_{2}, \\dots$ we have that: $$ G(\\Theta_{1}), G(\\Theta_{2}), \\dots \\sim \\text{Dir}(\\alpha H(\\Theta_{1}), \\alpha H(\\Theta_{2}), \\dots) $$ So they are joinly distributed as a Dirichlet distribution. And $H$ is called the base measure and $\\alpha$ is called the concentration parameter.\nTODO: first explain the intuition of the prior, in the case of the beta, extend this to the dirichlet, and use the same intuition to explain how the prior is updated.\nChoosing number of Clusters Dirichlet processes are related to finding the best number of clusters (See Clustering). It is a non-parametric way (meaning it can grow with the data) to find that number.\nStick Breaking We have dome something similar to $GP$ in Gaussian Processes: the difference is sequential sampling compared to sampling all of the points at once using the difficult multivariate distribution.\nWe would like to sample $(\\rho_{1}, \\dots, \\rho_{k}) \\sim \\text{Dir}(\\alpha_{1}, \\dots, \\alpha_{k})$. So now we just sample the first $\\rho_{1}$ and then sample the second conditioned on the first observation (So we have a beta distribution now) and so on.\nGriffiths-Engen-McCloskey distribution This distribution is just a generalization of the stick breaking process. We write $\\rho \\sim GEM(\\alpha)$ which means breaking according the distribution $\\text{Beta}(1, \\alpha)$. if beta is smaller then the stick is longer. So we can interpret the parameter $\\alpha$ as some sort of variable of the remaining stick length.\nDe Finetti’s theorem Given a sequence of infinitely exchangeable sequence of random variables (exchangeable means the distributions remains the same after a permutation of the infinite sequence), then there exists a random variable $G$ such that $\\forall n$: $$ p(X_{1}, \\dots, X_{n}) = \\int \\left( \\prod_{i = 1}^{n} p(x_{i} \\mid G) \\right) \\, dG $$ Which means we can decompose the infinite exchangeable sequence into independent conditional random variables. I have not understood why this is importnat.\nClassical Combinatorial problems The Chinese Restaurant Process 🟥 We have some customers (observations) $x^{(i)}$ assigned to some clusters $k$. Then we have the Matthew effect: more people in a table makes it more probable to seat there. Or some probability to create a new table $\\propto \\alpha$.\nSo the probability of customer $n + 1$ joining table $\\tau$ and $\\mathcal{P}$ is the set of tables. $$ p(\\tau = k \\mid \\tau_{1}, \\dots, \\tau_{n}) = \\begin{cases} \\frac{\\lVert \\tau \\rVert}{n + \\alpha} \u0026 \\text{ if } \\tau \\in \\mathcal{P} \\\\ \\frac{\\alpha}{n + \\alpha} \u0026 \\text{otherwise} \\end{cases} $$ Given this modelling, then it’s easy to compute the probability of a given table assignment, which is: $$ P(\\mathcal{P}) = \\frac{\\alpha^{\\lvert P \\rvert }}{\\alpha^{(n)}} \\prod_{\\tau \\in \\mathcal{P}} (\\lvert \\tau \\rvert - 1)! $$ We can do this because it is order and labeling-independent. With this model, we can show that the expected number of table is in the order of $\\mathcal{O}(\\alpha \\log(N))$ In economy, this effect is called rich get richer because more popular cluster are able to attract more points into it.\nPólya Urns We have urns with colored balls that can be drawn at random. If a ball is drawn it is doubled and put both back into the Urn. We can prove that this is equivalent to the Chinese Restaurant Process, given a finite number of clusters (colors). The important part is that this is exchangeable.\nHoppe Urn This is a variation of the Pólya’s urn. Here we have a special ball that when it’s picked it is put back into the urn but also a new color is put back! Then this model is exactly the same as the Chinese Restaurant Process. It should be a nice exercise to prove this. TODO: understand how you can apply de finetti’s theorem here.\nThe DP Mixture Model The model 🟥+ We have the probability of the clusters $\\rho = (\\rho_{1}, \\dots) \\sim GEM(\\alpha)$ and alpha is chosen appropriately with some validation. $\\mu_{k} \\sim \\mathcal{N}(\\mu_{0}, \\sigma_{0}^{2})$ are the centers of the clusters. We draw some assignments to the clusters with a categorical distribution based on $\\rho$. We call these $z_{i}$. And then draw points $x_{i} \\sim \\mathcal{N}(\\mu_{i}, \\sigma^{2})$.\nFitting a learner 🟥 EM (see Clustering) are difficult to use for non-parametric models. We will use Gibbs Sampling introduced in Monte Carlo Methods.\nThe Latent Dirichlet Allocation Model ",
-  "wordCount" : "991",
+  "articleBody": "The DP (Dirichlet Processes) is part of family of models called non-parametric models. Non parametric models concern learning models with potentially infinite number of parameters. One of the classical application is unsupervised techniques like clustering. Intuitively, clustering concerns in finding compact subsets of data, i.e. finding groups of points in the space that are particularly close by some measure.\nThe Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a generalization of the Beta distribution. It is defined as: $$ \\text{Dir}(\\rho_{1}, \\dots \\rho_{k};\\alpha_{1}, \\dots, \\alpha_{k}) = \\frac{1}{B(\\alpha)} \\prod_{i = 1}^{k} \\rho_{i}^{\\alpha_{i} - 1} $$ Where $B(\\alpha) = \\frac{\\prod_{i = 1}^{k} \\Gamma(\\alpha_{i})}{\\Gamma(\\sum_{i = 1}^{k} \\alpha_{i})}$ is the normalization constant. And $\\rho_{i} \\in [0, 1]$ and $\\sum_{i = 1}^{k} \\rho_{i} = 1$. The $\\Gamma$ function is defined as $$ \\Gamma(x) = \\int_{0}^{\\infty} t^{x - 1} e^{-t} dt $$ And it is has the nice property of $\\Gamma(x + 1) = x \\Gamma(x)$ and $\\Gamma(1) = 1$, this is why we can see this distribution as a generalization of the factorial. The important thing to note about this distribution is that it is the conjugate prior of the multinomial distribution. See here. So, if we have a multinomial distribution with a Dirichlet prior, then the posterior is also a Dirichlet distribution. This allows us to sort of update our prior with the data we have, which is a nice property for bayesian inference. You can learn more about prior updates in Bayesian Linear Regression.\nDP effectively defines a conjugate prior for arbitrary measurable spaces.\nDefinition of the process A Dirichlet Process is a distribution over probability measures $G: \\Theta \\to \\mathbb{R}^{+}$. It is defined as: $$ G \\sim DP(\\alpha, H) $$ Where given a partition of our sample space $\\Theta$ into a countable number of disjoint sets $\\Theta_{1}, \\Theta_{2}, \\dots$ we have that: $$ G(\\Theta_{1}), G(\\Theta_{2}), \\dots \\sim \\text{Dir}(\\alpha H(\\Theta_{1}), \\alpha H(\\Theta_{2}), \\dots) $$ So they are joinly distributed as a Dirichlet distribution. And $H$ is called the base measure and $\\alpha$ is called the concentration parameter.\nTODO: first explain the intuition of the prior, in the case of the beta, extend this to the dirichlet, and use the same intuition to explain how the prior is updated.\nChoosing number of Clusters Dirichlet processes are related to finding the best number of clusters (See Clustering). It is a non-parametric way (meaning it can grow with the data) to find that number.\nStick Breaking We have dome something similar to $GP$ in Gaussian Processes: the difference is sequential sampling compared to sampling all of the points at once using the difficult multivariate distribution.\nWe would like to sample $(\\rho_{1}, \\dots, \\rho_{k}) \\sim \\text{Dir}(\\alpha_{1}, \\dots, \\alpha_{k})$. So now we just sample the first $\\rho_{1}$ and then sample the second conditioned on the first observation (So we have a beta distribution now) and so on.\nGriffiths-Engen-McCloskey distribution This distribution is just a generalization of the stick breaking process. We write $\\rho \\sim GEM(\\alpha)$ which means breaking according the distribution $\\text{Beta}(1, \\alpha)$. if alpha is smaller then the stick is longer. So we can interpret the parameter $\\alpha$ as some sort of variable of the remaining stick length.\nDe Finetti’s theorem We define an infinite sequence of random $(X_1, X_2, \\dots)$ exchangeable when it satisfies $$ p(X_{1}, \\dots, X_{n}) = p(X_{\\sigma(1)}, \\dots, X_{\\sigma(n)}) $$ with $\\sigma$ a permutation of the set $\\{1, \\dots, n\\}$.\nGiven a sequence of infinitely exchangeable sequence of random variables, then there exists a random variable $G$ such that $\\forall n$: $$ p(X_{1}, \\dots, X_{n}) = \\int \\left( \\prod_{i = 1}^{n} p(x_{i} \\mid G) \\right) \\, dG $$ Which means we can decompose the infinite exchangeable sequence into independent conditional random variables. I have not understood why this is importnat.\nClassical Combinatorial problems The Chinese Restaurant Process 🟥 We have some customers (observations) $x^{(i)}$ assigned to some clusters $k$. Then we have the Matthew effect: more people in a table makes it more probable to seat there. Or some probability to create a new table $\\propto \\alpha$.\nSo the probability of customer $n + 1$ joining table $\\tau$ and $\\mathcal{P}$ is the set of tables. $$ p(\\tau = k \\mid \\tau_{1}, \\dots, \\tau_{n}) = \\begin{cases} \\frac{\\lVert \\tau \\rVert}{n + \\alpha} \u0026 \\text{ if } \\tau \\in \\mathcal{P} \\\\ \\frac{\\alpha}{n + \\alpha} \u0026 \\text{otherwise} \\end{cases} $$ Given this modelling, then it’s easy to compute the probability of a given table assignment, which is: $$ P(\\mathcal{P}) = \\frac{\\alpha^{\\lvert P \\rvert }}{\\alpha^{(n)}} \\prod_{\\tau \\in \\mathcal{P}} (\\lvert \\tau \\rvert - 1)! $$ We can do this because it is order and labeling-independent. With this model, we can show that the expected number of table is in the order of $\\mathcal{O}(\\alpha \\log(N))$ In economy, this effect is called rich get richer because more popular cluster are able to attract more points into it.\nRate of increase of the number of tables This number is important to track to get a sense of how the number of clusters is growing. Let’s call $K_{n}$ a random variable that returns the number of tables after $n$ customers have been seated. Then the expected increase at each step is equal to the probability of creating a new table (if it’s easier for you reader, you can also create an indicator variable that tells you if it has increased at step $n$, call it $\\mathbb{1}_{n}$): $$ \\mathbb{E}[K_{n} - K_{n - 1}] = \\mathbb{E}[\\mathbb{1}_{n}] = \\frac{\\alpha}{n + \\alpha} $$ Then the expected number of tables after $n$ customers is: $$ \\mathbb{E}[K_{n}] = \\alpha \\log(n) + \\mathcal{O}(1) $$ This is a simple consequence of the bound of the harmonic series. See Serie.\nPólya Urns We have urns with colored balls that can be drawn at random. If a ball is drawn it is doubled and put both back into the Urn. We can prove that this is equivalent to the Chinese Restaurant Process, given a finite number of clusters (colors). The important part is that this is exchangeable.\nHoppe Urn This is a variation of the Pólya’s urn. Here we have a special ball that when it’s picked it is put back into the urn but also a new color is put back! Then this model is exactly the same as the Chinese Restaurant Process. It should be a nice exercise to prove this. TODO: understand how you can apply de finetti’s theorem here.\nThe DP Mixture Model The model 🟨 We have the probability of the clusters $\\rho = (\\rho_{1}, \\dots) \\sim GEM(\\alpha)$ and alpha is chosen appropriately with some validation. $\\mu_{k} \\sim \\mathcal{N}(\\mu_{0}, \\sigma_{0}^{2})$ are the centers of the clusters. We draw some assignments to the clusters with a categorical distribution based on $\\rho$. We call these $z_{i}$. And then draw points $x_{i} \\sim \\mathcal{N}(\\mu_{i}, \\sigma^{2})$, based on the above cluster parameters.\nThe easy way to remember this model is with a graphical model: $\\alpha \\to \\rho \\to z, \\mu \\to H, (z, H) \\to x$\nFitting a learner 🟥 EM (see Clustering) are difficult to use for non-parametric models. We will use Gibbs Sampling introduced in Monte Carlo Methods.\nWith Gibbs we need to be able to compute the posterior $p(z_{i} =k \\mid z_{-i}, \\boldsymbol{x}, \\alpha, \\boldsymbol{\\mu})$. It’s easy to see (also by using the independence assumptions of the graphical model) that this is proportional to: $$ p(z_{i} =k \\mid z_{-i}, \\boldsymbol{x}, \\alpha, \\boldsymbol{\\mu}) \\propto p(z_{i} \\mid z_{-i}, \\alpha) \\cdot p(x_{i} \\mid \\boldsymbol{z}, \\boldsymbol{x}_{-i}, \\boldsymbol{\\mu}) $$ And then we have the probabilities in the image.\nCode Example just run it on a Notebook. I noticed that if we initialize the code with all classes assigned to a single cluster, the model seems to fail to learn that there are other classes, this is probably because the rich get richer effect is not enough to explore the space of the clusters. If we initialize the code with a random assignment on the maximum number of clusters, then it doesn’t seem to be able to eliminate clusters correctly. It is quite probable that we would need to tune for the $\\alpha$ value, but it is probably quite time consuming to find one.\nDrawbacks of Dirichlet We provide here a summary of the main drawbacks of the Dirichlet Process:\nCategory Drawback Growth Assumptions Logarithmic growth may not fit real-world data Cluster Size Bias Overemphasis on large clusters; poor handling of outliers Hyperparameter Sensitivity Choice of $\\alpha$ and $G_{0}$ (Base Measure)​ affects clustering Inference Complexity MCMC/Variational methods are computationally expensive Exchangeability Assumption Fails for temporally or spatially structured data Expressiveness Limited ability to handle complex or hierarchical data relationships Scalability Standard DP methods struggle with large datasets Task Restriction Primarily a clustering tool, requiring extensions for other tasks We observe that the main points are the exchangeability assumption, the growth assumptions (in real life some clusters may grow linearly or exponentially), and the scalability.\nThe Latent Dirichlet Allocation Model ",
+  "wordCount" : "1463",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ The Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a
     <h1 class="post-title entry-hint-parent">
       Dirichlet Processes
     </h1>
-    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -262,7 +262,11 @@ The Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a
                     <a href="#classical-combinatorial-problems" aria-label="Classical Combinatorial problems">Classical Combinatorial problems</a><ul>
                         
                 <li>
-                    <a href="#the-chinese-restaurant-process-" aria-label="The Chinese Restaurant Process 🟥">The Chinese Restaurant Process 🟥</a></li>
+                    <a href="#the-chinese-restaurant-process-" aria-label="The Chinese Restaurant Process 🟥">The Chinese Restaurant Process 🟥</a><ul>
+                        
+                <li>
+                    <a href="#rate-of-increase-of-the-number-of-tables" aria-label="Rate of increase of the number of tables">Rate of increase of the number of tables</a></li></ul>
+                </li>
                 <li>
                     <a href="#p%c3%b3lya-urns" aria-label="Pólya Urns">Pólya Urns</a></li>
                 <li>
@@ -272,9 +276,11 @@ The Dirichlet Process The Dirichlet Distribution The Dirichlet Distribution is a
                     <a href="#the-dp-mixture-model" aria-label="The DP Mixture Model">The DP Mixture Model</a><ul>
                         
                 <li>
-                    <a href="#the-model-" aria-label="The model 🟥&#43;">The model 🟥+</a></li>
+                    <a href="#the-model-" aria-label="The model 🟨">The model 🟨</a></li>
                 <li>
-                    <a href="#fitting-a-learner-" aria-label="Fitting a learner 🟥">Fitting a learner 🟥</a></li></ul>
+                    <a href="#fitting-a-learner-" aria-label="Fitting a learner 🟥">Fitting a learner 🟥</a></li>
+                <li>
+                    <a href="#drawbacks-of-dirichlet" aria-label="Drawbacks of Dirichlet">Drawbacks of Dirichlet</a></li></ul>
                 </li>
                 <li>
                     <a href="#the-latent-dirichlet-allocation-model" aria-label="The Latent Dirichlet Allocation Model">The Latent Dirichlet Allocation Model</a>
@@ -331,9 +337,16 @@ So they are joinly distributed as a Dirichlet distribution. And $H$ is called th
 <p>We have dome something similar to $GP$ in <a href="/notes/gaussian-processes/">Gaussian Processes</a>: the difference is sequential sampling compared to sampling all of the points at once using the difficult multivariate distribution.</p>
 <p>We would like to sample $(\rho_{1}, \dots, \rho_{k}) \sim \text{Dir}(\alpha_{1}, \dots, \alpha_{k})$. So now we just sample the first $\rho_{1}$ and then sample the second conditioned on the first observation (So we have a beta distribution now) and so on.</p>
 <h4 id="griffiths-engen-mccloskey-distribution">Griffiths-Engen-McCloskey distribution<a hidden class="anchor" aria-hidden="true" href="#griffiths-engen-mccloskey-distribution">#</a></h4>
-<p>This distribution is just a generalization of the stick breaking process. We write $\rho \sim GEM(\alpha)$ which means breaking according the distribution $\text{Beta}(1, \alpha)$. if beta is smaller then the stick is longer. So we can interpret the parameter $\alpha$ as some sort of variable of the remaining stick length.</p>
+<p>This distribution is just a generalization of the stick breaking process. We write $\rho \sim GEM(\alpha)$ which means breaking according the distribution $\text{Beta}(1, \alpha)$. if alpha is smaller then the stick is longer. So we can interpret the parameter $\alpha$ as some sort of variable of the remaining stick length.</p>
 <h4 id="de-finettis-theorem">De Finetti&rsquo;s theorem<a hidden class="anchor" aria-hidden="true" href="#de-finettis-theorem">#</a></h4>
-<p>Given a sequence of infinitely exchangeable sequence of random variables (exchangeable means the distributions remains the same after a permutation of the infinite sequence), then there exists a random variable $G$ such that $\forall n$:
+<p>We define an infinite sequence of random $(X_1, X_2, \dots)$ <strong>exchangeable</strong> when it satisfies
+</p>
+$$
+p(X_{1}, \dots, X_{n}) = p(X_{\sigma(1)}, \dots, X_{\sigma(n)})
+$$
+<p>
+with $\sigma$ a permutation of the set $\{1, \dots, n\}$.</p>
+<p>Given a sequence of infinitely exchangeable sequence of random variables, then there exists a random variable $G$ such that $\forall n$:
 </p>
 $$
 p(X_{1}, \dots, X_{n}) = \int \left( \prod_{i = 1}^{n} p(x_{i} \mid G) \right) \, dG 
@@ -365,6 +378,22 @@ $$
 We can do this because it is <em>order and labeling-independent</em>.
 With this model, we can show that the expected number of table is in the order of $\mathcal{O}(\alpha \log(N))$
 In economy, this effect is called <em>rich get richer</em> because more popular cluster are able to attract more points into it.</p>
+<h5 id="rate-of-increase-of-the-number-of-tables">Rate of increase of the number of tables<a hidden class="anchor" aria-hidden="true" href="#rate-of-increase-of-the-number-of-tables">#</a></h5>
+<p>This number is important to track to get a sense of how the number of clusters is growing.
+Let&rsquo;s call $K_{n}$ a random variable that returns the number of tables after $n$ customers have been seated.
+Then the expected increase at each step is equal to the probability of creating a new table (if it&rsquo;s easier for you reader, you can also create an indicator variable that tells you if it has increased at step $n$, call it $\mathbb{1}_{n}$):
+</p>
+$$
+\mathbb{E}[K_{n} - K_{n - 1}] = \mathbb{E}[\mathbb{1}_{n}] = \frac{\alpha}{n + \alpha}
+$$
+<p>
+Then the expected number of tables after $n$ customers is:
+</p>
+$$
+\mathbb{E}[K_{n}] = \alpha \log(n) + \mathcal{O}(1)
+$$
+<p>
+This is a simple consequence of the bound of the harmonic series. See <a href="/notes/serie/">Serie</a>.</p>
 <h4 id="pólya-urns">Pólya Urns<a hidden class="anchor" aria-hidden="true" href="#pólya-urns">#</a></h4>
 <p>We have urns with colored balls that can be drawn at random. If a ball is drawn it is doubled and put both back into the Urn.
 We can prove that this is equivalent to the Chinese Restaurant Process, given a finite number of clusters (colors).
@@ -373,14 +402,72 @@ The important part is that this is exchangeable.</p>
 <p>This is a variation of the Pólya&rsquo;s urn. Here we have a special ball that when it&rsquo;s picked it is put back into the urn but also a new color is put back! Then this model is exactly the same as the Chinese Restaurant Process. It should be a nice exercise to prove this.
 TODO: understand how you can apply de finetti&rsquo;s theorem here.</p>
 <h3 id="the-dp-mixture-model">The DP Mixture Model<a hidden class="anchor" aria-hidden="true" href="#the-dp-mixture-model">#</a></h3>
-<h4 id="the-model-">The model 🟥+<a hidden class="anchor" aria-hidden="true" href="#the-model-">#</a></h4>
+<h4 id="the-model-">The model 🟨<a hidden class="anchor" aria-hidden="true" href="#the-model-">#</a></h4>
 <p>We have the probability of the clusters $\rho = (\rho_{1}, \dots) \sim GEM(\alpha)$ and alpha is chosen appropriately with some validation.
 $\mu_{k} \sim \mathcal{N}(\mu_{0}, \sigma_{0}^{2})$ are the centers of the clusters.
 We draw some assignments to the clusters with a categorical distribution based on $\rho$. We call these $z_{i}$.
-And then draw points $x_{i} \sim \mathcal{N}(\mu_{i}, \sigma^{2})$.</p>
+And then draw points $x_{i} \sim \mathcal{N}(\mu_{i}, \sigma^{2})$, based on the above cluster parameters.</p>
+<p>The easy way to remember this model is with a graphical model:
+$\alpha \to \rho \to z, \mu \to H, (z, H) \to x$</p>
 <h4 id="fitting-a-learner-">Fitting a learner 🟥<a hidden class="anchor" aria-hidden="true" href="#fitting-a-learner-">#</a></h4>
 <p>EM (see <a href="/notes/clustering/">Clustering</a>) are difficult to use for non-parametric models. We will use Gibbs Sampling introduced in <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a>.</p>
+<p>With Gibbs we need to be able to compute the posterior $p(z_{i} =k \mid z_{-i}, \boldsymbol{x}, \alpha, \boldsymbol{\mu})$. It&rsquo;s easy to see (also by using the independence assumptions of the graphical model) that this is proportional to:
+</p>
+$$
+p(z_{i} =k \mid z_{-i}, \boldsymbol{x}, \alpha, \boldsymbol{\mu}) \propto p(z_{i} \mid z_{-i}, \alpha) \cdot p(x_{i} \mid \boldsymbol{z}, \boldsymbol{x}_{-i}, \boldsymbol{\mu})
+$$
+<p>
+And then we have the probabilities in the image.</p>
 <img src="/images/notes/Dirichlet Processes-20241212155107554.webp" alt="Dirichlet Processes-20241212155107554">
+<p><a href="https://gist.github.com/Flecart/e4105125f9b59fd7104bf9955b7e5d1b">Code Example</a> just run it on a Notebook.
+I noticed that if we initialize the code with all classes assigned to a single cluster, the model seems to fail to learn that there are other classes, this is probably because the rich get richer effect is not enough to explore the space of the clusters.
+If we initialize the code with a random assignment on the maximum number of clusters, then it doesn&rsquo;t seem to be able to eliminate clusters correctly.
+It is quite probable that we would need to tune for the $\alpha$ value, but it is probably quite time consuming to find one.</p>
+<h4 id="drawbacks-of-dirichlet">Drawbacks of Dirichlet<a hidden class="anchor" aria-hidden="true" href="#drawbacks-of-dirichlet">#</a></h4>
+<p>We provide here a summary of the main drawbacks of the Dirichlet Process:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Category</strong></th>
+<th><strong>Drawback</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Growth Assumptions</strong></td>
+<td>Logarithmic growth may not fit real-world data</td>
+</tr>
+<tr>
+<td><strong>Cluster Size Bias</strong></td>
+<td>Overemphasis on large clusters; poor handling of outliers</td>
+</tr>
+<tr>
+<td><strong>Hyperparameter Sensitivity</strong></td>
+<td>Choice of $\alpha$ and $G_{0}$ (Base Measure)​ affects clustering</td>
+</tr>
+<tr>
+<td><strong>Inference Complexity</strong></td>
+<td>MCMC/Variational methods are computationally expensive</td>
+</tr>
+<tr>
+<td><strong>Exchangeability Assumption</strong></td>
+<td>Fails for temporally or spatially structured data</td>
+</tr>
+<tr>
+<td><strong>Expressiveness</strong></td>
+<td>Limited ability to handle complex or hierarchical data relationships</td>
+</tr>
+<tr>
+<td><strong>Scalability</strong></td>
+<td>Standard DP methods struggle with large datasets</td>
+</tr>
+<tr>
+<td><strong>Task Restriction</strong></td>
+<td>Primarily a clustering tool, requiring extensions for other tasks</td>
+</tr>
+</tbody>
+</table>
+<p>We observe that the main points are the exchangeability assumption, the growth assumptions (in real life some clusters may grow linearly or exponentially), and the scalability.</p>
 <h3 id="the-latent-dirichlet-allocation-model">The Latent Dirichlet Allocation Model<a hidden class="anchor" aria-hidden="true" href="#the-latent-dirichlet-allocation-model">#</a></h3>
 
 
