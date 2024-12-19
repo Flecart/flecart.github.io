@@ -134,8 +134,8 @@ What is learnable? Somewhat akin to La macchina di Turing for computability theo
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "PAC Learning is one of the most famous theories in learning theory. Learning theory concerns in answering questions like:\nWhat is learnable? Somewhat akin to La macchina di Turing for computability theory. How well can you learn something? PAC is a framework that allows to formally answer these questions. Some definitions Empirical Risk Minimizer and Errors The empirical risk minimizer is defined as $$ \\arg \\min_{\\hat{c} \\in \\mathcal{H}} \\hat{R}_{n}(\\hat{c}) $$ Where the inside is the empirical error.\nThe Generalization error is $P(\\hat{c}(x) \\neq c(x))$ where $\\hat{c}$ is the learned concept (classifier) and $c$ is the true error and $x$ is the instance space.\nEmpirical error give a certain dataset is just the accuracy: $$ \\hat{R}_{n} (\\hat{c}) = \\frac{1}{n} \\sum_{i = 1}^{n} \\mathbb{1}_{\\hat{c}(x) \\neq c(x)} $$ It is true that in expectation the empirical error is the same as the generalization error.\nConcepts and Hypothesis We define a instance space $\\mathcal{X}$ that is the space of the object of interest of our learning task. We define a concept a subset of $\\mathcal{X}$ (this is why sometimes it is useful to use an indicator function to get a specific concept). A concept class is just a set of concepts. A Hypothesis class is the class of concepts that we are using to learn the true concept class.\nLearning Algorithm Given an Hypothesis Class $\\mathcal{H}$ and a concept $c$ a learning algorithm in this context is a computable function that takes in input a labelled dataset $(x_{1}, y_{1}), \\dots, (x_{n}, y_{n})$ and outputs an hypothesis $\\hat{c} \\in \\mathcal{H}$. One result that we will have is that we cannot have infinite precision (learn the concept class infinitely well).\nPAC Learnability ",
-  "wordCount" : "276",
+  "articleBody": "PAC Learning is one of the most famous theories in learning theory. Learning theory concerns in answering questions like:\nWhat is learnable? Somewhat akin to La macchina di Turing for computability theory. How well can you learn something? PAC is a framework that allows to formally answer these questions. Some definitions Empirical Risk Minimizer and Errors The empirical risk minimizer is defined as $$ \\arg \\min_{\\hat{c} \\in \\mathcal{H}} \\hat{R}_{n}(\\hat{c}) $$ Where the inside is the empirical error.\nThe Generalization error is $R(\\hat{c}) = P_{x\\sim D}(\\hat{c}(x) \\neq c(x)) = \\mathbb{E}_{x \\sim D} \\mathbb{1}_{\\hat{c}(x) \\neq c(x)}$ where $\\hat{c}$ is the learned concept (classifier) and $c$ is the true error and $x$ is the instance space.\nEmpirical error give a certain dataset is just the accuracy: $$ \\hat{R}_{n} (\\hat{c}) = \\frac{1}{n} \\sum_{i = 1}^{n} \\mathbb{1}_{\\hat{c}(x) \\neq c(x)} $$ It is true that in expectation the empirical error is the same as the generalization error.\nIt is quite easy to see that $\\mathbb{E}_{s \\sim \\mathcal{D}^{m}}[\\hat{R}_{S}(\\hat{c})] = R(\\hat{c})$ This will be important when we will prove some bounds for the inconsistent learner case, see #The Inconsistent Case.\nConcepts and Hypothesis We define a instance space $\\mathcal{X}$ that is the space of the object of interest of our learning task. We define a concept a subset of $\\mathcal{X}$ (this is why sometimes it is useful to use an indicator function to get a specific concept). A concept class is just a set of concepts. A Hypothesis class is the class of concepts that we are using to learn the true concept class.\nLearning Algorithm Given an Hypothesis Class $\\mathcal{H}$ and a concept $c$ a learning algorithm in this context is a computable function that takes in input a labelled dataset $(x_{1}, y_{1}), \\dots, (x_{n}, y_{n})$ and outputs an hypothesis $\\hat{c} \\in \\mathcal{H}$. One result that we will have is that we cannot have infinite precision (learn the concept class infinitely well).\nPAC Learnability In words, we say that something is PAC learnable when given a sufficiently large sample, we can learn a concept with high probability. Formally, we say that a concept class $\\mathcal{C}$ is PAC learnable if there exists a learning algorithm such that:\nfor all $\\epsilon, \\delta \u003e 0$ (respectively error parameter and confidence value) for all distributions $\\mathcal{D}$ over $\\mathcal{X}$, if the learning algorithm is given a sample of size $m \\geq \\text{poly}(1/\\epsilon, 1/\\delta, \\text{size}(x))$ =\u003e with probability at least $1 - \\delta$ the algorithm outputs a hypothesis $\\hat{c}$ such that $P(\\hat{c}(x) \\neq c(x)) \\leq \\epsilon$. So recalling that the above is exactly the definition of risk: $$ \\mathbb{P}_{Z \\sim D^{n}} (R(\\hat{c}) \u003e \\epsilon) \\leq \\delta $$ The PAC framework is a distribution-free model : no particular assumption is made about the distribution D from which examples are drawn.\nEfficiently Learnable If the sample size just depends on $\\varepsilon$ and $\\delta$ then it is called efficiently learnable.\nAnd one thing we would need to note is that sometimes the true concept is not in the hypothesis, so it’s impossible to attain a risk\nExample: Axis-aligned rectangles Suppose we are in $\\mathbb{R}^{2}$ and the concept class is the set of all axis-aligned rectangles. We generate some points with these rectangles. Let our learning algorithm return the minimum rectangle that contains all the points that return true. With this learning algorithm we do not have false positives.\nNow let’s fix $\\varepsilon$ and $\\delta$ and consider some rectangles on each side, let’s make them at most equal to $\\frac{\\varepsilon}{4}$. We have now that the probability of error is: $$ P_{Z \\sim D^{n}} (R(\\hat{c}) \u003e \\varepsilon) \\leq\\sum_{i = 1}^{4} P_{Z \\sim D^{n}} (Z \\cap r_{i} = \\varnothing) \\leq 4 (1 - \\varepsilon / 4)^{m} \\leq 4 \\exp(-m \\varepsilon / 4) $$ This implies that the number of samples needed is: $$ 4 \\exp(-m \\varepsilon / 4) \\leq \\delta \\Rightarrow m \\geq \\frac{4}{\\varepsilon} \\log\\left( \\frac{4}{\\delta} \\right)\n$$\nOften the sample efficiency bounds are derived in this manner in the framework of this theory.\nThis is a nice example on how to prove PAC related stuff. You should definitely remember the root idea of this example and how to write such proofs. There are nice exercises in the book to see if you are able to solve a PAC proof, refer to (Mohri et al. 2012).\nLearning Bounds Finite Hypothesis Class If we have finite hypothesis class $\\mathcal{H}$ then it is PAC learnable. We can get a consistent hypothesis that always classifies the training set correctly (note that here we are assuming that the dataset does not contain noise!). We need $$ n \\geq \\frac{1}{\\varepsilon} \\left( \\log(|\\mathcal{H}|) + \\log\\left( \\frac{1}{\\delta} \\right) \\right)) $$ Proof Let’s consider the set $\\mathcal{H}_{\\varepsilon} = \\left\\{ h \\in \\mathcal{H} : R(h) \u003e \\varepsilon \\right\\}$. We want to bound the probability that we get a bad hypothesis for consistent learners, that is an hypothesis that can get a zero error on the training set. If we consider the probability of the set: $$ P(\\exists h \\in \\mathcal{H}_{\\varepsilon} : \\hat{R}(h) = 0) \\leq \\sum_{h \\in \\mathcal{H}_{\\varepsilon} }\\mathbb{P}(\\hat{R}(h) = 0) \\leq |\\mathcal{H}_{\\varepsilon}| (1 - \\varepsilon)^{m} \\leq |\\mathcal{H}| \\exp(-m \\varepsilon) $$ We want to bound this probability by $\\delta$, so we have: $$ |\\mathcal{H}| \\exp(-m \\varepsilon) \\leq \\delta \\Rightarrow m \\geq \\frac{1}{\\varepsilon} \\left( \\log(|\\mathcal{H}|) + \\log\\left( \\frac{1}{\\delta} \\right) \\right) $$ $\\square$\nIn theory, this result strongly suggest that in our finite world, we can PAC-learn everything, we only need to model finite hypothesis worlds (or hypothesis that are small enough). This will is usually the difficult part.\nUniversal Concept Class is not PAC-learnable This theorem asserts that given a instance space $\\mathcal{X} = \\left\\{ 0, 1 \\right\\}^{*}$ and the concept class of all possible subsets, then the concept class is not PAC learnable. A simple check suggests that it is probably not learnable (although we wont provide the proof here). The main observation is that the hypothesis class is $\\lvert \\mathcal{H} \\rvert = 2^{2^{n}}$ with this setting and thus our sample complexity bounds becomes: $$ n \\geq \\frac{1}{\\varepsilon} \\left( 2^{n}log 2 + \\log\\left( \\frac{1}{\\delta} \\right) \\right) $$ Which is not polynomial in $n$.\nThe Inconsistent Case Vapnik-Chervoinkis’ Inequality Now we will tolerate that our learner does not learn the training data perfectly. We leverage Hoeffding’s inequality, introduced in Central Limit Theorem and Law of Large Numbers, to prove the following theorem. If we fix an hypothesis $h : \\mathcal{X} \\to \\left\\{ 0, 1 \\right\\}$ we have\n$$ \\mathbb{P}_{S \\sim \\mathcal{D}^{m}} \\left[ \\hat{R}_{S}(h) - R(h) \\geq \\varepsilon \\right] \\leq \\exp(-2m \\varepsilon^{2}) $$ We can also prove the opposite and have $$ \\mathbb{P}_{S \\sim \\mathcal{D}^{m}} \\left[ \\hat{R}_{S}(h) -R(h) \\leq - \\varepsilon \\right] \\leq \\exp(-2m \\varepsilon^{2}) $$ If we put them together we get: $$ \\mathbb{P}_{S \\sim \\mathcal{D}^{m}} \\left[ \\left| R(h) - \\hat{R}_{S}(h) \\right| \\geq \\varepsilon \\right] \\leq 2 \\exp(-2m \\varepsilon^{2}) $$ But note that this works for a fixed $h$. If we use learned hypothesis $\\hat{c}$ it is not guaranteed that the above holds as $\\hat{c}$ is a random variable dependent on the samples drawn (i.e. it could actually be bigger)! In my opinion, this has quite strong limits on the theory part. What is an unapplicable theory for? It seems to be more useful for philosophical insights on learnability.\nGeneralization Inequality: single hypothesis Given a fixed hypothesis $h$ the following inequality is a simple consequence of the above bounds. $$ R(h) \\leq \\hat{R}_{S}(h) + \\sqrt{\\frac{1}{2m} \\log \\left( \\frac{2}{\\delta} \\right)} $$ Proof: We see that given $m$ samples and confidence of error $\\delta$ we have that the value of $\\varepsilon$ is : $$ 2 \\exp(-2 m \\varepsilon^{2}) \u003c \\delta \\implies \\varepsilon \u003e \\sqrt{\\frac{1}{2m} \\log \\left( \\frac{2}{\\delta} \\right)} $$ Plugging this into the previous stuff we get the result.\nGeneralization inequality: Finite H $$ R(h) \\leq \\hat{R}_{S}(h) + \\sqrt{\\frac{1}{2m} \\log \\left( \\frac{2 \\lvert \\mathcal{H} \\rvert}{\\delta} \\right)}\n$$\nProof: This proof leverages the same idea of the previous proof in the sample complexity of finite hypothesis class. We have that: $$ P(\\exists h \\in \\mathcal{H} : \\lvert \\hat{R}_{S}(h) - R(h) \\rvert \u003e \\varepsilon) \\leq 2\\lvert \\mathcal{H} \\rvert \\exp(-2m \\varepsilon^{2})) $$ Then we see that we can bound the probability that the generalization error is bigger than $\\varepsilon$ by $\\delta$: $$ \\varepsilon \u003e \\sqrt{\\frac{1}{2m} \\log \\left( \\frac{2 \\lvert \\mathcal{H} \\rvert}{\\delta} \\right)} $$ Interpretation of the Generalization Inequality TODO:\nVC Dimension When a theory is too powerful, that theory is not falsifiable in a Popperian sense. Meaning every type of data can be explained by that theory, suggesting that the theory does not explain anything. This is why for Buhmann says about Vapnik’s work in 1982 was so interesting. In his opinion, it was able to bridge philosophy of science and mathematics.\nVapnik-Chervonenkis’ Bound 1974 theorem. Consider $\\lvert \\mathcal{H} \\rvert \u003c \\infty$ and $R(c^{*}) = 0$. Then for every $n$ and $\\varepsilon \u003e 0$ it holds that: $$ P(R(\\hat{c}) \u003e \\varepsilon) \\leq \\lvert \\mathcal{H} \\rvert \\exp(-n \\varepsilon))) $$ And: $$ \\mathbb{E}[R(\\hat{c})] \\leq \\frac{1 + \\log \\lvert \\mathcal{H} \\rvert}{n} $$ Proof: $$ \\begin{align} P(R(\\hat{c}) \u003e \\varepsilon) \u0026\\leq P(\\max_{c \\in \\mathcal{H}, \\hat{R}_{n}(c) = 0} R(c) \u003e \\varepsilon) \\\\ \u0026= \\mathbb{E}[\\max_{c \\in \\mathcal{H}, \\hat{R}_{n}(c) = 0} \\mathbb{1}_{R(c) \u003e \\varepsilon} )] \\\\ \u0026\\leq \\sum_{c \\in \\mathcal{H}, R(c) \u003e \\varepsilon} \\underbrace{P(\\hat{R}_{n}(c) = 0)}_{(1-\\varepsilon)^{n}} \\\\ \\\\ \u0026\\leq \\lvert \\mathcal{H} \\rvert \\exp(-n \\varepsilon) \\end{align} $$ Which ends the proof of the first part. Note that this is just a different bound for the same thing we have proved in #Finite Hypothesis Class.\nReferences [1] Mohri et al. “Foundations of Machine Learning” The MIT Press 2012\n",
+  "wordCount" : "1564",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ What is learnable? Somewhat akin to La macchina di Turing for computability theo
     <h1 class="post-title entry-hint-parent">
       Provably Approximately Correct Learning
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -239,7 +239,7 @@ What is learnable? Somewhat akin to La macchina di Turing for computability theo
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul><ul>
                 <li>
                     <a href="#some-definitions" aria-label="Some definitions">Some definitions</a><ul>
                         
@@ -250,10 +250,49 @@ What is learnable? Somewhat akin to La macchina di Turing for computability theo
                 <li>
                     <a href="#learning-algorithm" aria-label="Learning Algorithm">Learning Algorithm</a></li>
                 <li>
-                    <a href="#pac-learnability" aria-label="PAC Learnability">PAC Learnability</a>
+                    <a href="#pac-learnability" aria-label="PAC Learnability">PAC Learnability</a></li>
+                <li>
+                    <a href="#efficiently-learnable" aria-label="Efficiently Learnable">Efficiently Learnable</a></li></ul>
                 </li>
-            </ul>
-            </li>
+                <li>
+                    <a href="#example--axis-aligned-rectangles" aria-label="Example:  Axis-aligned rectangles">Example:  Axis-aligned rectangles</a></li></ul>
+                    
+                <li>
+                    <a href="#learning-bounds" aria-label="Learning Bounds">Learning Bounds</a><ul>
+                        
+                <li>
+                    <a href="#finite-hypothesis-class" aria-label="Finite Hypothesis Class">Finite Hypothesis Class</a><ul>
+                        
+                <li>
+                    <a href="#proof" aria-label="Proof">Proof</a></li>
+                <li>
+                    <a href="#universal-concept-class-is-not-pac-learnable" aria-label="Universal Concept Class is not PAC-learnable">Universal Concept Class is not PAC-learnable</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-inconsistent-case" aria-label="The Inconsistent Case">The Inconsistent Case</a><ul>
+                        
+                <li>
+                    <a href="#vapnik-chervoinkis-inequality" aria-label="Vapnik-Chervoinkis&rsquo; Inequality">Vapnik-Chervoinkis&rsquo; Inequality</a></li>
+                <li>
+                    <a href="#generalization-inequality-single-hypothesis" aria-label="Generalization Inequality: single hypothesis">Generalization Inequality: single hypothesis</a></li>
+                <li>
+                    <a href="#generalization-inequality-finite-h" aria-label="Generalization inequality: Finite H">Generalization inequality: Finite H</a></li>
+                <li>
+                    <a href="#interpretation-of-the-generalization-inequality" aria-label="Interpretation of the Generalization Inequality">Interpretation of the Generalization Inequality</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#vc-dimension" aria-label="VC Dimension">VC Dimension</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#vapnik-chervonenkis-bound" aria-label="Vapnik-Chervonenkis&rsquo; Bound">Vapnik-Chervonenkis&rsquo; Bound</a></li></ul>
+                    </ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
             </ul>
         </div>
     </details>
@@ -274,7 +313,7 @@ $$
 $$
 <p>
 Where the inside is the empirical error.</p>
-<p>The <strong>Generalization error</strong> is $P(\hat{c}(x) \neq c(x))$ where $\hat{c}$ is the learned concept (classifier) and $c$ is the true error and $x$ is the instance space.</p>
+<p>The <strong>Generalization error</strong> is $R(\hat{c}) = P_{x\sim D}(\hat{c}(x) \neq c(x)) = \mathbb{E}_{x \sim D} \mathbb{1}_{\hat{c}(x) \neq c(x)}$ where $\hat{c}$ is the learned concept (classifier) and $c$ is the true error and $x$ is the instance space.</p>
 <p><strong>Empirical error</strong> give a certain dataset is just the accuracy:
 </p>
 $$
@@ -282,6 +321,7 @@ $$
 $$
 <p>
 It is true that in expectation the empirical error is the same as the generalization error.</p>
+<p>It is quite easy to see that $\mathbb{E}_{s \sim \mathcal{D}^{m}}[\hat{R}_{S}(\hat{c})] = R(\hat{c})$ This will be important when we will prove some bounds for the inconsistent learner case, see <a href="/notes/provably-approximately-correct-learning/#the-inconsistent-case">#The Inconsistent Case</a>.</p>
 <h4 id="concepts-and-hypothesis">Concepts and Hypothesis<a hidden class="anchor" aria-hidden="true" href="#concepts-and-hypothesis">#</a></h4>
 <p>We define a <strong>instance space</strong> $\mathcal{X}$ that is the space of the object of interest of our learning task.
 We define a <strong>concept</strong> a subset of $\mathcal{X}$ (this is why sometimes it is useful to use an indicator function to get a specific concept).
@@ -291,6 +331,160 @@ A <strong>Hypothesis class</strong> is the class of concepts that we are using t
 <p>Given an Hypothesis Class $\mathcal{H}$ and a concept $c$ a learning algorithm in this context is a computable function that takes in input a labelled dataset $(x_{1}, y_{1}), \dots, (x_{n}, y_{n})$ and outputs an hypothesis $\hat{c} \in \mathcal{H}$.
 One result that we will have is that we cannot have infinite precision (learn the concept class infinitely well).</p>
 <h4 id="pac-learnability">PAC Learnability<a hidden class="anchor" aria-hidden="true" href="#pac-learnability">#</a></h4>
+<p>In words, we say that something is PAC learnable when given a <em>sufficiently large sample</em>, we can learn a concept with high probability.
+Formally, we say that a concept class $\mathcal{C}$ is PAC learnable if there exists a learning algorithm such that:</p>
+<ul>
+<li>for all $\epsilon, \delta > 0$ (respectively <em>error parameter</em> and <em>confidence value</em>)</li>
+<li>for all distributions $\mathcal{D}$ over $\mathcal{X}$,</li>
+<li>if the learning algorithm is given a sample of size $m \geq \text{poly}(1/\epsilon, 1/\delta, \text{size}(x))$</li>
+<li>=&gt; with probability at least $1 - \delta$ the algorithm outputs a hypothesis $\hat{c}$ such that $P(\hat{c}(x) \neq c(x)) \leq \epsilon$.
+So recalling that the above is exactly the definition of risk:
+$$
+\mathbb{P}_{Z \sim D^{n}} (R(\hat{c}) > \epsilon) \leq \delta
+$$</li>
+</ul>
+<blockquote>
+<p>The PAC framework is a <em>distribution-free model</em> : no particular assumption is made about the distribution D from which examples are drawn.</p>
+</blockquote>
+<h4 id="efficiently-learnable">Efficiently Learnable<a hidden class="anchor" aria-hidden="true" href="#efficiently-learnable">#</a></h4>
+<p>If the sample size just depends on $\varepsilon$ and $\delta$ then it is called <strong>efficiently learnable</strong>.</p>
+<p>And one thing we would need to note is that sometimes the true concept is not in the hypothesis, so it&rsquo;s impossible to attain a risk</p>
+<h3 id="example--axis-aligned-rectangles">Example:  Axis-aligned rectangles<a hidden class="anchor" aria-hidden="true" href="#example--axis-aligned-rectangles">#</a></h3>
+<p>Suppose we are in $\mathbb{R}^{2}$ and the concept class is the set of all axis-aligned rectangles.
+We generate some points with these rectangles. Let our learning algorithm return the minimum rectangle that contains all the points that return true. With this learning algorithm we do not have false positives.</p>
+<p>Now let&rsquo;s fix $\varepsilon$ and $\delta$  and consider some rectangles on each side, let&rsquo;s make them at most equal to $\frac{\varepsilon}{4}$. We have now that the probability of error is:
+</p>
+$$
+P_{Z \sim D^{n}} (R(\hat{c}) > \varepsilon) \leq\sum_{i = 1}^{4} P_{Z \sim D^{n}} (Z \cap r_{i} = \varnothing) \leq 4 (1 - \varepsilon / 4)^{m} \leq 4 \exp(-m \varepsilon / 4)
+$$
+<p>
+This implies that the number of samples needed is:
+$$
+4 \exp(-m \varepsilon / 4) \leq \delta \Rightarrow m \geq \frac{4}{\varepsilon} \log\left( \frac{4}{\delta} \right)</p>
+<p>$$</p>
+<p>Often the <em>sample efficiency</em> bounds are derived in this manner in the framework of this theory.</p>
+<p>This is a nice example on how to prove PAC related stuff. You should definitely remember the root idea of this example and how to write such proofs. There are nice exercises in the book to see if you are able to solve a PAC proof, refer to (Mohri et al. 2012).</p>
+<h2 id="learning-bounds">Learning Bounds<a hidden class="anchor" aria-hidden="true" href="#learning-bounds">#</a></h2>
+<h3 id="finite-hypothesis-class">Finite Hypothesis Class<a hidden class="anchor" aria-hidden="true" href="#finite-hypothesis-class">#</a></h3>
+<p>If we have  finite hypothesis class $\mathcal{H}$ then it is PAC learnable.
+We can get a consistent hypothesis that always classifies the training set correctly (note that here we are assuming that the dataset <em>does not</em> contain noise!).
+We need
+</p>
+$$
+n \geq \frac{1}{\varepsilon} \left( \log(|\mathcal{H}|) + \log\left( \frac{1}{\delta} \right) \right))
+$$
+<h4 id="proof">Proof<a hidden class="anchor" aria-hidden="true" href="#proof">#</a></h4>
+<p>Let&rsquo;s consider the set $\mathcal{H}_{\varepsilon} = \left\{ h \in \mathcal{H} : R(h) > \varepsilon \right\}$. We want to bound the probability that we get a bad hypothesis for <em>consistent</em> learners, that is an hypothesis that can get a zero error on the training set.
+If we consider the probability of the set:
+</p>
+$$
+P(\exists h \in \mathcal{H}_{\varepsilon} : \hat{R}(h) = 0) \leq \sum_{h \in \mathcal{H}_{\varepsilon} }\mathbb{P}(\hat{R}(h) = 0) \leq |\mathcal{H}_{\varepsilon}| (1 - \varepsilon)^{m} \leq |\mathcal{H}| \exp(-m \varepsilon)
+$$
+<p>
+We want to bound this probability by $\delta$, so we have:
+</p>
+$$
+|\mathcal{H}| \exp(-m \varepsilon) \leq \delta \Rightarrow m \geq \frac{1}{\varepsilon} \left( \log(|\mathcal{H}|) + \log\left( \frac{1}{\delta} \right) \right)
+$$
+<p>
+$\square$</p>
+<p>In theory, this result strongly suggest that in our finite world, we can PAC-learn everything, we only need to model finite hypothesis worlds (or hypothesis that are small enough). This will is usually the difficult part.</p>
+<h4 id="universal-concept-class-is-not-pac-learnable">Universal Concept Class is not PAC-learnable<a hidden class="anchor" aria-hidden="true" href="#universal-concept-class-is-not-pac-learnable">#</a></h4>
+<p>This theorem asserts that given a instance space $\mathcal{X} = \left\{ 0, 1 \right\}^{*}$ and the concept class of all possible subsets, then the concept class is not PAC learnable.
+A simple check suggests that it is probably not learnable (although we wont provide the proof here).
+The main observation is that the hypothesis class is $\lvert \mathcal{H} \rvert = 2^{2^{n}}$ with this setting and thus our sample complexity bounds becomes:
+</p>
+$$
+n \geq \frac{1}{\varepsilon} \left( 2^{n}log 2 + \log\left( \frac{1}{\delta} \right) \right)
+$$
+<p>
+Which is not polynomial in $n$.</p>
+<h3 id="the-inconsistent-case">The Inconsistent Case<a hidden class="anchor" aria-hidden="true" href="#the-inconsistent-case">#</a></h3>
+<h4 id="vapnik-chervoinkis-inequality">Vapnik-Chervoinkis&rsquo; Inequality<a hidden class="anchor" aria-hidden="true" href="#vapnik-chervoinkis-inequality">#</a></h4>
+<p>Now we will tolerate that our learner does not learn the training data perfectly.
+We leverage Hoeffding&rsquo;s inequality, introduced in <a href="/notes/central-limit-theorem-and-law-of-large-numbers/">Central Limit Theorem and Law of Large Numbers</a>, to prove the following theorem.
+If we fix an hypothesis $h : \mathcal{X} \to \left\{ 0, 1 \right\}$ we have</p>
+$$
+\mathbb{P}_{S \sim \mathcal{D}^{m}} \left[ \hat{R}_{S}(h) - R(h) \geq \varepsilon \right] \leq \exp(-2m \varepsilon^{2})
+$$
+<p>
+We can also prove the opposite and have
+</p>
+$$
+\mathbb{P}_{S \sim \mathcal{D}^{m}} \left[ \hat{R}_{S}(h) -R(h) \leq - \varepsilon \right] \leq \exp(-2m \varepsilon^{2})
+$$
+<p>
+If we put them together we get:
+</p>
+$$
+\mathbb{P}_{S \sim \mathcal{D}^{m}} \left[ \left| R(h) - \hat{R}_{S}(h) \right| \geq \varepsilon \right] \leq 2 \exp(-2m \varepsilon^{2})
+$$
+<p>
+But note that this works for a fixed $h$. If we use  learned hypothesis $\hat{c}$ it is not guaranteed that the above holds as $\hat{c}$ is a random variable dependent on the samples drawn (i.e. it could actually be bigger)!
+In my opinion, this has quite strong limits on the theory part. What is an unapplicable theory for? It seems to be more useful for philosophical insights on learnability.</p>
+<h4 id="generalization-inequality-single-hypothesis">Generalization Inequality: single hypothesis<a hidden class="anchor" aria-hidden="true" href="#generalization-inequality-single-hypothesis">#</a></h4>
+<p>Given a fixed hypothesis $h$ the following inequality is a simple consequence of the above bounds.
+</p>
+$$
+R(h) \leq \hat{R}_{S}(h) + \sqrt{\frac{1}{2m} \log \left( \frac{2}{\delta} \right)}
+$$
+<p><strong>Proof</strong>:
+We see that given $m$ samples and confidence of error $\delta$ we have that the value of $\varepsilon$ is :
+</p>
+$$
+2 \exp(-2 m \varepsilon^{2}) < \delta \implies \varepsilon >  \sqrt{\frac{1}{2m} \log \left( \frac{2}{\delta} \right)}
+$$
+<p>Plugging this into the previous stuff we get the result.</p>
+<h4 id="generalization-inequality-finite-h">Generalization inequality: Finite H<a hidden class="anchor" aria-hidden="true" href="#generalization-inequality-finite-h">#</a></h4>
+<p>$$
+R(h) \leq \hat{R}_{S}(h) + \sqrt{\frac{1}{2m} \log \left( \frac{2 \lvert \mathcal{H} \rvert}{\delta} \right)}</p>
+<p>$$</p>
+<p><strong>Proof:</strong>
+This proof leverages the same idea of the previous proof in the sample complexity of finite hypothesis class.
+We have that:
+</p>
+$$
+P(\exists h \in \mathcal{H} : \lvert  \hat{R}_{S}(h) - R(h) \rvert > \varepsilon) \leq 2\lvert \mathcal{H} \rvert \exp(-2m \varepsilon^{2}))
+$$
+<p>Then we see that we can bound the probability that the generalization error is bigger than $\varepsilon$ by $\delta$:
+</p>
+$$
+\varepsilon > \sqrt{\frac{1}{2m} \log \left( \frac{2 \lvert \mathcal{H} \rvert}{\delta} \right)}
+$$
+<h4 id="interpretation-of-the-generalization-inequality">Interpretation of the Generalization Inequality<a hidden class="anchor" aria-hidden="true" href="#interpretation-of-the-generalization-inequality">#</a></h4>
+<p>TODO:</p>
+<h2 id="vc-dimension">VC Dimension<a hidden class="anchor" aria-hidden="true" href="#vc-dimension">#</a></h2>
+<p>When a theory is too powerful, that theory is not falsifiable in a Popperian sense. Meaning every type of data can be explained by that theory, suggesting that the theory does not explain anything.
+This is why for Buhmann says about Vapnik&rsquo;s work in 1982 was so interesting. In his opinion, it was able to bridge philosophy of science and mathematics.</p>
+<h4 id="vapnik-chervonenkis-bound">Vapnik-Chervonenkis&rsquo; Bound<a hidden class="anchor" aria-hidden="true" href="#vapnik-chervonenkis-bound">#</a></h4>
+<p>1974 theorem.
+Consider $\lvert \mathcal{H} \rvert < \infty$ and $R(c^{*}) = 0$.
+Then for every $n$ and $\varepsilon > 0$ it holds that:
+</p>
+$$
+P(R(\hat{c}) > \varepsilon) \leq \lvert \mathcal{H} \rvert \exp(-n \varepsilon)))
+$$
+<p>
+And:
+</p>
+$$
+\mathbb{E}[R(\hat{c})] \leq \frac{1 + \log \lvert \mathcal{H} \rvert}{n} 
+$$
+<p><strong>Proof</strong>:
+</p>
+$$
+\begin{align}
+P(R(\hat{c}) > \varepsilon) &\leq P(\max_{c \in \mathcal{H}, \hat{R}_{n}(c) = 0} R(c) > \varepsilon)  \\
+&= \mathbb{E}[\max_{c \in \mathcal{H}, \hat{R}_{n}(c) = 0} \mathbb{1}_{R(c) > \varepsilon} )] \\
+&\leq \sum_{c \in \mathcal{H}, R(c) > \varepsilon} \underbrace{P(\hat{R}_{n}(c) = 0)}_{(1-\varepsilon)^{n}} \\ \\
+&\leq \lvert \mathcal{H} \rvert \exp(-n \varepsilon)
+\end{align}
+$$
+<p>
+Which ends the proof of the first part.
+Note that this is just a different bound for the same thing we have proved in <a href="/notes/provably-approximately-correct-learning/#finite-hypothesis-class">#Finite Hypothesis Class</a>.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] Mohri et al. “Foundations of Machine Learning” The MIT Press 2012</p>
 
 
   </div>
