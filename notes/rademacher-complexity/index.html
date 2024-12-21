@@ -5,12 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Cross Validation and Model Selection | X. Angelo Huang&#39;s Blog</title>
+<title>Rademacher Complexity | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
-How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.">
+<meta name="description" content="This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don&rsquo;t know. Or search online
+Rademacher Complexity Given an hypothesis set $\mathcal{H}$, we define a family of loss functions as: $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
-<link rel="canonical" href="https://flecart.github.io/notes/cross-validation-and-model-selection/">
+<link rel="canonical" href="https://flecart.github.io/notes/rademacher-complexity/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
@@ -19,7 +19,7 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
 <link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/cross-validation-and-model-selection/">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/rademacher-complexity/">
 <noscript>
     <style>
         #theme-toggle,
@@ -87,11 +87,11 @@ if (!doNotTrack) {
 	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
 }
 </script>
-<meta property="og:title" content="Cross Validation and Model Selection" />
-<meta property="og:description" content="There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
-How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning." />
+<meta property="og:title" content="Rademacher Complexity" />
+<meta property="og:description" content="This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don&rsquo;t know. Or search online
+Rademacher Complexity Given an hypothesis set $\mathcal{H}$, we define a family of loss functions as: $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/cross-validation-and-model-selection/" />
+<meta property="og:url" content="https://flecart.github.io/notes/rademacher-complexity/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta property="article:section" content="notes" />
 
@@ -99,9 +99,9 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Cross Validation and Model Selection"/>
-<meta name="twitter:description" content="There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
-How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning."/>
+<meta name="twitter:title" content="Rademacher Complexity"/>
+<meta name="twitter:description" content="This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don&rsquo;t know. Or search online
+Rademacher Complexity Given an hypothesis set $\mathcal{H}$, we define a family of loss functions as: $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function."/>
 
 
 <script type="application/ld+json">
@@ -118,8 +118,8 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Cross Validation and Model Selection",
-      "item": "https://flecart.github.io/notes/cross-validation-and-model-selection/"
+      "name": "Rademacher Complexity",
+      "item": "https://flecart.github.io/notes/rademacher-complexity/"
     }
   ]
 }
@@ -128,14 +128,14 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Cross Validation and Model Selection",
-  "name": "Cross Validation and Model Selection",
-  "description": "There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.\nHow can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.",
+  "headline": "Rademacher Complexity",
+  "name": "Rademacher Complexity",
+  "description": "This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don\u0026rsquo;t know. Or search online\nRademacher Complexity Given an hypothesis set $\\mathcal{H}$, we define a family of loss functions as: $$ \\mathcal{G} = \\left\\{ g : (x, y) \\to L(h(x), y) : h \\in \\mathcal{H} \\right\\} $$ Where $L : \\mathcal{Y} \\times \\mathcal{Y} \\to \\mathbb{R}$ is a generic loss function.",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.\nHow can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.\nValidation methods Cross-Validation Cross validation is one of the oldest and most popular methods to validate our model parameters. The following slide summarizes the main idea of the cross-validation method. With this method we divide our dataset into $S$ buckets and use $S-1$ of those buckets to train and the rest to validate. If $S = N$ where $N$ is the size of the dataset this is usually called leave-one-out cross-validation. As with this method one needs to have $S-1$ training, this method is usually considered to be computationally expensive for the algorithms that need a lot of time to train.\nBootstrap The bootstrap method is a resampling method that can be used to estimate the distribution of a statistic. The idea is to resample from the dataset with replacement and then calculate the statistic of interest. (Has the advantage of using the whole dataset instead of part of it, as Cross validation does) This process is repeated many times to estimate the distribution of the statistic. The bootstrap method is useful when the distribution of the statistic is unknown or when the sample size is small.\nTODO: probability of one sample appearing in the bootsrap samples.\nHypothesis Testing Hypothesis testing is like a legal trial. We assume someone is innocent unless the evidence strongly suggests that he is guilty. In (Wasserman 2004).\nThis seems to be a good resource for p-values.\nP-values We use p-values when we have a clear definition of the kinds of hypothesis that we are going to test. This value is useful if we want to compare two hypothesis: one that is the default safe assumption, and the other that is the surprising possible discovery. Usually we partition the parameter space $\\Theta$ in two disjoint sets $\\Theta_{0}$ and $\\Theta_{1}$, where $\\Theta_{0} \\cap \\Theta_{1} = \\emptyset$ and $\\Theta_{0} \\cup \\Theta_{1} = \\Theta$. Then we have the null hypothesis $H_{0}$ and the alternative hypothesis $H_{1}$. We want to find a rejection region $R$ such that if the observed data falls in $R$ we reject the null hypothesis, otherwise we accept it.\nMost likely the rejection region has the form $$ R_{c} = \\left\\{ x \\mid T(x) \\geq c \\right\\} $$ Where $c$ is called the critical value and $T$ is the test statistic.\nAfter we have defined those, we can define the p-value as $$ \\text{p-value} = \\inf \\left\\{ \\alpha : T(X^{n}) \\in R_{\\alpha} \\right\\} $$ where $R_{\\alpha}$ is the rejection region of size $\\alpha$. So the P-value tells us how likely are we to accept $H_{0}$, if it’s small we are likely to reject it, if it’s large we are likely to accept it. In practice, we often set the $\\alpha$ value to be 0.05 as one does not have access to the real distribution of the data. So the p-value just tells us the probability of the null hypothesis to be true. Murphy highlights some questions regarding the validity of that statistics in section 6.6.2 of (Murphy 2012).\nTypes of error 🟨– Type I error: Rejecting the null hypothesis when it is true. Type II error: Accepting the null hypothesis when it is false. Type I error is usually much more serious than Type II error. It could lead to unintended actions that attempt to leverage on the false information, thus bringing demise. If we want are obliged to choose between one of those errors, one would prefer the Type II error. This is why we only accept the alternative hypothesis when there is strong evidence for it.\nRisk of the least risky critical value that would lead to the rejection of the null hypothesis. $$ \\text{p-value} = P(\\text{observed data} | \\text{null hypothesis}) $$ Size and Power function Given a rejection region $R$ we define the power function to be $$ \\beta(\\theta) = \\mathbb{P}_{\\theta}(X \\in R) $$ So, the power function is the probability of rejection and is more related to Type II errors.\nWe want our default hypothesis to be the safest as possible, so usually we consider his size $\\alpha$ to be the one that has the greatest value: $$ \\alpha = \\sup_{\\theta \\in \\Theta_{0}} \\beta(\\theta) $$ We say that a test has significance level $\\alpha$ if its size is less or equal to $\\alpha$. Usually the value that is picked is 0.05, but this is just tradition, the value is completely arbitrary.\nWald Test The wald test is defined as\n$$ W = \\frac{\\hat{\\theta} - \\theta_{0}}{\\text{se}} \\sim N(0,1) $$ Given a size $\\alpha$ we reject if $\\lvert W \\rvert \u003e z_{\\alpha / 2}$ where $z_{\\alpha / 2}$ is the $\\alpha / 2$ quantile of the standard normal distribution.\nWith this test the p-value is defined as $$ \\text{p-value} = 2 \\min \\left( P(W \u003c w), P(W \u003e w) \\right) $$ References [1] Murphy “Machine Learning: A Probabilistic Perspective” 2012\n[2] Wasserman “All of Statistics: A Concise Course in Statistical Inference” Springer Science \u0026 Business Media 2004\n",
-  "wordCount" : "893",
+  "articleBody": "This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don’t know. Or search online\nRademacher Complexity Given an hypothesis set $\\mathcal{H}$, we define a family of loss functions as: $$ \\mathcal{G} = \\left\\{ g : (x, y) \\to L(h(x), y) : h \\in \\mathcal{H} \\right\\} $$ Where $L : \\mathcal{Y} \\times \\mathcal{Y} \\to \\mathbb{R}$ is a generic loss function.\nThe Rademacher complexity captures the richness of a family of functions by measuring the degree to which a hypothesis set can fit random noise. From (Mohri et al. 2012).\nThe thing is that you can do some generalization bounds with this kind of complexity, but for the moment we will just list the definitions and ignore the results.\nDefinitions Empirical Rademacher Complexity Let $\\sigma = (\\sigma_1, \\ldots, \\sigma_m)$ be a sequence of $m$ i.i.d. random variables, each taking values in $\\{ -1, 1 \\}$. The empirical Rademacher complexity of a family of loss functions $\\mathcal{G}$ is defined as: $$ \\hat{\\mathcal{R}}_m(\\mathcal{G}) = \\mathbb{E}_\\sigma \\left[ \\sup_{g \\in \\mathcal{G}} \\frac{1}{m} \\sum_{i=1}^m \\sigma_i g(x_i, y_i) \\right] $$ This can also be written in vector form: $$ \\hat{\\mathcal{R}}_m(\\mathcal{G}) = \\mathbb{E}_\\sigma \\left[ \\sup_{g \\in \\mathcal{G}} \\frac{1}{m} \\sigma^T g(x, y) \\right] $$ The inner product can be intuitively understood as how well the hypothesis set can fit random noise. Intuitively, a more expressive set of functions will have a larger empirical Rademacher complexity, as they can fit the noise in a better fashion\nRademacher Complexity The Rademacher complexity of a family of loss functions $\\mathcal{G}$ is defined as: $$ \\mathcal{R}_m(\\mathcal{G}) = \\mathop{\\mathbb{E}}_{S \\sim \\mathcal{D}^{m}} \\left[ \\hat{\\mathcal{R}}_m(\\mathcal{G}) \\right] $$ References [1] Mohri et al. “Foundations of Machine Learning” The MIT Press 2012\n",
+  "wordCount" : "284",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -145,7 +145,7 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://flecart.github.io/notes/cross-validation-and-model-selection/"
+    "@id": "https://flecart.github.io/notes/rademacher-complexity/"
   },
   "publisher": {
     "@type": "Organization",
@@ -228,9 +228,9 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
     <h1 class="post-title entry-hint-parent">
-      Cross Validation and Model Selection
+      Rademacher Complexity
     </h1>
-    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -241,26 +241,16 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
 
         <div class="inner"><ul><ul>
                 <li>
-                    <a href="#validation-methods" aria-label="Validation methods">Validation methods</a><ul>
+                    <a href="#rademacher-complexity" aria-label="Rademacher Complexity">Rademacher Complexity</a><ul>
                         
                 <li>
-                    <a href="#cross-validation" aria-label="Cross-Validation">Cross-Validation</a></li>
-                <li>
-                    <a href="#bootstrap" aria-label="Bootstrap">Bootstrap</a></li></ul>
-                </li>
-                <li>
-                    <a href="#hypothesis-testing" aria-label="Hypothesis Testing">Hypothesis Testing</a><ul>
-                        <ul>
+                    <a href="#definitions" aria-label="Definitions">Definitions</a><ul>
                         
                 <li>
-                    <a href="#p-values" aria-label="P-values">P-values</a></li>
+                    <a href="#empirical-rademacher-complexity" aria-label="Empirical Rademacher Complexity">Empirical Rademacher Complexity</a></li>
                 <li>
-                    <a href="#types-of-error---" aria-label="Types of error 🟨&ndash;">Types of error 🟨&ndash;</a></li>
-                <li>
-                    <a href="#size-and-power-function" aria-label="Size and Power function">Size and Power function</a></li>
-                <li>
-                    <a href="#wald-test" aria-label="Wald Test">Wald Test</a></li></ul>
-                    </ul>
+                    <a href="#rademacher-complexity-1" aria-label="Rademacher Complexity">Rademacher Complexity</a></li></ul>
+                </li></ul>
                 </li></ul>
                     
                 <li>
@@ -271,95 +261,43 @@ How can we estimate the expected risk of a particular estimator or algorithm? We
     </details>
 </div>
 
-  <div class="post-content"><p>There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in <a href="/notes/introduction-to-advanced-machine-learning/">Introduction to Advanced Machine Learning</a>. We will develop more methods to better comprehend this fundamental principles.</p>
-<p>How can we estimate the expected risk of a particular estimator or algorithm? We can use the <strong>cross-validation</strong> method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.</p>
-<h2 id="validation-methods">Validation methods<a hidden class="anchor" aria-hidden="true" href="#validation-methods">#</a></h2>
-<h3 id="cross-validation">Cross-Validation<a hidden class="anchor" aria-hidden="true" href="#cross-validation">#</a></h3>
-<p>Cross validation is one of the oldest and most popular methods to validate our model parameters.
-The following slide summarizes the main idea of the cross-validation method.
-<img src="/images/notes/Cross Validation and Model Selection-20241025191250474.webp" alt="Cross Validation and Model Selection-20241025191250474"></p>
-<p>With this method we divide our dataset into $S$ buckets and use $S-1$ of those buckets to train and the rest to validate. If $S = N$ where $N$ is the size of the dataset this is usually called <strong>leave-one-out</strong> cross-validation.
-As with this method one needs to have $S-1$ training, this method is usually considered to be <em>computationally expensive</em> for the algorithms that need a lot of time to train.</p>
-<h3 id="bootstrap">Bootstrap<a hidden class="anchor" aria-hidden="true" href="#bootstrap">#</a></h3>
-<p>The bootstrap method is a resampling method that can be used to estimate the distribution of a statistic. The idea is to resample from the dataset with replacement and then calculate the statistic of interest. (Has the advantage of using the whole dataset instead of part of it, as Cross validation does) This process is repeated many times to estimate the distribution of the statistic. The bootstrap method is useful when the distribution of the statistic is unknown or when the sample size is small.</p>
-<img src="/images/notes/Cross Validation and Model Selection-20241025191541431.webp" width="453" alt="Cross Validation and Model Selection-20241025191541431">
-<p>TODO: probability of one sample appearing in the bootsrap samples.</p>
-<h2 id="hypothesis-testing">Hypothesis Testing<a hidden class="anchor" aria-hidden="true" href="#hypothesis-testing">#</a></h2>
+  <div class="post-content"><p>This note used the definitions present in <a href="/notes/provably-approximately-correct-learning/">Provably Approximately Correct Learning</a>. So, go there when you encounter a word you don&rsquo;t know. Or search online</p>
+<h2 id="rademacher-complexity">Rademacher Complexity<a hidden class="anchor" aria-hidden="true" href="#rademacher-complexity">#</a></h2>
+<p>Given an hypothesis set $\mathcal{H}$, we define a <em>family of loss functions</em> as:
+</p>
+$$
+\mathcal{G}  = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} 
+$$
+<p>
+Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function.</p>
 <blockquote>
-<p>Hypothesis testing is like a legal trial. We assume someone is innocent
-unless the evidence strongly suggests that he is guilty. In (Wasserman 2004).</p>
+<p>The Rademacher complexity captures the richness of a family of functions by measuring the degree to which a hypothesis set can fit random noise. From (Mohri et al. 2012).</p>
 </blockquote>
-<p><a href="https://causallycurious.com/posts/p-value-power/p-value-power">This</a> seems to be a good resource for p-values.</p>
-<h4 id="p-values">P-values<a hidden class="anchor" aria-hidden="true" href="#p-values">#</a></h4>
-<p>We use p-values when we have a <strong>clear</strong> definition of the kinds of hypothesis that we are going to test.
-This value is useful if we want to compare two hypothesis: one that is the default safe assumption, and the other that is the surprising possible discovery.
-Usually we partition the parameter space $\Theta$ in two disjoint sets $\Theta_{0}$ and $\Theta_{1}$, where $\Theta_{0} \cap \Theta_{1} = \emptyset$ and $\Theta_{0} \cup \Theta_{1} = \Theta$.
-Then we have the null hypothesis $H_{0}$ and the alternative hypothesis $H_{1}$.
-We want to find a <strong>rejection region</strong> $R$ such that if the observed data falls in $R$ we reject the null hypothesis, otherwise we accept it.</p>
-<p>Most likely the rejection region has the form
+<p>The thing is that you can do some generalization bounds with this kind of complexity, but for the moment we will just list the definitions and ignore the results.</p>
+<h3 id="definitions">Definitions<a hidden class="anchor" aria-hidden="true" href="#definitions">#</a></h3>
+<h4 id="empirical-rademacher-complexity">Empirical Rademacher Complexity<a hidden class="anchor" aria-hidden="true" href="#empirical-rademacher-complexity">#</a></h4>
+<p>Let $\sigma = (\sigma_1, \ldots, \sigma_m)$ be a sequence of $m$ i.i.d. random variables, each taking values in $\{ -1, 1 \}$. The <em>empirical Rademacher complexity</em> of a family of loss functions $\mathcal{G}$ is defined as:
 </p>
 $$
-R_{c} = \left\{ x \mid T(x) \geq c \right\}
+\hat{\mathcal{R}}_m(\mathcal{G}) = \mathbb{E}_\sigma \left[ \sup_{g \in \mathcal{G}} \frac{1}{m} \sum_{i=1}^m \sigma_i g(x_i, y_i) \right]
 $$
 <p>
-Where $c$ is called the <strong>critical value</strong> and $T$ is the <strong>test statistic</strong>.</p>
-<p>After we have defined those, we can define the p-value as
+This can also be written in vector form:
 </p>
 $$
-\text{p-value} = \inf \left\{ \alpha : T(X^{n}) \in R_{\alpha} \right\} 
+\hat{\mathcal{R}}_m(\mathcal{G}) = \mathbb{E}_\sigma \left[ \sup_{g \in \mathcal{G}} \frac{1}{m} \sigma^T g(x, y) \right]
 $$
 <p>
-where $R_{\alpha}$ is the rejection region of size $\alpha$.
-So the P-value tells us <em>how likely</em> are we to accept $H_{0}$, if it&rsquo;s small we are likely to reject it, if it&rsquo;s large we are likely to accept it.
-In practice, we often set the $\alpha$ value to be 0.05 as one does not have access to the real distribution of the data. So the p-value just tells us the probability of the null hypothesis to be true.
-Murphy highlights some questions regarding the validity of that statistics in section 6.6.2 of <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">(Murphy 2012)</a>.</p>
-<h4 id="types-of-error---">Types of error 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#types-of-error---">#</a></h4>
-<ul>
-<li>Type I error: Rejecting the null hypothesis when it is true.</li>
-<li>Type II error: Accepting the null hypothesis when it is false.</li>
-</ul>
-<p>Type I error is usually much more serious than Type II error. It could lead to unintended actions that attempt to leverage on the false information, thus bringing demise.
-If we want are obliged to choose between one of those errors, one would prefer the Type II error.
-This is why we only accept the alternative hypothesis when there is <em>strong evidence</em> for it.</p>
-<blockquote>
-<p>Risk of the least risky  critical value that would lead to the rejection of the null hypothesis.
+The inner product can be intuitively understood as how well the hypothesis set can fit random noise.
+Intuitively, a more expressive set of functions will have a larger empirical Rademacher complexity, as they can fit the noise in a better fashion</p>
+<h4 id="rademacher-complexity-1">Rademacher Complexity<a hidden class="anchor" aria-hidden="true" href="#rademacher-complexity-1">#</a></h4>
+<p>The <em>Rademacher complexity</em> of a family of loss functions $\mathcal{G}$ is defined as:
 </p>
 $$
-\text{p-value} = P(\text{observed data} | \text{null hypothesis})
+\mathcal{R}_m(\mathcal{G}) = \mathop{\mathbb{E}}_{S \sim \mathcal{D}^{m}} \left[ \hat{\mathcal{R}}_m(\mathcal{G}) \right]
 $$
-</blockquote>
-<h4 id="size-and-power-function">Size and Power function<a hidden class="anchor" aria-hidden="true" href="#size-and-power-function">#</a></h4>
-<p>Given a <em>rejection region</em> $R$ we define the <strong>power function</strong> to be
-</p>
-$$
-\beta(\theta) = \mathbb{P}_{\theta}(X \in R)
-$$
-<p>
-So, the power function is the <em>probability of rejection</em> and is more related to Type II errors.</p>
-<p>We want our default hypothesis to be the safest as possible, so usually we consider his size $\alpha$ to be the one that has the greatest value:
-</p>
-$$
-\alpha = \sup_{\theta \in \Theta_{0}} \beta(\theta)
-$$
-<p>
-We say that a test has <strong>significance level</strong> $\alpha$ if its size is less or equal to $\alpha$. Usually the value that is picked is 0.05, but this is just tradition, the value is completely arbitrary.</p>
-<h4 id="wald-test">Wald Test<a hidden class="anchor" aria-hidden="true" href="#wald-test">#</a></h4>
-<p>The wald test is defined as</p>
-$$
-W = \frac{\hat{\theta} - \theta_{0}}{\text{se}} \sim N(0,1)
-$$
-<p>Given a size $\alpha$ we reject if $\lvert W \rvert > z_{\alpha / 2}$
-where $z_{\alpha / 2}$ is the $\alpha / 2$ quantile of the standard normal distribution.</p>
-<p>With this test the p-value is defined as
-</p>
-$$
-\text{p-value} = 2 \min \left( P(W < w), P(W > w) \right)
-$$
-<p>
-<img src="/images/notes/Cross Validation and Model Selection-20241026163334264.webp" width="570" alt="Cross Validation and Model Selection-20241026163334264"></p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] Murphy <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">“Machine Learning: A Probabilistic Perspective”</a>  2012</p>
-<p>[2] Wasserman “All of Statistics: A Concise Course in Statistical Inference” Springer Science &amp; Business Media 2004</p>
+<p>[1] Mohri et al. “Foundations of Machine Learning” The MIT Press 2012</p>
 
 
   </div>
@@ -372,8 +310,8 @@ $$
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on x"
-            href="https://x.com/intent/tweet/?text=Cross%20Validation%20and%20Model%20Selection&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f&amp;hashtags=machinelearning">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on x"
+            href="https://x.com/intent/tweet/?text=Rademacher%20Complexity&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f&amp;hashtags=machinelearning">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
@@ -381,8 +319,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f&amp;title=Cross%20Validation%20and%20Model%20Selection&amp;summary=Cross%20Validation%20and%20Model%20Selection&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f&amp;title=Rademacher%20Complexity&amp;summary=Rademacher%20Complexity&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -390,8 +328,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f&title=Cross%20Validation%20and%20Model%20Selection">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f&title=Rademacher%20Complexity">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -399,8 +337,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
@@ -408,8 +346,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on whatsapp"
-            href="https://api.whatsapp.com/send?text=Cross%20Validation%20and%20Model%20Selection%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on whatsapp"
+            href="https://api.whatsapp.com/send?text=Rademacher%20Complexity%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
@@ -417,8 +355,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on telegram"
-            href="https://telegram.me/share/url?text=Cross%20Validation%20and%20Model%20Selection&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on telegram"
+            href="https://telegram.me/share/url?text=Rademacher%20Complexity&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f">
             <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
@@ -426,8 +364,8 @@ $$
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Cross Validation and Model Selection on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=Cross%20Validation%20and%20Model%20Selection&u=https%3a%2f%2fflecart.github.io%2fnotes%2fcross-validation-and-model-selection%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Rademacher Complexity on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Rademacher%20Complexity&u=https%3a%2f%2fflecart.github.io%2fnotes%2frademacher-complexity%2f">
             <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
                 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
                 <path
