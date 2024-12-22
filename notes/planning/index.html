@@ -8,9 +8,7 @@
 <title>Planning | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence">
 <meta name="description" content="There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&rsquo;s called Model Predictive Control (MPC).
-Known Dynamics Case We try develop methods to scale to large MDPs.
-Setting of the problem. We have a deterministic model (often used for optimal control):
-$$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \max_{a_{0}: \infty} \sum_{t=0}^{\infty} \gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute.">
+There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \[.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/planning/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -91,9 +89,7 @@ if (!doNotTrack) {
 </script>
 <meta property="og:title" content="Planning" />
 <meta property="og:description" content="There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&rsquo;s called Model Predictive Control (MPC).
-Known Dynamics Case We try develop methods to scale to large MDPs.
-Setting of the problem. We have a deterministic model (often used for optimal control):
-$$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \max_{a_{0}: \infty} \sum_{t=0}^{\infty} \gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute." />
+There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \[." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/planning/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -105,9 +101,7 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Planning"/>
 <meta name="twitter:description" content="There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&rsquo;s called Model Predictive Control (MPC).
-Known Dynamics Case We try develop methods to scale to large MDPs.
-Setting of the problem. We have a deterministic model (often used for optimal control):
-$$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \max_{a_{0}: \infty} \sum_{t=0}^{\infty} \gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute."/>
+There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \[."/>
 
 
 <script type="application/ld+json">
@@ -136,12 +130,12 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
   "@type": "BlogPosting",
   "headline": "Planning",
   "name": "Planning",
-  "description": "There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It\u0026rsquo;s called Model Predictive Control (MPC).\nKnown Dynamics Case We try develop methods to scale to large MDPs.\nSetting of the problem. We have a deterministic model (often used for optimal control):\n$$ x_{t + 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \\max_{a_{0}: \\infty} \\sum_{t=0}^{\\infty} \\gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute.",
+  "description": "There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It\u0026rsquo;s called Model Predictive Control (MPC).\nThere are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \\[.",
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It’s called Model Predictive Control (MPC).\nKnown Dynamics Case We try develop methods to scale to large MDPs.\nSetting of the problem. We have a deterministic model (often used for optimal control):\n$$ x_{t + 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \\max_{a_{0}: \\infty} \\sum_{t=0}^{\\infty} \\gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute.\nFinite horizon version Often we just consider a Horizon $H$: $$ \\max_{a_{0}: H} \\sum_{t=0}^{H} \\gamma^{t}r(x_{t}, a_{t}) $$ We can write a cost function as: $$ J_{H}(a_{t:t + H - 1}) = \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau}) $$ Where $x_{\\tau}$ is the state we reached after executing the first $\\tau$ actions. If this cost is continuous and differentiable, then we can use gradient descent methods with Backpropagation.\nIf it is not differentiable, we can use Monte Carlo Methods (AlphaZero can be seen as an advanced version of these methods). These are called random shooting methods.\nOne clear drawback of finite horizon setting is when we have sparse rewards. If in the whole horizon the model doesn’t see any action that brings any reward, then it cannot learn anything. This is quite intuitive. One possible solution is adding a value estimate to the last reached state, (Krause calls this method return to go).\n$$ J_{H}(a_{t:t + H - 1}) = \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau}) + \\underbrace{\\gamma^{H} V(x_{t + H})}_{\\text{Added Value}} $$ If $H = 1$, then we have the greedy policy with respect to the value function, we have studied many of these settings in Tabular Reinforcement Learning and RL Function Approximation.\nThe stochastic Case In the case we have stochastic transition models, we just take the expectation. $$ J_{H}(a_{t:t + H - 1}) = \\mathop{\\mathbb{E}}_{x_{t + 1: t+H}} \\left[ \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau}) + \\gamma^{H} V(x_{t + H}) \\right] $$ A common approach is using monte carlo trajectory sampling. This is usually a high dimensional integral.\nWe have the same problem of states that depend on the actions. So we can use the score trick or reparameterization trick, as before. A common approach is the latter with the Gaussian policy. Applying this trick, we can estimate the expectation in this way:\n$$ J_{H}(a_{t:t + H - 1}) = \\sum_{i=1}^{N} \\left[ \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}^{(i)}, a_{\\tau}^{(i)}) + \\gamma^{H} V(x_{t + H}^{(i)}) \\right] $$ Where $x_{\\tau}$ is derived from the stochastic model. (Sample from normal Gaussian and then reparameterize). (See slides, this syntax has been written in a slightly different manner).\nThe problem with the current appraoch is that solving this optimization problem at every step could be quite expensive! This leads to parameterized q functions. We parameterize a policy $a_{t} = \\pi(x_{t}, \\theta)$, which brings us to offline methods.\nThis leads to this new cost: $$ J(\\theta) = \\mathop{\\mathbb{E}}_{x_{0} \\sim \\mu} \\left[ \\sum_{\\tau = 0}^{H - 1} \\gamma^{\\tau}r_{\\tau} + \\gamma^{H} Q(x_{H}, \\pi(x_{H}, \\theta)) \\mid \\theta \\right] $$ Where $\\mu$ explores all states with probability $\u003e 0$.\nUnknown Dynamics In this setting, we don’t know the transition model $f$ neither the reward function $r$. We will use the same idea in Tabular Reinforcement Learning, we will attempt to learn the transition and reward model based on some rollouts of the current policy.\nThe main idea Given a dataset of $D = \\left\\{ (x_{1}, a_{1}, r_{1}, x_{i + 1})_{i} \\right\\}$ we try to input the state and the action, and learn the reward and the next state.\nMain Drawbacks If we set some finite horizon $H \u003e 1$ the problem with the approximations is that the errors compound. The planning algorithm then runs on probably erroneous models (or uses the noise as information), which brings poor performance. One way to address this problem is to capture epistemic and aleatoric error and try to model them.\nGreedy Planning Separating Errors The epistemic error is the uncertainty in $P(f \\mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \\mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve.\nThe algorithm: Define empty dataset and prior $P(f) = P(f \\mid \\left\\{ \\right\\})$ Iterate: Find $\\pi$ such that it maximizes $$ \\mathop{\\mathbb{E}}_{f \\sim P(f \\mid D)} \\left[ \\sum_{\\tau = 0}^{H - 1} \\gamma^{\\tau}r_{\\tau} + \\gamma^{H} Q(x_{H}, \\pi(x_{H}, \\theta)) \\mid \\theta \\right] $$ Collect a dataset of rollouts $D = \\left\\{ (x_{1}, a_{1}, r_{1}, x_{i + 1})_{i} \\right\\}$ using this policy Update the prior $P(f \\mid D)$ The PETS algorithm is one example of these methods.\nOptimistic Methods H-UCRL ",
-  "wordCount" : "812",
+  "articleBody": "There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It’s called Model Predictive Control (MPC).\nThere are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \\[...\\] Moreover, modeling uncertainty in our model of the environment can be extremely useful in deciding where to explore. Learning a model can therefore help to dramatically reduce the sample complexity over model-free techniques.\nA general algorithm usually follows this outline:\nInitialize policy For some episodes: Collect data following a certain policy Learn a model $f$ of the world and the rewards $r$. Update the policy using the learned model. We can categorize the challenges into three main buckets:\nHow to develop policies given some model of the world How to infer the model of the world How to balance exploitation against exploration (the classical problem). Known Dynamics Case We try develop methods to scale to large MDPs. in this setting we have a deterministic model of the world, and would like to develop a policy that returns the maximum reward. This problem has been heavily studied in a field named optimal control.\nSetting of the problem. We have a deterministic model (often used for optimal control):\n$$ x_{t + 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns: $$ \\max_{a_{0}: \\infty} \\sum_{t=0}^{\\infty} \\gamma^{t} r(x_{t}, a_{t}) $$ But his is often not feasible to compute.\nFinite horizon version Often we just consider a Horizon $H$: $$ \\max_{a_{0}: H} \\sum_{t=0}^{H} \\gamma^{t}r(x_{t}, a_{t}) $$ We can write a cost function as: $$ J_{H}(a_{t:t + H - 1}) = \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau}) $$ Where $x_{\\tau}$ is the state we reached after executing the first $\\tau - 1$ actions. The objective is then finding the actions that minimize that cost. If this cost is continuous and differentiable, then we can use gradient descent methods with Backpropagation. This problem is calle model predictive control.\nIf it is not differentiable, we can use Monte Carlo Methods (AlphaZero can be seen as an advanced version of these methods). These are called random shooting methods.\nOne clear drawback of finite horizon setting is when we have sparse rewards. If in the whole horizon the model doesn’t see any action that brings any reward, then it cannot learn anything. This is quite intuitive. One possible solution is adding a value estimate to the last reached state, (Krause calls this method return to go).\n$$ J_{H}(a_{t:t + H - 1}) = \\underbrace{\\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau})}_{\\text{Short Term}} + \\underbrace{\\gamma^{H} V(x_{t + H})}_{\\text{Long Term}} $$ If $H = 1$, then we have the greedy policy with respect to the value function, we have studied many of these settings in Tabular Reinforcement Learning and RL Function Approximation.\nThe stochastic Case In the case we have stochastic transition models, we just take the expectation. $$ J_{H}(a_{t:t + H - 1}) = \\mathop{\\mathbb{E}}_{x_{t + 1: t+H}} \\left[ \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}, a_{\\tau}) + \\gamma^{H} V(x_{t + H}) \\mid a_{t: t+ H - 1}, f\\right] $$ A common approach is using monte carlo trajectory sampling. This is usually a high dimensional integral.\nWe have the same problem of states that depend on the actions. So we can use the score trick or reparameterization trick, as before. A common approach is the latter with the Gaussian policy. Applying this trick, we can estimate the expectation in this way:\n$$ J_{H}(a_{t:t + H - 1}) = \\frac{1}{N}\\sum_{i=1}^{N} \\left[ \\sum_{\\tau = t}^{t + H - 1} \\gamma^{\\tau - t}r(x_{\\tau}^{(i)}, a_{\\tau}^{(i)}) + \\gamma^{H} V(x_{t + H}^{(i)}) \\right] $$ Where $x_{\\tau}$ is derived from the stochastic model instead with the underlying stochastic transition function. (Sample from normal Gaussian and then reparameterize). (See slides, this syntax has been written in a slightly different manner).\nControl Loops The problem with the current approach is that solving this optimization problem at every step could be quite expensive! This problem is called closed control loop. This leads to parameterized $q$ functions in an attempt to make things faster. We parameterize a policy $a_{t} = \\pi(x_{t}, \\theta)$, which brings us to offline methods for faster online evaluation. This is called open control loop.\nThis leads to this new cost: $$ J_{\\mu, H}(\\varphi;\\theta) = \\mathop{\\mathbb{E}}_{x_{0} \\sim \\mu, x_{1:H} \\mid \\pi_{\\varphi}, f} \\left[ \\sum_{\\tau = 0}^{H - 1} \\gamma^{\\tau}r_{\\tau} + \\gamma^{H} Q(x_{H}, \\pi(x_{H}, \\theta)) \\mid \\theta \\right] $$ Where $\\mu$ explores all states with probability $\u003e 0$. One nice thing about this approach is that with $H = 0$ it corresponds with the DDPG algorithm.\nRecall that with Q-learning, we are assigning our policy in the following manner: $$ \\pi^{*}(x) = \\arg\\max_{a} Q^{*}(x, a; \\theta) $$ The two methods are quite similar if viewed from this point of view.\nUnknown Dynamics In this setting, we don’t know the transition model $f$ neither the reward function $r$. We will use the same idea in Tabular Reinforcement Learning, we will attempt to learn the transition and reward model based on some rollouts of the current policy.\nThe main idea Given a dataset of $D = \\left\\{ (x_{i}, a_{i}, r_{i}, x_{i + 1})_{i} \\right\\}$ we try to input the state and the action, and learn the reward and the next state. So in this case, we consider our input to be $(x_{i}, a_{i})$ and our output to be $(r_{i}, x_{i + 1})$. We then attempt to model a parameterized function $f$ such that: $$ x_{t + 1} \\sim f(x_{t}, a_{t},; \\psi) $$ The case of the reward function can be done in exactly the same manner.\nUsing Conditional Gaussians As we have done in Bayesian neural networks, we can model the mean and variance of a Gaussian that predicts the next state: $$ x_{t + 1} \\sim \\mathcal{N}(\\mu(x_{t}, a_{t}; \\psi), \\sigma(x_{t}, a_{t}; \\psi)) $$ And one nice thing we only need to use $n (n + 1) / 2$ parameters. We note that if the variance is 0, then it reduces to a deterministic setting.\nMain Drawbacks If we set some finite horizon $H \u003e 1$ the problem with the approximations is that the errors compound. The planning algorithm then runs on probably erroneous models (or uses the noise as information), which brings poor performance. This is also often why using point estimates is a bad idea in control settings. One way to address this problem is to capture epistemic and aleatoric error and try to model them.\nGreedy Planning Separating Errors The epistemic error is the uncertainty in $P(f \\mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \\mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve and can be attributed to uncertainty of the transitions in the underlying Markov Process.\nThen, we would like to focus on the epistemic uncertainty, i.e. the error that we have some control over. We can use the same idea of sampling repeatedly from the model and then taking the mean of the rewards. (Somewhat akin to Thompsom Sampling explored in Bayesian Optimization).\nThe algorithm: This is somewhat similar to an algorithm called probabilistic inference for learning control (PILCO).\nDefine empty dataset and prior $P(f) = P(f \\mid \\left\\{ \\right\\})$ Iterate: Find $\\pi$ such that it maximizes $$ \\mathop{\\mathbb{E}}_{f \\sim P(f \\mid D)} \\left[ \\sum_{\\tau = 0}^{H - 1} \\gamma^{\\tau}r_{\\tau} + \\gamma^{H} Q(x_{H}, \\pi(x_{H}, \\theta)) \\mid \\theta \\right] $$ Collect a dataset of rollouts $D = \\left\\{ (x_{1}, a_{1}, r_{1}, x_{i + 1})_{i} \\right\\}$ using this policy Update the prior $P(f \\mid D)$ The PETS algorithm is one example of these methods.\nExploration Reinforcement Learning can be seen as an expansion over Bayesian Optimization: we add actions and world models to the states (inputs) and rewards (outputs). This motivates the usage of some algorithms developed in that setting in the new one. One of the problems we had in Bayesian Optimization is the exploration and exploration trade-off. In this section, we will discuss about that problem in this setting.\nSome exploration techniques Gaussian Dithering This is a simple idea: we add some noise to the actions. This idea has been discussed before too. See Bayesian Optimization.\nThompson Sampling This is exactly the same idea in Bayesian Optimization: The algorithm goes as follows:\nInitialize the empty dataset $\\mathcal{D} = \\varnothing$ and the prior $p(f) = p(f \\mid \\mathcal{D})$ For some episodes do: Sample a model $f \\sim p(f \\mid \\mathcal{D})$ Find the policy that maximizes the expected reward under this model $\\max_{\\pi} J_{H}(\\pi; f)$. Execute this policy and collect the data $\\mathcal{D}$ Update the prior $p(f \\mid \\mathcal{D})$ Optimistic Exploration Let us consider a set $\\mathcal{M}(\\mathcal{D})$ of plausible models given some data $\\mathcal{D}$. Optimistic exploration would then optimize for the most advantageous model among all models that are plausible given the seen data.\nFor example in the context of conditional Gaussian models we can define a family of distributions in some confidence interval as $$ f_{i}(x, a) \\in \\mathcal{C}_{i} = \\left[ \\mu_{i}(x, a) - \\beta_{i}\\sigma_{i}(x, a), \\mu_{i}(x, a) + \\beta_{i}\\sigma_{i}(x, a) \\right] $$ Then the set of plausible models is $\\mathcal{M}(\\mathcal{D}) = \\left\\{ f_{i} \\mid i = 1, \\ldots, d \\right\\}$. Such that that function is in $\\mathcal{C}_{i}$\nThe algorithm goes as follows:\nInitialize the empty dataset $\\mathcal{D} = \\varnothing$ and the prior $p(f) = p(f \\mid \\mathcal{D})$ For some episodes do: Find the policy that maximizes the expected reward under the most optimistic model.$$ \\max_{\\pi} \\max_{f \\in \\mathcal{M}(\\mathcal{D})} J_{H}(\\pi; f) $$ Execute this policy and collect the data $\\mathcal{D}$ Update the prior $p(f \\mid \\mathcal{D})$ H-UCRL This is called Hallucinated Upper Confidence Reinforcement Learning and is a natural extension of UCB in the context of reinforcement learning. With this method, we use the idea of plausible models developed above and consider the whole range of possible actions within the confidence intervals. Then the optimization objective becomes: $$ \\pi_{t + 1} = \\arg\\max_{\\pi} \\max_{\\eta(\\cdot) \\in [-1, 1]^{d}} J_{H}(\\pi; \\hat{f}_{t}) $$ And the dynamics aare: $$ \\hat{f}_{t}(x, a) = \\mu_{t}(x, a) + \\beta_{t}\\eta_{t}\\sigma_{t}(x, a) $$ Illustration of H-UCRL from the Textbook",
+  "wordCount" : "1717",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -236,7 +230,7 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
     <h1 class="post-title entry-hint-parent">
       Planning
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -255,14 +249,20 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
                 <li>
                     <a href="#finite-horizon-version" aria-label="Finite horizon version">Finite horizon version</a></li>
                 <li>
-                    <a href="#the-stochastic-case" aria-label="The stochastic Case">The stochastic Case</a></li></ul>
+                    <a href="#the-stochastic-case" aria-label="The stochastic Case">The stochastic Case</a></li>
+                <li>
+                    <a href="#control-loops" aria-label="Control Loops">Control Loops</a></li></ul>
                     </ul>
                 </li>
                 <li>
                     <a href="#unknown-dynamics" aria-label="Unknown Dynamics">Unknown Dynamics</a><ul>
                         
                 <li>
-                    <a href="#the-main-idea" aria-label="The main idea">The main idea</a></li>
+                    <a href="#the-main-idea" aria-label="The main idea">The main idea</a><ul>
+                        
+                <li>
+                    <a href="#using-conditional-gaussians" aria-label="Using Conditional Gaussians">Using Conditional Gaussians</a></li></ul>
+                </li>
                 <li>
                     <a href="#main-drawbacks" aria-label="Main Drawbacks">Main Drawbacks</a></li>
                 <li>
@@ -272,9 +272,21 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
                     <a href="#separating-errors" aria-label="Separating Errors">Separating Errors</a></li>
                 <li>
                     <a href="#the-algorithm" aria-label="The algorithm:">The algorithm:</a></li></ul>
+                </li></ul>
                 </li>
                 <li>
-                    <a href="#optimistic-methods" aria-label="Optimistic Methods">Optimistic Methods</a><ul>
+                    <a href="#exploration" aria-label="Exploration">Exploration</a><ul>
+                        
+                <li>
+                    <a href="#some-exploration-techniques" aria-label="Some exploration techniques">Some exploration techniques</a><ul>
+                        
+                <li>
+                    <a href="#gaussian-dithering" aria-label="Gaussian Dithering">Gaussian Dithering</a></li>
+                <li>
+                    <a href="#thompson-sampling" aria-label="Thompson Sampling">Thompson Sampling</a></li></ul>
+                </li>
+                <li>
+                    <a href="#optimistic-exploration" aria-label="Optimistic Exploration">Optimistic Exploration</a><ul>
                         
                 <li>
                     <a href="#h-ucrl" aria-label="H-UCRL">H-UCRL</a>
@@ -290,8 +302,30 @@ $$ x_{t &#43; 1} = f(x_{t}, a_{t}) $$ And we still want to maximize our returns:
 
   <div class="post-content"><p>There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence.
 In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&rsquo;s called Model Predictive Control (MPC).</p>
+<blockquote>
+<p>There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. </p>
+\[...\]
+<p> Moreover, modeling uncertainty in our model of the environment can be extremely useful in deciding where to explore. Learning a model can therefore help to dramatically reduce the sample complexity over model-free techniques.</p>
+</blockquote>
+<p>A general algorithm usually follows this outline:</p>
+<ol>
+<li>Initialize policy</li>
+<li>For some episodes:
+<ol>
+<li>Collect data following a certain policy</li>
+<li>Learn a model $f$ of the world and the rewards $r$.</li>
+<li>Update the policy using the learned model.</li>
+</ol>
+</li>
+</ol>
+<p>We can categorize the challenges into three main buckets:</p>
+<ol>
+<li>How to develop policies given some model of the world</li>
+<li>How to infer the model of the world</li>
+<li>How to balance exploitation against exploration (the classical problem).</li>
+</ol>
 <h2 id="known-dynamics-case">Known Dynamics Case<a hidden class="anchor" aria-hidden="true" href="#known-dynamics-case">#</a></h2>
-<p>We try develop methods to scale to large MDPs.</p>
+<p>We try develop methods to scale to large MDPs. in this setting we have a deterministic model of the world, and would like to develop a policy that returns the maximum reward. This problem has been heavily studied in a field named <em>optimal control</em>.</p>
 <h4 id="setting-of-the-problem">Setting of the problem.<a hidden class="anchor" aria-hidden="true" href="#setting-of-the-problem">#</a></h4>
 <p>We have a deterministic model (often used for optimal control):</p>
 $$
@@ -317,51 +351,81 @@ $$
 J_{H}(a_{t:t + H - 1}) = \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau})
 $$
 <p>
-Where $x_{\tau}$ is the state we reached after executing the first $\tau$ actions.
-If this cost is continuous and differentiable, then we can use gradient descent methods with <a href="/notes/backpropagation/">Backpropagation</a>.</p>
+Where $x_{\tau}$ is the state we reached after executing the first $\tau - 1$ actions. The objective is then finding the actions that minimize that cost.
+If this cost is continuous and differentiable, then we can use gradient descent methods with <a href="/notes/backpropagation/">Backpropagation</a>. This problem is calle <strong>model predictive control</strong>.</p>
 <p>If it is not differentiable, we can use <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a> (AlphaZero can be seen as an advanced version of these methods). These are called <strong>random shooting methods</strong>.</p>
 <p>One clear drawback of finite horizon setting is when we have <strong>sparse</strong> rewards. If in the whole horizon the model doesn&rsquo;t see any action that brings any reward, then it cannot learn anything. This is quite intuitive.
 One possible solution is adding a <strong>value estimate</strong> to the last reached state, (Krause calls this method <em>return to go</em>).</p>
 $$
-J_{H}(a_{t:t + H - 1}) = \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau}) + \underbrace{\gamma^{H} V(x_{t + H})}_{\text{Added Value}}
+J_{H}(a_{t:t + H - 1}) = \underbrace{\sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau})}_{\text{Short Term}} + \underbrace{\gamma^{H} V(x_{t + H})}_{\text{Long Term}}
 $$
 <p>If $H = 1$, then we have the greedy policy with respect to the value function, we have studied many of these settings in <a href="/notes/tabular-reinforcement-learning/">Tabular Reinforcement Learning</a> and <a href="/notes/rl-function-approximation/">RL Function Approximation</a>.</p>
 <h4 id="the-stochastic-case">The stochastic Case<a hidden class="anchor" aria-hidden="true" href="#the-stochastic-case">#</a></h4>
 <p>In the case we have stochastic transition models, we just take the expectation.
 </p>
 $$
-J_{H}(a_{t:t + H - 1}) = \mathop{\mathbb{E}}_{x_{t + 1: t+H}} \left[   \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau}) + \gamma^{H} V(x_{t + H}) \right]
+J_{H}(a_{t:t + H - 1}) = \mathop{\mathbb{E}}_{x_{t + 1: t+H}} \left[   \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau}) + \gamma^{H} V(x_{t + H}) \mid  a_{t: t+ H - 1}, f\right]
 $$
 <p>
 A common approach is using monte carlo trajectory sampling. This is usually a high dimensional integral.</p>
 <p>We have the same problem of states that depend on the actions. So we can use the score trick or reparameterization trick, as before. A common approach is the latter with the Gaussian policy.
 Applying this trick, we can estimate the expectation in this way:</p>
 $$
-J_{H}(a_{t:t + H - 1}) = \sum_{i=1}^{N} \left[   \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}^{(i)}, a_{\tau}^{(i)}) + \gamma^{H} V(x_{t + H}^{(i)}) \right]
+J_{H}(a_{t:t + H - 1}) = \frac{1}{N}\sum_{i=1}^{N} \left[   \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}^{(i)}, a_{\tau}^{(i)}) + \gamma^{H} V(x_{t + H}^{(i)}) \right]
 $$
 <p>
-Where $x_{\tau}$ is derived from the stochastic model. (Sample from normal Gaussian and then reparameterize). (See slides, this syntax has been written in a slightly different manner).</p>
-<p>The problem with the current appraoch is that solving this optimization problem at every step could be quite expensive! This leads to parameterized q functions.
-We parameterize a policy $a_{t} = \pi(x_{t}, \theta)$, which brings us to offline methods.</p>
+Where $x_{\tau}$ is derived from the stochastic model instead with the underlying stochastic transition function. (Sample from normal Gaussian and then reparameterize). (See slides, this syntax has been written in a slightly different manner).</p>
+<h4 id="control-loops">Control Loops<a hidden class="anchor" aria-hidden="true" href="#control-loops">#</a></h4>
+<p>The problem with the current approach is that solving this optimization problem at every step could be quite expensive! This problem is called <strong>closed control loop</strong>. This leads to parameterized $q$ functions in an attempt to make things faster.
+We parameterize a policy $a_{t} = \pi(x_{t}, \theta)$, which brings us to offline methods for faster online evaluation. This is called <strong>open control loop</strong>.</p>
 <p>This leads to this new cost:
 </p>
 $$
-J(\theta) = \mathop{\mathbb{E}}_{x_{0} \sim \mu} \left[  \sum_{\tau = 0}^{H - 1} \gamma^{\tau}r_{\tau} + \gamma^{H} Q(x_{H}, \pi(x_{H}, \theta)) \mid \theta \right] 
+J_{\mu, H}(\varphi;\theta) = \mathop{\mathbb{E}}_{x_{0} \sim \mu, x_{1:H} \mid \pi_{\varphi}, f} \left[  \sum_{\tau = 0}^{H - 1} \gamma^{\tau}r_{\tau} + \gamma^{H} Q(x_{H}, \pi(x_{H}, \theta)) \mid \theta \right] 
 $$
 <p>
-Where $\mu$ explores all states with probability $> 0$.</p>
+Where $\mu$ explores all states with probability $> 0$.
+One nice thing about this approach is that with $H = 0$ it corresponds with the DDPG algorithm.</p>
+<p>Recall that with Q-learning, we are assigning our policy in the following manner:
+</p>
+$$
+\pi^{*}(x) = \arg\max_{a} Q^{*}(x, a; \theta)
+$$
+<p>
+The two methods are quite similar if viewed from this point of view.</p>
 <h2 id="unknown-dynamics">Unknown Dynamics<a hidden class="anchor" aria-hidden="true" href="#unknown-dynamics">#</a></h2>
 <p>In this setting, we don&rsquo;t know the transition model $f$ neither the reward function $r$.
 We will use the same idea in <a href="/notes/tabular-reinforcement-learning/">Tabular Reinforcement Learning</a>, we will attempt to learn the transition and reward model based on some rollouts of the current policy.</p>
 <h3 id="the-main-idea">The main idea<a hidden class="anchor" aria-hidden="true" href="#the-main-idea">#</a></h3>
-<p>Given a dataset of $D = \left\{ (x_{1}, a_{1}, r_{1}, x_{i + 1})_{i} \right\}$ we try to input the state and the action, and learn the reward and the next state.</p>
+<p>Given a dataset of $D = \left\{ (x_{i}, a_{i}, r_{i}, x_{i + 1})_{i} \right\}$ we try to input the state and the action, and learn the reward and the next state.
+So in this case, we consider our input to be $(x_{i}, a_{i})$ and our output to be $(r_{i}, x_{i + 1})$.
+We then attempt to model a parameterized function $f$ such that:
+</p>
+$$
+x_{t + 1} \sim f(x_{t}, a_{t},; \psi)
+$$
+<p>
+The case of the reward function can be done in exactly the same manner.</p>
+<h4 id="using-conditional-gaussians">Using Conditional Gaussians<a hidden class="anchor" aria-hidden="true" href="#using-conditional-gaussians">#</a></h4>
+<p>As we have done in <a href="/notes/bayesian-neural-networks/">Bayesian neural networks</a>, we can model the mean and variance of a Gaussian that predicts the next state:
+</p>
+$$
+x_{t + 1} \sim \mathcal{N}(\mu(x_{t}, a_{t}; \psi), \sigma(x_{t}, a_{t}; \psi))
+$$
+<p>
+And one nice thing we only need to use $n (n + 1) / 2$ parameters.
+We note that if the variance is 0, then it reduces to a deterministic setting.</p>
 <h3 id="main-drawbacks">Main Drawbacks<a hidden class="anchor" aria-hidden="true" href="#main-drawbacks">#</a></h3>
 <p>If we set some finite horizon $H > 1$ the problem with the approximations is that the errors <strong>compound</strong>. The planning algorithm then runs on probably erroneous models (or uses the noise as information), which brings <em>poor performance</em>.
+This is also often why using point estimates is a bad idea in control settings.
 One way to address this problem is to capture epistemic and aleatoric error and try to model them.</p>
 <h3 id="greedy-planning">Greedy Planning<a hidden class="anchor" aria-hidden="true" href="#greedy-planning">#</a></h3>
 <h4 id="separating-errors">Separating Errors<a hidden class="anchor" aria-hidden="true" href="#separating-errors">#</a></h4>
-<p>The epistemic error is the uncertainty in $P(f \mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve.</p>
+<p>The epistemic error is the uncertainty in $P(f \mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve and can be attributed to <em>uncertainty</em> of the transitions in the underlying <a href="/notes/markov-processes/">Markov Process</a>.</p>
+<p>Then, we would like to focus on the epistemic uncertainty, i.e. the error that we have some control over.
+We can use the same idea of sampling repeatedly from the model and then taking the mean of the rewards. (Somewhat akin to Thompsom Sampling explored in <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>).</p>
 <h4 id="the-algorithm">The algorithm:<a hidden class="anchor" aria-hidden="true" href="#the-algorithm">#</a></h4>
+<p>This is somewhat similar to an algorithm called <em>probabilistic inference for learning control (PILCO)</em>.</p>
 <ol>
 <li>Define empty dataset and prior $P(f) = P(f \mid \left\{  \right\})$</li>
 <li>Iterate:</li>
@@ -373,9 +437,67 @@ $$</li>
 <li>Update the prior $P(f \mid D)$</li>
 </ol>
 <p>The PETS algorithm is one example of these methods.</p>
-<h3 id="optimistic-methods">Optimistic Methods<a hidden class="anchor" aria-hidden="true" href="#optimistic-methods">#</a></h3>
+<h2 id="exploration">Exploration<a hidden class="anchor" aria-hidden="true" href="#exploration">#</a></h2>
+<p>Reinforcement Learning can be seen as an expansion over <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>: we add actions and world models to the states (inputs) and rewards (outputs).
+This motivates the usage of some algorithms developed in that setting in the new one.
+One of the problems we had in Bayesian Optimization is the exploration and exploration trade-off. In this section, we will discuss about that problem in this setting.</p>
+<h3 id="some-exploration-techniques">Some exploration techniques<a hidden class="anchor" aria-hidden="true" href="#some-exploration-techniques">#</a></h3>
+<h4 id="gaussian-dithering">Gaussian Dithering<a hidden class="anchor" aria-hidden="true" href="#gaussian-dithering">#</a></h4>
+<p>This is a simple idea: we add some noise to the actions. This idea has been discussed before too. See <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>.</p>
+<h4 id="thompson-sampling">Thompson Sampling<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling">#</a></h4>
+<p>This is exactly the same idea in <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>:
+The algorithm goes as follows:</p>
+<ol>
+<li>Initialize the empty dataset $\mathcal{D} = \varnothing$ and the prior $p(f) = p(f \mid \mathcal{D})$</li>
+<li>For some episodes do:
+<ol>
+<li>Sample a model $f \sim p(f \mid \mathcal{D})$</li>
+<li>Find the policy that maximizes the expected reward under this model $\max_{\pi} J_{H}(\pi; f)$.</li>
+<li>Execute this policy and collect the data $\mathcal{D}$</li>
+<li>Update the prior $p(f \mid \mathcal{D})$</li>
+</ol>
+</li>
+</ol>
+<h3 id="optimistic-exploration">Optimistic Exploration<a hidden class="anchor" aria-hidden="true" href="#optimistic-exploration">#</a></h3>
+<blockquote>
+<p>Let us consider a set $\mathcal{M}(\mathcal{D})$ of plausible models given some data $\mathcal{D}$. Optimistic exploration would then optimize for the most advantageous model among all models that are plausible given the seen data.</p>
+</blockquote>
+<p>For example in the context of conditional Gaussian models we can define a family of distributions in some confidence interval as
+</p>
+$$
+f_{i}(x, a) \in \mathcal{C}_{i} = \left[ \mu_{i}(x, a) - \beta_{i}\sigma_{i}(x, a), \mu_{i}(x, a) + \beta_{i}\sigma_{i}(x, a) \right]
+$$
+<p>
+Then the set of plausible models is $\mathcal{M}(\mathcal{D}) = \left\{ f_{i} \mid i = 1, \ldots, d \right\}$. Such that that function is in $\mathcal{C}_{i}$</p>
+<p>The algorithm goes as follows:</p>
+<ol>
+<li>Initialize the empty dataset $\mathcal{D} = \varnothing$ and the prior $p(f) = p(f \mid \mathcal{D})$</li>
+<li>For some episodes do:
+<ol>
+<li>Find the policy that maximizes the expected reward under the most optimistic model.$$
+\max_{\pi} \max_{f \in \mathcal{M}(\mathcal{D})} J_{H}(\pi; f)
+$$</li>
+<li>Execute this policy and collect the data $\mathcal{D}$</li>
+<li>Update the prior $p(f \mid \mathcal{D})$</li>
+</ol>
+</li>
+</ol>
 <h4 id="h-ucrl">H-UCRL<a hidden class="anchor" aria-hidden="true" href="#h-ucrl">#</a></h4>
-
+<p>This is called <em>Hallucinated Upper Confidence Reinforcement Learning</em> and is a natural extension of UCB in the context of reinforcement learning.
+With this method, we use the idea of plausible models developed above and consider the whole range of possible actions within the confidence intervals.
+Then the optimization objective becomes:
+</p>
+$$
+\pi_{t + 1} = \arg\max_{\pi} \max_{\eta(\cdot) \in [-1, 1]^{d}} J_{H}(\pi; \hat{f}_{t})
+$$
+<p>
+And the dynamics aare:
+</p>
+$$
+\hat{f}_{t}(x, a) = \mu_{t}(x, a) + \beta_{t}\eta_{t}\sigma_{t}(x, a)
+$$
+<img src="/images/notes/Planning-20241222215924983.webp" alt="Planning-20241222215924983">
+Illustration of H-UCRL from the Textbook
 
   </div>
 
