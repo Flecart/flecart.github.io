@@ -7,8 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Bayesian neural networks | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning, ➕probabilistic-artificial-intelligence">
-<meta name="description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.">
+<meta name="description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea The idea here is the same as the one applied to Bayesian neural networks: define a prior of the weights and likelihood and define a posterior over the weights.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bayesian-neural-networks/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -88,8 +87,7 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Bayesian neural networks" />
-<meta property="og:description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models." />
+<meta property="og:description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea The idea here is the same as the one applied to Bayesian neural networks: define a prior of the weights and likelihood and define a posterior over the weights." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/bayesian-neural-networks/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -100,8 +98,7 @@ We want to predict the weights of a given model with some bounds on certainty ab
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Bayesian neural networks"/>
-<meta name="twitter:description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea TODO
-We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models."/>
+<meta name="twitter:description" content="Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$ choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ Bayesian Neural Networks The Idea The idea here is the same as the one applied to Bayesian neural networks: define a prior of the weights and likelihood and define a posterior over the weights."/>
 
 
 <script type="application/ld+json">
@@ -130,12 +127,12 @@ We want to predict the weights of a given model with some bounds on certainty ab
   "@type": "BlogPosting",
   "headline": "Bayesian neural networks",
   "name": "Bayesian neural networks",
-  "description": "Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.",
+  "description": "Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea The idea here is the same as the one applied to Bayesian neural networks: define a prior of the weights and likelihood and define a posterior over the weights.",
   "keywords": [
     "machinelearning", "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea TODO\nWe want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models. Usually, in some datasets also the variance changes with the input; this is called heteroskedastic noise. This justifies models in the following form:\n$$ p(y \\mid \\boldsymbol{x}, \\theta) = \\mathcal{N}(u; f_{1}(\\boldsymbol{x}, \\theta), \\exp(f_{2}(\\boldsymbol{x}, \\theta))) $$ where $f_{1}$ and $f_{2}$ are neural networks and $\\theta$ are the weights of the neural network. We use neural networks to predict mean and variance. We use the $\\exp$ function to ensure that the variance is always positive.\nFrom a practical point of view, this machinery is quite good at estimating variance in regions where data is present (same thing in heteroskedastic settings!), while it is overconfident in zones without data, often collapsing the variance.\nMap estimate for bayesian NN Assume a prior $p(\\theta) \\sim \\mathcal{N}(\\theta; 0, \\lambda^{-1})$ and the above parametrization of the likelihood function, let’s derive the posterior distribution, that is $p(\\theta \\mid y, \\boldsymbol{x})$. TODO: We notice that while in the Bayesian Linear Regression the normalization constant is disregarded, here it is dependent on the $\\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.\nPrediction with Bayesian Neural Networks We see that prediction is just averaging over the predictions of different networks sampled from the approximate distribution that we derived from the variational inference of the weights. Some formalization could help in clearing this out.\n$$ \\begin{align} p(y^{} \\mid x^{}, x_{1:n}, y_{1:n}) \u0026 = \\int p(y^{} \\mid x^{}, \\theta) p(\\theta \\mid x_{1:n}, y_{1:n}) d\\theta \\ \u0026 = \\mathbb{E}{\\theta \\sim p(\\cdot \\mid x{1:n}, y_{1:n})} [p(y^{} \\mid x^{}, \\theta)]) \\ \\text{Using Variational Inf.}\u0026 \\approx \\mathbb{E}{{\\theta \\sim q(\\theta)}} [p(y^{} \\mid x^{}, \\theta)] \\\n\\text{Monte Carlo }\u0026 \\approx \\frac{1}{S} \\sum_{s = 1}^{S} p(y^{} \\mid x^{}, \\theta_{s}) \\end{align} $$ The variational is usually the approximation that is introducing the most errors.\nWe can also estimate the mean and variance of our prediction: TODO\nApproximating with Gaussians. Using the variational method, usually we parametrize with Gaussians. See Variational Inference. We usually use the ELBO to minimize the difference between the variational approximation and the true distribution.\n$$ \\log p(D) \\geq \\max_{q \\in \\mathcal{Q}} ELBO(q) = \\max_{q \\in \\mathcal{Q}} \\mathbb{E}_{q(\\theta)} [\\log p(D, \\theta) - \\log q(\\theta)] $$ Assuming a Gaussian prior, we can derive the ELBO as: $$ \\begin{align} ELBO(q) \u0026= \\mathbb{E}_{q(\\theta)} [\\log p(D, \\theta) - \\log q(\\theta)] \\\\ \u0026 = \\mathbb{E}_{\\varepsilon \\sim \\mathcal{N}(0, 1)} [\\log p(D, \\theta + \\sigma \\varepsilon)] + \\frac{1}{2}\\log \\lvert \\Sigma \\rvert + \\frac{D}{2} \\log 2\\pi e \\end{align} $$ This is known as Bayes by backprop (2015), and is parametrized with a diagonal covariance Gaussian.\nWith Laplace Approximation We need to model the joint density as $$ \\log p(\\mathcal{D}, \\theta) \\approx \\log p (\\mathcal{D}, \\hat{\\theta}) + \\frac{1}{2} (\\theta - \\hat{\\theta})^{T} H(\\theta - \\hat{\\theta}) $$ If we marginalize over the parameters we get $$ p(\\mathcal{D}) = p(\\mathcal{D}, \\hat{\\theta}) (2\\pi)^{D/2} \\lvert -H_{\\theta} \\rvert ^{-1/2} $$ The problem is often the Hessian, which could be instable, or difficult to approximate. For this reason usually we use low-rank matrices, diagonal matrices, or other approximations.\nDropout as Variational Inference 🟨– Dropout and dropconnect can be seen as a special case of variational inference. It can been seen as if we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.\nOne thing is using dropout during prediction to obtain uncertainty estimates. This is called Monte Carlo Dropout. The idea is very simple: keep the dropout during inference and sample from the network multiple times. The average of the predictions is the final prediction, and the variance is the uncertainty estimate.\nDeep Ensembles With this method we train different models on different data (maybe bootstrapped data, see Cross Validation and Model Selection). Then we just average the predictions of the different models. This is a very simple way to obtain uncertainty estimates, which allows to approximate the bayesian inference method.\nStein Variational Gradient Descent This is called (SVGD) by Liu and Wang 2016. We want to approximate the posterior distribution with a set of particles and minimize the KL divergence between the true posterior and the approximated one. We consider an ensemble of models $\\left\\{ \\theta_{i} \\right\\}^{n}_{i = 1}$ and we update them with the following update rule: $$ \\theta_{i} \\leftarrow \\theta_{i} + \\frac{\\epsilon}{n} \\sum_{j = 1}^{n} k(\\theta_{i}, \\theta_{j}) (\\nabla_{\\theta_{j}} \\log p(\\theta_{j} \\mid \\mathcal{D}) - \\nabla_{\\theta_{j}}k(\\theta_{j}, \\theta_{i})) $$ I have no idea why we use this update rule, but it should be minimizing a certain divergence between the two distributions. TODO: understand this part.\nMarkov Chain Monte Carlo We would like here to sample from the posterior distribution of the weights using MCMC (somewhat similar to the SGLD method), and then use the samples to make predictions. This is a very general method, but it’s computationally expensive.\nStoring weights We have seen in the previous paragraph that we just need to sample $S$ weights and average the predictions of every network that we get. But this comes at the cost of storing the $S$ weights. One idea is subsampling: we store some intermediate weights or predictions and use those for the final inference.\nAnother idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution. This is just the idea of SWA-Gaussians, presented (Maddox et al. 2019).\nProbabilistic Ensembles We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.\nWe can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.\nRe-parametrization trick TODO\nGradient descent with variational estimate TODO\nNoise Interpretation TODO: Discusso how aleatoric and epistemic noise are modeled in this context.\nCalibration What is Calibration? Well calibrated models have a similar accuracy to the confidence of their predictions. This is a very important property for many applications, especially in medical fields. For example, if a model is well calibrated, if it is secure on a prediction, it can leave the burden from the doctors, who would just manually check the hard ones.\nExpected Calibration Error 🟥 A well calibrated model’s accuracy is the same as the probability, interpretable as a confidence score, of its prediction. Mathematically we say that a model is calibrated if $$ \\mathbb{E}_{p \\sim \\hat{P}} [\\lvert \\mathbb{P}(\\hat{Y} = Y \\mid \\hat{P} = p) - p \\rvert ] = 0 $$ With $\\hat{Y}$ the predictions of the model and $\\hat{P}$ its confidences and $Y$ is the true label. So we would like to have $$ \\mathbb{P}(\\hat{Y} = y \\mid \\hat{P} = p) = p $$ Usually it’s quite difficult to have the exact estimates, so we do some heuristics to calculate this value. We divide the model’s predictions into bins based on the confidence score. Let’s say we defide all the space in $[0, 1]$ into $m$ bins. Then we say that the empirical accuracy score in the bin is $$ \\text{acc}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\mathbb{I}(\\hat{Y}_{i} = Y_{i}) $$ where $N_{b}$ is the number of samples in the bin and $\\mathbb{I}$ is the indicator function. Then we can calculate the expected calibration error as And the confidence score is $$ \\text{conf}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\hat{P}_{i} $$ Then we can calculate the expected calibration error (ECE) as $$ \\text{ECE} = \\sum_{b = 1}^{m} \\frac{N_{b}}{N} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Sometimes we are also interested in the Maximum Calibration Error defined as $$ \\text{MCE} = \\max_{b} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Reliability Diagrams We group the predictions of the model into bins based on their confidence. Then we plot the average confidence score against the accuracy of the model in that bin. If the model is well calibrated, this plot should be a diagonal line.\nTechniques for improving calibration Temperature Scaling There are many techniques to improve calibration. One of the most used is temperature scaling. This is just a scaling of the logits of the model.\nPlatt Scaling Another technique is Platt scaling. This is a logistic regression on the model’s output logits, interpretable as confidence scores.\nIsotonic Regression TODO:\nReferences [1] Maddox et al. “A Simple Baseline for Bayesian Uncertainty in Deep Learning” 2019\n",
-  "wordCount" : "1458",
+  "articleBody": "Robbins-Moro Algorithm TODO: the algorithm is very simple we do Set some learning rates $\\alpha_{0} \u003e \\alpha_{1} \u003e \\dots \u003e \\alpha_{n} \\dots$ choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \\alpha_{n} \\Delta w_{n} $$ Bayesian Neural Networks The Idea The idea here is the same as the one applied to Bayesian neural networks: define a prior of the weights and likelihood and define a posterior over the weights. But the nature of the model makes it quite difficult, if not impossible to have a closed-form solution for the posterior.\nA simple model We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models. Usually, in some datasets also the variance changes with the input; this is called heteroskedastic noise. This justifies models in the following form:\n$$ p(y \\mid \\boldsymbol{x}, \\theta) = \\mathcal{N}(u; f_{1}(\\boldsymbol{x}, \\theta), \\exp(f_{2}(\\boldsymbol{x}, \\theta))) $$ where $f_{1}$ and $f_{2}$ are neural networks and $\\theta$ are the weights of the neural network. We use neural networks to predict mean and variance. We use the $\\exp$ function to ensure that the variance is always positive.\nFrom a practical point of view, this machinery is quite good at estimating variance in regions where data is present (same thing in heteroskedastic settings!), while it is overconfident in zones without data, often collapsing the variance.\nMap estimate for bayesian NN Assume a prior $p(\\theta) \\sim \\mathcal{N}(\\theta; 0, \\lambda^{-1})$ and the above parametrization of the likelihood function, let’s derive the posterior distribution, that is $p(\\theta \\mid y, \\boldsymbol{x})$.\nWe notice that while in the Bayesian Linear Regression the normalization constant is disregarded, here it is dependent on the $\\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.\n$$ \\hat{\\theta} = \\arg\\min_{\\theta} - \\underbrace{\\log p(\\theta)}_{\\lambda \\lVert \\theta \\rVert ^{2}_{2}} - \\sum_{i = 1}^{n} \\log p(y_{i} \\mid x_{i}, \\theta) $$ If we use the above model for Bayesian Modeling we derive the likelihood to be: $$ \\begin{align} \\log p(y_{i} \\mid x_{i}, \\theta) \u0026= \\log \\mathcal{N}(y_{i}; \\mu(x_{i}, \\theta), \\sigma^{2}(x_{i}, \\theta))) \\\\ \u0026 = -\\frac{1}{2} \\log 2\\pi \\sigma^{2}(x_{i}, \\theta) - \\frac{1}{2\\sigma^{2}(x_{i}, \\theta)} (y_{i} - \\mu(x_{i}, \\theta))^{2} \\\\ \u0026 = -\\frac{1}{2} \\log 2\\pi - \\frac{1}{2} \\log \\sigma^{2}(x_{i}, \\theta) - \\frac{1}{2\\sigma^{2}(x_{i}, \\theta)} (y_{i} - \\mu(x_{i}, \\theta))^{2} \\\\ \u0026= \\underbrace{-\\frac{1}{2} \\log 2\\pi}_{\\text{const}} -\\frac{1}{2}\\left[ \\log \\sigma^{2}(x_{i}, \\theta) + \\frac{ (y_{i} - \\mu(x_{i}, \\theta))^{2} }{\\sigma^{2}(x_{i}, \\theta)}\\right] \\end{align} $$ Here you observe that the likelihood is maximized by having high variance (plus penalty) or having correct estimates. Then adding the prior is just a regularizing term that corresponds to weight decay (a good exercise is to prove this part).\nThe Classification Case: TODO: minute 22 of part 2.\nPrediction with Bayesian Neural Networks We see that prediction is just averaging over the predictions of different networks sampled from the approximate distribution that we derived from the variational inference of the weights. Some formalization could help in clearing this out.\n$$ \\begin{align} p(y^{} \\mid x^{}, x_{1:n}, y_{1:n}) \u0026 = \\int p(y^{} \\mid x^{}, \\theta) p(\\theta \\mid x_{1:n}, y_{1:n}) d\\theta \\ \u0026 = \\mathbb{E}{\\theta \\sim p(\\cdot \\mid x{1:n}, y_{1:n})} [p(y^{} \\mid x^{}, \\theta)]) \\ \\text{Using Variational Inf.}\u0026 \\approx \\mathbb{E}{{\\theta \\sim q(\\theta)}} [p(y^{} \\mid x^{}, \\theta)] \\\n\\text{Monte Carlo }\u0026 \\approx \\frac{1}{S} \\sum_{s = 1}^{S} p(y^{} \\mid x^{}, \\theta_{s}) \\end{align} $$ The variational is usually the approximation that is introducing the most errors.\nApproximating with Gaussians 🟥++ Training Using the variational method, usually we parametrize with Gaussians. See Variational Inference. We usually use the ELBO to minimize the difference between the variational approximation and the true distribution.\n$$ \\log p(D) \\geq \\max_{q \\in \\mathcal{Q}} ELBO(q) = \\max_{q \\in \\mathcal{Q}} \\mathbb{E}_{q(\\theta)} [\\log p(D, \\theta) - \\log q(\\theta)] $$ Assuming a Gaussian prior, we can derive the ELBO as: $$ \\begin{align} ELBO(q) \u0026= \\mathbb{E}_{q(\\theta)} [\\log p(D, \\theta) - \\log q(\\theta)] \\\\ \u0026= \\mathbb{E}_{\\varepsilon \\sim \\mathcal{N}(0, 1)} [\\log p(D, \\theta + \\sigma \\varepsilon)] + KL(q \\mid p) \\\\ \u0026 = \\mathbb{E}_{\\varepsilon \\sim \\mathcal{N}(0, 1)} [\\log p(D, \\theta + \\sigma \\varepsilon)] + \\frac{1}{2}\\log \\lvert \\Sigma \\rvert + \\frac{D}{2} \\log 2\\pi e \\end{align} $$ This is known as Bayes by backprop (2015), and is parameterized with a diagonal covariance Gaussian.\nThis is used to learn the covariance matrix and mean of the variational family. After, we can do inference in the following manner:\nInference $$ \\begin{align} p(y^{*} \\mid x^{*}, x_{1:n}, y_{1:n})\u0026= \\int p(y^{*} \\mid x^{*}, \\theta) p(\\theta \\mid x_{1:n}, y_{1:n}) d\\theta \\\\ \u0026\\approx \\int p(y^{*} \\mid x^{*}, \\theta) q(\\theta) d\\theta \\\\ \u0026\\approx \\frac{1}{S} \\sum_{s = 1}^{S} p(y^{*} \\mid x^{*}, \\theta_{s}) \\\\ \u0026= \\frac{1}{S} \\sum_{s = 1}^{S} \\mathcal{N}(y^{*}; f(x^{*}, \\theta_{s}), \\exp(g(x^{*}, \\theta_{s}))) \\end{align} $$ Intuitively, variational inference in Bayesian neural networks can be interpreted as averaging the predictions of multiple neural networks drawn according to the variational posterior $q$\nUnpacking uncertainties We can un pack that uncertainty of the likelihood prediction using the classical aleatoric and epistemic uncertainties: $$ \\begin{align} \\text{Var}[y^{*} \\mid x^{*}, x_{1:n}, y_{1:n}] \u0026= \\underbrace{\\mathbb{E}_{q(\\theta)}[\\text{Var}[y^{*} \\mid x^{*}, \\theta]]}_{\\text{Aleatoric}} + \\underbrace{\\text{Var}_{q(\\theta)}[\\mathbb{E}[y^{*} \\mid x^{*}, \\theta]] }_{\\text{Epistemic}} \\\\ \u0026\\approx \\frac{1}{m} \\sum_{s = 1}^{m} \\exp(g(x^{*}, \\theta_{s})) + \\frac{1}{m - 1} \\sum_{s = 1}^{m} (\\mu(x^{*}, \\theta_{s}) - \\bar{\\mu})^{2} \\end{align} $$ Where $\\bar{\\mu} = \\frac{1}{m} \\sum_{s = 1}^{m} \\mu(x^{*}, \\theta_{s})$.\nWith Laplace Approximation We need to model the joint density as $$ \\log p(\\mathcal{D}, \\theta) \\approx \\log p (\\mathcal{D}, \\hat{\\theta}) + \\frac{1}{2} (\\theta - \\hat{\\theta})^{T} H(\\theta - \\hat{\\theta}) $$ If we marginalize over the parameters we get $$ p(\\mathcal{D}) = p(\\mathcal{D}, \\hat{\\theta}) (2\\pi)^{D/2} \\lvert -H_{\\theta} \\rvert ^{-1/2} $$ The problem is often the Hessian, which could be unstable, or difficult to approximate. For this reason usually we use low-rank matrices, diagonal matrices, or other approximations.\nDropout as Variational Inference Dropout and dropconnect can be seen as a special case of variational inference. It can been seen as if we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.\nThe Variational Family 🟨– With dropout, instead of working with a single network, we are working with many probabilistic networks. It can be interpreted as doing variational inference with the following variational family: $$ q(\\theta \\mid \\lambda) = \\prod_{j} q_{j}(\\theta_{j} \\mid \\lambda_{j}) $$ Where $q_{j}(\\theta \\mid \\lambda)) = p\\delta_{0}(\\theta_{j}) + (1 - p) \\delta_{\\lambda_{j}}(\\theta_{j})$ a mixture of Dirac deltas: with a certain probability $1- p$ we keep the weight, or set it to zero. Optimizing the network with dropout can be seen as optimizing the ELBO with respect of this variational family.\nInference with Dropout 🟩 One thing is using dropout during prediction to obtain uncertainty estimates. This is called Monte Carlo Dropout. The idea is very simple: keep the dropout during inference and sample from the network multiple times. The average of the predictions is the final prediction, and the variance is the uncertainty estimate.\nDeep Ensembles The Idea We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.\nWe can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.\nInference With this method we train different models on different data (maybe bootstrapped data, see Cross Validation and Model Selection). Then we just average the predictions of the different models. This is a very simple way to obtain uncertainty estimates, which allows to approximate the bayesian inference method.\n$$ \\begin{align} p(y^{*} \\mid x^{*}, x_{1:n}, y_{1:n}) \u0026= \\int p(y^{*} \\mid x^{*}, \\theta) p(\\theta \\mid x_{1:n}, y_{1:n}) d\\theta \\\\ \u0026= \\mathop{\\mathbb{E}}_{\\theta \\sim p(\\cdot \\mid x_{1:n}, y_{1:n})} [p(y^{*} \\mid x^{*}, \\theta)] \\\\ \u0026\\approx \\frac{1}{m} \\sum_{s = 1}^{m} p(y^{*} \\mid x^{*}, \\theta_{s}) \\end{align} $$ Markov Chain Monte Carlo The MCMC idea We would like here to sample from the posterior distribution of the weights using MCMC (somewhat similar to the SGLD method), and then use the samples to make predictions. This is a very general method, but it’s computationally expensive. These methods explained in Monte Carlo Methods are exactly the same here, you can use these to sample from the posterior and then use the same tricks in #Inference (remember the Ergodic theorem) and #Unpacking uncertainties.\nKey Challenges There are two main challenges with these methods:\nStoring the weights (usually to expensive). One way to circumvent this problem is to keep some snapshots or keeping some running averages (see next section). One idea is subsampling: we store some intermediate weights or predictions and use those for the final inference. Burn in period is too costly. Running averages Another idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution. This is just the idea of SWA-Gaussians, presented (Maddox et al. 2019). This is a way not to store all the weights. $$ \\mu \\leftarrow \\frac{1}{T + 1} (T \\mu + \\theta) $$ And: $$ \\sigma^{2} \\leftarrow \\frac{1}{T + 1} (T \\sigma^{2} + \\theta^{T}\\theta) $$ Outlook: Othe rmethods Stein Variational Gradient Descent This is called (SVGD) by Liu and Wang 2016. We want to approximate the posterior distribution with a set of particles and minimize the KL divergence between the true posterior and the approximated one. We consider an ensemble of models $\\left\\{ \\theta_{i} \\right\\}^{n}_{i = 1}$ and we update them with the following update rule: $$ \\theta_{i} \\leftarrow \\theta_{i} + \\frac{\\epsilon}{n} \\sum_{j = 1}^{n} k(\\theta_{i}, \\theta_{j}) (\\nabla_{\\theta_{j}} \\log p(\\theta_{j} \\mid \\mathcal{D}) - \\nabla_{\\theta_{j}}k(\\theta_{j}, \\theta_{i})) $$ I have no idea why we use this update rule, but it should be minimizing a certain divergence between the two distributions. TODO: understand this part.\nCalibration What is Calibration? Well calibrated models have a similar accuracy to the confidence of their predictions. This is a very important property for many applications, especially in medical fields. For example, if a model is well calibrated, if it is secure on a prediction, it can leave the burden from the doctors, who would just manually check the hard ones.\nExpected Calibration Error 🟥 A well calibrated model’s accuracy is the same as the probability, interpretable as a confidence score, of its prediction. Mathematically we say that a model is calibrated if $$ \\mathbb{E}_{p \\sim \\hat{P}} [\\lvert \\mathbb{P}(\\hat{Y} = Y \\mid \\hat{P} = p) - p \\rvert ] = 0 $$ With $\\hat{Y}$ the predictions of the model and $\\hat{P}$ its confidences and $Y$ is the true label. So we would like to have $$ \\mathbb{P}(\\hat{Y} = y \\mid \\hat{P} = p) = p $$ Usually it’s quite difficult to have the exact estimates, so we do some heuristics to calculate this value. We divide the model’s predictions into bins based on the confidence score. Let’s say we defide all the space in $[0, 1]$ into $m$ bins. Then we say that the empirical accuracy score in the bin is $$ \\text{acc}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\mathbb{I}(\\hat{Y}_{i} = Y_{i}) $$ where $N_{b}$ is the number of samples in the bin and $\\mathbb{I}$ is the indicator function. Then we can calculate the expected calibration error as And the confidence score is $$ \\text{conf}(b) = \\frac{1}{N_{b}} \\sum_{i \\in b} \\hat{P}_{i} $$ Then we can calculate the expected calibration error (ECE) as $$ \\text{ECE} = \\sum_{b = 1}^{m} \\frac{N_{b}}{N} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Sometimes we are also interested in the Maximum Calibration Error defined as $$ \\text{MCE} = \\max_{b} \\lvert \\text{acc}(b) - \\text{conf}(b) \\rvert $$ Reliability Diagrams We group the predictions of the model into bins based on their confidence. Then we plot the average confidence score against the accuracy of the model in that bin. If the model is well calibrated, this plot should be a diagonal line.\nTechniques for improving calibration Temperature Scaling There are many techniques to improve calibration. One of the most used is temperature scaling. This is just a scaling of the logits of the model.\nPlatt Scaling Another technique is Platt scaling. This is a logistic regression on the model’s output logits, interpretable as confidence scores.\nIsotonic Regression TODO:\nReferences [1] Maddox et al. “A Simple Baseline for Bayesian Uncertainty in Deep Learning” 2019\n",
+  "wordCount" : "2026",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +227,7 @@ We want to predict the weights of a given model with some bounds on certainty ab
     <h1 class="post-title entry-hint-parent">
       Bayesian neural networks
     </h1>
-    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -247,35 +244,65 @@ We want to predict the weights of a given model with some bounds on certainty ab
                     <a href="#bayesian-neural-networks" aria-label="Bayesian Neural Networks">Bayesian Neural Networks</a><ul>
                         
                 <li>
-                    <a href="#the-idea" aria-label="The Idea">The Idea</a></li>
+                    <a href="#the-idea" aria-label="The Idea">The Idea</a><ul>
+                        
                 <li>
-                    <a href="#map-estimate-for-bayesian-nn" aria-label="Map estimate for bayesian NN">Map estimate for bayesian NN</a></li>
+                    <a href="#a-simple-model" aria-label="A simple model">A simple model</a></li></ul>
+                </li>
+                <li>
+                    <a href="#map-estimate-for-bayesian-nn" aria-label="Map estimate for bayesian NN">Map estimate for bayesian NN</a><ul>
+                        
+                <li>
+                    <a href="#the-classification-case" aria-label="The Classification Case:">The Classification Case:</a></li></ul>
+                </li>
                 <li>
                     <a href="#prediction-with-bayesian-neural-networks" aria-label="Prediction with Bayesian Neural Networks">Prediction with Bayesian Neural Networks</a><ul>
                         
                 <li>
-                    <a href="#approximating-with-gaussians" aria-label="Approximating with Gaussians.">Approximating with Gaussians.</a></li>
+                    <a href="#approximating-with-gaussians-" aria-label="Approximating with Gaussians 🟥&#43;&#43;">Approximating with Gaussians 🟥++</a><ul>
+                        
                 <li>
-                    <a href="#with-laplace-approximation" aria-label="With Laplace Approximation">With Laplace Approximation</a></li>
+                    <a href="#training" aria-label="Training">Training</a></li>
                 <li>
-                    <a href="#dropout-as-variational-inference---" aria-label="Dropout as Variational Inference 🟨&ndash;">Dropout as Variational Inference 🟨&ndash;</a></li>
+                    <a href="#inference" aria-label="Inference">Inference</a></li>
                 <li>
-                    <a href="#deep-ensembles" aria-label="Deep Ensembles">Deep Ensembles</a></li>
-                <li>
-                    <a href="#stein-variational-gradient-descent" aria-label="Stein Variational Gradient Descent">Stein Variational Gradient Descent</a></li>
-                <li>
-                    <a href="#markov-chain-monte-carlo" aria-label="Markov Chain Monte Carlo">Markov Chain Monte Carlo</a></li></ul>
+                    <a href="#unpacking-uncertainties" aria-label="Unpacking uncertainties">Unpacking uncertainties</a></li></ul>
                 </li>
                 <li>
-                    <a href="#storing-weights" aria-label="Storing weights">Storing weights</a></li>
+                    <a href="#with-laplace-approximation" aria-label="With Laplace Approximation">With Laplace Approximation</a></li></ul>
+                </li>
                 <li>
-                    <a href="#probabilistic-ensembles" aria-label="Probabilistic Ensembles">Probabilistic Ensembles</a></li>
+                    <a href="#dropout-as-variational-inference" aria-label="Dropout as Variational Inference">Dropout as Variational Inference</a><ul>
+                        
                 <li>
-                    <a href="#re-parametrization-trick" aria-label="Re-parametrization trick">Re-parametrization trick</a></li>
+                    <a href="#the-variational-family---" aria-label="The Variational Family 🟨&ndash;">The Variational Family 🟨&ndash;</a></li>
                 <li>
-                    <a href="#gradient-descent-with-variational-estimate" aria-label="Gradient descent with variational estimate">Gradient descent with variational estimate</a></li>
+                    <a href="#inference-with-dropout-" aria-label="Inference with Dropout 🟩">Inference with Dropout 🟩</a></li></ul>
+                </li>
                 <li>
-                    <a href="#noise-interpretation" aria-label="Noise Interpretation">Noise Interpretation</a></li></ul>
+                    <a href="#deep-ensembles" aria-label="Deep Ensembles">Deep Ensembles</a><ul>
+                        
+                <li>
+                    <a href="#the-idea-1" aria-label="The Idea">The Idea</a></li>
+                <li>
+                    <a href="#inference-1" aria-label="Inference">Inference</a></li></ul>
+                </li>
+                <li>
+                    <a href="#markov-chain-monte-carlo" aria-label="Markov Chain Monte Carlo">Markov Chain Monte Carlo</a><ul>
+                        
+                <li>
+                    <a href="#the-mcmc-idea" aria-label="The MCMC idea">The MCMC idea</a></li>
+                <li>
+                    <a href="#key-challenges" aria-label="Key Challenges">Key Challenges</a></li>
+                <li>
+                    <a href="#running-averages" aria-label="Running averages">Running averages</a></li></ul>
+                </li>
+                <li>
+                    <a href="#outlook-othe-rmethods" aria-label="Outlook: Othe rmethods">Outlook: Othe rmethods</a><ul>
+                        
+                <li>
+                    <a href="#stein-variational-gradient-descent" aria-label="Stein Variational Gradient Descent">Stein Variational Gradient Descent</a></li></ul>
+                </li></ul>
                 </li>
                 <li>
                     <a href="#calibration" aria-label="Calibration">Calibration</a><ul>
@@ -318,7 +345,8 @@ w_{n+1} = w_{n} - \alpha_{n} \Delta w_{n}
 $$
 <h2 id="bayesian-neural-networks">Bayesian Neural Networks<a hidden class="anchor" aria-hidden="true" href="#bayesian-neural-networks">#</a></h2>
 <h3 id="the-idea">The Idea<a hidden class="anchor" aria-hidden="true" href="#the-idea">#</a></h3>
-<p>TODO</p>
+<p>The idea here is the same as the one applied to <a href="/notes/bayesian-neural-networks/">Bayesian neural networks</a>: define a prior of the weights and likelihood and define a posterior over the weights. But the nature of the model makes it quite difficult, if not impossible to have a closed-form solution for the posterior.</p>
+<h4 id="a-simple-model">A simple model<a hidden class="anchor" aria-hidden="true" href="#a-simple-model">#</a></h4>
 <p>We want to predict the weights of a given model with some bounds on certainty about them. One thing is that we have always used linear models for this, but we can also use neural networks or more complex models.
 Usually, in some datasets also the variance changes with the input; this is called heteroskedastic noise.
 This justifies models in the following form:</p>
@@ -330,9 +358,26 @@ where $f_{1}$ and $f_{2}$ are neural networks and $\theta$ are the weights of th
 We use neural networks to predict mean and variance. We use the $\exp$ function to ensure that the variance is always positive.</p>
 <p>From a practical point of view, this machinery is quite good at estimating variance in regions where data is present (same thing in heteroskedastic settings!), while it is overconfident in zones without data, often collapsing the variance.</p>
 <h3 id="map-estimate-for-bayesian-nn">Map estimate for bayesian NN<a hidden class="anchor" aria-hidden="true" href="#map-estimate-for-bayesian-nn">#</a></h3>
-<p>Assume a prior $p(\theta) \sim \mathcal{N}(\theta; 0, \lambda^{-1})$ and the above parametrization of the likelihood function, let&rsquo;s derive the posterior distribution, that is $p(\theta \mid y, \boldsymbol{x})$.
-TODO:
-We notice that while in the <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> the normalization constant is disregarded, here it is dependent on the $\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.</p>
+<p>Assume a prior $p(\theta) \sim \mathcal{N}(\theta; 0, \lambda^{-1})$ and the above parametrization of the likelihood function, let&rsquo;s derive the posterior distribution, that is $p(\theta \mid y, \boldsymbol{x})$.</p>
+<p>We notice that while in the <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> the normalization constant is disregarded, here it is dependent on the $\theta$, so we need to consider it. We can pay higher variance cost to minimize the error in the quadratic term.</p>
+$$
+\hat{\theta} = \arg\min_{\theta} - \underbrace{\log p(\theta)}_{\lambda \lVert \theta \rVert ^{2}_{2}} - \sum_{i = 1}^{n} \log p(y_{i} \mid x_{i}, \theta)
+$$
+<p>If we use the above model for Bayesian Modeling we derive the likelihood to be:
+</p>
+$$
+\begin{align}
+\log p(y_{i} \mid x_{i}, \theta)  &= \log \mathcal{N}(y_{i}; \mu(x_{i}, \theta), \sigma^{2}(x_{i}, \theta)))  \\
+& = -\frac{1}{2} \log 2\pi \sigma^{2}(x_{i}, \theta) - \frac{1}{2\sigma^{2}(x_{i}, \theta)} (y_{i} - \mu(x_{i}, \theta))^{2} \\
+& = -\frac{1}{2} \log 2\pi - \frac{1}{2} \log \sigma^{2}(x_{i}, \theta) - \frac{1}{2\sigma^{2}(x_{i}, \theta)} (y_{i} - \mu(x_{i}, \theta))^{2} \\
+&= \underbrace{-\frac{1}{2} \log 2\pi}_{\text{const}} -\frac{1}{2}\left[ \log \sigma^{2}(x_{i}, \theta) + \frac{ (y_{i} - \mu(x_{i}, \theta))^{2} }{\sigma^{2}(x_{i}, \theta)}\right]
+\end{align}
+$$
+<p>
+Here you observe that the likelihood is maximized by having high variance (plus penalty) or having correct estimates.
+Then adding the prior is just a regularizing term that corresponds to weight decay (a good exercise is to prove this part).</p>
+<h4 id="the-classification-case">The Classification Case:<a hidden class="anchor" aria-hidden="true" href="#the-classification-case">#</a></h4>
+<p>TODO: minute 22 of part 2.</p>
 <h3 id="prediction-with-bayesian-neural-networks">Prediction with Bayesian Neural Networks<a hidden class="anchor" aria-hidden="true" href="#prediction-with-bayesian-neural-networks">#</a></h3>
 <p>We see that prediction is just averaging over the predictions of different networks sampled from the approximate distribution that we derived from the variational inference of the weights. Some formalization could help in clearing this out.</p>
 <p>$$
@@ -344,9 +389,8 @@ p(y^{<em>} \mid x^{</em>}, x_{1:n}, y_{1:n}) &amp; = \int p(y^{<em>} \mid x^{</e
 \end{align}
 $$
 The variational is usually the approximation that is introducing the most errors.</p>
-<p>We can also estimate the mean and variance of our prediction:
-TODO</p>
-<h4 id="approximating-with-gaussians">Approximating with Gaussians.<a hidden class="anchor" aria-hidden="true" href="#approximating-with-gaussians">#</a></h4>
+<h4 id="approximating-with-gaussians-">Approximating with Gaussians 🟥++<a hidden class="anchor" aria-hidden="true" href="#approximating-with-gaussians-">#</a></h4>
+<h5 id="training">Training<a hidden class="anchor" aria-hidden="true" href="#training">#</a></h5>
 <p>Using the variational method, usually we parametrize with Gaussians. See <a href="/notes/variational-inference/">Variational Inference</a>. We usually use the ELBO to minimize the difference between the variational approximation and the true distribution.</p>
 $$
 \log p(D) \geq \max_{q \in \mathcal{Q}} ELBO(q) = \max_{q \in \mathcal{Q}} \mathbb{E}_{q(\theta)} [\log p(D, \theta) - \log q(\theta)]
@@ -355,11 +399,39 @@ $$
 </p>
 $$
 \begin{align}
-ELBO(q) &= \mathbb{E}_{q(\theta)} [\log p(D, \theta) - \log q(\theta)] \\
+ELBO(q) &= \mathbb{E}_{q(\theta)} [\log p(D, \theta) - \log q(\theta)]  \\
+&= \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [\log p(D, \theta + \sigma \varepsilon)]  + KL(q \mid p) \\
 & = \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [\log p(D, \theta + \sigma \varepsilon)] + \frac{1}{2}\log \lvert \Sigma \rvert  + \frac{D}{2} \log 2\pi e
 \end{align}
 $$
-<p>This is known as Bayes by backprop (2015), and is parametrized with a diagonal covariance Gaussian.</p>
+<p>This is known as Bayes by backprop (2015), and is parameterized with a diagonal covariance Gaussian.<br>
+This is used to learn the covariance matrix and mean of the variational family. After, we can do inference in the following manner:</p>
+<h5 id="inference">Inference<a hidden class="anchor" aria-hidden="true" href="#inference">#</a></h5>
+$$
+\begin{align}
+p(y^{*} \mid x^{*}, x_{1:n}, y_{1:n})&= \int p(y^{*} \mid x^{*}, \theta) p(\theta \mid x_{1:n}, y_{1:n}) d\theta  \\
+&\approx \int p(y^{*} \mid x^{*}, \theta) q(\theta) d\theta \\
+&\approx \frac{1}{S} \sum_{s = 1}^{S} p(y^{*} \mid x^{*}, \theta_{s}) \\
+&= \frac{1}{S} \sum_{s = 1}^{S} \mathcal{N}(y^{*}; f(x^{*}, \theta_{s}), \exp(g(x^{*}, \theta_{s})))
+\end{align}
+$$
+<blockquote>
+<p>Intuitively, variational inference in Bayesian neural networks can be
+interpreted as averaging the predictions of multiple neural networks
+drawn according to the variational posterior $q$</p>
+</blockquote>
+<h5 id="unpacking-uncertainties">Unpacking uncertainties<a hidden class="anchor" aria-hidden="true" href="#unpacking-uncertainties">#</a></h5>
+<p>We can un pack that uncertainty of the likelihood prediction using the classical aleatoric and epistemic uncertainties:
+</p>
+$$
+\begin{align}
+\text{Var}[y^{*} \mid x^{*}, x_{1:n}, y_{1:n}] &= \underbrace{\mathbb{E}_{q(\theta)}[\text{Var}[y^{*} \mid x^{*}, \theta]]}_{\text{Aleatoric}} + \underbrace{\text{Var}_{q(\theta)}[\mathbb{E}[y^{*} \mid x^{*}, \theta]]
+}_{\text{Epistemic}} \\
+&\approx \frac{1}{m} \sum_{s = 1}^{m} \exp(g(x^{*}, \theta_{s})) + \frac{1}{m - 1} \sum_{s = 1}^{m} (\mu(x^{*}, \theta_{s}) - \bar{\mu})^{2}
+\end{align}
+$$
+<p>
+Where $\bar{\mu} = \frac{1}{m} \sum_{s = 1}^{m} \mu(x^{*}, \theta_{s})$.</p>
 <h4 id="with-laplace-approximation">With Laplace Approximation<a hidden class="anchor" aria-hidden="true" href="#with-laplace-approximation">#</a></h4>
 <p>We need to model the joint density as
 </p>
@@ -372,12 +444,65 @@ If we marginalize over the parameters we get
 $$
 p(\mathcal{D}) = p(\mathcal{D}, \hat{\theta}) (2\pi)^{D/2} \lvert -H_{\theta} \rvert ^{-1/2}
 $$
-<p>The problem is often the Hessian, which could be instable, or difficult to approximate. For this reason usually we use low-rank matrices, diagonal matrices, or other approximations.</p>
-<h4 id="dropout-as-variational-inference---">Dropout as Variational Inference 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#dropout-as-variational-inference---">#</a></h4>
-<p>Dropout and dropconnect can be seen as a special case of variational inference. It can been seen as if we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.</p>
+<p>The problem is often the Hessian, which could be unstable, or difficult to approximate. For this reason usually we use low-rank matrices, diagonal matrices, or other approximations.</p>
+<h3 id="dropout-as-variational-inference">Dropout as Variational Inference<a hidden class="anchor" aria-hidden="true" href="#dropout-as-variational-inference">#</a></h3>
+<p>Dropout and dropconnect can be seen as a <em>special case</em> of variational inference. It can been seen as if we are working with a probability distribution of different networks, which can be recalled as a special case of the one we have discussed above.</p>
+<h4 id="the-variational-family---">The Variational Family 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#the-variational-family---">#</a></h4>
+<p>With dropout, instead of working with a single network, we are working with many probabilistic networks.
+It can be interpreted as doing variational inference with the following variational family:
+</p>
+$$
+q(\theta \mid \lambda) = \prod_{j} q_{j}(\theta_{j} \mid \lambda_{j})
+$$
+<p>
+Where $q_{j}(\theta \mid \lambda)) = p\delta_{0}(\theta_{j}) + (1 - p) \delta_{\lambda_{j}}(\theta_{j})$ a mixture of Dirac deltas: with a certain probability $1- p$ we keep the weight, or set it to zero.
+Optimizing the network with dropout can be seen as optimizing the ELBO with respect of this variational family.</p>
+<h4 id="inference-with-dropout-">Inference with Dropout 🟩<a hidden class="anchor" aria-hidden="true" href="#inference-with-dropout-">#</a></h4>
 <p>One thing is using dropout during prediction to obtain uncertainty estimates. This is called <strong>Monte Carlo Dropout</strong>. The idea is very simple: keep the dropout during inference and sample from the network multiple times. The average of the predictions is the final prediction, and the variance is the uncertainty estimate.</p>
-<h4 id="deep-ensembles">Deep Ensembles<a hidden class="anchor" aria-hidden="true" href="#deep-ensembles">#</a></h4>
-<p>With this method we train different models on different data (maybe bootstrapped data, see <a href="/notes/cross-validation-and-model-selection/">Cross Validation and Model Selection</a>). Then we just average the predictions of the different models. This is a very simple way to obtain uncertainty estimates, which allows to approximate the bayesian inference method.</p>
+<h3 id="deep-ensembles">Deep Ensembles<a hidden class="anchor" aria-hidden="true" href="#deep-ensembles">#</a></h3>
+<h4 id="the-idea-1">The Idea<a hidden class="anchor" aria-hidden="true" href="#the-idea-1">#</a></h4>
+<p>We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.</p>
+<p>We can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.</p>
+<h4 id="inference-1">Inference<a hidden class="anchor" aria-hidden="true" href="#inference-1">#</a></h4>
+<p>With this method we train different models on different data (maybe <em>bootstrapped</em> data, see <a href="/notes/cross-validation-and-model-selection/">Cross Validation and Model Selection</a>).
+Then we just average the predictions of the different models. This is a very simple way to obtain uncertainty estimates, which allows to approximate the bayesian inference method.</p>
+$$
+\begin{align}
+p(y^{*} \mid x^{*}, x_{1:n}, y_{1:n}) &= \int p(y^{*} \mid x^{*}, \theta) p(\theta \mid x_{1:n}, y_{1:n}) d\theta  \\
+&= \mathop{\mathbb{E}}_{\theta \sim p(\cdot \mid x_{1:n}, y_{1:n})} [p(y^{*} \mid x^{*}, \theta)]  \\
+&\approx \frac{1}{m} \sum_{s = 1}^{m} p(y^{*} \mid x^{*}, \theta_{s})
+\end{align}
+$$
+<h3 id="markov-chain-monte-carlo">Markov Chain Monte Carlo<a hidden class="anchor" aria-hidden="true" href="#markov-chain-monte-carlo">#</a></h3>
+<h4 id="the-mcmc-idea">The MCMC idea<a hidden class="anchor" aria-hidden="true" href="#the-mcmc-idea">#</a></h4>
+<p>We would like here to sample from the posterior distribution of the weights using MCMC (somewhat similar to the SGLD method), and then use the samples to make predictions. This is a very general method, but it&rsquo;s computationally expensive.
+These methods explained in <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a> are exactly the same here, you can use these to sample from the posterior and then use the same tricks in <a href="/notes/bayesian-neural-networks/#inference">#Inference</a> (remember the Ergodic theorem) and <a href="/notes/bayesian-neural-networks/#unpacking-uncertainties">#Unpacking uncertainties</a>.</p>
+<h4 id="key-challenges">Key Challenges<a hidden class="anchor" aria-hidden="true" href="#key-challenges">#</a></h4>
+<p>There are two main challenges with these methods:</p>
+<ol>
+<li>Storing the weights (usually to expensive).
+<ol>
+<li>One way to circumvent this problem is to keep some <em>snapshots</em> or keeping some running averages (see next section).</li>
+<li>One idea is <strong>subsampling</strong>: we store some intermediate weights or predictions and use those for the final inference.</li>
+</ol>
+</li>
+<li>Burn in period is too costly.</li>
+</ol>
+<h4 id="running-averages">Running averages<a hidden class="anchor" aria-hidden="true" href="#running-averages">#</a></h4>
+<p>Another idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution.
+This is just the idea of SWA-Gaussians, presented <a href="http://arxiv.org/abs/1902.02476">(Maddox et al. 2019)</a>.
+This is a way not to store all the weights.
+</p>
+$$
+\mu \leftarrow \frac{1}{T + 1} (T \mu + \theta)
+$$
+<p>
+And:
+</p>
+$$
+\sigma^{2} \leftarrow \frac{1}{T + 1} (T \sigma^{2} + \theta^{T}\theta)
+$$
+<h3 id="outlook-othe-rmethods">Outlook: Othe rmethods<a hidden class="anchor" aria-hidden="true" href="#outlook-othe-rmethods">#</a></h3>
 <h4 id="stein-variational-gradient-descent">Stein Variational Gradient Descent<a hidden class="anchor" aria-hidden="true" href="#stein-variational-gradient-descent">#</a></h4>
 <p>This is called (SVGD) by Liu and Wang 2016.
 We want to approximate the posterior distribution with a set of particles and minimize the KL divergence between the true posterior and the approximated one.
@@ -388,22 +513,6 @@ $$
 $$
 <p>
 I have no idea why we use this update rule, but it should be minimizing a certain divergence between the two distributions. TODO: understand this part.</p>
-<h4 id="markov-chain-monte-carlo">Markov Chain Monte Carlo<a hidden class="anchor" aria-hidden="true" href="#markov-chain-monte-carlo">#</a></h4>
-<p>We would like here to sample from the posterior distribution of the weights using MCMC (somewhat similar to the SGLD method), and then use the samples to make predictions. This is a very general method, but it&rsquo;s computationally expensive.</p>
-<h3 id="storing-weights">Storing weights<a hidden class="anchor" aria-hidden="true" href="#storing-weights">#</a></h3>
-<p>We have seen in the previous paragraph that we just need to sample $S$ weights and average the predictions of every network that we get. But this comes at the cost of storing the $S$ weights.
-One idea is <strong>subsampling</strong>: we store some intermediate weights or predictions and use those for the final inference.</p>
-<p>Another idea is assuming a distribution over the weights (e.g. a Gaussian) and keeping the mean and variance of the weights. Then we can sample from this distribution.
-This is just the idea of SWA-Gaussians, presented <a href="http://arxiv.org/abs/1902.02476">(Maddox et al. 2019)</a>.</p>
-<h3 id="probabilistic-ensembles">Probabilistic Ensembles<a hidden class="anchor" aria-hidden="true" href="#probabilistic-ensembles">#</a></h3>
-<p>We train $m$ different models from a bootstrapped dataset and then just average their prediction. This is the main idea of doing Ensembles.</p>
-<p>We can also extend the probabilistic case to classification. In this case we just add a noise in the softmax layer to have some variability.</p>
-<h3 id="re-parametrization-trick">Re-parametrization trick<a hidden class="anchor" aria-hidden="true" href="#re-parametrization-trick">#</a></h3>
-<p>TODO</p>
-<h3 id="gradient-descent-with-variational-estimate">Gradient descent with variational estimate<a hidden class="anchor" aria-hidden="true" href="#gradient-descent-with-variational-estimate">#</a></h3>
-<p>TODO</p>
-<h3 id="noise-interpretation">Noise Interpretation<a hidden class="anchor" aria-hidden="true" href="#noise-interpretation">#</a></h3>
-<p>TODO: Discusso how aleatoric and epistemic noise are modeled in this context.</p>
 <h2 id="calibration">Calibration<a hidden class="anchor" aria-hidden="true" href="#calibration">#</a></h2>
 <h4 id="what-is-calibration">What is Calibration?<a hidden class="anchor" aria-hidden="true" href="#what-is-calibration">#</a></h4>
 <p>Well calibrated models have a <em>similar accuracy to the confidence</em> of their predictions. This is a very important property for many applications, especially in medical fields.

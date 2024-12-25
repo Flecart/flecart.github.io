@@ -181,30 +181,42 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Livello di Rete
+    <h2 class="entry-hint-parent">Mac Wifi
     </h2>
   </header>
   <div class="entry-content">
-    <p>Reti di Reti Le parti importanti per questo sono Data Plane e Control Plane (che ha saltato quasi tutto, ma almeno dijkstra lo dovresti fare bene)
-Introduzione (puoi skippare 🟩) La puoi skipppare perché tratta in modo molto generare parti che saranno trattati in modo più approfondito in seguito. La parte importante forse è il riassunto di cosa faccia questo livello.
-Discussione rete locale globale Slide
-No, non è possible creare una connessione globale utilizzando le tecnologie locali, come hub, switch e simili, perché causerebbe flooding e impedirebbe scalabilità e crescita dinamica che è classica della rete...</p>
+    <p>Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
+Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione)....</p>
   </div>
-  <footer class="entry-footer">26 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Livello di Rete" href="https://flecart.github.io/notes/livello-di-rete/"></a>
+  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Mac Wifi" href="https://flecart.github.io/notes/mac-wifi/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Plane
+    <h2 class="entry-hint-parent">Sicurezza delle reti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
-Funzioni principali Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane....</p>
+    <p>Obiettivi della sicurezza (!!!) 🟩 Vogliamo creare delle reti che abbiamo certe garanzie di sicurezza, soprattutto:
+Confidenzialità, non vorremmo che il nostro messaggio sia intercettabile e leggibili da persone intermedie Integrità: non vogliamo che messaggi possano essere cambiati senza intervento del sender Autenticazione: vorremmo sapere con chi stiamo parlando, e vorremmo essere sicuri che non stiano mentendo sull’identità. Sicurezza operativa(Availability): vorremmo essere in grado di poter continuare a fornire il servizio (quindi non sia possibile dossare, o installare malware che modifichino il comportamento del servizio)....</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
+  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Sicurezza delle reti" href="https://flecart.github.io/notes/sicurezza-delle-reti/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">VLAN
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Quando abbiamo una switch, ma vogliamo allo stesso momento andare a creare più LAN, allora abbiamo bisogno delle VLAN. Questi switch che hanno delle VLAN si chiamano managed switches
+Queste vlan sono numerate (ricorda l’espericomento cn LUCA!).
+Il problema Sono un protocollo livello 2 (Link-Layer, di collegamento), non vorremmo per esempio che un broadcast di una certa rete vada anche in altre reti che non centrino praticamente nulla, come possiamo vedere in figura....</p>
+  </div>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to VLAN" href="https://flecart.github.io/notes/vlan/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -222,37 +234,15 @@ La soluzione che è stata individuata, e ha rappresentato uno dei principali car
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Control Plane
+    <h2 class="entry-hint-parent">Data Plane
     </h2>
   </header>
   <div class="entry-content">
-    <p>Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
-Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c’è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve....</p>
+    <p>Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
+Funzioni principali Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane....</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Control Plane" href="https://flecart.github.io/notes/control-plane/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Modulazione wireless
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione Digital modulation 🟨 Slide introduzione
-Modulazione digitale: prendiamo un dato digitale e trasmesso con un segnale analogico, come le RF.
-ASK: amplitude shift keying
-FSK: frequency shift
-PSK: phase shift
-Questi sono i tre metodi principali, che dipendono dalle caratteristiche dell’onda descritte in Fisica del Wireless.
-TRE CARATTERISTICHE
-Power
-Resistenza interferenze. (robustezza)
-ANALOG MODULATION
-Per modulare un segnale analogico si utilizzano principalemente AM o FM, amplitude o frequency modulation, raramente si utilizza PM....</p>
-  </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Modulazione wireless" href="https://flecart.github.io/notes/modulazione-wireless/"></a>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
