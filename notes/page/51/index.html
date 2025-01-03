@@ -196,73 +196,79 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Metric Spaces
+    <h2 class="entry-hint-parent">Markov Processes
     </h2>
   </header>
   <div class="entry-content">
-    <p>There is a close relationship between topologies and metric spaces. We will see that every metric space directly induces a topology based on its metric. (from a CS point of view, this means topologies are more general than metric spaces).
-Definition of Metric Space 🟩 We say that $(\mathcal{X}, d)$ is a metric space if $\mathcal{X}$ is a set and $d$ a function $\mathcal{X} \times \mathcal{X} \to \mathbb{R}$ such that:...</p>
+    <p>Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
+Markov property Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Metric Spaces" href="https://flecart.github.io/notes/metric-spaces/"></a>
+  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Markov Processes" href="https://flecart.github.io/notes/markov-processes/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Norme e Condizionamento
+    <h2 class="entry-hint-parent">Probabilistic Parsing
     </h2>
   </header>
   <div class="entry-content">
-    <p>Errore inerente Bisogna cercare di generalizzare il concetto di errore e lo si fa con la norma
-Norma vettoriale È una funzione da $f: \mathbb{R}^n \to \mathbb{R}$ indicata con due barrette, questa funzione mi dà un concetto di distanza.
-Proprietà della norma Si definisce una norma una funzione che soddisfa queste proprietà
-$\lVert x \rVert \geq 0$ per ogni $x \in \mathbb{R}^{n}$ $\lVert x \rVert = 0 \iff x = 0$ $\lVert \alpha x \rVert = \lvert \alpha \rvert \lVert x \rVert$ per ogni $x \in \mathbb{R}^{n}$ e $\alpha \in \mathbb{R}$ Vale la disuguaglianza triangolare, ossia $\forall x, y \in \mathbb{R}^{n}, \lVert x &#43; y \rVert \leq \lVert x \rVert &#43; \lVert y \rVert$....</p>
+    <p>Language Constituents A constituent is a word or a group of words that function as a single unit within a hierarchical structure
+This is because there is a lot of evidence pointing towards an hierarchical organization of human language.
+Example of constituents Let’s have some examples: John speaks [Spanish] fluently John speaks [Spanish and French] fluently
+Mary programs the homework [in the ETH computer laboratory] Mary programs the homework [in the laboratory]...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Probabilistic Parsing" href="https://flecart.github.io/notes/probabilistic-parsing/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">The Database Management System
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Struttura del DBMS Introduzione ai DBMS Schema riassuntivo #### Operazioni classiche Ci stiamo chiedendo, come facciamo a descrivere i processi che portano alla comprensione della query e della retrieval degli elementi utili? Questo deve fare il DBMS, ossia capace di - Aggiornare tuple - Trovare tuple - Gestire gli accessi - Gestire accessi concorrenti? ### Query processor #### Query compiler (3) 🟩 - Parsing (crea l&#39;albero di derivazione per la nostra query) - Pre-processing (fa check semantici sulla query) - Optimization, si occupa lui di migliorare L&#39;ottimizzazione #### Execution engine 🟩 Esegue l&#39;effettiva computazione per la query, ed è il punto d&#39;incontro col resto (indexes, e logging per dire) Esegue il piano di esecuzione che probabilmente un livello superiore ha calcolato Interagisce con tutti gli altri componenti del db (ad esempio Log per transazioni e durabilità, buffer e scheduler delle operazioni prolly)....</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to The Database Management System" href="https://flecart.github.io/notes/the-database-management-system/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Agente Logico
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Nozioni base Questi sono le parole chiave di questo capitolo, ci permettono di parlare con chiarezza riguardo l’agente logico.
+Sentence
+Knowledge Base
+Axiom
+Inference
+background knowledge
+Knowledge representation language
+Knowledge level
+Implementation level
+Esempio generale di agente logico
+Logica proposizionale Sintassi del linguaggio Descrivere la BNF della logica proposizionale.
+per sapere cosa sia la BNF di questo è molto più facile rifarsi agli appunti di logica presi durante l’anno di corso 2021/2022 Logica Proposizionale....</p>
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Norme e Condizionamento" href="https://flecart.github.io/notes/norme-e-condizionamento/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Problemi di ricerca
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>2 Problemi di ricerca In questa prima parte si tratta di ricerca semplice, ossia si utilizza un modello basato su obiettivi, di struttura atomica, in un ambiente che risulti singolo-agente, episodico, totalmente osservabile, deterministico, statico, discreto, conosciuto.
-2.1 Il problema Vogliamo cercare di enunciare in un modo che possa essere formale, senza nessuna ambiguità il concetto di problema di ricerca.
-2.1.1 Framework di soluzione Individuiamo 4 fasi principali per un problema di ricerca, questo è un framework molto generico....</p>
-  </div>
-  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Problemi di ricerca" href="https://flecart.github.io/notes/problemi-di-ricerca/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Algebra lineare numerica
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular....</p>
-  </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Bayesian Optimization
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.
-Definitions First we will introduce some useful definitions in this context....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bayesian Optimization" href="https://flecart.github.io/notes/bayesian-optimization/"></a>
+  <a class="entry-link" aria-label="post link to Agente Logico" href="https://flecart.github.io/notes/agente-logico/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
