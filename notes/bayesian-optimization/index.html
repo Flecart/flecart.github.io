@@ -134,8 +134,8 @@ Definitions First we will introduce some useful definitions in this context."/>
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \\dots, x_{n}$ to find $\\max_{x \\in \\mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.\nDefinitions First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.\nWe suppose there is an underlying function $f$, but we are only observing some noised estimates $y = f + \\varepsilon$ where $\\varepsilon$ is usually modeled as Gaussian noise.\nAt each time step we can choose some $x_{t}$, then the reward is $y_{t} = f(x_{t}) + \\varepsilon_{t}$. We would like to maximize the cumulative reward $\\sum_{t=1}^{n} y_{t}$.\nRegret 🟩 We define regret to be: $$ R_{n} = \\sum_{t=1}^{n} f(x^{*}) - f(x_{t}) $$ Where $x^{*}$ is the best possible point we could have chosen for the underlying unknown function $f$. This regret is defined to be sub-linear if the following holds: $$ \\lim_{n \\to \\infty} \\frac{R_{n}}{n} = 0 $$ Intuitively, it says that if we explore enough, then we will always get the best possible choice.\nExploration and Exploitation 🟩 This setting naturally leads to the exploration-exploitation tradeoff. We can either choose to explore new regions of the input space, or exploit the regions we have already visited. It’s easy to observe that both greedy strategies that only exploit the current best guess and strategies that only explore new regions are not optimal, meaning they will yield not sub-linear regrets.\nOptimization Techniques A standard Idea In the rest of the section, we will assume that the $f$ function is a Gaussian Process. Then one greedy way to solve this optimization problem is the following algorithm\nInitialize a $f \\sim GP(\\mu_{0}, k_{0})$. For $t = 1, \\dots, n$ do Find the point $x_{t} = \\arg\\max_{x \\in \\mathcal{X}} f(x)$. Observe the reward $y_{t} = f(x_{t}) + \\varepsilon_{t}$. Update the GP with the new observation. On the need of Calibrated Models The most important of the following models is the GP-UCB acquisition function that heavily relies on the calibration assumption. Recall Bayesian neural networks for a refresh on calibration. Intuitively, only in the case of calibrated models, the confidence bounds given by the GP relates to the accuracy of the prediction. If a model is not calibrated, the confidence doesn’t tell you anything on the accuracy of the prediction.\nFor this reason is important sometimes to consider the well calibrated confidence intervals: $$ \\forall t \\geq 1, \\forall x \\in \\mathcal{X} : f^{*}(x) \\in \\mathcal{C}_{t}(x) = [\\mu_{t}(x) - \\beta_{t}\\sigma_{t}(x), \\mu_{t}(x) + \\beta_{t}\\sigma_{t}(x)] $$ Which is the confidence interval defined by the GP-UCB algorithm.\nEntropy Search TODO:\nThis method expands the d-optimality criteria, by looking for the point that gives the maximal information on the point we are looking for. There is a chicken and egg problem here, as the point itself.\nGP-UCB The idea Image taken from slides of the PAI course ETH 2024. Optimism in the face of uncertainty\nWe just want to pick the point that maximizes our upper confidence bound in the posterior of the Gaussian Processes. The green region are the possible regions that we would like to sample from, as their upper confidence is higher than our lower bound. This idea is recurring in this setting.\nIf the model is well calibrated, then the uncertainty regions are coherent with what actually returns the underlying function. This motivates why we can safely ignore the zones on our input where the maximum is less than the minimum value of the variance. We are sure, due to calibration, that those zones do not contain our maximum with high confidence.\nUCB Picking principle 🟩 This is formalized as $$ x_{t} = \\arg\\max_{x \\in D} \\mu_{t - 1}(x) + \\beta_{t - 1} \\sigma_{t - 1}(x) $$ Where $\\mu_{t - 1}(x)$ is the mean of the GP at the point $x$ and $\\sigma_{t - 1}(x)$ is the standard deviation. $\\beta_{t - 1}$ is a parameter that we can tune to have more or less exploration. This should select the point that maximizes the upper confidence bound in the GP.\nWe observe that if $\\forall t,\\beta_{t - 1} = 0$ then the algorithm is purely exploitative, while if $\\beta_{t - 1} = \\infty$ then the algorithm is purely esplorative, and it’s equivalent to uncertainty sampling presented in Active Learning.\nConvergence Bound on GP-UCP 🟨– The convergence bound on the GP-UCB, given we choose the $\\beta$ correctly, is $$ \\frac{1}{T} \\sum_{t = 1}^{T} (f(x^{*}) - f(x_{t})) = \\mathcal{O}\\left( \\sqrt{\\frac{\\gamma_{T}}{T}} \\right) $$ The maximum information gain determines the regret, often indicated as $\\gamma_{T}$, sometimes as $\\max_{S \\leq T} I(f; y_{S})$. This sets the rate at which we get information. Due to submodularity of mutual information we can show that $\\gamma_{T}$ can at most grow linearly with $T$.\nI have no idea why this is true. These are the bounds for different kernels in the GP The nice thing is that with all these kernels, we have guarantees that the regret is sub-linear, so we get the best possible solution.\nProof: Using the calibration hypothesis we have that the the instantaneous regret $r_{t}$ is bounded as follows: $$ r_{t} \\leq 2 \\beta_{t} \\sigma_{t}(x_{t}) $$ And using the GP informational result from Active Learning we have: $$ \\begin{align} \\frac{1}{T} R^{2}{T} \u0026\\leq \\sum{t = 1}^{T}r_{t}^{2} \\text{ Cauchy-Schwarz} \\ \u0026\\leq 4 \\beta_{t}^{2} \\sum_{t = 1}^{T} \\sigma_{t}^{2}(x_{t}) \\ \u0026= 4 \\sigma_{n}^{2} \\beta_{t}^{2} \\sum_{t = 1}^{T} \\frac{\\sigma^{2}{t}(x{t})}{\\sigma^{2}{n}} \\ \u0026\\leq 4C \\sigma{n}^{2} \\beta_{t}^{2} \\sum_{t = 1}^{T} \\log \\left( 1 + \\frac{\\sigma^{2}{t}(x{t})}{\\sigma^{2}{n}} \\right) \\ \u0026= 4C \\sigma{n}^{2} \\beta_{t}^{2} I(f_{T}; y_{T}) \\in \\mathcal{O}(\\beta^{2}{T}\\gamma{T})\n\\end{align} $$\nGrowth rate of information gain 🟨- There is a clean intuition for the following graph: if the function is continuous, smooth so to say, then knowing the value of one point gives lots of insights to the value of the next point. Which means we need fewer point to get a good estimate of the function (this is why the slope of the function is low). If we have quite independent samples, then we need more points to get a good estimate of the function. This is why it has a linear growth rate: every point gives you about the same information. Note that this happens only for white noise, so probably it is not a much interesting case.\nChoosing the point Usually the acquisition function is non-convex, so we need some methods to compute that maximum.\nLow dimensionality: we can use lipschitz optimization. High dimensionality: we can use gradient descent. Probability Improvement The PI Idea This method keeps track of a running optimum, and models the probability of improvement after a number $t$ of steps: $$ I_{t}(x) = (f(x) - \\hat{f}_{t})_{+} $$ Where $\\hat{f}$ is the current maximum. Then the point that is going to be picked is the point that maximizes the probability of having an improvement:\n$$ x_{t + 1} = \\arg \\max_{x \\in \\mathcal{X}} \\mathbb{P}(f(x) \u003e \\hat{f}_{t} \\mid x_{1:t}, y_{1:t}) = \\arg \\max_{x \\in \\mathcal{X}} \\Phi \\left( \\frac{\\mu_{t}(x) - \\hat{f}_{t}}{\\sigma_{t}(x)} \\right) $$ We observe that this algorithm is a little biased towards exploration as it prefers large means with low variances.\nExpected Improvement This is based on a similar idea, but here we consider how much it improves, instead of focusing on the most probable improvement. So our optimization objective is: $$ x_{t + 1} \\arg \\max_{x \\in \\mathcal{X}}\\mathop{\\mathbb{E}}[I_{t}(x) \\mid x_{1:t}, y_{1:t}] $$ It can be proven that Expected Improvement has the same regret bound as UCB. One drawback of this method, is that the optimization objective is usually flat, which makes it more difficult to optimize.\nThompson Sampling Thompson Sampling Method 🟩 With Thompson sampling , we first sample a function: $$ f_{t + 1} \\sim p( \\cdot \\mid x_{1:t}, y_{1:t}) $$ And the find the new point as the maximum of this function $x_{t + 1} = \\arg\\max_{x \\in \\mathcal{X}} f_{t + 1}(x)$. In this case, we are leveraging the randomness of $f$ to trade between exploitation and exploration. Similar bounds to UCB can be established also for Thompson.\nInformation Directed Sampling Regret Information Ratio A key quantity introduced by Russo and van Roy (2016) is the regret-information ratio: $$ \\Psi_{t}(x) = \\frac{\\Delta(x)^{2}}{I_{t}(x)} $$ Where $\\Delta(x) = \\max_{x'}f^{*}(x') - f^{*}(x)$ and $I_{t}$ is a function that captures the information gain (doesn’t need to be the same as the one for probability improvement).\nRegret Bound for ID It is possible to prove that with the above regret information ratio, the following holds: $$ R_{T} \\leq \\sqrt{\\sum_{t = 1}^{ T}I_{t - 1}(x_{t}) \\cdot \\sum_{t = 1}^{T} \\Psi_{t - 1}(x_{t}) } $$ ID Algorithm With the above definition $\\Delta(\\cdot)$ is not known, this leads to the following approximation: $$ \\hat{\\Delta}_{t}(x) = \\max_{x'\\in \\mathcal{X}} u_{t}(x') - l_{t}(x) $$ Where $u$ and $l$ are respectively, the upper and lower bound for a calibrated model.\nThen one can choose the selection of the new point based on the following rule: $$ x_{t + 1} = \\arg \\min _{x \\in \\mathcal{X}} \\left( \\frac{\\hat{\\Delta}_{t}(x)^{2}}{I_{t}(x)} \\right) $$ A common problem One common problem with these methods is the kernel. How could we choose the correct kernel and its hyper-parameters? We are using these kernels to select the data itself, which could be quite biased; phrased in another manner: we are dependently selecting points based on the model (which is a good thing, but also the main drawback!) Another problem is getting calibrated models in this setting where you continuously select points. And often, datasets in this domain are quite small.\nCommon approaches to this problem are:\nImposing priors on the kernel parameters. Occasionally selecting random points. ",
-  "wordCount" : "1630",
+  "articleBody": "While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \\dots, x_{n}$ to find $\\max_{x \\in \\mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.\nDefinitions First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.\nWe suppose there is an underlying function $f$, but we are only observing some noised estimates $y = f + \\varepsilon$ where $\\varepsilon$ is usually modeled as Gaussian noise.\nAt each time step we can choose some $x_{t}$, then the reward is $y_{t} = f(x_{t}) + \\varepsilon_{t}$. We would like to maximize the cumulative reward $\\sum_{t=1}^{n} y_{t}$.\nRegret 🟩 We define regret to be: $$ R_{n} = \\sum_{t=1}^{n} f(x^{*}) - f(x_{t}) $$ Where $x^{*}$ is the best possible point we could have chosen for the underlying unknown function $f$. This regret is defined to be sub-linear if the following holds: $$ \\lim_{n \\to \\infty} \\frac{R_{n}}{n} = 0 $$ Intuitively, it says that if we explore enough, then we will always get the best possible choice.\nRegret and maximum of the function One can prove that if and only if the function converges to the optimum then it has sub-linear regret: $$ \\lim_{ n \\to \\infty } f(x_{n}) = \\max_{x} f(x) \\iff \\lim_{ n \\to \\infty } \\frac{R_{n}}{n} = 0 $$ Proof:\nUsing Cesàro Mean we quickly verify the $\\implies$ direction. For the inverse we see the following:\n$$ \\begin{align} \\lim_{ n \\to \\infty } \\frac{R_{n}}{n} \u0026= \\lim_{ n \\to \\infty } \\frac{\\left( \\sum_{t = 1}^{n} \\max_{x} f(x) - f(x_{t}) \\right)}{n} \\\\ \u0026= \\max_{x}f(x) - \\lim_{ n \\to \\infty } \\frac{1}{n} \\sum_{t = 1}^{n}f(x_{t}) \\\\ \u0026\\implies \\lim_{ n \\to \\infty } \\frac{1}{n} \\sum_{t = 1}^{n}f(x_{t}) = \\max_{x} f(x) \\end{align} $$ Then it follows from the other direction of the Cesàro mean.\nExploration and Exploitation 🟩 This setting naturally leads to the exploration-exploitation tradeoff. We can either choose to explore new regions of the input space, or exploit the regions we have already visited. It’s easy to observe that both greedy strategies that only exploit the current best guess and strategies that only explore new regions are not optimal, meaning they will yield not sub-linear regrets.\nOptimization Techniques A standard Idea 🟩 In the rest of the section, we will assume that the $f$ function is a Gaussian Process. Then one greedy way to solve this optimization problem is the following algorithm\nInitialize a $f \\sim GP(\\mu_{0}, k_{0})$. For $t = 1, \\dots, n$ do Find the point $x_{t} = \\arg\\max_{x \\in \\mathcal{X}} f(x)$. Observe the reward $y_{t} = f(x_{t}) + \\varepsilon_{t}$. Update the GP with the new observation. On the need of Calibrated Models 🟩 The most important of the following models is the GP-UCB acquisition function that heavily relies on the calibration assumption. Recall Bayesian neural networks for a refresh on calibration. Intuitively, only in the case of calibrated models, the confidence bounds given by the GP relates to the accuracy of the prediction. If a model is not calibrated, the confidence doesn’t tell you anything on the accuracy of the prediction.\nFor this reason is important sometimes to consider the well calibrated confidence intervals: $$ \\forall t \\geq 1, \\forall x \\in \\mathcal{X} : f^{*}(x) \\in \\mathcal{C}_{t}(x) = [\\mu_{t}(x) - \\beta_{t}\\sigma_{t}(x), \\mu_{t}(x) + \\beta_{t}\\sigma_{t}(x)] $$ Which is the confidence interval defined by the GP-UCB algorithm.\nBound over confidence intervals Assuming $f \\sim GP(\\mu_{0}, \\Sigma_{0})$ we have that the probability of having well calibrated confidence intervals has error margin $\\delta$ is satisfied when: $$ \\beta_{t}(\\delta) \\in \\mathcal{O}(\\sqrt{ \\log(\\lvert \\mathcal{X} \\rvert t / \\delta ) }) $$ Entropy Search TODO:\nThis method expands the d-optimality criteria, by looking for the point that gives the maximal information on the point we are looking for. There is a chicken and egg problem here, as the point itself.\nGP-UCB The idea Image taken from slides of the PAI course ETH 2024. Optimism in the face of uncertainty\nWe just want to pick the point that maximizes our upper confidence bound in the posterior of the Gaussian Processes. The green region are the possible regions that we would like to sample from, as their upper confidence is higher than our lower bound. This idea is recurring in this setting.\nIf the model is well calibrated, then the uncertainty regions are coherent with what actually returns the underlying function. This motivates why we can safely ignore the zones on our input where the maximum is less than the minimum value of the variance. We are sure, due to calibration, that those zones do not contain our maximum with high confidence.\nUCB Picking principle 🟩 This is formalized as $$ x_{t} = \\arg\\max_{x \\in D} \\mu_{t - 1}(x) + \\beta_{t - 1} \\sigma_{t - 1}(x) $$ Where $\\mu_{t - 1}(x)$ is the mean of the GP at the point $x$ and $\\sigma_{t - 1}(x)$ is the standard deviation. $\\beta_{t - 1}$ is a parameter that we can tune to have more or less exploration. This should select the point that maximizes the upper confidence bound in the GP.\nWe observe that if $\\forall t,\\beta_{t - 1} = 0$ then the algorithm is purely exploitative, while if $\\beta_{t - 1} = \\infty$ then the algorithm is purely esplorative, and it’s equivalent to uncertainty sampling presented in Active Learning.\nConvergence Bound on GP-UCP 🟨– The convergence bound on the GP-UCB, given we choose the $\\beta$ correctly, is $$ \\frac{1}{T} \\sum_{t = 1}^{T} (f(x^{*}) - f(x_{t})) = \\mathcal{O}\\left( \\sqrt{\\frac{\\gamma_{T}}{T}} \\right) $$ The maximum information gain determines the regret, often indicated as $\\gamma_{T}$, sometimes as $\\max_{S \\leq T} I(f; y_{S})$. This sets the rate at which we get information. Due to submodularity of mutual information we can show that $\\gamma_{T}$ can at most grow linearly with $T$.\nI have no idea why this is true. These are the bounds for different kernels in the GP The nice thing is that with all these kernels, we have guarantees that the regret is sub-linear, so we get the best possible solution.\nProof: Using the calibration hypothesis we have that the the instantaneous regret $r_{t}$ is bounded as follows: $$ r_{t} \\leq 2 \\beta_{t} \\sigma_{t}(x_{t}) $$ And using the GP informational result from Active Learning we have: $$ \\begin{align} \\frac{1}{T} R^{2}{T} \u0026\\leq \\sum{t = 1}^{T}r_{t}^{2} \\text{ Cauchy-Schwarz} \\ \u0026\\leq 4 \\beta_{t}^{2} \\sum_{t = 1}^{T} \\sigma_{t}^{2}(x_{t}) \\ \u0026= 4 \\sigma_{n}^{2} \\beta_{t}^{2} \\sum_{t = 1}^{T} \\frac{\\sigma^{2}{t}(x{t})}{\\sigma^{2}{n}} \\ \u0026\\leq 4C \\sigma{n}^{2} \\beta_{t}^{2} \\sum_{t = 1}^{T} \\log \\left( 1 + \\frac{\\sigma^{2}{t}(x{t})}{\\sigma^{2}{n}} \\right) \\ \u0026= 4C \\sigma{n}^{2} \\beta_{t}^{2} I(f_{T}; y_{T}) \\in \\mathcal{O}(\\beta^{2}{T}\\gamma{T})\n\\end{align} $$\nGrowth rate of information gain 🟨- There is a clean intuition for the following graph: if the function is continuous, smooth so to say, then knowing the value of one point gives lots of insights to the value of the next point. Which means we need fewer point to get a good estimate of the function (this is why the slope of the function is low). If we have quite independent samples, then we need more points to get a good estimate of the function. This is why it has a linear growth rate: every point gives you about the same information. Note that this happens only for white noise, so probably it is not a much interesting case.\nChoosing the point Usually the acquisition function is non-convex, so we need some methods to compute that maximum.\nLow dimensionality: we can use lipschitz optimization. High dimensionality: we can use gradient descent. Probability Improvement The PI Idea 🟩 – This method keeps track of a running optimum, and models the probability of improvement after a number $t$ of steps: $$ I_{t}(x) = (f(x) - \\hat{f}_{t})_{+} $$ Where $\\hat{f}$ is the current maximum. Then the point that is going to be picked is the point that maximizes the probability of having an improvement:\n$$ x_{t + 1} = \\arg \\max_{x \\in \\mathcal{X}} \\mathbb{P}(f(x) \u003e \\hat{f}_{t} \\mid x_{1:t}, y_{1:t}) = \\arg \\max_{x \\in \\mathcal{X}} \\Phi \\left( \\frac{\\mu_{t}(x) - \\hat{f}_{t}}{\\sigma_{t}(x)} \\right) $$ We observe that this algorithm is a little biased towards exploration as it prefers large means with low variances.\nExpected Improvement This is based on a similar idea, but here we consider how much it improves, instead of focusing on the most probable improvement. So our optimization objective is: $$ x_{t + 1} \\arg \\max_{x \\in \\mathcal{X}}\\mathop{\\mathbb{E}}[I_{t}(x) \\mid x_{1:t}, y_{1:t}] $$ It can be proven that Expected Improvement has the same regret bound as UCB. One drawback of this method, is that the optimization objective is usually flat, which makes it more difficult to optimize.\nThompson Sampling Thompson Sampling Method 🟩– With Thompson sampling , we first sample a function: $$ f_{t + 1} \\sim p( \\cdot \\mid x_{1:t}, y_{1:t}) $$ And the find the new point as the maximum of this function $x_{t + 1} = \\arg\\max_{x \\in \\mathcal{X}} f_{t + 1}(x)$. In this case, we are leveraging the randomness of $f$ to trade between exploitation and exploration. Similar bounds to UCB can be established also for Thompson.\nInformation Directed Sampling Regret Information Ratio 🟨 A key quantity introduced by Russo and van Roy (2016) is the regret-information ratio: $$ \\Psi_{t}(x) = \\frac{\\Delta(x)^{2}}{I_{t}(x)} $$ Where $\\Delta(x) = \\max_{x'}f^{*}(x') - f^{*}(x)$ and $I_{t}$ is a function that captures the information gain (doesn’t need to be the same as the one for probability improvement).\nRegret Bound for ID 🟥 It is possible to prove that with the above regret information ratio, the following holds: $$ R_{T} \\leq \\sqrt{\\sum_{t = 1}^{ T}I_{t - 1}(x_{t}) \\cdot \\sum_{t = 1}^{T} \\Psi_{t - 1}(x_{t}) } $$ ID Algorithm 🟥 With the above definition $\\Delta(\\cdot)$ is not known, this leads to the following approximation: $$ \\hat{\\Delta}_{t}(x) = \\max_{x'\\in \\mathcal{X}} u_{t}(x') - l_{t}(x) $$ Where $u$ and $l$ are respectively, the upper and lower bound for a calibrated model.\nThen one can choose the selection of the new point based on the following rule: $$ x_{t + 1} = \\arg \\min _{x \\in \\mathcal{X}} \\left( \\frac{\\hat{\\Delta}_{t}(x)^{2}}{I_{t}(x)} \\right) $$ A common problem 🟨++ One common problem with these methods is the kernel. How could we choose the correct kernel and its hyper-parameters? We are using these kernels to select the data itself, which could be quite biased; phrased in another manner: we are dependently selecting points based on the model (which is a good thing, but also the main drawback!) Another problem is getting calibrated models in this setting where you continuously select points. And often, datasets in this domain are quite small.\nCommon approaches to this problem are:\nImposing priors on the kernel parameters. Occasionally selecting random points. ",
+  "wordCount" : "1803",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,7 +230,7 @@ Definitions First we will introduce some useful definitions in this context."/>
     <h1 class="post-title entry-hint-parent">
       Bayesian Optimization
     </h1>
-    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -246,6 +246,8 @@ Definitions First we will introduce some useful definitions in this context."/>
                 <li>
                     <a href="#regret-" aria-label="Regret 🟩">Regret 🟩</a></li>
                 <li>
+                    <a href="#regret-and-maximum-of-the-function" aria-label="Regret and maximum of the function">Regret and maximum of the function</a></li>
+                <li>
                     <a href="#exploration-and-exploitation-" aria-label="Exploration and Exploitation 🟩">Exploration and Exploitation 🟩</a></li></ul>
                 </li></ul>
                     
@@ -253,10 +255,12 @@ Definitions First we will introduce some useful definitions in this context."/>
                     <a href="#optimization-techniques" aria-label="Optimization Techniques">Optimization Techniques</a><ul>
                         
                 <li>
-                    <a href="#a-standard-idea" aria-label="A standard Idea">A standard Idea</a><ul>
+                    <a href="#a-standard-idea-" aria-label="A standard Idea 🟩">A standard Idea 🟩</a><ul>
                         
                 <li>
-                    <a href="#on-the-need-of-calibrated-models" aria-label="On the need of Calibrated Models">On the need of Calibrated Models</a></li></ul>
+                    <a href="#on-the-need-of-calibrated-models-" aria-label="On the need of Calibrated Models 🟩">On the need of Calibrated Models 🟩</a></li>
+                <li>
+                    <a href="#bound-over-confidence-intervals" aria-label="Bound over confidence intervals">Bound over confidence intervals</a></li></ul>
                 </li>
                 <li>
                     <a href="#entropy-search" aria-label="Entropy Search">Entropy Search</a></li>
@@ -278,7 +282,7 @@ Definitions First we will introduce some useful definitions in this context."/>
                     <a href="#probability-improvement" aria-label="Probability Improvement">Probability Improvement</a><ul>
                         
                 <li>
-                    <a href="#the-pi-idea" aria-label="The PI Idea">The PI Idea</a></li>
+                    <a href="#the-pi-idea----" aria-label="The PI Idea 🟩 &ndash;">The PI Idea 🟩 &ndash;</a></li>
                 <li>
                     <a href="#expected-improvement" aria-label="Expected Improvement">Expected Improvement</a></li></ul>
                 </li>
@@ -286,20 +290,20 @@ Definitions First we will introduce some useful definitions in this context."/>
                     <a href="#thompson-sampling" aria-label="Thompson Sampling">Thompson Sampling</a><ul>
                         
                 <li>
-                    <a href="#thompson-sampling-method-" aria-label="Thompson Sampling Method 🟩">Thompson Sampling Method 🟩</a></li></ul>
+                    <a href="#thompson-sampling-method---" aria-label="Thompson Sampling Method 🟩&ndash;">Thompson Sampling Method 🟩&ndash;</a></li></ul>
                 </li>
                 <li>
                     <a href="#information-directed-sampling" aria-label="Information Directed Sampling">Information Directed Sampling</a><ul>
                         
                 <li>
-                    <a href="#regret-information-ratio" aria-label="Regret Information Ratio">Regret Information Ratio</a></li>
+                    <a href="#regret-information-ratio-" aria-label="Regret Information Ratio 🟨">Regret Information Ratio 🟨</a></li>
                 <li>
-                    <a href="#regret-bound-for-id" aria-label="Regret Bound for ID">Regret Bound for ID</a></li>
+                    <a href="#regret-bound-for-id-" aria-label="Regret Bound for ID 🟥">Regret Bound for ID 🟥</a></li>
                 <li>
-                    <a href="#id-algorithm" aria-label="ID Algorithm">ID Algorithm</a></li></ul>
+                    <a href="#id-algorithm-" aria-label="ID Algorithm 🟥">ID Algorithm 🟥</a></li></ul>
                 </li>
                 <li>
-                    <a href="#a-common-problem" aria-label="A common problem">A common problem</a>
+                    <a href="#a-common-problem-" aria-label="A common problem 🟨&#43;&#43;">A common problem 🟨++</a>
                 </li>
             </ul>
             </li>
@@ -329,11 +333,29 @@ $$
 \lim_{n \to \infty} \frac{R_{n}}{n} = 0
 $$
 <p>Intuitively, it says that if we explore enough, then we will always get the best possible choice.</p>
+<h4 id="regret-and-maximum-of-the-function">Regret and maximum of the function<a hidden class="anchor" aria-hidden="true" href="#regret-and-maximum-of-the-function">#</a></h4>
+<p>One can prove that if and only if the function converges to the optimum then it has sub-linear regret:
+</p>
+$$
+\lim_{ n \to \infty } f(x_{n}) = \max_{x} f(x) \iff \lim_{ n \to \infty } \frac{R_{n}}{n} = 0
+$$
+<p><strong>Proof:</strong></p>
+<p>Using <a href="/notes/serie/">Cesàro Mean</a> we quickly verify the $\implies$ direction.
+For the inverse we see the following:</p>
+$$
+\begin{align}
+\lim_{ n \to \infty }  \frac{R_{n}}{n} &= \lim_{ n \to \infty } \frac{\left( \sum_{t = 1}^{n} \max_{x} f(x) - f(x_{t}) \right)}{n} \\
+&= \max_{x}f(x) - \lim_{ n \to \infty } \frac{1}{n} \sum_{t = 1}^{n}f(x_{t}) \\
+&\implies \lim_{ n \to \infty } \frac{1}{n} \sum_{t = 1}^{n}f(x_{t}) = \max_{x} f(x)
+\end{align}
+$$
+<p>
+Then it follows from the other direction of the Cesàro mean.</p>
 <h4 id="exploration-and-exploitation-">Exploration and Exploitation 🟩<a hidden class="anchor" aria-hidden="true" href="#exploration-and-exploitation-">#</a></h4>
 <p>This setting naturally leads to the exploration-exploitation tradeoff. We can either choose to explore new regions of the input space, or exploit the regions we have already visited.
 It&rsquo;s easy to observe that both greedy strategies that only exploit the current best guess and strategies that only explore new regions are not optimal, meaning they will yield not sub-linear regrets.</p>
 <h2 id="optimization-techniques">Optimization Techniques<a hidden class="anchor" aria-hidden="true" href="#optimization-techniques">#</a></h2>
-<h3 id="a-standard-idea">A standard Idea<a hidden class="anchor" aria-hidden="true" href="#a-standard-idea">#</a></h3>
+<h3 id="a-standard-idea-">A standard Idea 🟩<a hidden class="anchor" aria-hidden="true" href="#a-standard-idea-">#</a></h3>
 <p>In the rest of the section, we will assume that the $f$ function is a <a href="/notes/gaussian-processes/">Gaussian Process</a>.
 Then one greedy way to solve this optimization problem is the following algorithm</p>
 <ol>
@@ -346,7 +368,7 @@ Then one greedy way to solve this optimization problem is the following algorith
 </ol>
 </li>
 </ol>
-<h4 id="on-the-need-of-calibrated-models">On the need of Calibrated Models<a hidden class="anchor" aria-hidden="true" href="#on-the-need-of-calibrated-models">#</a></h4>
+<h4 id="on-the-need-of-calibrated-models-">On the need of Calibrated Models 🟩<a hidden class="anchor" aria-hidden="true" href="#on-the-need-of-calibrated-models-">#</a></h4>
 <p>The most important of the following models is the GP-UCB acquisition function that heavily relies on the <strong>calibration</strong> assumption. Recall <a href="/notes/bayesian-neural-networks/">Bayesian neural networks</a> for a refresh on calibration.
 Intuitively, only in the case of calibrated models, the confidence bounds given by the GP relates to the accuracy of the prediction.
 If a model is not calibrated, the confidence doesn&rsquo;t tell you anything on the accuracy of the prediction.</p>
@@ -357,6 +379,12 @@ $$
 $$
 <p>
 Which is the confidence interval defined by the GP-UCB algorithm.</p>
+<h4 id="bound-over-confidence-intervals">Bound over confidence intervals<a hidden class="anchor" aria-hidden="true" href="#bound-over-confidence-intervals">#</a></h4>
+<p>Assuming $f \sim GP(\mu_{0}, \Sigma_{0})$ we have that the probability of having well calibrated confidence intervals has error margin $\delta$ is satisfied when:
+</p>
+$$
+\beta_{t}(\delta) \in \mathcal{O}(\sqrt{ \log(\lvert \mathcal{X} \rvert t / \delta ) })
+$$
 <h3 id="entropy-search">Entropy Search<a hidden class="anchor" aria-hidden="true" href="#entropy-search">#</a></h3>
 <p>TODO:</p>
 <p>This method expands the <em>d-optimality</em> criteria, by looking for the point that gives the maximal information on the point we are looking for. There is a chicken and egg problem here, as the point itself.</p>
@@ -421,7 +449,7 @@ This is why it has a linear growth rate: every point gives you about the same in
 <li><em>High dimensionality</em>: we can use gradient descent.</li>
 </ul>
 <h3 id="probability-improvement">Probability Improvement<a hidden class="anchor" aria-hidden="true" href="#probability-improvement">#</a></h3>
-<h4 id="the-pi-idea">The PI Idea<a hidden class="anchor" aria-hidden="true" href="#the-pi-idea">#</a></h4>
+<h4 id="the-pi-idea----">The PI Idea 🟩 &ndash;<a hidden class="anchor" aria-hidden="true" href="#the-pi-idea----">#</a></h4>
 <p>This method keeps track of a <em>running optimum</em>, and models the probability of improvement after a number $t$ of steps:
 </p>
 $$
@@ -445,7 +473,7 @@ $$
 It can be proven that Expected Improvement has the same regret bound as UCB.
 One drawback of this method, is that the optimization objective is usually flat, which makes it more difficult to optimize.</p>
 <h3 id="thompson-sampling">Thompson Sampling<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling">#</a></h3>
-<h4 id="thompson-sampling-method-">Thompson Sampling Method 🟩<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling-method-">#</a></h4>
+<h4 id="thompson-sampling-method---">Thompson Sampling Method 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling-method---">#</a></h4>
 <p>With Thompson sampling , we first sample a function:
 </p>
 $$
@@ -456,21 +484,21 @@ And the find the new point as the maximum of this function $x_{t + 1} = \arg\max
 In this case, we are leveraging the randomness of $f$ to trade between exploitation and exploration.
 Similar bounds to UCB can be established also for Thompson.</p>
 <h3 id="information-directed-sampling">Information Directed Sampling<a hidden class="anchor" aria-hidden="true" href="#information-directed-sampling">#</a></h3>
-<h4 id="regret-information-ratio">Regret Information Ratio<a hidden class="anchor" aria-hidden="true" href="#regret-information-ratio">#</a></h4>
+<h4 id="regret-information-ratio-">Regret Information Ratio 🟨<a hidden class="anchor" aria-hidden="true" href="#regret-information-ratio-">#</a></h4>
 <p>A key quantity introduced by Russo and van Roy (2016) is the <em>regret-information ratio</em>:
 </p>
 $$
 \Psi_{t}(x) = \frac{\Delta(x)^{2}}{I_{t}(x)}
 $$
 <p>
-Where $\Delta(x) = \max_{x'}f^{*}(x') - f^{*}(x)$ and $I_{t}$ is a function that captures the information gain (doesn&rsquo;t need to be the same as the one for probability improvement).</p>
-<h4 id="regret-bound-for-id">Regret Bound for ID<a hidden class="anchor" aria-hidden="true" href="#regret-bound-for-id">#</a></h4>
+Where $\Delta(x) = \max_{x'}f^{*}(x') - f^{*}(x)$ and $I_{t}$ is a function that captures the <em>information gain</em> (doesn&rsquo;t need to be the same as the one for probability improvement).</p>
+<h4 id="regret-bound-for-id-">Regret Bound for ID 🟥<a hidden class="anchor" aria-hidden="true" href="#regret-bound-for-id-">#</a></h4>
 <p>It is possible to prove that with the above regret information ratio, the following holds:
 </p>
 $$
 R_{T} \leq \sqrt{\sum_{t = 1}^{ T}I_{t  - 1}(x_{t}) \cdot \sum_{t = 1}^{T} \Psi_{t - 1}(x_{t}) }
 $$
-<h4 id="id-algorithm">ID Algorithm<a hidden class="anchor" aria-hidden="true" href="#id-algorithm">#</a></h4>
+<h4 id="id-algorithm-">ID Algorithm 🟥<a hidden class="anchor" aria-hidden="true" href="#id-algorithm-">#</a></h4>
 <p>With the above definition $\Delta(\cdot)$ is not known, this leads to the following approximation:
 </p>
 $$
@@ -483,7 +511,7 @@ Where $u$ and $l$ are respectively, the upper and lower bound for a calibrated m
 $$
 x_{t + 1} = \arg \min _{x \in \mathcal{X}} \left( \frac{\hat{\Delta}_{t}(x)^{2}}{I_{t}(x)} \right) 
 $$
-<h3 id="a-common-problem">A common problem<a hidden class="anchor" aria-hidden="true" href="#a-common-problem">#</a></h3>
+<h3 id="a-common-problem-">A common problem 🟨++<a hidden class="anchor" aria-hidden="true" href="#a-common-problem-">#</a></h3>
 <p>One common problem with these methods is the kernel. How could we choose the correct kernel and its hyper-parameters?
 We are using these kernels to select the data itself, which could be quite biased; phrased in another manner: we are <strong>dependently</strong> selecting points based on the model (which is a good thing, but also the main drawback!)
 Another problem is getting calibrated models in this setting where you continuously select points.
