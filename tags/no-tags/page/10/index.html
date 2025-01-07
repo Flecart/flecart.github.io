@@ -181,78 +181,71 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Top-down Parser
+    <h2 class="entry-hint-parent">Expressiveness of NN
     </h2>
   </header>
   <div class="entry-content">
-    <p>Top-down Algoritmo di parsing 🟩 Slide
-Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
-Esempio di esecuzione
-Commenti efficienza di sopra 🟩 È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
-$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
-Slide
-Si può rendere molto più efficiente con un valore di lookahead....</p>
+    <p>The perceptron Slide summary of working of perceptron Note on the bias: it is only useful to move the treshhold where to consider the output to be 1 and where to be 1. Now we ask what can be predicted by a perceptron? We can see the update rule of the perceptron: $$ \begin{cases} w = w &#43; \alpha x \\ b = b &#43; \alpha \end{cases} $$ Where $$ \alpha = \begin{cases} 0 &amp; \Theta(x \theta &#43; b) = y \\ -1 &amp; \Theta(x \theta &#43; b) &gt; y \\ 1 &amp; \Theta(x \theta &#43; b) &lt; y \end{cases} $$ Linearly separability necessity Hyperplanes, because that equation is an hyperplane, so we are sure that we can predict an hyperplane, and that it, and it’s only it....</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Top-down Parser" href="https://flecart.github.io/notes/top-down-parser/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Expressiveness of NN" href="https://flecart.github.io/notes/expressiveness-of-nn/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Teorema di Lagrange
+    <h2 class="entry-hint-parent">Semplificazione grammatiche
     </h2>
   </header>
   <div class="entry-content">
-    <p>Classi laterali Dimostrazione dei lemmi sopra. La cosa interessante di questa parte è possiamo usare una classe laterale per partizionare il gruppo iniziale!
-Il teorema di Lagrange Dividere significa che **partiziona** l&#39;insieme iniziale in alcuni insiemi distinti. L&#39;insieme $G:H$ è l&#39;insieme che contiene tutti i cosets, credo. Dimostrazione
-|G:H| = |G|/|H| |a| divide |G| Ossia un corollario dopo il teorema di Lagrange. La cosa citata è dimostrata in Gruppi ciclici e permutazioni#Criterio $a {i} = a {j}$....</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Teorema di Lagrange" href="https://flecart.github.io/notes/teorema-di-lagrange/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Gruppi Normali
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione Definizione normalità Test del sottogruppo normale Dimostrazione
-Il gruppo quoziente L’importanza del gruppo normale è che quando esso vale, possiamo avere il gurppo fattore
-Dimostrazione
-!</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gruppi Normali" href="https://flecart.github.io/notes/gruppi-normali/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">LR(k) e YACC
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>LR(k) Grammatiche LR(k) 🟩 Anche in questo caso proviamo a generalizzare il concetto dei pirmi k caratteri, in modo da generalizzare in qualche senso il concetto di LR(k), quindi andiamo a modificare la closure considerando ora first k
-Per ricordarti come si calcolava first k, andare a guardare Top-down Parser
-il problema che poi diventa pratico riguardo questo è l’impossibilità di gestire stringhe lunghezza k che sono una assurdità (esponenziale per la lunghezza)...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to LR(k) e YACC" href="https://flecart.github.io/notes/lrk-e-yacc/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Optimization methods
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
-Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
-Newton Raphson method Molte implementazioni in R usano questo metodo, è
-Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
+    <p>Gestione del non determinismo Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.
+Semplificazione grammatiche (5) Slide
+No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all’infinito!) No produzioni unitarie, così evito cicli in cui da A derivo sé stesso. No simboli inutili No ricorsione sinistra (divergenza per top-down) Fattorizzazione della grammatica Eliminazione delel produzioni nulle Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono....</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
+  <a class="entry-link" aria-label="post link to Semplificazione grammatiche" href="https://flecart.github.io/notes/semplificazione-grammatiche/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Training a NN
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
+Elementi di ripasso Training of NN How can we be sure that we can train well our function?
+Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!...</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Training a NN" href="https://flecart.github.io/notes/training-a-nn/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Costraint Satisfaction Problems
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Definizione Caratteristiche Variabili Dominio per ogni variabile Costraints per ogni variabile Queste tre sono elementi che definiscono un problema di soddisfazione delle restrizioni, una soluzione è un assegnamento di variabili che soddisfi ogni restrizioone e sia all’interno del dominio
+Consistenza Vogliamo andare a limitare il dominio valutando le consistenze possibili
+Consistenza del punto Si può dire che un punto sia consistente se le sue variabili possibili non viola nessuna restrizione unaria: eg....</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Costraint Satisfaction Problems" href="https://flecart.github.io/notes/costraint-satisfaction-problems/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Fn Ordine superiore
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.
+Si parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.
+un linguaggio di programmazione è di ordine superiore qualora ammetta funzioni sia come parametro che come risultato di altre funzioni.
+La parte molto simile alla precedente è il fatto di valutare la funzione nell’ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Fn Ordine superiore" href="https://flecart.github.io/notes/fn-ordine-superiore/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
