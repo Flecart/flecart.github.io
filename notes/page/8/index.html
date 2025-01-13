@@ -196,76 +196,73 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Markov Chains
+    <h2 class="entry-hint-parent">Bottom-up Parser LR(0)
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
-$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
-Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Markov Chains" href="https://flecart.github.io/notes/markov-chains/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Memory Corruption
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that
-Every new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data)....</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Memory Corruption" href="https://flecart.github.io/notes/memory-corruption/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Message Passing
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>ora abbiamo alcune primitive per passarci i messaggi, vogliamo creare metodo in modo che i processi si possano sincronizzare mandando messaggi.
-la memoria è sempre privata.
-Primitive Send e receive 🟩 Send
-Spedizione del messaggio input deve avere un identificato al processo su cui spedire. Se si vuole espandere si possono avere multicast e broadcasting ma non li studieremo in questo corso.
-Receive
-Ricevi messaggi
-Tassonomia dei message passing (!)🟩 Slide...</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Message Passing" href="https://flecart.github.io/notes/message-passing/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Note sull’architettura
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
-Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
-Slide Interrupt Hardware e software...</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Note sull’architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Processi e thread
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
-Slide schema generale tabelle
-Processi Il process control block è la struttura di dati principali da comprendere.
-Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria....</p>
+    <p>Descrivo ora alcune domande utili per ripasso:
+Quali sono schematicmente quali sono le operazioni migliori per un parser top-down? Cosa è un prefisso viabile? Quali sono i conflitti possibli, e come risolverli… Non sai nemmeno definire inmodo formale cosa sia un item Bottom up Intro shift-reduce e LR 🟩 Slide
+In breve:
+Shift = simbolo terminale messo nella stack Riduzione utilizzando una produzione LR = dettura da Sinistra, creazione della stringa da destra (derivazione rightmost) Algoritmo classico 🟨&#43; Quello che credo che intendevo per questo algoritmo classico è quello non deterministico, nel senso che prova a fare backtracking, finché non ha finito tutte le possibilità, oppure trova la derivazione giusta....</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
+  <a class="entry-link" aria-label="post link to Bottom-up Parser LR(0)" href="https://flecart.github.io/notes/bottom-up-parser-lr0/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Data Plane
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
+Funzioni principali Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane....</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Model of Analogies
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>The human ability of making analogies proceeds in such a way as to keep complexity minimal.
+Perché facciamo questo? Perché è la cosa più semplice da fare! Anche su Vapnik’s dimensions è simile questa idea!
+Occam razor, Epicuro, con Solomonoff che ha risolto problema dell’induzione che Hume pensava di fare con abitudini. Attualmente IQ tests provano a misurare la capacità di estendere questo.
+Analogia Studiamo l’analogia come oggetto matematico perché sembra essere una capacità molto difficile da generalizzare e utilizzare nelle macchine....</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Model of Analogies" href="https://flecart.github.io/notes/model-of-analogies/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Modelli AGILE
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Socialità dello sviluppo del software (3) 🟨- Si assume che
+È difficile assegnarsi i compiti, bisogni di utenti, tempi di consegna (&#43; persone difficile) È facile scrivere software (almeno software classico, e non computazione scientifica) La gente sia brava tecnicamente che socialmente è una cosa rara VS Waterfall (3) 🟨&#43;&#43; Pianificare tutto come viene descritto nel modello del waterfall non è possibile. Per i seguenti motivi
+Non è chiaro cosa vuole l’utente finale (quindi sarebbe meglio avere feedback continuo)....</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Modelli AGILE" href="https://flecart.github.io/notes/modelli-agile/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Algorithmic Probability
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>“Information theory must precede probability theory, and not be based on it. By the very essence of this discipline, the foundations of information theory have a finite combinatorial character.” Kolmogorov, A. N. (1983). Combinatorial foundations of information theory and the calculus of probabilities.
+Russian mathematical surveys, 38 (4), 29-40.
+“it is clear that elements requiring an extremely large number of words for their definition should be considered as having an extremely low probability....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Algorithmic Probability" href="https://flecart.github.io/notes/algorithmic-probability/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
