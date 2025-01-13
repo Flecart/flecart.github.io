@@ -7,9 +7,9 @@
 <meta name="robots" content="index, follow">
 <title>Kalman Filters | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence">
-<meta name="description" content="Kalman Filters are defined as follows:
+<meta name="description" content="Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:
 We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state.">
+$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/kalman-filters/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -89,9 +89,9 @@ if (!doNotTrack) {
 }
 </script>
 <meta property="og:title" content="Kalman Filters" />
-<meta property="og:description" content="Kalman Filters are defined as follows:
+<meta property="og:description" content="Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:
 We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state." />
+$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/kalman-filters/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -102,9 +102,9 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
 <meta name="twitter:title" content="Kalman Filters"/>
-<meta name="twitter:description" content="Kalman Filters are defined as follows:
+<meta name="twitter:description" content="Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:
 We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state."/>
+$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} & H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians."/>
 
 
 <script type="application/ld+json">
@@ -133,12 +133,12 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
   "@type": "BlogPosting",
   "headline": "Kalman Filters",
   "name": "Kalman Filters",
-  "description": "Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state.",
+  "description": "Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians.",
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\nKalman Inference In the exercise session we have discussed about the Kalman gain\nThat is\nGiven the belief that $X_{t} \\mid y_{1:t} = \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t})$ Then the posterior $X_{t+1} \\mid y_{1:t+1} =\\sim \\mathcal{N}(\\mu_{t+1}, \\sigma^{2}_{t + 1})$ where $$ \\begin{align} \\\\ \\mu_{t + 1} \u0026= \\mu_{t} + K_{t + 1}(y_{t + 1} - \\mu_{t}) \\\\ \\sigma^{2}_{t + 1} \u0026= (1 - K_{t+1})(\\sigma^{2}_{t} + \\sigma^{2}_{x}) \\end{align} $$ Where $K_{t+1} = (\\sigma^{2}_{x} + \\sigma^{2}_{t}) / (\\sigma^{2}_{x} + \\sigma^{2}_{t} + \\sigma^{2}_{y})$ So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.\n",
-  "wordCount" : "263",
+  "articleBody": "Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\nKalman Inference In the exercise session we have discussed about the Kalman gain\nThat is\nGiven the belief that $X_{t} \\mid y_{1:t} = \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t})$ Then the posterior $X_{t+1} \\mid y_{1:t+1} =\\sim \\mathcal{N}(\\mu_{t+1}, \\sigma^{2}_{t + 1})$ where $$ \\begin{align} \\\\ \\mu_{t + 1} \u0026= \\mu_{t} + K_{t + 1}(y_{t + 1} - \\mu_{t}) \\\\ \\sigma^{2}_{t + 1} \u0026= (1 - K_{t+1})(\\sigma^{2}_{t} + \\sigma^{2}_{x}) \\end{align} $$ Where $K_{t+1} = (\\sigma^{2}_{x} + \\sigma^{2}_{t}) / (\\sigma^{2}_{x} + \\sigma^{2}_{t} + \\sigma^{2}_{y})$ So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.\n",
+  "wordCount" : "272",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -251,7 +251,8 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
     </details>
 </div>
 
-  <div class="post-content"><p>Kalman Filters are defined as follows:</p>
+  <div class="post-content"><p>Here is a historical treatment on the topic: <a href="https://jwmi.github.io/ASM/6-KalmanFilter.pdf.">https://jwmi.github.io/ASM/6-KalmanFilter.pdf.</a>
+Kalman Filters are defined as follows:</p>
 <p>We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a <em>motion model</em> and a <em>sensor model</em>:</p>
 $$
 \begin{cases}
