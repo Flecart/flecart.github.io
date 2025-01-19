@@ -137,8 +137,8 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\nKalman Inference In the exercise session we have discussed about the Kalman gain\nThat is\nGiven the belief that $X_{t} \\mid y_{1:t} = \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t})$ Then the posterior $X_{t+1} \\mid y_{1:t+1} =\\sim \\mathcal{N}(\\mu_{t+1}, \\sigma^{2}_{t + 1})$ where $$ \\begin{align} \\\\ \\mu_{t + 1} \u0026= \\mu_{t} + K_{t + 1}(y_{t + 1} - \\mu_{t}) \\\\ \\sigma^{2}_{t + 1} \u0026= (1 - K_{t+1})(\\sigma^{2}_{t} + \\sigma^{2}_{x}) \\end{align} $$ Where $K_{t+1} = (\\sigma^{2}_{x} + \\sigma^{2}_{t}) / (\\sigma^{2}_{x} + \\sigma^{2}_{t} + \\sigma^{2}_{y})$ So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.\n",
-  "wordCount" : "272",
+  "articleBody": "Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:\nWe start with a variable $X_{0} \\sim \\mathcal{N}(\\mu, \\Sigma)$, then we have a motion model and a sensor model:\n$$ \\begin{cases} X_{t + 1} = FX_{t} + \\varepsilon_{t} \u0026 F \\in \\mathbb{R}^{d\\times d}, \\varepsilon_{t} \\sim \\mathcal{N}(0, \\Sigma_{x})\\\\ Y_{t} = HX_{t} + \\eta_{t} \u0026 H \\in \\mathbb{R}^{m \\times d}, \\eta_{t} \\sim \\mathcal{N}(0, \\Sigma_{y}) \\end{cases} $$ Inference is just doing things with the Gaussians. One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state. We see that the Kalman Filters satisfy the Markov Property, see Markov Chains. These independence properties allow a easy characterization of the joint distribution for Kalman Filters:\n$$ p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \\mid x_{1}) \\prod_{i = 2}^{t} p(x_{i} \\mid x_{i - 1}) p(y_{i} \\mid x_{i}) $$ One can also observe that the classic Bayesian Linear Regression is a special case of Kalman Filters.\nKalman Inference Kalman Gain In the exercise session we have discussed about the Kalman gain\nThat is $$ K_{t+1} = \\frac{\\sigma^{2}_{x} + \\sigma_{t}^{2}}{\\sigma^{2}_{x} + \\sigma^{2}_{y} + \\sigma_{t}^{2}} $$ Given the belief that $X_{t} \\mid y_{1:t} = \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t})$ Then the posterior $X_{t+1} \\mid y_{1:t+1} =\\sim \\mathcal{N}(\\mu_{t+1}, \\sigma^{2}_{t + 1})$ where $$ \\begin{align} \\\\ \\mu_{t + 1} \u0026= \\mu_{t} + K_{t + 1}(y_{t + 1} - \\mu_{t}) \\\\ \\sigma^{2}_{t + 1} \u0026= (1 - K_{t+1})(\\sigma^{2}_{t} + \\sigma^{2}_{x}) \\end{align} $$ The updates are somewhat similar to RL reinforcement methods studied in RL Function Approximation, they are a convex update with the new value and the old value.\nSo this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.\nInterpretation of the Kalman Gain We also notice that if the uncertainty about the observation is high, then the Kalman Gain is much lower, and closer to 0, this is because probably we cannot trust the update much. If else the uncertainty about the hidden status update is high, then the Kalman Gain is a little bit higher, and closer to 1, this is because we trust more the hidden status than the observation.\nProof Sketch We will prove the case where $F, H = I$.\nIt goes as follow, first assume recursively that the value of $X_{t} \\mid y_{1:t} \\sim \\mathcal{N}(\\mu_{t}, \\sigma_{t}^{2})$\nThen, we can use Bayes rule to compute: $$ p(x_{t + 1} \\mid y_{1:t+1}) = \\frac{p(y_{t + 1} \\mid x_{t + 1}) p(x_{t + 1} \\mid y_{1:t})}{Z} $$ We compute the two values with two different steps: $$ p(y_{t +1}\\mid x_{t + 1}) = \\frac{1}{Z'} \\exp\\left( -\\frac{1}{2} \\frac{(y_{t + 1} - x_{t + 1})^{2}}{\\sigma^{2}_{y}} \\right) $$ And with a lot of computation one can prove that: $$ p(x_{t + 1} \\mid y_{1:t}) = \\int p(x_{t + 1} \\mid x_{t}) p(x_{t} \\mid y_{1:t}) dx_{t} \\approx \\mathcal{N}(\\mu_{t}, \\sigma^{2}_{t} + \\sigma^{2}_{x}) $$ Then putting everything together one can have the solution above.\nGeneral Case In the general case the Kalman Update is as follows:\n$$ \\begin{cases} \\mu_{t + 1} = F\\mu_{t} + K_{t + 1}(y_{t + 1} - HF\\mu_{t}) \\\\ \\sigma^{2}_{t + 1} = (I - K_{t + 1}H)(F\\Sigma_{t}F^{T} + \\Sigma_{x}) \\end{cases} $$ ",
+  "wordCount" : "543",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -233,7 +233,7 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
     <h1 class="post-title entry-hint-parent">
       Kalman Filters
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -244,8 +244,19 @@ $$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} & F \in \mathbb{R}
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#kalman-inference" aria-label="Kalman Inference">Kalman Inference</a>
+                    <a href="#kalman-inference" aria-label="Kalman Inference">Kalman Inference</a><ul>
+                        
+                <li>
+                    <a href="#kalman-gain" aria-label="Kalman Gain">Kalman Gain</a></li>
+                <li>
+                    <a href="#interpretation-of-the-kalman-gain" aria-label="Interpretation of the Kalman Gain">Interpretation of the Kalman Gain</a></li>
+                <li>
+                    <a href="#proof-sketch" aria-label="Proof Sketch">Proof Sketch</a></li>
+                <li>
+                    <a href="#general-case" aria-label="General Case">General Case</a>
                 </li>
+            </ul>
+            </li>
             </ul>
         </div>
     </details>
@@ -268,9 +279,14 @@ $$
 p(x_{1:t}, y_{1:t}) = p(x_{1}) p(y_{1} \mid x_{1}) \prod_{i = 2}^{t} p(x_{i} \mid x_{i - 1}) p(y_{i} \mid x_{i})
 $$
 <p>One can also observe that the classic <a href="/notes/bayesian-linear-regression/">Bayesian Linear Regression</a> is a special case of Kalman Filters.</p>
-<h4 id="kalman-inference">Kalman Inference<a hidden class="anchor" aria-hidden="true" href="#kalman-inference">#</a></h4>
+<h3 id="kalman-inference">Kalman Inference<a hidden class="anchor" aria-hidden="true" href="#kalman-inference">#</a></h3>
+<h4 id="kalman-gain">Kalman Gain<a hidden class="anchor" aria-hidden="true" href="#kalman-gain">#</a></h4>
 <p>In the exercise session we have discussed about the <strong>Kalman gain</strong></p>
-<p>That is</p>
+<p>That is
+</p>
+$$
+K_{t+1} = \frac{\sigma^{2}_{x} + \sigma_{t}^{2}}{\sigma^{2}_{x} + \sigma^{2}_{y} + \sigma_{t}^{2}}
+$$
 <p>Given the belief that $X_{t} \mid y_{1:t} = \mathcal{N}(\mu_{t}, \sigma^{2}_{t})$
 Then the posterior $X_{t+1} \mid y_{1:t+1} =\sim \mathcal{N}(\mu_{t+1}, \sigma^{2}_{t + 1})$ where
 </p>
@@ -282,8 +298,38 @@ $$
 \end{align}
 $$
 <p>
-Where $K_{t+1} = (\sigma^{2}_{x} + \sigma^{2}_{t}) /  (\sigma^{2}_{x} + \sigma^{2}_{t} + \sigma^{2}_{y})$
-So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.</p>
+The updates are somewhat similar to RL reinforcement methods studied in <a href="/notes/rl-function-approximation/">RL Function Approximation</a>, they are a convex update with the new value and the old value.</p>
+<p>So this value tells us how likely are we to trust the new observation, if the value is high (close to one) the new observation has usually a high impact, else it is lower.</p>
+<h4 id="interpretation-of-the-kalman-gain">Interpretation of the Kalman Gain<a hidden class="anchor" aria-hidden="true" href="#interpretation-of-the-kalman-gain">#</a></h4>
+<p>We also notice that if the uncertainty about the observation is high, then the Kalman Gain is much lower, and closer to 0, this is because probably we cannot trust the update much.
+If else the uncertainty about the hidden status update is high, then the Kalman Gain is a little bit higher, and closer to 1, this is because we trust more the hidden status than the observation.</p>
+<h4 id="proof-sketch">Proof Sketch<a hidden class="anchor" aria-hidden="true" href="#proof-sketch">#</a></h4>
+<p>We will prove the case where $F, H = I$.</p>
+<p>It goes as follow, first assume recursively that the value of $X_{t} \mid y_{1:t} \sim \mathcal{N}(\mu_{t}, \sigma_{t}^{2})$</p>
+<p>Then, we can use Bayes rule to compute:
+</p>
+$$
+p(x_{t + 1} \mid y_{1:t+1}) = \frac{p(y_{t + 1} \mid x_{t + 1}) p(x_{t + 1} \mid y_{1:t})}{Z}
+$$
+<p>We compute the two values with two different steps:
+</p>
+$$
+p(y_{t +1}\mid x_{t + 1}) = \frac{1}{Z'} \exp\left( -\frac{1}{2} \frac{(y_{t + 1} - x_{t + 1})^{2}}{\sigma^{2}_{y}} \right)
+$$
+<p>And with a lot of computation one can prove that:
+</p>
+$$
+p(x_{t + 1} \mid y_{1:t}) = \int p(x_{t + 1} \mid x_{t}) p(x_{t} \mid y_{1:t}) dx_{t} \approx \mathcal{N}(\mu_{t}, \sigma^{2}_{t} + \sigma^{2}_{x})
+$$
+<p>Then putting everything together one can have the solution above.</p>
+<h4 id="general-case">General Case<a hidden class="anchor" aria-hidden="true" href="#general-case">#</a></h4>
+<p>In the general case the Kalman Update is as follows:</p>
+$$
+\begin{cases}
+\mu_{t + 1} = F\mu_{t} + K_{t + 1}(y_{t + 1} - HF\mu_{t})  \\
+\sigma^{2}_{t + 1} = (I - K_{t + 1}H)(F\Sigma_{t}F^{T} + \Sigma_{x})
+\end{cases}
+$$
 
 
   </div>

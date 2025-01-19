@@ -9,7 +9,7 @@
 <meta name="keywords" content="📓big-data">
 <meta name="description" content="We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.
 Introduction Common input formats 🟨 You need to know well what
-Shards Textual input binary, parquet and similars CSV and similars Sharding It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset.">
+Shards Textual input binary, parquet and similars CSV and similars Sharding 🟩 It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/massive-parallel-processing/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
@@ -91,7 +91,7 @@ if (!doNotTrack) {
 <meta property="og:title" content="Massive Parallel Processing" />
 <meta property="og:description" content="We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.
 Introduction Common input formats 🟨 You need to know well what
-Shards Textual input binary, parquet and similars CSV and similars Sharding It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset." />
+Shards Textual input binary, parquet and similars CSV and similars Sharding 🟩 It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://flecart.github.io/notes/massive-parallel-processing/" />
 <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
@@ -104,7 +104,7 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
 <meta name="twitter:title" content="Massive Parallel Processing"/>
 <meta name="twitter:description" content="We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.
 Introduction Common input formats 🟨 You need to know well what
-Shards Textual input binary, parquet and similars CSV and similars Sharding It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset."/>
+Shards Textual input binary, parquet and similars CSV and similars Sharding 🟩 It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset."/>
 
 
 <script type="application/ld+json">
@@ -133,12 +133,12 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
   "@type": "BlogPosting",
   "headline": "Massive Parallel Processing",
   "name": "Massive Parallel Processing",
-  "description": "We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.\nIntroduction Common input formats 🟨 You need to know well what\nShards Textual input binary, parquet and similars CSV and similars Sharding It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset.",
+  "description": "We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.\nIntroduction Common input formats 🟨 You need to know well what\nShards Textual input binary, parquet and similars CSV and similars Sharding 🟩 It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset.",
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.\nIntroduction Common input formats 🟨 You need to know well what\nShards Textual input binary, parquet and similars CSV and similars Sharding It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset. For example, in Cloud Storage settings we often divide big files into chunks, while in Distributed file systems the system automatically divides big files into native files of maximum 10 GB size.\nThis has two main advantages:\nWe can use the MapReduce framework to process the chunk in a highly parallelized manner. We are more robust to network communication . MapReduce We can process terabytes of data with thousands of nodes with this architecture.\nLogical Model General framework 🟩 We can see in the image taken from the course book [({fourny} 2024)](https://ghislainfourny.github.io/big-data-textbook/), that there are two general phases for the map reduce framework: 1. First phase is mapping, where the data is divided into chunks and processed by the mappers, then these are delivered to the designated reducers. This is usually the bottleneck, the part that runs in $\\mathcal{O}(n^{2})$. 2. The reduce process connects to all other machines to get the their own mapped value. 3. Reducers then processed the partitioned, probably homogeneous data and return a result, which is often a file in HDFS. Key Value Pairs We have seen that MapReduce is composed of mainly two parts:\nOne part where we are extracting the data from various sources (Could be cloud, distributed files systems, wide column storages etc…) We map this data to the correct reducer This part often produces some spaghetti like data flows in it. Which has some weird shapes of arrows in all directions (some parts could be more linear, while others could be more spaghetti like) The final part is the reduce where the actual value is produced and stored. The three parts in principle can have different key types, but they need to have some key type known at compile time. But often the output key and the key input to the reducer have the same type.\nThe Architecture Centralized Architecture 🟨++ Hadoop MapReduce builds upon a centralized architecture compatible to Distributed file systems and HBase. In this case there is a Jobtracker, often in the same node as the NameNode; and Tasktrackers that are in the same node as the DataNodes. We have now three processes on the same machine. When MapReduce finishes, usually every TaskTracker produces a file in the disk (usually sharded, numerated increasingly). If the task fails for a node, the Jobtracker usually re-assigns the node to another.\nImpendance Mismatch 🟩 MapReduce needs to have key-values to process the files. For text, we usually use the lines and its character offset to index them. We could also use a special character to separate different parts of the text. Often this part part of preprocessing the dataset so that it is understandable by mapreduce is called impendance mismatch\nCombining 🟨 This is a form of optimization. When we are mapping, we can do part of the reducing step. Often the combining step is the same as the reducing step. But this is not often possible:\nType must be the same for reduce function. We need to have commutative and associative functions for reduce. After the combining step we have the following diagram: And there will be less overload on the network, which makes the whole thing faster.\nRule of thumb: tasks are 3x the number of nodes that are mapping and reducing.\nOn Terminology You need to know what maps, reducer and combiners are. You also need to know what tasks, slots and phases, are.\nSlots are bundles of CPU cores, memory resources, and network bandwidth. Usually, a single node could have more than one slot, which helps to handle the different needs for resources of different slots (some could need more memory, while others on the same node could need less memory, this better balances it). TODO: write this section better.\nSplits and Blocks 🟥 Splits are map or reduce partition sets of the whole data that needs to be processed. This is physically stored in HDFS blocks. These blocks are exactly of size 128MB, which implies the first and last key-values could be splitted in different blocks. This is an inconvenience as one needs to fetch also the preceding and successive blocks. This is why in HDFS’s api one can read blocks partially. The underlying details on how these optimizations are done are not covered here.\nResource Management We now introduce ResourceManagers, ApplicationManagers and NodeManagers. See here. For a not checked explanation.\nBottlenecks of the original version Jobtrackers were the bottleneck and have many responsibilities.\nJobtracker’s single point of failure Some responsibilities of the Jobtracker\nResource Management Monitoring every task’s progress Job scheduling Scalability issues This is usually a bottleneck in this model. Clusters of about 4,000 become usually very very slow and about 10,000 tasks. Another drawback is that many reducers are idle during the map phase.\nContainers are virtual collections of slots (one container could have more than one map or reduce slot), each with some cpu and some amount of memory.\nOther bottlenecks Scalability : MapReduce has limited scalability, while YARN can scale to 10,000 nodes. Rigidity : MapReduce v1 only supports MapReduce specific jobs. There is a need, however, for scheduling non-MapReduce workloads. For instance, we would like the ability to share cluster with MPI, graph processing, and any user code. Resource utilization : in MapReduce v1, the reducers wait on the mappers to finish (and vice-versa), leaving large fractions of time when either the reducers or the mappers are idle. Ideally all resources should be used at any given time. Flexibility : mapper and reducer roles are decided at configuration time, and cannot be reconfigured. Spark makes use of in-memory data too, making the access to data much faster.\nAdvantages of MapReduce Nonetheless, there could be cases where MapReduce is better than Spark, for example when the data is too big to fit in memory.\nUltra-large datasets that do not fit in memory: For massive datasets that don’t fit even across a large Spark cluster’s memory, MapReduce’s disk-based processing can be more manageable. Strict fault tolerance requirements: MapReduce’s fault tolerance mechanism is very robust, as it writes intermediate results to HDFS, which may be preferred in environments where data recovery is critical. Low hardware resources: Spark requires more memory and computational resources than MapReduce, so in resource-constrained environments, MapReduce may be a more practical choice. ApplicationMaster This is an innovation introduced by the YARN architecture. With this new architecture we have containers and a resource manager that allocates resources to the tasks that need to be processed. When a user starts a task, the resource manager elevates a container to be the application master by communicating with a process. This container then takes part of the responsibilities of the jobtracker in the old version; it now tracks task state, re allocates other containers when one fails, it asks or releases resources to the resource manager, at any time.\nSetting up a task 🟨 ApplicationMasters can request and release containers at any time, dynamically. A container request is typically made by the ApplicationMasters with a specific demand (e.g., “10 containers with each 2 cores and 16 GB of RAM”). If the request is granted by the ResourceManager fully or partially, this is done indirectly by signing and issuing a container token to the ApplicationMaster that acts as proof that the resource was granted. The ApplicationMaster can then connect to the allocated NodeManager and send the token. The NodeManager will then check the validity of the token and provide the memory and CPU granted by the ResourceManager. The ApplicationMaster ships the code (e.g., as a jar file) as well as parameters, which then runs as a process with exclusive use of this memory and CPU. ~From the Book ({fourny} 2024)\nThe main facts to keep in mind:\nApplicationMasters can set up and release resources dynamically at any time ApplicationMasters can request resources in a fine-grained manner, asking for exactly a specific amount of resources to the ResourceManager The Granting procedure uses authorization tokens. Code is usually shipped by the ApplicationMaster to the worker container. Performance This new version supports 10,000 nodes and 100,000 tasks, a big improvement over the previous version.\nResource tracking Also in this case, as has been done similarly for Distributed file systems and others, we track the available resources of each machine using heartbeats sent by NodeManagers to the ResourceManager. In this way, the ResourceManager knows exacly what is the load of each node.\nScheduling methods Queue scheduler 🟩 For example, the queue scheduler where a job takes the whole cluster one after the other. But it’s probably not efficient as it doesn’t allow for multiple-tenancy of the cluster.\nCapacity Scheduler 🟩 Another way could be the hierarchical scheduler where the amount of resource is allocated a priori. This is also called capacity scheduling because the whole cluster is divided into multiple sub-clusters corresponding to a specific department in a university or parts of a company. Then, each department can use a specific local scheduler, which could be a standard fair queue.\nFair Schedule 🟨 It’s difficult to orchestrate the allocation of different resources. But how to allocate it correctly when the need of resources is different for other processes? Some processes could need more memory than cpu, Disk and Network Input and Output and others other resources. Some solution is dominant resource fairness, but we won’t delve into this topic here. 🟥 TODO: get the missing parts for dominant resource fairness.\nThree types of schedule sharing TODO: fill this in a later occasion (See page 273 of the book)\nSteady fair share: Instantaneous fair share: Current share: References [1] {fourny} “The Big Data Textbook” 2024\n",
-  "wordCount" : "1681",
+  "articleBody": "We have a group of mappers that work on dividing the keys for some reducers that actually work on that same group of data. The bottleneck is the assigning part: when mappers finish and need to handle the data to the reducers.\nIntroduction Common input formats 🟨 You need to know well what\nShards Textual input binary, parquet and similars CSV and similars Sharding 🟩 It is a common practice to divide a big dataset into chunks (or shards), smaller parts which recomposed give the original dataset. For example, in Cloud Storage settings we often divide big files into chunks, while in Distributed file systems the system automatically divides big files into native files of maximum 10 GB size.\nThis has two main advantages:\nWe can use the MapReduce framework to process the chunk in a highly parallelized manner. We are more robust to network communication . MapReduce We can process terabytes of data with thousands of nodes with this architecture.\nLogical Model General framework 🟩 We can see in the image taken from the course book [({fourny} 2024)](https://ghislainfourny.github.io/big-data-textbook/), that there are two general phases for the map reduce framework: 1. First phase is mapping, where the data is divided into chunks and processed by the mappers, then these are delivered to the designated reducers. This is usually the bottleneck, the part that runs in $\\mathcal{O}(n^{2})$. 2. The reduce process connects to all other machines to get the their own mapped value. 3. Reducers then processed the partitioned, probably homogeneous data and return a result, which is often a file in HDFS. Key Value Pairs 🟩 We have seen that MapReduce is composed of mainly two parts:\nOne part where we are extracting the data from various sources (Could be cloud, distributed files systems, wide column storages etc…) We map this data to the correct reducer This part often produces some spaghetti like data flows in it. Which has some weird shapes of arrows in all directions (some parts could be more linear, while others could be more spaghetti like) The final part is the reduce where the actual value is produced and stored. The three parts in principle can have different key types, but they need to have some key type known at compile time. But often the output key and the key input to the reducer have the same type.\nThe Architecture Centralized Architecture 🟩– Hadoop MapReduce builds upon a centralized architecture compatible to Distributed file systems and HBase. In this case there is a Jobtracker, often in the same node as the NameNode; and Tasktrackers that are in the same node as the DataNodes. We have now three processes on the same machine. When MapReduce finishes, usually every TaskTracker produces a file in the disk (usually sharded, numerated increasingly). If the task fails for a node, the Jobtracker usually re-assigns the node to another.\nJobtracker’s responsibilities The Jobtracker has many responsibilities, see (Dean \u0026 Ghemawat 2008):\nTracking the state of each map and reduce task (idle, executed, on execution). Actively pinging the Tasktrackers to see if they are still active or dead. If a worker has died, then re-issue the task to another machine. In the case a map machine has failed, it should issue all reducers to read from the machine of the newly-assigned worker. Scheduling the tasks to account for locality information (meaning usually the map task needs a split that is in the same node, or on node close by it). Impendance Mismatch 🟩 MapReduce needs to have key-values to process the files. For text, we usually use the lines and its character offset to index them. We could also use a special character to separate different parts of the text. Often this part part of preprocessing the dataset so that it is understandable by mapreduce is called impendance mismatch\nTask Granularity We subdivide the map phase into M pieces and the reduce phase into R pieces, as described above. Ideally, $M$ and $R$ should be much larger than the number of worker machines. From (Dean \u0026 Ghemawat 2008).\nThe reason why $M$ and $R$ should be larger is that in this manner we have better load balancing. Usual numbers are: $M$ knowing the size of the original dataset, the aim is to keep the blocks of data around 64MB, the size of a Google GFS. $R$ is usually a multiple of the number of reduce nodes. The paper reports usual numbers like: $M = 200'000$ and $R = 5'000$, using 2,000 worker machines.\nCombining 🟩 This is a form of optimization. Recall that a big bottleneck of this system is the network communication, when we are mapping, we can do part of the reducing step so that later we have fewer key-value pairs to transmit. Often the combining step is the same as the reducing step. But this is not often possible:\nType must be the same for reduce function. We need to have commutative and associative functions for reduce. After the combining step we have the following diagram: And there will be less overload on the network, which makes the whole thing faster.\nRule of thumb: tasks are 3x the number of nodes that are mapping and reducing.\nOn Terminology You need to know what maps, reducer and combiners are. You also need to know what tasks, slots and phases, are.\nFunctions 🟩 The only difference between a map and reduce function, is that the former takes a single key-value pair as input, while the second can take one or more. Both of them are functions that can produce zero, one, or more output key-value pairs. The combine function has the same definition as the reduce function.\nTasks 🟩 Tasks are sequential calls to the respective functions. If we consider map-tasks for example, then the number of map function calls within the task is the the number of key-value pairs within an input task. The input split is so divided into many mapping tasks, and each task calls the mapping function individually for each key-value pair.\nSame thing could be said for reduce tasks: they are sequential calls to the reduce function on a subset of intermediate key-value pairs.\nBut, there are no combine tasks, as they are immediately executed after the map function, if any.\nSlots 🟩 Slots are bundles of resources like CPU cores, memory resources, and network bandwidth. Usually, a single node could have more than one slot, which helps to handle the different needs for resources of different slots (some could need more memory, while others on the same node could need less memory, this better balances it).\nA Map Slot is usually a single CPU core with some memory. As we have a single core, the slot processes a single map task at a time, but several map tasks after one other.\nSame thing is said for Reduce Slots, but in this case we are talking about reduce functions.\nPhase 🟩 The map phase is several map slots processing several map tasks in parallel. Same thing is said for the reduce phase. With the standard MapReduce framework, slots are allocated statically at the beginning, which could hinder performance. Innovation like YARN ease this problem, we will talk about this in the following sections.\nSplits and Blocks 🟥 the data belonging to the split that is the input of a map task resides on the same machine as the map slot processing this map task.\nSplits are map or reduce partition sets of the whole data that needs to be processed. This is physically stored in HDFS blocks. These blocks are exactly of size 128MB, which implies the first and last key-values could be splitted in different blocks. This is an inconvenience as one needs to fetch also the preceding and successive blocks. This is why in HDFS’s api one can read blocks partially. The underlying details on how these optimizations are done are not covered here.\nResource Management We now introduce ResourceManagers, ApplicationManagers and NodeManagers. See here. For a not checked explanation.\nBottlenecks of the original version Jobtrackers were the bottleneck and have many responsibilities.\nJobtracker’s single point of failure With the above traditional MapReduce function, the Jobtracker is just assumed not to die: (Dean \u0026 Ghemawat 2008). This is clearly a single point of failure. Here the idea is to shift the responsibility of managing the job to some specific slot (container) within the tasktracker.\nSome responsibilities of the Jobtracker\nResource Management Monitoring every task’s progress Job scheduling This point of failure is still not solved! The Resource Manager becomes the next point of failure within the system!\nScalability issues :🟩 This is usually a bottleneck in this model. Clusters of about 4,000 become usually very very slow and about 10,000 tasks. Another drawback is that many reducers are idle during the map phase.\nContainers are virtual collections of slots (one container could have more than one map or reduce slot), each with some cpu and some amount of memory.\nOther bottlenecks 🟥 Scalability : MapReduce has limited scalability, while YARN can scale to 10,000 nodes and 100,000 tasks, one order of magnitute higher compared to classical MapReduce! Rigidity : MapReduce v1 only supports MapReduce specific jobs. There is a need, however, for scheduling non-MapReduce workloads. For instance, we would like the ability to share cluster with MPI, graph processing, and any user code. Resource utilization : in MapReduce v1, the reducers wait on the mappers to finish (and vice-versa), leaving large fractions of time when either the reducers or the mappers are idle. Ideally all resources should be used at any given time. Flexibility : mapper and reducer roles are decided at configuration time, and cannot be reconfigured, this is also called lack of fungibility. Spark makes use of in-memory data too, making the access to data much faster.\nAdvantages of MapReduce Nonetheless, there could be cases where MapReduce is better than Spark, for example when the data is too big to fit in memory.\nUltra-large datasets that do not fit in memory: For massive datasets that don’t fit even across a large Spark cluster’s memory, MapReduce’s disk-based processing can be more manageable. Strict fault tolerance requirements: MapReduce’s fault tolerance mechanism is very robust, as it writes intermediate results to HDFS, which may be preferred in environments where data recovery is critical. Low hardware resources: Spark requires more memory and computational resources than MapReduce, so in resource-constrained environments, MapReduce may be a more practical choice. ApplicationMaster and ResourceMaster YARN decouples the scheduling of the jobs, the allocation of resource of the jobs, and the monitoring of the jobs, the first is done by the ResourceMaster, the last by the ApplicationMaster, while the middle one is done in collaboration.\nThis is an innovation introduced by the YARN architecture. With this new architecture we have containers and a resource manager that allocates resources to the tasks that need to be processed.\nResourceMaster The ResourceMaster’s main job is to grant:\nleases for resources when the ApplicationManager requests it. Schedule the jobs, and track only the state (on queue, executed, done). Accept requests by clients for jobs. Track the resources requested by each application. Disaster recovery The RM recovers from its own failures by restoring its state from a persistent store on initialization. Once the recovery process is complete, it kills all the containers running in the cluster, including live ApplicationMasters. It then launches new instances of each AM. From (Vavilapalli et al. 2013).\nApplicationMaster When a user starts a task, the resource manager elevates a container to be the application master by communicating with a process. This container then takes part of the responsibilities of the Jobtracker in the old version;\nit now tracks task state, as done with the Jobtracker, re-allocates other containers when one fails (expects liveliness by the worker machines) it asks or releases resources to the resource manager, at any time. (they are quite good with pre-emption, see Gestione delle risorse). Send HeartBeats to the resource-manager to signal he is still alive. NodeManagers These processes run on everynode in the cluster, and are responsible for:\nMonitoring the resources on the node (CPU, memory, disk, network) Reporting to the ResourceManager (using heartbeats) Managing the containers on the node. If a NodeManager dies, the ResourceManager assumes all the containers on the node are gone, and reports failure to all ApplicationManagers, who then will re-request resources and update their state tracking part. Setting up a task 🟨 ApplicationMasters can request and release containers at any time, dynamically. A container request is typically made by the ApplicationMasters with a specific demand (e.g., “10 containers with each 2 cores and 16 GB of RAM”). If the request is granted by the ResourceManager fully or partially, this is done indirectly by signing and issuing a container token to the ApplicationMaster that acts as proof that the resource was granted. The ApplicationMaster can then connect to the allocated NodeManager and send the token. The NodeManager will then check the validity of the token and provide the memory and CPU granted by the ResourceManager. The ApplicationMaster ships the code (e.g., as a jar file) as well as parameters, which then runs as a process with exclusive use of this memory and CPU. ~From the Book ({fourny} 2024)\nThe main facts to keep in mind:\nApplicationMasters can set up and release resources dynamically at any time ApplicationMasters can request resources in a fine-grained manner, asking for exactly a specific amount of resources to the ResourceManager The Granting procedure uses authorization tokens. Code is usually shipped by the ApplicationMaster to the worker container. ApplicationMasters can be pre-empted by the ResourceManager if the resources are needed by another application. All the information to create a container is called Container Launch Context or CLC for short. Containers usually contain many slots, in fact they can execute several tasks in parallel.\nResource tracking Also in this case, as has been done similarly for Distributed file systems and others, we track the available resources of each machine using heartbeats sent by NodeManagers to the ResourceManager. In this way, the ResourceManager knows exacly what is the load of each node.\nScheduling methods Queue scheduler 🟩 For example, the queue scheduler where a job takes the whole cluster one after the other. But it’s probably not efficient as it doesn’t allow for multiple-tenancy of the cluster.\nCapacity Scheduler 🟩 Another way could be the hierarchical scheduler where the amount of resource is allocated a priori. This is also called capacity scheduling because the whole cluster is divided into multiple sub-clusters corresponding to a specific department in a university or parts of a company. Then, each department can use a specific local scheduler, which could be a standard fair queue.\nFair Schedule 🟨 Fair scheduling involves more complex algorithms that attempt to allocate resources in a way fair to all users of the cluster and based on the share they are normally entitled to.\nIt’s difficult to orchestrate the allocation of different resources. But how to allocate it correctly when the need of resources is different for other processes? Some processes could need more memory than cpu, Disk and Network Input and Output and others other resources. If some department is not using the resource, then it could be allocated to another department. There are different types of fair scheduling, the next sections briefly examine the main methods of scheduling\nSteady Fair Share 🟩 This is the share of the cluster officially allocated to each department. The various departments agree upon this with each other in advance. This number is thus static and rarely changes.\nInstantaneous Fair Share 🟨 this is the fair share that a department should ideally be allocated (according to economic and game theory considerations) at any point in time. This is a dynamic number that changes constantly, based on departments being idle: if a department is idle, then the instantaneous fair share of others department becomes higher than their steady fair shares.\nCurrent Share 🟥 this is the actual share of the cluster that a department effectively uses at any point in time. This is highly dynamic. The current share does not necessarily match the instantaneous fair share because there is some inertia in the process: a department might be using more resources while another is idle. When the other department later stops being idle, these resources are not immediately withdrawn from the first department; rather, the first department will stop getting more resources, and the second department will gradually recover these resources as they get released by the first department.\nDominant Resource Fairness 🟨 The idea is quite simple: consider the dominant resource usage by each user. Then allocate the containers in a manner that is constant with respect to max resource usage ratio / number of containers. For example if Alice is using 6% of the available CPU, and Bob 3% of the available RAM, then bob should have twice as the number of containers compared to Alice.\nThree types of schedule sharing TODO: fill this in a later occasion (See page 273 of the book)\nSteady fair share: Instantaneous fair share: Current share: References [1] Vavilapalli et al. “Apache Hadoop YARN: Yet Another Resource Negotiator” ACM 2013\n[2] {fourny} “The Big Data Textbook” 2024\n[3] Dean \u0026 Ghemawat “MapReduce: Simplified Data Processing on Large Clusters” Communications of the ACM Vol. 51(1), pp. 107–113 2008\n",
+  "wordCount" : "2890",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -233,7 +233,7 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
     <h1 class="post-title entry-hint-parent">
       Massive Parallel Processing
     </h1>
-    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">14 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -249,7 +249,7 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
                 <li>
                     <a href="#common-input-formats-" aria-label="Common input formats 🟨">Common input formats 🟨</a></li>
                 <li>
-                    <a href="#sharding" aria-label="Sharding">Sharding</a></li></ul>
+                    <a href="#sharding-" aria-label="Sharding 🟩">Sharding 🟩</a></li></ul>
                 </li></ul>
                     
                 <li>
@@ -261,19 +261,33 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
                 <li>
                     <a href="#general-framework-" aria-label="General framework 🟩">General framework 🟩</a></li>
                 <li>
-                    <a href="#key-value-pairs" aria-label="Key Value Pairs">Key Value Pairs</a></li></ul>
+                    <a href="#key-value-pairs-" aria-label="Key Value Pairs 🟩">Key Value Pairs 🟩</a></li></ul>
                 </li>
                 <li>
                     <a href="#the-architecture" aria-label="The Architecture">The Architecture</a><ul>
                         
                 <li>
-                    <a href="#centralized-architecture-" aria-label="Centralized Architecture 🟨&#43;&#43;">Centralized Architecture 🟨++</a></li>
+                    <a href="#centralized-architecture---" aria-label="Centralized Architecture 🟩&ndash;">Centralized Architecture 🟩&ndash;</a></li>
+                <li>
+                    <a href="#jobtrackers-responsibilities" aria-label="Jobtracker&rsquo;s responsibilities">Jobtracker&rsquo;s responsibilities</a></li>
                 <li>
                     <a href="#impendance-mismatch-" aria-label="Impendance Mismatch 🟩">Impendance Mismatch 🟩</a></li>
                 <li>
-                    <a href="#combining-" aria-label="Combining 🟨">Combining 🟨</a></li>
+                    <a href="#task-granularity" aria-label="Task Granularity">Task Granularity</a></li>
                 <li>
-                    <a href="#on-terminology" aria-label="On Terminology">On Terminology</a></li>
+                    <a href="#combining-" aria-label="Combining 🟩">Combining 🟩</a></li></ul>
+                </li>
+                <li>
+                    <a href="#on-terminology" aria-label="On Terminology">On Terminology</a><ul>
+                        
+                <li>
+                    <a href="#functions-" aria-label="Functions 🟩">Functions 🟩</a></li>
+                <li>
+                    <a href="#tasks-" aria-label="Tasks 🟩">Tasks 🟩</a></li>
+                <li>
+                    <a href="#slots-" aria-label="Slots 🟩">Slots 🟩</a></li>
+                <li>
+                    <a href="#phase-" aria-label="Phase 🟩">Phase 🟩</a></li>
                 <li>
                     <a href="#splits-and-blocks-" aria-label="Splits and Blocks 🟥">Splits and Blocks 🟥</a></li></ul>
                 </li></ul>
@@ -287,19 +301,25 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
                 <li>
                     <a href="#jobtrackers-single-point-of-failure" aria-label="Jobtracker&rsquo;s single point of failure">Jobtracker&rsquo;s single point of failure</a></li>
                 <li>
-                    <a href="#scalability-issues" aria-label="Scalability issues">Scalability issues</a></li>
+                    <a href="#scalability-issues-" aria-label="Scalability issues :🟩">Scalability issues :🟩</a></li>
                 <li>
-                    <a href="#other-bottlenecks" aria-label="Other bottlenecks">Other bottlenecks</a></li>
+                    <a href="#other-bottlenecks-" aria-label="Other bottlenecks 🟥">Other bottlenecks 🟥</a></li>
                 <li>
                     <a href="#advantages-of-mapreduce" aria-label="Advantages of MapReduce">Advantages of MapReduce</a></li></ul>
                 </li>
                 <li>
-                    <a href="#applicationmaster" aria-label="ApplicationMaster">ApplicationMaster</a><ul>
+                    <a href="#applicationmaster-and-resourcemaster" aria-label="ApplicationMaster and ResourceMaster">ApplicationMaster and ResourceMaster</a><ul>
                         
                 <li>
-                    <a href="#setting-up-a-task-" aria-label="Setting up a task 🟨">Setting up a task 🟨</a></li>
+                    <a href="#resourcemaster" aria-label="ResourceMaster">ResourceMaster</a></li>
                 <li>
-                    <a href="#performance" aria-label="Performance">Performance</a></li>
+                    <a href="#disaster-recovery" aria-label="Disaster recovery">Disaster recovery</a></li>
+                <li>
+                    <a href="#applicationmaster" aria-label="ApplicationMaster">ApplicationMaster</a></li>
+                <li>
+                    <a href="#nodemanagers" aria-label="NodeManagers">NodeManagers</a></li>
+                <li>
+                    <a href="#setting-up-a-task-" aria-label="Setting up a task 🟨">Setting up a task 🟨</a></li>
                 <li>
                     <a href="#resource-tracking" aria-label="Resource tracking">Resource tracking</a></li></ul>
                 </li>
@@ -312,6 +332,14 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
                     <a href="#capacity-scheduler-" aria-label="Capacity Scheduler 🟩">Capacity Scheduler 🟩</a></li>
                 <li>
                     <a href="#fair-schedule-" aria-label="Fair Schedule 🟨">Fair Schedule 🟨</a></li>
+                <li>
+                    <a href="#steady-fair-share-" aria-label="Steady Fair Share 🟩">Steady Fair Share 🟩</a></li>
+                <li>
+                    <a href="#instantaneous-fair-share-" aria-label="Instantaneous Fair Share 🟨">Instantaneous Fair Share 🟨</a></li>
+                <li>
+                    <a href="#current-share-" aria-label="Current Share 🟥">Current Share 🟥</a></li>
+                <li>
+                    <a href="#dominant-resource-fairness-" aria-label="Dominant Resource Fairness 🟨">Dominant Resource Fairness 🟨</a></li>
                 <li>
                     <a href="#three-types-of-schedule-sharing" aria-label="Three types of schedule sharing">Three types of schedule sharing</a></li></ul>
                 </li></ul>
@@ -335,7 +363,7 @@ Shards Textual input binary, parquet and similars CSV and similars Sharding It i
 <li>binary, parquet and similars</li>
 <li>CSV and similars</li>
 </ul>
-<h4 id="sharding">Sharding<a hidden class="anchor" aria-hidden="true" href="#sharding">#</a></h4>
+<h4 id="sharding-">Sharding 🟩<a hidden class="anchor" aria-hidden="true" href="#sharding-">#</a></h4>
 <p>It is a common practice to divide a big dataset into <em>chunks</em> (or shards), smaller parts which recomposed give the original dataset.
 For example, in <a href="/notes/cloud-storage/">Cloud Storage</a> settings we often divide big files into chunks, while in <a href="/notes/distributed-file-systems/">Distributed file systems</a> the system automatically divides big files into native files of maximum 10 GB size.</p>
 <p>This has two main advantages:</p>
@@ -352,7 +380,7 @@ We can see in the image taken from the course book [({fourny} 2024)](https://ghi
 1. First phase is mapping, where the data is divided into chunks and processed by the mappers, then these are delivered to the designated reducers. This is usually the bottleneck, the part that runs in $\mathcal{O}(n^{2})$.
 2. The reduce process connects to all other machines to get the their own mapped value. 
 3. Reducers then processed the partitioned, probably homogeneous data and return a result, which is often a file in HDFS.
-<h4 id="key-value-pairs">Key Value Pairs<a hidden class="anchor" aria-hidden="true" href="#key-value-pairs">#</a></h4>
+<h4 id="key-value-pairs-">Key Value Pairs 🟩<a hidden class="anchor" aria-hidden="true" href="#key-value-pairs-">#</a></h4>
 <p>We have seen that MapReduce is composed of mainly two parts:</p>
 <ol>
 <li>One part where we are extracting the data from various sources (Could be cloud, distributed files systems, wide column storages etc&hellip;)</li>
@@ -366,16 +394,32 @@ We can see in the image taken from the course book [({fourny} 2024)](https://ghi
 <p>The three parts in principle can have <strong>different key</strong> types, but they need to have some key type <em>known at compile time</em>.
 But often the output key and the key input to the reducer have the same type.</p>
 <h3 id="the-architecture">The Architecture<a hidden class="anchor" aria-hidden="true" href="#the-architecture">#</a></h3>
-<h4 id="centralized-architecture-">Centralized Architecture 🟨++<a hidden class="anchor" aria-hidden="true" href="#centralized-architecture-">#</a></h4>
+<h4 id="centralized-architecture---">Centralized Architecture 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#centralized-architecture---">#</a></h4>
 <p>Hadoop MapReduce builds upon a centralized architecture compatible to <a href="/notes/distributed-file-systems/">Distributed file systems</a> and <a href="/notes/wide-column-storage/">HBase</a>. In this case there is a <strong>Jobtracker</strong>, often in the same node as the <strong>NameNode</strong>; and <strong>Tasktrackers</strong> that are in the same node as the <strong>DataNodes</strong>. We have now three processes on the same machine.
 When MapReduce finishes, usually every TaskTracker produces a file in the disk (usually sharded, numerated increasingly).
 If the task fails for a node, the Jobtracker usually re-assigns the node to another.</p>
+<h4 id="jobtrackers-responsibilities">Jobtracker&rsquo;s responsibilities<a hidden class="anchor" aria-hidden="true" href="#jobtrackers-responsibilities">#</a></h4>
+<p>The Jobtracker has many responsibilities, see <a href="https://dl.acm.org/doi/10.1145/1327452.1327492">(Dean &amp; Ghemawat 2008)</a>:</p>
+<ul>
+<li>Tracking the state of each map and reduce task (idle, executed, on execution).</li>
+<li>Actively pinging the Tasktrackers to see if they are still active or dead.</li>
+<li>If a worker has died, then re-issue the task to another machine. In the case a map machine has failed, it should issue all reducers to read from the machine of the newly-assigned worker.</li>
+<li>Scheduling the tasks to account for <strong>locality information</strong> (meaning usually the map task needs a split that is in the same node, or on node close by it).</li>
+</ul>
 <h4 id="impendance-mismatch-">Impendance Mismatch 🟩<a hidden class="anchor" aria-hidden="true" href="#impendance-mismatch-">#</a></h4>
 <p>MapReduce needs to have key-values to process the files.
 For text, we usually use the <strong>lines</strong> and its character offset to index them. We could also use a special character to separate different parts of the text.
 Often this part part of preprocessing the dataset so that it is understandable by mapreduce is called impendance mismatch</p>
-<h4 id="combining-">Combining 🟨<a hidden class="anchor" aria-hidden="true" href="#combining-">#</a></h4>
-<p>This is a form of optimization. When we are mapping, we can do part of the reducing step. Often the combining step is the same as the reducing step. But this is not often possible:</p>
+<h4 id="task-granularity">Task Granularity<a hidden class="anchor" aria-hidden="true" href="#task-granularity">#</a></h4>
+<blockquote>
+<p>We subdivide the map phase into M pieces and the reduce phase into R pieces, as described above. Ideally, $M$ and $R$ should be much larger than the number of worker machines. From <a href="https://dl.acm.org/doi/10.1145/1327452.1327492">(Dean &amp; Ghemawat 2008)</a>.</p>
+</blockquote>
+<p>The reason why $M$ and $R$ should be larger is that in this manner we have better load balancing.
+Usual numbers are: $M$ knowing the size of the original dataset, the aim is to keep the blocks of data around 64MB, the size of a Google GFS.
+$R$ is usually a multiple of the number of reduce nodes. The paper reports usual numbers like: $M = 200'000$ and $R = 5'000$, using 2,000 worker machines.</p>
+<h4 id="combining-">Combining 🟩<a hidden class="anchor" aria-hidden="true" href="#combining-">#</a></h4>
+<p>This is a form of optimization. Recall that a big bottleneck of this system is the network communication, when we are mapping, we can do part of the reducing step so that later we have fewer key-value pairs to transmit. Often the combining step is the same as the reducing step.
+But this is not often possible:</p>
 <ul>
 <li>Type must be the same for reduce function.</li>
 <li>We need to have commutative and associative functions for reduce.</li>
@@ -384,35 +428,57 @@ Often this part part of preprocessing the dataset so that it is understandable b
 <img src="/images/notes/Massive Parallel Processing-20241103195030645.webp" alt="Massive Parallel Processing-20241103195030645">
 And there will be less overload on the network, which makes the whole thing faster.</p>
 <p>Rule of thumb: tasks are 3x the number of nodes that are mapping and reducing.</p>
-<h4 id="on-terminology">On Terminology<a hidden class="anchor" aria-hidden="true" href="#on-terminology">#</a></h4>
+<h3 id="on-terminology">On Terminology<a hidden class="anchor" aria-hidden="true" href="#on-terminology">#</a></h3>
 <p>You need to know what maps, reducer and combiners are. You also need to know what tasks, slots and phases, are.</p>
-<p>Slots are bundles of CPU cores, memory resources, and network bandwidth. Usually, a single node could have more than one slot, which helps to handle the different needs for resources of different slots (some could need more memory, while others on the same node could need less memory, this better balances it).
-TODO: write this section better.</p>
+<h4 id="functions-">Functions 🟩<a hidden class="anchor" aria-hidden="true" href="#functions-">#</a></h4>
+<p>The only difference between a map and reduce function, is that the former takes a single key-value pair as input, while the second can take one or more.
+Both of them are functions that can produce zero, one, or more output key-value pairs.
+The combine function has the same definition as the reduce function.</p>
+<h4 id="tasks-">Tasks 🟩<a hidden class="anchor" aria-hidden="true" href="#tasks-">#</a></h4>
+<p>Tasks are sequential calls to the respective functions.
+If we consider map-tasks for example, then the number of map function calls within the task is the the number of key-value pairs within an input task.
+The input split is so divided into many mapping tasks, and each task calls the mapping function individually for each key-value pair.</p>
+<p>Same thing could be said for <strong>reduce tasks</strong>: they are <em>sequential</em> calls to the reduce function on a subset of intermediate key-value pairs.</p>
+<p>But, there are no combine tasks, as they are immediately executed after the map function, if any.</p>
+<h4 id="slots-">Slots 🟩<a hidden class="anchor" aria-hidden="true" href="#slots-">#</a></h4>
+<p>Slots are bundles of resources like <em>CPU cores, memory resources, and network bandwidth</em>. Usually, a single node could have more than one slot, which helps to handle the different needs for resources of different slots (some could need more memory, while others on the same node could need less memory, this better balances it).</p>
+<p>A <strong>Map Slot</strong> is usually a single CPU core with some memory. As we have a single core, the slot processes a single map task at a time, but several map tasks after one other.</p>
+<p>Same thing is said for <strong>Reduce Slots</strong>, but in this case we are talking about reduce functions.</p>
+<h4 id="phase-">Phase 🟩<a hidden class="anchor" aria-hidden="true" href="#phase-">#</a></h4>
+<p>The map phase is several map slots processing several map tasks in parallel. Same thing is said for the <strong>reduce phase</strong>.
+With the standard MapReduce framework, slots are allocated statically at the beginning, which could hinder performance. Innovation like YARN ease this problem, we will talk about this in the following sections.</p>
 <h4 id="splits-and-blocks-">Splits and Blocks 🟥<a hidden class="anchor" aria-hidden="true" href="#splits-and-blocks-">#</a></h4>
+<blockquote>
+<p>the data belonging to the split that is the input of a map task resides on the same machine as the map slot processing this map task.</p>
+</blockquote>
 <p>Splits are map or reduce partition sets of the whole data that needs to be processed. This is physically stored in HDFS blocks.
 These blocks are exactly of size 128MB, which implies the first and last key-values could be splitted in different blocks. This is an inconvenience as one needs to fetch also the preceding and successive blocks.
-This is why in HDFS&rsquo;s api one can read blocks partially. The underlying details on how these optimizations are done are not covered here.</p>
+This is why in HDFS&rsquo;s api one can <strong>read blocks partially</strong>.
+The underlying details on how these optimizations are done are not covered here.</p>
 <h2 id="resource-management">Resource Management<a hidden class="anchor" aria-hidden="true" href="#resource-management">#</a></h2>
 <p>We now introduce ResourceManagers, ApplicationManagers and NodeManagers. See <a href="https://chatgpt.com/share/673da14d-5254-8009-ac60-f08762c15b0a">here</a>. For a not checked explanation.</p>
 <h3 id="bottlenecks-of-the-original-version">Bottlenecks of the original version<a hidden class="anchor" aria-hidden="true" href="#bottlenecks-of-the-original-version">#</a></h3>
 <p>Jobtrackers were the bottleneck and have many responsibilities.</p>
 <h4 id="jobtrackers-single-point-of-failure">Jobtracker&rsquo;s single point of failure<a hidden class="anchor" aria-hidden="true" href="#jobtrackers-single-point-of-failure">#</a></h4>
+<p>With the above traditional MapReduce function, the Jobtracker is just assumed not to die: <a href="https://dl.acm.org/doi/10.1145/1327452.1327492">(Dean &amp; Ghemawat 2008)</a>. This is clearly a single point of failure.
+Here the idea is to shift the responsibility of managing the job to some specific slot (container) within the tasktracker.</p>
 <p>Some responsibilities of the Jobtracker</p>
 <ul>
 <li>Resource Management</li>
 <li>Monitoring every task&rsquo;s progress</li>
 <li>Job scheduling</li>
 </ul>
-<h4 id="scalability-issues">Scalability issues<a hidden class="anchor" aria-hidden="true" href="#scalability-issues">#</a></h4>
+<p>This point of failure is still not solved! The Resource Manager becomes the next point of failure within the system!</p>
+<h4 id="scalability-issues-">Scalability issues :🟩<a hidden class="anchor" aria-hidden="true" href="#scalability-issues-">#</a></h4>
 <p>This is usually a bottleneck in this model. Clusters of about 4,000 become usually very very slow and about 10,000 tasks.
 Another drawback is that many reducers are idle during the map phase.</p>
 <p>Containers are virtual collections of slots (one container could have more than one map or reduce slot), each with some cpu and some amount of memory.</p>
-<h4 id="other-bottlenecks">Other bottlenecks<a hidden class="anchor" aria-hidden="true" href="#other-bottlenecks">#</a></h4>
+<h4 id="other-bottlenecks-">Other bottlenecks 🟥<a hidden class="anchor" aria-hidden="true" href="#other-bottlenecks-">#</a></h4>
 <ol>
-<li>Scalability : MapReduce has limited scalability, while YARN can scale to 10,000 nodes.</li>
-<li>Rigidity : MapReduce v1 only supports MapReduce specific jobs. There is a need, however, for scheduling non-MapReduce workloads. For instance, we would like the ability to share cluster with MPI, graph processing, and any user code.</li>
-<li>Resource utilization : in MapReduce v1, the reducers wait on the mappers to finish (and vice-versa), leaving large fractions of time when either the reducers or the mappers are idle. Ideally all resources should be used at any given time.</li>
-<li>Flexibility : mapper and reducer roles are decided at configuration time, and cannot be reconfigured.</li>
+<li><strong>Scalability</strong> : MapReduce has limited scalability, while YARN can scale to 10,000 nodes and 100,000 tasks, one order of magnitute higher compared to classical MapReduce!</li>
+<li><strong>Rigidity</strong> : MapReduce v1 only supports MapReduce specific jobs. There is a need, however, for scheduling non-MapReduce workloads. For instance, we would like the ability to share cluster with MPI, graph processing, and any user code.</li>
+<li><strong>Resource utilization</strong> : in MapReduce v1, the reducers wait on the mappers to finish (and vice-versa), leaving large fractions of time when either the reducers or the mappers are idle. Ideally all resources should be used at any given time.</li>
+<li><strong>Flexibility</strong> : mapper and reducer roles are decided at configuration time, and cannot be reconfigured, this is also called <em>lack of fungibility</em>.</li>
 </ol>
 <p>Spark makes use of in-memory data too, making the access to data much faster.</p>
 <h4 id="advantages-of-mapreduce">Advantages of MapReduce<a hidden class="anchor" aria-hidden="true" href="#advantages-of-mapreduce">#</a></h4>
@@ -422,13 +488,40 @@ Another drawback is that many reducers are idle during the map phase.</p>
 <li>Strict fault tolerance requirements: MapReduce’s fault tolerance mechanism is very robust, as it writes intermediate results to HDFS, which may be preferred in environments where data recovery is critical.</li>
 <li>Low hardware resources: Spark requires more memory and computational resources than MapReduce, so in resource-constrained environments, MapReduce may be a more practical choice.</li>
 </ul>
-<h3 id="applicationmaster">ApplicationMaster<a hidden class="anchor" aria-hidden="true" href="#applicationmaster">#</a></h3>
-<p>This is an innovation introduced by the YARN architecture. With this new architecture we have <strong>containers</strong> and a resource manager that allocates resources to the tasks that need to be processed.
-When a user starts a task, the resource manager elevates a container to be the <strong>application master</strong> by communicating with a process. This container then takes part of the responsibilities of the jobtracker in the old version; it now tracks task state, re allocates other containers when one fails, it asks or releases resources to the resource manager, at <em>any time</em>.</p>
+<h3 id="applicationmaster-and-resourcemaster">ApplicationMaster and ResourceMaster<a hidden class="anchor" aria-hidden="true" href="#applicationmaster-and-resourcemaster">#</a></h3>
+<p>YARN decouples the scheduling of the jobs, the allocation of resource of the jobs, and the monitoring of the jobs, the first is done by the ResourceMaster, the last by the ApplicationMaster, while the middle one is done in collaboration.</p>
+<p>This is an innovation introduced by the YARN architecture. With this new architecture we have <strong>containers</strong> and a resource manager that allocates resources to the tasks that need to be processed.</p>
+<h4 id="resourcemaster">ResourceMaster<a hidden class="anchor" aria-hidden="true" href="#resourcemaster">#</a></h4>
+<p>The ResourceMaster&rsquo;s main job is to grant:</p>
+<ul>
+<li><em>leases</em> for resources when the ApplicationManager requests it.</li>
+<li>Schedule the jobs, and track only the state (on queue, executed, done).</li>
+<li>Accept requests by clients for jobs.</li>
+<li>Track the resources requested by each application.</li>
+</ul>
+<h4 id="disaster-recovery">Disaster recovery<a hidden class="anchor" aria-hidden="true" href="#disaster-recovery">#</a></h4>
+<blockquote>
+<p>The RM recovers from its own failures by restoring its state from a persistent store on initialization. Once the recovery process is complete, it kills all the containers running in the cluster, including live ApplicationMasters. It then launches new instances of each AM. From <a href="https://dl.acm.org/doi/10.1145/2523616.2523633">(Vavilapalli et al. 2013)</a>.</p>
+</blockquote>
+<h4 id="applicationmaster">ApplicationMaster<a hidden class="anchor" aria-hidden="true" href="#applicationmaster">#</a></h4>
+<p>When a user starts a task, the resource manager elevates a container to be the <strong>application master</strong> by communicating with a process. This container then takes part of the responsibilities of the Jobtracker in the old version;</p>
+<ul>
+<li>it now tracks task state, as done with the Jobtracker,</li>
+<li>re-allocates other containers when one fails (expects liveliness by the worker machines)</li>
+<li>it asks or releases resources to the resource manager, at <em>any time</em>. (they are quite good with pre-emption, see <a href="/notes/gestione-delle-risorse/">Gestione delle risorse</a>).</li>
+<li>Send HeartBeats to the resource-manager to signal he is still alive.</li>
+</ul>
+<h4 id="nodemanagers">NodeManagers<a hidden class="anchor" aria-hidden="true" href="#nodemanagers">#</a></h4>
+<p>These processes run on everynode in the cluster, and are responsible for:</p>
+<ul>
+<li>Monitoring the resources on the node (CPU, memory, disk, network)</li>
+<li>Reporting to the ResourceManager (using heartbeats)</li>
+<li>Managing the containers on the node.
+If a NodeManager dies, the ResourceManager assumes all the containers on the node are gone, and reports failure to all ApplicationManagers, who then will re-request resources and update their state tracking part.</li>
+</ul>
 <h4 id="setting-up-a-task-">Setting up a task 🟨<a hidden class="anchor" aria-hidden="true" href="#setting-up-a-task-">#</a></h4>
 <blockquote>
-<p>ApplicationMasters can request and release containers at <strong>any time</strong>,
-dynamically. A container request is typically made by the ApplicationMasters with a specific demand (e.g., “10 containers with each 2 cores and 16 GB of RAM”). If the request is granted by the ResourceManager fully or partially, this is done indirectly by signing and issuing a <strong>container token</strong> to the ApplicationMaster that acts as proof that the resource was granted.
+<p>ApplicationMasters can request and release containers at <strong>any time</strong>, dynamically. A container request is typically made by the ApplicationMasters with a specific demand (e.g., “10 containers with each 2 cores and 16 GB of RAM”). If the request is granted by the ResourceManager fully or partially, this is done indirectly by signing and issuing a <strong>container token</strong> to the ApplicationMaster that acts as proof that the resource was granted.
 The ApplicationMaster can then connect to the allocated NodeManager and send the token. The NodeManager will then check the validity of the token and provide the memory and CPU granted by the
 ResourceManager. The ApplicationMaster ships the code (e.g., as a jar file) as well as parameters, which then runs as a process with exclusive use of this memory and CPU.
 <em>~From the Book <a href="https://ghislainfourny.github.io/big-data-textbook/">({fourny} 2024)</a></em></p>
@@ -439,9 +532,10 @@ ResourceManager. The ApplicationMaster ships the code (e.g., as a jar file) as w
 <li>ApplicationMasters can request resources in a <strong>fine-grained</strong> manner, asking for exactly a specific amount of resources to the ResourceManager</li>
 <li>The Granting procedure uses <strong>authorization tokens</strong>.</li>
 <li>Code is usually <strong>shipped</strong> by the ApplicationMaster to the worker container.</li>
+<li>ApplicationMasters can be <strong>pre-empted</strong> by the ResourceManager if the resources are needed by another application.</li>
 </ol>
-<h4 id="performance">Performance<a hidden class="anchor" aria-hidden="true" href="#performance">#</a></h4>
-<p>This new version supports 10,000 nodes and 100,000 tasks, a big improvement over the previous version.</p>
+<p>All the information to create a container is called <em>Container Launch Context</em> or CLC for short.
+Containers usually contain <em>many</em> slots, in fact they can execute several tasks in parallel.</p>
 <h4 id="resource-tracking">Resource tracking<a hidden class="anchor" aria-hidden="true" href="#resource-tracking">#</a></h4>
 <p>Also in this case, as has been done similarly for <a href="/notes/distributed-file-systems/">Distributed file systems</a> and others, we track the available resources of each machine using <strong>heartbeats</strong> sent by NodeManagers to the ResourceManager. In this way, the ResourceManager knows exacly what is the load of each node.</p>
 <h3 id="scheduling-methods">Scheduling methods<a hidden class="anchor" aria-hidden="true" href="#scheduling-methods">#</a></h3>
@@ -451,9 +545,27 @@ ResourceManager. The ApplicationMaster ships the code (e.g., as a jar file) as w
 <p>Another way could be the <strong>hierarchical scheduler</strong> where the amount of resource is allocated a priori. This is also called <strong>capacity scheduling</strong> because the whole cluster is divided into multiple sub-clusters corresponding to a specific department in a university or parts of a company.
 Then, each department can use a specific local scheduler, which could be a standard fair queue.</p>
 <h4 id="fair-schedule-">Fair Schedule 🟨<a hidden class="anchor" aria-hidden="true" href="#fair-schedule-">#</a></h4>
-<p>It&rsquo;s difficult to orchestrate the allocation of different resources.
-But how to allocate it correctly when the need of resources is different for other processes? Some processes could need more memory than cpu, Disk and Network Input and Output and others other resources. Some solution is <strong>dominant resource fairness</strong>, but we won&rsquo;t delve into this topic here.
-🟥 TODO: get the missing parts for dominant resource fairness.</p>
+<blockquote>
+<p>Fair scheduling involves more complex algorithms that attempt to allocate resources in a way fair to all users of the cluster and based on the share they are normally entitled to.</p>
+</blockquote>
+<p>It&rsquo;s difficult to orchestrate the allocation of different resources. But how to allocate it correctly when the need of resources is different for other processes? Some processes could need more memory than cpu, Disk and Network Input and Output and others other resources. If some department is not using the resource, then it could be allocated to another department.
+There are different types of fair scheduling, the next sections briefly examine the main methods of scheduling</p>
+<h4 id="steady-fair-share-">Steady Fair Share 🟩<a hidden class="anchor" aria-hidden="true" href="#steady-fair-share-">#</a></h4>
+<blockquote>
+<p>This is the share of the cluster officially allocated to each department. The various departments agree upon this with each other <strong>in advance</strong>. This number is thus <strong>static</strong> and rarely changes.</p>
+</blockquote>
+<h4 id="instantaneous-fair-share-">Instantaneous Fair Share 🟨<a hidden class="anchor" aria-hidden="true" href="#instantaneous-fair-share-">#</a></h4>
+<blockquote>
+<p>this is the fair share that a department should <em>ideally</em> be allocated (according to economic and game theory considerations) at any point in time. This is a dynamic number that changes constantly, based on departments being idle: if a department is idle, then the instantaneous fair share of others department becomes higher than their steady fair shares.</p>
+</blockquote>
+<h4 id="current-share-">Current Share 🟥<a hidden class="anchor" aria-hidden="true" href="#current-share-">#</a></h4>
+<blockquote>
+<p>this is the actual share of the cluster that a department effectively uses at any point in time. This is highly dynamic. The current share does not necessarily match the instantaneous fair share because there is some inertia in the process: a department might be using more resources while another is idle. When the other department later stops being idle, these resources are not immediately withdrawn from the first department; rather, the first department will stop getting more resources, and the second
+department will gradually recover these resources as they get released by the first department.</p>
+</blockquote>
+<h4 id="dominant-resource-fairness-">Dominant Resource Fairness 🟨<a hidden class="anchor" aria-hidden="true" href="#dominant-resource-fairness-">#</a></h4>
+<p>The idea is quite simple: consider the dominant resource usage by each user. Then allocate the containers in a manner that is constant with respect to max resource usage ratio / number of containers.
+For example if Alice is using 6% of the available CPU, and Bob 3% of the available RAM, then bob should have twice as the number of containers compared to Alice.</p>
 <h4 id="three-types-of-schedule-sharing">Three types of schedule sharing<a hidden class="anchor" aria-hidden="true" href="#three-types-of-schedule-sharing">#</a></h4>
 <p>TODO: fill this in a later occasion (See page 273 of the book)</p>
 <ul>
@@ -462,7 +574,9 @@ But how to allocate it correctly when the need of resources is different for oth
 <li>Current share:</li>
 </ul>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] {fourny} <a href="https://ghislainfourny.github.io/big-data-textbook/">“The Big Data Textbook”</a>  2024</p>
+<p>[1] Vavilapalli et al. <a href="https://dl.acm.org/doi/10.1145/2523616.2523633">“Apache Hadoop YARN: Yet Another Resource Negotiator”</a> ACM  2013</p>
+<p>[2] {fourny} <a href="https://ghislainfourny.github.io/big-data-textbook/">“The Big Data Textbook”</a>  2024</p>
+<p>[3] Dean &amp; Ghemawat <a href="https://dl.acm.org/doi/10.1145/1327452.1327492">“MapReduce: Simplified Data Processing on Large Clusters”</a> Communications of the ACM Vol. 51(1), pp. 107&ndash;113 2008</p>
 
 
   </div>
