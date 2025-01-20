@@ -196,76 +196,67 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Linguaggi Deterministici e DPDA
+    <h2 class="entry-hint-parent">Bias Variance Trade-off
     </h2>
   </header>
   <div class="entry-content">
-    <p>DPDA Definizione (2)🟩 La definizione di DPDA è molto simile a quella trattata in Linguaggi liberi e PDA, con solo costraints sulla deterministicità, che si traducono in due condizioni:
-Al massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack Se ho una transizione senza leggere, posso avere solo quella Slide
-Linguaggio libero deterministico Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per stato finale....</p>
+    <p>This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
+Introduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente....</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Linguaggi Deterministici e DPDA" href="https://flecart.github.io/notes/linguaggi-deterministici-e-dpda/"></a>
+  <a class="entry-link" aria-label="post link to Bias Variance Trade-off" href="https://flecart.github.io/notes/bias-variance-trade-off/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Livello ISA
+    <h2 class="entry-hint-parent">Data Plane
     </h2>
   </header>
   <div class="entry-content">
-    <p>il livello isa è il livallo delle istruzioni
-8.1 Struttura Solitamente le istruzioni sono divise in due parti:
-8.1.1 Opcode e indirizzamento Opcode
-Questo opcode indica la tipologia di istruzione.
-Per esempio per l’architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.
-Questo insieme poi alle altre istruzioni che definiscono cosa deve fare costituiscono OPcode.
-Indirizzamento
-Poi c’è una sezione che indirizza, cioè dice all’istruzione cosa deve prendere e dove deve salvare....</p>
+    <p>Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
+Funzioni principali Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane....</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Livello ISA" href="https://flecart.github.io/notes/livello-isa/"></a>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Semantica intuizionista
+    <h2 class="entry-hint-parent">Programmi Concorrenti
     </h2>
   </header>
   <div class="entry-content">
-    <p>Molto importante questo documento per avere chiara la differenza fra la logica intuizionista e la Logica Proposizionale classica.
-Questa logica intuizionista non si preoccupa del noumeno platonico, ma solo di una prova reale.
-Introduzione:
-wikipedia
-9 11 Scopi di intuizionista (3) Semantica dell’evidenza → costruzione della prova Semantica della conoscenza diretta = conoscenza diretta Semantica della calcolabilità = programma, algoritmo della soluzione 9.1 Invenzione o scoperta La semantica intuizionista vede la matematica come una creazione (e questa cosa interessa molto all’informatico perché è una prova....</p>
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Semantica intuizionista" href="https://flecart.github.io/notes/semantica-intuizionista/"></a>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Cubes
+    <h2 class="entry-hint-parent">Time and Space Complexity
     </h2>
   </header>
   <div class="entry-content">
-    <p>Data Cubes is a data format especially useful for heavy reads. It has been popularized in business environments where the main use for data was to make reports (many reads). This also links with the OLAP (Online Analytical Processing) vs OLTP (Online Transaction Processing) concepts, where one is optimized for reads and the other for writes.
-The main driver behind data cubes was business intelligence. While traditional relational database systems are focused on the day-to-day business of a company and record keeping (with customers placing or- ders, inventories kept up to date, etc), business intelligence is focused on the production of high-level reports for supporting C-level executives in making informed decisions....</p>
+    <p>In this note we explore a theme of time and space complexity. Those are cardinal themes in Theoretical CS. Time -&gt; execution step bounds on algorithms Space -&gt; the cells visited by a Turing Machine when executed.
+Introduction to Time Complexity This note will build upon know techniques of algorithms analysis explained in Notazione Asintotica. We will need big-$O$ notation and $o$ notation. L’idea è che il problema di decisione è decidibile se limito la lunghezza del teorema....</p>
   </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Cubes" href="https://flecart.github.io/notes/data-cubes/"></a>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Time and Space Complexity" href="https://flecart.github.io/notes/time-and-space-complexity/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Interactive Theorem Provers
+    <h2 class="entry-hint-parent">Variational Inference
     </h2>
   </header>
   <div class="entry-content">
-    <p>Most of times the pattern of proving and verifying it is like this $prove \to verify$, that is: there is an entity that generates the solution, andPo then another that tries to verify it. But more expressive algorithms could be possible if there is interaction between the two entities, ones that try to prove it, and others try to verify it. From some point of view, this is similar from what AlphaGo does when searching, there is a part that guides the search, another that actually searches for it....</p>
+    <p>With variational inference we want to find a good approximation of the posterior distribution from which it is easy to sample. The objective is to approximate the posterior with a simpler one, because sometimes the prior or likelihood are difficult to compute. $$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$ For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation....</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Interactive Theorem Provers" href="https://flecart.github.io/notes/interactive-theorem-provers/"></a>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
