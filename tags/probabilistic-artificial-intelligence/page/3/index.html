@@ -181,66 +181,68 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Kalman Filters
+    <h2 class="entry-hint-parent">Bayesian Linear Regression
     </h2>
   </header>
   <div class="entry-content">
-    <p>Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:
-We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t &#43; 1} = FX_{t} &#43; \varepsilon_{t} &amp; F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} &#43; \eta_{t} &amp; H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians....</p>
+    <p>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
+Classical Linear regression Let’s start with a classical regression. In this setting we need to estimate a model that is generated from this kind of data: $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty....</p>
   </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Kalman Filters" href="https://flecart.github.io/notes/kalman-filters/"></a>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Bayesian Linear Regression" href="https://flecart.github.io/notes/bayesian-linear-regression/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Variational Inference
+    <h2 class="entry-hint-parent">RL Function Approximation
     </h2>
   </header>
   <div class="entry-content">
-    <p>With variational inference we want to find a good approximation of the posterior distribution from which it is easy to sample. The objective is to approximate the posterior with a simpler one, because sometimes the prior or likelihood are difficult to compute. $$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$ For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation....</p>
+    <p>These algorithms are good for scaling state spaces, but not actions spaces.
+The Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
+A simple parametrization 🟩 The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don’t need to explicitly explore every single state in the state space....</p>
+  </div>
+  <footer class="entry-footer">17 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to RL Function Approximation" href="https://flecart.github.io/notes/rl-function-approximation/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Markov Processes
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
+Markov property Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente....</p>
+  </div>
+  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Markov Processes" href="https://flecart.github.io/notes/markov-processes/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Bayesian neural networks
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Robbins-Moro Algorithm The Algorithm the algorithm is very simple we do the following until convergence: set some learning rates that satisfy the Robbins Moro Conditions, choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ For example with $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$, and $\alpha_{t} = \frac{1}{t}$ they satisfy the condition (in practice we use a constant $\alpha$, but we lose the convergence guarantee by Robbins Moro)....</p>
   </div>
   <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
+  <a class="entry-link" aria-label="post link to Bayesian neural networks" href="https://flecart.github.io/notes/bayesian-neural-networks/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Monte Carlo Methods
+    <h2 class="entry-hint-parent">Markov Chains
     </h2>
   </header>
   <div class="entry-content">
-    <p>DI Law of Large Numbers e Central limit theorem ne parliamo in Central Limit Theorem and Law of Large Numbers. Usually these methods are useful when you need to calculate following something similar to Bayes rule, but don’t know how to calculate the denominator, often infeasible integral. We estimate this value without explicitly calculating that.
-Interested in $\mathbb{P}(x) = \frac{1}{z} \mathbb{P}^{*}(x) = \frac{1}{Z} e^{-E(x)}$ Can evaluate E(x) at any x....</p>
+    <p>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
+$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
+Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente....</p>
   </div>
   <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Monte Carlo Methods" href="https://flecart.github.io/notes/monte-carlo-methods/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Gaussians
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Gaussians are one of the most important family of probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Clustering algorithm. They have also something to say about Maximum Entropy Principle. The best thing if you want to learn this part actually well is section 2....</p>
-  </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gaussians" href="https://flecart.github.io/notes/gaussians/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Planning
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It’s called Model Predictive Control (MPC).
-There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \[....</p>
-  </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Planning" href="https://flecart.github.io/notes/planning/"></a>
+  <a class="entry-link" aria-label="post link to Markov Chains" href="https://flecart.github.io/notes/markov-chains/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

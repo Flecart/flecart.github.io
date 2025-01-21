@@ -181,70 +181,76 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Kolmogorov complexity
+    <h2 class="entry-hint-parent">Optimization methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Gran parte di quanto scrivo ora è tratto da (Li &amp; Vitányi 2019). Chaitin, Kolmogorov e Solomonoff hanno elaborato il tema in modo indipendente e allo stesso tempo verso gli anni ‘60!
-Solomonoff lo ha trovato sul problema dell’induzione all’età di 38 anni, Kolmogorov invece era già tardi, ha già trovato gli assiomi della probabilità e poi nel 65 cerca randomness. Mentre Chaiten Information = Computation e non probabilità, nel 68 all’età di 19 anni....</p>
+    <p>Metodi altri sono trovare una approssimazione facile da calcolare (simile all’approccio del modello surrogato credo). Ma nel nostro caso proviamo a trovare metodi di esplorare lo spazio dei parametri in modo intelligente.
+Deterministic methods Sono utilizzabili quando ci sono delle proprietà come convessità, limitatezza, continuità.
+Newton Raphson method Molte implementazioni in R usano questo metodo, è
+Perfetto quando $h$ è quadratico, e in statistica molti problemi sono quadratici e funziona in modo perfetto Ma in cose non lineari si ha meno performance (perché l’hessiana è molto instabile per l’inversione, si dice che è mal condizionata, e si fa con attenzione....</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Kolmogorov complexity" href="https://flecart.github.io/notes/kolmogorov-complexity/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Optimization methods" href="https://flecart.github.io/notes/optimization-methods/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">LR(k) e YACC
+    <h2 class="entry-hint-parent">Teorema di Lagrange
     </h2>
   </header>
   <div class="entry-content">
-    <p>LR(k) Grammatiche LR(k) 🟩 Anche in questo caso proviamo a generalizzare il concetto dei pirmi k caratteri, in modo da generalizzare in qualche senso il concetto di LR(k), quindi andiamo a modificare la closure considerando ora first k
-Per ricordarti come si calcolava first k, andare a guardare Top-down Parser
-il problema che poi diventa pratico riguardo questo è l’impossibilità di gestire stringhe lunghezza k che sono una assurdità (esponenziale per la lunghezza)...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to LR(k) e YACC" href="https://flecart.github.io/notes/lrk-e-yacc/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Training a NN
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
-Elementi di ripasso Training of NN How can we be sure that we can train well our function?
-Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!...</p>
+    <p>Classi laterali Dimostrazione dei lemmi sopra. La cosa interessante di questa parte è possiamo usare una classe laterale per partizionare il gruppo iniziale!
+Il teorema di Lagrange Dividere significa che **partiziona** l&#39;insieme iniziale in alcuni insiemi distinti. L&#39;insieme $G:H$ è l&#39;insieme che contiene tutti i cosets, credo. Dimostrazione
+|G:H| = |G|/|H| |a| divide |G| Ossia un corollario dopo il teorema di Lagrange. La cosa citata è dimostrata in Gruppi ciclici e permutazioni#Criterio $a {i} = a {j}$....</p>
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Training a NN" href="https://flecart.github.io/notes/training-a-nn/"></a>
+  <a class="entry-link" aria-label="post link to Teorema di Lagrange" href="https://flecart.github.io/notes/teorema-di-lagrange/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Gruppi
+    <h2 class="entry-hint-parent">Accept Reject algorithm
     </h2>
   </header>
   <div class="entry-content">
-    <p>Definizione gruppo Qualunque insieme più operazione tale per cui:
-Esistenza dell’inverso per ogni elemento $\forall g \in G, \exists g^{-1} \in G : gg^{-1} = e$ Esistenza di un elemento neutro $\exists e \in G: \forall g \in G, eg = g$ Associatività: $(gh)f = g(hf)$ Closure: $\forall g, h \in G \implies gh \in G$ Unicità dell’elemento neutro Supponiamo di avere un gruppo $G$ e due elementi neutri $e, f$ Allora abbiamo che $ae = a = af$ però se moltiplichiamo per l’inversa abbiamo che $a^{-1}ae = a^{-1}af \implies e = f$...</p>
+    <p>Some useful links Main results: https://jblevins.org/notes/accept-reject
+Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
+La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
+Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
+Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density....</p>
   </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gruppi" href="https://flecart.github.io/notes/gruppi/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Accept Reject algorithm" href="https://flecart.github.io/notes/accept-reject-algorithm/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Circuit Motifs
+    <h2 class="entry-hint-parent">Descrizione linguaggio
     </h2>
   </header>
   <div class="entry-content">
-    <p>Work like (Luo 2021) show that our brain has naturally some types of circuits, which can be classified mainly as 4 types as described in (Wang et al.):
-References [1] Luo “Architectures of Neuronal Circuits” Science Vol. 373(6559), pp. eabg7285 2021
-[2] Wang et al. “CircuitNet: A Generic Neural Network to Realize Universal Circuit Motif Modeling”</p>
+    <p>Introduzione Per questa parte c’è un sacco di roba in comune con Tecniche di definizione di semantica (4) 🟩
+Trattiamo alcune caratteristiche che descrivono ad alto livello un linguaggio di programmazione. È da notare che questa parte della spiegazione del linguaggio non è limitante al solo linguaggio di programmazione, è utile per analizzare tutti i linguaggi (tranne la parte di implementazione)
+Sintassi 🟩- Relazione fra segni. si occupa di decidere quando una frase è corretta....</p>
+  </div>
+  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Descrizione linguaggio" href="https://flecart.github.io/notes/descrizione-linguaggio/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Gruppi Normali
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Definizione normalità Test del sottogruppo normale Dimostrazione
+Il gruppo quoziente L’importanza del gruppo normale è che quando esso vale, possiamo avere il gurppo fattore
+Dimostrazione
+!</p>
   </div>
   <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Circuit Motifs" href="https://flecart.github.io/notes/circuit-motifs/"></a>
+  <a class="entry-link" aria-label="post link to Gruppi Normali" href="https://flecart.github.io/notes/gruppi-normali/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
