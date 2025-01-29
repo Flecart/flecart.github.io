@@ -181,40 +181,15 @@ if (!doNotTrack) {
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Backpropagation
+    <h2 class="entry-hint-parent">Linear Regression methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover....</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Backpropagation" href="https://flecart.github.io/notes/backpropagation/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Bayesian neural networks
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Robbins-Moro Algorithm The Algorithm the algorithm is very simple we do the following until convergence: set some learning rates that satisfy the Robbins Moro Conditions, choose a $w_{0}$ then update in the following way: $$ w_{n&#43;1} = w_{n} - \alpha_{n} \Delta w_{n} $$ For example with $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$, and $\alpha_{t} = \frac{1}{t}$ they satisfy the condition (in practice we use a constant $\alpha$, but we lose the convergence guarantee by Robbins Moro)....</p>
+    <p>We will present some methods related to regression methods for data analysis. Some of the work here is from (Hastie et al. 2009). This note does not treat the bayesian case, you should see Bayesian Linear Regression for that.
+Problem setting In usual regression problems we want to reach the $\arg \min \mathbb{E}_{Y \mid X} \left[ (Y - f(X))^{2} \right]$ and the solution is given by the conditional mean: $f^{*} = \mathbb{E}(Y \mid X = x)$....</p>
   </div>
   <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bayesian neural networks" href="https://flecart.github.io/notes/bayesian-neural-networks/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Counterfactual Invariance
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Machine learning cannot distinguish between causal and environment features.
-Shortcut learning Often we observe shortcut learning: the model learns some dataset dependent shortcuts (e.g. the machine that was used to take the X-ray) to make inference, but this is very brittle, and is not usually able to generalize.
-Shortcut learning happens when there are correlations in the test set between causal and non-causal features. Our object of interest should be the main focus, not the environment around, in most of the cases....</p>
-  </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Counterfactual Invariance" href="https://flecart.github.io/notes/counterfactual-invariance/"></a>
+  <a class="entry-link" aria-label="post link to Linear Regression methods" href="https://flecart.github.io/notes/linear-regression-methods/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -232,15 +207,44 @@ Il Kernel I punti interessanti delle immagini sono solamente i punti di cambio s
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Lagrange Multipliers
+    <h2 class="entry-hint-parent">Diffusion Models
     </h2>
   </header>
   <div class="entry-content">
-    <p>This is also known as Lagrange Optimization or undetermined multipliers. Some of these notes are based on Appendix E of (Bishop 2006), others were found when studying bits of rational mechanics. Also (Boyd &amp; Vandenberghe 2004) chapter 5 should be a good resource on this topic.
-Let’s consider a standard linear optimization problem $$ \begin{array} \\ \min f_{0}(x) \\ \text{subject to } f_{i}(x) \leq 0 \\ h_{j}(x) = 0 \end{array} $$ Lagrangian function And let’s consider the Lagrangian function associated to this problem defined as $$ \mathcal{L}(x, \lambda, \nu) = f_{0}(x) &#43; \sum \lambda_{i}f_{i}(x) &#43; \sum\nu_{j}h_{j}(x) $$ We want to say something about this function, because it is able to simplify the optimization problem a lot, but first we want to study this mathematically....</p>
+    <p>Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
+The Diffusion Process This note follows original Einstein’s presentation, here we have a simplified version.
+Let’s suppose we have a particle at $t = 0$ at some position $i$....</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Lagrange Multipliers" href="https://flecart.github.io/notes/lagrange-multipliers/"></a>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Diffusion Models" href="https://flecart.github.io/notes/diffusion-models/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Logistic Regression
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
+Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.
+Introduzione al problema Supponiamo che
+$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro....</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Logistic Regression" href="https://flecart.github.io/notes/logistic-regression/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cross Validation and Model Selection
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
+How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning....</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cross Validation and Model Selection" href="https://flecart.github.io/notes/cross-validation-and-model-selection/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

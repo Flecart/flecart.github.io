@@ -196,74 +196,70 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmi Concorrenti
+    <h2 class="entry-hint-parent">Replication and consistency
     </h2>
   </header>
   <div class="entry-content">
-    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:...</p>
+    <p>Replication and consistency Introduzione Ci sono due vantaggi principali nella replicazione dei dati
+Velocità Vicinanza geografica (quindi meno tempo ad andare a tornare) Maggiore computazione, quindi avere molti più processori che cercano di offrire lo stesso servizio. Affidabilità Così se una sede diventa corrotta, posso avere abbondanza, avere una copia da una altra parte, così non perdo le informazioni! Se una macchina cade in errore, ho altre macchine che lo sostituiscono!...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+  <a class="entry-link" aria-label="post link to Replication and consistency" href="https://flecart.github.io/notes/replication-and-consistency/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Rappresentazione della conoscenza
+    <h2 class="entry-hint-parent">Syncronous model
     </h2>
   </header>
   <div class="entry-content">
-    <p>Questo è stato un capitolo molto vasto, che andava in certi punti a toccare la filosofia, la fisica. Un aspetto, quello di codifica delle informazioni reali in un ambiente logico (che per quanto i miei pregiudizi siano, ritengo una cosa molto impossibile, molto limitata e altrettanto impossibile). Si tratta dello studio della logica per rappresentazione di conoscenza.
-Fatto sta che mi sembra assurdamente teorico tanto da non aver nessun utilizzo (probabilmente mi sbaglio di grosso), e che sia roba da filosofi....</p>
+    <p>Introduction Da ricordare il “The State Machine Replication (SMR) Problem” in Consensus protocols che è importantissimo per comprendere questa parte.
+Storia locale Transazioni al singolo noto Problema del sync fra tutti questi nodi.
+Goal of SMR solution in blockchains Andiamo a considerare alcune proprietà di safety e liveness Programmi Concorrenti
+Consistenza i nodi devono essere daccordo su quale transazione mettere prima e dopo → stessa storia per tutte le transazioni. (con la possibilità di alcuni nodi che siano indietro, ma solo prefisso!...</p>
   </div>
   <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Rappresentazione della conoscenza" href="https://flecart.github.io/notes/rappresentazione-della-conoscenza/"></a>
+  <a class="entry-link" aria-label="post link to Syncronous model" href="https://flecart.github.io/notes/syncronous-model/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Semafori
+    <h2 class="entry-hint-parent">Campo elettrico
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione Concetto principale 🟩- È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
-Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
-due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo
-Primitive dei semafori 🟩- Il semaforo solitamente è una variabile intera non negativa....</p>
+    <p>Introduzione Intuizione del campo elettrostatico Elettrostatico vs elettrodinamico 🟩 Andiamo a chiamare elettrostatico perché nel nostro caso non si sta muovendo nessuna carica all’itnerno di questo campo.
+Proprietà del campo elettrostatico (5) 🟨 Le linee di forza in ogni punto dello spazio sono tangenti e concorde al campo in quel punto; le linee di forza si addensano dove l’intensità del campo e maggiore; le linee di forza non si incrociano mai, in quanto in ogni punto il campo è definito univocamente e non può avere due direzioni distinte....</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Semafori" href="https://flecart.github.io/notes/semafori/"></a>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Campo elettrico" href="https://flecart.github.io/notes/campo-elettrico/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Tabelle di hash
+    <h2 class="entry-hint-parent">Complexity Hierarchies
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione alle Tabelle di Hash 5.1.1 Prototipo Vogliamo implementare le operazioni del prototipo dizionario presentato in Strutture di dati elementari, e vogliamo fare solo queste 3 ma molto bene.
-Insert O(1) Delete O(1) Search in O(1) La struttura dati di hash riesce a fare bene queste singole operazioni
-Si vedrà che l’array modificato è il modo migliore per avere questo hash, solo generalizzando un modo per indicizzarlo che non saranno numeri (indici)....</p>
+    <p>Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time. We would like to define a clear hierarchy of these set of problems.
+Space Hierarchies Def: Space constructible We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\log n)$ is space constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ space complexity....</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Tabelle di hash" href="https://flecart.github.io/notes/tabelle-di-hash/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Complexity Hierarchies" href="https://flecart.github.io/notes/complexity-hierarchies/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Algebra lineare numerica
+    <h2 class="entry-hint-parent">La qualità del software
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular....</p>
+    <p>Dato che il software sta diventando sempre più diffuso, diventa sempre più importante andare a definire delle metriche che possano garantirne la qualità, ossia la non frequenza di errori o bug che possono in qualche modo limitarne la qualità.
+Error, Fault and Failure Secondo la definizione esatta data da IEEE, questi tre termini hanno un significato ben specifico, molto diverso.
+Error, sono comportamenti non previsti da un comportamento dell’utente, oppure il programmatore capisce male le specifiche....</p>
   </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to La qualità del software" href="https://flecart.github.io/notes/la-qualit%C3%A0-del-software/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
