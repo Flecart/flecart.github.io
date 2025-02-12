@@ -7,11 +7,14 @@
 <meta name="robots" content="index, follow">
 <title>Bias Variance Trade-off | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="statistics">
-<meta name="description" content="This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
-Introduction È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente.">
+<meta name="description" content="This note should be considered deprecated.
+There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
+Introduction
+È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente.
+Dall&rsquo;altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bias-variance-trade-off/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -60,7 +63,6 @@ Introduction È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fr
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -77,31 +79,38 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Bias Variance Trade-off" />
-<meta property="og:description" content="This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
-Introduction È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/bias-variance-trade-off/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
 
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Bias Variance Trade-off"/>
-<meta name="twitter:description" content="This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
-Introduction È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente."/>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/bias-variance-trade-off/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Bias Variance Trade-off">
+  <meta property="og:description" content="This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
+Introduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="Statistics">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Bias Variance Trade-off">
+<meta name="twitter:description" content="This note should be considered deprecated.
+There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
+Introduction
+È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente.
+Dall&rsquo;altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.">
 
 
 <script type="application/ld+json">
@@ -130,12 +139,12 @@ Introduction È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fr
   "@type": "BlogPosting",
   "headline": "Bias Variance Trade-off",
   "name": "Bias Variance Trade-off",
-  "description": "This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.\nIntroduction È una cosa ormai risaputa che c\u0026rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente.",
+  "description": "This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.\nIntroduction È una cosa ormai risaputa che c\u0026rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall\u0026rsquo;altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.\n",
   "keywords": [
     "statistics"
   ],
-  "articleBody": "This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.\nIntroduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.\nMathematical decomposition Si può derivare una decomposizione di questo trade-off da un punto di vista matematico, quanto enunciato è dimostrato nel capitolo 8.1.1 delle Note di andrew NG 229 stanford proviamo a descrivere in modo molto leggero quanto presente in quelle note qui. Solitamente vogliamo minimizzare la loss, descritta come $$ \\mathcal{L}(\\theta) = \\mathbb{E}_{(x, y) \\sim \\mathcal{D}} [(y - h_{\\theta}(x))^{2}] $$ Assumiamo che in $y$ ci sia presente del rumore causato dalla misurazione, e che la famiglia di funzioni descritta da $h$ riesca a modellare la distribuzione reale, questo ci motiva a descrivere $y = h_{\\theta^{*}} + \\varepsilon$ dove $\\varepsilon$ è l’errore intrinseco data dalla misurazione e $\\theta^{*}$ è la parametrizzazione migliore esistente.\nAllora abbiamo: $$ MSE(x) = \\mathbb{E}[(y - h_{\\theta}(x))^{2}] = \\mathbb{E}[(h_{\\theta^{*} }+ \\varepsilon - h_{\\theta}(x))^{2}] \\mathbb{E}[\\varepsilon^{2}] + \\mathbb{E}[(h_{\\theta^{*}}(x) - h_{\\theta}(x))^{2}] $$\nQuesto si può scomporre ancora assumendo l’esistenza di un modello medio. (vedere derivazione 121 delle note). Avremo alla fine che $$ MSE(x) = \\sigma^{2} + \\text{ bias}^{2} + \\text{ variance} $$ Dove $\\text{ bias} = h_{\\theta^{*}}(x) - h_{avg}(x)$ e la varianza uguale ad altro.\nDall’espressione matematica, deriviamo che anche nel caso in cui riusciamo ad eliminare del tutto la varianza e il bias, rimarrebbe l’errore irriducibile di cui abbiamo parlato in Introduction to statistical learning.\nConsiderazioni generali Questo trade-off è nato principalmente nell’analisi teorica dei modelli, però è bene tenere in mente la presenza di ciò anche per i modelli reali. Non possiamo calcolare esplicitamente il MSE, però ci dovrebbe essere. Questa è l’osservazione principale per asserire che non sempre il modelli più complicato è la migliore, abbiamo il no-free-lunch theorem!\nStatistical learning framework Introduction to the problem We will introduce the most common statistical learning framework. There will be a lot of new words to learn for this setting. We will have\nA classifier $h : \\mathcal{ X} \\to \\left\\{ 0, 1 \\right\\}$ mapping our data to a label, taken from a set $\\mathcal{H}$ of all possible hypothesis. Then pairs $(x, y)$ which are training examples and our dataset. A dataset $S_{in} = \\left( (x_{1}, y_{1}), \\dots, (x_{m}, y_{m}) \\right)$ our learning algorithm will be identified as an $\\mathcal{A} : \\text{ training sequence } \\to \\text{ classifier }$. So our training algorithm will output a classifier, which we call it in this manner: $h = A(S_{in})$ and we would like this to be correct, which means that $h(x) = y$. for most of our examples. We will briefly introduce also a simple error measure for this theory. There will be mainly two approaches, one based on statistics the other one based on game theory. We will briefly touch both of them. The statistical approach has been mainly explored by the famous Vapnik, then explored by Valiant. We point to (Shalev-Shwartz \u0026 Ben-David 2014) as a good resource for the statistical learning approach. We now assume that our dataset $(X, Y)$ is drawn from $D$ which is unknown. We assume that our data is i.i.d. which is a very strong assumption, but useful to give a general feeling about the field. We define a concept of risk also called loss, which we describe as $$ l_{D}(h) = P(h(X) \\not = Y) $$ Which is just the probability that our classifier is wrong.\nWe call the realizable case this $\\inf_{h \\in \\mathcal{H}} l_{D}(h) = 0$ Sometimes is interesting to try to characterize the expected loss, i.e. the value $\\mathbb{E}_{A}[l_{D}(A(S_{m}))]$. We define the optimal risk to be $\\inf_{h \\in \\mathcal{H}} l_{D}(h)$.\nWe define the excess risk to be $E_{m} (A, \\mathcal{H}) = \\sup_{D} (\\mathbb{E}\\left[ l_{D} (A(S_{m}))\\right] - \\inf_{h \\in \\mathcal{H}} l_{D}(h))$ We would like to minimize this, because this is the worst case scenario for a certain algorithm $A$. We say that the set of hypothesis $\\mathcal{H}$ is learnable if $E_{m}(\\mathcal{H}) = \\inf_{A} E_{m}(A, \\mathcal{H}) \\to 0$. as $m \\to \\infty$ (i think $m$ is number of training cases??)\nWe call the empirical risk minimizer to be $\\text{ erm}_{\\mathcal{H}} (S)$ to be classifier $\\mathcal{H}$ that minimizes classification mistakes on $S$. Now that we have these definitions we can ask some questions.\nIs $\\mathcal{H}$ learnable? How can we minimize the excess risk? how can we learn $\\mathcal{H}$ fast? Learnability We now try to further define the problem\nReferences [1] Shalev-Shwartz \u0026 Ben-David “Understanding Machine Learning: From Theory to Algorithms” Cambridge University Press 2014\n",
-  "wordCount" : "840",
+  "articleBody": "This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.\nIntroduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.\nMathematical decomposition $$ \\mathcal{L}(\\theta) = \\mathbb{E}_{(x, y) \\sim \\mathcal{D}} [(y - h_{\\theta}(x))^{2}] $$ Assumiamo che in $y$ ci sia presente del rumore causato dalla misurazione, e che la famiglia di funzioni descritta da $h$ riesca a modellare la distribuzione reale, questo ci motiva a descrivere $y = h_{\\theta^{*}} + \\varepsilon$ dove $\\varepsilon$ è l’errore intrinseco data dalla misurazione e $\\theta^{*}$ è la parametrizzazione migliore esistente.\nAllora abbiamo: $$ MSE(x) = \\mathbb{E}[(y - h_{\\theta}(x))^{2}] = \\mathbb{E}[(h_{\\theta^{*} }+ \\varepsilon - h_{\\theta}(x))^{2}] \\mathbb{E}[\\varepsilon^{2}] + \\mathbb{E}[(h_{\\theta^{*}}(x) - h_{\\theta}(x))^{2}] $$\n$$ MSE(x) = \\sigma^{2} + \\text{ bias}^{2} + \\text{ variance} $$ Dove $\\text{ bias} = h_{\\theta^{*}}(x) - h_{avg}(x)$ e la varianza uguale ad altro.\nDall’espressione matematica, deriviamo che anche nel caso in cui riusciamo ad eliminare del tutto la varianza e il bias, rimarrebbe l’errore irriducibile di cui abbiamo parlato in Introduction to statistical learning.\nConsiderazioni generali Questo trade-off è nato principalmente nell’analisi teorica dei modelli, però è bene tenere in mente la presenza di ciò anche per i modelli reali. Non possiamo calcolare esplicitamente il MSE, però ci dovrebbe essere. Questa è l’osservazione principale per asserire che non sempre il modelli più complicato è la migliore, abbiamo il no-free-lunch theorem!\nStatistical learning framework Introduction to the problem We will introduce the most common statistical learning framework. There will be a lot of new words to learn for this setting. We will have\nA classifier $h : \\mathcal{ X} \\to \\left\\{ 0, 1 \\right\\}$ mapping our data to a label, taken from a set $\\mathcal{H}$ of all possible hypothesis. Then pairs $(x, y)$ which are training examples and our dataset. A dataset $S_{in} = \\left( (x_{1}, y_{1}), \\dots, (x_{m}, y_{m}) \\right)$ our learning algorithm will be identified as an $\\mathcal{A} : \\text{ training sequence } \\to \\text{ classifier }$. So our training algorithm will output a classifier, which we call it in this manner: $h = A(S_{in})$ and we would like this to be correct, which means that $h(x) = y$. for most of our examples. We will briefly introduce also a simple error measure for this theory. There will be mainly two approaches, one based on statistics the other one based on game theory. We will briefly touch both of them. The statistical approach has been mainly explored by the famous Vapnik, then explored by Valiant. We point to (Shalev-Shwartz \u0026 Ben-David 2014) as a good resource for the statistical learning approach. $$ l_{D}(h) = P(h(X) \\not = Y) $$ Which is just the probability that our classifier is wrong.\nWe call the realizable case this $\\inf_{h \\in \\mathcal{H}} l_{D}(h) = 0$ Sometimes is interesting to try to characterize the expected loss, i.e. the value $\\mathbb{E}_{A}[l_{D}(A(S_{m}))]$. We define the optimal risk to be $\\inf_{h \\in \\mathcal{H}} l_{D}(h)$.\nWe define the excess risk to be $E_{m} (A, \\mathcal{H}) = \\sup_{D} (\\mathbb{E}\\left[ l_{D} (A(S_{m}))\\right] - \\inf_{h \\in \\mathcal{H}} l_{D}(h))$ We would like to minimize this, because this is the worst case scenario for a certain algorithm $A$. We say that the set of hypothesis $\\mathcal{H}$ is learnable if $E_{m}(\\mathcal{H}) = \\inf_{A} E_{m}(A, \\mathcal{H}) \\to 0$. as $m \\to \\infty$ (i think $m$ is number of training cases??)\nWe call the empirical risk minimizer to be $\\text{ erm}_{\\mathcal{H}} (S)$ to be classifier $\\mathcal{H}$ that minimizes classification mistakes on $S$. Now that we have these definitions we can ask some questions.\nIs $\\mathcal{H}$ learnable? How can we minimize the excess risk? how can we learn $\\mathcal{H}$ fast? Learnability We now try to further define the problem\nReferences [1] Shalev-Shwartz \u0026 Ben-David “Understanding Machine Learning: From Theory to Algorithms” Cambridge University Press 2014\n",
+  "wordCount" : "721",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -271,26 +280,18 @@ There is not much about Bias Variance Trade-off, and its quite random and old. F
 <p>È una cosa ormai risaputa che c&rsquo;è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente.
 Dall&rsquo;altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.</p>
 <h3 id="mathematical-decomposition">Mathematical decomposition<a hidden class="anchor" aria-hidden="true" href="#mathematical-decomposition">#</a></h3>
-<p>Si può derivare una decomposizione di questo trade-off da un punto di vista matematico, quanto enunciato è dimostrato nel capitolo 8.1.1 delle <a href="https://cs229.stanford.edu/main_notes.pdf">Note di andrew NG 229 stanford</a>
-proviamo a descrivere in modo molto leggero quanto presente in quelle note qui.
-Solitamente vogliamo minimizzare la loss, descritta come
-</p>
 $$
 \mathcal{L}(\theta) = \mathbb{E}_{(x, y) \sim \mathcal{D}} [(y - h_{\theta}(x))^{2}]
-$$
-<p>
+$$<p>
 Assumiamo che in $y$ ci sia presente del rumore causato dalla misurazione, e che la famiglia di funzioni descritta da $h$ riesca a modellare la distribuzione reale, questo ci motiva a descrivere $y = h_{\theta^{*}} + \varepsilon$   dove $\varepsilon$ è <strong>l&rsquo;errore intrinseco</strong> data dalla misurazione e $\theta^{*}$ è la parametrizzazione migliore esistente.</p>
 <h1 id="msex--mathbbey---h_thetax2--mathbbeh_theta--varepsilon---h_thetax2">Allora abbiamo:
 $$
 MSE(x) = \mathbb{E}[(y - h_{\theta}(x))^{2}] = \mathbb{E}[(h_{\theta^{*} }+ \varepsilon - h_{\theta}(x))^{2}]</h1>
 <p>\mathbb{E}[\varepsilon^{2}] + \mathbb{E}[(h_{\theta^{*}}(x) - h_{\theta}(x))^{2}]
 $$</p>
-<p>Questo si può scomporre ancora assumendo l&rsquo;esistenza di un modello medio. (vedere derivazione 121 delle note). Avremo alla fine che
-</p>
 $$
 MSE(x) = \sigma^{2} + \text{ bias}^{2} + \text{ variance}
-$$
-<p>
+$$<p>
 Dove $\text{ bias} = h_{\theta^{*}}(x) - h_{avg}(x)$ e la varianza uguale ad altro.</p>
 <p>Dall&rsquo;espressione matematica, deriviamo che anche nel caso in cui riusciamo ad eliminare del tutto la varianza e il bias, rimarrebbe l&rsquo;errore irriducibile di cui abbiamo parlato in <a href="/notes/introduction-to-statistical-learning/">Introduction to statistical learning</a>.</p>
 <h3 id="considerazioni-generali">Considerazioni generali<a hidden class="anchor" aria-hidden="true" href="#considerazioni-generali">#</a></h3>
@@ -308,13 +309,9 @@ There will be mainly two approaches, one based on statistics the other one based
 The statistical approach has been mainly explored by the famous Vapnik, then explored by Valiant.
 We point to (Shalev-Shwartz &amp; Ben-David 2014) as a good resource for the statistical learning approach.</li>
 </ul>
-<p>We now assume that our dataset $(X, Y)$ is drawn from $D$ which is unknown. We assume that our data is <em>i.i.d.</em> which is a very <strong>strong assumption</strong>, but useful to give a general feeling about the field.
-We define a concept of <strong>risk</strong> also called loss, which we describe as
-</p>
 $$
 l_{D}(h) = P(h(X) \not = Y)
-$$
-<p>
+$$<p>
 Which is just the probability that our classifier is wrong.</p>
 <p>We call the <strong>realizable case</strong> this $\inf_{h \in \mathcal{H}} l_{D}(h) = 0$
 Sometimes is interesting to try to characterize the expected loss, i.e. the value $\mathbb{E}_{A}[l_{D}(A(S_{m}))]$.
@@ -414,7 +411,8 @@ We say that the set of hypothesis $\mathcal{H}$ is <strong>learnable</strong> if
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

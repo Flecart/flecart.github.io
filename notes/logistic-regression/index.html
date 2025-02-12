@@ -8,12 +8,28 @@
 <title>Logistic Regression | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning, 🥘deep-learning">
 <meta name="description" content="Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
-Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&rsquo;inferenza, quindi si parla di modello discriminativo.
-Introduzione al problema Supponiamo che
-$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall&rsquo;altro.">
+Introduzione alla logistic regression
+Giustificazione del metodo
+Questo è uno dei modelli classici, creati da Minsky qualche decennio fa
+In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&rsquo;inferenza, quindi si parla di modello discriminativo.
+Introduzione al problema
+Supponiamo che
+
+$Y$ siano variabili booleane
+$X_{i}$ siano variabili continue
+$X_{i}$ siano indipendenti uno dall&rsquo;altro.
+$P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$
+
+NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l&rsquo;approssimazione lineare
+Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica!
+
+
+$Y$ è una distribuzione bernoulliana.
+
+Ci chiediamo come è fatto $P(Y|X)$?">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/logistic-regression/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -62,7 +78,6 @@ $Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indi
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -79,35 +94,56 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Logistic Regression" />
-<meta property="og:description" content="Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
-Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&rsquo;inferenza, quindi si parla di modello discriminativo.
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/logistic-regression/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Logistic Regression">
+  <meta property="og:description" content="Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
+Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.
 Introduzione al problema Supponiamo che
-$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall&rsquo;altro." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/logistic-regression/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
-
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Logistic Regression"/>
+$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l’approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="Machinelearning">
+    <meta property="article:tag" content="🥘Deep-Learning">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Logistic Regression">
 <meta name="twitter:description" content="Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
-Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&rsquo;inferenza, quindi si parla di modello discriminativo.
-Introduzione al problema Supponiamo che
-$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall&rsquo;altro."/>
+Introduzione alla logistic regression
+Giustificazione del metodo
+Questo è uno dei modelli classici, creati da Minsky qualche decennio fa
+In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&rsquo;inferenza, quindi si parla di modello discriminativo.
+Introduzione al problema
+Supponiamo che
+
+$Y$ siano variabili booleane
+$X_{i}$ siano variabili continue
+$X_{i}$ siano indipendenti uno dall&rsquo;altro.
+$P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$
+
+NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l&rsquo;approssimazione lineare
+Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica!
+
+
+$Y$ è una distribuzione bernoulliana.
+
+Ci chiediamo come è fatto $P(Y|X)$?">
 
 
 <script type="application/ld+json">
@@ -136,12 +172,12 @@ $Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indi
   "@type": "BlogPosting",
   "headline": "Logistic Regression",
   "name": "Logistic Regression",
-  "description": "Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.\nIntroduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l\u0026rsquo;inferenza, quindi si parla di modello discriminativo.\nIntroduzione al problema Supponiamo che\n$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall\u0026rsquo;altro.",
+  "description": "Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.\nIntroduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l\u0026rsquo;inferenza, quindi si parla di modello discriminativo.\nIntroduzione al problema Supponiamo che\n$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall\u0026rsquo;altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\\mathbb{N}(\\mu_{ik}, \\sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l\u0026rsquo;approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?\n",
   "keywords": [
     "machinelearning", "🥘deep-learning"
   ],
-  "articleBody": "Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.\nIntroduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.\nIntroduzione al problema Supponiamo che\n$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\\mathbb{N}(\\mu_{ik}, \\sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l’approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?\nCaratterizzazione di P(Y|X) 🟨+ Proviamo a calcolare analiticamente come è fatto $P(Y|X)$ usando le assunzioni di sopra\nTheorem Assunte le cose di sopra si avrà che $$ P(Y=1| X= \\left\u003c x_{1},\\dots, x_{n} \\right\u003e ) = \\frac{1}{1 + \\exp\\left( w_{0} + \\sum_{i} w_{i}x_{i} \\right)} $$ Nella derivazione di sopra si ha che $\\pi = P(Y=1)$ E poi sappiamo che\n$$ \\ln \\frac{P(X_{i} | Y=0)}{P(X_{i} | Y=1)} = \\ln \\frac{e^{-\\frac{(X_{i} - \\mu_{i0})^{2}}{2 \\sigma_{0}^{2}}}}{ e^{-\\frac{(X_{i} - \\mu_{i_{1}})^{2}}{2 \\sigma_{1}^{2}}}} = -\\frac{(X_{i} - \\mu_{i0})^{2}}{2 \\sigma_{i}^{2}} + \\frac{(X_{i} - \\mu_{i1})^{2}}{2 \\sigma_{i}^{2}} $$ E si può notare che poi abbiamo il risultato di sopra e diventa sensato avere la forma di Sigmoid, che esce in modo molto molto naturale\nDalla parte in blu capiamo che è una cosa lineare, perché se è maggiore di zero allora è meglio la probabilità di stare da una parte rispetto all’altra.\nFunzione di Sigmoid 🟩 Questo ci dà una motivazione del motivo per cui utilizziamo $$ \\text{ Funzione di sigmoid: }\\sigma(x) = \\frac{1}{1 + e^{-x}} $$ Questa funzione si può vedere come un caso particolare di [Softmax Function](/notes/softmax-function). Derivata Si può calcolare che ha una derivata molto molto carina, ma è anche il problema per cui esiste vanishing gradient. $$ \\sigma'(x) = \\sigma(x) (1 - \\sigma(x)) $$ Quindi diventa vero che $$ P(Y=1|x,w) = \\sigma\\left( w_{0} + \\sum_{i} w_{i}x_{i} \\right) $$ Possiamo scrivere la probabilità di ogni singolo campione come in figura sotto\nFunzione di loss 🟩 Che sembra una cross-entropy classica, che però non ha una soluzione analitica, per questo motivo si utilizza **discesa del gradiente**. Ottimizzazione discesa del gradiente Intuizione sul gradiente 🟩 abbiamo alla fine che il gradiente è\n$$ \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} = \\sum_{l} x^{l}_{i} \\cdot (y^{l} - \\alpha^{l}) $$ Perché già $(y - \\alpha)$ sta misurando in un certo senso la differenza (l’errore), e il prodotto lo sta legando all’input preciso, quindi è molto bello quando la formula è interpretabile in modo fisico quasi.\nSometimes is clearer to write $\\alpha$ in an explicit fashion: $$ \\nabla_{w} \\ell(w)(x, y) = [\\sigma(w \\cdot x) - y]x $$ Calcolo del gradiente cross entropy 🟨++ $$ a^{l} = \\sigma\\left( w_{0} + \\sum_{i} x_{i}w_{i} \\right) = \\sigma(z) $$ $$ \\sum_{l} \\log P(Y= y^{l} | x ^{l}, w) = \\sum_{l} y^{l}\\log(\\alpha^{l}) + (1- y^{l})(1 - \\log(\\alpha^{l})) $$ Dalla formula di sopra riscritta in altro modo.\nQuesto è esattamente poi quanto sarà fatto durante il percettrone, per l'aggiornamento delle variabili in quelle istanze. Fase update del gradiente 🟩 Una volta calcolato che il valore di update è analiticamente uguale a $$ \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} = \\sum_{l} (y^{l} - \\alpha^{l}) x^{l} $$ Possiamo usare questa per aggiornare il peso di $w_{i}$\nUpdate step: $$ w_{i} = w_{i} + \\mu \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} $$ A volte viene aggiunto un fattore di regolarizzazione che fa diventare la regola di update come $$ w_{i} = w_{i} + \\mu \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} + \\mu \\lambda|w_{i}| $$ Che implica il fatto che se abbiamo un singolo peso grande, farà molta fatica ad esserci nel regolarizzatore (quindi ho meno varianza fra i pesi diciamo).\n",
-  "wordCount" : "655",
+  "articleBody": "Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.\nIntroduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.\nIntroduzione al problema Supponiamo che\n$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\\mathbb{N}(\\mu_{ik}, \\sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l’approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?\nCaratterizzazione di P(Y|X) 🟨+ Proviamo a calcolare analiticamente come è fatto $P(Y|X)$ usando le assunzioni di sopra\n$$ P(Y=1| X= \\left\u003c x_{1},\\dots, x_{n} \\right\u003e ) = \\frac{1}{1 + \\exp\\left( w_{0} + \\sum_{i} w_{i}x_{i} \\right)} $$ Nella derivazione di sopra si ha che $\\pi = P(Y=1)$ E poi sappiamo che\n$$ \\ln \\frac{P(X_{i} | Y=0)}{P(X_{i} | Y=1)} = \\ln \\frac{e^{-\\frac{(X_{i} - \\mu_{i0})^{2}}{2 \\sigma_{0}^{2}}}}{ e^{-\\frac{(X_{i} - \\mu_{i_{1}})^{2}}{2 \\sigma_{1}^{2}}}} = -\\frac{(X_{i} - \\mu_{i0})^{2}}{2 \\sigma_{i}^{2}} + \\frac{(X_{i} - \\mu_{i1})^{2}}{2 \\sigma_{i}^{2}} $$E si può notare che poi abbiamo il risultato di sopra e diventa sensato avere la forma di Sigmoid, che esce in modo molto molto naturale\nDalla parte in blu capiamo che è una cosa lineare, perché se è maggiore di zero allora è meglio la probabilità di stare da una parte rispetto all’altra.\nFunzione di Sigmoid 🟩 Questo ci dà una motivazione del motivo per cui utilizziamo $$ \\text{ Funzione di sigmoid: }\\sigma(x) = \\frac{1}{1 + e^{-x}} $$ Questa funzione si può vedere come un caso particolare di [Softmax Function](/notes/softmax-function). $$ \\sigma'(x) = \\sigma(x) (1 - \\sigma(x)) $$$$ P(Y=1|x,w) = \\sigma\\left( w_{0} + \\sum_{i} w_{i}x_{i} \\right) $$Possiamo scrivere la probabilità di ogni singolo campione come in figura sotto\nFunzione di loss 🟩 Che sembra una cross-entropy classica, che però non ha una soluzione analitica, per questo motivo si utilizza **discesa del gradiente**. Ottimizzazione discesa del gradiente Intuizione sul gradiente 🟩 abbiamo alla fine che il gradiente è\n$$ \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} = \\sum_{l} x^{l}_{i} \\cdot (y^{l} - \\alpha^{l}) $$ Perché già $(y - \\alpha)$ sta misurando in un certo senso la differenza (l’errore), e il prodotto lo sta legando all’input preciso, quindi è molto bello quando la formula è interpretabile in modo fisico quasi.\n$$ \\nabla_{w} \\ell(w)(x, y) = [\\sigma(w \\cdot x) - y]x $$Calcolo del gradiente cross entropy 🟨++ $$ a^{l} = \\sigma\\left( w_{0} + \\sum_{i} x_{i}w_{i} \\right) = \\sigma(z) $$$$ \\sum_{l} \\log P(Y= y^{l} | x ^{l}, w) = \\sum_{l} y^{l}\\log(\\alpha^{l}) + (1- y^{l})(1 - \\log(\\alpha^{l})) $$ Dalla formula di sopra riscritta in altro modo.\nQuesto è esattamente poi quanto sarà fatto durante il percettrone, per l'aggiornamento delle variabili in quelle istanze. Fase update del gradiente 🟩 $$ \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} = \\sum_{l} (y^{l} - \\alpha^{l}) x^{l} $$ Possiamo usare questa per aggiornare il peso di $w_{i}$\n$$ w_{i} = w_{i} + \\mu \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} $$$$ w_{i} = w_{i} + \\mu \\frac{\\delta \\mathcal{L}(w)}{\\delta w_{i}} + \\mu \\lambda|w_{i}| $$ Che implica il fatto che se abbiamo un singolo peso grande, farà molta fatica ad esserci nel regolarizzatore (quindi ho meno varianza fra i pesi diciamo).\n",
+  "wordCount" : "575",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -236,7 +272,7 @@ $Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indi
     <h1 class="post-title entry-hint-parent">
       Logistic Regression
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -302,19 +338,14 @@ In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l&
 <p>Ci chiediamo come è fatto $P(Y|X)$?</p>
 <h4 id="caratterizzazione-di-pyx-">Caratterizzazione di P(Y|X) 🟨+<a hidden class="anchor" aria-hidden="true" href="#caratterizzazione-di-pyx-">#</a></h4>
 <p>Proviamo a calcolare analiticamente come è fatto $P(Y|X)$ usando le assunzioni di sopra</p>
-<p><strong>Theorem</strong>
-Assunte le cose di sopra si avrà che
-</p>
 $$
 P(Y=1| X= \left< x_{1},\dots, x_{n} \right> ) = \frac{1}{1 + \exp\left( w_{0} + \sum_{i} w_{i}x_{i} \right)}
-$$
-<img src="/images/notes/Logistic Regression-1697464292967.jpeg" alt="Logistic Regression-1697464292967">
+$$<img src="/images/notes/Logistic Regression-1697464292967.jpeg" alt="Logistic Regression-1697464292967">
 Nella derivazione di sopra si ha che $\pi = P(Y=1)$
 <p>E poi sappiamo che</p>
 $$
 \ln \frac{P(X_{i} | Y=0)}{P(X_{i} | Y=1)} = \ln \frac{e^{-\frac{(X_{i} - \mu_{i0})^{2}}{2 \sigma_{0}^{2}}}}{ e^{-\frac{(X_{i} - \mu_{i_{1}})^{2}}{2 \sigma_{1}^{2}}}} = -\frac{(X_{i} - \mu_{i0})^{2}}{2 \sigma_{i}^{2}} + \frac{(X_{i} - \mu_{i1})^{2}}{2 \sigma_{i}^{2}}
-$$
-<p>E si può notare che poi abbiamo il risultato di sopra e diventa sensato avere la forma di Sigmoid, che esce in modo molto molto naturale</p>
+$$<p>E si può notare che poi abbiamo il risultato di sopra e diventa sensato avere la forma di Sigmoid, che esce in modo molto molto naturale</p>
 <p>Dalla parte in blu capiamo che è una cosa <strong>lineare</strong>, perché se è maggiore di zero allora è meglio la probabilità di stare da una parte rispetto all&rsquo;altra.</p>
 <h4 id="funzione-di-sigmoid-">Funzione di Sigmoid 🟩<a hidden class="anchor" aria-hidden="true" href="#funzione-di-sigmoid-">#</a></h4>
 <img src="/images/notes/Logistic Regression-1697464563385.jpeg" width="400" alt="Logistic Regression-1697464563385">
@@ -323,18 +354,11 @@ $$
 \text{ Funzione di sigmoid: }\sigma(x) = \frac{1}{1 + e^{-x}} 
 $$
 Questa funzione si può vedere come un caso particolare di [Softmax Function](/notes/softmax-function).
-<p><strong>Derivata</strong>
-Si può calcolare che ha una derivata molto molto carina, ma è anche il problema per cui esiste <strong>vanishing gradient</strong>.
-</p>
 $$
 \sigma'(x) = \sigma(x) (1 - \sigma(x))
-$$
-<p>Quindi diventa vero che
-</p>
-$$
+$$$$
 P(Y=1|x,w) = \sigma\left( w_{0} + \sum_{i} w_{i}x_{i} \right)
-$$
-<p>Possiamo scrivere la probabilità di ogni singolo campione come in figura sotto</p>
+$$<p>Possiamo scrivere la probabilità di ogni singolo campione come in figura sotto</p>
 <h4 id="funzione-di-loss-">Funzione di loss 🟩<a hidden class="anchor" aria-hidden="true" href="#funzione-di-loss-">#</a></h4>
 <img src="/images/notes/Logistic Regression-1697462930410.jpeg" alt="Logistic Regression-1697462930410">
 Che sembra una cross-entropy classica, che però non ha una soluzione analitica, per questo motivo si utilizza **discesa del gradiente**.
@@ -343,44 +367,29 @@ Che sembra una cross-entropy classica, che però non ha una soluzione analitica,
 <p>abbiamo alla fine che il gradiente è</p>
 $$
 \frac{\delta \mathcal{L}(w)}{\delta w_{i}} = \sum_{l} x^{l}_{i} \cdot (y^{l} - \alpha^{l})
-$$
-<p>
+$$<p>
 Perché già $(y - \alpha)$ sta misurando in un certo senso la differenza (l&rsquo;errore), e il prodotto lo sta legando all&rsquo;input preciso, quindi è molto bello quando la formula è interpretabile in modo fisico quasi.</p>
-<p>Sometimes is clearer to write $\alpha$ in an explicit fashion:
-</p>
 $$
 \nabla_{w} \ell(w)(x, y) = [\sigma(w \cdot x) - y]x
-$$
-<h4 id="calcolo-del-gradiente-cross-entropy-">Calcolo del gradiente cross entropy 🟨++<a hidden class="anchor" aria-hidden="true" href="#calcolo-del-gradiente-cross-entropy-">#</a></h4>
+$$<h4 id="calcolo-del-gradiente-cross-entropy-">Calcolo del gradiente cross entropy 🟨++<a hidden class="anchor" aria-hidden="true" href="#calcolo-del-gradiente-cross-entropy-">#</a></h4>
 $$
 a^{l} = \sigma\left( w_{0} + \sum_{i} x_{i}w_{i} \right) = \sigma(z)
-$$
-$$
+$$$$
 \sum_{l} \log P(Y= y^{l} | x ^{l}, w) = \sum_{l} y^{l}\log(\alpha^{l}) + (1-  y^{l})(1 - \log(\alpha^{l}))
-$$
-<p>
+$$<p>
 Dalla formula di sopra riscritta in altro modo.</p>
 <img src="/images/notes/Logistic Regression-1697463186166.jpeg" alt="Logistic Regression-1697463186166">
 Questo è esattamente poi quanto sarà fatto durante il percettrone, per l'aggiornamento delle variabili in quelle istanze.
 <h4 id="fase-update-del-gradiente-">Fase update del gradiente 🟩<a hidden class="anchor" aria-hidden="true" href="#fase-update-del-gradiente-">#</a></h4>
-<p>Una volta calcolato che il valore di update è analiticamente uguale a
-</p>
 $$
 \frac{\delta \mathcal{L}(w)}{\delta w_{i}} = \sum_{l} (y^{l} - \alpha^{l}) x^{l}
-$$
-<p>
+$$<p>
 Possiamo usare questa per aggiornare il peso di $w_{i}$</p>
-<p><strong>Update step:</strong>
-</p>
 $$
 w_{i} = w_{i} + \mu \frac{\delta \mathcal{L}(w)}{\delta w_{i}} 
-$$
-<p>A volte viene aggiunto un <strong>fattore di regolarizzazione</strong> che fa diventare la regola di update come
-</p>
-$$
+$$$$
 w_{i} = w_{i} + \mu \frac{\delta \mathcal{L}(w)}{\delta w_{i}}  + \mu \lambda|w_{i}|
-$$
-<p>
+$$<p>
 Che implica il fatto che se abbiamo un singolo peso grande, farà molta fatica ad esserci nel regolarizzatore (quindi ho meno varianza fra i pesi diciamo).</p>
 
 
@@ -465,7 +474,8 @@ Che implica il fatto che se abbiamo un singolo peso grande, farà molta fatica a
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

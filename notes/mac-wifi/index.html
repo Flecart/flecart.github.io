@@ -7,11 +7,31 @@
 <meta name="robots" content="index, follow">
 <title>Mac Wifi | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🕸computer-networks">
-<meta name="description" content="Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
-Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione).">
+<meta name="description" content="Introduzione
+Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
+Obiettivi:
+
+Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi).
+
+Sia in tempo
+Sia in spazio (come gestire il segnale mandato nello stesso spazio)
+
+
+Utilizzo minimo di energia
+Quality of service
+Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione).
+Evitare segnale spaghetti o jammed
+
+Collisioni fanno sprecare energia ad entrambi (sia ricevente sia sender)
+bisogna trovare un metodo per fare risoluzione (controllare il sender riguardo la trasmissione, in quanto non sono in grado di trasmettere e ascoltare in modo contemporaneo)
+Questo si lega alla parte di arbitraggio del canale
+
+
+
+Ricordiamo che ethernet provava ad ascoltare il segnale e provare a trasmettere, si può utilizzare la stessa cosa anche qui? No, ethernet permetteva di ascolatare il segnale nel momento di generazione, mentre wifi non può, perché semplicemente il segnale prodotto localmente è molto più grande. Inoltre wifi ha anche bisogno di fare multiplexing sullo spazio non solo nel tempo come per l’ethernet.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/mac-wifi/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -60,7 +80,6 @@ Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof 
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -77,31 +96,55 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Mac Wifi" />
-<meta property="og:description" content="Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
-Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione)." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/mac-wifi/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/mac-wifi/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Mac Wifi">
+  <meta property="og:description" content="Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
+Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione). Evitare segnale spaghetti o jammed Collisioni fanno sprecare energia ad entrambi (sia ricevente sia sender) bisogna trovare un metodo per fare risoluzione (controllare il sender riguardo la trasmissione, in quanto non sono in grado di trasmettere e ascoltare in modo contemporaneo) Questo si lega alla parte di arbitraggio del canale Ricordiamo che ethernet provava ad ascoltare il segnale e provare a trasmettere, si può utilizzare la stessa cosa anche qui? No, ethernet permetteva di ascolatare il segnale nel momento di generazione, mentre wifi non può, perché semplicemente il segnale prodotto localmente è molto più grande. Inoltre wifi ha anche bisogno di fare multiplexing sullo spazio non solo nel tempo come per l’ethernet.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="🕸Computer-Networks">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Mac Wifi">
+<meta name="twitter:description" content="Introduzione
+Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
+Obiettivi:
+
+Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi).
+
+Sia in tempo
+Sia in spazio (come gestire il segnale mandato nello stesso spazio)
+
+
+Utilizzo minimo di energia
+Quality of service
+Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione).
+Evitare segnale spaghetti o jammed
+
+Collisioni fanno sprecare energia ad entrambi (sia ricevente sia sender)
+bisogna trovare un metodo per fare risoluzione (controllare il sender riguardo la trasmissione, in quanto non sono in grado di trasmettere e ascoltare in modo contemporaneo)
+Questo si lega alla parte di arbitraggio del canale
 
 
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Mac Wifi"/>
-<meta name="twitter:description" content="Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.
-Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione)."/>
+Ricordiamo che ethernet provava ad ascoltare il segnale e provare a trasmettere, si può utilizzare la stessa cosa anche qui? No, ethernet permetteva di ascolatare il segnale nel momento di generazione, mentre wifi non può, perché semplicemente il segnale prodotto localmente è molto più grande. Inoltre wifi ha anche bisogno di fare multiplexing sullo spazio non solo nel tempo come per l’ethernet.">
 
 
 <script type="application/ld+json">
@@ -130,7 +173,7 @@ Obiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof 
   "@type": "BlogPosting",
   "headline": "Mac Wifi",
   "name": "Mac Wifi",
-  "description": "Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.\nObiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione).",
+  "description": "Introduzione Ricordiamo che vogliamo cercare di arbitrare l’accesso al canale fisico sottostante. In questo momento andiamo ad assumere di avere già tutto l’impianto di trasmissione fisica che abbiamo in Tecnologia Wireless, Modulazione wireless Fisica del Wireless.\nObiettivi: Arbitraggio del singolo canale fisico (la tesi di dottorato del prof era su collision avoidance di wifi). Sia in tempo Sia in spazio (come gestire il segnale mandato nello stesso spazio) Utilizzo minimo di energia Quality of service Adaptive behaviour (come il 6G che vuole andare ad utilizzare AI per fare predizione). Evitare segnale spaghetti o jammed Collisioni fanno sprecare energia ad entrambi (sia ricevente sia sender) bisogna trovare un metodo per fare risoluzione (controllare il sender riguardo la trasmissione, in quanto non sono in grado di trasmettere e ascoltare in modo contemporaneo) Questo si lega alla parte di arbitraggio del canale Ricordiamo che ethernet provava ad ascoltare il segnale e provare a trasmettere, si può utilizzare la stessa cosa anche qui? No, ethernet permetteva di ascolatare il segnale nel momento di generazione, mentre wifi non può, perché semplicemente il segnale prodotto localmente è molto più grande. Inoltre wifi ha anche bisogno di fare multiplexing sullo spazio non solo nel tempo come per l’ethernet.\n",
   "keywords": [
     "🕸computer-networks"
   ],
@@ -579,7 +622,8 @@ Appena sentono un RTS, e se sanno la lunghezza del campo di trasmissione classic
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

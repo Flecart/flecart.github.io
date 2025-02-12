@@ -7,11 +7,19 @@
 <meta name="robots" content="index, follow">
 <title>Memoria virtuale | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="sistemi-operativi">
-<meta name="description" content="Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
-caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.">
+<meta name="description" content="Memoria virtuale
+Perché è utile la MV? 🟨-
+I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
+
+caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.
+Crescita dei segmenti stack, heap, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro.
+Gestione degli errori. che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo.
+
+Paginazione a richiesta 🟩—
+Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Livello OS.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/memoria-virtuale/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -60,7 +68,6 @@ caricamento codice dinamico Per esempio anche a caricare il codice di un compila
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -77,31 +84,43 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Memoria virtuale" />
-<meta property="og:description" content="Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
-caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/memoria-virtuale/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/memoria-virtuale/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Memoria virtuale">
+  <meta property="og:description" content="Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L’idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
+caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo. Crescita dei segmenti stack, heap, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro. Gestione degli errori. che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo. Paginazione a richiesta 🟩— Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Livello OS.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="Sistemi-Operativi">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Memoria virtuale">
+<meta name="twitter:description" content="Memoria virtuale
+Perché è utile la MV? 🟨-
+I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
 
+caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.
+Crescita dei segmenti stack, heap, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro.
+Gestione degli errori. che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo.
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Memoria virtuale"/>
-<meta name="twitter:description" content="Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.
-caricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo."/>
+Paginazione a richiesta 🟩—
+Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Livello OS.">
 
 
 <script type="application/ld+json">
@@ -130,7 +149,7 @@ caricamento codice dinamico Per esempio anche a caricare il codice di un compila
   "@type": "BlogPosting",
   "headline": "Memoria virtuale",
   "name": "Memoria virtuale",
-  "description": "Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L\u0026rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.\ncaricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.",
+  "description": "Memoria virtuale Perché è utile la MV? 🟨- I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L\u0026rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.\ncaricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo. Crescita dei segmenti stack, heap, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro. Gestione degli errori. che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo. Paginazione a richiesta 🟩— Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Livello OS.\n",
   "keywords": [
     "sistemi-operativi"
   ],
@@ -342,8 +361,7 @@ caricamento codice dinamico Per esempio anche a caricare il codice di un compila
 <p>Ma questo metodo qui è come se fosse uno swap pigro. (se un processo è vecchio, nel senso che non utilizza la pagina per tanto tempo, è probabile che la sua memoria è messa in memoria secondaria).</p>
 <blockquote>
 <p>il termine swap area per indicare l&rsquo;area del disco
-utilizzata per ospitare le pagine in memoria secondaria</p>
-</blockquote>
+utilizzata per ospitare le pagine in memoria secondaria</p></blockquote>
 <h2 id="algoritmi-di-rimpiazzamento">Algoritmi di rimpiazzamento<a hidden class="anchor" aria-hidden="true" href="#algoritmi-di-rimpiazzamento">#</a></h2>
 <p>AKA Paginazione.</p>
 <h3 id="obiettivo-del-rimpiazzamento-">Obiettivo del rimpiazzamento 🟩—<a hidden class="anchor" aria-hidden="true" href="#obiettivo-del-rimpiazzamento-">#</a></h3>
@@ -397,8 +415,7 @@ utilizzata per ospitare le pagine in memoria secondaria</p>
 <p>Però si può dimostrare che questo algo <strong>genera il minor numero di faults</strong>.</p>
 <blockquote>
 <p>Seleziona come pagina vittima una pagina che non sarà più
-acceduta o la pagina che verrà acceduta nel futuro più lontano</p>
-</blockquote>
+acceduta o la pagina che verrà acceduta nel futuro più lontano</p></blockquote>
 <p>È un buon algoritmo per utilizzare come paragone di altri algoritmi reali, cioè questi reali quanto bene fanno rispetto a questo algoritmo perfetto!</p>
 <ul>
 <li>
@@ -416,11 +433,10 @@ acceduta o la pagina che verrà acceduta nel futuro più lontano</p>
 <p>Ma solitamente questo, come FIFO, non è che venga utilizzata.</p>
 <p>Vado a considerare il concetto di <strong>frequenza</strong>, definita in questo modo: contatore / tempo di permanenza in memoria.</p>
 <h2 id="algoritmo-di-lru">Algoritmo di LRU<a hidden class="anchor" aria-hidden="true" href="#algoritmo-di-lru">#</a></h2>
-<p>Ne abbiamo parlato anche in architettura, qui: <a href="/notes/9.2.4-algoritmi-di-paginazione-(2)">9.2.4 Algoritmi di paginazione (2)</a>.</p>
+<p>Ne abbiamo parlato anche in architettura, qui: <a href="/notes/9.2.4-algoritmi-di-paginazione-%282%29">9.2.4 Algoritmi di paginazione (2)</a>.</p>
 <blockquote>
 <p>seleziona come pagina vittima la pagina che è stata usata meno
-recentemente nel passato</p>
-</blockquote>
+recentemente nel passato</p></blockquote>
 <p>In pratica provo a stimare l’utilizzo della pagina in base a quanti accessi abbia fatto in passato.</p>
 <ul>
 <li>
@@ -523,8 +539,7 @@ Ora abbiamo due casi: non c’è abbstanza spazio, o c’è ancora spazio:
 <h3 id="thrashing-">Thrashing 🟩<a hidden class="anchor" aria-hidden="true" href="#thrashing-">#</a></h3>
 <blockquote>
 <p>un processo (o un sistema) si dice che è in trashing quando spende
-più tempo per la paginazione che per l&rsquo;esecuzione</p>
-</blockquote>
+più tempo per la paginazione che per l&rsquo;esecuzione</p></blockquote>
 <p>Questo è quindi un effetto molto brutto! Va a finire che l&rsquo;intero sistema si impalli. <strong>rubano le pagine a vicenda,</strong> l&rsquo;effetto più classico è questo:  non riescono a tenere in memoria i frame utili a breve termine (perchè altri processi chiedono frame liberi) e quindi generano page fault ogni pochi passi di avanzamento) In pratica quasi ogni operazione è un page fault.</p>
 <p>Per evitare questo, massimo 2x memoria virtuale, altrimenti potrei andare in thrashing.</p>
 <ul>
@@ -538,8 +553,7 @@ più tempo per la paginazione che per l&rsquo;esecuzione</p>
 <h3 id="working-set-">Working set 🟩—<a hidden class="anchor" aria-hidden="true" href="#working-set-">#</a></h3>
 <blockquote>
 <p>si definisce working set di finestra Δ l&rsquo;insieme delle pagine accedute
-nei più recenti Δ riferimenti</p>
-</blockquote>
+nei più recenti Δ riferimenti</p></blockquote>
 <p>Questo è utile per <strong>stimare se il sistema è in thrashing</strong>. Questo è utile per avere un concetto di località delle pagine, vogliamo avere una stima delle pagine attualmente utili, e utilizziamo questo per andare a decidere se una pagina è ancora utile o meno.</p>
 <ul>
 <li>
@@ -643,7 +657,8 @@ nei più recenti Δ riferimenti</p>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

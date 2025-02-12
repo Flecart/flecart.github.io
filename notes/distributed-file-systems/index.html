@@ -8,10 +8,14 @@
 <title>Distributed file systems | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📓big-data">
 <meta name="description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.">
+Designing DFSs
+The Use Case
+Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
+Here, we would like to easily store petabytes of data in a single file, for example big datasets.
+Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/distributed-file-systems/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -60,7 +64,6 @@ Designing DFSs The Use Case Remember that the size of the files where heavily li
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -77,31 +80,39 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Distributed file systems" />
-<meta property="og:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/distributed-file-systems/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
 
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Distributed file systems"/>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/distributed-file-systems/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Distributed file systems">
+  <meta property="og:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
+Designing DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes. Here, we would like to easily store petabytes of data in a single file, for example big datasets. Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="📓Big-Data">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Distributed file systems">
 <meta name="twitter:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes."/>
+Designing DFSs
+The Use Case
+Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
+Here, we would like to easily store petabytes of data in a single file, for example big datasets.
+Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
 
 
 <script type="application/ld+json">
@@ -130,7 +141,7 @@ Designing DFSs The Use Case Remember that the size of the files where heavily li
   "@type": "BlogPosting",
   "headline": "Distributed file systems",
   "name": "Distributed file systems",
-  "description": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesigning DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.",
+  "description": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesigning DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes. Here, we would like to easily store petabytes of data in a single file, for example big datasets. Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.\n",
   "keywords": [
     "📓big-data"
   ],
@@ -389,8 +400,7 @@ Along side this pattern, the DataNode also sends every <strong>six hours</strong
 <li>Then the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn.</li>
 </ul>
 <blockquote>
-<p><em>It is informative to think about the interaction between HBase and HDFS. [&hellip;] Who is the client here? The RegionServer, which does co-habit with a DataNode. [&hellip;] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally <strong>without communicating with the NameNode</strong>: this is known as short-circuiting in HDFS.</em></p>
-</blockquote>
+<p><em>It is informative to think about the interaction between HBase and HDFS. [&hellip;] Who is the client here? The RegionServer, which does co-habit with a DataNode. [&hellip;] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally <strong>without communicating with the NameNode</strong>: this is known as short-circuiting in HDFS.</em></p></blockquote>
 <h5 id="write-">Write 🟩<a hidden class="anchor" aria-hidden="true" href="#write-">#</a></h5>
 <p>This operations is a little bit more complex and needs many machines to be organized with each other:</p>
 <ul>
@@ -539,7 +549,8 @@ I don&rsquo;t know what happens when a NameNode fails and you cannot access some
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

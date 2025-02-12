@@ -7,11 +7,16 @@
 <meta name="robots" content="index, follow">
 <title>Control Plane | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🕸computer-networks">
-<meta name="description" content="Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
-Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c&rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve.">
+<meta name="description" content="Tipologie di control plane
+La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
+
+Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c&rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione)
+Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di distance vector.
+
+Possono anche essere statici, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/control-plane/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -60,7 +65,6 @@ Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -77,31 +81,40 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Control Plane" />
-<meta property="og:description" content="Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
-Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c&rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/control-plane/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/control-plane/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Control Plane">
+  <meta property="og:description" content="Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
+Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c’è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di distance vector. Possono anche essere statici, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="🕸Computer-Networks">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Control Plane">
+<meta name="twitter:description" content="Tipologie di control plane
+La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
 
+Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c&rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione)
+Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di distance vector.
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Control Plane"/>
-<meta name="twitter:description" content="Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie
-Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c&rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve."/>
+Possono anche essere statici, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.">
 
 
 <script type="application/ld+json">
@@ -130,7 +143,7 @@ Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere
   "@type": "BlogPosting",
   "headline": "Control Plane",
   "name": "Control Plane",
-  "description": "Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie\nCentralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c\u0026rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve.",
+  "description": "Tipologie di control plane La control plane è la parte al livello di rete che si occupa di riempire le tabelle di istradamento dei router. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie\nCentralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le SDN ossia software defined networking di cui abbiamo parlato in Data Plane utilizzano questi metodi, c\u0026rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione) Distribuiti in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di distance vector. Possono anche essere statici, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.\n",
   "keywords": [
     "🕸computer-networks"
   ],
@@ -445,7 +458,8 @@ Centralizzati, anche chiamati algoritmi LS( Link state) perché devono conoscere
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

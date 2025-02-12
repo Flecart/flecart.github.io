@@ -8,11 +8,13 @@
 <title>k-esimo priority-q DSU | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🗄algorithms-and-data-structures">
 <meta name="description" content="Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
-7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi
-7.1.1 Note sull&rsquo;utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.">
+7.1 Introduzione al problema
+Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi
+7.1.1 Note sull&rsquo;utilizzo
+Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/k-esimo-priority-q-dsu/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -61,7 +63,6 @@
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -78,33 +79,39 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="k-esimo priority-q DSU" />
-<meta property="og:description" content="Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/k-esimo-priority-q-dsu/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="k-esimo priority-q DSU">
+  <meta property="og:description" content="Questo documento è totalmente concentrato sull’analisi del problema della selezione del k-esimo elemento.
 7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi
-7.1.1 Note sull&rsquo;utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/k-esimo-priority-q-dsu/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
-
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="k-esimo priority-q DSU"/>
+7.1.1 Note sull’utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="🗄Algorithms-and-Data-Structures">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="k-esimo priority-q DSU">
 <meta name="twitter:description" content="Questo documento è totalmente concentrato sull&rsquo;analisi del problema della selezione del k-esimo elemento.
-7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi
-7.1.1 Note sull&rsquo;utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto."/>
+7.1 Introduzione al problema
+Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi
+7.1.1 Note sull&rsquo;utilizzo
+Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.">
 
 
 <script type="application/ld+json">
@@ -133,7 +140,7 @@ if (!doNotTrack) {
   "@type": "BlogPosting",
   "headline": "k-esimo priority-q DSU",
   "name": "k-esimo priority-q DSU",
-  "description": "Questo documento è totalmente concentrato sull\u0026rsquo;analisi del problema della selezione del k-esimo elemento.\n7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi\n7.1.1 Note sull\u0026rsquo;utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.",
+  "description": "Questo documento è totalmente concentrato sull\u0026rsquo;analisi del problema della selezione del k-esimo elemento.\n7.1 Introduzione al problema Dato un array di elementi vogliamo cercare di trovare un modo efficiente per selezionare il k-esimo elemento, ossia un elemento che sia maggiore di k-1 elementi\n7.1.1 Note sull\u0026rsquo;utilizzo Questo algoritmo è utile per esempio per sapere cosa displayare in una pagina di ricerca, perché per esempio posso avere blocchi di tanta roba 140k, mentre ovviamente posso selezionare solamente un blocco ristretto.\n",
   "keywords": [
     "🗄algorithms-and-data-structures"
   ],
@@ -645,7 +652,8 @@ Ho più elementi di k - 1 minori di x dopo il partition, vado a cercare l&rsquo;
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

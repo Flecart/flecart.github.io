@@ -9,153 +9,236 @@
       <url>https://flecart.github.io/images/papermod-cover.png</url>
       <link>https://flecart.github.io/images/papermod-cover.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.143.1</generator>
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/probabilistic-artificial-intelligence/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Gaussian Processes</title>
-      <link>https://flecart.github.io/notes/gaussian-processes/</link>
+      <title>Active Learning</title>
+      <link>https://flecart.github.io/notes/active-learning/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/gaussian-processes/</guid>
-      <description>Gaussian processes can be viewed through a Bayesian lens of the function space: rather than sampling over individual data points, we are now sampling over entire functions. They extend the idea of bayesian linear regression by introducing an infinite number of feature functions for the input XXX.
-In geostatistics, Gaussian processes are referred to as kriging regressions, and many other models, such as Kalman Filters or radial basis function networks, can be understood as special cases of Gaussian processes.</description>
-    </item>
-    <item>
-      <title>Variational Inference</title>
-      <link>https://flecart.github.io/notes/variational-inference/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/variational-inference/</guid>
-      <description>With variational inference we want to find a good approximation of the posterior distribution from which it is easy to sample. The objective is to approximate the posterior with a simpler one, because sometimes the prior or likelihood are difficult to compute. $$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$ For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.</description>
-    </item>
-    <item>
-      <title>Markov Chains</title>
-      <link>https://flecart.github.io/notes/markov-chains/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/markov-chains/</guid>
-      <description>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
-$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
-Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente.</description>
-    </item>
-    <item>
-      <title>Monte Carlo Methods</title>
-      <link>https://flecart.github.io/notes/monte-carlo-methods/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/monte-carlo-methods/</guid>
-      <description>DI Law of Large Numbers e Central limit theorem ne parliamo in Central Limit Theorem and Law of Large Numbers. Usually these methods are useful when you need to calculate following something similar to Bayes rule, but don&amp;rsquo;t know how to calculate the denominator, often infeasible integral. We estimate this value without explicitly calculating that.
-Interested in $\mathbb{P}(x) = \frac{1}{z} \mathbb{P}^{*}(x) = \frac{1}{Z} e^{-E(x)}$ Can evaluate E(x) at any x.</description>
-    </item>
-    <item>
-      <title>RL Function Approximation</title>
-      <link>https://flecart.github.io/notes/rl-function-approximation/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/rl-function-approximation/</guid>
-      <description>These algorithms are good for scaling state spaces, but not actions spaces.
-The Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
-A simple parametrization 🟩 The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don&amp;rsquo;t need to explicitly explore every single state in the state space.</description>
+      <guid>https://flecart.github.io/notes/active-learning/</guid>
+      <description>&lt;p&gt;Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model?
+Gathering data is very costly, we would like to create some principled manner to choose the best data point to humanly label in order to have the best model.&lt;/p&gt;
+&lt;p&gt;In this setting, we are interested in the concept of &lt;strong&gt;usefulness of information&lt;/strong&gt;. One of our main goals is to &lt;em&gt;reduce uncertainty&lt;/em&gt;, thus, &lt;a href=&#34;https://flecart.github.io/notes/entropy/&#34;&gt;Entropy&lt;/a&gt;-based (mutual information) methods are often used.
+For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bayesian Linear Regression</title>
       <link>https://flecart.github.io/notes/bayesian-linear-regression/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/bayesian-linear-regression/</guid>
-      <description>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression Let&amp;rsquo;s start with a classical regression. In this setting we need to estimate a model that is generated from this kind of data: $$ y = w^{T}x + \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&amp;rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty.</description>
-    </item>
-    <item>
-      <title>Bayesian Optimization</title>
-      <link>https://flecart.github.io/notes/bayesian-optimization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/bayesian-optimization/</guid>
-      <description>While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.
-Definitions First we will introduce some useful definitions in this context.</description>
-    </item>
-    <item>
-      <title>Tabular Reinforcement Learning</title>
-      <link>https://flecart.github.io/notes/tabular-reinforcement-learning/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/tabular-reinforcement-learning/</guid>
-      <description>This note extends the content Markov Processes in this specific context.
-Standard notions Explore-exploit dilemma 🟩 We have seen something similar also in Active Learning when we tried to model if we wanted to look elsewhere or go for the maximum value we have found. The dilemma under analysis is the explore-exploit dilemma: whether if we should just go for the best solution we have found at the moment, or look for a better one.</description>
-    </item>
-    <item>
-      <title>On intuitive notions of probability</title>
-      <link>https://flecart.github.io/notes/on-intuitive-notions-of-probability/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/on-intuitive-notions-of-probability/</guid>
-      <description>This note will mainly attempt to summarize the introduction of some intuitive notions of probability used in common sense human reasoning. Most of what is said here is available here (Jaynes 2003).
-Three intuitive notions of probability Jaynes presents some forms of inference that are not possible in classical first order or propositional logic, yet they are frequent in human common sense reasoning. Let&amp;rsquo;s present some rules and some examples along them:</description>
-    </item>
-    <item>
-      <title>Maximum Entropy Principle</title>
-      <link>https://flecart.github.io/notes/maximum-entropy-principle/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/maximum-entropy-principle/</guid>
-      <description>The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam&amp;rsquo;s Razor, i.e. the principle of parsimony.
-Let&amp;rsquo;s start with a simple example taken from Andreas Kraus&amp;rsquo;s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:
-Consider a criminal trial with three suspects, A, B, and C. The collected evidence shows that suspect C can not have committed the crime, however it does not yield any information about sus- pects A and B.</description>
-    </item>
-    <item>
-      <title>Kernel Methods</title>
-      <link>https://flecart.github.io/notes/kernel-methods/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/kernel-methods/</guid>
-      <description>As we will briefly see, Kernels will have an important role in many machine learning applications. In this note we will get to know what are Kernels and why are they useful. Intuitively they measure the similarity between two input points. So if they are close the kernel should be big, else it should be small.
-We briefly state the requirements of a Kernel, then we will argue with a simple example why they are useful.</description>
-    </item>
-    <item>
-      <title>Planning</title>
-      <link>https://flecart.github.io/notes/planning/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/planning/</guid>
-      <description>There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence. In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&amp;rsquo;s called Model Predictive Control (MPC).
-There are a few ways in which the model-based approach is advantageous. First, if we have an accurate model of the environment, we can use it for planning. \[.</description>
-    </item>
-    <item>
-      <title>Markov Processes</title>
-      <link>https://flecart.github.io/notes/markov-processes/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/markov-processes/</guid>
-      <description>Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di Markov Chains prima di approcciare questo capitolo.
-Markov property Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.</description>
+      <description>&lt;p&gt;We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the &lt;em&gt;evidence&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;classical-linear-regression&#34;&gt;Classical Linear regression&lt;/h4&gt;
+$$
+y = w^{T}x + \varepsilon
+$$&lt;p&gt;
+Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&amp;rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called &lt;strong&gt;aleatoric uncertainty&lt;/strong&gt;.
+One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&amp;rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bayesian neural networks</title>
       <link>https://flecart.github.io/notes/bayesian-neural-networks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/bayesian-neural-networks/</guid>
-      <description>Robbins-Moro Algorithm The Algorithm the algorithm is very simple we do the following until convergence: set some learning rates that satisfy the Robbins Moro Conditions, choose a $w_{0}$ then update in the following way: $$ w_{n+1} = w_{n} - \alpha_{n} \Delta w_{n} $$ For example with $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$, and $\alpha_{t} = \frac{1}{t}$ they satisfy the condition (in practice we use a constant $\alpha$, but we lose the convergence guarantee by Robbins Moro).</description>
+      <description>&lt;h3 id=&#34;robbins-moro-algorithm&#34;&gt;Robbins-Moro Algorithm&lt;/h3&gt;
+&lt;h4 id=&#34;the-algorithm&#34;&gt;The Algorithm&lt;/h4&gt;
+$$
+w_{n+1} = w_{n} - \alpha_{n} \Delta w_{n}
+$$&lt;p&gt;For example with $\alpha_{0} &gt; \alpha_{1} &gt; \dots &gt; \alpha_{n} \dots$, and $\alpha_{t} = \frac{1}{t}$ they satisfy the condition (in practice we use a constant $\alpha$, but we lose the convergence guarantee by Robbins Moro).
+More generally, the Robbins-Moro conditions re:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$\sum_{n} \alpha_{n} = \infty$&lt;/li&gt;
+&lt;li&gt;$\sum_{n} \alpha_{n}^{2} &lt; \infty$
+Then the algorithm is guaranteed to converge to the best answer.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;One nice thing about this, is that we &lt;strong&gt;don&amp;rsquo;t need gradients&lt;/strong&gt;.
+But often we use gradient versions (stochastic gradient descent and similar), using auto-grad, see &lt;a href=&#34;https://flecart.github.io/notes/backpropagation/&#34;&gt;Backpropagation&lt;/a&gt;.
+But learning with gradients brings some drawbacks:&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Reinforcement Learning, a introduction</title>
-      <link>https://flecart.github.io/notes/reinforcement-learning-a-introduction/</link>
+      <title>Bayesian Optimization</title>
+      <link>https://flecart.github.io/notes/bayesian-optimization/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/reinforcement-learning-a-introduction/</guid>
-      <description>The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.
-Reinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward.</description>
+      <guid>https://flecart.github.io/notes/bayesian-optimization/</guid>
+      <description>&lt;p&gt;While &lt;a href=&#34;https://flecart.github.io/notes/active-learning/&#34;&gt;Active Learning&lt;/a&gt; looks for the most informative points to recover a &lt;em&gt;true&lt;/em&gt; underlying function, Bayesian Optimization is just interested to find the maximum of that function.
+In Bayesian Optimization, we ask for the best way to find &lt;em&gt;sequentially&lt;/em&gt; a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.&lt;/p&gt;
+&lt;h3 id=&#34;definitions&#34;&gt;Definitions&lt;/h3&gt;
+&lt;p&gt;First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Kalman Filters</title>
-      <link>https://flecart.github.io/notes/kalman-filters/</link>
+      <title>Gaussian Processes</title>
+      <link>https://flecart.github.io/notes/gaussian-processes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/kalman-filters/</guid>
-      <description>Here is a historical treatment on the topic: https://jwmi.github.io/ASM/6-KalmanFilter.pdf. Kalman Filters are defined as follows:
-We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a motion model and a sensor model:
-$$ \begin{cases} X_{t + 1} = FX_{t} + \varepsilon_{t} &amp; F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\ Y_{t} = HX_{t} + \eta_{t} &amp; H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y}) \end{cases} $$ Inference is just doing things with the Gaussians.</description>
+      <guid>https://flecart.github.io/notes/gaussian-processes/</guid>
+      <description>&lt;p&gt;Gaussian processes can be viewed through a Bayesian lens of the function space: rather than sampling over individual data points, we are now sampling over entire functions. They extend the idea of &lt;a href=&#34;https://flecart.github.io/notes/bayesian-linear-regression/&#34;&gt;bayesian linear regression&lt;/a&gt; by introducing an infinite number of feature functions for the input XXX.&lt;/p&gt;
+&lt;p&gt;In geostatistics, Gaussian processes are referred to as &lt;em&gt;kriging&lt;/em&gt; regressions, and many other models, such as &lt;a href=&#34;https://flecart.github.io/notes/kalman-filters/&#34;&gt;Kalman Filters&lt;/a&gt; or radial basis function networks, can be understood as special cases of Gaussian processes. In this framework, certain functions are more likely than others, and we aim to model this probability distribution.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Gaussians</title>
       <link>https://flecart.github.io/notes/gaussians/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/gaussians/</guid>
-      <description>Gaussians are one of the most important family of probability distributions. They arise naturally in the law of large numbers and have some nice properties that we will briefly present and prove here in this note. They are also quite common for Gaussian Processes and the Clustering algorithm. They have also something to say about Maximum Entropy Principle. The best thing if you want to learn this part actually well is section 2.</description>
+      <description>&lt;p&gt;Gaussians are one of the most important family of probability distributions.
+They arise naturally in the &lt;a href=&#34;https://flecart.github.io/notes/central-limit-theorem-and-law-of-large-numbers/&#34;&gt;law of large numbers&lt;/a&gt; and have some nice properties that we will briefly present and prove here in this note. They are also quite common for &lt;a href=&#34;https://flecart.github.io/notes/gaussian-processes/&#34;&gt;Gaussian Processes&lt;/a&gt; and the &lt;a href=&#34;https://flecart.github.io/notes/clustering/&#34;&gt;Clustering&lt;/a&gt; algorithm. They have also something to say about &lt;a href=&#34;https://flecart.github.io/notes/maximum-entropy-principle/&#34;&gt;Maximum Entropy Principle&lt;/a&gt;.
+The best thing if you want to learn this part actually well is section 2.3 of (Bishop 2006), so go there my friend :)&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Active Learning</title>
-      <link>https://flecart.github.io/notes/active-learning/</link>
+      <title>Kalman Filters</title>
+      <link>https://flecart.github.io/notes/kalman-filters/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/active-learning/</guid>
-      <description>Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? Gathering data is very costly, we would like to create some principled manner to choose the best data point to humanly label in order to have the best model.
-In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used.</description>
+      <guid>https://flecart.github.io/notes/kalman-filters/</guid>
+      <description>&lt;p&gt;Here is a historical treatment on the topic: &lt;a href=&#34;https://jwmi.github.io/ASM/6-KalmanFilter.pdf.&#34;&gt;https://jwmi.github.io/ASM/6-KalmanFilter.pdf.&lt;/a&gt;
+Kalman Filters are defined as follows:&lt;/p&gt;
+&lt;p&gt;We start with a variable $X_{0} \sim \mathcal{N}(\mu, \Sigma)$, then we have a &lt;em&gt;motion model&lt;/em&gt; and a &lt;em&gt;sensor model&lt;/em&gt;:&lt;/p&gt;
+$$
+\begin{cases}
+X_{t + 1} = FX_{t} + \varepsilon_{t}  &amp;  F \in \mathbb{R}^{d\times d}, \varepsilon_{t} \sim \mathcal{N}(0, \Sigma_{x})\\
+Y_{t} = HX_{t} + \eta_{t}  &amp;  H \in \mathbb{R}^{m \times d}, \eta_{t} \sim \mathcal{N}(0, \Sigma_{y})
+\end{cases}
+$$&lt;p&gt;Inference is just doing things with the &lt;a href=&#34;https://flecart.github.io/notes/gaussians/&#34;&gt;Gaussians&lt;/a&gt;.
+One can interpret the $Y$ to be the observations and $X$ to be the underlying beliefs about a certain state.
+We see that the Kalman Filters satisfy the &lt;em&gt;Markov Property&lt;/em&gt;, see &lt;a href=&#34;https://flecart.github.io/notes/markov-chains/&#34;&gt;Markov Chains&lt;/a&gt;.
+These independence properties allow a easy characterization of the joint distribution for Kalman Filters:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Kernel Methods</title>
+      <link>https://flecart.github.io/notes/kernel-methods/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/kernel-methods/</guid>
+      <description>&lt;p&gt;As we will briefly see, Kernels will have an important role in many machine learning applications. In this note we will get to know what are Kernels and why are they useful. Intuitively they measure the &lt;strong&gt;similarity&lt;/strong&gt; between two input points. So if they are close the kernel should be big, else it should be small.&lt;/p&gt;
+&lt;p&gt;We briefly state the requirements of a Kernel, then we will argue with a simple example why they are useful.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Markov Chains</title>
+      <link>https://flecart.github.io/notes/markov-chains/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/markov-chains/</guid>
+      <description>&lt;h3 id=&#34;introduzione-alle-catene-di-markov&#34;&gt;Introduzione alle catene di Markov&lt;/h3&gt;
+&lt;h4 id=&#34;la-proprietà-di-markov&#34;&gt;La proprietà di Markov&lt;/h4&gt;
+&lt;p&gt;Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:&lt;/p&gt;
+$$
+P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1})
+$$&lt;p&gt;
+Ossia posso scordarmi tutta la &lt;strong&gt;storia precedente&lt;/strong&gt;, mi interessa solamente lo stato precedente per sapere la probabilità attuale.&lt;/p&gt;
+&lt;p&gt;Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Markov Processes</title>
+      <link>https://flecart.github.io/notes/markov-processes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/markov-processes/</guid>
+      <description>&lt;p&gt;Andiamo a parlare di processi Markoviani. Dobbiamo avere bene a mente il contenuto di &lt;a href=&#34;https://flecart.github.io/notes/markov-chains/&#34;&gt;Markov Chains&lt;/a&gt; prima di approcciare questo capitolo.&lt;/p&gt;
+&lt;h3 id=&#34;markov-property&#34;&gt;Markov property&lt;/h3&gt;
+&lt;p&gt;Uno stato si può dire di godere della proprietà di Markov se, intuitivamente parlando, possiede già tutte le informazioni necessarie per predire lo stato successivo, ossia, supponiamo di avere la sequenza di stati $(S_n)_{n \in \mathbb{N}}$, allora si ha che $P(S_k | S_{k-1}) = P(S_k|S_0S_1...S_{k - 1})$, ossia lo stato attuale in $S_{k}$ dipende solamente dallo stato precedente.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Maximum Entropy Principle</title>
+      <link>https://flecart.github.io/notes/maximum-entropy-principle/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/maximum-entropy-principle/</guid>
+      <description>&lt;p&gt;The maximum entropy principle is one of the most important guiding motives in artificial artificial intelligence. Its roots emerge from a long tradition of probabilistic inference that goes back to Laplace and Occam&amp;rsquo;s Razor, i.e. the principle of parsimony.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start with a simple example taken from Andreas Kraus&amp;rsquo;s Lecture notes in the ETH course of Probabilistic Artificial Intelligence:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Consider a criminal trial with three suspects, A, B, and C. The
+collected evidence shows that suspect C can not have committed
+the crime, however it does not yield any information about sus-
+pects A and B. Clearly, any distribution respecting the data must
+assign zero probability of having committed the crime to suspect
+C. However, any distribution interpolating between (1, 0, 0) and
+(0, 1, 0) respects the data. The principle of indifference suggests
+that the desired distribution is $(\frac{1}{2}, \frac{1}{2}, 0)$, and indeed, any alterna-
+tive distribution seems unreasonable.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Monte Carlo Methods</title>
+      <link>https://flecart.github.io/notes/monte-carlo-methods/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/monte-carlo-methods/</guid>
+      <description>&lt;p&gt;DI Law of Large Numbers e Central limit theorem ne parliamo in &lt;a href=&#34;https://flecart.github.io/notes/central-limit-theorem-and-law-of-large-numbers/&#34;&gt;Central Limit Theorem and Law of Large Numbers&lt;/a&gt;.
+Usually these methods are useful when you need to calculate following something similar to Bayes rule, but don&amp;rsquo;t know how to calculate the denominator, often infeasible integral. We estimate this value without explicitly calculating that.&lt;/p&gt;
+&lt;p&gt;Interested in $\mathbb{P}(x) = \frac{1}{z} \mathbb{P}^{*}(x) = \frac{1}{Z} e^{-E(x)}$
+Can evaluate E(x) at any x.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Problem 1 Make samples x(r) ~ 2 P&lt;/li&gt;
+&lt;li&gt;Problem 2 Estimate expectations  $\Phi = \sum_{x}\phi(x)\mathbb{P}(x)$)
+What we&amp;rsquo;re not trying to do:&lt;/li&gt;
+&lt;li&gt;We&amp;rsquo;re not trying to find the most probable state.&lt;/li&gt;
+&lt;li&gt;We&amp;rsquo;re not trying to visit all typical states.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;law-of-large-numbers&#34;&gt;Law of large numbers&lt;/h3&gt;
+$$
+S_{n} = \sum^n_{i=1} x_{i} ,:, \bar{x}_{n} = \frac{S_{n}}{n}
+$$$$
+\bar{x}_{n} \to \mu
+$$&lt;p&gt;
+Ossia il limite converge sul valore atteso di tutte le variabili aleatorie.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>On intuitive notions of probability</title>
+      <link>https://flecart.github.io/notes/on-intuitive-notions-of-probability/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/on-intuitive-notions-of-probability/</guid>
+      <description>&lt;p&gt;This note will mainly attempt to summarize the introduction of some intuitive notions of probability used in common sense human reasoning. Most of what is said here is available here &lt;a href=&#34;https://www.cambridge.org/core/books/probability-theory/9CA08E224FF30123304E6D8935CF1A99&#34;&gt;(Jaynes 2003)&lt;/a&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;three-intuitive-notions-of-probability&#34;&gt;Three intuitive notions of probability&lt;/h4&gt;
+&lt;p&gt;Jaynes presents some forms of inference that are not possible in classical first order or propositional logic, yet they are frequent in human common sense reasoning.
+Let&amp;rsquo;s present some rules and some examples along them:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Planning</title>
+      <link>https://flecart.github.io/notes/planning/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/planning/</guid>
+      <description>&lt;p&gt;There is huge literature on planning. We will attack this problem from the view of probabilistic artificial intelligence.
+In this case we focus on continuous, fully observed with non-linear transitions, an environment often used for robotics. It&amp;rsquo;s called Model Predictive Control (MPC).&lt;/p&gt;
+&lt;blockquote&gt;
+\[...\]&lt;p&gt; Moreover, modeling uncertainty in our model of the environment can be extremely useful in deciding where to explore. Learning a model can therefore help to dramatically reduce the sample complexity over model-free techniques.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Reinforcement Learning, a introduction</title>
+      <link>https://flecart.github.io/notes/reinforcement-learning-a-introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/reinforcement-learning-a-introduction/</guid>
+      <description>&lt;p&gt;The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of &lt;strong&gt;actions&lt;/strong&gt; into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Reinforcement learning&lt;/strong&gt; (&lt;strong&gt;RL&lt;/strong&gt;) is an interdisciplinary area of &lt;a href=&#34;https://en.wikipedia.org/wiki/Machine_learning&#34;&gt;machine learning&lt;/a&gt; and &lt;a href=&#34;https://en.wikipedia.org/wiki/Optimal_control&#34;&gt;optimal control&lt;/a&gt; concerned with how an &lt;a href=&#34;https://en.wikipedia.org/wiki/Intelligent_agent&#34;&gt;intelligent agent&lt;/a&gt; ought to take &lt;a href=&#34;https://en.wikipedia.org/wiki/Action_selection&#34;&gt;actions&lt;/a&gt; in a dynamic environment in order to maximize the &lt;a href=&#34;https://en.wikipedia.org/wiki/Reward-based_selection&#34;&gt;cumulative reward&lt;/a&gt;. &lt;em&gt;~Wikipedia page&lt;/em&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>RL Function Approximation</title>
+      <link>https://flecart.github.io/notes/rl-function-approximation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/rl-function-approximation/</guid>
+      <description>&lt;p&gt;These algorithms are good for scaling state spaces, but not actions spaces.&lt;/p&gt;
+&lt;h3 id=&#34;the-gradient-idea&#34;&gt;The Gradient Idea&lt;/h3&gt;
+&lt;p&gt;Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in &lt;a href=&#34;https://flecart.github.io/notes/tabular-reinforcement-learning/&#34;&gt;Tabular Reinforcement Learning&lt;/a&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;a-simple-parametrization-&#34;&gt;A simple parametrization 🟩&lt;/h4&gt;
+&lt;p&gt;The idea here is to parametrize the value estimation function so that &lt;em&gt;similar inputs&lt;/em&gt; gets &lt;em&gt;similar values&lt;/em&gt; akin to &lt;a href=&#34;https://flecart.github.io/notes/parametric-modeling/&#34;&gt;Parametric Modeling&lt;/a&gt; estimation we have done in the other courses. In this manner, we don&amp;rsquo;t need to explicitly explore every single state in the state space.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Tabular Reinforcement Learning</title>
+      <link>https://flecart.github.io/notes/tabular-reinforcement-learning/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/tabular-reinforcement-learning/</guid>
+      <description>&lt;p&gt;This note extends the content &lt;a href=&#34;https://flecart.github.io/notes/markov-processes/&#34;&gt;Markov Processes&lt;/a&gt; in this specific context.&lt;/p&gt;
+&lt;h3 id=&#34;standard-notions&#34;&gt;Standard notions&lt;/h3&gt;
+&lt;h4 id=&#34;explore-exploit-dilemma-&#34;&gt;Explore-exploit dilemma 🟩&lt;/h4&gt;
+&lt;p&gt;We have seen something similar also in &lt;a href=&#34;https://flecart.github.io/notes/active-learning/&#34;&gt;Active Learning&lt;/a&gt; when we tried to model if we wanted to look elsewhere or go for the maximum value we have found.
+The dilemma under analysis is the &lt;strong&gt;explore-exploit&lt;/strong&gt; dilemma: whether if we should just go for the best solution we have found at the moment, or look for a better one.
+This also has implications in many other fields, also in normal human life there are a lot of balances in these terms.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Variational Inference</title>
+      <link>https://flecart.github.io/notes/variational-inference/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/variational-inference/</guid>
+      <description>$$
+p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda)
+$$&lt;p&gt;For &lt;a href=&#34;https://flecart.github.io/notes/bayesian-linear-regression/&#34;&gt;Bayesian Linear Regression&lt;/a&gt; we had high dimensional &lt;a href=&#34;https://flecart.github.io/notes/gaussians/&#34;&gt;Gaussians&lt;/a&gt; which made the inference &lt;em&gt;closed form&lt;/em&gt;, in general this is not true, so we need some kinds of approximation.&lt;/p&gt;
+&lt;h2 id=&#34;laplace-approximation&#34;&gt;Laplace approximation&lt;/h2&gt;
+&lt;h4 id=&#34;introduction-to-the-idea-&#34;&gt;Introduction to the Idea 🟩&lt;/h4&gt;
+$$
+\psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) + (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) + \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) + \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) 
+$$&lt;p&gt;
+We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

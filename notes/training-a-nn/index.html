@@ -7,12 +7,25 @@
 <meta name="robots" content="index, follow">
 <title>Training a NN | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
-Elementi di ripasso Training of NN How can we be sure that we can train well our function?
-Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!">
+<meta name="description" content="Ultima modifica: March 11, 2023 7:22 PM
+Primo Abbozzo: March 8, 2023 6:05 PM
+Studi Personali: No
+Elementi di ripasso
+Training of NN
+How can we be sure that we can train well our function?
+
+Dataset quality (this cannot be changed in training time)
+Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function.
+
+Training approaches
+
+Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways)
+Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!
+
+When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/training-a-nn/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -61,7 +74,6 @@ Dataset quality (this cannot be changed in training time) Models and parameters 
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -78,33 +90,50 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Training a NN" />
-<meta property="og:description" content="Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/training-a-nn/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Training a NN">
+  <meta property="og:description" content="Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
 Elementi di ripasso Training of NN How can we be sure that we can train well our function?
-Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/training-a-nn/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
+Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down! When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="No-Tags">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Training a NN">
+<meta name="twitter:description" content="Ultima modifica: March 11, 2023 7:22 PM
+Primo Abbozzo: March 8, 2023 6:05 PM
+Studi Personali: No
+Elementi di ripasso
+Training of NN
+How can we be sure that we can train well our function?
 
+Dataset quality (this cannot be changed in training time)
+Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function.
 
+Training approaches
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Training a NN"/>
-<meta name="twitter:description" content="Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No
-Elementi di ripasso Training of NN How can we be sure that we can train well our function?
-Dataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!"/>
+Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways)
+Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!
+
+When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.">
 
 
 <script type="application/ld+json">
@@ -133,12 +162,12 @@ Dataset quality (this cannot be changed in training time) Models and parameters 
   "@type": "BlogPosting",
   "headline": "Training a NN",
   "name": "Training a NN",
-  "description": "Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No\nElementi di ripasso Training of NN How can we be sure that we can train well our function?\nDataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \\theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down!",
+  "description": "Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No\nElementi di ripasso Training of NN How can we be sure that we can train well our function?\nDataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \\theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down! When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.\n",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No\nElementi di ripasso Training of NN How can we be sure that we can train well our function?\nDataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \\theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down! When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.\nSo if we have a step function, we can’t learn anything, this is not a good loss. This is the classic gradient descent, but the new thing is that we have optimizers, more on them later.\nThe standard Gradient descent uses the whole dataset to calculate the direction and module of descent. Usually this is quite expensive, why would we need to use all the data when a subset could be enough? And also, why can’t we use the last gradient to know where to go? There are the ideas for the next gradient descent methods.\nStochastic Gradient descent faster More noise Sometimes when we try to escape from the noise, we can add some noise, like having a bigger step function, and we can escape a local minima if we get to.\nMomentum This is the other type of gradient descent, we add a momentum factor something like\n$$ v_{t + 1} = \\mu\\nabla L(x) + \\alpha v_t $$ The first term is the gradient (direction term) the second is the momentum term.\nSlide on momentum\nA different kind of momentum is nesterov momentum that just calculates the gradient from the next point after we applied the momentum, and not before, this should be a little better because we are just going from the gradient direction in an offsetted point, and not changing the gradient with some heuristic, (non mi sono affatto spiegato bene qui, non credo infatti di averlo capito bene sto momentum)\nSlides nesterov\nBackpropagation This is the gradient descent for neural networks.\n",
-  "wordCount" : "404",
+  "articleBody": "Ultima modifica: March 11, 2023 7:22 PM Primo Abbozzo: March 8, 2023 6:05 PM Studi Personali: No\nElementi di ripasso Training of NN How can we be sure that we can train well our function?\nDataset quality (this cannot be changed in training time) Models and parameters of our model, we can describe it as $L(x, \\theta)$, and we try to minimize this function. Training approaches Random perturn weights, this is ispired by evolution, but it’s slow and not effective (and we can make things worse in many ways) Predict adjustments, usually we can analitically define what is the best way to minimize the loss, so we would like to follow that slope and go down! When we try to learn with the second method we usually follow the direction of a derivative (this is also an idea of gradient descent that we discussed in Metodi di Discesa.\nSo if we have a step function, we can’t learn anything, this is not a good loss. This is the classic gradient descent, but the new thing is that we have optimizers, more on them later.\nThe standard Gradient descent uses the whole dataset to calculate the direction and module of descent. Usually this is quite expensive, why would we need to use all the data when a subset could be enough? And also, why can’t we use the last gradient to know where to go? There are the ideas for the next gradient descent methods.\nStochastic Gradient descent faster More noise Sometimes when we try to escape from the noise, we can add some noise, like having a bigger step function, and we can escape a local minima if we get to.\nMomentum This is the other type of gradient descent, we add a momentum factor something like\n$$ v_{t + 1} = \\mu\\nabla L(x) + \\alpha v_t $$The first term is the gradient (direction term) the second is the momentum term.\nSlide on momentum\nA different kind of momentum is nesterov momentum that just calculates the gradient from the next point after we applied the momentum, and not before, this should be a little better because we are just going from the gradient direction in an offsetted point, and not changing the gradient with some heuristic, (non mi sono affatto spiegato bene qui, non credo infatti di averlo capito bene sto momentum)\nSlides nesterov\nBackpropagation This is the gradient descent for neural networks.\n",
+  "wordCount" : "403",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -294,8 +323,7 @@ Studi Personali: No</p>
 <p>This is the other type of gradient descent, we add a <strong>momentum factor</strong> something like</p>
 $$
 v_{t + 1} = \mu\nabla L(x) + \alpha v_t
-$$
-<p>The first term is the gradient (direction term) the second is the momentum term.</p>
+$$<p>The first term is the gradient (direction term) the second is the momentum term.</p>
 <ul>
 <li>
 <p>Slide on momentum</p>
@@ -393,7 +421,8 @@ $$
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

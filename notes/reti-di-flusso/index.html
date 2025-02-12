@@ -9,10 +9,14 @@
 <meta name="keywords" content="📈optimization">
 <meta name="description" content="Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).
 Un problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali
-Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati.">
+Note introduttive
+Rete, terminologia
+In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati.
+Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non  so se vale anche in questo caso).
+Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/reti-di-flusso/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
@@ -61,7 +65,6 @@ Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete
 
 
 
-
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -78,33 +81,41 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WW6NN2QGKF', { 'anonymize_ip': false });
-}
-</script>
-<meta property="og:title" content="Reti di flusso" />
-<meta property="og:description" content="Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/reti-di-flusso/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Reti di flusso">
+  <meta property="og:description" content="Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).
 Un problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali
-Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://flecart.github.io/notes/reti-di-flusso/" />
-<meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta property="article:section" content="notes" />
-
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png" />
-<meta name="twitter:title" content="Reti di flusso"/>
+Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati. Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non so se vale anche in questo caso). Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:tag" content="📈Optimization">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Reti di flusso">
 <meta name="twitter:description" content="Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).
 Un problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali
-Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati."/>
+Note introduttive
+Rete, terminologia
+In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati.
+Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non  so se vale anche in questo caso).
+Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.">
 
 
 <script type="application/ld+json">
@@ -133,12 +144,12 @@ Note introduttive Rete, terminologia In questo caso andiamo ad indicare con rete
   "@type": "BlogPosting",
   "headline": "Reti di flusso",
   "name": "Reti di flusso",
-  "description": "Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).\nUn problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali\nNote introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati.",
+  "description": "Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).\nUn problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali\nNote introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati. Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non so se vale anche in questo caso). Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.\n",
   "keywords": [
     "📈optimization"
   ],
-  "articleBody": "Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).\nUn problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali\nNote introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati. Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non so se vale anche in questo caso). Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.\nAbbiamo studiato questo nel corso di algoritmi, nella lezione sui Grafi.\nSbilanciamento Sbilanciamento, mi da informazione riguardo se il nodo vuole ricevere o dare fuori, quindi il fatto che sia negativo positivo può essere buona roba.\nNodi di input output e trasferimento Importante sapere cosa sono nodo di input, output e trasferimento e quando un nodo si può chiare in questo modo.\nCapacità inferiore e superiore Oltre a ciò possiamo definire capacità inferiore e superiore degli archi, e definire un concetto di ammissibilità di un trasferimento di un arco quando la quantità che ci passa rispetta queste condizioni.\nVincoli di un problema di flusso (3) 🟨+ Domanda e offerta globale Conservazione del flusso sol nodo locale Ammissibilità del flusso Slide\nIl perché si utilizzano grafi è perché sono espressivi per questo genere di problemi, ossia sono molto utili per modellizzare questo. E hanno una complessità gestibile perché sono stati molto studiati ed esistono algoritmi efficienti per questa(credo)\nNormalizzazione della capacità inferiore (3) 🟩- Si tratta in questa parte di trasformare il problema in un altro problema con le capacità inferiori nulle, basta considerare questa cosa nel calcolo della funzione obiettivo e rimodulare i valori degli archi (per capacità superiore).\nLe 3 cose per normalizzare\nTogliere l a capacità superiore Aggiungere l a b (così flusso si conserva Considerare il costo di questo flusso Cioè semplifico mettendo quanto deve passare per la capacità inferiore come flusso proveniente dall’esterno!\nSlide\nModelizzazione del flusso di costo minimo (!!!) (3) 🟨- Come si può notare la condizione è molto facile da scrivere.\nMinimizzare il costo $cx$, con x il vettore dei flussi, c il vettore dei costi Condizione di massimo flusso $\\forall i, 0\\leq x_i \\leq u_i$, con u il vettore dei massimi E tutte le condizioni di bilanciamento $Ex = b$ con E la matrice (probabilmente sparsa) che mi calcola l’incidenza (0, 1, -1 per dire esiste, entrata o uscita), che devono essere uguali a b. Condizione dei pozzi 🟩\nSpesso è molto buono idealizzare con un solo pozzo di entrata e un solo pozzo di uscita. Al fine di avere questo risultato si creano due pozzi aggiuntivi , uno che prende tutte le entrate e una che prende tutte le uscite\nSlide costruzione dei pozzi e sorgenti\nCondizione limiti di nodo🟨—\nPer modellizzare cose come i router, che sono sì dei nodi, ma hanno dei limiti per trasmettere e ricevere creiamo un nodo fittizio che sia in grado di rappresentare questo genere di occazioni\nslide\nProblema del flusso massimo Caratteristiche flusso max (3) 🟩 Slide definizione del problema\nDa notare che questo problema può essere visto come caso particolare di MCF in cui\nCosti sono nulli Sbilanciamenti sono nulli Presenza di arco fittizio con capacità infinita da target a source Tagli Definizione 🟩 Slide\nIn pratica è una partizione dei nodi di una rete.\nUn s-t taglioè un taglio in cui s e t stanno in partizioni differenti (dato che sono due le partizioni direi che stanno nelle due partizioni corrispondenti).\nAndiamo ora a caratterizzare gli archi.\nA+ attraversa da s a t\nA- attraversa da t a s.\nEsempio di Taglio\nI rossi sono A+, i verdi sono A-\nEsempio del prof più contorto\nProprietà !! (2) 🟩 Enunciato:\n$$ \\forall (s-t)\\text{-taglio} \\, (N_{s}, N_{t}) \\text{ e ogni flusso ammissibile } x \\text{ con valore } v: $$ Abbiamo che: $$ \\begin{cases} v = \\sum_{(i, j) \\in A^{+}(N_{s}, N_{t})} x_{ij} - \\sum_{(i, j) \\in A^{-} (N_{s}, N_{t})} x_{ij} \\\\ v \\leq \\sum_{(i, j) \\in A^{+}(N_{s}, N_{t})} u_{ij} \\end{cases} $$ Ossia il flusso è uguale a ciò che attraversa il taglio, e tutto questo è sempre minore alla capacità del taglio!\nDimostrazione\nPer 1 in pratica prende la differenza iniziale e riscrive i nodi di trasferimento (quindi input - output = 0) in altro modo per averlo nella forma che ci piace). Gli archi interni si cancellano fra di loro, gli archi esterni in Nt non vengono proprio contati, quindi possiamo andare a considerare solamente gli archi della frontiera quindi andiamo a finire in questo modo.\nDimo Slides\nFlusso e capacità del taglio 🟩 Le proprietà dei tagli spiegati in precedenza sono dei punti fondamentali per l’analisi di questo problema di flusso!.\nIl valore di un flusso ammissibile è sempre minore o uguale della capacità di qualunque taglio.\nAndremo a cercare un caso in cui il flusso = capacità. In quanto trovato questo taglio, questo è un flusso massimo! Per il lemma precedente non può crescere ancora.\nFord Fulkerson Andremo in questa parte ad introdurre alcuni concetti molto utili che ci porteranno alla definizione dell’algoritmo di Ford Fulkelson.\nGrafi residui 🟩 Utile per dirmi se possono ancora migliorare o meno in un arco.\nQuindi ci dà un concetto di flusso rimanente per un arco (termine mio questo) utilizzato per decidere se possiamo utilizzarlo o meno per migliorare qualcosa.\nSlide\nCammini aumentanti 🟩 Chiachiamo in questo modo i cammini nel grafo dei residui. Lo chiamiamo in questo modo perché ci permette di avere più flusso da s a t. In particolare lo utilizzo in questo modo\nSe è un arco discorde diminuisco il valore del flusso. Se è un arco concorde aumento il flusso. Il valore di aumento o diminuzione è il minimo del residuo fra tutti gli archi, questa cosa la chiamiamo capacità del cammino aumentante.\nL’algoritmo 🟩 L’algoritmo si traduce nel\nSetta flusso iniziale a 0 Prendi un cammino aumentante a caso, se esiste aggiungi al flusso il valore di cui è aumentato, altrimenti ritorna il flusso. Continua finché non esci. Slide\nCorrettezza 🟨 Per dimostrare la correttezza è spesso molto bello trovare l’invariante, in questo caso è il seguente lemma\nSe x è un flusso ammissibile, allora è ammissibile anche il flusso modificato con una iterazione dell’algoritmo. Se ho il flusso massimo, allora non posso trovare cammini aumentanti o flussi altri.\nSlide lemmi su flusso massimo e ammissibilità, con cammini aumentanti\nLemma fondamentale per correttezza, esistenza di taglio v\nNOTA: raggiungibili con un cammino aumentante!\nIntera dimostrazione insieme\nComplessità 🟨+ Possiamo dire che ha fine solo se ha capacità intere, altrimenti potrebbe essere che non termini mai. Il prof dice che questo algo dà troppa libertà per cui la complessità non è sotto controllo.\nTeorema e dimostrazione complessità casi interi\nMa questa è una complessità pseudo-polinomiale nel senso che è polinomiale solo se non si utilizza la compressione logaritmica nella rappresentazione degli interi (quindi polinomiale nel tempo, ma non nella rappresentazione in memoria).\nMa comunque il termine U ci è abbastanza brutto.\nMax Flow Min Cut (!) 🟩 Se riusciamo a dimostrare che il massimo flusso è ≥ di un taglio allora mettendo insieme al lemma sul upper bound del massimo flusso ho finito.\nUtilizziamo il risultato nella dimostrazione di FF, assumendo che abbiamo un flusso massimo, quindi non ci sono cammini aumentanti, allora abbiamo un taglio di capacità v, per cui ho finito.\nEnunciato e dimo\nEdmonds Karp Introduzione 🟩 Questo algoritmo non è altro che una implementazione di Ford_fulkerson. Quindi sappiamo già che sia corretta. Utilizza una bfs per trovare il cammino aumentante migliore.\nUtilizzando la bfs, quindi scegliemo sempre il percorso più corto questa è una delle proprietà di maggior rilievo per EK.\nLemma distanze di EK (non chiede dim) 🟨— Questo è un lemma che caratterizza fortemente EK, perché è una conseguenza della sua ricerca in BFS che trova gli archi critici più corti prima di quelli più lunghi.\nÈ anche fondamentale per fare il calcolo della complessità dell’algoritmo!\nEnunciato\nDimostrazione (non fatta in classe) preso dal cormen\nComplessità (!!) 🟨+ Il lemma di sopra ci permette di togliere il termine sulla capacità degli archi. Il motivo è che per il lemma precedente ogni arco può essere considerato al più |N| volte, con N il numero dei nodi. Quindi Applico BFS, per ogni arco, al più N volte, costo $O(NM^2)$\nHint dimostrazione\nAndiamo a considerare gli archi che vengono saturati durante il percorso di un cammino aumentante (questo esiste sempre perché il cammino aumentante è costruito sul minimo del percorso.\nVogliamo dire che ogni arco può essere al massimo considerato critico N volte, per cui al massimo ho NA.\nDopo aver fatto questa osservazione, bisogna andare a fare un ragionamento sulla distanza, che continua a crescere per ogni iterazione, e lo può fare per al massimo il numero di nodi, prima di diventare staccato.\nDimostrazione\nGoldberg-Tarjan Slide algoritmo\n!\n",
-  "wordCount" : "1531",
+  "articleBody": "Questi problemi sono una sottoclasse della programmazione lineare con variabili reali. (Alcuni riescono a riconoscere se un problema è in questa forma, e lo risolvono in modo istantaneo se questo succede).\nUn problema dei router è un classico problema di flusso, che si risolvono con questi algoritmi polinomiali\nNote introduttive Rete, terminologia In questo caso andiamo ad indicare con rete un grafo con $G = (N, A)$ con $N$ nodi e $A$ archi, che solitamente sono diretti con pesi associati. Possiamo interpretare gli archi come canali in cui fluiranno un qualcosa (ad esempio acqua in un tubo). Questi possono essere discreti o continui (mi sembra di ricordare che il discreto stranamente è più facile del continuo, non so se vale anche in questo caso). Abbiamo poi i nodi che sono punti di ingresso e uscita della nostra rete.\nAbbiamo studiato questo nel corso di algoritmi, nella lezione sui Grafi.\nSbilanciamento Sbilanciamento, mi da informazione riguardo se il nodo vuole ricevere o dare fuori, quindi il fatto che sia negativo positivo può essere buona roba.\nNodi di input output e trasferimento Importante sapere cosa sono nodo di input, output e trasferimento e quando un nodo si può chiare in questo modo.\nCapacità inferiore e superiore Oltre a ciò possiamo definire capacità inferiore e superiore degli archi, e definire un concetto di ammissibilità di un trasferimento di un arco quando la quantità che ci passa rispetta queste condizioni.\nVincoli di un problema di flusso (3) 🟨+ Domanda e offerta globale Conservazione del flusso sol nodo locale Ammissibilità del flusso Slide\nIl perché si utilizzano grafi è perché sono espressivi per questo genere di problemi, ossia sono molto utili per modellizzare questo. E hanno una complessità gestibile perché sono stati molto studiati ed esistono algoritmi efficienti per questa(credo)\nNormalizzazione della capacità inferiore (3) 🟩- Si tratta in questa parte di trasformare il problema in un altro problema con le capacità inferiori nulle, basta considerare questa cosa nel calcolo della funzione obiettivo e rimodulare i valori degli archi (per capacità superiore).\nLe 3 cose per normalizzare\nTogliere l a capacità superiore Aggiungere l a b (così flusso si conserva Considerare il costo di questo flusso Cioè semplifico mettendo quanto deve passare per la capacità inferiore come flusso proveniente dall’esterno!\nSlide\nModelizzazione del flusso di costo minimo (!!!) (3) 🟨- Come si può notare la condizione è molto facile da scrivere.\nMinimizzare il costo $cx$, con x il vettore dei flussi, c il vettore dei costi Condizione di massimo flusso $\\forall i, 0\\leq x_i \\leq u_i$, con u il vettore dei massimi E tutte le condizioni di bilanciamento $Ex = b$ con E la matrice (probabilmente sparsa) che mi calcola l’incidenza (0, 1, -1 per dire esiste, entrata o uscita), che devono essere uguali a b. Condizione dei pozzi 🟩\nSpesso è molto buono idealizzare con un solo pozzo di entrata e un solo pozzo di uscita. Al fine di avere questo risultato si creano due pozzi aggiuntivi , uno che prende tutte le entrate e una che prende tutte le uscite\nSlide costruzione dei pozzi e sorgenti\nCondizione limiti di nodo🟨—\nPer modellizzare cose come i router, che sono sì dei nodi, ma hanno dei limiti per trasmettere e ricevere creiamo un nodo fittizio che sia in grado di rappresentare questo genere di occazioni\nslide\nProblema del flusso massimo Caratteristiche flusso max (3) 🟩 Slide definizione del problema\nDa notare che questo problema può essere visto come caso particolare di MCF in cui\nCosti sono nulli Sbilanciamenti sono nulli Presenza di arco fittizio con capacità infinita da target a source Tagli Definizione 🟩 Slide\nIn pratica è una partizione dei nodi di una rete.\nUn s-t taglioè un taglio in cui s e t stanno in partizioni differenti (dato che sono due le partizioni direi che stanno nelle due partizioni corrispondenti).\nAndiamo ora a caratterizzare gli archi.\nA+ attraversa da s a t\nA- attraversa da t a s.\nEsempio di Taglio\nI rossi sono A+, i verdi sono A-\nEsempio del prof più contorto\nProprietà !! (2) 🟩 Enunciato:\n$$ \\forall (s-t)\\text{-taglio} \\, (N_{s}, N_{t}) \\text{ e ogni flusso ammissibile } x \\text{ con valore } v: $$$$ \\begin{cases} v = \\sum_{(i, j) \\in A^{+}(N_{s}, N_{t})} x_{ij} - \\sum_{(i, j) \\in A^{-} (N_{s}, N_{t})} x_{ij} \\\\ v \\leq \\sum_{(i, j) \\in A^{+}(N_{s}, N_{t})} u_{ij} \\end{cases} $$Ossia il flusso è uguale a ciò che attraversa il taglio, e tutto questo è sempre minore alla capacità del taglio!\nDimostrazione\nPer 1 in pratica prende la differenza iniziale e riscrive i nodi di trasferimento (quindi input - output = 0) in altro modo per averlo nella forma che ci piace). Gli archi interni si cancellano fra di loro, gli archi esterni in Nt non vengono proprio contati, quindi possiamo andare a considerare solamente gli archi della frontiera quindi andiamo a finire in questo modo.\nDimo Slides\nFlusso e capacità del taglio 🟩 Le proprietà dei tagli spiegati in precedenza sono dei punti fondamentali per l’analisi di questo problema di flusso!.\nIl valore di un flusso ammissibile è sempre minore o uguale della capacità di qualunque taglio.\nAndremo a cercare un caso in cui il flusso = capacità. In quanto trovato questo taglio, questo è un flusso massimo! Per il lemma precedente non può crescere ancora.\nFord Fulkerson Andremo in questa parte ad introdurre alcuni concetti molto utili che ci porteranno alla definizione dell’algoritmo di Ford Fulkelson.\nGrafi residui 🟩 Utile per dirmi se possono ancora migliorare o meno in un arco.\nQuindi ci dà un concetto di flusso rimanente per un arco (termine mio questo) utilizzato per decidere se possiamo utilizzarlo o meno per migliorare qualcosa.\nSlide\nCammini aumentanti 🟩 Chiachiamo in questo modo i cammini nel grafo dei residui. Lo chiamiamo in questo modo perché ci permette di avere più flusso da s a t. In particolare lo utilizzo in questo modo\nSe è un arco discorde diminuisco il valore del flusso. Se è un arco concorde aumento il flusso. Il valore di aumento o diminuzione è il minimo del residuo fra tutti gli archi, questa cosa la chiamiamo capacità del cammino aumentante.\nL’algoritmo 🟩 L’algoritmo si traduce nel\nSetta flusso iniziale a 0 Prendi un cammino aumentante a caso, se esiste aggiungi al flusso il valore di cui è aumentato, altrimenti ritorna il flusso. Continua finché non esci. Slide\nCorrettezza 🟨 Per dimostrare la correttezza è spesso molto bello trovare l’invariante, in questo caso è il seguente lemma\nSe x è un flusso ammissibile, allora è ammissibile anche il flusso modificato con una iterazione dell’algoritmo. Se ho il flusso massimo, allora non posso trovare cammini aumentanti o flussi altri.\nSlide lemmi su flusso massimo e ammissibilità, con cammini aumentanti\nLemma fondamentale per correttezza, esistenza di taglio v\nNOTA: raggiungibili con un cammino aumentante!\nIntera dimostrazione insieme\nComplessità 🟨+ Possiamo dire che ha fine solo se ha capacità intere, altrimenti potrebbe essere che non termini mai. Il prof dice che questo algo dà troppa libertà per cui la complessità non è sotto controllo.\nTeorema e dimostrazione complessità casi interi\nMa questa è una complessità pseudo-polinomiale nel senso che è polinomiale solo se non si utilizza la compressione logaritmica nella rappresentazione degli interi (quindi polinomiale nel tempo, ma non nella rappresentazione in memoria).\nMa comunque il termine U ci è abbastanza brutto.\nMax Flow Min Cut (!) 🟩 Se riusciamo a dimostrare che il massimo flusso è ≥ di un taglio allora mettendo insieme al lemma sul upper bound del massimo flusso ho finito.\nUtilizziamo il risultato nella dimostrazione di FF, assumendo che abbiamo un flusso massimo, quindi non ci sono cammini aumentanti, allora abbiamo un taglio di capacità v, per cui ho finito.\nEnunciato e dimo\nEdmonds Karp Introduzione 🟩 Questo algoritmo non è altro che una implementazione di Ford_fulkerson. Quindi sappiamo già che sia corretta. Utilizza una bfs per trovare il cammino aumentante migliore.\nUtilizzando la bfs, quindi scegliemo sempre il percorso più corto questa è una delle proprietà di maggior rilievo per EK.\nLemma distanze di EK (non chiede dim) 🟨— Questo è un lemma che caratterizza fortemente EK, perché è una conseguenza della sua ricerca in BFS che trova gli archi critici più corti prima di quelli più lunghi.\nÈ anche fondamentale per fare il calcolo della complessità dell’algoritmo!\nEnunciato\nDimostrazione (non fatta in classe) preso dal cormen\nComplessità (!!) 🟨+ Il lemma di sopra ci permette di togliere il termine sulla capacità degli archi. Il motivo è che per il lemma precedente ogni arco può essere considerato al più |N| volte, con N il numero dei nodi. Quindi Applico BFS, per ogni arco, al più N volte, costo $O(NM^2)$\nHint dimostrazione\nAndiamo a considerare gli archi che vengono saturati durante il percorso di un cammino aumentante (questo esiste sempre perché il cammino aumentante è costruito sul minimo del percorso.\nVogliamo dire che ogni arco può essere al massimo considerato critico N volte, per cui al massimo ho NA.\nDopo aver fatto questa osservazione, bisogna andare a fare un ragionamento sulla distanza, che continua a crescere per ogni iterazione, e lo può fare per al massimo il numero di nodi, prima di diventare staccato.\nDimostrazione\nGoldberg-Tarjan Slide algoritmo\n!\n",
+  "wordCount" : "1527",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -424,17 +435,12 @@ Abbiamo poi i <em>nodi</em> che sono <strong>punti di ingresso e uscita</strong>
 <p>Enunciato:</p>
 $$
 \forall (s-t)\text{-taglio} \, (N_{s}, N_{t}) \text{ e ogni flusso ammissibile } x \text{ con valore } v:
-$$
-<p>
-Abbiamo che:
-</p>
-$$
+$$$$
 \begin{cases}
 v = \sum_{(i, j) \in A^{+}(N_{s}, N_{t})} x_{ij} - \sum_{(i, j) \in A^{-} (N_{s}, N_{t})} x_{ij} \\
 v \leq \sum_{(i, j) \in A^{+}(N_{s}, N_{t})} u_{ij}
 \end{cases}
-$$
-<p>Ossia il <strong>flusso è uguale a ciò che attraversa il taglio</strong>, e tutto questo è sempre minore alla capacità del taglio!</p>
+$$<p>Ossia il <strong>flusso è uguale a ciò che attraversa il taglio</strong>, e tutto questo è sempre minore alla capacità del taglio!</p>
 <ul>
 <li>
 <p>Dimostrazione</p>
@@ -450,8 +456,7 @@ Gli archi interni si cancellano fra di loro, gli archi esterni in Nt non vengono
 <h3 id="flusso-e-capacità-del-taglio-">Flusso e capacità del taglio 🟩<a hidden class="anchor" aria-hidden="true" href="#flusso-e-capacità-del-taglio-">#</a></h3>
 <p>Le proprietà dei tagli spiegati in precedenza sono dei punti fondamentali per l’analisi di questo problema di flusso!.</p>
 <blockquote>
-<p><strong>Il valore di un flusso ammissibile è sempre minore o uguale della capacità di qualunque taglio</strong>.</p>
-</blockquote>
+<p><strong>Il valore di un flusso ammissibile è sempre minore o uguale della capacità di qualunque taglio</strong>.</p></blockquote>
 <p>Andremo a cercare un caso in cui <strong>il flusso = capacità</strong>. In quanto trovato questo taglio, questo è un flusso massimo! Per il lemma precedente non può crescere ancora.</p>
 <h2 id="ford-fulkerson">Ford Fulkerson<a hidden class="anchor" aria-hidden="true" href="#ford-fulkerson">#</a></h2>
 <p>Andremo in questa parte ad introdurre alcuni concetti molto utili che ci porteranno alla definizione dell’algoritmo di Ford Fulkelson.</p>
@@ -489,8 +494,7 @@ Gli archi interni si cancellano fra di loro, gli archi esterni in Nt non vengono
 <p>Per dimostrare la correttezza è spesso molto bello trovare l’invariante, in questo caso è il seguente lemma</p>
 <blockquote>
 <p>Se x è un flusso ammissibile, allora è ammissibile anche il flusso modificato con una iterazione dell’algoritmo.
-Se ho il flusso massimo, allora non posso trovare cammini aumentanti o flussi altri.</p>
-</blockquote>
+Se ho il flusso massimo, allora non posso trovare cammini aumentanti o flussi altri.</p></blockquote>
 <ul>
 <li>
 <p>Slide lemmi su flusso massimo e ammissibilità, con cammini aumentanti</p>
@@ -649,7 +653,8 @@ Se ho il flusso massimo, allora non posso trovare cammini aumentanti o flussi al
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span>
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
