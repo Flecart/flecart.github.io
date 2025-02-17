@@ -199,6 +199,53 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:
+Due Uno Uno Due Uno Due Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno
+Esempio 2 mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; int count = 0; void test(void *s) { for (int i = 0; i &lt; 100000; i&#43;&#43;) { count&#43;= 1; } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); printf(&#34;%d\n&#34;, count); } Vogliamo creare un modello teorico che riesca a rappresentare il concetto di processi concorrenti, questo è il modello concorrente
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Project Management
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Project, product management, project management Bisogna capire queste definizioni. Vedere https://dynamik.vercel.app/ingegneria-del-software/lucidi/13-gestione-del-progetto.pdf?from=informatica, slide 5 per definizione
+Progetto: inizia e finisce in tempo preciso. È importante comunque ricordare gli steps principali per il progetto ossia ideazione, creazione, mantenimento, rilascio, e poi morte, questo in genere è per qualunque progetto.
+Project Manager Compiti principali (costi e risorse) Vedere se il progetto è fattibile Allocare risorse Monitorare come sta andando. (preventivo e consuntivo). Work Breakdown structure Descrizione WBS È una suddivisione del progetto in piccoli sottoparti che si possono gestire in modo autonomo.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Project Management" href="https://flecart.github.io/notes/project-management/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Provably Approximately Correct Learning
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>PAC Learning is one of the most famous theories in learning theory. Learning theory concerns in answering questions like:
+What is learnable? Somewhat akin to La macchina di Turing for computability theory. How well can you learn something? PAC is a framework that allows to formally answer these questions. Now there is also a bayesian version of PAC in which there is a lot of research. Some definitions Empirical Risk Minimizer and Errors $$ \arg \min_{\hat{c} \in \mathcal{H}} \hat{R}_{n}(\hat{c}) $$ Where the inside is the empirical error.
+...</p>
+  </div>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Provably Approximately Correct Learning" href="https://flecart.github.io/notes/provably-approximately-correct-learning/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Proximal Policy Optimization
     </h2>
   </header>
@@ -225,56 +272,12 @@ Usually, PPO is explained as an actor critic framework. This means there is an a
   <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Proximal Polixy Optimization" href="https://flecart.github.io/notes/proximal-polixy-optimization/"></a>
 </article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Querying Denormalized Data
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>TODO: write the introduction to the note.
-JSONiq purports as an easy query language that could run everywhere. It attempts to solve common problems in SQL i.e. the lack of support for nested data structures and also the lack of support for JSON data types. A nice thing about JSONiq is that it is functional, which makes its queries quite powerful and flexible. It is also declarative and set-based. These are some commonalities with SQL.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Querying Denormalized Data" href="https://flecart.github.io/notes/querying-denormalized-data/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">R e Intervalli
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>2.1 Necessità e caratteristiche di R 2.1.1 Radici di N non perfetti e Q $\sqrt{n} \in \mathbb{Q} \implies n \text{ è quadrato perfetto}$
-Fai lemma della divisibilità fra due numeri
-Lemma: Dati $m,n,l$ tali che $MCD(m,l)=1$ e $l | m n$ allora allora $l | n$ Questo si risolve con ragionamenti sui fattori di m e n. Per dimostrare che è razionale la radice di solamente una radice perfetta parto da un numero razionale, faccio certi ragionamenti e scoprirò alla fine che il numero deve essere una radice perfetta.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to R e Intervalli" href="https://flecart.github.io/notes/r-e-intervalli/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Rademacher Complexity
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don’t know. Or search online
-Rademacher Complexity $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function.
-The Rademacher complexity captures the richness of a family of functions by measuring the degree to which a hypothesis set can fit random noise. From (Mohri et al. 2012).
-...</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Rademacher Complexity" href="https://flecart.github.io/notes/rademacher-complexity/"></a>
-</article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://flecart.github.io/notes/page/50/">
-      «&nbsp;Prev&nbsp;50/67
+      «&nbsp;Prev&nbsp;50/68
     </a>
-    <a class="next" href="https://flecart.github.io/notes/page/52/">Next&nbsp;52/67&nbsp;»
+    <a class="next" href="https://flecart.github.io/notes/page/52/">Next&nbsp;52/68&nbsp;»
     </a>
   </nav>
 </footer>
