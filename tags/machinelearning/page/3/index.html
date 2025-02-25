@@ -184,32 +184,100 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Logistic Regression
+    <h2 class="entry-hint-parent">Support Vector Machines
     </h2>
   </header>
   <div class="entry-content">
-    <p>Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
-Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.
-Introduzione al problema Supponiamo che
-$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l’approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?
+    <p>This is a quite good resource about this part of Support Vector Machines (step by step derivation). (Bishop 2006) chapter 7 is a good resource. The main idea about this supervised method is separating with a large gap. The thing is that we have a hyperplane, when this plane is projected to lower dimensional data, it can look like a non-linear separator. After we have found this separator, we can intuitively have an idea of confidence based on the distance of the separator.
 ...</p>
   </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Logistic Regression" href="https://flecart.github.io/notes/logistic-regression/"></a>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Support Vector Machines" href="https://flecart.github.io/notes/support-vector-machines/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Naïve Bayes
+    <h2 class="entry-hint-parent">The Perceptron Model
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione a Naïve Bayes NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.
-Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.
-Bayes ad alto livello 🟩 Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio ...</p>
+    <p>The perceptron is a fundamental binary linear classifier introduced by (Rosenblatt 1958). It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.
+The Mathematical Definition Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:
+$$ z = \mathbf{w}^\top \mathbf{x} &#43; b = \sum_{i=1}^{n} w_i x_i &#43; b $$where $b$ is the bias term. The output is determined by the Heaviside step function:
+...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Naïve Bayes" href="https://flecart.github.io/notes/na%C3%AFve-bayes/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to The Perceptron Model" href="https://flecart.github.io/notes/the-perceptron-model/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Transformers
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Transformers, introduced in NLP language translation in (Vaswani et al. 2017), are one of the cornerstones of modern deep learning. For this reason, it is quite important to understand how they are done.
+Introduction to Transformers Transformers are called in this manner because they transform the input data space into another with the same dimensionality.
+The goal of the transformation is that the new space will have a richer internal representation that is better suited to solving downstream tasks. (Bishop &amp; Bishop 2024)
+...</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Transformers" href="https://flecart.github.io/notes/transformers/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Variational Inference
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>$$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
+Laplace approximation Introduction to the Idea 🟩 $$ \psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.
+...</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Autoencoders
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono
+Introduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder. Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all’originale. Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione. Possiamo infatti osservare che se spazio latente = spazio originale, loss di ricostruzione = 0 perché basta imparare l’identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all’originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c’è una leggera perdita in questo senso.
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Autoencoders" href="https://flecart.github.io/notes/autoencoders/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Lagrange Multipliers
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This is also known as Lagrange Optimization or undetermined multipliers. Some of these notes are based on Appendix E of (Bishop 2006), others were found when studying bits of rational mechanics. Also (Boyd &amp; Vandenberghe 2004) chapter 5 should be a good resource on this topic.
+$$ \begin{array} \\ \min f_{0}(x) \\ \text{subject to } f_{i}(x) \leq 0 \\ h_{j}(x) = 0 \end{array} $$Lagrangian function $$ \mathcal{L}(x, \lambda, \nu) = f_{0}(x) &#43; \sum \lambda_{i}f_{i}(x) &#43; \sum\nu_{j}h_{j}(x) $$ We want to say something about this function, because it is able to simplify the optimization problem a lot, but first we want to study this mathematically.
+...</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Lagrange Multipliers" href="https://flecart.github.io/notes/lagrange-multipliers/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Backpropagation
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See colah’s blog. Karpathy has a nice resource for this topic too!
+...</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Backpropagation" href="https://flecart.github.io/notes/backpropagation/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -229,100 +297,30 @@ Datasets Example datasets Pascal VOC 2012 Coco datasets Cityscapes dataset Autog
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Parametric Modeling
+    <h2 class="entry-hint-parent">Naïve Bayes
     </h2>
   </header>
   <div class="entry-content">
-    <p>In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
-Short introduction to the statistical methods Bayesian 🟩 $$ p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) $$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.
-...</p>
+    <p>Introduzione a Naïve Bayes NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.
+Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.
+Bayes ad alto livello 🟩 Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio ...</p>
   </div>
-  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Parametric Modeling" href="https://flecart.github.io/notes/parametric-modeling/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Naïve Bayes" href="https://flecart.github.io/notes/na%C3%AFve-bayes/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Provably Approximately Correct Learning
+    <h2 class="entry-hint-parent">Alberi di decisione
     </h2>
   </header>
   <div class="entry-content">
-    <p>PAC Learning is one of the most famous theories in learning theory. Learning theory concerns in answering questions like:
-What is learnable? Somewhat akin to La macchina di Turing for computability theory. How well can you learn something? PAC is a framework that allows to formally answer these questions. Now there is also a bayesian version of PAC in which there is a lot of research. Some definitions Empirical Risk Minimizer and Errors $$ \arg \min_{\hat{c} \in \mathcal{H}} \hat{R}_{n}(\hat{c}) $$ Where the inside is the empirical error.
+    <p>Introduzione agli alberi di decisione Setting del problema 🟩- Spazio delle ipotesi Definizione spazio ipotesi 🟩— Per spazio delle ipotesi andiamo a considerare l’insieme delle funzioni rappresentabili dal nostro modello. Questo implica che l’allenamento ricerca l’ipotesi ossia la parametrizzazione ottimale del nostro modello, ottimale in quanto minimizza l’errore che viene compiuto nel training set.
+L’insieme iniziale si può anche considerare come inductive bias ossia il restringimento solamente a certe ipotesi e non tutte. Altrimenti abbiamo no free lunch.
 ...</p>
   </div>
-  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Provably Approximately Correct Learning" href="https://flecart.github.io/notes/provably-approximately-correct-learning/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Proximal Policy Optimization
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>(Schulman et al. 2017) è uno degli articoli principali che praticamente hanno dato via al campo. Anche questo è buono per Policy gradients:
-https://lilianweng.github.io/posts/2018-04-08-policy-gradient/
-Introduzione a PPO References [1] Schulman et al. “Proximal Policy Optimization Algorithms” arXiv preprint arXiv:1707.06347 2017
-</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Proximal Policy Optimization" href="https://flecart.github.io/notes/proximal-policy-optimization/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Rademacher Complexity
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don’t know. Or search online
-Rademacher Complexity $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function.
-The Rademacher complexity captures the richness of a family of functions by measuring the degree to which a hypothesis set can fit random noise. From (Mohri et al. 2012).
-...</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Rademacher Complexity" href="https://flecart.github.io/notes/rademacher-complexity/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Reti convoluzionali
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Abbiamo trattato i modelli classici in Convolutional NN. Con i vecchi files di notion
-Il Kernel I punti interessanti delle immagini sono solamente i punti di cambio solo che attualmente siamo in stato discreto, quindi ci è difficile usare una derivata, si usano kernel del tipo: $\left[ 1, 0, -1 \right]$, che sarà positivo se cresce verso sinistra, negativo se scende. feature map Sono delle mappe che rappresentano alcune informazioni interessanti della nostra immagine.
-...</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Reti convoluzionali" href="https://flecart.github.io/notes/reti-convoluzionali/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Softmax Function
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Softmax is one of the most important functions for neural networks. It also has some interesting properties that we list here. This function is part of The Exponential Family, one can also see that the sigmoid function is a particular case of this softmax, just two variables. Sometimes this could be seen as a relaxation of the action potential inspired by neuroscience (See The Neuron for a little bit more about neurons). This is because we need differentiable, for gradient descent. The action potential is an all or nothing thing.
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Softmax Function" href="https://flecart.github.io/notes/softmax-function/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Support Vector Machines
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This is a quite good resource about this part of Support Vector Machines (step by step derivation). (Bishop 2006) chapter 7 is a good resource. The main idea about this supervised method is separating with a large gap. The thing is that we have a hyperplane, when this plane is projected to lower dimensional data, it can look like a non-linear separator. After we have found this separator, we can intuitively have an idea of confidence based on the distance of the separator.
-...</p>
-  </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Support Vector Machines" href="https://flecart.github.io/notes/support-vector-machines/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Alberi di decisione" href="https://flecart.github.io/notes/alberi-di-decisione/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

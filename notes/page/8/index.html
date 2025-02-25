@@ -199,148 +199,146 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Cook-Levin and Savitch
+    <h2 class="entry-hint-parent">Variational Inference
     </h2>
   </header>
   <div class="entry-content">
-    <p>Cook Levin theorem is important because says that in 1971 if $SAT \in P$ then $NP = P$. We will start with this idea to define the concept of NP-completeness. Let’s start with the basics.
-Poly-reduction Def: poly-reduction🟩 $$ x \in L&#39; \iff f(x) \in L $$ This is very similar to the Halting Theorem and Reducibility#Mapping reducibility. The difference is that it needs to be polynomially-bounded, so to say, it is efficient function.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cook-Levin and Savitch" href="https://flecart.github.io/notes/cook-levin-and-savitch/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Cookie e autenticazione
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Cookies Gli utilizzi più soliti sono per Autenticazione e per Autorizzazione, perché sono delle informazioni che il server genera e mette al client, come se fossero dei segreti cifrati.
-Cookie Questi sono una estensione di netscape, che si appoggiano al protocollo HTTP per implementare certe funzionalità (soprattutto il fatto di essere stateless, quindi è utile per avere informazioni sugli stati su qualcosa.)
-Slide cookie
-Vengon utilizzati header specifici per settare il cookie.
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cookie e autenticazione" href="https://flecart.github.io/notes/cookie-e-autenticazione/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Corrente Elettrica
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Introduzione alla corrente elettrica Considerazioni generali Elettroni liberi nei materiali Ricorda che è un reticolo cristallino, con un elettrone nell’ultimo orbitale poco legato, quindi facilmente ionizzabile, in cui gli elettroni si possono muovere facilmente, e abbiamo che $n \approx 8.5 \times 10^{28} \frac{e^{-}}{m^{3}}$ nel rame Per l’argento abbiamo 5.9 con stesso ordine di grandezza.
-Velocità media elettroni senza campo elettrico 🟩 $$ \vec{v}_{m} = \sum_{i = 1} ^{N} \frac{\vec{v}_{i}}{N} = 0 $$$$ \frac{1}{2} m_{e} v^{2} = \frac{3}{2} k T $$ Con $k = 1.38 \times 10 ^{-23} J / K$ questo da studiare in altro posto…
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Corrente Elettrica" href="https://flecart.github.io/notes/corrente-elettrica/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Costraint Satisfaction Problems
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Definizione Caratteristiche Variabili Dominio per ogni variabile Costraints per ogni variabile Queste tre sono elementi che definiscono un problema di soddisfazione delle restrizioni, una soluzione è un assegnamento di variabili che soddisfi ogni restrizioone e sia all’interno del dominio
-Consistenza Vogliamo andare a limitare il dominio valutando le consistenze possibili
-Consistenza del punto Si può dire che un punto sia consistente se le sue variabili possibili non viola nessuna restrizione unaria: eg. se ho N e ho la restrizione n ≥ 0, allora avere tutto N è inconsistente nel punto.
-...</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Costraint Satisfaction Problems" href="https://flecart.github.io/notes/costraint-satisfaction-problems/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Counterfactual Invariance
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p> Machine learning cannot distinguish between causal and environment features.
-Shortcut learning Often we observe shortcut learning: the model learns some dataset dependent shortcuts (e.g. the machine that was used to take the X-ray) to make inference, but this is very brittle, and is not usually able to generalize.
-Shortcut learning happens when there are correlations in the test set between causal and non-causal features. Our object of interest should be the main focus, not the environment around, in most of the cases. For example, a camel in a grass land should still be recognized as a camel, not a cow. One solution could be engineering invariant representations which are independent of the environment. So having a kind of encoder that creates these representations.
+    <p>$$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
+Laplace approximation Introduction to the Idea 🟩 $$ \psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.
 ...</p>
   </div>
   <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Counterfactual Invariance" href="https://flecart.github.io/notes/counterfactual-invariance/"></a>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Cross Validation and Model Selection
+    <h2 class="entry-hint-parent">Wide Column Storage
     </h2>
   </header>
   <div class="entry-content">
-    <p>There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
-How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.
+    <p>Introduction to Wide Column Storages One of the bottlenecks of traditional relational databases is the speed of the Joints, which could be done in $\mathcal{O}(n)$ using a merge join, assuming some indexes are present which make the keys already sorted. The other solution, of just using Distributed file systems, is also not optimal: they have usually a high latency, with high throughput, that is not optimal with the series of small files that it is optimized for. While Object Storages, do not have APIs that could be helpful -&gt; richer logical model.
+...</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Wide Column Storage" href="https://flecart.github.io/notes/wide-column-storage/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Introduction to Decentralized Finance
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Financial Markets Uses of Financial Markets In this section, we answer the question of what financial markets are for.
+Raising capital Equity and Dept: Equity is ownership in a company, while debt is a loan. (there is also a mezzanine). Price discovery: The process of determining the price of an asset in the marketplace. Liquidity: pooling people together to have an ease of access to these assets. Risk management: Managing the risk of the assets. Risks could be: inflation (uncertainty on the value of the money), interest rate (uncertainty on the value of the money), credit risk (uncertainty on the value of the money), market risk (uncertainty on the value of the money), etc. This allows hedging risks. They have a role in economic growth (this is economic theory, we won’t delve into this). The Shareholders of the market Investors: People that provide capital to governments and companies in exchange of bonds or stocks Intermediaries: organizations that facilitate these kinds of exchanges Market data providers: we can see these as intermediaries that sell data about markets (they usually sell licenses, for example Bloomberg does this). Issuers: organizations that sell financial assets. Regulators: ensure the market is fair and is working properly (usually government agencies that create the rules). For example, it is quite difficult to get into the market, from a regulatory point of view. Collateral and Over-Collateralization Collateral refers to assets or property that a borrower pledges to a lender as security for a loan. If the borrower fails to repay, the lender has the right to seize or sell the collateral to recover the outstanding debt.
+...</p>
+  </div>
+  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduction to Decentralized Finance" href="https://flecart.github.io/notes/introduction-to-decentralized-finance/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Notazione Asintotica
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione alla notazione asintotica Cercare di definire il tempo impiegato da una funzione per essere eseguita in termini di DIMENSIONE dell’input. **(il numero di bit a livello basso basso)
+Ma abbiamo il problema di misura, in quanto dobbiamo considerare delle variabili che siano indipendenti rispetto alla macchina.
+Caratteristiche della notazione Vogliamo considerare una notazione asintotica (che guarda quanto fa il comportamento verso l’infinito)
+### Accesso di memoria Ogni operazione in un processore moderno ha in generale un numero di accessi in memoria constante (solitamente abbiamo sempre un numero fissato di operandi possibile, questo significa che se un certo algoritmo ha una certa complessità, resta di questa complessità anche tenendo in considerazione le operazioni di accesso di memoria). Questo discorso non tiene più se teniamo in considerazione numeri a precisione infinita, che possono avere un numero arbitrario di accessi in memoria per poter essere computato.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Notazione Asintotica" href="https://flecart.github.io/notes/notazione-asintotica/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cloud Computing Services
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Cloud Computing: An Overview Key Players in the Cloud Industry The cloud computing market is dominated by several major providers, often referred to as the “Big Seven”:
+Amazon Web Services (AWS): The largest provider, offering a comprehensive suite of cloud services. Microsoft Azure: Known for deep integration with enterprise systems and hybrid cloud solutions. Google Cloud Platform (GCP): Excels in data analytics, AI/ML, and Kubernetes-based solutions. IBM Cloud: Focuses on hybrid cloud and enterprise-grade AI. Oracle Cloud: Specializes in database solutions and enterprise applications. Alibaba Cloud: The leading provider in Asia, offering services similar to AWS. Salesforce: A major player in SaaS, particularly for CRM and business applications.
+These providers collectively control the majority of the global cloud infrastructure market, enabling scalable and on-demand computing resources for businesses worldwide. Capital and Operational Expenses in the Cloud Cloud computing transforms traditional IT cost structures by shifting expenses from capital expenditures (CapEx), such as purchasing servers and data centers, to operational expenditures (OpEx), where users pay only for the resources they consume.
+...</p>
+  </div>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cloud Computing Services" href="https://flecart.github.io/notes/cloud-computing-services/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Campo elettrico
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione Intuizione del campo elettrostatico Elettrostatico vs elettrodinamico 🟩 Andiamo a chiamare elettrostatico perché nel nostro caso non si sta muovendo nessuna carica all’itnerno di questo campo.
+Proprietà del campo elettrostatico (5) 🟨 Le linee di forza in ogni punto dello spazio sono tangenti e concorde al campo in quel punto; le linee di forza si addensano dove l’intensità del campo e maggiore; le linee di forza non si incrociano mai, in quanto in ogni punto il campo è definito univocamente e non può avere due direzioni distinte. le linee di forza hanno origine dalle cariche positive e terminano sul cariche negative; qualora ci siano solo cariche dello stesso segno le linee di forza si chiudono all’ infinito; nel caso di cariche di segno opposto, ma eguali in modulo, tutte le linee the partono dalle cariche positive si chiudono su quelle negative (induzione completa), alcune passando eventualmente per l’infinito; se invece le cariche non sono eguali in modulo, alcune linee terminano o provengono dall’ infinito. Carica esploratrice 🟩 È anche chiamata carica di prova, è una carica fittizia messa per esplorare la struttura del campo elettrico in un certo spazio
 ...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cross Validation and Model Selection" href="https://flecart.github.io/notes/cross-validation-and-model-selection/"></a>
+  <a class="entry-link" aria-label="post link to Campo elettrico" href="https://flecart.github.io/notes/campo-elettrico/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">CSS
+    <h2 class="entry-hint-parent">Leggi di Ohm
     </h2>
   </header>
   <div class="entry-content">
-    <p>Cascading Style Sheets Inizialmente HTML era per la presentazione, abbiamo ancora un pò di attributi storici e tag storici per questa parte di presentazione descritto in Markup.
-Introduzione È un linguaggio indipendente per la descrizione della grafica. La cosa bella è iil fatto di essere indipendente, quindi è adatto a HTML, a XML e simili.
-Una cosa particolare è il cascading quindi il fatto che dichiarazioni più nuove sovrascrivano o espandino dichiarazione vecchie.
+    <p>Gli argomenti della lezione 31 Ottobre sono circa da pagina 164 fino a 185 del mazzoldi.
+Leggi di Ohm Introduzione microscopica 🟩 Sappiamo che $$ \vec{J} = -n e \vec{v}_{d} ne^{2} t \frac{\vec{E}}{m} $$ Vedi analisi della velocità di deriva col modello del 1900 in Corrente Elettrica.
+Dove abbiamo utilizzato la definizione di densità di corrente e la velocità fra collisioni ed altre Questo è una motivazione per considerare la densità di corrente come se fosse nello stesso verso.
 ...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to CSS" href="https://flecart.github.io/notes/css/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Leggi di Ohm" href="https://flecart.github.io/notes/leggi-di-ohm/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Cubes
+    <h2 class="entry-hint-parent">Potenziale Elettrostatico
     </h2>
   </header>
   <div class="entry-content">
-    <p>Data Cubes is a data format especially useful for heavy reads. It has been popularized in business environments where the main use for data was to make reports (many reads). This also links with the OLAP (Online Analytical Processing) vs OLTP (Online Transaction Processing) concepts, where one is optimized for reads and the other for writes.
-The main driver behind data cubes was business intelligence. While traditional relational database systems are focused on the day-to-day business of a company and record keeping (with customers placing or- ders, inventories kept up to date, etc), business intelligence is focused on the production of high-level reports for supporting C-level executives in making informed decisions.
+    <p>Introduzione al potenziale elettrostatico Abbiamo studiato in dinamica che il potenziale è un concetto strettamente legato al Lavoro, ossia dalla quantità di energia necessaria per spostare un oggetto da un punto all’altro, vogliamo cercare di definire le relazioni che intercorrono nel caso della forza elettromagnetica
+Rotore nullo =&gt; forza conservativa 🟩 $$ \vec{\nabla} \times \vec{F} \implies \vec{F} \text{ è una forza conservativa} $$$$ \oint_{L} \vec{F} \cdot d\vec{l} = \iint_{S} \vec{\nabla} \times \vec{F} \,d\vec{s} $$ E se abbiamo che il rotore è nullo, allora la forza è conservativa perché per definizione è conservativa se non dipende dal percorso, e la cosa che un circuito chiuso è sufficiente per dimostrare il sopra.
 ...</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Cubes" href="https://flecart.github.io/notes/data-cubes/"></a>
+  <a class="entry-link" aria-label="post link to Potenziale Elettrostatico" href="https://flecart.github.io/notes/potenziale-elettrostatico/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Models and Validation
+    <h2 class="entry-hint-parent">Central Limit Theorem and Law of Large Numbers
     </h2>
   </header>
   <div class="entry-content">
-    <p> A data model is an abstract view over the data that hides the way it is stored physically.
-The same idea from (Codd 1970) This is why we should not modify data directly, but pass though some abstraction that maintain the properties of that specific data model.
-Data Models Tree view 🟩 We can view all JSON and XML data, as presented in Markup, as trees. This structure is usually quite evident, as it is inherent in their design. Converting from the tree structure to a memory model is known as serialization, while the reverse process is called parsing.
+    <p>Bounds Markov Bound $$ P(X \geq y) \leq \frac{E[X]}{y} $$$$ yP(X \geq y) = y\int _{x =y}^{&#43;\infty} f(x) \, dx \leq \int _{x=y}^{&#43;\infty} x f(x) \, d \leq \int _{-\infty}^{&#43;\infty}xf(x) \, d = E[X] $$ Il che finisce la dimostrazione.
+Chebychev Bound $$ P(\lvert x - E[X] \rvert \geq y) \leq \frac{\sigma^{2}}{y^{2}} $$ E in pratica dice che all’infinito viene tutto compattata sul valore atteso La dimostrazione è abbastanza semplice, si sostituisce $(x - E[X])^{2}$ su $X$ di Markov e $\varepsilon^{2}$ a $y$ e poi si dovrebbe già avere il risultato
 ...</p>
   </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Models and Validation" href="https://flecart.github.io/notes/data-models-and-validation/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Central Limit Theorem and Law of Large Numbers" href="https://flecart.github.io/notes/central-limit-theorem-and-law-of-large-numbers/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Plane
+    <h2 class="entry-hint-parent">Equazioni non lineari
     </h2>
   </header>
   <div class="entry-content">
-    <p>Introduzione Data or Control plane come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
-Funzioni principali Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane.
+    <p>Per trovare i zeri di una funzione continua non lineare non esistono alcuni metodi diretti che ci portano subito a una soluzione. Per questo motivo andremo ad analizzare molteplici pasis iterativi per trovare i zeri di una funzione.
+La discussione di convergenza di ordine p è stata già discussa nelle note introduttive convergenza e iterazione, per quanto riguarda i metodi iterativi per risolvere sistemi di equazioni lineari
+Globale e local Ricordiamo di Norme e Condizionamento, in cui il condizionamento era più o meno una stima di quanto cambia la soluzione quando cambia brevemente l’input. Ma ora vogliamo estendere il concetto per equazioni non lineari.
 ...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Plane" href="https://flecart.github.io/notes/data-plane/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Equazioni non lineari" href="https://flecart.github.io/notes/equazioni-non-lineari/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

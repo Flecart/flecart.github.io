@@ -199,93 +199,20 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Processi e thread
+    <h2 class="entry-hint-parent">Simplesso e B&amp;B
     </h2>
   </header>
   <div class="entry-content">
-    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
-Slide schema generale tabelle
-Processi Il process control block è la struttura di dati principali da comprendere.
-Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria.
+    <p>Algoritmo del simplesso Ricerca della direzione migliore Ricerca dello step Pseudocodice Slide
+B sono gli indici di partenza, poi questi vengono aggiornati
+In riga 5 vado a checkare se ho direzioni di crescita possibili, se è tutto positivo non ne ho.
+in riga 6, si sceglie il più piccol per evitare loop.
+L’idea in generale va in questo modo
+Cerco di trovare il duale e confrontarlo con la x attuale Se sono uguali, allora ho trovato l’ottimo ed esco Altrimenti cerco una direzione di crescita che sia anche ammissibile Continuo fino a trovare un vertice, se ho il vertice allora mi muovo lì e riapplico, altrimenti è illimitata, se non esiste un vertice. Correttezza Slide
 ...</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmazione lineare
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Vogliamo cercare di restare nel nostro spazio delle soluzioni ammissibili, senza dover stare ad esplorare tutto, vogliamo andare a concentrarci su una parte specifica di essa. Vogliamo utilizzare una struttura fondamentale per i problemi di programmazione lineare, che è quello con cui vogliamo andare a fare. Il fatto è che spostandoci leggermente da un punto tra le soluzioni, possiamo gestire in modo molto semplice il modo con cui si sposta la retta dei valori.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmazione lineare" href="https://flecart.github.io/notes/programmazione-lineare/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Programmi Concorrenti
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
-Esempio mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:
-Due Uno Uno Due Uno Due Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno
-Esempio 2 mini-programma rallentamento
-#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; int count = 0; void test(void *s) { for (int i = 0; i &lt; 100000; i&#43;&#43;) { count&#43;= 1; } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); printf(&#34;%d\n&#34;, count); } Vogliamo creare un modello teorico che riesca a rappresentare il concetto di processi concorrenti, questo è il modello concorrente
-...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Project Management
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Project, product management, project management Bisogna capire queste definizioni. Vedere https://dynamik.vercel.app/ingegneria-del-software/lucidi/13-gestione-del-progetto.pdf?from=informatica, slide 5 per definizione
-Progetto: inizia e finisce in tempo preciso. È importante comunque ricordare gli steps principali per il progetto ossia ideazione, creazione, mantenimento, rilascio, e poi morte, questo in genere è per qualunque progetto.
-Project Manager Compiti principali (costi e risorse) Vedere se il progetto è fattibile Allocare risorse Monitorare come sta andando. (preventivo e consuntivo). Work Breakdown structure Descrizione WBS È una suddivisione del progetto in piccoli sottoparti che si possono gestire in modo autonomo.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Project Management" href="https://flecart.github.io/notes/project-management/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Provably Approximately Correct Learning
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>PAC Learning is one of the most famous theories in learning theory. Learning theory concerns in answering questions like:
-What is learnable? Somewhat akin to La macchina di Turing for computability theory. How well can you learn something? PAC is a framework that allows to formally answer these questions. Now there is also a bayesian version of PAC in which there is a lot of research. Some definitions Empirical Risk Minimizer and Errors $$ \arg \min_{\hat{c} \in \mathcal{H}} \hat{R}_{n}(\hat{c}) $$ Where the inside is the empirical error.
-...</p>
-  </div>
-  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Provably Approximately Correct Learning" href="https://flecart.github.io/notes/provably-approximately-correct-learning/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Proximal Policy Optimization
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>(Schulman et al. 2017) è uno degli articoli principali che praticamente hanno dato via al campo. Anche questo è buono per Policy gradients:
-https://lilianweng.github.io/posts/2018-04-08-policy-gradient/
-Introduzione a PPO References [1] Schulman et al. “Proximal Policy Optimization Algorithms” arXiv preprint arXiv:1707.06347 2017
-</p>
-  </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Proximal Policy Optimization" href="https://flecart.github.io/notes/proximal-policy-optimization/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Simplesso e B&B" href="https://flecart.github.io/notes/simplesso-e-bb/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -304,46 +231,126 @@ Usually, PPO is explained as an actor critic framework. This means there is an a
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Querying Denormalized Data
+    <h2 class="entry-hint-parent">Geometrie di spire
     </h2>
   </header>
   <div class="entry-content">
-    <p>TODO: write the introduction to the note.
-JSONiq purports as an easy query language that could run everywhere. It attempts to solve common problems in SQL i.e. the lack of support for nested data structures and also the lack of support for JSON data types. A nice thing about JSONiq is that it is functional, which makes its queries quite powerful and flexible. It is also declarative and set-based. These are some commonalities with SQL.
+    <p>Spire Spira quadrata Questo è descritto nell’esempio 8.1 del Mazzoldi. È stato descritto anche in un esercizio in classe (non è importante).
+Spira circolare 🟩 Vedere pagina 245 Vogliamo cercare il valore del campo sull’asse della spira circolare. Questo è semplice, basta usare la prima di Laplace e trovare l’apporto del campo magnetico al centro. Si può anche pensare come momento magnetico, allora si utilizza sempre lo stesso discorso per la spira quadrata classica e il suo momento.
 ...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Querying Denormalized Data" href="https://flecart.github.io/notes/querying-denormalized-data/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Geometrie di spire" href="https://flecart.github.io/notes/geometrie-di-spire/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">R e Intervalli
+    <h2 class="entry-hint-parent">Algebra lineare numerica
     </h2>
   </header>
   <div class="entry-content">
-    <p>2.1 Necessità e caratteristiche di R 2.1.1 Radici di N non perfetti e Q $\sqrt{n} \in \mathbb{Q} \implies n \text{ è quadrato perfetto}$
-Fai lemma della divisibilità fra due numeri
-Lemma: Dati $m,n,l$ tali che $MCD(m,l)=1$ e $l | m n$ allora allora $l | n$ Questo si risolve con ragionamenti sui fattori di m e n. Per dimostrare che è razionale la radice di solamente una radice perfetta parto da un numero razionale, faccio certi ragionamenti e scoprirò alla fine che il numero deve essere una radice perfetta.
+    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
+Immagini Lab 2 images
+Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
+$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
+Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular.
 ...</p>
   </div>
   <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to R e Intervalli" href="https://flecart.github.io/notes/r-e-intervalli/"></a>
+  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Rademacher Complexity
+    <h2 class="entry-hint-parent">Algebra modulare
     </h2>
   </header>
   <div class="entry-content">
-    <p>This note used the definitions present in Provably Approximately Correct Learning. So, go there when you encounter a word you don’t know. Or search online
-Rademacher Complexity $$ \mathcal{G} = \left\{ g : (x, y) \to L(h(x), y) : h \in \mathcal{H} \right\} $$ Where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ is a generic loss function.
-The Rademacher complexity captures the richness of a family of functions by measuring the degree to which a hypothesis set can fit random noise. From (Mohri et al. 2012).
+    <p>Algebra modulare Assunzioni Andiamo ora ad assumere l’esistenza e correttezza di alcune cose di base. (in teoria si possono dimostrare da cose più di base, ma non ho tempo).
+Teorema fondamentale dell’algebra Ogni numero intero si fattorizza in modo unico.
+Algoritmo di Euclide La conseguenza più importante di questo teorema, dovuto ad Euclide è che se ho $a, b \in \mathbb{Z}$ allora esistono resto e dividendo fra i due. Ossia $\exists q, p : a\mid b = qk &#43; p$ per qualche $k$ intero
 ...</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Rademacher Complexity" href="https://flecart.github.io/notes/rademacher-complexity/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Algebra modulare" href="https://flecart.github.io/notes/algebra-modulare/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Applicazioni lineari
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>3.1 Introduzione e definizione Si definisce applicazione lineare una funzione (omomorfica) che preserva la struttura dello spazio vettoriale, ossia vale che
+$$ f:V \to W, \text{ tale che } \\ f(u &#43; v) = f(u) &#43;f(v)\\, f(\lambda v) = \lambda f(v) $$ Vengono mantenute alcune caratteristiche principali. In modo simile si possono definire omomorfismi per tutte le altre strutture algebriche, la cosa importante è che lo spazio d’arrivo possieda ancora tutte le stesse operazioni.
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Applicazioni lineari" href="https://flecart.github.io/notes/applicazioni-lineari/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Base e dimensione
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>2.1 Basi 2.1.1 Definizione Un insieme di vettori $v_1,...,v_n$ sono basi di uno spazio vettoriale $V$ se sono soddisfatte queste proprietà
+$V = \langle v_1,...,v_n\rangle$ $v_1,...,v_n$ sono linearmente indipendenti Dalla proprietà 2 potremmo anche dire che è il minimo insieme di vettori necessario per avere questa base.
+Finitamente generato
+Se l’insieme dei vettori nella base è finito allora posso dire che è finitamente generato
+Ma possiamo trovare anche spazi che non sono finitamente generati come $\R[x]$ che non hanno un numero finito di basi (perché dipende dal grado dei polinomi che può essere infinito).
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Base e dimensione" href="https://flecart.github.io/notes/base-e-dimensione/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cambio di Base
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Nozioni da avere prima di Cambio di Base Applicazioni lineari La definizione di applicazione lineare La matrice associata L’esistenza e unicità di una applicazione lineare rispetto a una base Le coordinate di un punto rispetto a una base. Matrice del Cambio di Base Se ho due spazi vettoriali
+Intuizione in $R$ Le coordinate dei punti in $R$ sono uguali a $V$ per le basi canoniche, ma questo vale solamente per $R$, ora vogliamo andare a dire una cosa più forte, il cambio di base Poi sarà importantissimo questa nozione, applicazione di base in ML è Principal Component Analysis. Se ho una applicazione lineare $F: V \to W$ e un insieme di basi del dominio e del codominio, allora esiste una matrice $A \in M_{m \times n} (\mathbb{R})$ tali che vale il cambio di base.
+...</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cambio di Base" href="https://flecart.github.io/notes/cambio-di-base/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Determinanti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Determinanti I determinanti sono un numero associato alle matrici quadrate. Più o meno ne sono il riassunto.
+Proprietà Le prime 3 sono quelle fondamentali per calcolare il tutto, i numeri dopo il 3 sono alcune conseguenze.
+det I = 1
+Cambiare righe → cambiare il segno della determinante.
+(Importante)
+Se moltiplico una riga per una costante, il determinante è moltiplicato per questa costante. Se sommo una costante a una riga, allora il determinante è una somma strana… Immagine di esempio
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Determinanti" href="https://flecart.github.io/notes/determinanti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Introduzione algebra
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Tutta sta parte si fa in modo formale in Sistemi Lineari e determinanti, quindi potresti saltarla totalmente
+Equazioni lineari L’obiettivo dell’algebra lineare è risolvere n equazioni con n sconosciuti di primo grado. Cosa che ci riesce con grandissimo successo! Andiamo ora a definire meglio cosa è una equazione lineare
+Definizione Una equazione lineare è una equazione a coefficienti appartenenti a un certo campo (che può essere R) e incognite il cui grado è 1 e che siano indipendenti:
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduzione algebra" href="https://flecart.github.io/notes/introduzione-algebra/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
