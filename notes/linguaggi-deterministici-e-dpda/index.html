@@ -166,7 +166,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "DPDA Definizione (2)🟩 La definizione di DPDA è molto simile a quella trattata in Linguaggi liberi e PDA, con solo costraints sulla deterministicità, che si traducono in due condizioni:\nAl massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack Se ho una transizione senza leggere, posso avere solo quella Slide\nLinguaggio libero deterministico Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per stato finale.\nProprietà accettazione per DPDA🟩 Per stato finale accettato resta sempre, cambia un pò l’accettazione per pila vuota, in cui si deve avere una prefix property.\nQuesta prefix property ha un certo interesse perché basta aggiungere un simbolo che non è presente nell’alfabeto, e ho la prefix property! (guarda esempi Lez12 prime slide).\nPrefix property🟩 Due parole del linguaggio in cui il primo è interamente dentro il secondo.\nslide Prefix property\nSe aggiungo un simbolo $ riesco a far sempre che ci sia la prefix property.\nLa dimostrazione è più o meno su questa scia. affinché uno sia prefisso dell’altro, deve avere il dollaro nella stessa posizione, allora hanno la stessa lunghezza, ma se hanno la stessa lunghezza devono essere uguali, ecco la prefix property.\nEsiste DPDA che riconosce linguaggi regolari🟩 Enunciato\nDimostrazione\nPraticamente la dimostrazione è la stessa per Grammatiche Regolari, ma ho anche lo stack, basta che non lo uso e ho finito.\nNon ambiguità dei DPDA🟩 Enunciato\nQuindi se esiste un DPDA che riconosce il linguaggio, si può creare una grammatica non ambigua che riconosce lo stesso linguaggio.\nCon la lezione del 29/11 abbiamo introdotto che un linguaggio è deterministico sse SLR(1) in LR(k) e YACC, quindi probabile che i DPDA posso essere ricondotti in una forma deterministica a singolo\nProprietà dei linguaggi deterministici🟩 Complemento sì Unione o intersezione no. Complemento probabilmente sì perché basta applicare lo stesso ragionamento fatto per le regex in Automi e Regexp, ossia basta invertire gli stati accettati.\nPer dimostrare che non sono chiusi per intersezione o unione sarebbe buona cosa fornire un esempio.\nEsempio non intersezione ⇒ non unione.\nAnalizzatori sintattici In modo simile a quanto presentato in Grammatiche Regolari nell discussione dei Lex.\nQuesta parte utilizziamo abbiamo i strumenti automatici che prendono una grammatica libera e resituiscono un DPDA\nTipologie di parser (2-2-2)🟩 Deterministico o non-deterministico Top-Bottom Oltre a ciò possiamo anche dividere i parse a seconda di\nLettura da destra o da sinistra Creazione derivazione rightmost o leftmost Numero di look ahead. Quindi per esempio se ho una grammatica che inizia a leggere da sinistra, crea derivazione leftmost e ha un lookahead di 1, lo rappresento come $LL(1)$\nTop down parsing con PDA singolo stato🟩 Simile a quanto fatto in Linguaggi liberi e PDA per il teorema di equivalenza di linguaggio libero e PDA, vado a crearmi un automa in un certo modo (in particolare con singolo stato riconosce per pila vuota).\nSlide enunciato\nQuesta è una semplice soluzione non deterministica, possiamo togliere questo non determinismo con il Look Ahead come rpesentato sotto\nLook Ahead(+)🟩 Posso andare a guardare la lettera avanti per capire in che modo comportarmi con la derivazione.\nUtilizzo una tabella di parsing per capire in che modo devo espandere il non-terminale.\nEsempio di look ahead 1\ncon $S := aSb|\\varepsilon$\nNote per risolvere i conflitti\nPosso\nFattorizzare (creare una nuov agrammatic aequivalente senza ricorsione sinistra che non riesco a gestirla, va a divergere, quindi non finisce mai Fare un look ahead maggiore di 1 Queso è utile per togliere il non determinismo.\nBottom up parsing(3)🟨- Si tratta sempre della creazione di un PDA a singolo stato!, ma fatto in modo di verso, in modo tale che ci sia una derivazione rightmost.\nImportanti in questa parte sono 3 operazioni\nShift, in cui facci ocrescere verso destra la pila, come se stessi facendo lo shift Reduce, quando creo il non terminale come se fosse una espansione di non terminale. Accept Esempio di creazione di parser bottom up\nEsempio di derivazione con il parser di sopra\nProblema non determinismo per sopra\nMa comunque andiamo a discutere meglio di questa parte in Bottom-up Parser LR(0).\nTipologie di conflitti di bottom up Shift-reduce Reduce-Reduce Oltre a questo c’è un grandissimo problema delle produzioni del tipo $A \\to \\varepsilon$, perché queste divergono sempre, quindi è meglio non avere grammatiche con questa produzione se vogliamo utilizzare parsing bottom up.3\n",
+  "articleBody": "DPDA Definizione (2)🟩 La definizione di DPDA è molto simile a quella trattata in Linguaggi liberi e PDA, con solo costraints sulla deterministicità, che si traducono in due condizioni:\nAl massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack Se ho una transizione senza leggere, posso avere solo quella Slide\nLinguaggio libero deterministico Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per stato finale.\nProprietà accettazione per DPDA🟩 Per stato finale accettato resta sempre, cambia un pò l’accettazione per pila vuota, in cui si deve avere una prefix property.\nQuesta prefix property ha un certo interesse perché basta aggiungere un simbolo che non è presente nell’alfabeto, e ho la prefix property! (guarda esempi Lez12 prime slide).\nPrefix property🟩 Due parole del linguaggio in cui il primo è interamente dentro il secondo.\nslide Prefix property\nSe aggiungo un simbolo $ riesco a far sempre che ci sia la prefix property.\nLa dimostrazione è più o meno su questa scia. affinché uno sia prefisso dell’altro, deve avere il dollaro nella stessa posizione, allora hanno la stessa lunghezza, ma se hanno la stessa lunghezza devono essere uguali, ecco la prefix property.\nEsiste DPDA che riconosce linguaggi regolari🟩 Enunciato\nDimostrazione\nPraticamente la dimostrazione è la stessa per Grammatiche Regolari, ma ho anche lo stack, basta che non lo uso e ho finito.\nNon ambiguità dei DPDA🟩 Enunciato\nQuindi se esiste un DPDA che riconosce il linguaggio, si può creare una grammatica non ambigua che riconosce lo stesso linguaggio.\nCon la lezione del 29/11 abbiamo introdotto che un linguaggio è deterministico sse SLR(1) in LR(k) e YACC%20e%20YACC%20af47672b50fb43258a6aecef0bacf891.md), quindi probabile che i DPDA posso essere ricondotti in una forma deterministica a singolo\nProprietà dei linguaggi deterministici🟩 Complemento sì Unione o intersezione no. Complemento probabilmente sì perché basta applicare lo stesso ragionamento fatto per le regex in Automi e Regexp, ossia basta invertire gli stati accettati.\nPer dimostrare che non sono chiusi per intersezione o unione sarebbe buona cosa fornire un esempio.\nEsempio non intersezione ⇒ non unione.\nAnalizzatori sintattici In modo simile a quanto presentato in Grammatiche Regolari nell discussione dei Lex.\nQuesta parte utilizziamo abbiamo i strumenti automatici che prendono una grammatica libera e resituiscono un DPDA\nTipologie di parser (2-2-2)🟩 Deterministico o non-deterministico Top-Bottom Oltre a ciò possiamo anche dividere i parse a seconda di\nLettura da destra o da sinistra Creazione derivazione rightmost o leftmost Numero di look ahead. Quindi per esempio se ho una grammatica che inizia a leggere da sinistra, crea derivazione leftmost e ha un lookahead di 1, lo rappresento come $LL(1)$\nTop down parsing con PDA singolo stato🟩 Simile a quanto fatto in Linguaggi liberi e PDA per il teorema di equivalenza di linguaggio libero e PDA, vado a crearmi un automa in un certo modo (in particolare con singolo stato riconosce per pila vuota).\nSlide enunciato\nQuesta è una semplice soluzione non deterministica, possiamo togliere questo non determinismo con il Look Ahead come rpesentato sotto\nLook Ahead(+)🟩 Posso andare a guardare la lettera avanti per capire in che modo comportarmi con la derivazione.\nUtilizzo una tabella di parsing per capire in che modo devo espandere il non-terminale.\nEsempio di look ahead 1\ncon $S := aSb|\\varepsilon$\nNote per risolvere i conflitti\nPosso\nFattorizzare (creare una nuov agrammatic aequivalente senza ricorsione sinistra che non riesco a gestirla, va a divergere, quindi non finisce mai Fare un look ahead maggiore di 1 Queso è utile per togliere il non determinismo.\nBottom up parsing(3)🟨- Si tratta sempre della creazione di un PDA a singolo stato!, ma fatto in modo di verso, in modo tale che ci sia una derivazione rightmost.\nImportanti in questa parte sono 3 operazioni\nShift, in cui facci ocrescere verso destra la pila, come se stessi facendo lo shift Reduce, quando creo il non terminale come se fosse una espansione di non terminale. Accept Esempio di creazione di parser bottom up\nEsempio di derivazione con il parser di sopra\nProblema non determinismo per sopra\nMa comunque andiamo a discutere meglio di questa parte in Bottom-up Parser LR(0)%2092be8778006943cf99add4d634a3fb1a.md).\nTipologie di conflitti di bottom up Shift-reduce Reduce-Reduce Oltre a questo c’è un grandissimo problema delle produzioni del tipo $A \\to \\varepsilon$, perché queste divergono sempre, quindi è meglio non avere grammatiche con questa produzione se vogliamo utilizzare parsing bottom up.3\n",
   "wordCount" : "719",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
@@ -319,7 +319,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 
   <div class="post-content"><h2 id="dpda">DPDA<a hidden class="anchor" aria-hidden="true" href="#dpda">#</a></h2>
 <h3 id="definizione-2">Definizione (2)🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-2">#</a></h3>
-<p>La definizione di DPDA è molto simile a quella trattata in <a href="/notes/linguaggi-liberi-e-pda/">Linguaggi liberi e PDA</a>, con solo costraints sulla deterministicità, che si traducono in due condizioni:</p>
+<p>La definizione di DPDA è molto simile a quella trattata in <a href="/notes/linguaggi-liberi-e-pda">Linguaggi liberi e PDA</a>, con solo costraints sulla deterministicità, che si traducono in due condizioni:</p>
 <ol>
 <li>Al massimo posso avere un risultato per ogni coppia di lettura e simbolo su stack</li>
 <li>Se ho una transizione senza leggere, posso avere solo quella</li>
@@ -327,7 +327,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 <ul>
 <li>
 <p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 1.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 1">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 1">
 </li>
 </ul>
 <h3 id="linguaggio-libero-deterministico">Linguaggio libero deterministico<a hidden class="anchor" aria-hidden="true" href="#linguaggio-libero-deterministico">#</a></h3>
@@ -341,7 +341,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 <ul>
 <li>
 <p>slide Prefix property</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 2.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 2">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 2">
 </li>
 </ul>
 <p>Se aggiungo un simbolo <strong>$</strong> riesco a far sempre che ci sia la prefix property.</p>
@@ -350,40 +350,40 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 <ul>
 <li>
 <p>Enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 3.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 3">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 3">
 </li>
 <li>
 <p>Dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 4.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 4">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 4">
 </li>
 </ul>
-<p>Praticamente la dimostrazione è la stessa per <a href="/notes/grammatiche-regolari/">Grammatiche Regolari</a>, ma ho anche lo stack, basta che non lo uso e ho finito.</p>
+<p>Praticamente la dimostrazione è la stessa per <a href="/notes/grammatiche-regolari">Grammatiche Regolari</a>, ma ho anche lo stack, basta che non lo uso e ho finito.</p>
 <h3 id="non-ambiguità-dei-dpda">Non ambiguità dei DPDA🟩<a hidden class="anchor" aria-hidden="true" href="#non-ambiguità-dei-dpda">#</a></h3>
 <ul>
 <li>
 <p>Enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 5.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 5">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 5">
 </li>
 </ul>
 <p>Quindi se esiste un DPDA che riconosce il linguaggio, si può creare una grammatica non ambigua che riconosce lo stesso linguaggio.</p>
-<p>Con la lezione del 29/11 abbiamo introdotto che un linguaggio è deterministico sse SLR(1) in <a href="LR%28k%29%20e%20YACC%20af47672b50fb43258a6aecef0bacf891.md">LR(k) e YACC</a>, quindi probabile che i DPDA posso essere ricondotti in una forma deterministica a singolo</p>
+<p>Con la lezione del 29/11 abbiamo introdotto che un linguaggio è deterministico sse SLR(1) in <a href="/LR(k">LR(k) e YACC</a>%20e%20YACC%20af47672b50fb43258a6aecef0bacf891.md), quindi probabile che i DPDA posso essere ricondotti in una forma deterministica a singolo</p>
 <h3 id="proprietà-dei-linguaggi-deterministici">Proprietà dei linguaggi deterministici🟩<a hidden class="anchor" aria-hidden="true" href="#proprietà-dei-linguaggi-deterministici">#</a></h3>
 <ol>
 <li>Complemento sì</li>
 <li>Unione o intersezione no.</li>
 </ol>
-<p>Complemento probabilmente sì perché basta applicare lo stesso ragionamento fatto per le regex in <a href="/notes/automi-e-regexp/">Automi e Regexp</a>, ossia basta invertire gli stati accettati.</p>
+<p>Complemento probabilmente sì perché basta applicare lo stesso ragionamento fatto per le regex in <a href="/notes/automi-e-regexp">Automi e Regexp</a>, ossia basta invertire gli stati accettati.</p>
 <p>Per dimostrare che non sono chiusi per intersezione o unione sarebbe buona cosa fornire un esempio.</p>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 6.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 6">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 6">
 <p>Esempio non intersezione ⇒ non unione.</p>
 <h2 id="analizzatori-sintattici">Analizzatori sintattici<a hidden class="anchor" aria-hidden="true" href="#analizzatori-sintattici">#</a></h2>
-<p>In modo simile a quanto presentato in <a href="/notes/grammatiche-regolari/">Grammatiche Regolari</a> nell discussione dei Lex.</p>
+<p>In modo simile a quanto presentato in <a href="/notes/grammatiche-regolari">Grammatiche Regolari</a> nell discussione dei Lex.</p>
 <p>Questa parte utilizziamo abbiamo i strumenti automatici che prendono una grammatica libera e resituiscono un DPDA</p>
 <h3 id="tipologie-di-parser-2-2-2">Tipologie di parser (2-2-2)🟩<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-parser-2-2-2">#</a></h3>
 <h4 id="deterministico-o-non-deterministico">Deterministico o non-deterministico<a hidden class="anchor" aria-hidden="true" href="#deterministico-o-non-deterministico">#</a></h4>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 7.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 7">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 7">
 <h4 id="top-bottom">Top-Bottom<a hidden class="anchor" aria-hidden="true" href="#top-bottom">#</a></h4>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 8.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 8">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 8">
 <p>Oltre a ciò possiamo anche dividere i parse a seconda di</p>
 <ol>
 <li>Lettura da destra o da sinistra</li>
@@ -392,11 +392,11 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 </ol>
 <p>Quindi per esempio se ho una grammatica che inizia a leggere da sinistra, crea derivazione leftmost e ha un lookahead di 1, lo rappresento come $LL(1)$</p>
 <h3 id="top-down-parsing-con-pda-singolo-stato">Top down parsing con PDA singolo stato🟩<a hidden class="anchor" aria-hidden="true" href="#top-down-parsing-con-pda-singolo-stato">#</a></h3>
-<p>Simile a quanto fatto in <a href="/notes/linguaggi-liberi-e-pda/">Linguaggi liberi e PDA</a> per il teorema di equivalenza di linguaggio libero e PDA, vado a crearmi un automa in un certo modo (in particolare con singolo stato <strong>riconosce per pila vuota</strong>).</p>
+<p>Simile a quanto fatto in <a href="/notes/linguaggi-liberi-e-pda">Linguaggi liberi e PDA</a> per il teorema di equivalenza di linguaggio libero e PDA, vado a crearmi un automa in un certo modo (in particolare con singolo stato <strong>riconosce per pila vuota</strong>).</p>
 <ul>
 <li>
 <p>Slide enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 9.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 9">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 9">
 </li>
 </ul>
 <p>Questa è una semplice <strong>soluzione non deterministica</strong>, possiamo togliere questo non determinismo con il Look Ahead come rpesentato sotto</p>
@@ -407,7 +407,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 <li>
 <p>Esempio di look ahead 1</p>
 <p>con $S := aSb|\varepsilon$</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 10.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 10">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 10">
 </li>
 </ul>
 <p><strong>Note per risolvere i conflitti</strong></p>
@@ -418,7 +418,7 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 </ol>
 <p>Queso è utile per togliere il non determinismo.</p>
 <h3 id="bottom-up-parsing3-">Bottom up parsing(3)🟨-<a hidden class="anchor" aria-hidden="true" href="#bottom-up-parsing3-">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 11.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 11">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 11">
 <p>Si tratta sempre della creazione di un PDA a singolo stato!, ma fatto in modo di verso, in modo tale che ci sia una derivazione rightmost.</p>
 <p>Importanti in questa parte sono 3 operazioni</p>
 <ol>
@@ -429,19 +429,19 @@ Un linguaggio è libero deterministico se esiste un PDA che lo riconosce per sta
 <ul>
 <li>
 <p>Esempio di creazione di parser bottom up</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 12.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 12">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 13.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 13">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 12">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 13">
 </li>
 <li>
 <p>Esempio di derivazione con il parser di sopra</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 14.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 14">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 14">
 </li>
 <li>
 <p>Problema non determinismo per sopra</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 15.png" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 15">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi Deterministici e DPDA/Untitled 15">
 </li>
 </ul>
-<p>Ma comunque andiamo a discutere meglio di questa parte in <a href="Bottom-up%20Parser%20LR%280%29%2092be8778006943cf99add4d634a3fb1a.md">Bottom-up Parser LR(0)</a>.</p>
+<p>Ma comunque andiamo a discutere meglio di questa parte in <a href="/Bottom-up%20Parser%20LR(0">Bottom-up Parser LR(0)</a>%2092be8778006943cf99add4d634a3fb1a.md).</p>
 <h3 id="tipologie-di-conflitti-di-bottom-up">Tipologie di conflitti di bottom up<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-conflitti-di-bottom-up">#</a></h3>
 <ul>
 <li>Shift-reduce</li>

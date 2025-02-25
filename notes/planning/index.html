@@ -348,7 +348,7 @@ $$$$
 \max_{a_{0}: \infty} \sum_{t=0}^{\infty} \gamma^{t} r(x_{t}, a_{t})
 $$<p>
 But his is often not feasible to compute.
-This is exactly the same as the ones we have explored in <a href="/notes/rl-function-approximation/">RL Function Approximation</a>, but here we explicitly model the transition probabilities, and the time horizon was equal to $1$.</p>
+This is exactly the same as the ones we have explored in <a href="/notes/rl-function-approximation">RL Function Approximation</a>, but here we explicitly model the transition probabilities, and the time horizon was equal to $1$.</p>
 <h4 id="finite-horizon-version---">Finite horizon version 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#finite-horizon-version---">#</a></h4>
 $$
 \max_{a_{0}: H} \sum_{t=0}^{H} \gamma^{t}r(x_{t}, a_{t})
@@ -356,13 +356,13 @@ $$$$
 J_{H}(a_{t:t + H - 1}) = \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau})
 $$<p>
 Where $x_{\tau}$ is the state we reached after executing the first $\tau - 1$ actions. The objective is then finding the actions that minimize that cost.
-If this cost is continuous and differentiable, then we can use gradient descent methods with <a href="/notes/backpropagation/">Backpropagation</a>. This problem is calle <strong>model predictive control</strong>.</p>
-<p>If it is not differentiable, we can use <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a> (AlphaZero can be seen as an advanced version of these methods). These are called <strong>random shooting methods</strong>.</p>
+If this cost is continuous and differentiable, then we can use gradient descent methods with <a href="/notes/backpropagation">Backpropagation</a>. This problem is calle <strong>model predictive control</strong>.</p>
+<p>If it is not differentiable, we can use <a href="/notes/monte-carlo-methods">Monte Carlo Methods</a> (AlphaZero can be seen as an advanced version of these methods). These are called <strong>random shooting methods</strong>.</p>
 <p>One clear drawback of finite horizon setting is when we have <strong>sparse</strong> rewards. If in the whole horizon the model doesn&rsquo;t see any action that brings any reward, then it cannot learn anything. This is quite intuitive.
 One possible solution is adding a <strong>value estimate</strong> to the last reached state, (Krause calls this method <em>return to go</em>).</p>
 $$
 J_{H}(a_{t:t + H - 1}) = \underbrace{\sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau})}_{\text{Short Term}} + \underbrace{\gamma^{H} V(x_{t + H})}_{\text{Long Term}}
-$$<p>If $H = 1$, then we have the greedy policy with respect to the value function, we have studied many of these settings in <a href="/notes/tabular-reinforcement-learning/">Tabular Reinforcement Learning</a> and <a href="/notes/rl-function-approximation/">RL Function Approximation</a>.</p>
+$$<p>If $H = 1$, then we have the greedy policy with respect to the value function, we have studied many of these settings in <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a> and <a href="/notes/rl-function-approximation">RL Function Approximation</a>.</p>
 <h4 id="the-stochastic-case-">The stochastic Case 🟩<a hidden class="anchor" aria-hidden="true" href="#the-stochastic-case-">#</a></h4>
 $$
 J_{H}(a_{t:t + H - 1}) = \mathop{\mathbb{E}}_{x_{t + 1: t+H}} \left[   \sum_{\tau = t}^{t + H - 1} \gamma^{\tau - t}r(x_{\tau}, a_{\tau}) + \gamma^{H} V(x_{t + H}) \mid  a_{t: t+ H - 1}, f\right]
@@ -388,7 +388,7 @@ $$<p>
 The two methods are quite similar if viewed from this point of view.</p>
 <h2 id="unknown-dynamics">Unknown Dynamics<a hidden class="anchor" aria-hidden="true" href="#unknown-dynamics">#</a></h2>
 <p>In this setting, we don&rsquo;t know the transition model $f$ neither the reward function $r$.
-We will use the same idea in <a href="/notes/tabular-reinforcement-learning/">Tabular Reinforcement Learning</a>, we will attempt to learn the transition and reward model based on some rollouts of the current policy.</p>
+We will use the same idea in <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>, we will attempt to learn the transition and reward model based on some rollouts of the current policy.</p>
 <h3 id="the-main-idea-">The main idea 🟩<a hidden class="anchor" aria-hidden="true" href="#the-main-idea-">#</a></h3>
 $$
 x_{t + 1} \sim f(x_{t}, a_{t},; \psi)
@@ -406,9 +406,9 @@ This is also often why using point estimates is a bad idea in control settings.
 One way to address this problem is to capture epistemic and aleatoric error and try to model them.</p>
 <h3 id="greedy-planning">Greedy Planning<a hidden class="anchor" aria-hidden="true" href="#greedy-planning">#</a></h3>
 <h4 id="separating-errors">Separating Errors<a hidden class="anchor" aria-hidden="true" href="#separating-errors">#</a></h4>
-<p>The epistemic error is the uncertainty in $P(f \mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve and can be attributed to <em>uncertainty</em> of the transitions in the underlying <a href="/notes/markov-processes/">Markov Process</a>.</p>
+<p>The epistemic error is the uncertainty in $P(f \mid D)$ while the aleatoric is the uncertainty of the point given the model $p(x_{t + 1} \mid f, x_{t}, a_{t})$ and is usually irreducible and inherent of the problem we are trying to solve and can be attributed to <em>uncertainty</em> of the transitions in the underlying <a href="/notes/markov-processes">Markov Process</a>.</p>
 <p>Then, we would like to focus on the epistemic uncertainty, i.e. the error that we have some control over.
-We can use the same idea of sampling repeatedly from the model and then taking the mean of the rewards. (Somewhat akin to Thompsom Sampling explored in <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>).</p>
+We can use the same idea of sampling repeatedly from the model and then taking the mean of the rewards. (Somewhat akin to Thompsom Sampling explored in <a href="/notes/bayesian-optimization">Bayesian Optimization</a>).</p>
 <h4 id="the-pilco-algorithm-">The PILCO algorithm 🟨<a hidden class="anchor" aria-hidden="true" href="#the-pilco-algorithm-">#</a></h4>
 <p>This is somewhat similar to an algorithm called <em>probabilistic inference for learning control (PILCO)</em>.</p>
 <ol>
@@ -424,14 +424,14 @@ $$</li>
 <p>The PETS algorithm is one example of these methods.</p>
 <p>Here $f$ is a <em>model of the world</em> which tells us how the state updates after a certain action is made: $x_{t + 1} = f(x_{t}, a_{t}; \psi)$, sometimes we parametrize with Gaussians, especially in continuous settings.</p>
 <h2 id="exploration">Exploration<a hidden class="anchor" aria-hidden="true" href="#exploration">#</a></h2>
-<p>Reinforcement Learning can be seen as an expansion over <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>: we add actions and world models to the states (inputs) and rewards (outputs).
+<p>Reinforcement Learning can be seen as an expansion over <a href="/notes/bayesian-optimization">Bayesian Optimization</a>: we add actions and world models to the states (inputs) and rewards (outputs).
 This motivates the usage of some algorithms developed in that setting in the new one.
 One of the problems we had in Bayesian Optimization is the exploration and exploration trade-off. In this section, we will discuss about that problem in this setting.</p>
 <h3 id="some-exploration-techniques">Some exploration techniques<a hidden class="anchor" aria-hidden="true" href="#some-exploration-techniques">#</a></h3>
 <h4 id="gaussian-dithering-">Gaussian Dithering 🟩<a hidden class="anchor" aria-hidden="true" href="#gaussian-dithering-">#</a></h4>
-<p>This is a simple idea: we add some noise to the actions. This idea has been discussed before too. See <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>.</p>
+<p>This is a simple idea: we add some noise to the actions. This idea has been discussed before too. See <a href="/notes/bayesian-optimization">Bayesian Optimization</a>.</p>
 <h4 id="thompson-sampling-">Thompson Sampling 🟩<a hidden class="anchor" aria-hidden="true" href="#thompson-sampling-">#</a></h4>
-<p>This is exactly the same idea in <a href="/notes/bayesian-optimization/">Bayesian Optimization</a>:
+<p>This is exactly the same idea in <a href="/notes/bayesian-optimization">Bayesian Optimization</a>:
 The algorithm goes as follows:</p>
 <ol>
 <li>Initialize the empty dataset $\mathcal{D} = \varnothing$ and the prior $p(f) = p(f \mid \mathcal{D})$</li>
@@ -472,11 +472,11 @@ $$$$
 \hat{f}_{t}(x, a) = \mu_{t}(x, a) + \beta_{t}\eta_{t}\sigma_{t}(x, a)
 $$<p>
 Where the new variable $\eta \in [-1, 1]$.</p>
-<img src="/images/notes/Planning-20241222215924983.webp" alt="Planning-20241222215924983">
+<img src="/images/notes/Planning-20241222215924983.webp" style="width: 100%" class="center" alt="Planning-20241222215924983">
 Illustration of H-UCRL from the Textbook.
 <h3 id="safe-exploration">Safe Exploration<a hidden class="anchor" aria-hidden="true" href="#safe-exploration">#</a></h3>
 <p>TODO</p>
-<p>This part also links to Hübotter&rsquo;s idea on transductive learning, see <a href="/notes/active-learning/">Active Learning</a>.</p>
+<p>This part also links to Hübotter&rsquo;s idea on transductive learning, see <a href="/notes/active-learning">Active Learning</a>.</p>
 <h4 id="basic-formulation">Basic formulation<a hidden class="anchor" aria-hidden="true" href="#basic-formulation">#</a></h4>
 <p>We define a <strong>constrained</strong> formulation with some variable $\delta$ and say that the function is safe (constrained) if it satisfies the following:</p>
 $$
@@ -484,9 +484,9 @@ $$
 \max_{\pi} &J_{\mu}(\pi, f) = \mathop{\mathbb{E}}_{x_{0} \sim \mu, x_{1:H} \mid \pi, f} \left[  \sum_{\tau = 0}^{H - 1} \gamma^{\tau}r_{\tau} + \gamma^{H} Q(x_{H}, \pi(x_{H}, \theta)) \mid \theta \right]  \\
 \text{Subject to } & J_{\mu}^{c}(\pi, f) = \mathop{\mathbb{E}}_{x_{0} \sim \mu, x_{1:H} \mid \pi, f} \left[  \sum_{\tau = 0}^{H - 1} \gamma^{\tau}c(x_{\tau}) \right] \leq \delta
 \end{align}
-$$<p>One usually optimizes for the Lagrangian, see <a href="/notes/lagrange-multipliers/">Lagrange Multipliers</a>.</p>
+$$<p>One usually optimizes for the Lagrangian, see <a href="/notes/lagrange-multipliers">Lagrange Multipliers</a>.</p>
 <h4 id="optimistic-and-pessimistic">Optimistic and Pessimistic<a hidden class="anchor" aria-hidden="true" href="#optimistic-and-pessimistic">#</a></h4>
-<p>We have already encountered some optimistic approaches in <a href="/notes/rl-function-approximation/">RL Function Approximation</a>.
+<p>We have already encountered some optimistic approaches in <a href="/notes/rl-function-approximation">RL Function Approximation</a>.
 Here we will introduce a simple idea of being <em>pessimistic</em> about the safety contraints:
 TODO.</p>
 

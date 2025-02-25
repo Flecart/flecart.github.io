@@ -325,14 +325,14 @@ Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, di
 <p><strong>Assunzione di complessità</strong> vogliamo che non ci siano algoritmi efficienti per risolvere qualcosa in modo molto veloce</p>
 <h2 id="the-state-machine-replication-smr-problem">The State Machine Replication (SMR) Problem<a hidden class="anchor" aria-hidden="true" href="#the-state-machine-replication-smr-problem">#</a></h2>
 <h3 id="intuizione-al-problema">Intuizione al problema<a hidden class="anchor" aria-hidden="true" href="#intuizione-al-problema">#</a></h3>
-<p>Prendiamo uno <strong>state machine</strong>, in modo simile a quanto fatto in <a href="/notes/grammatiche-regolari/">Grammatiche Regolari</a>, che ad ogni input e output cambia lo stato interno. Uno state machine può essere un database, ma può essere anche tutto l’ambiente delle blockchain (e.g. mandare currency cambia lo stato) o un <a href="/notes/automi-e-regexp/">Automi e Regexp</a>.</p>
+<p>Prendiamo uno <strong>state machine</strong>, in modo simile a quanto fatto in <a href="/notes/grammatiche-regolari">Grammatiche Regolari</a>, che ad ogni input e output cambia lo stato interno. Uno state machine può essere un database, ma può essere anche tutto l’ambiente delle blockchain (e.g. mandare currency cambia lo stato) o un <a href="/notes/automi-e-regexp">Automi e Regexp</a>.</p>
 <p>La <strong>replica</strong> è necessaria per la performance, in modo che ci siano più macchine uguali che rendano lo stesso servizio. Ma se ho tante macchine che fanno la stessa cosa, devo in qualche modo farci il sync, ed ecco il problema che nasce dai database, il problema dei sync write e read. Per noi la replicazione è lo stato della macchina gigante della blockchain.</p>
 <p><strong>Nel contesto di blockchain</strong></p>
 <p>Avremo una <strong>lista</strong> di transazioni, che sono niente altro che delle richieste a un certo nodo di fare qualcosa, e si registra la storia delle transazioni, è molto importate che <strong>l’ordine sia consistente</strong>. Il problema del consenso diventa quindi provare a <strong>sincronizzare la transazioni</strong>, che nota, non devo essere money! Basta richieste.</p>
 <h3 id="consistency">Consistency<a hidden class="anchor" aria-hidden="true" href="#consistency">#</a></h3>
 <p>Questa è la proprietà che tutti i nodi sono d’accordo sulla storia, permettendo la possibilità che qualche nodo sia indietro (ma devono essere d’accordo su quella parte comune!)</p>
 <h3 id="liveness-e-safety">Liveness e Safety<a hidden class="anchor" aria-hidden="true" href="#liveness-e-safety">#</a></h3>
-<p>Queste sono le stesse proprietà descritte in <a href="/notes/programmi-concorrenti/">Programmi Concorrenti</a>. Con la liveness vogliamo che non ci siano deadlocks, e blocchi con la stessa logica → <strong>alla fine il nodo dovrà essere aggiunto!</strong></p>
+<p>Queste sono le stesse proprietà descritte in <a href="/notes/programmi-concorrenti">Programmi Concorrenti</a>. Con la liveness vogliamo che non ci siano deadlocks, e blocchi con la stessa logica → <strong>alla fine il nodo dovrà essere aggiunto!</strong></p>
 
 
   </div>

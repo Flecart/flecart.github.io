@@ -323,7 +323,7 @@ In this context, document stores like MongoDB comes naturally into play.</p>
 <p>a collection can have millions or billions of documents, while each single document weighs no more than 16 MB</p></blockquote>
 <p>This is why document stores can scale up to Gigabytes or terabytes of data.
 Somewhat similar to HDFS, where each block size had maximum of 128 megabytes.
-The size limit, is quite close to the limit set by <a href="/notes/wide-column-storage/">Wide Column Storage</a> of 10 MB.</p>
+The size limit, is quite close to the limit set by <a href="/notes/wide-column-storage">Wide Column Storage</a> of 10 MB.</p>
 <h4 id="enforcing-schemas-">Enforcing Schemas 🟩<a hidden class="anchor" aria-hidden="true" href="#enforcing-schemas-">#</a></h4>
 <p>Document stores leverage the so called <strong>schema on read pattern</strong>: the schema is enforced when the data is read, not when it is written. This is a relaxed, more flexible, version of the schema on write pattern, that is used in relational databases.
 In document stores, the schema is often <strong>discovered</strong>.</p>
@@ -336,14 +336,14 @@ In document stores, the schema is often <strong>discovered</strong>.</p>
 <p>If we store petabytes of data, replication is a necessary feature.
 In MongoDB the collections are partitioned into <strong>shards</strong>, and each partition has a <strong>Replica Set</strong>.
 Each replica set has a primary server and a set of secondary servers. The primary server is the one that accepts write operations, while the secondary servers replicate the data from the primary server. Usually a MongoDBcluster has not many machines.</p>
-<p>When writing to the primary servery, a simple optimization is the following: clients may wait only for a <em>certain</em> number of acknowledgements by the second server. Then the other replicas can continue asynchronously. This is for making it faster for the user. This is somewhat similar to the $R$ parameter in Dynamo <a href="/notes/cloud-storage/#key-value-stores">Cloud Storage#Key-value stores</a>.</p>
-<p>The main difference with systems like <a href="/notes/distributed-file-systems/">HDFS</a> is that here we have a series of nodes with exactly the same data, while in HDFS, it is quite improbable, as the blocks are replicated independently.</p>
+<p>When writing to the primary servery, a simple optimization is the following: clients may wait only for a <em>certain</em> number of acknowledgements by the second server. Then the other replicas can continue asynchronously. This is for making it faster for the user. This is somewhat similar to the $R$ parameter in Dynamo <a href="/notes/cloud-storage#key-value-stores">Cloud Storage#Key-value stores</a>.</p>
+<p>The main difference with systems like <a href="/notes/distributed-file-systems">HDFS</a> is that here we have a series of nodes with exactly the same data, while in HDFS, it is quite improbable, as the blocks are replicated independently.</p>
 <h4 id="physical-storage---">Physical Storage 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#physical-storage---">#</a></h4>
-<p>Documents in MongoDB are usually stored in BSON format, an equivalent method to JSON (see <a href="/notes/markup/">Markup</a>) but in <strong>binary</strong> format as it is usually more <em>efficient</em>.</p>
+<p>Documents in MongoDB are usually stored in BSON format, an equivalent method to JSON (see <a href="/notes/markup">Markup</a>) but in <strong>binary</strong> format as it is usually more <em>efficient</em>.</p>
 <h3 id="indices">Indices<a hidden class="anchor" aria-hidden="true" href="#indices">#</a></h3>
-<p>While <a href="/notes/massive-parallel-processing/">Spark</a> would look at all the data in parallel to find a single point data for a certain query, the main advantage with ETL (so MongoDBs) is by having the possibility of creating <strong>indexes</strong>. With indexes we can look data quite faster. We have studied something similar for relational database in <a href="/notes/index-b-trees-and-hashes/">Index, B-trees and hashes</a></p>
+<p>While <a href="/notes/massive-parallel-processing">Spark</a> would look at all the data in parallel to find a single point data for a certain query, the main advantage with ETL (so MongoDBs) is by having the possibility of creating <strong>indexes</strong>. With indexes we can look data quite faster. We have studied something similar for relational database in <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a></p>
 <h4 id="types-of-indices-">Types of indices 🟩<a hidden class="anchor" aria-hidden="true" href="#types-of-indices-">#</a></h4>
-<p>There are mainly two types of indices, hash and B-trees. , both have been extensively studied in this node <a href="/notes/index-b-trees-and-hashes/">Index, B-trees and hashes</a>, and it&rsquo;s exactly the same.</p>
+<p>There are mainly two types of indices, hash and B-trees. , both have been extensively studied in this node <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a>, and it&rsquo;s exactly the same.</p>
 <p>Drawbacks of hash indices</p>
 <ol>
 <li>Cannot answer for range queries.</li>

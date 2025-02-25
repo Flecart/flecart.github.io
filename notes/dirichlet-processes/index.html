@@ -307,7 +307,7 @@ Non parametric models concern learning models with potentially infinite number o
 One of the classical application is unsupervised techniques like clustering.
 Intuitively, clustering concerns in finding <em>compact subsets</em> of data, i.e. finding groups of points in the space that are particularly close by some measure.</p>
 <h3 id="the-dirichlet-process">The Dirichlet Process<a hidden class="anchor" aria-hidden="true" href="#the-dirichlet-process">#</a></h3>
-<p>See <a href="/notes/beta-and-dirichlet-distributions/">Beta and Dirichlet Distributions</a> for the definition and intuition of these two distributions.
+<p>See <a href="/notes/beta-and-dirichlet-distributions">Beta and Dirichlet Distributions</a> for the definition and intuition of these two distributions.
 One quite important thing that Dirichlet allows to do is the ability of assigning an ever growing number of clusters to data. This models are thus quite flexible to change and growth.</p>
 <h4 id="definition-of-the-process">Definition of the process<a hidden class="anchor" aria-hidden="true" href="#definition-of-the-process">#</a></h4>
 $$
@@ -319,12 +319,12 @@ So they are jointly distributed as a Dirichlet distribution. And $H$ is called t
 <p>The base measure $H$ represents our prior belief about the distribution of the data.
 $\alpha$ is called <strong>concentration parameter</strong>:  $\alpha$ is small, the resulting distributions tend to concentrate on fewer clusters, effectively encouraging sparsity. Conversely, a larger $\alpha$ allows for a richer, more diverse set of clusters.</p>
 <h3 id="choosing-number-of-clusters">Choosing number of Clusters<a hidden class="anchor" aria-hidden="true" href="#choosing-number-of-clusters">#</a></h3>
-<p>Dirichlet processes are related to finding the best number of clusters (See <a href="/notes/clustering/">Clustering</a>). It is a non-parametric way (meaning it can grow with the data) to find that number.</p>
+<p>Dirichlet processes are related to finding the best number of clusters (See <a href="/notes/clustering">Clustering</a>). It is a non-parametric way (meaning it can grow with the data) to find that number.</p>
 <h4 id="stick-breaking-">Stick Breaking 🟨++<a hidden class="anchor" aria-hidden="true" href="#stick-breaking-">#</a></h4>
-<p>We have dome something similar to $GP$ in <a href="/notes/gaussian-processes/">Gaussian Processes</a>: the difference is sequential sampling compared to sampling all of the points at once using the difficult multivariate distribution.</p>
+<p>We have dome something similar to $GP$ in <a href="/notes/gaussian-processes">Gaussian Processes</a>: the difference is sequential sampling compared to sampling all of the points at once using the difficult multivariate distribution.</p>
 <p>We would like to sample $(\rho_{1}, \dots, \rho_{k}) \sim \text{Dir}(\alpha_{1}, \dots, \alpha_{k})$. So now we just sample the first $\rho_{1}$ and then sample the second conditioned on the first observation (So we have a beta distribution now) and so on, until we finish the possible clusters.</p>
 <p>Image from the slides.
-<img src="/images/notes/Dirichlet Processes-20250201114331078.webp" alt="Dirichlet Processes-20250201114331078"></p>
+<img src="/images/notes/Dirichlet Processes-20250201114331078.webp" style="width: 100%" class="center" alt="Dirichlet Processes-20250201114331078"></p>
 <h4 id="griffiths-engen-mccloskey-distribution-">Griffiths-Engen-McCloskey distribution 🟨++<a hidden class="anchor" aria-hidden="true" href="#griffiths-engen-mccloskey-distribution-">#</a></h4>
 <p>This distribution is just a generalization of the stick breaking process. We write $\rho \sim GEM(\alpha)$ which means breaking according the distribution $\text{Beta}(1, \alpha)$. if alpha is smaller then the stick is longer. So we can interpret the parameter $\alpha$ as some sort of variable of the remaining stick length.</p>
 <p>Using the above image, we can define the stick breaking patterns using constant values $1, \alpha$, which correspond to  GEM distribution, a dirichlet process with concentration measure $\alpha$ and base measure $H$.</p>
@@ -361,7 +361,7 @@ $$
 $$$$
 \mathbb{E}[K_{n}] = O( \alpha \log(n))
 $$<p>
-This is a simple consequence of the bound of the harmonic series. See <a href="/notes/serie/">Serie</a>.</p>
+This is a simple consequence of the bound of the harmonic series. See <a href="/notes/serie">Serie</a>.</p>
 <h4 id="pólya-urns-">Pólya Urns 🟩<a hidden class="anchor" aria-hidden="true" href="#pólya-urns-">#</a></h4>
 <p>We have urns with colored balls that can be drawn at random. If a ball is drawn it is doubled and put both back into the Urn.
 We can prove that this is equivalent to the Chinese Restaurant Process, given a <strong>finite</strong> number of clusters (colors).
@@ -381,12 +381,12 @@ The important part is that this is exchangeable.</p>
 <p>The easy way to remember this model is with a graphical model:
 $\alpha \to \rho \to z, \mu \to H, (z, H) \to x$</p>
 <h4 id="fitting-a-learner-">Fitting a learner 🟥<a hidden class="anchor" aria-hidden="true" href="#fitting-a-learner-">#</a></h4>
-<p>EM (see <a href="/notes/clustering/">Clustering</a>) are difficult to use for non-parametric models. We will use Gibbs Sampling introduced in <a href="/notes/monte-carlo-methods/">Monte Carlo Methods</a>.</p>
+<p>EM (see <a href="/notes/clustering">Clustering</a>) are difficult to use for non-parametric models. We will use Gibbs Sampling introduced in <a href="/notes/monte-carlo-methods">Monte Carlo Methods</a>.</p>
 $$
 p(z_{i} =k \mid z_{-i}, \boldsymbol{x}, \alpha, \boldsymbol{\mu}) \propto p(z_{i} \mid z_{-i}, \alpha) \cdot p(x_{i} \mid \boldsymbol{z}, \boldsymbol{x}_{-i}, \boldsymbol{\mu})
 $$<p>
 And then we have the probabilities in the image.</p>
-<img src="/images/notes/Dirichlet Processes-20241212155107554.webp" alt="Dirichlet Processes-20241212155107554">
+<img src="/images/notes/Dirichlet Processes-20241212155107554.webp" style="width: 100%" class="center" alt="Dirichlet Processes-20241212155107554">
 <p><a href="https://gist.github.com/Flecart/e4105125f9b59fd7104bf9955b7e5d1b">Code Example</a> just run it on a Notebook.
 I noticed that if we initialize the code with all classes assigned to a single cluster, the model seems to fail to learn that there are other classes, this is probably because the rich get richer effect is not enough to explore the space of the clusters.
 If we initialize the code with a random assignment on the maximum number of clusters, then it doesn&rsquo;t seem to be able to eliminate clusters correctly.

@@ -286,8 +286,8 @@ In geostatistics, Gaussian processes are referred to as kriging regressions, and
     </details>
 </div>
 
-  <div class="post-content"><p>Gaussian processes can be viewed through a Bayesian lens of the function space: rather than sampling over individual data points, we are now sampling over entire functions. They extend the idea of <a href="/notes/bayesian-linear-regression/">bayesian linear regression</a> by introducing an infinite number of feature functions for the input XXX.</p>
-<p>In geostatistics, Gaussian processes are referred to as <em>kriging</em> regressions, and many other models, such as <a href="/notes/kalman-filters/">Kalman Filters</a> or radial basis function networks, can be understood as special cases of Gaussian processes. In this framework, certain functions are more likely than others, and we aim to model this probability distribution.</p>
+  <div class="post-content"><p>Gaussian processes can be viewed through a Bayesian lens of the function space: rather than sampling over individual data points, we are now sampling over entire functions. They extend the idea of <a href="/notes/bayesian-linear-regression">bayesian linear regression</a> by introducing an infinite number of feature functions for the input XXX.</p>
+<p>In geostatistics, Gaussian processes are referred to as <em>kriging</em> regressions, and many other models, such as <a href="/notes/kalman-filters">Kalman Filters</a> or radial basis function networks, can be understood as special cases of Gaussian processes. In this framework, certain functions are more likely than others, and we aim to model this probability distribution.</p>
 <p>Gaussian processes retain epistemic uncertainty, meaning we are still modeling what we don&rsquo;t know about the function, while remaining tractable. Essentially, they provide a <strong>normal distribution over functions</strong>.</p>
 <p>If we index this infinite dimensional Gaussian, thanks to the properties of Gaussians with marginalization, we still have another Gaussian. We need a way to parametrize now. In this case we do it using a covariance function $k(x, x') = \text{Cov} (f(x), f(x'))$</p>
 <p><a href="https://distill.pub/2019/visual-exploration-gaussian-processes/">This</a> seems a quite nice resource on the topic.</p>
@@ -310,9 +310,9 @@ k(x_{m}, x_{1}), \dots, k(x_{m}, k_{m})
 \end{pmatrix}
 $$<p>$k : X \times X \to \mathbb{R}$ is called the <strong>covariance (kernel)</strong> function and $\mu : X \to \mathbb{R}$ is called the mean function.
 We write $f \sim GP(\mu, k)$ and define $f(x) := f_{x}$
-See <a href="/notes/kernel-methods/">Kernel Methods</a> for more about kernels.</p>
+See <a href="/notes/kernel-methods">Kernel Methods</a> for more about kernels.</p>
 <h4 id="inference-for-gaussian-processes-">Inference for Gaussian Processes 🟩<a hidden class="anchor" aria-hidden="true" href="#inference-for-gaussian-processes-">#</a></h4>
-<p>Inference is easy if you understand the conditional Gaussian distribution, see <a href="/notes/gaussians/">Gaussians</a>.
+<p>Inference is easy if you understand the conditional Gaussian distribution, see <a href="/notes/gaussians">Gaussians</a>.
 You already have the old points defined, you just need to get the conditioned Gaussian on the previous data points.</p>
 $$
 \bar{f} = \begin{bmatrix}
@@ -359,7 +359,7 @@ But we need to compute the matrix inverse in this case, which also takes $\mathc
 <h3 id="learning-gaussians-processes">Learning Gaussians Processes<a hidden class="anchor" aria-hidden="true" href="#learning-gaussians-processes">#</a></h3>
 <h4 id="kernel-optimization-">Kernel optimization 🟨++<a hidden class="anchor" aria-hidden="true" href="#kernel-optimization-">#</a></h4>
 <p>Once we have chosen a Kernel, we would like to find the best Hyper-parameters for our problem.
-Take a look at the <a href="/notes/kernel-methods/">Kernel Methods</a> for possible Kernels.
+Take a look at the <a href="/notes/kernel-methods">Kernel Methods</a> for possible Kernels.
 We want to optimize the following equation:
 $$
 \begin{align}
@@ -383,7 +383,7 @@ $$</p>
 $$
 \frac{ \partial \log p(y_{1:n} \mid x_{1:n}, \theta) }{ \partial \theta_{j} }  = \frac{1}{2} \text{tr}\left( (\alpha \alpha^{T} - K^{-1}_{y, \theta}) \frac{ \partial K_{y, \theta} }{ \partial \theta_{j}}  \right) 
 $$<p>
-With $\alpha = K_{y, \theta}^{-1}y$, you just need some formulas from <a href="/notes/multi-variable-derivatives/">Multi Variable Derivatives</a>.
+With $\alpha = K_{y, \theta}^{-1}y$, you just need some formulas from <a href="/notes/multi-variable-derivatives">Multi Variable Derivatives</a>.
 Now let&rsquo;s take some time to analyze what we good after all of this derivation:
 The quadratic form is interpretable as the <strong>likelihood</strong>, or the goodness of the fit. While the log of the Kernel matrix is the <strong>volume</strong> of the possible prediction, which is kinda the prior.
 Minimizing the above loss with gradient methods or similars can give us the best kernel parameters.</p>

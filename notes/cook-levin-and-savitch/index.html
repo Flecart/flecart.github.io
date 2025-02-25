@@ -309,7 +309,7 @@ The difference is that it needs to be polynomially-bounded, so to say, it is eff
 $$
 x \in L' \iff f(x) \in L
 $$<p>
-This is very similar to the <a href="/notes/halting-theorem-and-reducibility/#mapping-reducibility">Halting Theorem and Reducibility#Mapping reducibility</a>.
+This is very similar to the <a href="/notes/halting-theorem-and-reducibility#mapping-reducibility">Halting Theorem and Reducibility#Mapping reducibility</a>.
 The difference is that it needs to be <em>polynomially-bounded</em>, so to say, it is efficient function.</p>
 <h4 id="th-l-leq_p-l-land-l-in-p-implies-l-in-p">Th: $L' \leq_{p} L \land L \in P \implies L' \in P$🟩<a hidden class="anchor" aria-hidden="true" href="#th-l-leq_p-l-land-l-in-p-implies-l-in-p">#</a></h4>
 <p>This theorem says that if we can reduce with a polynomially bounded function to a class of language in $P$ then we have automatically another language in $P$.</p>
@@ -322,9 +322,9 @@ Now let&rsquo;s build the converter, which works in constant time. Take two word
 $f$ works in polynomial time thanks to the fact that $L \in P$.</p>
 <h2 id="cook-levin-theorem">Cook-Levin Theorem<a hidden class="anchor" aria-hidden="true" href="#cook-levin-theorem">#</a></h2>
 <h3 id="def-np-completeness">Def: NP-completeness🟩<a hidden class="anchor" aria-hidden="true" href="#def-np-completeness">#</a></h3>
-<p>We say that a $L$ is NP-complete if it is in $NP$ and every other $L'$ is reducible in $NP$ using <a href="/notes/cook-levin-and-savitch/#poly-reduction">#Poly-reduction</a>.</p>
+<p>We say that a $L$ is NP-complete if it is in $NP$ and every other $L'$ is reducible in $NP$ using <a href="/notes#poly-reduction">#Poly-reduction</a>.</p>
 <h3 id="def-np-hard">Def: NP-hard🟩<a hidden class="anchor" aria-hidden="true" href="#def-np-hard">#</a></h3>
-<p>$L$ is NP-hard if every $L'$ in $NP$ in reducible to it using <a href="/notes/cook-levin-and-savitch/#poly-reduction">#Poly-reduction</a>. We don&rsquo;t need that it is in $NP$.</p>
+<p>$L$ is NP-hard if every $L'$ in $NP$ in reducible to it using <a href="/notes#poly-reduction">#Poly-reduction</a>. We don&rsquo;t need that it is in $NP$.</p>
 <h3 id="tmsat">TMSAT🟨<a hidden class="anchor" aria-hidden="true" href="#tmsat">#</a></h3>
 $$
 TMSAT = \left\{  \langle x, w, s,t \rangle  \mid x = code(M) \text{ and } M \text{ accepts } \langle w, c \rangle  \right\} 
@@ -341,7 +341,7 @@ We can say that SAT is easily verifiable.</p>
 <h4 id="sat-is-np-hard-">SAT is NP-hard🟨-<a hidden class="anchor" aria-hidden="true" href="#sat-is-np-hard-">#</a></h4>
 <p>This is the difficult part.
 The idea is to create a representation of the computation of the Turing Machine of whatever algorithm. So we create a <strong>tableau</strong> that represents the computation, and we want to translate this tableau as a satisfiability problem. We know that this tableau is finite because the problem is in $NP$.</p>
-<img src="/images/notes/Cook-Levin Theorem-20240410125141970.webp" alt="Cook-Levin Theorem-20240410125141970">
+<img src="/images/notes/Cook-Levin Theorem-20240410125141970.webp" style="width: 100%" class="center" alt="Cook-Levin Theorem-20240410125141970">
 $$
 F_{w} := F_{cell} \land F_{start} \land F_{move} \land F_{accept}
 $$<p>
@@ -363,7 +363,7 @@ F_{accept} = \bigvee_{1 \leq i, j \leq n^{k}} x_{i,j, T}
 $$<p>Then we need to define the $F_{move}$ function, which is the last formula we would need to define!
 As we only need to know how the state moves, we just need <strong>windows</strong> of 3.</p>
 <p>Examples:
-<img src="/images/notes/Cook-Levin Theorem-20240410131145903.webp" alt="Cook-Levin Theorem-20240410131145903"></p>
+<img src="/images/notes/Cook-Levin Theorem-20240410131145903.webp" style="width: 100%" class="center" alt="Cook-Levin Theorem-20240410131145903"></p>
 $$
 F_{move} = \bigwedge_{1 <i\leq n^{k}, 1 < j \leq n^{k}} \left( \bigvee_{a_{1},\dots, a_{6}} x_{i,j-1,a_{1}} \land x_{i,j, a_{2}} \land x_{i, j + 1, a_{3}} \land x_{i+1, j-1, a_{4}} \land x_{i+1, j , a_{5}} \land x_{i+1, j+ 1, a_{6}}\right) 
 $$<p>
@@ -379,7 +379,7 @@ NSPACE(f(N)) \subseteq SPACE(f^{2}(n))
 $$$$
 NSPACE = PSPACE
 $$<h3 id="sketch-of-the-proof-idea">Sketch of the proof idea🟩<a hidden class="anchor" aria-hidden="true" href="#sketch-of-the-proof-idea">#</a></h3>
-<p>The proof idea uses a similar idea explored in <a href="/notes/common-problems-in-theoretical-cs/#true-quantified-boolean-formula">Common problems in Theoretical CS#True quantified Boolean formula</a>, saying that TQBF was PSPACE-complete.</p>
+<p>The proof idea uses a similar idea explored in <a href="/notes/common-problems-in-theoretical-cs#true-quantified-boolean-formula">Common problems in Theoretical CS#True quantified Boolean formula</a>, saying that TQBF was PSPACE-complete.</p>
 <p>So given two configurations of the NTM, $c_{1}, c_{2}$ we want to say that it&rsquo;s possible to reach from $c_{1}$ to $c_{2}$ in at most $t$ computational steps in the new deterministic TM that we are going to build.
 We already know by hypothesis that the given NTM is in $NSPACE(t(n))$ now we will prove that the built TM is in $SPACE(t(n^{2}))$, so by this reduction we know that we have that inclusion.</p>
 <p>For the inductive case, We want to build a function <code>REACH</code> that is true if and only if the TM starting from state $c$ can reach $c'$ in at most $t$ computational steps.
@@ -388,7 +388,7 @@ Run <code>REACH</code>$c_{init}, c_{acc}, 2^{dt(n)}$ if this accepts, accepts. W
 <h3 id="proof-of-savitchs-theorem-">Proof of Savitch&rsquo;s theorem🟩-<a hidden class="anchor" aria-hidden="true" href="#proof-of-savitchs-theorem-">#</a></h3>
 <p>We prove it by induction:
 If $t=1$ verify if $c_{1} = c_{2}$ or if $c_{2}$ is a reachable configuration with $1$ computational step. You can do this by enumerating all possible transition functions starting with that state for example. If ok accept, else reject.
-The logic for enumerating possible transitions is presented in the proof of <a href="/notes/cook-levin-and-savitch/#cook-levin-theorem">#Cook-Levin Theorem</a>.</p>
+The logic for enumerating possible transitions is presented in the proof of <a href="/notes#cook-levin-theorem">#Cook-Levin Theorem</a>.</p>
 <p>Else we run for each $c_{m}$ configuration of the TM, that is bounded and uses $t(n)$ space.</p>
 <ol>
 <li><code>REACH(c, c_m, t/2)</code></li>

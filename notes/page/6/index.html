@@ -199,84 +199,154 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Asymmetric Cryptography
+    <h2 class="entry-hint-parent">Cauchy-Schwarz Inequality
     </h2>
   </header>
   <div class="entry-content">
-    <p>Public Key Encryption We now define a formally what is a public key encryption
-Formal definition of Public Key Encryption We define a 3-tuple formed as follows: $(G, E, D)$ where
-$G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input. Now is this definition useful? i don’t think so! We can’t create theorems for it, too general I suppose. Is it clear? yes! I think this is the usefulness of maths in many occasions, it delivers some complex information in a concise and understandable manner.
+    <p>This note briefly states and proves one of the most famous inequalities in geometry/analysis.
+Theorem Statement $$ \left( \sum_{i = 1}^{n} x_{i}y_{i} \right) ^{2} \leq \left( \sum_{i= 1}^{n} x^{2}_{i} \right) \left( \sum_{i = 1}^{n} y^{2}_{i} \right) $$$$ \lvert \langle u, v \rangle \rvert ^{2} \leq \langle u, u \rangle \cdot \langle v, v \rangle $$ with $u = \left( x_{1}, \dots, x_{n} \right)$ and $v = \left( y_{1}, \dots, y_{n} \right)$ and the $\langle \cdot, \cdot \rangle$ operator is the inner product. We have equality if and only if $u$ and $v$ are linearly dependent (this one is easy to prove if seen from the vectorial view).
 ...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Asymmetric Cryptography" href="https://flecart.github.io/notes/asymmetric-cryptography/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cauchy-Schwarz Inequality" href="https://flecart.github.io/notes/cauchy-schwarz-inequality/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Asymptotic Equipartition Property
+    <h2 class="entry-hint-parent">Central Limit Theorem and Law of Large Numbers
     </h2>
   </header>
   <div class="entry-content">
-    <p>Sembra essere molto simile a Central Limit Theorem and Law of Large Numbers però per Entropy. This is also called Shannon’s source coding theorem see here
-Enunciato AEP $$ -\frac{1}{n} \log p(X_{1}, X_{2}, \dots, X_{n}) \to H(X) $$ in probability (la definizione data in Central Limit Theorem and Law of Large Numbers#Convergence in probability).
-Un modo alternativo per enunciarla è così, segue il metodo in (MacKay 2003).
-$$ \left\lvert \frac{1}{N} H_{\delta}(X^{N}) - H(x) \right\rvert \leq \varepsilon $$Ossia a grandi linee: dato una variabile aleatoria $X$ e $N$ estrazioni della stessa, possiamo comprimere questa sequenza in $NH(X)$.
+    <p>Bounds Markov Bound $$ P(X \geq y) \leq \frac{E[X]}{y} $$$$ yP(X \geq y) = y\int _{x =y}^{&#43;\infty} f(x) \, dx \leq \int _{x=y}^{&#43;\infty} x f(x) \, d \leq \int _{-\infty}^{&#43;\infty}xf(x) \, d = E[X] $$ Il che finisce la dimostrazione.
+Chebychev Bound $$ P(\lvert x - E[X] \rvert \geq y) \leq \frac{\sigma^{2}}{y^{2}} $$ E in pratica dice che all’infinito viene tutto compattata sul valore atteso La dimostrazione è abbastanza semplice, si sostituisce $(x - E[X])^{2}$ su $X$ di Markov e $\varepsilon^{2}$ a $y$ e poi si dovrebbe già avere il risultato
 ...</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Asymptotic Equipartition Property" href="https://flecart.github.io/notes/asymptotic-equipartition-property/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Central Limit Theorem and Law of Large Numbers" href="https://flecart.github.io/notes/central-limit-theorem-and-law-of-large-numbers/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Autoencoders
+    <h2 class="entry-hint-parent">Central Processing Unit (CPU)
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono
-Introduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder. Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all’originale. Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione. Possiamo infatti osservare che se spazio latente = spazio originale, loss di ricostruzione = 0 perché basta imparare l’identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all’originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c’è una leggera perdita in questo senso.
-...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Autoencoders" href="https://flecart.github.io/notes/autoencoders/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Automi e Regexp
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Per l’analisi lessicale vogliamo cercare di ricordare le parole legali all’interno di questo linguaggio e questo è fatto con i linguaggi regolari.
-Introduzione a analizzatori lessicali Token 🟩 Struttura del token è fatto da due parti
-Identificatore della classe del token Identificatore del valore del token Pattern e lessema ci sono direi boh Pattern e Lessema 🟩 I pattern sono una descrizione generale della forma dei valori di una classe di token.
-...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Automi e Regexp" href="https://flecart.github.io/notes/automi-e-regexp/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Autovalori e Autovettori
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Ha senso solamente parlare di autovettori quando si ha una applicazione lineare con stesso dominio e stesso codominio.
-Vorremmo trovare una buona matrice che sia diagonale.
-6.1 Diagonalizzabilità 6.1.1 Definizione per funzione e matrice Questo perché vorrei una base in cui si abbia un matrice diagonale. (quindi probabilmente P è una matrice identità).
+    <p>La struttura moderna degli elaboratori sono basati principalmente sull’architettura di Von Neuman, l’unica differenza è che gli elementi di questa architettura.
+Struttura e funzione della CPU La CPU si può dividere in tre parti principali:
+Una unità di controllo che coordina i processi Registri che immagazzinano temporaneamente piccole quantità di informazioni ALU che fa i calcoli ordinategli dalla CPU Registri Principali Program Counter o Instruction Pointer Contiene un pointer all’istruzione da eseguire così lo prende dalla memoria Instruction Register Contiene l’istruzione da eseguire Memory Address Register Prende l’indirizzo del contenuto interessante dalla memoria Memory Data Register Prende il contenuto dalla memoria Program Status Word Raccoglie lo stato di esecuzione del programma, se fallisce se tutto ok oppure se ci sono errori ALU Aritmetic Logic Unit, è la componente che fa i calcoli. Per sapere cosa deve fare, è la Control Unit che collega certe vie dai registri all’ALU. A seconda del genere di architettura può collegarsi direttamente in memoria (CISC) oppure sempre passando per i registri (solitamente RISC)
 ...</p>
   </div>
   <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Autovalori e Autovettori" href="https://flecart.github.io/notes/autovalori-e-autovettori/"></a>
+  <a class="entry-link" aria-label="post link to Central Processing Unit (CPU)" href="https://flecart.github.io/notes/central-processing-unit-cpu/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Circuiti Sequenziali
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>7.1 Introduzione 7.1.1 Perché usarli Sono utili per mantenere delle informazioni nel tempo
+7.1.2 Caratteristiche Hanno feedback cioè ci sono degli output che tornano dentro al circuito, quindi è molto difficile senza sapere niente cosa succede dentro
+Questo circuito non è combinatorio, che è formalizzabile in modo deterministico con l’lgebra booleana.
+7.1.3 Il Bit di memoria Questo bit ha due input, un load e un input, se il load è attivo comincia a storare, altrimenti l’output è sempre il bit che ha memoriazzato.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Circuiti Sequenziali" href="https://flecart.github.io/notes/circuiti-sequenziali/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Classi OOP
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione a OOP Per la definizione di classe andare a guardare Object orientation, però lo ripeto in questa occasione, è solamente un modello su cui andare a costruire degli oggetti.
+Capisaldi🟩 Incapsulazione Astrazione Ereditarietà Dispatch dinamico Costruttori 🟩- Il costruttore è un codice utilizzato per inizializzare correttamente lo stato interno. Le regole sono le stesse dei metodi sovraccaricati (dinamica per la chiamata, statica per il numero dei parametri che prende in input).
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Classi OOP" href="https://flecart.github.io/notes/classi-oop/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Classical Cyphers
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione a Crittografia al corso di crittografia di Christof Paar su Youtube, con aggiunte del corso Unibo.
+Classifications and definitions Classification nowadays as many many applications like, and it’s a increasing important field
+Cryptology (2) 🟩 La branca comunemente riferita come crittografia è divisa principalmente in due campi crittografia e cryptanalysis in cui una cerca di creare nuovi metodi per cifrare i messaggi, e l’altro prova ad attaccare questi messaggi ritrovando il messaggio originale.
+...</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Classical Cyphers" href="https://flecart.github.io/notes/classical-cyphers/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cloud Computing Services
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Cloud Computing: An Overview Key Players in the Cloud Industry The cloud computing market is dominated by several major providers, often referred to as the “Big Seven”:
+Amazon Web Services (AWS): The largest provider, offering a comprehensive suite of cloud services. Microsoft Azure: Known for deep integration with enterprise systems and hybrid cloud solutions. Google Cloud Platform (GCP): Excels in data analytics, AI/ML, and Kubernetes-based solutions. IBM Cloud: Focuses on hybrid cloud and enterprise-grade AI. Oracle Cloud: Specializes in database solutions and enterprise applications. Alibaba Cloud: The leading provider in Asia, offering services similar to AWS. Salesforce: A major player in SaaS, particularly for CRM and business applications.
+These providers collectively control the majority of the global cloud infrastructure market, enabling scalable and on-demand computing resources for businesses worldwide. Capital and Operational Expenses in the Cloud Cloud computing transforms traditional IT cost structures by shifting expenses from capital expenditures (CapEx), such as purchasing servers and data centers, to operational expenditures (OpEx), where users pay only for the resources they consume.
+...</p>
+  </div>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cloud Computing Services" href="https://flecart.github.io/notes/cloud-computing-services/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cloud Storage
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Object Stores Object storage design principles 🟨&#43;&#43; We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:
+Black-box objects Flat and global key-value model (trivial model, easy to access, without the need to trasverse a file hierarchy). Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Object storage usages 🟩 Object storage are useful to store things that are usually read-intensive. Some examples are
+...</p>
+  </div>
+  <footer class="entry-footer">15 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cloud Storage" href="https://flecart.github.io/notes/cloud-storage/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Clustering
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Gaussian Mixture Models This set takes inspiration from chapter 9.2 of (Bishop 2006). We assume that the reader already knows quite well what is a Gaussian mixture model and we will just restate the models here. We will discuss the problem of estimating the best possible parameters (so, this is a density estimation problem) when the data is generated by a mixture of Gaussians.
+$$ \mathcal{N}(x \mid \mu, \Sigma) = \frac{1}{\sqrt{ 2\pi }} \frac{1}{\lvert \Sigma \rvert^{1/2} } \exp \left( -\frac{1}{2} (x - \mu)^{T} \Sigma^{-1}(x - \mu) \right) $$Problem statement 🟩 $$ p(z) = \prod_{i = 1}^{k} \pi_{i}^{z_{i}} $$ Because we know that $z$ is a $k$ dimensional vector that has a single digit indicating which Gaussian was chosen.
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Clustering" href="https://flecart.github.io/notes/clustering/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Codifica dei caratteri
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione sull’encoding Ossia trattiamo metodi per codificare caratteri dei linguaggi umani, come ASCII, UCS e UTF.
+Digitalizzare significa encodarlo in un sistema che possa essere memorizzato su un dispositivo di memorizzazione elettronico. Ovviamente non possiamo mantenere l’informazione così come è, ma vogliamo memorizzarne una forma equivalente, ma più facile da manipolare dal punto di vista del computer. Creiamo quindi un mapping, o anche isomorfismo tra il valore di mappatura (o encoding), solitamente un valore numerico, tra il singolo valore atomico originale e il numero.
+...</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Codifica dei caratteri" href="https://flecart.github.io/notes/codifica-dei-caratteri/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://flecart.github.io/notes/page/5/">
-      «&nbsp;Prev&nbsp;5/69
+      «&nbsp;Prev&nbsp;5/35
     </a>
-    <a class="next" href="https://flecart.github.io/notes/page/7/">Next&nbsp;7/69&nbsp;»
+    <a class="next" href="https://flecart.github.io/notes/page/7/">Next&nbsp;7/35&nbsp;»
     </a>
   </nav>
 </footer>

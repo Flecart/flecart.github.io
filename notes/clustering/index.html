@@ -335,7 +335,7 @@ Using product rule and using the expectation to get rid of the $Z$.</p>
 $$
 \log p(X) = \mathbb{E}_{Z \sim q} \left[  \log \frac{P(X, Z)}{q(Z)} \right] + \mathbb{E}_{Z \sim q} \left[ \log \frac{q(Z)}{P(Z \mid X)} \right] = M(q, \theta) + E(q, \theta)
 $$<p>
-We note that $E$ is a <a href="/notes/entropy/#relative-entropy-or-kullback-leibler">Kullback-Leibler divergence</a> so it&rsquo;s always positive, and we have $\log p(X) \geq M(q, \theta)$.</p>
+We note that $E$ is a <a href="/notes/entropy#relative-entropy-or-kullback-leibler">Kullback-Leibler divergence</a> so it&rsquo;s always positive, and we have $\log p(X) \geq M(q, \theta)$.</p>
 <p>Another fundamental operation is that we can find the parameters of $q$ such that $E$ is null, because we know that if two distributions are the same then the divergence is null. We can compute this because we know the values of the posterior.</p>
 <h3 id="the-expectation-maximization-algorithm---">The expectation-maximization algorithm 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#the-expectation-maximization-algorithm---">#</a></h3>
 <p>Dempster et al., 1977; McLachlan and Krishnan, 1997 are useful references for this method.</p>
@@ -357,7 +357,7 @@ We note that $E$ is a <a href="/notes/entropy/#relative-entropy-or-kullback-leib
 </ol>
 <p>It is guaranteed that the likelihood is increasing, but we might be stuck on local maxima and similar things.</p>
 <h4 id="convergence-of-em">Convergence of EM<a hidden class="anchor" aria-hidden="true" href="#convergence-of-em">#</a></h4>
-<p>This is just a bounded optimization problem, after which you use the convergence theorem in <a href="/notes/successioni/">Successioni</a> which asserts that the limit for bounded monotone sequences always exists and is Unique.</p>
+<p>This is just a bounded optimization problem, after which you use the convergence theorem in <a href="/notes/successioni">Successioni</a> which asserts that the limit for bounded monotone sequences always exists and is Unique.</p>
 <p>We know that $\log p(X) = M(q, \theta) + E(q, \theta)$, after the $E$ step, the corresponding Kullback-Leibler divergence is 0, so we have $\log p(X) = M(q', \theta)$ where $q'$ is the updated variational estimator.</p>
 <p>Then, if we set $\theta^{'} = \arg\max_{\theta} \log p(X) = \arg\max_{\theta} M(q', \theta)$, we have the following equations:</p>
 $$
@@ -380,7 +380,7 @@ $$<p>Then you can derive this loss to get the best mean, Sigma and $\pi$.
 This follows <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">(Murphy 2012)</a>, but I am not sure I modified it correctly.</p>
 <h4 id="deriving-the-expected-mean-">Deriving the expected mean 🟨++<a hidden class="anchor" aria-hidden="true" href="#deriving-the-expected-mean-">#</a></h4>
 <p>Then we continue with the maximization step, which is finding the best variables under this new variational family.</p>
-<p>First we want to do some <a href="/notes/massimi-minimi-multi-variabile/">multivariable analysis</a> in order to derive some conditions of the minima, for this reason we take the derivative with respect to $\mu_{k}$ of the loss equation, and we derive that</p>
+<p>First we want to do some <a href="/notes/massimi-minimi-multi-variabile">multivariable analysis</a> in order to derive some conditions of the minima, for this reason we take the derivative with respect to $\mu_{k}$ of the loss equation, and we derive that</p>
 <p>$$
 \begin{align}
 \frac{ \partial \log p(x) }{ \partial \mu_{k} }&amp;= \sum_{n = 1}^{N}\frac{\pi_{k}\mathcal{N}(x_{n} \mid \mu_{k}, \Sigma_{k})}{\sum_{j} \pi_{j} \mathcal{N} (x_{n} \mid \mu_{j}, \Sigma_{j})} \cdot \left( -\frac{1}{2} \right)  \frac{ \partial (x_{n} - \mu_{k})^{T} \Sigma^{-1}<em>{k}(x</em>{n} - \mu_{k}) }{ \partial \mu_{k} }  \
@@ -410,7 +410,7 @@ That assigns each point some <em>unique</em> label.</p>
 $$
 R(c, \mathcal{Y}) = \sum_{i  = 1}^{N} \lVert x_{i} - \mu_{c(x)}  \rVert ^{2}
 $$<h4 id="the-algorithm-">The Algorithm 🟩<a hidden class="anchor" aria-hidden="true" href="#the-algorithm-">#</a></h4>
-<img src="/images/notes/Non-parametric Modeling-20241205152331188.webp" alt="Non-parametric Modeling-20241205152331188">
+<img src="/images/notes/Non-parametric Modeling-20241205152331188.webp" style="width: 100%" class="center" alt="Non-parametric Modeling-20241205152331188">
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p>[1] Bishop “Pattern Recognition and Machine Learning” Springer 2006</p>
 <p>[2] Murphy <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">“Machine Learning: A Probabilistic Perspective”</a>  2012</p>

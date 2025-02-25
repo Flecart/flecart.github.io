@@ -336,9 +336,9 @@ The general idea is to ask how the function $\varphi$ that maps the longest $n$ 
 
   <div class="post-content"><p>In this note we explore a theme of time and space complexity. Those are cardinal themes in Theoretical CS.
 Time -&gt; execution step bounds on algorithms
-Space -&gt; the cells visited by a <a href="/notes/la-macchina-di-turing/">Turing Machine</a> when executed.</p>
+Space -&gt; the cells visited by a <a href="/notes/la-macchina-di-turing">Turing Machine</a> when executed.</p>
 <h2 id="introduction-to-time-complexity">Introduction to Time Complexity<a hidden class="anchor" aria-hidden="true" href="#introduction-to-time-complexity">#</a></h2>
-<p>This note will build upon know techniques of algorithms analysis explained in <a href="/notes/notazione-asintotica/">Notazione Asintotica</a>.
+<p>This note will build upon know techniques of algorithms analysis explained in <a href="/notes/notazione-asintotica">Notazione Asintotica</a>.
 We will need big-$O$ notation and $o$ notation.
 L&rsquo;idea è che il problema di decisione è decidibile se limito la lunghezza del teorema.
 Simile al <a href="https://en.wikipedia.org/wiki/Chaitin%27s_constant">numero di Chaitin</a>, che non è computabile, ma è approssimabile quanto si vuole. In un certo senso è computabile.
@@ -352,7 +352,7 @@ The general idea is to ask how the function $\varphi$ that maps the longest $n$ 
 </ul>
 <h3 id="influence-of-the-computational-model">Influence of the Computational Model<a hidden class="anchor" aria-hidden="true" href="#influence-of-the-computational-model">#</a></h3>
 <p>In Complexity Theory <strong>the choice of the formal model</strong> influences the complexity class of the model!
-This is different from the argument from computational theory of the <a href="/notes/la-macchina-di-turing/#tesi-di-church-turing">Church Turing Thesis</a>, where it asserts that a function is computable in every computational model. See 7.7 in <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a>.</p>
+This is different from the argument from computational theory of the <a href="/notes/la-macchina-di-turing#tesi-di-church-turing">Church Turing Thesis</a>, where it asserts that a function is computable in every computational model. See 7.7 in <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a>.</p>
 <h4 id="multi-tape-vs-single-tape-tm">Multi-tape vs single-tape TM<a hidden class="anchor" aria-hidden="true" href="#multi-tape-vs-single-tape-tm">#</a></h4>
 <p>It can be proved that every $t(n)$ time multi-tape TM can be simulated by a $t^{2}(n)$ single tape TM. See Theorem 7.8 of <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a>.</p>
 <h2 id="the-time-complexity-class">The Time Complexity Class<a hidden class="anchor" aria-hidden="true" href="#the-time-complexity-class">#</a></h2>
@@ -377,19 +377,19 @@ See later.</p>
 <h4 id="path-is-in-p">PATH is in P🟩<a hidden class="anchor" aria-hidden="true" href="#path-is-in-p">#</a></h4>
 <p>We can prove that the language
 $\left\{ \langle G, s, t \rangle \mid G \text{ is a graph that has a route from } s \text{ to } t \right\}$
-is in $P$ class. (Just use <a href="/notes/grafi/#bfs">Grafi#BFS</a> or <a href="/notes/grafi/#dfs">Grafi#DFS</a>).</p>
+is in $P$ class. (Just use <a href="/notes/grafi#bfs">Grafi#BFS</a> or <a href="/notes/grafi#dfs">Grafi#DFS</a>).</p>
 <p>NOTE: we have worked assuming that the algorithm worked on the nodes, but usually TM work with bits, the thing is that there is a polynomial algo that converts that nodes into binary format, so it is not much of a big deal.</p>
 <h4 id="overview-of-problems-in-p">Overview of problems in $P$<a hidden class="anchor" aria-hidden="true" href="#overview-of-problems-in-p">#</a></h4>
-<img src="/images/notes/Time Complexity-20240321132710013.webp" alt="Time Complexity-20240321132710013">
+<img src="/images/notes/Time Complexity-20240321132710013.webp" style="width: 100%" class="center" alt="Time Complexity-20240321132710013">
 <h3 id="exponential-complexity-class">Exponential Complexity Class🟩<a hidden class="anchor" aria-hidden="true" href="#exponential-complexity-class">#</a></h3>
 $$
 EXP = \bigcup_{i\geq 1} TIME(2^{n^{i}})
 $$<p>
-This class is common of the algorithms that use backtracking, for example <a href="/notes/costraint-satisfaction-problems/">Costraint Satisfaction Problems</a>. Or just brute-force search all the branches.</p>
+This class is common of the algorithms that use backtracking, for example <a href="/notes/costraint-satisfaction-problems">Costraint Satisfaction Problems</a>. Or just brute-force search all the branches.</p>
 <h3 id="non-deterministic-complexity-class">Non-deterministic Complexity Class<a hidden class="anchor" aria-hidden="true" href="#non-deterministic-complexity-class">#</a></h3>
 <p>Let $N$ be a non-deterministic decider (which means that the TM will halt on every computation branch) then we have that a problem is in this complexity class, called $NTIME$ if the running time cost $f: \mathbb{N} \to \mathbb{N}$ is bounded by that (longest computational branch).
-The difference with <a href="/notes/time-and-space-complexity/#polynomial-complexity-class">#Polynomial Complexity Class</a> is that here we consider the length of a single branch, but we explore everything at the same time!</p>
-<img src="/images/notes/Time Complexity-20240314134202678.webp" alt="Time Complexity-20240314134202678">
+The difference with <a href="/notes#polynomial-complexity-class">#Polynomial Complexity Class</a> is that here we consider the length of a single branch, but we explore everything at the same time!</p>
+<img src="/images/notes/Time Complexity-20240314134202678.webp" style="width: 100%" class="center" alt="Time Complexity-20240314134202678">
 <p>Quindi</p>
 $$
 NP = \bigcup_{i\geq 1} NTIME(n^{k})
@@ -397,14 +397,14 @@ $$<h4 id="simulation-by-deterministic-tm">Simulation by Deterministic TM<a hidde
 <p>We can prove that every TM in NP can be simulated by a deterministic machine in $2^{Ot(n)}$ time, where $t(n)$ is the complexity class of the TM. The intuition is easy, just try <em>every possible computational branch</em>, and see for the result.
 We then observe that $NP \subseteq EXP$ but this is not so useful.</p>
 <h4 id="clique-problem">Clique problem<a hidden class="anchor" aria-hidden="true" href="#clique-problem">#</a></h4>
-<p>See <a href="/notes/common-problems-in-theoretical-cs/#the-clique-problem">Common problems in Theoretical CS#The Clique problem</a> for description of the problem.</p>
+<p>See <a href="/notes/common-problems-in-theoretical-cs#the-clique-problem">Common problems in Theoretical CS#The Clique problem</a> for description of the problem.</p>
 <p><strong>NP algorithm</strong>
 Just</p>
 <ol>
 <li>Select a subset of nodes from $G$. Do it non deterministically.</li>
 <li>Verify if this subset is a complete graph. If yes add it to the solution set.</li>
 </ol>
-<p>We can prove that this is correct, and it works, but it is a non deterministic algorithm, so it isn&rsquo;t easily simulated by deterministic algorithms, even though we proved in <a href="/notes/estensioni-di-turing-e-altre-macchine/">Estensioni di Turing e altre macchine</a> that from the computability point of view it is the same.</p>
+<p>We can prove that this is correct, and it works, but it is a non deterministic algorithm, so it isn&rsquo;t easily simulated by deterministic algorithms, even though we proved in <a href="/notes/estensioni-di-turing-e-altre-macchine">Estensioni di Turing e altre macchine</a> that from the computability point of view it is the same.</p>
 <p><strong>Verifiable</strong>
 Given input the graph, and a subset, we need to</p>
 <ol>
@@ -452,17 +452,17 @@ $$
 P \subseteq NP \subseteq PSPACE = NPSPACE \subseteq  EXPTIME
 $$<p>
 The last subset is given by an observation that a TM that uses $f(n)$ space (PSPACE) cannot have more than $f(n)2^{O(f(n))}$ computational steps before looping.
-<img src="/images/notes/Time and Space Complexity-20240518095235181.webp" alt="Time and Space Complexity-20240518095235181"></p>
+<img src="/images/notes/Time and Space Complexity-20240518095235181.webp" style="width: 100%" class="center" alt="Time and Space Complexity-20240518095235181"></p>
 <h3 id="def-pspace-and-npspace">Def: PSPACE and NPSPACE<a hidden class="anchor" aria-hidden="true" href="#def-pspace-and-npspace">#</a></h3>
 $$
 PSPACE = \bigcup_{k}SPACE(n^{k})
 $$$$
 NPSPACE = \bigcup_{k} NSPACE(n^{k})
 $$<h3 id="def-pspace-completeness">Def: PSPACE-completeness<a hidden class="anchor" aria-hidden="true" href="#def-pspace-completeness">#</a></h3>
-<p>We say that $L$ is PSPACE-complete if it is $\in PSPACE$ and every other $L' \in PSPACE$ is <a href="/notes/cook-levin-and-savitch/#poly-reduction">poly-reducible</a> to it.</p>
+<p>We say that $L$ is PSPACE-complete if it is $\in PSPACE$ and every other $L' \in PSPACE$ is <a href="/notes/cook-levin-and-savitch#poly-reduction">poly-reducible</a> to it.</p>
 <h2 id="th-np-in-pspace">Th: $NP \in PSPACE$<a hidden class="anchor" aria-hidden="true" href="#th-np-in-pspace">#</a></h2>
 <p>In order to prove this we prove that $SAT \in PSPACE$ because as it is $NP-complete$ every NP problem can be reduced to $SAT$ and so it is in $PSPACE$.
-For more about SAT see <a href="/notes/common-problems-in-theoretical-cs/#the-sat-problem">Common problems in Theoretical CS#The SAT problem</a>.</p>
+For more about SAT see <a href="/notes/common-problems-in-theoretical-cs#the-sat-problem">Common problems in Theoretical CS#The SAT problem</a>.</p>
 <h4 id="proof-of-sat-in-pspace">Proof of SAT in PSPACE<a hidden class="anchor" aria-hidden="true" href="#proof-of-sat-in-pspace">#</a></h4>
 <p>We note that the simple algorithm that just enumerates all possible assignments is in $PSPACE$.
 Consider this algorithm:

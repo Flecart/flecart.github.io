@@ -319,7 +319,7 @@ While Object Storages, do not have APIs that could be helpful -&gt; richer logic
 
   <div class="post-content"><h3 id="introduction-to-wide-column-storages">Introduction to Wide Column Storages<a hidden class="anchor" aria-hidden="true" href="#introduction-to-wide-column-storages">#</a></h3>
 <p>One of the bottlenecks of traditional relational databases is the speed of the Joints, which could be done in $\mathcal{O}(n)$ using a merge join, assuming some indexes are present which make the keys already sorted.
-The other solution, of just using <a href="/notes/distributed-file-systems/">Distributed file systems</a>, is also not optimal: they have usually a high latency, with high throughput, that is not optimal with the series of small files that it is optimized for.
+The other solution, of just using <a href="/notes/distributed-file-systems">Distributed file systems</a>, is also not optimal: they have usually a high latency, with high throughput, that is not optimal with the series of small files that it is optimized for.
 While Object Storages, do not have APIs that could be helpful -&gt; <strong>richer logical model</strong>.</p>
 <p>Wide Column Storage solve this problem by keeping the entire table already joined -&gt; <strong>highly structured data</strong>, and providing similar querying abilities compared to relational tables. This brings to highly sparse relational tables.</p>
 <h4 id="the-usage">The Usage<a hidden class="anchor" aria-hidden="true" href="#the-usage">#</a></h4>
@@ -333,11 +333,11 @@ While Object Storages, do not have APIs that could be helpful -&gt; <strong>rich
 <li><strong>Batch processing</strong>: Store together what is accessed together.</li>
 </ul>
 <p>These are the current problems, with wide column stores we should solve all of these problems.
-<img src="/images/notes/Wide Column Storage-20241015094859900.webp" width="612" alt="Wide Column Storage-20241015094859900"></p>
+<img src="/images/notes/Wide Column Storage-20241015094859900.webp" width="612" class="center" alt="Wide Column Storage-20241015094859900"/></p>
 <p>This project has originated at Google with Big Table (similarly to Big Query). HBase is an opensource equivalent of the Google projects.</p>
 <p>With traditional relational database management systems, the joins are the expensive part of the operations.
 Wide Column Stores solve this problem by storing large <strong>sparse</strong> tables, as in the image:
-<img src="/images/notes/Wide Column Storage-20241015180733794.webp" width="585" alt="Wide Column Storage-20241015180733794"></p>
+<img src="/images/notes/Wide Column Storage-20241015180733794.webp" width="585" class="center" alt="Wide Column Storage-20241015180733794"/></p>
 <h4 id="basic-characteristics">Basic Characteristics<a hidden class="anchor" aria-hidden="true" href="#basic-characteristics">#</a></h4>
 <p>We summarize here some of the defining characteristics for Wide Column Storages:</p>
 <ul>
@@ -370,7 +370,7 @@ We will see later in the physical level that both families and qualifiers are re
 <p>Row updates are atomic, no matter how many row columns constitute the row-level transaction. This keeps the locking model simple.</p></blockquote>
 <p>From the Hadoop guide <a href="https://piazza-resources.s3.amazonaws.com/ist3pwd6k8p5t/iu5gqbsh8re6mj/OReilly.Hadoop.The.Definitive.Guide.4th.Edition.2015.pdf">here</a>.</p>
 <h3 id="physical-architecture">Physical Architecture<a hidden class="anchor" aria-hidden="true" href="#physical-architecture">#</a></h3>
-<img src="/images/notes/Wide Column Storage-20250120124713189.webp" alt="Wide Column Storage-20250120124713189">
+<img src="/images/notes/Wide Column Storage-20250120124713189.webp" style="width: 100%" class="center" alt="Wide Column Storage-20250120124713189">
 Image From the textbook.
 <h4 id="regions-and-stores-">Regions and Stores 🟩<a hidden class="anchor" aria-hidden="true" href="#regions-and-stores-">#</a></h4>
 <p>A region is just a <em>continuous section</em> of the rows.
@@ -382,14 +382,14 @@ The responsibility is not replicated, because HDFS automatically replicates the 
 <p>On a probability point of view, all the files are going to come back to the RegionServer because RegionServers are usually going to delete and recreate files, and HDFS by default stores the first copy on the same machine it is creating it from.
 The nice thing is that if the hblock is in the same machine, the process can circumvent HDFS and directly read that HDFS block. This was possible because HDFS and Wide column storage has been developed by the same team. So they have nice compatibilities.</p>
 <h4 id="network-architecture-">Network architecture 🟩<a hidden class="anchor" aria-hidden="true" href="#network-architecture-">#</a></h4>
-<p>The network topology is the same as the one we have for <a href="/notes/distributed-file-systems/">Distributed file systems</a>. We have a main node and some slave nodes. In this context they are called <strong>HMaster</strong> and <strong>RegionServers</strong>. We also have standby master nodes in this case.</p>
-<p>The HMaster has a metatable of all the responsibilities of every RegionServer, heartbeat and reports system also here to keep track of this in a old version, before there were also race conditions, see <a href="/notes/programmi-concorrenti/">Programmi Concorrenti</a>.
+<p>The network topology is the same as the one we have for <a href="/notes/distributed-file-systems">Distributed file systems</a>. We have a main node and some slave nodes. In this context they are called <strong>HMaster</strong> and <strong>RegionServers</strong>. We also have standby master nodes in this case.</p>
+<p>The HMaster has a metatable of all the responsibilities of every RegionServer, heartbeat and reports system also here to keep track of this in a old version, before there were also race conditions, see <a href="/notes/programmi-concorrenti">Programmi Concorrenti</a>.
 Now in order too keep the presence of everybody is something called a <strong>zoo-keeper</strong>.</p>
 <p>Creating tables, deleting them, creating column families, all the Data Definition operations go through the HMaster.
 HMaster&rsquo;s job is to load balance the RegionServer&rsquo;s load in terms of quantity of data. If regions grow too big, then it can split or reorganize the regions across the servers.</p>
 <h4 id="hfiles-and-keyvalues-">HFiles and KeyValues 🟨<a hidden class="anchor" aria-hidden="true" href="#hfiles-and-keyvalues-">#</a></h4>
 <p>Stores are Memorized as <strong>HFiles</strong>, organized in HBlocks of <strong>fixed</strong> size of 64Kb (+ last key key value, so it could be a little larger), usually the key-values are read in the blocks.
-These blocks are then compacted together (see <a href="/notes/wide-column-storage/#log-structured-trees">#Log Structured Trees</a>) until it reaches a maximum size for a region, which is typically 10GB. When the limit is reached, the region is usually divided into two.</p>
+These blocks are then compacted together (see <a href="/notes#log-structured-trees">#Log Structured Trees</a>) until it reaches a maximum size for a region, which is typically 10GB. When the limit is reached, the region is usually divided into two.</p>
 <p>These files are just list of the cells, stored by coordinate (keys, often in CamelCase) and values (also different versions are stored along side each other)</p>
 <p>A KeyValue in a HFiles is made of 4 parts:</p>
 <ul>
@@ -398,12 +398,12 @@ These blocks are then compacted together (see <a href="/notes/wide-column-storag
 <li>Key</li>
 <li>Value</li>
 </ul>
-<p>This is a prefix code, see <a href="/notes/algorithmic-probability/">Algorithmic Probability</a> for something more about prefix codes.</p>
+<p>This is a prefix code, see <a href="/notes/algorithmic-probability">Algorithmic Probability</a> for something more about prefix codes.</p>
 <p>The HFile also contains the boundary index of all the blocks that it has. So that it is easy to check for membership inside the blocks</p>
 <h4 id="structure-of-key-and-values-">Structure of Key and Values 🟥++<a hidden class="anchor" aria-hidden="true" href="#structure-of-key-and-values-">#</a></h4>
-<p>One also has an index, idea similar from <a href="/notes/index-b-trees-and-hashes/">b-trees</a>, so the lookup inside a HDFS block is easy.</p>
+<p>One also has an index, idea similar from <a href="/notes/index,-b-trees-and-hashes">b-trees</a>, so the lookup inside a HDFS block is easy.</p>
 <p>This image from the book cleanly summarizes the structure of the Key:
-<img src="/images/notes/Wide Column Storage-20241015190027475.webp" alt="Wide Column Storage-20241015190027475"></p>
+<img src="/images/notes/Wide Column Storage-20241015190027475.webp" style="width: 100%" class="center" alt="Wide Column Storage-20241015190027475"></p>
 <p>The red part of the key is of <strong>variable length</strong>. Grey boxes are of fixed length, also column family. The qualifier is variable, but you can recover that by knowing the length of the whole key.</p>
 <h4 id="in-memory-key-value-store--">In memory key-value store 🟩-<a hidden class="anchor" aria-hidden="true" href="#in-memory-key-value-store--">#</a></h4>
 <p>We store the key values in order in memory using some sort of tree. The upside is that we don&rsquo;t need to cancel and recreate the block in HDFS, because that only allows appending, the written data is not modifiable.
@@ -440,7 +440,7 @@ If it gets bigger, then the region might be splitted.</p>
 <p>So, just lookup tables that are <strong>known</strong> by everybody, and this should make communication a little bit faster.</p>
 <h4 id="cache-usages">Cache Usages<a hidden class="anchor" aria-hidden="true" href="#cache-usages">#</a></h4>
 <p>We should not use cache when we have random access or when we are doing batch processing, because the data the batches are processing are usually separate and independent with each other.
-You should refer to <a href="/notes/memoria/">Memoria</a> and <a href="/notes/memoria-virtuale/">Memoria virtuale</a> to know how usually is cache made.</p>
+You should refer to <a href="/notes/memoria">Memoria</a> and <a href="/notes/memoria-virtuale">Memoria virtuale</a> to know how usually is cache made.</p>
 <h4 id="key-ranges">Key Ranges<a hidden class="anchor" aria-hidden="true" href="#key-ranges">#</a></h4>
 <blockquote>
 <p>Efficiently tells  <strong>for sure</strong>  that a Key range is not contained in a file.</p></blockquote>
@@ -449,10 +449,10 @@ You should refer to <a href="/notes/memoria/">Memoria</a> and <a href="/notes/me
 <blockquote>
 <p>It is basically a black box that can tell with absolute certainty that a certain key does not belong to an HFile, while it only predicts with good probability (albeit not certain) that it does belong to it.</p></blockquote>
 <p>So that we can <strong>skip</strong> over files so that we can fasten the lookup time. Without bloom filters we would look for a specific key value in every single HFile, which could be quite slow.</p>
-<p>See <a href="/notes/bloom-filters/">Bloom Filters</a> for an overview on how they work.</p>
+<p>See <a href="/notes/bloom-filters">Bloom Filters</a> for an overview on how they work.</p>
 <h4 id="data-locality-and-short-circuiting-">Data locality and Short Circuiting 🟩<a hidden class="anchor" aria-hidden="true" href="#data-locality-and-short-circuiting-">#</a></h4>
 <p>We have specified in some paragraphs before that when HBase writes a HFile to a node, the first replica of the file is written on the same node.
-This allows for <strong>short circuiting</strong> which allows to directly read from the disk without asking the NameNode for the classical <a href="/notes/distributed-file-systems/#hadoop">HDFS</a> system.</p>
+This allows for <strong>short circuiting</strong> which allows to directly read from the disk without asking the NameNode for the classical <a href="/notes/distributed-file-systems#hadoop">HDFS</a> system.</p>
 
 
   </div>

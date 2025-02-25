@@ -281,7 +281,7 @@ La parte molto simile alla precedente è il fatto di valutare la funzione nell&r
     </details>
 </div>
 
-  <div class="post-content"><p>Questa parte è strettamente collegata conl a parte di <a href="/notes/astrazione-sul-controllo/">Astrazione sul controllo</a>.</p>
+  <div class="post-content"><p>Questa parte è strettamente collegata conl a parte di <a href="/notes/astrazione-sul-controllo">Astrazione sul controllo</a>.</p>
 <p>Si parla di <strong>passare le funzioni come dati</strong>. e quindi possono essere passati come se fossero dei parametri.</p>
 <blockquote>
 <p>un linguaggio di programmazione è di ordine superiore qualora
@@ -291,7 +291,7 @@ ammetta funzioni sia come parametro che come risultato di altre funzioni.</p></b
 <ul>
 <li>
 <p>Esempio di passaggio di funzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Fn Ordine superiore/Untitled.png" alt="image/universita/ex-notion/Fn Ordine superiore/Untitled">
+  <img src="/images/notes/image/universita/ex-notion/Fn Ordine superiore/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Fn Ordine superiore/Untitled">
 </li>
 </ul>
 <p>Si noti che questa distinzione fra scope statico e dinamico è indipendente da queste regole di shallow e deep binding, queste regole qui ci dicono quale ambiente scegliere per la valutazione, mentre le altre ci dicono in che modo percorrere le catene, se andare per catena dinamica o statica.</p>
@@ -300,13 +300,13 @@ ammetta funzioni sia come parametro che come risultato di altre funzioni.</p></b
 <h4 id="shallow-binding">Shallow Binding<a hidden class="anchor" aria-hidden="true" href="#shallow-binding">#</a></h4>
 <p>In questo caso l’ultimo binding possibile, quando sono proprio dentro la funzione (quindi la x attiva in quell’ambiente). Nell’esempio di sopra la x in riga 5. Quindi si valuta la funzione <strong>al momento della chiamata</strong>.</p>
 <h3 id="implementazione-del-shallow-binding">Implementazione del shallow binding<a hidden class="anchor" aria-hidden="true" href="#implementazione-del-shallow-binding">#</a></h3>
-<p>Questa è l&rsquo;implementazione semplice, praticamente uguale allo scope dinamico in <a href="/notes/nomi-e-scope/">Nomi e Scope</a>. Quindi <strong>cerco l’ultima istanza presente</strong> fra tutte quelle presenti (se voglio scope statico, risalgo catena statica, altrimenti risalgo catena dinamica). Esattamente come si faceva per lo scope dinamico, infatti si potrebbe dire che è più naturale utilizzare scope dinamico con questo, anche se si potrebbe senza problemi utilizzare scope statico!.</p>
+<p>Questa è l&rsquo;implementazione semplice, praticamente uguale allo scope dinamico in <a href="/notes/nomi-e-scope">Nomi e Scope</a>. Quindi <strong>cerco l’ultima istanza presente</strong> fra tutte quelle presenti (se voglio scope statico, risalgo catena statica, altrimenti risalgo catena dinamica). Esattamente come si faceva per lo scope dinamico, infatti si potrebbe dire che è più naturale utilizzare scope dinamico con questo, anche se si potrebbe senza problemi utilizzare scope statico!.</p>
 <p>Questo perché l’ultima presente era quella ancora presente nell&rsquo;ambiente di chiamata!</p>
 <h3 id="implementazione-del-deep-binding">Implementazione del deep binding<a hidden class="anchor" aria-hidden="true" href="#implementazione-del-deep-binding">#</a></h3>
 <p>Abbiamo detto che vogliamo valutare il deep binding seguendo la sua struttura (in questo caso <strong>statico</strong>, oppure nello scope di chiamata, in quel caso dinamico).</p>
 <p>Questo è easy, si segue direttamente lo stesso sistema fatto per il nome e per la catena statica, passando una coppia <strong>(funzione, ambiente</strong>) chiamata <strong>chiusura</strong> della funzione, la funzione sarà il puntatore al codice, mentre l&rsquo;ambiente è determinato così:</p>
 <h4 id="statico">Statico<a hidden class="anchor" aria-hidden="true" href="#statico">#</a></h4>
-<p>In questo caso devo mettere nel puntatore d’ambiente in cui la nostra funzione è dichiarata, questo si può avere a tempo di compilazione, perché conosco il livello di annidamento della funzione, e anche al momento della creazione del binding, quindi utilizzo un sistema simile in <a href="/notes/nomi-e-scope/">Nomi e Scope</a>. (quindi scorrere la catena statica con la differenza che conosco, oppure display).</p>
+<p>In questo caso devo mettere nel puntatore d’ambiente in cui la nostra funzione è dichiarata, questo si può avere a tempo di compilazione, perché conosco il livello di annidamento della funzione, e anche al momento della creazione del binding, quindi utilizzo un sistema simile in <a href="/notes/nomi-e-scope">Nomi e Scope</a>. (quindi scorrere la catena statica con la differenza che conosco, oppure display).</p>
 <h4 id="dinamico">Dinamico<a hidden class="anchor" aria-hidden="true" href="#dinamico">#</a></h4>
 <p>In questo caso basta mettere l&rsquo;ambiente in cui metto creo il binding fra parametro formale e attuale.</p>
 <h3 id="il-caso-del-c">Il caso del C<a hidden class="anchor" aria-hidden="true" href="#il-caso-del-c">#</a></h3>

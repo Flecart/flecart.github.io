@@ -309,12 +309,12 @@ ders, inventories kept up to date, etc), business intelligence is focused on
 the production of high-level reports for supporting C-level executives
 in making informed decisions.</p></blockquote>
 <h3 id="the-data-model">The Data Model<a hidden class="anchor" aria-hidden="true" href="#the-data-model">#</a></h3>
-<img src="/images/notes/Data Cubes-20241213154509445.webp" alt="Data Cubes-20241213154509445">
+<img src="/images/notes/Data Cubes-20241213154509445.webp" style="width: 100%" class="center" alt="Data Cubes-20241213154509445">
 We basically have some dimensions that index the data (which can be more than three in the image), and we have some information for each. The important part is that they are **dense** meaning we usually have information for every entry.
 <h4 id="fact-tables">Fact Tables<a hidden class="anchor" aria-hidden="true" href="#fact-tables">#</a></h4>
 <p>Clearly this model can be decomposed into a relational table, which is called <strong>fact table</strong> in this context.
 For example, the following is a $2\times 2\times 2$ cube:
-<img src="/images/notes/Data Cubes-20241213154807702.webp" alt="Data Cubes-20241213154807702"></p>
+<img src="/images/notes/Data Cubes-20241213154807702.webp" style="width: 100%" class="center" alt="Data Cubes-20241213154807702"></p>
 <h3 id="operations">Operations<a hidden class="anchor" aria-hidden="true" href="#operations">#</a></h3>
 <h4 id="slicing---">Slicing 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#slicing---">#</a></h4>
 <p>We just take a subset of the cube, for example, we can take all the data for a specific value of one of the dimensions. This should be the equivalent of a <strong>projection</strong>, we only care about specific values.
@@ -323,7 +323,7 @@ Equivalent of a selection on the fact table.</p>
 <li><strong>Definition</strong>: Slicing is the process of selecting a specific slice (subset) of the data cube by fixing a value for one or more dimensions. It reduces the dimensionality of the cube by keeping certain dimensions constant and viewing the data along the remaining dimensions.</li>
 <li><strong>Example</strong>: Consider a data cube with dimensions: <strong>Time</strong>, <strong>Product</strong>, and <strong>Location</strong>. Slicing might involve selecting data for a specific <strong>Time</strong> (e.g., January 2025) to analyze sales across <strong>Product</strong> and <strong>Location</strong> dimensions.</li>
 </ul>
-<img src="/images/notes/Data Cubes-20250128105132230.webp" alt="Data Cubes-20250128105132230">
+<img src="/images/notes/Data Cubes-20250128105132230.webp" style="width: 100%" class="center" alt="Data Cubes-20250128105132230">
 <h4 id="dicers---">Dicers 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#dicers---">#</a></h4>
 <p>If we slice in a way such that we only have (1,2,3)-dimensions left, then we have a nice way to represent that information in 2D table.
 This is what dicing means, it is a slice plus a nice organization in an human readable manner of the information.</p>
@@ -358,7 +358,7 @@ The easiest example is when we have a column in a table to be an enum, then we c
 The reverse process is called unpivoting.</p>
 <h4 id="satellite-tables">Satellite Tables<a hidden class="anchor" aria-hidden="true" href="#satellite-tables">#</a></h4>
 <p>These are tables that contain information about the dimensions. The main table just contains the keys to these tables, the full information is in the satellite tables and can be recovered with joins.
-If the satellited tables are also normalized (see <a href="/notes/structured-query-language/">Structured Query Language</a>) we derive the snowflake schema (if not, is called star schema).</p>
+If the satellited tables are also normalized (see <a href="/notes/structured-query-language">Structured Query Language</a>) we derive the snowflake schema (if not, is called star schema).</p>
 <h4 id="querying-cube-data">Querying Cube Data<a hidden class="anchor" aria-hidden="true" href="#querying-cube-data">#</a></h4>
 <p>TODO: (the main problem is doing with multiple aggregates).</p>
 <h3 id="molap">MOLAP<a hidden class="anchor" aria-hidden="true" href="#molap">#</a></h3>

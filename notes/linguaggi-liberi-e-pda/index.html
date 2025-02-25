@@ -150,7 +150,7 @@ I nodi di una derivazione da grammatica libera da contesto è chiamato costituen
     "no-tags"
   ],
   "articleBody": "In questa parte del nostro percorso nei linguaggi di programmazione proviamo ad espandere NFA e DFA in modo che possano riconoscere linguaggi come $ww^r | w \\in \\{a, b\\}^*$ , con r maggiore o uguale a zero (r per dire che è il contrario di w) (questo linguaggio per il pumping lemma).\nGrammatiche libere da contesto $$ G = \\langle \\mathcal{N}, S, \\Sigma, \\mathcal{R} \\rangle $$ Dove $\\mathcal{N}$ sono i non terminali, $S$ è il non terminale iniziale, $\\Sigma$ sono l’alfabeto dei simboli finali e $\\mathcal{R}$ le relazioni possibili. Spesso lo scriviamo solo tramite le relazioni, perché è la forma più compatta. I nodi di una derivazione da grammatica libera da contesto è chiamato costituente del linguaggio. Questo è più importante in linguistica.\nPush-down automata Introduzione automi a pila (7)🟩 – L’idea principale per espandere gli NFA è il concetto di stato o memoria, avere quindi una stack o pila può rendere molto più espressivo queste entità.\nIl prof. definisce automa a pila non deterministico (PDA) questa settupla $(\\Sigma, Q, \\Gamma, \\delta, q_{0}, \\bot, F)$\n$\\Sigma$ l’alfabeto finito dei simboli in input $\\Gamma$ l’alfabeto dei simboli sulla pila $Q$ l’insieme degli stati $\\delta$ transizione, nella forma $\\delta: Q\\times (\\Sigma \\cup \\left\\{ \\varepsilon \\right\\}) \\times \\Gamma \\to \\mathbb{P}(Q \\times \\Gamma^{*})$ $q_{0}$ lo stato iniziale $\\bot \\in \\Gamma$ il simbolo iniziale sulla pila $F \\in Q$ l’insieme degli stati finali. Una differenza che fa questo prof. contro La macchina di Turing è che lui fa distinzione dei simboli sulla pila, mentre l’altro no, una altra differenza è che gli stati finali sono esterni nell’altro. Ma credo alla fine sia equivalente. Attenzione: l’automa può leggere qualcosa solo se la sua stack non è vuota!\nLa parte inteessante dei PDA rispetto agli automi studiati in Automi e Regexp è la funzione di transizione, che è ora nella forma\n$$ \\delta: Q \\times (\\Sigma \\cup\\{\\varepsilon\\}) \\times \\Gamma \\to P(Q \\times \\Gamma ^*) $$ Esempio hard di PDA Computazione automi a pila🟩 – Accettazione della stringa 🟩 La cosa particolare degli automi a pila è che accettano la stringa anche quando la pila diventa vuota, non solo quando finisco di leggere e ho uno stato che è bello. Ossia detto meglio, posso costruirmi un automa a Pila che accetta la stessa stringa quando la pila diventa vuota, c’è una sorta di equivalenza fra stato e cose sulla pila.\nSlide\nLa cosa importante da capire per questa parte è che si differenziano due metodi di accettazione per la stringa:\nPila vuota Stato finale. In entrambi i casi devo leggere tutto l’input, e poi vado a vadere dove sto. Nel primo caso se ho letto tutto l’input e la pila è vuota allora accetto, nel secondo caso se ho letto tutta la stringa e sono in uno stato finale allora vado ad accettare.\nTeorema equivalenza accettazione Vuoto-Stato 🟩 Enunciato\nDimostrazione in slide\nL’idea dietro questo teorema è molto simile a quanto presente nella conversione fra espressione regolare e NFA, perché sto andando in modo ricorsivo, supponendo che ho già un vecchio automa che funzioni, e basta che ci costruisca cose intorno ad essa. (in questo caso simbolo iniziale nuovo e stato finale che più o meno racchiude tutti gli stati finali!\nZ è un simbolo stack nel nostro nuovo automa, solo utilizzato per gestire meglio alcune cose con la stack.\nOgni linguaggio è libero sse riconosciuto da PDA (chiede)🟩 Enunciato\nDimostrazione\nDiagramma PDA per →\nNota questo non è il PDA di cui parlava il prof nelle slides, bisognerebbe condensarlo in un unico stato. Questo qui risolve per stato finale, quello del prof per stack vuota\nNote sulla dimo\nVogliamo dimostrare un sse, in una proviamo a costruire un automa partendo dalle regole della grammatica, (non dimostriamo che l’automa riconosce effettivamente, la costruiamo ebbasta.\nPer l’altra freccia bisogna avere dimostrato prima alcuni lemmi che noi saltiamo per ora.\nProprietà dei linguaggi liberi Unione, Conc, e Kleene 🟩 Dimostrazione\nIn pratica i non terminali e terminali sono uniti assieme, e con qualche produzione in più sullo stato iniziale per gestire le cose.\nIntersezione con linguaggio regolare (chiede per alto voto) 🟩 Questa è qualcosa di leggermente più tosta, però in soldoni sto facendo un bruteforce, e prendendo tutte le combinazioni possibili per cui si possa riconoscere\nTh e dimostrazione\nCon questo teorema è spesso utile per dimostrare che un linguaggio non è libero.\nInvece non sono chiusi per intersezione i linguaggi liberi\nEsempio di non chiusura\nDa questo dato si può concludere che non sono chiusi per complemento altrimenti lo sarebbero anche per l’intersezione.\nPumping theorem, tosta (!) 🟨++ Enunciato\nDimostrazione\nDimostrazione libro sispser (più chiaro)\nL’idea è sempre avere così tanti stati che avrò per forza dei non terminali duplicati. uno sotto l’altro, in una forma ricorsiva, allora prendo il minore e vado a fare ragionamenti lì.\nClassificazione dei linguaggi Classificazione di Chomsky Chomsky, linguista, ha descritto una gerarchia di linguaggi\nCaratterizzazione dei linguaggi Sulla decidibilità guardare Fondamenti teorica e La macchina di Turing\nIn questo caso i nuovi sono\nGrammatiche dipendenti dal contesto, in cui una singola produzione può avere più non-terminali. Grammatiche motonone, le cui produzioni basta che crescano Grammatiche generali, in cui non c’è nessun vincolo di produzioni Schema generale delle grammatiche 🟩 Per turing, vedere La macchina di Turing.\nGerarchia automi 🟨+ In generale si può estendere dicendo\nAutomi Limitati riconoscono grammatiche dipendenti dal contesto Automi di Turing riconoscono i linguaggi ricorsivi, e sono in grado di enumerare ricorsivamente quelle generali. (anche se è semidecidibile, quindi forse non riesce a ricononscerli tutte??) ",
-  "wordCount" : "929",
+  "wordCount" : "932",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -320,29 +320,29 @@ I nodi di una derivazione da grammatica libera da contesto è chiamato <strong>c
 <li>$q_{0}$ lo stato iniziale</li>
 <li>$\bot \in \Gamma$ il simbolo iniziale sulla pila</li>
 <li>$F \in Q$ l&rsquo;insieme degli stati finali.
-Una differenza che fa questo prof. contro <a href="/notes/la-macchina-di-turing/">La macchina di Turing</a> è che lui fa distinzione dei simboli sulla pila, mentre l&rsquo;altro no, una altra differenza è che gli stati finali sono esterni nell&rsquo;altro. Ma credo alla fine sia equivalente.</li>
+Una differenza che fa questo prof. contro <a href="/notes/la-macchina-di-turing">La macchina di Turing</a> è che lui fa distinzione dei simboli sulla pila, mentre l&rsquo;altro no, una altra differenza è che gli stati finali sono esterni nell&rsquo;altro. Ma credo alla fine sia equivalente.</li>
 </ul>
 <p>Attenzione: l’automa può leggere qualcosa solo se la sua stack non è vuota!</p>
-<p>La parte inteessante dei PDA rispetto agli automi studiati in <a href="/notes/automi-e-regexp/">Automi e Regexp</a> è la funzione di transizione, che è ora nella forma</p>
+<p>La parte inteessante dei PDA rispetto agli automi studiati in <a href="/notes/automi-e-regexp">Automi e Regexp</a> è la funzione di transizione, che è ora nella forma</p>
 $$
 \delta: Q \times (\Sigma \cup\{\varepsilon\}) \times \Gamma \to P(Q \times \Gamma ^*)
 $$<ul>
 <li>Esempio hard di PDA
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 2.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 2"></li>
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 2"></li>
 </ul>
 <h3 id="computazione-automi-a-pila---">Computazione automi a pila🟩 &ndash;<a hidden class="anchor" aria-hidden="true" href="#computazione-automi-a-pila---">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 3.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 3">
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 4.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 4">
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 5.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 5">
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 6.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 6">
-<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 7.png&quot; alt=&quot;image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 7&quot;&gt;
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 3">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 4">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 5">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 6">
+<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 7.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 7&quot;&gt;
 </code></pre>
 <h3 id="accettazione-della-stringa-">Accettazione della stringa 🟩<a hidden class="anchor" aria-hidden="true" href="#accettazione-della-stringa-">#</a></h3>
 <p>La cosa particolare degli automi a pila è che accettano la stringa anche quando la pila diventa vuota, non solo quando finisco di leggere e ho uno stato che è bello. Ossia detto meglio, posso costruirmi un automa a Pila che accetta la stessa stringa quando la pila diventa vuota, c’è una sorta di equivalenza fra stato e cose sulla pila.</p>
 <ul>
 <li>
 <p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 8.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 8">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 8">
 </li>
 </ul>
 <p>La cosa importante da capire per questa parte è che si differenziano <strong>due metodi di accettazione</strong> per la stringa:</p>
@@ -355,11 +355,11 @@ $$<ul>
 <ul>
 <li>
 <p>Enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 9.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 9">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 9">
 </li>
 <li>
 <p>Dimostrazione in slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 10.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 10">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 10">
 </li>
 </ul>
 <p>L&rsquo;idea dietro questo teorema è molto simile a quanto presente nella conversione fra espressione regolare e NFA, perché sto andando in modo ricorsivo, supponendo che ho già un vecchio automa che funzioni, e basta che ci costruisca cose intorno ad essa. (in questo caso simbolo iniziale nuovo e stato finale che più o meno racchiude tutti gli stati finali!</p>
@@ -368,19 +368,19 @@ $$<ul>
 <ul>
 <li>
 <p>Enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 11.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 11">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 11">
 </li>
 <li>
 <p>Dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 12.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 12">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 13.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 13">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 14.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 14">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 15.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 15">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 12">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 13">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 14">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 15">
 </li>
 <li>
 <p>Diagramma PDA per →</p>
 <p>Nota questo non è il PDA di cui parlava il prof nelle slides, bisognerebbe condensarlo in un unico stato. Questo qui risolve per stato finale, quello del prof per stack vuota</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 16.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 16">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 16">
 </li>
 </ul>
 <p><strong>Note sulla dimo</strong></p>
@@ -391,7 +391,7 @@ $$<ul>
 <ul>
 <li>
 <p>Dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 17.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 17">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 17">
 </li>
 </ul>
 <p>In pratica i non terminali e terminali sono uniti assieme, e con qualche produzione in più sullo stato iniziale per gestire le cose.</p>
@@ -400,7 +400,7 @@ $$<ul>
 <ul>
 <li>
 <p>Th e dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 18.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 18">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 18">
 </li>
 </ul>
 <p>Con questo teorema è spesso utile per dimostrare che un linguaggio non è libero.</p>
@@ -408,7 +408,7 @@ $$<ul>
 <ul>
 <li>
 <p>Esempio di non chiusura</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 19.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 19">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 19">
 </li>
 </ul>
 <p>Da questo dato si può concludere che <strong>non sono chiusi per complemento</strong> altrimenti lo sarebbero anche per l&rsquo;intersezione.</p>
@@ -416,22 +416,22 @@ $$<ul>
 <ul>
 <li>
 <p>Enunciato</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 20.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 20">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 20">
 </li>
 <li>
 <p>Dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 21.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 21">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 22.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 22">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 23.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 23">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 24.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 24">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 25.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 25">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 26.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 26">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 27.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 27">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 21.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 21">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 22">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 23.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 23">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 24.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 24">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 25.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 25">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 26.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 26">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 27.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 27">
 </li>
 <li>
 <p>Dimostrazione libro sispser (più chiaro)</p>
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 28.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 28">
-  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 29.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 29">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 28.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 28">
+  <img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 29.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 29">
 </li>
 </ul>
 <p>L’idea è sempre avere così tanti stati che avrò per forza dei <strong>non terminali duplicati</strong>. uno sotto l’altro, in una forma ricorsiva, allora prendo il minore e vado a fare ragionamenti lì.</p>
@@ -440,9 +440,9 @@ $$<ul>
 <p>Chomsky, linguista, ha descritto una gerarchia di linguaggi</p>
 <ul>
 <li>Caratterizzazione dei linguaggi
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 30.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 30"></li>
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 30.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 30"></li>
 </ul>
-<p>Sulla decidibilità guardare <a href="/notes/fondamenti-teorica/">Fondamenti teorica</a> e <a href="/notes/la-macchina-di-turing/">La macchina di Turing</a></p>
+<p>Sulla decidibilità guardare <a href="/notes/fondamenti-teorica">Fondamenti teorica</a> e <a href="/notes/la-macchina-di-turing">La macchina di Turing</a></p>
 <p>In questo caso i nuovi sono</p>
 <ul>
 <li>Grammatiche dipendenti dal contesto, in cui una singola produzione può avere <strong>più non-terminali</strong>.</li>
@@ -450,15 +450,15 @@ $$<ul>
 <li>Grammatiche generali, in cui non c’è nessun vincolo di produzioni</li>
 </ul>
 <h3 id="schema-generale-delle-grammatiche-">Schema generale delle grammatiche 🟩<a hidden class="anchor" aria-hidden="true" href="#schema-generale-delle-grammatiche-">#</a></h3>
-<p>Per turing, vedere <a href="/notes/la-macchina-di-turing/">La macchina di Turing</a>.</p>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 31.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 31">
+<p>Per turing, vedere <a href="/notes/la-macchina-di-turing">La macchina di Turing</a>.</p>
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 31.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 31">
 <h3 id="gerarchia-automi-">Gerarchia automi 🟨+<a hidden class="anchor" aria-hidden="true" href="#gerarchia-automi-">#</a></h3>
 <p>In generale si può estendere dicendo</p>
 <ul>
 <li>Automi Limitati riconoscono grammatiche dipendenti dal contesto</li>
 <li>Automi di Turing riconoscono i linguaggi ricorsivi, e sono in grado di enumerare ricorsivamente quelle generali. (anche se è semidecidibile, quindi forse non riesce a ricononscerli tutte??)</li>
 </ul>
-<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 32.png" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 32">
+<img src="/images/notes/image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 32.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Linguaggi liberi e PDA/Untitled 32">
 
   </div>
 

@@ -319,7 +319,7 @@ First we will introduce some useful definitions in this context. These were also
     </details>
 </div>
 
-  <div class="post-content"><p>While <a href="/notes/active-learning/">Active Learning</a> looks for the most informative points to recover a <em>true</em> underlying function, Bayesian Optimization is just interested to find the maximum of that function.
+  <div class="post-content"><p>While <a href="/notes/active-learning">Active Learning</a> looks for the most informative points to recover a <em>true</em> underlying function, Bayesian Optimization is just interested to find the maximum of that function.
 In Bayesian Optimization, we ask for the best way to find <em>sequentially</em> a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.</p>
 <h3 id="definitions">Definitions<a hidden class="anchor" aria-hidden="true" href="#definitions">#</a></h3>
 <p>First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.</p>
@@ -336,7 +336,7 @@ $$<p>Intuitively, it says that if we explore enough, then we will always get the
 $$
 \lim_{ n \to \infty } f(x_{n}) = \max_{x} f(x) \iff \lim_{ n \to \infty } \frac{R_{n}}{n} = 0
 $$<p><strong>Proof:</strong></p>
-<p>Using <a href="/notes/serie/">Cesàro Mean</a> we quickly verify the $\implies$ direction.
+<p>Using <a href="/notes/serie">Cesàro Mean</a> we quickly verify the $\implies$ direction.
 For the inverse we see the following:</p>
 $$
 \begin{align}
@@ -351,7 +351,7 @@ Then it follows from the other direction of the Cesàro mean.</p>
 It&rsquo;s easy to observe that both greedy strategies that only exploit the current best guess and strategies that only explore new regions are not optimal, meaning they will yield not sub-linear regrets.</p>
 <h2 id="optimization-techniques">Optimization Techniques<a hidden class="anchor" aria-hidden="true" href="#optimization-techniques">#</a></h2>
 <h3 id="a-standard-idea-">A standard Idea 🟩<a hidden class="anchor" aria-hidden="true" href="#a-standard-idea-">#</a></h3>
-<p>In the rest of the section, we will assume that the $f$ function is a <a href="/notes/gaussian-processes/">Gaussian Process</a>.
+<p>In the rest of the section, we will assume that the $f$ function is a <a href="/notes/gaussian-processes">Gaussian Process</a>.
 Then one greedy way to solve this optimization problem is the following algorithm</p>
 <ol>
 <li>Initialize a $f \sim GP(\mu_{0}, k_{0})$.</li>
@@ -364,7 +364,7 @@ Then one greedy way to solve this optimization problem is the following algorith
 </li>
 </ol>
 <h4 id="on-the-need-of-calibrated-models-">On the need of Calibrated Models 🟩<a hidden class="anchor" aria-hidden="true" href="#on-the-need-of-calibrated-models-">#</a></h4>
-<p>The most important of the following models is the GP-UCB acquisition function that heavily relies on the <strong>calibration</strong> assumption. Recall <a href="/notes/bayesian-neural-networks/">Bayesian neural networks</a> for a refresh on calibration.
+<p>The most important of the following models is the GP-UCB acquisition function that heavily relies on the <strong>calibration</strong> assumption. Recall <a href="/notes/bayesian-neural-networks">Bayesian neural networks</a> for a refresh on calibration.
 Intuitively, only in the case of calibrated models, the confidence bounds given by the GP relates to the accuracy of the prediction.
 If a model is not calibrated, the confidence doesn&rsquo;t tell you anything on the accuracy of the prediction.</p>
 $$
@@ -379,11 +379,11 @@ $$<h3 id="entropy-search">Entropy Search<a hidden class="anchor" aria-hidden="tr
 <p>This method expands the <em>d-optimality</em> criteria, by looking for the point that gives the maximal information on the point we are looking for. There is a chicken and egg problem here, as the point itself.</p>
 <h3 id="gp-ucb">GP-UCB<a hidden class="anchor" aria-hidden="true" href="#gp-ucb">#</a></h3>
 <h4 id="the-idea">The idea<a hidden class="anchor" aria-hidden="true" href="#the-idea">#</a></h4>
-<img src="/images/notes/N-Bandit Problem-20241110182231356.webp" width="624" alt="N-Bandit Problem-20241110182231356">
+<img src="/images/notes/N-Bandit Problem-20241110182231356.webp" width="624" class="center" alt="N-Bandit Problem-20241110182231356"/>
 Image taken from slides of the PAI course ETH 2024.
 <blockquote>
 <p>Optimism in the face of uncertainty</p></blockquote>
-<p>We just want to pick the point that maximizes our upper confidence bound in the posterior of the <a href="/notes/gaussian-processes/">Gaussian Processes</a>.
+<p>We just want to pick the point that maximizes our upper confidence bound in the posterior of the <a href="/notes/gaussian-processes">Gaussian Processes</a>.
 The green region are the possible regions that we would like to sample from, as their upper confidence is higher than our lower bound. This idea is recurring in this setting.</p>
 <p>If the model is well calibrated, then the uncertainty regions are coherent with what actually returns the underlying function. This motivates why we can safely ignore the zones on our input where the maximum is less than the minimum value of the variance. We are sure, due to calibration, that those zones do not contain our maximum with high confidence.</p>
 <h4 id="ucb-picking-principle-">UCB Picking principle 🟩<a hidden class="anchor" aria-hidden="true" href="#ucb-picking-principle-">#</a></h4>
@@ -391,7 +391,7 @@ $$
 x_{t} = \arg\max_{x \in D} \mu_{t - 1}(x) + \beta_{t - 1} \sigma_{t - 1}(x)
 $$<p>
 Where $\mu_{t - 1}(x)$ is the mean of the GP at the point $x$ and $\sigma_{t - 1}(x)$ is the standard deviation. $\beta_{t - 1}$ is a parameter that we can tune to have more or less exploration. This should select the point that maximizes the upper confidence bound in the GP.</p>
-<p>We observe that if $\forall t,\beta_{t - 1} = 0$ then the algorithm is <em>purely exploitative</em>, while if $\beta_{t - 1} = \infty$ then the algorithm is <em>purely esplorative</em>, and it&rsquo;s equivalent to uncertainty sampling presented in <a href="/notes/active-learning/">Active Learning</a>.</p>
+<p>We observe that if $\forall t,\beta_{t - 1} = 0$ then the algorithm is <em>purely exploitative</em>, while if $\beta_{t - 1} = \infty$ then the algorithm is <em>purely esplorative</em>, and it&rsquo;s equivalent to uncertainty sampling presented in <a href="/notes/active-learning">Active Learning</a>.</p>
 <p>The point can be found using standard one dimensional optimization techniques (e.g. random sampling or similars).</p>
 <h4 id="convergence-bound-on-gp-ucp---">Convergence Bound on GP-UCP 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#convergence-bound-on-gp-ucp---">#</a></h4>
 $$
@@ -400,12 +400,12 @@ $$<p>
 The maximum information gain determines the regret, often indicated as $\gamma_{T}$, sometimes as $\max_{S \leq T} I(f; y_{S})$. This sets the <em>rate</em> at which we get information. Due to submodularity of mutual information we can show that $\gamma_{T}$ can at most grow linearly with $T$.</p>
 <p>I have no idea why this is true.
 These are the bounds for different kernels in the GP
-<img src="/images/notes/N-Bandit Problem-20241110183044028.webp" alt="N-Bandit Problem-20241110183044028">
+<img src="/images/notes/N-Bandit Problem-20241110183044028.webp" style="width: 100%" class="center" alt="N-Bandit Problem-20241110183044028">
 The nice thing is that with all these kernels, we have guarantees that the regret is sub-linear, so we get the best possible solution.</p>
 $$
 r_{t} \leq 2 \beta_{t} \sigma_{t}(x_{t})
 $$<p>
-And using the GP informational result from <a href="/notes/active-learning/">Active Learning</a> we have:
+And using the GP informational result from <a href="/notes/active-learning">Active Learning</a> we have:
 $$
 \begin{align}
 \frac{1}{T} R^{2}<em>{T} &amp;\leq \sum</em>{t = 1}^{T}r_{t}^{2} \text{ Cauchy-Schwarz} \
@@ -420,7 +420,7 @@ $$</p>
 if the function is continuous, smooth so to say, then knowing the value of one point gives lots of insights to the value of the next point. Which means we need fewer point to get a good estimate of the function (this is why the slope of the function is low).
 If we have quite independent samples, then we need more points to get a good estimate of the function.
 This is why it has a linear growth rate: every point gives you about the same information. Note that this happens only for white noise, so probably it is not a much interesting case.</p>
-<img src="/images/notes/Bayesian Optimization-20241220155951442.webp" alt="Bayesian Optimization-20241220155951442">
+<img src="/images/notes/Bayesian Optimization-20241220155951442.webp" style="width: 100%" class="center" alt="Bayesian Optimization-20241220155951442">
 <h4 id="choosing-the-point">Choosing the point<a hidden class="anchor" aria-hidden="true" href="#choosing-the-point">#</a></h4>
 <p>Usually the acquisition function is <em>non-convex</em>, so we need some methods to compute that maximum.</p>
 <ul>

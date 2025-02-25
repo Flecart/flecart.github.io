@@ -351,7 +351,7 @@ Anche se non so nei dettagli in che modo esegue questo (alla fine roba assembly?
   <div class="post-content"><h2 id="struttura-del-dbms">Struttura del DBMS<a hidden class="anchor" aria-hidden="true" href="#struttura-del-dbms">#</a></h2>
 <h3 id="introduzione-ai-dbms">Introduzione ai DBMS<a hidden class="anchor" aria-hidden="true" href="#introduzione-ai-dbms">#</a></h3>
 <h4 id="schema-riassuntivo">Schema riassuntivo<a hidden class="anchor" aria-hidden="true" href="#schema-riassuntivo">#</a></h4>
-<img src="/images/notes/The Database Management System-1700648809120.jpeg" alt="The Database Management System-1700648809120">
+<img src="/images/notes/The Database Management System-1700648809120.jpeg" style="width: 100%" class="center" alt="The Database Management System-1700648809120">
 #### Operazioni classiche
 Ci stiamo chiedendo, come facciamo a descrivere i processi che portano alla comprensione della query e della retrieval degli elementi utili?
 Questo deve fare il DBMS, ossia capace di 
@@ -381,27 +381,27 @@ Esegue l'effettiva computazione per la query, ed è il punto d'incontro col rest
 <p>In questo senso <strong>gestisce le risorse</strong>, perché gestisce le informazioni, in questo caso risorsa principale del nostro db.</p>
 <h4 id="index-file-record-manager-">Index file record manager 🟨++<a hidden class="anchor" aria-hidden="true" href="#index-file-record-manager-">#</a></h4>
 <p>È la parte del database che <strong>conosce le strutture delle tables</strong> e sa accedere ai dati, ossia contiene le <em>strutture di dati</em> utili per l&rsquo;accesso a queste tables.</p>
-<p>Però non so in che modo è implementato un index, dovresti guardare in <a href="/notes/index-b-trees-and-hashes/">Index, B-trees and hashes</a>.</p>
+<p>Però non so in che modo è implementato un index, dovresti guardare in <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a>.</p>
 <h4 id="buffer-manager-">Buffer Manager 🟩<a hidden class="anchor" aria-hidden="true" href="#buffer-manager-">#</a></h4>
 <p>Si occupa di memorizzare in modo temporaneo le informazioni necessarie per fare le join e altre operazioni (anche una cache diciamo). <strong>ram riservata</strong>. Qui sarà presente un nodo più forte e normale tipo!
 Può essere molto utile per <em>tenere gli indici</em>, per tabelle più frequentemente accedute!
 Solitamente 100MB di ram qui!, circa 25k nodi di b-tree anche!</p>
 <h4 id="storage-manager-">Storage Manager 🟩<a hidden class="anchor" aria-hidden="true" href="#storage-manager-">#</a></h4>
-<p>Probabilmente utilizza hash <a href="/notes/index-b-trees-and-hashes/">Index, B-trees and hashes</a> per capire quale esatto blocco gli è stato richiesto.</p>
+<p>Probabilmente utilizza hash <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a> per capire quale esatto blocco gli è stato richiesto.</p>
 <p>Si occupa di <strong>tenere traccia</strong> dei blocchi precisi con informazioni nel disco principale (è la parte del sistema che si occupa di restituire il blocco di interesse una volta richiesto la chiave).</p>
 <h3 id="other-parts">Other parts<a hidden class="anchor" aria-hidden="true" href="#other-parts">#</a></h3>
 <h3 id="transaction-manager">Transaction Manager<a hidden class="anchor" aria-hidden="true" href="#transaction-manager">#</a></h3>
 <p>Permette di fare le transazioni.
-<img src="/images/notes/The Database Management System-1703757406734.jpeg" alt="The Database Management System-1703757406734"></p>
+<img src="/images/notes/The Database Management System-1703757406734.jpeg" style="width: 100%" class="center" alt="The Database Management System-1703757406734"></p>
 <h4 id="logging--">Logging 🟩-<a hidden class="anchor" aria-hidden="true" href="#logging--">#</a></h4>
-<p>Come per i filesystem basati su logging, questo è un metodo utile per tenere traccia dei cambiamenti effettivamente fatti o meno. vedere <a href="/notes/filesystem/">Filesystem</a>.
+<p>Come per i filesystem basati su logging, questo è un metodo utile per tenere traccia dei cambiamenti effettivamente fatti o meno. vedere <a href="/notes/filesystem">Filesystem</a>.
 Aiuta a creare l&rsquo;<strong>atomicità</strong> e la <strong>consistenza</strong> necessari per ACID.</p>
 <p><strong>Cosa fa:</strong>
 Scrive log in RAM, nel buffer manager, e ci sono protocolli per far sì che questi vengano correttamente salvati sul disco.
 Nel caso di problemi, comunica col <strong>recovery manager</strong> in modo che il database torni indietro in stato consistente.</p>
 <h4 id="concurrency-control">Concurrency control<a hidden class="anchor" aria-hidden="true" href="#concurrency-control">#</a></h4>
 <p>Questa parte si occupa della <strong>isolation</strong> in ACID, cerca di fare sì che tutte le operazioni siano eseguite come se fossero isolate uno dall&rsquo;altra, in questo caso si parla di <strong>serializzabilità</strong> dell&rsquo;operazione.</p>
-<p>Questa è la parte che ha il controllo sui <strong>locks</strong> come i <a href="/notes/semafori/">Semafori</a> o <a href="/notes/monitor/">Monitor</a> per la gestione della concorrenza.</p>
+<p>Questa è la parte che ha il controllo sui <strong>locks</strong> come i <a href="/notes/semafori">Semafori</a> o <a href="/notes/monitor">Monitor</a> per la gestione della concorrenza.</p>
 <h5 id="schedule-">Schedule 🟨<a hidden class="anchor" aria-hidden="true" href="#schedule-">#</a></h5>
 <blockquote>
 <p>Una sequenza di azioni (read, write, commit, abort) da un** insieme di transazioni**</p></blockquote>
@@ -413,7 +413,7 @@ Nel caso di problemi, comunica col <strong>recovery manager</strong> in modo che
 <blockquote>
 <p>Uno schedule è serializzabile, se <strong>l&rsquo;effetto finale</strong> è come di uno schedule completo seriale.</p></blockquote>
 <h5 id="tipologie-di-anomalie-di-concorrenza-4">Tipologie di anomalie di concorrenza (4)<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-anomalie-di-concorrenza-4">#</a></h5>
-<img src="/images/notes/The Database Management System-1704791088187.jpeg" alt="The Database Management System-1704791088187">
+<img src="/images/notes/The Database Management System-1704791088187.jpeg" style="width: 100%" class="center" alt="The Database Management System-1704791088187">
 Una cosa carina è che questi processi possono essere intesi come errori di Theory of mind secondo me. Si hanno errori quando una serie fa qualcosa, ma l'altro pensa che lo stato sia di un altro genere.
 <p>Più in generale questo problema si può riassumere in <strong>phantom anomaly</strong>, perché un oggetto viene cambiato nel momento in cui una altra transazione pensa resti la stessa.</p>
 <h5 id="transaction-isolation-levels-">Transaction isolation levels 🟥<a hidden class="anchor" aria-hidden="true" href="#transaction-isolation-levels-">#</a></h5>

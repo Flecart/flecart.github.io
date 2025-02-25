@@ -309,7 +309,7 @@ bisogna in questa fase valutare la performance principalmente su indicatori, oss
 <li>Un design concettuale spiegato in precedenza.</li>
 </ul>
 <p>E si avrà in output un design logico con anche un po&rsquo; di documentazione.
-<img src="/images/notes/Database logical design-1700046979267.jpeg" alt="Database logical design-1700046979267"></p>
+<img src="/images/notes/Database logical design-1700046979267.jpeg" style="width: 100%" class="center" alt="Database logical design-1700046979267"></p>
 <p>bisogna in questa fase <strong>valutare la performance</strong> principalmente su <em>indicatori</em>, ossia una operazione quante istanze visiterà? Invece di garanzie sul numero di transazioni al secondo.</p>
 <h4 id="indicatori-visti-2">Indicatori visti (2)<a hidden class="anchor" aria-hidden="true" href="#indicatori-visti-2">#</a></h4>
 <p><strong>Costo di una operazione</strong>: viene valutato in termini di numero di occorrenze di
@@ -346,16 +346,16 @@ cicli</p>
 </li>
 </ul>
 <p>Esempi:
-<img src="/images/notes/Database logical design-1700047514866.jpeg" alt="Database logical design-1700047514866">
+<img src="/images/notes/Database logical design-1700047514866.jpeg" style="width: 100%" class="center" alt="Database logical design-1700047514866">
 Nell&rsquo;ultimo esempio, basta fare la join per avere quella informazione, un ciclo implica una ridondanza in pratica.</p>
 <h3 id="generalizations-deletion">Generalizations deletion<a hidden class="anchor" aria-hidden="true" href="#generalizations-deletion">#</a></h3>
-<p>We need to delete the generalizations because in ER explained in <a href="/notes/design-del-database/">Design del database</a> the generalizations are not possible. A common way to fix this is embed children in the parent or something very similar.</p>
+<p>We need to delete the generalizations because in ER explained in <a href="/notes/design-del-database">Design del database</a> the generalizations are not possible. A common way to fix this is embed children in the parent or something very similar.</p>
 <h4 id="example-of-deletion-of-generalization-3--">Example of deletion of generalization (3) 🟩-<a hidden class="anchor" aria-hidden="true" href="#example-of-deletion-of-generalization-3--">#</a></h4>
 <ul>
 <li>In un caso abbiamo che il genitore prende tutti i campi.</li>
 <li>Oppure elimina il genitore e metti due relazioni</li>
 <li>Oppure crea relazioni col genitore
-<img src="/images/notes/Database logical design-1699531502380.jpeg" alt="Database logical design-1699531502380">
+<img src="/images/notes/Database logical design-1699531502380.jpeg" style="width: 100%" class="center" alt="Database logical design-1699531502380">
 Ma come fare a scegliere la versione corretta? Vogliamo prendere la soluzione che ci permette di <strong>minimizzare il numero di accessi</strong>, come per esempio se sappiamo che figli e genitori vengono acceduti insieme, ha senso usare la freccia in basso a sinistra!</li>
 </ul>
 <h3 id="partitioning-or-grouping-of-entities">Partitioning or grouping of entities<a hidden class="anchor" aria-hidden="true" href="#partitioning-or-grouping-of-entities">#</a></h3>
@@ -365,9 +365,9 @@ In modo simile se ho due entità che vengono spesso accedute assieme potrebbe es
 <h4 id="partizionamento-verticale-o-orizzontale--">Partizionamento verticale o orizzontale 🟩-<a hidden class="anchor" aria-hidden="true" href="#partizionamento-verticale-o-orizzontale--">#</a></h4>
 <p>Possiamo fare partizionamento in verticale o in orizzontale
 Verticale quando spezziamo una entità in due e le relazioniamo (utile quando accediamo solamente certe cose della tavola).</p>
-<img src="/images/notes/Database logical design-1700652278473.jpeg" alt="Database logical design-1700652278473">
+<img src="/images/notes/Database logical design-1700652278473.jpeg" style="width: 100%" class="center" alt="Database logical design-1700652278473">
 Orizzontale quando ad esempio provo a dividere correnti e passati (dividere la stessa relazione in più forme!).
-<img src="/images/notes/Database logical design-1700652119913.jpeg" alt="Database logical design-1700652119913">
+<img src="/images/notes/Database logical design-1700652119913.jpeg" style="width: 100%" class="center" alt="Database logical design-1700652119913">
 ### Identifying the primary keys (non fare)
 Questo passo è chiaramente il passo necessario per utilizzare E-R nel nostro caso.
 <ul>
@@ -379,15 +379,15 @@ Questo passo è chiaramente il passo necessario per utilizzare E-R nel nostro ca
 <h2 id="traduzione-in-schema-logico">Traduzione in schema logico<a hidden class="anchor" aria-hidden="true" href="#traduzione-in-schema-logico">#</a></h2>
 <h3 id="tradurre-relazioni-">Tradurre relazioni 🟩<a hidden class="anchor" aria-hidden="true" href="#tradurre-relazioni-">#</a></h3>
 <p>Questa tabella riassume praticamente tutto. (303 Atzeni)
-<img src="/images/notes/Database logical design-1703674035236.jpeg" alt="Database logical design-1703674035236"></p>
+<img src="/images/notes/Database logical design-1703674035236.jpeg" style="width: 100%" class="center" alt="Database logical design-1703674035236"></p>
 <h4 id="la-singola-relazione-">La singola relazione 🟩<a hidden class="anchor" aria-hidden="true" href="#la-singola-relazione-">#</a></h4>
 <p>Una volta che abbiamo una relazione in E-R possiamo creare una tavola anche per questa parte!
 L&rsquo;importante quando facciamo questo, bisogna encodare una <strong>referential integrity constraint</strong> che è la cosa bella della tabella.</p>
 <p>La nota è che aggiungere la constraint non è sufficiente per tenere in considerazione vincoli di cardinalità.
 Anche se è n-aria si può modellizzare senza troppi problemi!</p>
-<img src="/images/notes/Database logical design-1700652936337.jpeg" width="500" alt="Database logical design-1700652936337">
+<img src="/images/notes/Database logical design-1700652936337.jpeg" width="500" class="center" alt="Database logical design-1700652936337"/>
 #### Relazioni ricorsive 🟩
-<img src="/images/notes/Database logical design-1700652734472.jpeg" width="400" alt="Database logical design-1700652734472">
+<img src="/images/notes/Database logical design-1700652734472.jpeg" width="400" class="center" alt="Database logical design-1700652734472"/>
 La seconda tabella modella la parte ricorsiva (in teoria le due chiavi foreign dovrebbero essere code e code, ma il nome è migliore in questo modo per esprimere questa relazione)
 <h4 id="merge-di-relazioni">Merge di relazioni<a hidden class="anchor" aria-hidden="true" href="#merge-di-relazioni">#</a></h4>
 <p>A volte può essere utile unire relazione con l&rsquo;entità, succede spesso per relazioni unarie da una parte, perché così faccio enforcing del 1.

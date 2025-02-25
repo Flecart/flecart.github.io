@@ -333,7 +333,7 @@ In reality, the predictors are often correlated, which is why the variance of th
 <p>In this whole section we will assume that the classifiers output $\left\{ -1, 1 \right\}$. The idea of bagging (Breiman 1996) is producing a diverse set of classifiers using Bootstrapped samples (or other methods to induce diversity in the classifiers). And then keep the prediction as the average of the predicted values by each classifier.
 This technique is known also as <em>committee</em> methods.</p>
 <h4 id="bagging-classifiers-">Bagging Classifiers 🟩<a hidden class="anchor" aria-hidden="true" href="#bagging-classifiers-">#</a></h4>
-<p>The basic idea of this method is quite easy, and builds upon bootstrap, introduced in <a href="/notes/cross-validation-and-model-selection/">Cross Validation and Model Selection</a>.
+<p>The basic idea of this method is quite easy, and builds upon bootstrap, introduced in <a href="/notes/cross-validation-and-model-selection">Cross Validation and Model Selection</a>.
 Set $B$ the number of classifiers to train. Then do the following:
 For $B$ times:</p>
 <ul>
@@ -344,11 +344,11 @@ This setting only works for the binary classification problem, and it is slightl
 </ul>
 <h4 id="compare-and-bag-">Compare and Bag 🟩<a hidden class="anchor" aria-hidden="true" href="#compare-and-bag-">#</a></h4>
 <p>This method has a very similar idea to the previous one. But are training two different ensembles and selecting based on the performance of the validation set.
-<img src="/images/notes/Ensemble Methods-20241107210140625.webp" alt="Ensemble Methods-20241107210140625"></p>
+<img src="/images/notes/Ensemble Methods-20241107210140625.webp" style="width: 100%" class="center" alt="Ensemble Methods-20241107210140625"></p>
 <h3 id="random-forests">Random Forests<a hidden class="anchor" aria-hidden="true" href="#random-forests">#</a></h3>
 <h4 id="the-idea-">The Idea 🟩<a hidden class="anchor" aria-hidden="true" href="#the-idea-">#</a></h4>
-<p>This method leverages on <a href="/notes/alberi-di-decisione/">Decision Trees</a> to build a <em>forest</em> of them. The idea is to create enough different classifiers so that we can build upon the observation on the variance of ensembles.
-<img src="/images/notes/Ensemble Methods-20241107205340512.webp" alt="Ensemble Methods-20241107205340512"></p>
+<p>This method leverages on <a href="/notes/alberi-di-decisione">Decision Trees</a> to build a <em>forest</em> of them. The idea is to create enough different classifiers so that we can build upon the observation on the variance of ensembles.
+<img src="/images/notes/Ensemble Methods-20241107205340512.webp" style="width: 100%" class="center" alt="Ensemble Methods-20241107205340512"></p>
 <h4 id="diversifying-the-models-">Diversifying the models 🟩<a hidden class="anchor" aria-hidden="true" href="#diversifying-the-models-">#</a></h4>
 <p>Ways to diversify the trees are:</p>
 <ul>
@@ -363,7 +363,7 @@ This setting only works for the binary classification problem, and it is slightl
 <p>The main idea of AdaBoost, which has been a breakthrough in the field of statistical learning, is to train a sequence of classifiers, each of which focuses on the examples that the previous classifiers have misclassified.
 If a sample has been misclassified in a previous attempt, it will have a higher weight in the next classifier.
 It is implemented in the following way:</p>
-<img src="/images/notes/Ensemble Methods-20241107210639836.webp" alt="Ensemble Methods-20241107210639836">
+<img src="/images/notes/Ensemble Methods-20241107210639836.webp" style="width: 100%" class="center" alt="Ensemble Methods-20241107210639836">
 <p>Curious choices are for the $\alpha$ and how we scaled the weights. These will be discussed in the next section.</p>
 <h4 id="a-philosophical-similarity">A philosophical similarity<a hidden class="anchor" aria-hidden="true" href="#a-philosophical-similarity">#</a></h4>
 <p>Adaboost is just a collection of simple algorithmic steps which could be interpreted as some optimization objective in the larger scheme of things.
@@ -391,7 +391,7 @@ $h_{m}$ are also called <strong>basis functions</strong>. In this setting, they 
 $$
 L(y, f(x)) = \exp(-yf(x))
 $$<p>
-This has some slight resemblance to <a href="/notes/log-linear-models/">Log Linear Models</a>.</p>
+This has some slight resemblance to <a href="/notes/log-linear-models">Log Linear Models</a>.</p>
 $$
 \sum_{m = 1}^{N} \exp(-y_{i}f_{m - 1}(x)  - y_{i}\gamma_{m}h_{m}(x_{i})) = \sum_{m =1}^{N} w_{m} \exp(-y_{i}\gamma_{m}h_{m}(x_{i}))
 $$$$
@@ -411,7 +411,7 @@ We note that the term $\exp(\gamma_{m})$ is a constant, this can be dropped when
 Now we have Adaboost&rsquo;s weight update rule in the classification setting.</p>
 <h4 id="is-the-exponential-a-good-loss">Is the exponential a Good Loss?<a hidden class="anchor" aria-hidden="true" href="#is-the-exponential-a-good-loss">#</a></h4>
 <p>From(Bishop 2006):
-<img src="/images/notes/Ensemble Methods-20241226155325992.webp" alt="Ensemble Methods-20241226155325992">
+<img src="/images/notes/Ensemble Methods-20241226155325992.webp" style="width: 100%" class="center" alt="Ensemble Methods-20241226155325992">
 We observe that the misclassification error for the exponential loss grows exponentially for negatives, which could be sign of a <em>high sensitivity</em> to outliers.
 Another note on the exponential loss: it cannot be interpreted as log likelihood of some well defined probability distribution.</p>
 <p>Another drawback of the exponential loss compared to a cross-entropy loss is the extension to multi-class classification: while with cross entropy it&rsquo;s easy, with the exponential loss there is no straightforward manner to extend it to multi-class classification.</p>
@@ -420,11 +420,11 @@ $$
 $$$$
 \mathcal{L}(f(x), y) = \log(1 + \exp(-yf(x)))
 $$<p>
-Used for <a href="/notes/linear-regression-methods/">Linear Classification</a>, as the underlying probability is different.</p>
+Used for <a href="/notes/linear-regression-methods">Linear Classification</a>, as the underlying probability is different.</p>
 $$
 \max(0, 1 - yf(x))
 $$<p>
-Used from <a href="/notes/support-vector-machines/">Support Vector Machines</a></p>
+Used from <a href="/notes/support-vector-machines">Support Vector Machines</a></p>
 <h4 id="adaboost-and-logistic-regression-">Adaboost and Logistic Regression 🟩<a hidden class="anchor" aria-hidden="true" href="#adaboost-and-logistic-regression-">#</a></h4>
 $$
 f^{*}(x) = \arg\min_{f(x)} \mathbb{E}_{y \mid x} \exp(-yf(x))
@@ -442,7 +442,7 @@ $$
 $$
 P(y = 1 \mid x) = \frac{1}{1 + \exp(-2f^{*}(x))}
 $$<p>
-This is also close to the <a href="/notes/softmax-function/">sigmoid</a> function! Remember that this is why in <a href="/notes/logistic-regression/">Logistic Regression</a>, Sigmoid is a good choice for the loss function.</p>
+This is also close to the <a href="/notes/softmax-function">sigmoid</a> function! Remember that this is why in <a href="/notes/logistic-regression">Logistic Regression</a>, Sigmoid is a good choice for the loss function.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p>[1] Wolfram “A New Kind of Science” Wolfram Media 2002</p>
 <p>[2] Bishop “Pattern Recognition and Machine Learning” Springer 2006</p>
