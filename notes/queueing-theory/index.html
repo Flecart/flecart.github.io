@@ -142,8 +142,8 @@ We need some little maths to model the stochastic process of request arrivals.">
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": " Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.\nThis is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.\nWe need some little maths to model the stochastic process of request arrivals.\nCharacterization of Queueing Theory We define here some basic terminology:\nNumber of servers: the number of workers that process in parallel System capacity: the finite number of request that can be fit at any time. This includes the buffer capacity, how many requests can be waiting to be assigned. Population size: how many requests can be processed in unit time. Arrival rate: the stochastic process that models the arrival of the requests. Queue discipline: how you choose the request (First come first served etc…) Service time: time required to service a job on this CPU Interval Arrival Time It is usually modelled as a Poisson distribution, see Poisson processes. Using uniform distribution is not very realistic.\nKey assumptions Stationary (it does not depend on the time) State independent it does not depend on the previous requests. In real systems these assumptions are not always true. But for this analysis it is ok to do it. In reality there are some bursts that make it not stationary (or just day vs night). ",
-  "wordCount" : "247",
+  "articleBody": " Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.\nThis is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.\nWe need some little maths to model the stochastic process of request arrivals.\nCharacterization of Queueing Theory We define here some basic terminology:\nNumber of servers: the number of workers that process in parallel System capacity: the finite number of request that can be fit at any time. This includes the buffer capacity, how many requests can be waiting to be assigned. Population size: how many requests can be processed in unit time. Arrival rate: the stochastic process that models the arrival of the requests. Queue discipline: how you choose the request (First come first served etc…) Service time: time required to service a job on this CPU Interval Arrival Time It is usually modelled as a Poisson distribution, see Poisson processes. Using uniform distribution is not very realistic.\nKey assumptions Stationary (it does not depend on the time) State independent it does not depend on the previous requests. In real systems these assumptions are not always true. But for this analysis it is ok to do it. In reality there are some bursts that make it not stationary (or just day vs night). Types of Queues Queueing systems in computer and network performance analysis are often classified into Open Systems, Interactive Closed Systems, and Batch Closed Systems based on how jobs arrive, circulate, and leave the system.\nOpen System Definition: Jobs (requests, tasks, or customers) arrive from an external source, are processed, and eventually leave the system. Characteristics: Arrival rate is typically modeled as a Poisson process. Service times follow an exponential or other probabilistic distribution. There is no limit on the number of jobs in the system at a given time. Example: A web server handling requests from users across the internet. Interactive Closed System Definition: A fixed number of jobs (users, processes) continuously circulate within the system. After a job is served, it re-enters the queue after some think time (a delay before rejoining). Characteristics: The total number of jobs in the system is constant. Think time between jobs prevents overwhelming the system. Response time affects user behavior (e.g., a slower system results in longer think times). Example: A system with N interactive users running on a time-sharing computer. Each user submits a request, waits for a response, and then submits another request after a short delay. Time-sharing OS is another example of these type of system.\n3. Batch Closed System Definition: A fixed number of jobs circulate continuously in the system without think time. Once a job completes, it immediately rejoins the queue for processing. Characteristics: The number of jobs remains constant, but they move as fast as the system allows. No idle periods—jobs are processed as quickly as resources permit. Example: A batch processing system, such as a data analytics pipeline that processes a fixed set of tasks repeatedly. Comparison and Applications System Type Jobs Enter from Outside? Fixed Number of Jobs? Think Time? Example Open System ✅ Yes ❌ No ❌ No Web requests Interactive Closed ❌ No ✅ Yes ✅ Yes Batch Closed ❌ No ✅ Yes ❌ No Batch processing Each type of system applies to different scenarios in computing, networking, and performance modeling.\n",
+  "wordCount" : "585",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -238,7 +238,7 @@ We need some little maths to model the stochastic process of request arrivals.">
     <h1 class="post-title entry-hint-parent">
       Queueing Theory
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -247,13 +247,26 @@ We need some little maths to model the stochastic process of request arrivals.">
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul>
                 <li>
                     <a href="#characterization-of-queueing-theory" aria-label="Characterization of Queueing Theory">Characterization of Queueing Theory</a></li>
                 <li>
                     <a href="#interval-arrival-time" aria-label="Interval Arrival Time">Interval Arrival Time</a></li>
                 <li>
-                    <a href="#key-assumptions" aria-label="Key assumptions">Key assumptions</a>
+                    <a href="#key-assumptions" aria-label="Key assumptions">Key assumptions</a></li></ul>
+                    
+                <li>
+                    <a href="#types-of-queues" aria-label="Types of Queues">Types of Queues</a><ul>
+                        
+                <li>
+                    <a href="#open-system" aria-label="Open System">Open System</a></li>
+                <li>
+                    <a href="#interactive-closed-system" aria-label="Interactive Closed System">Interactive Closed System</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-batch-closed-system" aria-label="3. Batch Closed System">3. Batch Closed System</a></li>
+                <li>
+                    <a href="#comparison-and-applications" aria-label="Comparison and Applications">Comparison and Applications</a>
                 </li>
             </ul>
         </div>
@@ -287,6 +300,80 @@ We need some little maths to model the stochastic process of request arrivals.">
 In real systems these assumptions are not always true. But for this analysis it is ok to do it.
 In reality there are some <strong>bursts</strong> that make it not stationary (or just day vs night).</li>
 </ul>
+<h3 id="types-of-queues">Types of Queues<a hidden class="anchor" aria-hidden="true" href="#types-of-queues">#</a></h3>
+<p>Queueing systems in computer and network performance analysis are often classified into <strong>Open Systems</strong>, <strong>Interactive Closed Systems</strong>, and <strong>Batch Closed Systems</strong> based on how jobs arrive, circulate, and leave the system.</p>
+<h4 id="open-system">Open System<a hidden class="anchor" aria-hidden="true" href="#open-system">#</a></h4>
+<ul>
+<li><strong>Definition</strong>: Jobs (requests, tasks, or customers) arrive from an external source, are processed, and eventually leave the system.</li>
+<li><strong>Characteristics</strong>:
+<ul>
+<li>Arrival rate is typically modeled as a <strong>Poisson process</strong>.</li>
+<li>Service times follow an exponential or other probabilistic distribution.</li>
+<li>There is no limit on the number of jobs in the system at a given time.</li>
+</ul>
+</li>
+<li><strong>Example</strong>: A web server handling requests from users across the internet.</li>
+</ul>
+<h4 id="interactive-closed-system">Interactive Closed System<a hidden class="anchor" aria-hidden="true" href="#interactive-closed-system">#</a></h4>
+<ul>
+<li><strong>Definition</strong>: A <strong>fixed</strong> number of jobs (users, processes) continuously circulate within the system. After a job is served, it re-enters the queue after some <strong>think time</strong> (a delay before rejoining).</li>
+<li><strong>Characteristics</strong>:
+<ul>
+<li>The total number of jobs in the system is constant.</li>
+<li><strong>Think time</strong> between jobs prevents overwhelming the system.</li>
+<li>Response time affects user behavior (e.g., a slower system results in longer think times).</li>
+</ul>
+</li>
+<li><strong>Example</strong>: A system with <strong>N</strong> interactive users running on a time-sharing computer. Each user submits a request, waits for a response, and then submits another request after a short delay.</li>
+</ul>
+<p>Time-sharing OS is another example of these type of system.</p>
+<h3 id="3-batch-closed-system"><strong>3. Batch Closed System</strong><a hidden class="anchor" aria-hidden="true" href="#3-batch-closed-system">#</a></h3>
+<ul>
+<li><strong>Definition</strong>: A <strong>fixed</strong> number of jobs circulate continuously in the system <strong>without think time</strong>. Once a job completes, it immediately rejoins the queue for processing.</li>
+<li><strong>Characteristics</strong>:
+<ul>
+<li>The number of jobs remains constant, but they move as fast as the system allows.</li>
+<li>No idle periods—jobs are processed as quickly as resources permit.</li>
+</ul>
+</li>
+<li><strong>Example</strong>: A <strong>batch processing system</strong>, such as a data analytics pipeline that processes a fixed set of tasks repeatedly.</li>
+</ul>
+<h3 id="comparison-and-applications"><strong>Comparison and Applications</strong><a hidden class="anchor" aria-hidden="true" href="#comparison-and-applications">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>System Type</th>
+          <th>Jobs Enter from Outside?</th>
+          <th>Fixed Number of Jobs?</th>
+          <th>Think Time?</th>
+          <th>Example</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Open System</strong></td>
+          <td>✅ Yes</td>
+          <td>❌ No</td>
+          <td>❌ No</td>
+          <td>Web requests</td>
+      </tr>
+      <tr>
+          <td><strong>Interactive Closed</strong></td>
+          <td>❌ No</td>
+          <td>✅ Yes</td>
+          <td>✅ Yes</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><strong>Batch Closed</strong></td>
+          <td>❌ No</td>
+          <td>✅ Yes</td>
+          <td>❌ No</td>
+          <td>Batch processing</td>
+      </tr>
+  </tbody>
+</table>
+<p>Each type of system applies to different scenarios in computing, networking, and performance modeling.</p>
 
 
   </div>
