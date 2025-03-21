@@ -13,16 +13,6 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Queueing Theory</title>
-      <link>https://flecart.github.io/notes/queueing-theory/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/queueing-theory/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;This is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.&lt;/p&gt;
-&lt;p&gt;We need some little maths to model the &lt;strong&gt;stochastic process&lt;/strong&gt; of request arrivals.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Architecture of the Brain</title>
       <link>https://flecart.github.io/notes/architecture-of-the-brain/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -41,6 +31,110 @@
 But this is comparing with transistors with one higher level object, so this comparison might not be completely fair.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;And only some brain areas are similar to real neural networks&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Backpropagation</title>
+      <link>https://flecart.github.io/notes/backpropagation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/backpropagation/</guid>
+      <description>&lt;p&gt;Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well.
+An important observation is that this algorithm is &lt;strong&gt;linear&lt;/strong&gt;: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See &lt;a href=&#34;https://colah.github.io/posts/2015-08-Backprop/&#34;&gt;colah&amp;rsquo;s blog&lt;/a&gt;.
+&lt;a href=&#34;https://youtu.be/VMj-3S1tku0?si=wRCObFw7woZTwU56&#34;&gt;Karpathy&lt;/a&gt; has a nice resource for this topic too!&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Cache Optimization</title>
+      <link>https://flecart.github.io/notes/cache-optimization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
+      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
+&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
+&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
+&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
+In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
+&lt;p&gt;For example consider this snippet:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
+loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Introduction to Decentralized Finance</title>
+      <link>https://flecart.github.io/notes/introduction-to-decentralized-finance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/introduction-to-decentralized-finance/</guid>
+      <description>&lt;h2 id=&#34;financial-markets&#34;&gt;Financial Markets&lt;/h2&gt;
+&lt;h4 id=&#34;uses-of-financial-markets&#34;&gt;Uses of Financial Markets&lt;/h4&gt;
+&lt;p&gt;In this section, we answer the question of what financial markets are for.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Raising capital&lt;/li&gt;
+&lt;li&gt;Equity and Dept: Equity is ownership in a company, while debt is a loan. (there is also a mezzanine).&lt;/li&gt;
+&lt;li&gt;Price discovery: The process of determining the price of an asset in the marketplace.&lt;/li&gt;
+&lt;li&gt;Liquidity: pooling people together to have an ease of access to these assets.&lt;/li&gt;
+&lt;li&gt;Risk management: Managing the risk of the assets.
+&lt;ul&gt;
+&lt;li&gt;Risks could be: inflation (uncertainty on the value of the money), interest rate (uncertainty on the value of the money), credit risk (uncertainty on the value of the money), market risk (uncertainty on the value of the money), etc.&lt;/li&gt;
+&lt;li&gt;This allows hedging risks.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;They have a role in economic growth (this is economic theory, we won&amp;rsquo;t delve into this).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;the-shareholders-of-the-market&#34;&gt;The Shareholders of the market&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Investors&lt;/strong&gt;: People that provide capital to governments and companies in exchange of bonds or stocks&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Intermediaries&lt;/strong&gt;: organizations that facilitate these kinds of exchanges&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Market data providers&lt;/strong&gt;: we can see these as intermediaries that sell data about markets (they usually sell licenses, for example Bloomberg does this).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Issuers&lt;/strong&gt;: organizations that sell financial assets.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Regulators&lt;/strong&gt;: ensure the market is fair and is working properly (usually government agencies that create the rules).
+&lt;ul&gt;
+&lt;li&gt;For example, it is quite difficult to get into the market, from a regulatory point of view.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;collateral-and-over-collateralization&#34;&gt;Collateral and Over-Collateralization&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Collateral&lt;/strong&gt; refers to assets or property that a borrower pledges to a lender as security for a loan. If the borrower fails to repay, the lender has the right to seize or sell the collateral to recover the outstanding debt.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Memory in Human Brain</title>
+      <link>https://flecart.github.io/notes/memory-in-human-brain/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/memory-in-human-brain/</guid>
+      <description>&lt;p&gt;Here we attempt to answer what is memory, how is it stored and retrieved.&lt;/p&gt;
+&lt;p&gt;Memory is a process by which information is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Encoded&lt;/li&gt;
+&lt;li&gt;Stored&lt;/li&gt;
+&lt;li&gt;Retrieved
+The brain has different types of memories, and certain brain regions are specialized for this task.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;ebbinghaus-curves&#34;&gt;Ebbinghaus Curves&lt;/h4&gt;
+&lt;img src=&#34;https://flecart.github.io/images/notes/Memory in Human Brain-20250312200342781.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Memory in Human Brain-20250312200342781&#34;&gt;
+&lt;p&gt;Other experiments destroy  parts of the cortex and correlate this with recall.&lt;/p&gt;
+&lt;h3 id=&#34;types-of-memory&#34;&gt;Types of memory&lt;/h3&gt;
+&lt;p&gt;TODO see Kendal67-1 figure.&lt;/p&gt;
+&lt;h4 id=&#34;sensory-memory&#34;&gt;Sensory memory&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;iconic memory (remembering images) 150-500 milliseconds&lt;/li&gt;
+&lt;li&gt;Echoic memory (recognizing some sounds) usually retained for 1 to 2 seconds.
+This memory is filtered by &lt;em&gt;consciousness/attention&lt;/em&gt; to be passed to short term working memory.
+The register capacity of this memory is considered to be quite large.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;short-term-memory&#34;&gt;Short-term memory&lt;/h4&gt;
+&lt;p&gt;it has an explicit storage of about 7 +- 2 items (so very small).
+Depending on attention level, it is retained for 2 to 18 seconds.
+It seems the representation here is often &lt;strong&gt;vocal&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Queueing Theory</title>
+      <link>https://flecart.github.io/notes/queueing-theory/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/queueing-theory/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;This is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.&lt;/p&gt;
+&lt;p&gt;We need some little maths to model the &lt;strong&gt;stochastic process&lt;/strong&gt; of request arrivals.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Cluster Management Policies</title>
@@ -80,55 +174,6 @@ Most of the time, the user specifies an amount of resources, and then the cluste
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
       <description></description>
-    </item>
-    <item>
-      <title>Memory in Human Brain</title>
-      <link>https://flecart.github.io/notes/memory-in-human-brain/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/memory-in-human-brain/</guid>
-      <description>&lt;p&gt;Here we attempt to answer what is memory, how is it stored and retrieved.&lt;/p&gt;
-&lt;p&gt;Memory is a process by which information is:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Encoded&lt;/li&gt;
-&lt;li&gt;Stored&lt;/li&gt;
-&lt;li&gt;Retrieved
-The brain has different types of memories, and certain brain regions are specialized for this task.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;ebbinghaus-curves&#34;&gt;Ebbinghaus Curves&lt;/h4&gt;
-&lt;img src=&#34;https://flecart.github.io/images/notes/Memory in Human Brain-20250312200342781.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Memory in Human Brain-20250312200342781&#34;&gt;
-&lt;p&gt;Other experiments destroy  parts of the cortex and correlate this with recall.&lt;/p&gt;
-&lt;h3 id=&#34;types-of-memory&#34;&gt;Types of memory&lt;/h3&gt;
-&lt;p&gt;TODO see Kendal67-1 figure.&lt;/p&gt;
-&lt;h4 id=&#34;sensory-memory&#34;&gt;Sensory memory&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;iconic memory (remembering images) 150-500 milliseconds&lt;/li&gt;
-&lt;li&gt;Echoic memory (recognizing some sounds) usually retained for 1 to 2 seconds.
-This memory is filtered by &lt;em&gt;consciousness/attention&lt;/em&gt; to be passed to short term working memory.
-The register capacity of this memory is considered to be quite large.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;short-term-memory&#34;&gt;Short-term memory&lt;/h4&gt;
-&lt;p&gt;it has an explicit storage of about 7 +- 2 items (so very small).
-Depending on attention level, it is retained for 2 to 18 seconds.
-It seems the representation here is often &lt;strong&gt;vocal&lt;/strong&gt;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Cache Optimization</title>
-      <link>https://flecart.github.io/notes/cache-optimization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
-      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
-&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
-&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
-&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
-In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
-&lt;p&gt;For example consider this snippet:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
-loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Memoria</title>
@@ -1163,42 +1208,6 @@ The other solution, of just using &lt;a href=&#34;https://flecart.github.io/note
 While Object Storages, do not have APIs that could be helpful -&amp;gt; &lt;strong&gt;richer logical model&lt;/strong&gt;.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Introduction to Decentralized Finance</title>
-      <link>https://flecart.github.io/notes/introduction-to-decentralized-finance/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/introduction-to-decentralized-finance/</guid>
-      <description>&lt;h2 id=&#34;financial-markets&#34;&gt;Financial Markets&lt;/h2&gt;
-&lt;h4 id=&#34;uses-of-financial-markets&#34;&gt;Uses of Financial Markets&lt;/h4&gt;
-&lt;p&gt;In this section, we answer the question of what financial markets are for.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Raising capital&lt;/li&gt;
-&lt;li&gt;Equity and Dept: Equity is ownership in a company, while debt is a loan. (there is also a mezzanine).&lt;/li&gt;
-&lt;li&gt;Price discovery: The process of determining the price of an asset in the marketplace.&lt;/li&gt;
-&lt;li&gt;Liquidity: pooling people together to have an ease of access to these assets.&lt;/li&gt;
-&lt;li&gt;Risk management: Managing the risk of the assets.
-&lt;ul&gt;
-&lt;li&gt;Risks could be: inflation (uncertainty on the value of the money), interest rate (uncertainty on the value of the money), credit risk (uncertainty on the value of the money), market risk (uncertainty on the value of the money), etc.&lt;/li&gt;
-&lt;li&gt;This allows hedging risks.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;They have a role in economic growth (this is economic theory, we won&amp;rsquo;t delve into this).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;the-shareholders-of-the-market&#34;&gt;The Shareholders of the market&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Investors&lt;/strong&gt;: People that provide capital to governments and companies in exchange of bonds or stocks&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Intermediaries&lt;/strong&gt;: organizations that facilitate these kinds of exchanges&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Market data providers&lt;/strong&gt;: we can see these as intermediaries that sell data about markets (they usually sell licenses, for example Bloomberg does this).&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Issuers&lt;/strong&gt;: organizations that sell financial assets.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Regulators&lt;/strong&gt;: ensure the market is fair and is working properly (usually government agencies that create the rules).
-&lt;ul&gt;
-&lt;li&gt;For example, it is quite difficult to get into the market, from a regulatory point of view.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;collateral-and-over-collateralization&#34;&gt;Collateral and Over-Collateralization&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Collateral&lt;/strong&gt; refers to assets or property that a borrower pledges to a lender as security for a loan. If the borrower fails to repay, the lender has the right to seize or sell the collateral to recover the outstanding debt.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Campo elettrico</title>
       <link>https://flecart.github.io/notes/campo-elettrico/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -1794,15 +1803,6 @@ Lo spazio campionatorio è l&amp;rsquo;insieme di tutti gli stati possibili per 
 &lt;p&gt;This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space.
 But with Frequency hopping this attack is solved. See &lt;a href=&#34;https://flecart.github.io/notes/tecnologia-wireless#frequency-hopping&#34;&gt;Tecnologia Wireless#Frequency Hopping&lt;/a&gt;
 But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in &lt;a href=&#34;https://flecart.github.io/notes/theoretical-notions-of-security#ciaa-principles-of-security&#34;&gt;Theoretical Notions of Security#CIAA principles of security&lt;/a&gt;.) if the initial seed is known.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Backpropagation</title>
-      <link>https://flecart.github.io/notes/backpropagation/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/backpropagation/</guid>
-      <description>&lt;p&gt;Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well.
-An important observation is that this algorithm is &lt;strong&gt;linear&lt;/strong&gt;: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See &lt;a href=&#34;https://colah.github.io/posts/2015-08-Backprop/&#34;&gt;colah&amp;rsquo;s blog&lt;/a&gt;.
-&lt;a href=&#34;https://youtu.be/VMj-3S1tku0?si=wRCObFw7woZTwU56&#34;&gt;Karpathy&lt;/a&gt; has a nice resource for this topic too!&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bag of words</title>
