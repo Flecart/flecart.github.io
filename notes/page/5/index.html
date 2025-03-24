@@ -199,147 +199,150 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bayesian Linear Regression
+    <h2 class="entry-hint-parent">Circuiti Sequenziali
     </h2>
   </header>
   <div class="entry-content">
-    <p>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty. One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it’s the exact same thing as the previous, so if we look for the MLE estimate now we get
+    <p>7.1 Introduzione 7.1.1 Perché usarli Sono utili per mantenere delle informazioni nel tempo
+7.1.2 Caratteristiche Hanno feedback cioè ci sono degli output che tornano dentro al circuito, quindi è molto difficile senza sapere niente cosa succede dentro
+Questo circuito non è combinatorio, che è formalizzabile in modo deterministico con l’lgebra booleana.
+7.1.3 Il Bit di memoria Questo bit ha due input, un load e un input, se il load è attivo comincia a storare, altrimenti l’output è sempre il bit che ha memoriazzato.
 ...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bayesian Linear Regression" href="https://flecart.github.io/notes/bayesian-linear-regression/"></a>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Circuiti Sequenziali" href="https://flecart.github.io/notes/circuiti-sequenziali/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bayesian Optimization
+    <h2 class="entry-hint-parent">Paginazione e segmentazione
     </h2>
   </header>
   <div class="entry-content">
-    <p>While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.
-Definitions First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.
+    <p>Memoria sistema Operativo Guradare Memoria virtuale Per vedere come vengono rimpiazzate le pagine
+In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)
+MMU Controlla se l’accesso di memoria è bono o meno. (traduzione fra indirizzo logico e fisico)
 ...</p>
   </div>
   <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bayesian Optimization" href="https://flecart.github.io/notes/bayesian-optimization/"></a>
+  <a class="entry-link" aria-label="post link to Paginazione e segmentazione" href="https://flecart.github.io/notes/paginazione-e-segmentazione/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Beta and Dirichlet Distributions
+    <h2 class="entry-hint-parent">Active Learning
     </h2>
   </header>
   <div class="entry-content">
-    <p>The beta distribution The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here’s a structured intuition to grasp its essence:
-Core Concept The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.
-Key Intuitions a. “Pseudo-Counts” Interpretation α acts like “successes” and β like “failures” in a hypothetical experiment. Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data. After observing x real successes and y real failures, the posterior becomes Beta(α&#43;x, β&#43;y). This makes beta the conjugate prior for the binomial distribution (bernoulli process). b. Shape Flexibility Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely. Bell-shaped: When α, β &gt; 1, the distribution peaks at mode = (α-1)/(α&#43;β-2). Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5). U-shaped: When α, β &lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.). Skewed: If α &gt; β, skewed toward 1; if β &gt; α, skewed toward 0. c. Moments Mean: $α/(α&#43;β)$ – your “expected” probability of success. Variance: $αβ / [(α&#43;β)²(α&#43;β&#43;1)]$ – decreases as α and β grow (more confidence). $$ \text{Mode} = \frac{\alpha - 1}{\alpha &#43; \beta - 2} $$The mathematical model $$ \text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1} $$ Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( &#43; b)$ And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$
+    <p>Active Learning concerns methods to decide how to sample the most useful information in a specific domain; how can you select the best sample for an unknown model? Gathering data is very costly, we would like to create some principled manner to choose the best data point to humanly label in order to have the best model.
+In this setting, we are interested in the concept of usefulness of information. One of our main goals is to reduce uncertainty, thus, Entropy-based (mutual information) methods are often used. For example, we can use active learning to choose what samples needs to be labelled in order to have highest accuracy on the trained model, when labelling is costly.
+...</p>
+  </div>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Active Learning" href="https://flecart.github.io/notes/active-learning/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Estensioni di Turing e altre macchine
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Sono variazioni possibili equivalenti: • Nastri addizionali • Testine addizionali • Nastri infiniti su entrambi i lati • Non-determinismo • Scelta probabilistica • Scelta quantistica Si può dire che la definizione di TM è stata robusta nella storia perché tantissimi formalismi che intuitivamente sembrano essere molto diversi rispetto alla TM alla fine possono essere dimostrate essere equivalenti.
+Turing con nastri addizionali Questo è presente in modo abbastanza facile sul Sipser.
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Estensioni di Turing e altre macchine" href="https://flecart.github.io/notes/estensioni-di-turing-e-altre-macchine/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Introduzione ad architettura
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>1.1 Il principio di astrazione/implementazione Astrazione per macchine livello n con linguaggi n.
+1.2 I livelli principali di astrazione Livelli in breve
+1.2.1 Livello 0 Qua è utile indagare la
+Porte Logiche in cui si indagano in un modo molto alto il funzionamento di porte
+È il livello fisico delle porte logiche e dell’ingegneria elettrica.
+1.2.2 Livello 1 Link utili potrebbero essere la Central Processing Unit
+...</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduzione ad architettura" href="https://flecart.github.io/notes/introduzione-ad-architettura/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Introduzione SO
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Scopi del sistema operativo 🟩 Un sistema operativo è una astrazione sul HW che permette di
+Gestire l’esecuzione di più programmi assieme (concorrenza), tramite virtualizzazione CPU e Memoria Gestire le risorse (Quindi I/O, RAM, Memoria, Networking) Fornisce una interfaccia di programmazione (API) molto più generale e potente, in grado di astrarre da dettagli di livello basso, vicini all’Hardware (come device drivers). Quindi in breve il SO è n programma che crea un ambiente civile per i programmi in cui interagire, e facilita molto il lavoro al programmatore per la sua interfaccia nuova. (si potrebbe dire che sia una macchina virtuale con un suo linguaggio (che è l’API) se seguiamo la terminologia di Macchine Astratte)
 ...</p>
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Beta and Dirichlet Distributions" href="https://flecart.github.io/notes/beta-and-dirichlet-distributions/"></a>
+  <a class="entry-link" aria-label="post link to Introduzione SO" href="https://flecart.github.io/notes/introduzione-so/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Cloud Storage
+    <h2 class="entry-hint-parent">Monte Carlo Methods
     </h2>
   </header>
   <div class="entry-content">
-    <p>Object Stores Object storage design principles 🟨&#43;&#43; We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:
-Black-box objects Flat and global key-value model (trivial model, easy to access, without the need to trasverse a file hierarchy). Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Object storage usages 🟩 Object storage are useful to store things that are usually read-intensive. Some examples are
+    <p>DI Law of Large Numbers e Central limit theorem ne parliamo in Central Limit Theorem and Law of Large Numbers. Usually these methods are useful when you need to calculate following something similar to Bayes rule, but don’t know how to calculate the denominator, often infeasible integral. We estimate this value without explicitly calculating that.
+Interested in $\mathbb{P}(x) = \frac{1}{z} \mathbb{P}^{*}(x) = \frac{1}{Z} e^{-E(x)}$ Can evaluate E(x) at any x.
+Problem 1 Make samples x(r) ~ 2 P Problem 2 Estimate expectations $\Phi = \sum_{x}\phi(x)\mathbb{P}(x)$) What we’re not trying to do: We’re not trying to find the most probable state. We’re not trying to visit all typical states. Law of large numbers $$ S_{n} = \sum^n_{i=1} x_{i} ,:, \bar{x}_{n} = \frac{S_{n}}{n} $$$$ \bar{x}_{n} \to \mu $$ Ossia il limite converge sul valore atteso di tutte le variabili aleatorie.
 ...</p>
   </div>
-  <footer class="entry-footer">15 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cloud Storage" href="https://flecart.github.io/notes/cloud-storage/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Monte Carlo Methods" href="https://flecart.github.io/notes/monte-carlo-methods/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Counterfactual Invariance
+    <h2 class="entry-hint-parent">Analysis of Neural Codes
     </h2>
   </header>
   <div class="entry-content">
-    <p> Machine learning cannot distinguish between causal and environment features.
-Shortcut learning Often we observe shortcut learning: the model learns some dataset dependent shortcuts (e.g. the machine that was used to take the X-ray) to make inference, but this is very brittle, and is not usually able to generalize.
-Shortcut learning happens when there are correlations in the test set between causal and non-causal features. Our object of interest should be the main focus, not the environment around, in most of the cases. For example, a camel in a grass land should still be recognized as a camel, not a cow. One solution could be engineering invariant representations which are independent of the environment. So having a kind of encoder that creates these representations.
+    <p>Metodi di registrazione informazione Ci stiamo chiedendo in che modo possiamo registrare attività del cervello e quindi cercare di fare decoding delle informazioni presenti Prima parliamo di alcune tecniche non invasive che ci permettono di vedere alcune attività presenti nel cervello.
+Metodi macroscopici Functional Magnetic Resonance Imaging Un metodo è fMRI. (ci sono cose ) TODO capire come funziona
+Electro-Encephalo-Gram EEG che prende direttamente dai segnali Ma il drawback di entrambi è che non registrano attività del singolo array.
 ...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Counterfactual Invariance" href="https://flecart.github.io/notes/counterfactual-invariance/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Analysis of Neural Codes" href="https://flecart.github.io/notes/analysis-of-neural-codes/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Cross Validation and Model Selection
+    <h2 class="entry-hint-parent">Firing-rate based Network models
     </h2>
   </header>
   <div class="entry-content">
-    <p>There is a big difference between the empirical score and the expected score; in the beginning, we had said something about this in Introduction to Advanced Machine Learning. We will develop more methods to better comprehend this fundamental principles.
-How can we estimate the expected risk of a particular estimator or algorithm? We can use the cross-validation method. This method is used to estimate the expected risk of a model, and it is a fundamental method in machine learning.
+    <p>The Potassium Exchange values We use the measurement by Cole and Curthis 40mS/cm squared was their measure of Potassium ions leaving the membrane
+$$ \Delta Q = Idt = GA \Delta E dt $$The potassium concentration is 0.155 moles per litre. Where $G$ is the conductance per unit area, $A$ the membrane surface, $E$ voltage deflection Remember that the conductance is the reciprocal of the resistance, and $V = IR \implies I = \frac{V}{R} = GV$
 ...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cross Validation and Model Selection" href="https://flecart.github.io/notes/cross-validation-and-model-selection/"></a>
+  <a class="entry-link" aria-label="post link to Firing-rate based Network models" href="https://flecart.github.io/notes/firing-rate-based-network-models/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Cubes
+    <h2 class="entry-hint-parent">Introduction to Neural Sytems
     </h2>
   </header>
   <div class="entry-content">
-    <p>Data Cubes is a data format especially useful for heavy reads. It has been popularized in business environments where the main use for data was to make reports (many reads). This also links with the OLAP (Online Analytical Processing) vs OLTP (Online Transaction Processing) concepts, where one is optimized for reads and the other for writes.
-The main driver behind data cubes was business intelligence. While traditional relational database systems are focused on the day-to-day business of a company and record keeping (with customers placing or- ders, inventories kept up to date, etc), business intelligence is focused on the production of high-level reports for supporting C-level executives in making informed decisions.
+    <p>What is a neural system? A neural system is an intricately organized network of specialized cells—primarily neurons, along with a variety of supportive glial cells—that processes and transmits information via electrical and chemical signals. In biological organisms, such systems underpin the entire nervous system, coordinating functions that range from basic reflexes to the complex interplay of perception, thought, and behavior. Early studies in neurobiology revealed that even simple neural circuits can generate coordinated responses, while modern neuroscience has shown that vast, hierarchically structured networks (such as the central and peripheral nervous systems) are responsible for the rich tapestry of animal behavior and cognition
 ...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Cubes" href="https://flecart.github.io/notes/data-cubes/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Models and Validation
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p> A data model is an abstract view over the data that hides the way it is stored physically.
-The same idea from (Codd 1970) This is why we should not modify data directly, but pass though some abstraction that maintain the properties of that specific data model.
-Data Models Tree view 🟩 We can view all JSON and XML data, as presented in Markup, as trees. This structure is usually quite evident, as it is inherent in their design. Converting from the tree structure to a memory model is known as serialization, while the reverse process is called parsing.
-...</p>
-  </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Models and Validation" href="https://flecart.github.io/notes/data-models-and-validation/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Dependency Parsing
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This set of note is still in TODO
-Dependency Grammar has been much bigger in Europe compared to USA, where Chomsky’s grammars ruled. One of the main developers of this theory is Lucien Tesnière (1959):
-“The sentence is an organized whole, the constituent elements of which are words. Every word that belongs to a sentence ceases by itself to be isolated as in the dictionary. Between the word and its neighbors, the mind perceives connections, the totality of which forms the structure of the sentence. The structural connections establish dependency relations between the words. Each connection in principle unites a superior term and an inferior term. The superior term receives the name governor (head). The inferior term receives the name subordinate (dependent).” ~Lucien Tesnière
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Dependency Parsing" href="https://flecart.github.io/notes/dependency-parsing/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Diffusion Models
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
-The Diffusion Process This note follows original Einstein’s presentation, here we have a simplified version.
-Let’s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
-...</p>
-  </div>
-  <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Diffusion Models" href="https://flecart.github.io/notes/diffusion-models/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Introduction to Neural Sytems" href="https://flecart.github.io/notes/introduction-to-neural-sytems/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

@@ -13,14 +13,28 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/computer-networks/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Control Plane</title>
+      <link>https://flecart.github.io/notes/control-plane/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/control-plane/</guid>
+      <description>&lt;h3 id=&#34;tipologie-di-control-plane&#34;&gt;Tipologie di control plane&lt;/h3&gt;
+&lt;p&gt;La control plane è la parte al livello di rete che si occupa di &lt;strong&gt;riempire le tabelle di instradamento dei router&lt;/strong&gt;. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Centralizzati&lt;/strong&gt;, anche chiamati &lt;strong&gt;algoritmi LS( Link state)&lt;/strong&gt; perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le &lt;strong&gt;SDN&lt;/strong&gt; ossia software defined networking di cui abbiamo parlato in &lt;a href=&#34;https://flecart.github.io/notes/data-plane&#34;&gt;Data Plane&lt;/a&gt; utilizzano questi metodi, c&amp;rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Distribuiti&lt;/strong&gt; in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di &lt;strong&gt;distance vector&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Possono anche essere &lt;strong&gt;statici&lt;/strong&gt;, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Data Plane</title>
       <link>https://flecart.github.io/notes/data-plane/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/data-plane/</guid>
       <description>&lt;h2 id=&#34;introduzione-data-or-control-plane&#34;&gt;Introduzione Data or Control plane&lt;/h2&gt;
-&lt;p&gt;come fanno i router a fare forwarding dei pacchetti? e decidere come mandare? Come fanno a passare. Sono le tabelle di instradamento. Si può dire di &lt;strong&gt;end-to-end&lt;/strong&gt; perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).&lt;/p&gt;
+&lt;p&gt;Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto.
+Si può dire di &lt;strong&gt;end-to-end&lt;/strong&gt; perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).&lt;/p&gt;
 &lt;h3 id=&#34;funzioni-principali&#34;&gt;Funzioni principali&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Forwarding&lt;/strong&gt; che in pratica è passare il pacchetto al successivo, è parte del data plane.&lt;/p&gt;</description>
+&lt;p&gt;Il &lt;strong&gt;data plane&lt;/strong&gt; è la parte che si occupa di fare il forwarding, ossia risponde a domande come &amp;ldquo;come faccio a mandare in modo efficiente questo pacchetto lì?&amp;rdquo; mentre il &lt;strong&gt;control plane&lt;/strong&gt; si occupa di fare il routing, ossia risponde a domande &amp;ldquo;Dove mando il pacchetto che ho?&amp;rdquo;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Antenne</title>
@@ -54,19 +68,6 @@
 &lt;p&gt;Capire l’architettura significa capire la struttura (l’organizzazione) del nostro app e comprenderne i motivi (i sottoproblemi risolti) che ogni livello prova a risolvere&lt;/p&gt;
 &lt;p&gt;La soluzione che è stata individuata, e ha rappresentato uno dei principali cardini del successo delle reti e della nascita di Internet, è data dalla separazione delle classi di protocolli in livelli. La struttura dei livelli dei protocolli di rete prende il nome di architettura dei protocolli di rete.
 Il concetto di architettura dei protocolli, suddivisa in livelli, è semplice ed è basato su alcune condizioni.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Control Plane</title>
-      <link>https://flecart.github.io/notes/control-plane/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/control-plane/</guid>
-      <description>&lt;h3 id=&#34;tipologie-di-control-plane&#34;&gt;Tipologie di control plane&lt;/h3&gt;
-&lt;p&gt;La control plane è la parte al livello di rete che si occupa di &lt;strong&gt;riempire le tabelle di istradamento dei router&lt;/strong&gt;. In questo caso si possono in generare dividere gli algoritmi in due grandi famiglie&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Centralizzati&lt;/strong&gt;, anche chiamati &lt;strong&gt;algoritmi LS( Link state)&lt;/strong&gt; perché devono conoscere in che modo sono collegati i router fra di loro. Solitamente le &lt;strong&gt;SDN&lt;/strong&gt; ossia software defined networking di cui abbiamo parlato in &lt;a href=&#34;https://flecart.github.io/notes/data-plane&#34;&gt;Data Plane&lt;/a&gt; utilizzano questi metodi, c&amp;rsquo;è un server centralizzato (che per ragioni di tolleranza può anche essere distribuito, però diciamo che è esterno al router la decisione)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Distribuiti&lt;/strong&gt; in cui nessuno ha informazioni complete sulla rete, ma è possibile scambiarsi informazioni sui vicini e congiungere così al percorso più breve. Vengono in questa sede utilizzati algoritmi di &lt;strong&gt;distance vector&lt;/strong&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Possono anche essere &lt;strong&gt;statici&lt;/strong&gt;, ma dato che la topologia della rete è spesso dinamica è difficile che vengano utilizzati. Sono molto più preferibili gli algoritmi dinamici che vanno ogni tot ad aggiornare le tabelle.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Fisica del Wireless</title>
