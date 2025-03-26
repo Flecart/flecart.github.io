@@ -7,14 +7,18 @@
 <meta name="robots" content="index, follow">
 <title>Cloud Reliability | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="☁cloud-computing">
-<meta name="description" content="Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
+<meta name="description" content="
+Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
+Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
 Defining the vocabulary
-MTTF: Mean Time To Failure
-MTBF: Mean Time Between Failures
-Basic Failure Analsysi
-Every component is Necessary
-If we assume to have $N$ components each with mean time to failure of $\frac{1}{r}$, then the system has a failure rate of $\frac{1}{N \cdot r}$, meaning the failure rate is multiplied by the number of components.
-This suggests that we can:">
+Availability
+$$
+\text{Availability} = \frac{\text{Uptime}}{\text{Uptime} &#43; \text{Downtime}}
+$$MTTF: Mean Time To Failure
+$$
+\text{MTTF} = \frac{1}{r}
+$$
+This definition does not include repair time, and assumes the failures are independent with each other.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/cloud-reliability/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
@@ -99,8 +103,9 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/cloud-reliability/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Cloud Reliability">
-  <meta property="og:description" content="Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary MTTF: Mean Time To Failure MTBF: Mean Time Between Failures Basic Failure Analsysi Every component is Necessary If we assume to have $N$ components each with mean time to failure of $\frac{1}{r}$, then the system has a failure rate of $\frac{1}{N \cdot r}$, meaning the failure rate is multiplied by the number of components. This suggests that we can:">
+  <meta property="og:description" content=" Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
+Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
+Defining the vocabulary Availability $$ \text{Availability} = \frac{\text{Uptime}}{\text{Uptime} &#43; \text{Downtime}} $$MTTF: Mean Time To Failure $$ \text{MTTF} = \frac{1}{r} $$ This definition does not include repair time, and assumes the failures are independent with each other.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,14 +114,18 @@ Defining the vocabulary MTTF: Mean Time To Failure MTBF: Mean Time Between Failu
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Cloud Reliability">
-<meta name="twitter:description" content="Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
+<meta name="twitter:description" content="
+Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
+Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
 Defining the vocabulary
-MTTF: Mean Time To Failure
-MTBF: Mean Time Between Failures
-Basic Failure Analsysi
-Every component is Necessary
-If we assume to have $N$ components each with mean time to failure of $\frac{1}{r}$, then the system has a failure rate of $\frac{1}{N \cdot r}$, meaning the failure rate is multiplied by the number of components.
-This suggests that we can:">
+Availability
+$$
+\text{Availability} = \frac{\text{Uptime}}{\text{Uptime} &#43; \text{Downtime}}
+$$MTTF: Mean Time To Failure
+$$
+\text{MTTF} = \frac{1}{r}
+$$
+This definition does not include repair time, and assumes the failures are independent with each other.">
 
 
 <script type="application/ld+json">
@@ -145,12 +154,12 @@ This suggests that we can:">
   "@type": "BlogPosting",
   "headline": "Cloud Reliability",
   "name": "Cloud Reliability",
-  "description": "Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary MTTF: Mean Time To Failure MTBF: Mean Time Between Failures Basic Failure Analsysi Every component is Necessary If we assume to have $N$ components each with mean time to failure of $\\frac{1}{r}$, then the system has a failure rate of $\\frac{1}{N \\cdot r}$, meaning the failure rate is multiplied by the number of components. This suggests that we can:\n",
+  "description": " Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.\nCloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary Availability $$ \\text{Availability} = \\frac{\\text{Uptime}}{\\text{Uptime} + \\text{Downtime}} $$MTTF: Mean Time To Failure $$ \\text{MTTF} = \\frac{1}{r} $$ This definition does not include repair time, and assumes the failures are independent with each other.\n",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary MTTF: Mean Time To Failure MTBF: Mean Time Between Failures Basic Failure Analsysi Every component is Necessary If we assume to have $N$ components each with mean time to failure of $\\frac{1}{r}$, then the system has a failure rate of $\\frac{1}{N \\cdot r}$, meaning the failure rate is multiplied by the number of components. This suggests that we can:\nEnsure that each component is resistant (components have lower failure rate $r$) We provide redundancy (higher $N$) $$ \\text{Availability}_{\\text{system}} = 1 - \\frac{N \\cdot r \\cdot x}{365 \\cdot 24} $$Only one is Necessary We can model the number of working versions using Markov Chains, in a manner akin to what we have done in Queueing Theory for performance analysis.\n$$ \\text{MTBF}_{\\text{system}} = \\sum_{i=0}^{N -1} \\frac{1}{(N - i)r_i} $$ And the failure rate of the system is the inverse of the MTBF. MTBF stands for Mean Time Between Failures\n$$ \\text{Availability}_{\\text{system}} = 1 - (1 - \\text{Availability}_{\\text{component}})^N $$Parallelization and Reliability If we had a single component that processes at a rate $X$, then the time to process it in parallel is $M / X$ where $M$ is the data.\nIf I add more components, I can process it in time $M / (N \\cdot X)$ but I made the failure rate higher.\nBest Effort In some applications, we do not want the service to be down, but it would be ok to be inconsistent (remember Cloud Storage#CAP Theorem). For example, the google search could be a best effort application, here we do not offer service guarantees, but do the best to do it.\nError, Faults and Failures Definition of the topic Error: we get a result but it is incorrect (system is “working”, but not as specified) Should be detected Typically corrected by the system Fault: some part of the system is not working and, as a result, some of its functionality might be compromised Should be detected Typically compensated through redundancy Failure: system is not working A range of situations that require different solutions It needs more troubleshooting, the reasons could be multiple (performance, network errors, data corruption etc…). Detecting and predicting failures In usual Cloud system we monitor the system to gather information about its health:\nData collection: activity, errors, configuration about each node. Storage: We store the data plus some metadata (usually as time series). Prediction use some Machine Learning tools to predict these kinds of failures, so that we can proactively solve them (instead of just reactively). Then in order to hide the failures, every part of the stack should provide high availability and redundancy: not just software but also:\nPower and cooling Network infrastructure Scheduling, see Cluster Resource Management. Storage. Providing Fault Tolerance We need some form of replication for better reliability and error correction. Sometimes sharding is done (remember Distributed file systems).\nData Striping The idea is to distribute data among several disks so that it can be accessed in parallel, this is usually implemented at RAID level, see Devices OS#RAID, level 0. This is a easier way to decrease latency and increase thoughput.\nFine and Coarse Grained Striping Fine-grain and coarse-grain data striping are techniques used in parallel computing and storage systems to distribute data across multiple devices to improve performance and fault tolerance.\nFine-grained:\nDefinition: Data is divided into very small chunks and distributed across multiple disks or processing units. Advantages: Improves load balancing, as all disks contribute to every I/O request. Provides high parallelism, making it well-suited for applications with many small, frequent data accesses. Disadvantages: High overhead due to increased coordination among disks. May not be optimal for large sequential reads and writes. Example: RAID 3, where data is split at the byte or bit level across disks, requiring all disks to participate in every operation. Coarse-grained:\nDefinition: Data is divided into larger blocks before being distributed across multiple disks or processing units. Advantages: Reduces overhead by allowing each disk to handle independent requests. Better suited for workloads with large sequential data accesses. Disadvantages: Less effective load balancing for small requests since fewer disks participate per operation. May result in uneven disk utilization. Example: RAID 5, where data is striped at the block level, allowing parallel access without requiring all disks to be involved in every operation. Feature Fine-Grain Striping Coarse-Grain Striping Chunk Size Very small (bytes or bits) Large (blocks or files) Parallelism High Moderate Suitability Frequent small requests Large sequential reads/writes Overhead High Lower Load Balancing Good Can be uneven RAID levels See Devices OS#RAID: you should be able to explain what every RAID level does.\nSharding We can choose to have big or small shards.\nBig shards: they are easier to manage, but if they fail, we lose a lot of data, or lots of data could be on the same disk creating a bottleneck. Small shards: they are harder to manage, but they are more fault tolerant and have a better load balancing. Placing the blocks Random Placing Random block placement is a good idea, if we assume failures of blocks is uncorrelated with each other. But in reality it seems that failures are correlated (see paper in 2013). Frameworks like Distributed file systems HDFS do it one in the node that receives, one in the same rake, and other one in another node in the same cluster.\nCopyset Replication A copyset is a set of nodes that contain all the blocks of the data. Then you do random replication. But this is a single point of failure, so you do random replication. But losing three servers makes you lose some data.\nMinCopysets Place replicas deterministically in copyset after placing one deterministically, this is why HDFS does the fixed second copy.\nevery time we lose data, we lose more data in this case compared to the previous technique. Another drawback is that it is slower to recover data. ",
-  "wordCount" : "1001",
+  "articleBody": " Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.\nCloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary Availability $$ \\text{Availability} = \\frac{\\text{Uptime}}{\\text{Uptime} + \\text{Downtime}} $$MTTF: Mean Time To Failure $$ \\text{MTTF} = \\frac{1}{r} $$ This definition does not include repair time, and assumes the failures are independent with each other.\nMTBF: Mean Time Between Failures This considers the mean time of repair time. If we consider that the repair time is $x$ seconds, then the MTBF is just $x + \\text{MTTF}$.\n$$ \\text{Availability} = \\frac{\\text{MTTF}}{x + \\text{MTTF}} $$Basic Failure Analysis Every component is Necessary If we assume to have $N$ components each with mean time to failure of $\\frac{1}{r}$, then the system has a failure rate of $\\frac{1}{N \\cdot r}$, meaning the failure rate is multiplied by the number of components. This suggests that we can:\nEnsure that each component is resistant (components have lower failure rate $r$) We provide redundancy (higher $N$) $$ \\text{Availability}_{\\text{system}} = 1 - \\frac{N \\cdot r \\cdot x}{365 \\cdot 24} $$Only one is Necessary We can model the number of working versions using Markov Chains, in a manner akin to what we have done in Queueing Theory for performance analysis.\n$$ \\text{MTBF}_{\\text{system}} = \\sum_{i=0}^{N -1} \\frac{1}{(N - i)r_i} $$ And the failure rate of the system is the inverse of the MTBF. MTBF stands for Mean Time Between Failures\n$$ \\text{Availability}_{\\text{system}} = 1 - (1 - \\text{Availability}_{\\text{component}})^N $$Parallelization and Reliability If we had a single component that processes at a rate $X$, then the time to process it in parallel is $M / X$ where $M$ is the data.\nIf I add more components, I can process it in time $M / (N \\cdot X)$ but I made the failure rate higher.\nBest Effort In some applications, we do not want the service to be down, but it would be ok to be inconsistent (remember Cloud Storage#CAP Theorem). For example, the google search could be a best effort application, here we do not offer service guarantees, but do the best to do it.\nError, Faults and Failures Definition of the topic Error: we get a result but it is incorrect (system is “working”, but not as specified) Should be detected Typically corrected by the system Fault: some part of the system is not working and, as a result, some of its functionality might be compromised Should be detected Typically compensated through redundancy Failure: system is not working A range of situations that require different solutions It needs more troubleshooting, the reasons could be multiple (performance, network errors, data corruption etc…). Detecting and predicting failures In usual Cloud system we monitor the system to gather information about its health:\nData collection: activity, errors, configuration about each node. Storage: We store the data plus some metadata (usually as time series). Prediction use some Machine Learning tools to predict these kinds of failures, so that we can proactively solve them (instead of just reactively). Then in order to hide the failures, every part of the stack should provide high availability and redundancy: not just software but also:\nPower and cooling Network infrastructure Scheduling, see Cluster Resource Management. Storage. Providing Fault Tolerance We need some form of replication for better reliability and error correction. Sometimes sharding is done (remember Distributed file systems).\nData Striping The idea is to distribute data among several disks so that it can be accessed in parallel, this is usually implemented at RAID level, see Devices OS#RAID, level 0. This is a easier way to decrease latency and increase thoughput.\nFine and Coarse Grained Striping Fine-grain and coarse-grain data striping are techniques used in parallel computing and storage systems to distribute data across multiple devices to improve performance and fault tolerance.\nFine-grained:\nDefinition: Data is divided into very small chunks and distributed across multiple disks or processing units. Advantages: Improves load balancing, as all disks contribute to every I/O request. Provides high parallelism, making it well-suited for applications with many small, frequent data accesses. Disadvantages: High overhead due to increased coordination among disks. May not be optimal for large sequential reads and writes. Example: RAID 3, where data is split at the byte or bit level across disks, requiring all disks to participate in every operation. Coarse-grained:\nDefinition: Data is divided into larger blocks before being distributed across multiple disks or processing units. Advantages: Reduces overhead by allowing each disk to handle independent requests. Better suited for workloads with large sequential data accesses. Disadvantages: Less effective load balancing for small requests since fewer disks participate per operation. May result in uneven disk utilization. Example: RAID 5, where data is striped at the block level, allowing parallel access without requiring all disks to be involved in every operation. Feature Fine-Grain Striping Coarse-Grain Striping Chunk Size Very small (bytes or bits) Large (blocks or files) Parallelism High Moderate Suitability Frequent small requests Large sequential reads/writes Overhead High Lower Load Balancing Good Can be uneven RAID levels See Devices OS#RAID: you should be able to explain what every RAID level does.\nSharding We can choose to have big or small shards.\nBig shards: they are easier to manage, but if they fail, we lose a lot of data, or lots of data could be on the same disk creating a bottleneck. Small shards: they are harder to manage, but they are more fault tolerant and have a better load balancing. Placing the blocks Random Placing Random block placement is a good idea, if we assume failures of blocks is uncorrelated with each other. But in reality it seems that failures are correlated (see paper in 2013). Frameworks like Distributed file systems HDFS do it one in the node that receives, one in the same rake, and other one in another node in the same cluster.\nCopyset Replication A copyset is a set of nodes that contain all the blocks of the data. Then you do random replication. But this is a single point of failure, so you do random replication. But losing three servers makes you lose some data.\nMinCopysets Place replicas deterministically in copyset after placing one deterministically, this is why HDFS does the fixed second copy.\nevery time we lose data, we lose more data in this case compared to the previous technique. Another drawback is that it is slower to recover data. ",
+  "wordCount" : "1082",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -245,7 +254,7 @@ This suggests that we can:">
     <h1 class="post-title entry-hint-parent">
       Cloud Reliability
     </h1>
-    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -259,12 +268,14 @@ This suggests that we can:">
                     <a href="#defining-the-vocabulary" aria-label="Defining the vocabulary">Defining the vocabulary</a><ul>
                         
                 <li>
+                    <a href="#availability" aria-label="Availability">Availability</a></li>
+                <li>
                     <a href="#mttf-mean-time-to-failure" aria-label="MTTF: Mean Time To Failure">MTTF: Mean Time To Failure</a></li>
                 <li>
                     <a href="#mtbf-mean-time-between-failures" aria-label="MTBF: Mean Time Between Failures">MTBF: Mean Time Between Failures</a></li></ul>
                 </li>
                 <li>
-                    <a href="#basic-failure-analsysi" aria-label="Basic Failure Analsysi">Basic Failure Analsysi</a><ul>
+                    <a href="#basic-failure-analysis" aria-label="Basic Failure Analysis">Basic Failure Analysis</a><ul>
                         
                 <li>
                     <a href="#every-component-is-necessary" aria-label="Every component is Necessary">Every component is Necessary</a></li>
@@ -312,11 +323,23 @@ This suggests that we can:">
     </details>
 </div>
 
-  <div class="post-content"><p>Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.</p>
+  <div class="post-content"><blockquote>
+<p>Reliability is the ability of a system to remain <strong>operational</strong> over time, i.e., to offer the service it was designed for.</p></blockquote>
+<p>Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.</p>
 <h3 id="defining-the-vocabulary">Defining the vocabulary<a hidden class="anchor" aria-hidden="true" href="#defining-the-vocabulary">#</a></h3>
-<h4 id="mttf-mean-time-to-failure">MTTF: Mean Time To Failure<a hidden class="anchor" aria-hidden="true" href="#mttf-mean-time-to-failure">#</a></h4>
+<h4 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h4>
+$$
+\text{Availability} = \frac{\text{Uptime}}{\text{Uptime} + \text{Downtime}}
+$$<h4 id="mttf-mean-time-to-failure">MTTF: Mean Time To Failure<a hidden class="anchor" aria-hidden="true" href="#mttf-mean-time-to-failure">#</a></h4>
+$$
+\text{MTTF} = \frac{1}{r}
+$$<p>
+This definition does not include repair time, and assumes the failures are independent with each other.</p>
 <h4 id="mtbf-mean-time-between-failures">MTBF: Mean Time Between Failures<a hidden class="anchor" aria-hidden="true" href="#mtbf-mean-time-between-failures">#</a></h4>
-<h3 id="basic-failure-analsysi">Basic Failure Analsysi<a hidden class="anchor" aria-hidden="true" href="#basic-failure-analsysi">#</a></h3>
+<p>This considers the mean time of repair time. If we consider that the repair time is $x$ seconds, then the MTBF is just $x + \text{MTTF}$.</p>
+$$
+\text{Availability} = \frac{\text{MTTF}}{x + \text{MTTF}}
+$$<h3 id="basic-failure-analysis">Basic Failure Analysis<a hidden class="anchor" aria-hidden="true" href="#basic-failure-analysis">#</a></h3>
 <h4 id="every-component-is-necessary">Every component is Necessary<a hidden class="anchor" aria-hidden="true" href="#every-component-is-necessary">#</a></h4>
 <p>If we assume to have $N$ components each with mean time to failure of $\frac{1}{r}$, then the system has a failure rate of $\frac{1}{N \cdot r}$, meaning the failure rate is multiplied by the number of components.
 This suggests that we can:</p>
