@@ -165,8 +165,8 @@ Now autotuning has been done a lot for NN systems.">
   "keywords": [
     "advanced-systems-lab"
   ],
-  "articleBody": "Many problems in scientific computing include:\nSolving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.\nVector sum Matrix vector product MMM (scales with the cache size, so this was the preferred version for speed). On Strassen’s Algorithm Indeed there are faster methods for matrix to matrix multiplication Yet, it is much less numerically stable and complex compared to the standard one, and it is not used in practice.\nATLAS Architecture Fixes some hyperparameters (bounds, possible choices. hardware parameters) Then it generates the code for each architecture. Tests it on the architecture Repeasts and chooses the best one. But this is not quite transparent, it does not tell you why it is the best. Others have built a Model-Based ATLAS that finds the parameters in theory for the code. It gives you some understanding.\nOptimizing MMM Loop Order Consider a multiplication in the form $C = AB$. And a loop in the form:\nfor (i = 0; i \u003c n; i++) for (j = 0; j \u003c n; j++) for (k = 0; k \u003c n; k++) C[i][j] += A[i][k] * B[k][j]; Then it is better to have:\ni-j-k if B is smaller than A (B is re-used). j-i-k if A is smaller than B (A is re-used). Blocking for Cache This is called micro-MMM. Blocking is used to improve the cache locality. It uses mini matrix matrix multipications. ATLAS uses this count for the cache size: $N_{B}^{2} \\leq \\min(C, 80^{2})$. The idea is that the working set should fit into memory.\nThe classical model is $3N_{B}^{2} \\leq C_{1}$ but closer analysis can highlight the following:\n$B$ is reused $A$ is used only once. $$ \\underbrace{N_{B}^{2}}_{\\text{all of } b} + \\underbrace{N_{B}}_{\\text{row of }a} + \\underbrace{1}_{\\text{ element of } c} \\leq C_{1} $$ It might also be useful to take block size into measure: $$ \\left\\lceil \\frac{N_{B}^{2}}{B_{1}} \\right\\rceil + \\left\\lceil \\frac{N_{B}}{B_{2}} \\right\\rceil + 1 \\leq \\frac{C_{1}}{B_{1}} $$ We would like to evict the row of $A$, and always keep the matrix $B$ in cache. But it is not possible in practice to make this fit perfectly, cache eviction is not software controlled. In reality, we need to fit at least two rows of $A$. In the model we might need to fit a little bit more.\nBlocking for Registers This is called micro-MMM This is the reason why ATLAS prefers the second version, better instruction level parallelism.\nSo the optimized version should take this into account, and when it still fits into memory, you should do the outer loop.\nTypes of dependencies In hardware, it might be that every logica register has many physical registers under it. Some renaming is done at the hardware level.",
-  "wordCount" : "568",
+  "articleBody": "Many problems in scientific computing include:\nSolving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.\nVector sum Matrix vector product MMM (scales with the cache size, so this was the preferred version for speed). On Strassen’s Algorithm Indeed there are faster methods for matrix to matrix multiplication Yet, it is much less numerically stable and complex compared to the standard one, and it is not used in practice.\nATLAS Architecture Fixes some hyperparameters (bounds, possible choices. hardware parameters) Then it generates the code for each architecture. Tests it on the architecture Repeasts and chooses the best one. But this is not quite transparent, it does not tell you why it is the best. Others have built a Model-Based ATLAS that finds the parameters in theory for the code. It gives you some understanding.\nAn advantage is that this model is able to adapt to new architectures, and it is not limited to the ones that are already in the database (but we don’t know why it chooses that, so it is scientifically unsatisfactory).\nOptimizing MMM Loop Order Consider a multiplication in the form $C = AB$. And a loop in the form:\nfor (i = 0; i \u003c n; i++) for (j = 0; j \u003c n; j++) for (k = 0; k \u003c n; k++) C[i][j] += A[i][k] * B[k][j]; Then it is better to have:\ni-j-k if B is smaller than A (B is re-used). j-i-k if A is smaller than B (A is re-used). Blocking for Cache This is called micro-MMM. Blocking is used to improve the cache locality. It uses mini matrix matrix multipications. ATLAS uses this count for the cache size: $N_{B}^{2} \\leq \\min(C, 80^{2})$. The idea is that the working set should fit into memory.\nThe classical model is $3N_{B}^{2} \\leq C_{1}$ but closer analysis can highlight the following:\n$B$ is reused $A$ is used only once. $$ \\underbrace{N_{B}^{2}}_{\\text{all of } b} + \\underbrace{N_{B}}_{\\text{row of }a} + \\underbrace{1}_{\\text{ element of } c} \\leq C_{1} $$ It might also be useful to take block size into measure: $$ \\left\\lceil \\frac{N_{B}^{2}}{B_{1}} \\right\\rceil + \\left\\lceil \\frac{N_{B}}{B_{2}} \\right\\rceil + 1 \\leq \\frac{C_{1}}{B_{1}} $$ We would like to evict the row of $A$, and always keep the matrix $B$ in cache. But it is not possible in practice to make this fit perfectly, cache eviction is not software controlled. In reality, we need to fit at least two rows of $A$. In the model we might need to fit a little bit more.\nBlocking for Registers This is called micro-MMM This is the reason why ATLAS prefers the second version, better instruction level parallelism.\nSo the optimized version should take this into account, and when it still fits into memory, you should do the outer loop.\nTypes of dependencies In hardware, it might be that every logica register has many physical registers under it. Some renaming is done at the hardware level (aliased). - CPU can do the renaming on the fly (this was relevant for the matric multiplication analysis). Micro-MMM model $$ M_{U} \\cdot N_{U} + N_{U} + M_{U} \\leq Reg $$ The number of registers, which is 16 usually. (In the paper, the count of the registers is a little more complex).\nRead after write mechanisms in real ATLAS code, but the hardware renaming solved it.\nFor b we only use a single register, one for a and 14 for C. Virtual Address Performance Incluences Cache lookup can start in parallel with the address translation (faster access to level 1 and 2 caches). Exactly the last 6 bits match with the row for the cache lookup. Cannot change page size -\u003e cache line size is fixed, you can only extend memory of cache with associativity. For skylake:\n128 entries for instructions (which is a lot for instruction pages) 64 entries for data: few cycles of penalty STLB miss with 1536 entries, is very very expensive (as long as the data is in this cache, then it is ok, about 6MB it seems), but it fits in the L2 cache (slowdown for address translation). ",
+  "wordCount" : "801",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -261,7 +261,7 @@ Now autotuning has been done a lot for NN systems.">
     <h1 class="post-title entry-hint-parent">
       Fast Linear Algebra
     </h1>
-    <div class="post-meta">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -288,10 +288,13 @@ Now autotuning has been done a lot for NN systems.">
                 <li>
                     <a href="#blocking-for-registers" aria-label="Blocking for Registers">Blocking for Registers</a></li>
                 <li>
-                    <a href="#types-of-dependencies" aria-label="Types of dependencies">Types of dependencies</a>
+                    <a href="#types-of-dependencies" aria-label="Types of dependencies">Types of dependencies</a></li>
+                <li>
+                    <a href="#micro-mmm-model" aria-label="Micro-MMM model">Micro-MMM model</a></li></ul>
                 </li>
-            </ul>
-            </li>
+                <li>
+                    <a href="#virtual-address-performance-incluences" aria-label="Virtual Address Performance Incluences">Virtual Address Performance Incluences</a>
+                </li>
             </ul>
         </div>
     </details>
@@ -331,6 +334,7 @@ Yet, it is much less numerically stable and complex compared to the standard one
 </ol>
 <p>But this is not quite transparent, it does not tell you why it is the best.
 Others have built a <strong>Model-Based ATLAS</strong> that finds the parameters in theory for the code. It gives you some understanding.</p>
+<p>An advantage is that this model is able to adapt to new architectures, and it is not limited to the ones that are already in the database (but we don&rsquo;t know why it chooses that, so it is <em>scientifically unsatisfactory</em>).</p>
 <h3 id="optimizing-mmm">Optimizing MMM<a hidden class="anchor" aria-hidden="true" href="#optimizing-mmm">#</a></h3>
 <h4 id="loop-order">Loop Order<a hidden class="anchor" aria-hidden="true" href="#loop-order">#</a></h4>
 <p>Consider a multiplication in the form $C = AB$.
@@ -371,7 +375,28 @@ This is the reason why ATLAS prefers the second version, better instruction leve
 <p>So the optimized version should take this into account, and when it still fits into memory, you should do the outer loop.</p>
 <h4 id="types-of-dependencies">Types of dependencies<a hidden class="anchor" aria-hidden="true" href="#types-of-dependencies">#</a></h4>
 <img src="/images/notes/Fast Linear Algebra-20250324114924896.webp" style="width: 100%" class="center" alt="Fast Linear Algebra-20250324114924896">
-In hardware, it might be that every logica register has many physical registers under it. Some renaming is done at the hardware level.
+In hardware, it might be that every logica register has many physical registers under it. Some renaming is done at the hardware level (aliased).
+- CPU can do the renaming on the fly (this was relevant for the matric multiplication analysis).
+<h4 id="micro-mmm-model">Micro-MMM model<a hidden class="anchor" aria-hidden="true" href="#micro-mmm-model">#</a></h4>
+$$
+M_{U} \cdot N_{U} + N_{U} + M_{U} \leq Reg
+$$<p>
+The number of registers, which is 16 usually. (In the paper, the count of the registers is a little more complex).</p>
+<p>Read after write mechanisms in real ATLAS code, but the hardware renaming solved it.</p>
+<ul>
+<li>For b we only use a single register, one for a and 14 for C.</li>
+</ul>
+<h3 id="virtual-address-performance-incluences">Virtual Address Performance Incluences<a hidden class="anchor" aria-hidden="true" href="#virtual-address-performance-incluences">#</a></h3>
+<p>Cache lookup can start in <strong>parallel</strong> with the address translation (faster access to level 1 and 2 caches).
+Exactly the last 6 bits match with the row for the cache lookup.
+Cannot change page size -&gt; cache line size is fixed, you can only extend memory of cache with associativity.
+For skylake:</p>
+<ul>
+<li>128 entries for <strong>instructions</strong> (which is a lot for instruction pages)</li>
+<li>64 entries for data: few cycles of penalty</li>
+<li>STLB miss with 1536 entries, is very very expensive (as long as the data is in this cache, then it is ok, about 6MB it seems), but it fits in the L2 cache (slowdown for address translation).</li>
+</ul>
+
 
   </div>
 

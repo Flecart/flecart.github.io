@@ -13,25 +13,6 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/advanced-systems-lab/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Cache Optimization</title>
-      <link>https://flecart.github.io/notes/cache-optimization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
-      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
-&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
-&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
-&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
-In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
-&lt;p&gt;For example consider this snippet:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
-loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Fast Linear Algebra</title>
       <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -52,6 +33,25 @@ BLAS are kernel functions for each computer, while LAPACK are the higher level f
 Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
 This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
 Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Cache Optimization</title>
+      <link>https://flecart.github.io/notes/cache-optimization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
+      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
+&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
+&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
+&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
+In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
+&lt;p&gt;For example consider this snippet:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
+loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Skylake Microprocessor</title>
