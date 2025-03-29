@@ -142,8 +142,8 @@ We need some little maths to model the stochastic process of request arrivals.">
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": " Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.\nThis is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.\nWe need some little maths to model the stochastic process of request arrivals.\nCharacterization of Queueing Theory We define here some basic terminology:\nNumber of servers: the number of workers that process in parallel System capacity: the finite number of request that can be fit at any time. This includes the buffer capacity, how many requests can be waiting to be assigned. Population size: how many requests can be processed in unit time. Arrival rate: the stochastic process that models the arrival of the requests. Queue discipline: how you choose the request (First come first served etc…) Service time: time required to service a job on this CPU Interval Arrival Time It is usually modelled as a Poisson distribution, see Poisson processes. Using uniform distribution is not very realistic.\nKey assumptions Stationary (it does not depend on the time) State independent it does not depend on the previous requests. In real systems these assumptions are not always true. But for this analysis it is ok to do it. In reality there are some bursts that make it not stationary (or just day vs night). Types of Queues Queueing systems in computer and network performance analysis are often classified into Open Systems, Interactive Closed Systems, and Batch Closed Systems based on how jobs arrive, circulate, and leave the system.\nOpen System Definition: Jobs (requests, tasks, or customers) arrive from an external source, are processed, and eventually leave the system. There is no feedback on the speed of the requests. They can arrive at any time. You could have a unlimited number of requests (useful for real systems to evaluate maximum load). Characteristics: Arrival rate is typically modeled as a Poisson process. Service times follow an exponential or other probabilistic distribution. There is no limit on the number of jobs in the system at a given time. Example: A web server handling requests from users across the internet. If you assume $\\lambda \u003c \\mu$ then the throughput of this system is the mean arrival rate. Making higher $\\mu$ means lower response time or waiting time in the queue, but does not influence the throughtput. If $\\lambda \u003e \\mu$ then the system is unstable, meaning it could have infinite response time as time goes on: the system does not keep up with the number of the requests. The system is stable if $\\rho \u003c 1$ meaning the utilization is less than one hundred percent of the time. If it is $1$ it is still not stable, as queues will grow indefinitely for randomness reasons (server cannot catch up when the queue grows). $1$ seems to be the asyntote.\nInteractive Closed System Closed system means no new requests until I hear back from the previous one. In these systems the thoughput is the service rate. In closed systems the $\\mu$ is thus an upper bound for the throughput.\nDefinition: A fixed number of jobs (users, processes) continuously circulate within the system. After a job is served, it re-enters the queue after some think time (a delay before rejoining). Characteristics: The total number of jobs in the system is constant. Think time between jobs prevents overwhelming the system. Response time affects user behavior (e.g., a slower system results in longer think times). Example: A system with N interactive users running on a time-sharing computer. Each user submits a request, waits for a response, and then submits another request after a short delay. Time-sharing OS is another example of these type of system.\nBatch Closed System Definition: A fixed number of jobs circulate continuously in the system without think time. Once a job completes, it immediately rejoins the queue for processing. Characteristics: The number of jobs remains constant, but they move as fast as the system allows. No idle periods—jobs are processed as quickly as resources permit. Example: A batch processing system, such as a data analytics pipeline that processes a fixed set of tasks repeatedly. Some laws This section is about some laws that are useful to understand the performance of the system.\nInteractive Response Time Law: Closed Systems For closed systems we have:\n$$ X = \\frac{\\text{Jobs}}{\\text{Time}} = \\frac{\\left( N \\frac{T}{R + Z} \\right)}{T} = \\frac{N}{R + Z} $$$$ R = \\frac{N}{X} - Z $$ Which is generally good\nLittle’s Law $$ L = \\lambda (R + Z) $$ Where $L$ is the number of jobs in the system, $\\lambda$ is the arrival rate of the jobs, $R$ is the response time, $Z$ is the think time (This is valid in close systems), if we assume to have an open system then we need to substitute $W$ to $R + Z$, which is the time spent in the system.\nModels of Queues Birth-Death Process $$ \\lambda_{n}P_{n} = \\mu_{n + 1}P_{n + 1} $$ One nice thing is that you can model the probability of being at a certain state starting from some state (you have only one path!)\nM/M/1 This is a queueing system that has only a single server. The arrival rate is $\\lambda$ and the service rate is $\\mu$. M stands for Markovian, and the numbers are the arrival and service rate. We have an exponential (Poisson) arrival and service time. We can still use the above Markovian structure, but now we have defined probabilities for the trainsitions.\n$$ E[w] = \\frac{1}{\\mu - \\lambda} = \\frac{\\rho}{(1 - \\rho)\\lambda} $$M/M/m This is the same as above but with $m$ servers. The bottom transition is a little more interesting, while the transitions towards more states is equal. In general this model has less response time than m M/M/1 queues.\nM/M/1/B This is the same as above but with a buffer of size $B$ (we don’t have infinite buffer size in reality).\nOptimizing for latency and throughput Throughput optimizations One simple way to add throughput to the system is to add more servers. But this comes at a cost:\nEffective load balancing (more servers, it becomes more complex) Cost of the servers Bottlenecks in accessing shared resources (e.g. database). Latency optimizations Parallelism: Split the job into smaller tasks and run them in parallel (but you need to care about overheads in communication and joining the results) Critical path length shortening: reduce the length of the critical path (the longest path in the system) Reduce network calls or other communications (this might reduce throughput though, as we are adding more load to a single machine). Reduce the number of steps Buy faster hardware ",
-  "wordCount" : "1130",
+  "articleBody": " Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.\nThis is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.\nWe need some little maths to model the stochastic process of request arrivals.\nIntroduction to Queuing Theory Characterization of Queueing Theory 🟩 We define here some basic terminology:\nNumber of servers: the number of workers that process in parallel System capacity: the finite number of request that can be fit at any time. This includes the buffer capacity, how many requests can be waiting to be assigned. Population size: how many requests can be processed in unit time. Arrival rate: the stochastic process that models the arrival of the requests. Queue discipline: how you choose the request (First come first served etc…) Service time: time required to service a job on this CPU, so it is measured usually in seconds/job, often indicated with $\\mu$. Interval Arrival Time 🟩 It is usually modelled as a Poisson distribution, see Poisson processes. Using uniform distribution is not very realistic.\nKey assumptions 🟩 Stationary (it does not depend on the time) State independent it does not depend on the previous requests. In real systems these assumptions are not always true. But for this analysis it is ok to do it. In reality there are some bursts that make it not stationary (or just day vs night). Types of Queues Queueing systems in computer and network performance analysis are often classified into Open Systems, Interactive Closed Systems, and Batch Closed Systems based on how jobs arrive, circulate, and leave the system.\nOpen System 🟩 Definition: Jobs (requests, tasks, or customers) arrive from an external source, are processed, and eventually leave the system. There is no feedback on the speed of the requests. They can arrive at any time. You could have a unlimited number of requests (useful for real systems to evaluate maximum load). Characteristics: Arrival rate is typically modeled as a Poisson process. Service times follow an exponential or other probabilistic distribution. There is no limit on the number of jobs in the system at a given time. Example: A web server handling requests from users across the internet. If you assume $\\lambda \u003c \\mu$ then the throughput of this system is the mean arrival rate. Making higher $\\mu$ means lower response time or waiting time in the queue, but does not influence the throughput. If $\\lambda \u003e \\mu$ then the system is unstable, meaning it could have infinite response time as time goes on: the system does not keep up with the number of the requests. The system is stable if $\\rho \u003c 1$ meaning the utilization is less than one hundred percent of the time. If it is $1$ it is still not stable, as queues will grow indefinitely for randomness reasons (server cannot catch up when the queue grows). $1$ seems to be the asyntote. The utilization is defined as $\\rho = \\frac{\\lambda}{\\mu}$, the fraction of time the server is busy.\nInteractive Closed System 🟩 Closed system means no new requests until I hear back from the previous one. In these systems the throughput is the service rate. In closed systems the $\\mu$ is thus an upper bound for the throughput.\nDefinition: A fixed number of jobs (users, processes) continuously circulate within the system. After a job is served, it re-enters the queue after some think time (a delay before rejoining). Characteristics: The total number of jobs in the system is constant. Think time between jobs prevents overwhelming the system. Response time affects user behavior (e.g., a slower system results in longer think times). Example: A system with N interactive users running on a time-sharing computer. Each user submits a request, waits for a response, and then submits another request after a short delay. Time-sharing OS is another example of these type of system.\nBatch Closed System 🟩 Definition: A fixed number of jobs circulate continuously in the system without think time. Once a job completes, it immediately rejoins the queue for processing. Characteristics: The number of jobs remains constant, but they move as fast as the system allows. No idle periods—jobs are processed as quickly as resources permit. Example: A batch processing system, such as a data analytics pipeline that processes a fixed set of tasks repeatedly. Some laws This section is about some laws that are useful to understand the performance of the system.\nInteractive Response Time Law: Closed Systems 🟩 For closed systems we have:\n$$ X = \\frac{\\text{Jobs}}{\\text{Time}} = \\frac{\\left( N \\frac{T}{R + Z} \\right)}{T} = \\frac{N}{R + Z} $$$$ R = \\frac{N}{X} - Z $$ Which is generally good\nLittle’s Law 🟨– $$ L = \\lambda (R + Z) $$ Where $L$ is the number of jobs in the system, $\\lambda$ is the arrival rate of the jobs, $R$ is the response time, $Z$ is the think time (This is valid in close systems), if we assume to have an open system then we need to substitute $W$ to $R + Z$, which is the time spent in the system.\nModels of Queues Birth-Death Process 🟥 $$ \\lambda_{n}P_{n} = \\mu_{n + 1}P_{n + 1} $$ One nice thing is that you can model the probability of being at a certain state starting from some state (you have only one path!)\n$$ P_{n} = \\left( \\frac{\\lambda}{\\mu} \\right)^{n}P_{0} = \\rho^{n} \\cdot (1 - \\rho) $$$$ P_{0}\\sum_{n=0}^{\\infty} \\rho^{n} = \\frac{P_{0}}{1 - \\rho} = 1 $$ The above should be equal to 1.\n$$ E[n] = \\sum_{n=0}^{\\infty} nP_{n} = \\frac{\\rho}{1 - \\rho} $$ This is a known result from geometric series.\nM/M/1 🟩 This is a queueing system that has only a single server. The arrival rate is $\\lambda$ and the service rate is $\\mu$. M stands for Markovian, and the numbers are the arrival and service rate. We have an exponential (Poisson) arrival and service time. We can still use the above Markovian structure, but now we have defined probabilities for the trainsitions.\n$$ E[w] = \\frac{1}{\\mu - \\lambda} = \\frac{\\rho}{(1 - \\rho)\\lambda} $$M/M/m 🟩 This is the same as above but with $m$ servers. The bottom transition is a little more interesting, while the transitions towards more states is equal. In general this model has less response time than m M/M/1 queues.\nM/M/1/B 🟥++ This is the same as above but with a buffer of size $B$ (we don’t have infinite buffer size in reality).\nOptimizing for latency and throughput Throughput optimizations 🟨 One simple way to add throughput to the system is to add more servers. But this comes at a cost:\nEffective load balancing (more servers, it becomes more complex) Cost of the servers Bottlenecks in accessing shared resources (e.g. database). Latency optimizations 🟨 Parallelism: Split the job into smaller tasks and run them in parallel (but you need to care about overheads in communication and joining the results) Critical path length shortening: reduce the length of the critical path (the longest path in the system) Reduce network calls or other communications (this might reduce throughput though, as we are adding more load to a single machine). Reduce the number of steps Buy faster hardware ",
+  "wordCount" : "1222",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -247,51 +247,54 @@ We need some little maths to model the stochastic process of request arrivals.">
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul>
+        <div class="inner"><ul>
                 <li>
-                    <a href="#characterization-of-queueing-theory" aria-label="Characterization of Queueing Theory">Characterization of Queueing Theory</a></li>
+                    <a href="#introduction-to-queuing-theory" aria-label="Introduction to Queuing Theory">Introduction to Queuing Theory</a><ul>
+                        
                 <li>
-                    <a href="#interval-arrival-time" aria-label="Interval Arrival Time">Interval Arrival Time</a></li>
+                    <a href="#characterization-of-queueing-theory-" aria-label="Characterization of Queueing Theory 🟩">Characterization of Queueing Theory 🟩</a></li>
                 <li>
-                    <a href="#key-assumptions" aria-label="Key assumptions">Key assumptions</a></li></ul>
-                    
+                    <a href="#interval-arrival-time-" aria-label="Interval Arrival Time 🟩">Interval Arrival Time 🟩</a></li>
+                <li>
+                    <a href="#key-assumptions-" aria-label="Key assumptions 🟩">Key assumptions 🟩</a></li></ul>
+                </li>
                 <li>
                     <a href="#types-of-queues" aria-label="Types of Queues">Types of Queues</a><ul>
                         
                 <li>
-                    <a href="#open-system" aria-label="Open System">Open System</a></li>
+                    <a href="#open-system-" aria-label="Open System 🟩">Open System 🟩</a></li>
                 <li>
-                    <a href="#interactive-closed-system" aria-label="Interactive Closed System">Interactive Closed System</a></li>
+                    <a href="#interactive-closed-system-" aria-label="Interactive Closed System 🟩">Interactive Closed System 🟩</a></li>
                 <li>
-                    <a href="#batch-closed-system" aria-label="Batch Closed System">Batch Closed System</a></li></ul>
+                    <a href="#batch-closed-system-" aria-label="Batch Closed System 🟩">Batch Closed System 🟩</a></li></ul>
                 </li>
                 <li>
                     <a href="#some-laws" aria-label="Some laws">Some laws</a><ul>
                         
                 <li>
-                    <a href="#interactive-response-time-law-closed-systems" aria-label="Interactive Response Time Law: Closed Systems">Interactive Response Time Law: Closed Systems</a></li>
+                    <a href="#interactive-response-time-law-closed-systems-" aria-label="Interactive Response Time Law: Closed Systems 🟩">Interactive Response Time Law: Closed Systems 🟩</a></li>
                 <li>
-                    <a href="#littles-law" aria-label="Little&rsquo;s Law">Little&rsquo;s Law</a></li></ul>
+                    <a href="#littles-law---" aria-label="Little&rsquo;s Law 🟨&ndash;">Little&rsquo;s Law 🟨&ndash;</a></li></ul>
                 </li>
                 <li>
                     <a href="#models-of-queues" aria-label="Models of Queues">Models of Queues</a><ul>
                         
                 <li>
-                    <a href="#birth-death-process" aria-label="Birth-Death Process">Birth-Death Process</a></li>
+                    <a href="#birth-death-process-" aria-label="Birth-Death Process 🟥">Birth-Death Process 🟥</a></li>
                 <li>
-                    <a href="#mm1" aria-label="M/M/1">M/M/1</a></li>
+                    <a href="#mm1-" aria-label="M/M/1 🟩">M/M/1 🟩</a></li>
                 <li>
-                    <a href="#mmm" aria-label="M/M/m">M/M/m</a></li>
+                    <a href="#mmm-" aria-label="M/M/m 🟩">M/M/m 🟩</a></li>
                 <li>
-                    <a href="#mm1b" aria-label="M/M/1/B">M/M/1/B</a></li></ul>
+                    <a href="#mm1b-" aria-label="M/M/1/B 🟥&#43;&#43;">M/M/1/B 🟥++</a></li></ul>
                 </li>
                 <li>
                     <a href="#optimizing-for-latency-and-throughput" aria-label="Optimizing for latency and throughput">Optimizing for latency and throughput</a><ul>
                         
                 <li>
-                    <a href="#throughput-optimizations" aria-label="Throughput optimizations">Throughput optimizations</a></li>
+                    <a href="#throughput-optimizations-" aria-label="Throughput optimizations 🟨">Throughput optimizations 🟨</a></li>
                 <li>
-                    <a href="#latency-optimizations" aria-label="Latency optimizations">Latency optimizations</a>
+                    <a href="#latency-optimizations-" aria-label="Latency optimizations 🟨">Latency optimizations 🟨</a>
                 </li>
             </ul>
             </li>
@@ -304,7 +307,8 @@ We need some little maths to model the stochastic process of request arrivals.">
 <p>Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.</p></blockquote>
 <p>This is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.</p>
 <p>We need some little maths to model the <strong>stochastic process</strong> of request arrivals.</p>
-<h4 id="characterization-of-queueing-theory">Characterization of Queueing Theory<a hidden class="anchor" aria-hidden="true" href="#characterization-of-queueing-theory">#</a></h4>
+<h3 id="introduction-to-queuing-theory">Introduction to Queuing Theory<a hidden class="anchor" aria-hidden="true" href="#introduction-to-queuing-theory">#</a></h3>
+<h4 id="characterization-of-queueing-theory-">Characterization of Queueing Theory 🟩<a hidden class="anchor" aria-hidden="true" href="#characterization-of-queueing-theory-">#</a></h4>
 <p>We define here some basic terminology:</p>
 <ul>
 <li>Number of servers: the number of workers that process in parallel</li>
@@ -316,11 +320,11 @@ We need some little maths to model the stochastic process of request arrivals.">
 <li>Population size: how many requests can be processed in unit time.</li>
 <li>Arrival rate: the stochastic process that models the arrival of the requests.</li>
 <li>Queue discipline: how you choose the request (First come first served etc&hellip;)</li>
-<li>Service time: time required to service a job on this CPU</li>
+<li>Service time: time required to service a job on this CPU, so it is measured usually in <em>seconds/job</em>, often indicated with $\mu$.</li>
 </ul>
-<h4 id="interval-arrival-time">Interval Arrival Time<a hidden class="anchor" aria-hidden="true" href="#interval-arrival-time">#</a></h4>
+<h4 id="interval-arrival-time-">Interval Arrival Time 🟩<a hidden class="anchor" aria-hidden="true" href="#interval-arrival-time-">#</a></h4>
 <p>It is usually modelled as a <strong>Poisson distribution</strong>, see <a href="/notes/poisson-processes">Poisson processes</a>. Using uniform distribution is not very realistic.</p>
-<h4 id="key-assumptions">Key assumptions<a hidden class="anchor" aria-hidden="true" href="#key-assumptions">#</a></h4>
+<h4 id="key-assumptions-">Key assumptions 🟩<a hidden class="anchor" aria-hidden="true" href="#key-assumptions-">#</a></h4>
 <ul>
 <li><strong>Stationary</strong> (it does not depend on the time)</li>
 <li><strong>State independent</strong> it does not depend on the previous requests.
@@ -329,7 +333,7 @@ In reality there are some <strong>bursts</strong> that make it not stationary (o
 </ul>
 <h3 id="types-of-queues">Types of Queues<a hidden class="anchor" aria-hidden="true" href="#types-of-queues">#</a></h3>
 <p>Queueing systems in computer and network performance analysis are often classified into <strong>Open Systems</strong>, <strong>Interactive Closed Systems</strong>, and <strong>Batch Closed Systems</strong> based on how jobs arrive, circulate, and leave the system.</p>
-<h4 id="open-system">Open System<a hidden class="anchor" aria-hidden="true" href="#open-system">#</a></h4>
+<h4 id="open-system-">Open System 🟩<a hidden class="anchor" aria-hidden="true" href="#open-system-">#</a></h4>
 <ul>
 <li><strong>Definition</strong>: Jobs (requests, tasks, or customers) arrive from an external source, are processed, and eventually leave the system. There is no feedback on the speed of the requests. They can arrive at any time. You could have a <strong>unlimited number of requests</strong> (useful for real systems to evaluate maximum load).</li>
 <li><strong>Characteristics</strong>:
@@ -342,12 +346,13 @@ In reality there are some <strong>bursts</strong> that make it not stationary (o
 <li><strong>Example</strong>: A web server handling requests from users across the internet.</li>
 </ul>
 <p>If you assume $\lambda < \mu$ then the throughput of this system is the mean arrival rate.
-Making higher $\mu$ means lower response time or waiting time in the queue, but does not influence the throughtput.
+Making higher $\mu$ means lower response time or waiting time in the queue, but does not influence the throughput.
 If $\lambda > \mu$ then the system is unstable, meaning it could have infinite response time as time goes on: the system does not keep up with the number of the requests.
-The system is <strong>stable</strong> if $\rho < 1$ meaning the utilization is less than one hundred percent of the time. If it is $1$ it is still not stable, as queues will grow indefinitely for randomness reasons (server cannot catch up when the queue grows). $1$ seems to be the asyntote.</p>
-<h4 id="interactive-closed-system">Interactive Closed System<a hidden class="anchor" aria-hidden="true" href="#interactive-closed-system">#</a></h4>
+The system is <strong>stable</strong> if $\rho < 1$ meaning the utilization is less than one hundred percent of the time. If it is $1$ it is still not stable, as queues will grow indefinitely for randomness reasons (server cannot catch up when the queue grows). $1$ seems to be the asyntote.
+The utilization is defined as $\rho = \frac{\lambda}{\mu}$, the fraction of time the server is busy.</p>
+<h4 id="interactive-closed-system-">Interactive Closed System 🟩<a hidden class="anchor" aria-hidden="true" href="#interactive-closed-system-">#</a></h4>
 <p>Closed system means no new requests until I hear back from the previous one.
-In these systems the thoughput is the <strong>service rate</strong>. In closed systems the $\mu$ is thus an upper bound for the throughput.</p>
+In these systems the throughput is the <strong>service rate</strong>. In closed systems the $\mu$ is thus an upper bound for the throughput.</p>
 <ul>
 <li><strong>Definition</strong>: A <strong>fixed</strong> number of jobs (users, processes) continuously circulate within the system. After a job is served, it re-enters the queue after some <strong>think time</strong> (a delay before rejoining).</li>
 <li><strong>Characteristics</strong>:
@@ -360,7 +365,7 @@ In these systems the thoughput is the <strong>service rate</strong>. In closed s
 <li><strong>Example</strong>: A system with <strong>N</strong> interactive users running on a time-sharing computer. Each user submits a request, waits for a response, and then submits another request after a short delay.</li>
 </ul>
 <p>Time-sharing OS is another example of these type of system.</p>
-<h4 id="batch-closed-system">Batch Closed System<a hidden class="anchor" aria-hidden="true" href="#batch-closed-system">#</a></h4>
+<h4 id="batch-closed-system-">Batch Closed System 🟩<a hidden class="anchor" aria-hidden="true" href="#batch-closed-system-">#</a></h4>
 <ul>
 <li><strong>Definition</strong>: A <strong>fixed</strong> number of jobs circulate continuously in the system <strong>without think time</strong>. Once a job completes, it immediately rejoins the queue for processing.</li>
 <li><strong>Characteristics</strong>:
@@ -373,7 +378,7 @@ In these systems the thoughput is the <strong>service rate</strong>. In closed s
 </ul>
 <h3 id="some-laws">Some laws<a hidden class="anchor" aria-hidden="true" href="#some-laws">#</a></h3>
 <p>This section is about some laws that are useful to understand the performance of the system.</p>
-<h4 id="interactive-response-time-law-closed-systems">Interactive Response Time Law: Closed Systems<a hidden class="anchor" aria-hidden="true" href="#interactive-response-time-law-closed-systems">#</a></h4>
+<h4 id="interactive-response-time-law-closed-systems-">Interactive Response Time Law: Closed Systems 🟩<a hidden class="anchor" aria-hidden="true" href="#interactive-response-time-law-closed-systems-">#</a></h4>
 <p>For closed systems we have:</p>
 $$
 X = \frac{\text{Jobs}}{\text{Time}} = \frac{\left( N \frac{T}{R + Z} \right)}{T} = \frac{N}{R + Z}
@@ -381,37 +386,47 @@ $$$$
 R = \frac{N}{X} - Z
 $$<p>
 Which is generally good</p>
-<h4 id="littles-law">Little&rsquo;s Law<a hidden class="anchor" aria-hidden="true" href="#littles-law">#</a></h4>
+<h4 id="littles-law---">Little&rsquo;s Law 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#littles-law---">#</a></h4>
 $$
 L = \lambda (R + Z)
 $$<p>
 Where $L$ is the number of jobs in the system, $\lambda$ is the arrival rate of the jobs, $R$ is the response time, $Z$ is the think time (This is valid in close systems), if we assume to have an open system then we need to substitute $W$ to $R + Z$, which is the time spent in the system.</p>
 <h3 id="models-of-queues">Models of Queues<a hidden class="anchor" aria-hidden="true" href="#models-of-queues">#</a></h3>
-<h4 id="birth-death-process">Birth-Death Process<a hidden class="anchor" aria-hidden="true" href="#birth-death-process">#</a></h4>
+<h4 id="birth-death-process-">Birth-Death Process 🟥<a hidden class="anchor" aria-hidden="true" href="#birth-death-process-">#</a></h4>
 $$
 \lambda_{n}P_{n} = \mu_{n + 1}P_{n + 1}
 $$<p>
 One nice thing is that you can model the probability of being at a certain state starting from some state (you have only one path!)</p>
-<h4 id="mm1">M/M/1<a hidden class="anchor" aria-hidden="true" href="#mm1">#</a></h4>
+$$
+P_{n} = \left( \frac{\lambda}{\mu} \right)^{n}P_{0} = \rho^{n} \cdot (1 - \rho)
+$$$$
+P_{0}\sum_{n=0}^{\infty} \rho^{n} = \frac{P_{0}}{1 - \rho} = 1
+$$<p>
+The above should be equal to 1.</p>
+$$
+E[n] = \sum_{n=0}^{\infty} nP_{n} = \frac{\rho}{1 - \rho}
+$$<p>
+This is a known result from geometric series.</p>
+<h4 id="mm1-">M/M/1 🟩<a hidden class="anchor" aria-hidden="true" href="#mm1-">#</a></h4>
 <p>This is a queueing system that has only a single server. The arrival rate is $\lambda$ and the service rate is $\mu$. M stands for Markovian, and the numbers are the arrival and service rate.
 We have an exponential (Poisson) arrival and service time. We can still use the above Markovian structure, but now we have defined probabilities for the trainsitions.</p>
 $$
 E[w] = \frac{1}{\mu - \lambda} = \frac{\rho}{(1 - \rho)\lambda}
-$$<h4 id="mmm">M/M/m<a hidden class="anchor" aria-hidden="true" href="#mmm">#</a></h4>
+$$<h4 id="mmm-">M/M/m 🟩<a hidden class="anchor" aria-hidden="true" href="#mmm-">#</a></h4>
 <p>This is the same as above but with $m$ servers.
 The bottom transition is a little more interesting, while the transitions towards more states is equal.
 In general this model has less response time than m M/M/1 queues.</p>
-<h4 id="mm1b">M/M/1/B<a hidden class="anchor" aria-hidden="true" href="#mm1b">#</a></h4>
+<h4 id="mm1b-">M/M/1/B 🟥++<a hidden class="anchor" aria-hidden="true" href="#mm1b-">#</a></h4>
 <p>This is the same as above but with a buffer of size $B$ (we don&rsquo;t have infinite buffer size in reality).</p>
 <h3 id="optimizing-for-latency-and-throughput">Optimizing for latency and throughput<a hidden class="anchor" aria-hidden="true" href="#optimizing-for-latency-and-throughput">#</a></h3>
-<h4 id="throughput-optimizations">Throughput optimizations<a hidden class="anchor" aria-hidden="true" href="#throughput-optimizations">#</a></h4>
+<h4 id="throughput-optimizations-">Throughput optimizations 🟨<a hidden class="anchor" aria-hidden="true" href="#throughput-optimizations-">#</a></h4>
 <p>One simple way to add throughput to the system is to add more servers. But this comes at a cost:</p>
 <ol>
 <li>Effective load balancing (more servers, it becomes more complex)</li>
 <li>Cost of the servers</li>
 <li>Bottlenecks in accessing shared resources (e.g. database).</li>
 </ol>
-<h4 id="latency-optimizations">Latency optimizations<a hidden class="anchor" aria-hidden="true" href="#latency-optimizations">#</a></h4>
+<h4 id="latency-optimizations-">Latency optimizations 🟨<a hidden class="anchor" aria-hidden="true" href="#latency-optimizations-">#</a></h4>
 <ol>
 <li><strong>Parallelism</strong>: Split the job into smaller tasks and run them in parallel (but you need to care about overheads in communication and joining the results)</li>
 <li><strong>Critical path length shortening</strong>: reduce the length of the critical path (the longest path in the system)
