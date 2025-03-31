@@ -184,20 +184,6 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Fast Linear Algebra
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Many problems in scientific computing include:
-Solving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Fast Linear Algebra" href="https://flecart.github.io/notes/fast-linear-algebra/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">Cache Optimization
     </h2>
   </header>
@@ -215,6 +201,34 @@ sum = 0; for (i = 0; i &lt; n; i&#43;&#43;) sum &#43;= a[i]; return sum; Sum is 
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Compiler Limitations
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
+What are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies
+...</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Compiler Limitations" href="https://flecart.github.io/notes/compiler-limitations/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Fast Linear Algebra
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Many problems in scientific computing include:
+Solving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Fast Linear Algebra" href="https://flecart.github.io/notes/fast-linear-algebra/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Skylake Microprocessor
     </h2>
   </header>
@@ -225,6 +239,20 @@ The Intel Processor In 1978 Intel made the choice to have retrocompatibility for
   </div>
   <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Skylake Microprocessor" href="https://flecart.github.io/notes/skylake-microprocessor/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Sparse Matrix Vector Multiplication
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Algorithms for Sparse Matrix-Vector Multiplication Compressed Sporse Row This is an optimized way to store rows for sparse matrices: Sparse MVM using CSR void smvm(int m, const double* values, const int* col_idx, const int* row_start, double* x, double* y) { int i, j; double d; /* Loop over m rows */ for (i = 0; i &lt; m; i&#43;&#43;) { d = y[i]; /* Scalar replacement since reused */ /* Loop over non-zero elements in row i */ for (j = row_start[i]; j &lt; row_start[i &#43; 1]; j&#43;&#43;) { d &#43;= values[j] * x[col_idx[j]]; } y[i] = d; } } Let’s analyze this code:
+Spatial locality: with respect to row_start, col_idx and values we have spatial locality. Temporal locality: with respect to y we have temporal locality. (Poor temporal with respect to $x$) Good storage efficiency for the sparse matrix. But it is 2x slower than the dense matrix multiplication when the matrix is dense. Block CSR But we cannot do block optimizations for the cache with this storage method.
+...</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Sparse Matrix Vector Multiplication" href="https://flecart.github.io/notes/sparse-matrix-vector-multiplication/"></a>
 </article>
     </main>
     

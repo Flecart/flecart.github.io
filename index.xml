@@ -20,6 +20,108 @@
       <description>First blog post</description>
     </item>
     <item>
+      <title>Cache Optimization</title>
+      <link>https://flecart.github.io/notes/cache-optimization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
+      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
+&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
+&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
+&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
+In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
+&lt;p&gt;For example consider this snippet:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
+loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Compiler Limitations</title>
+      <link>https://flecart.github.io/notes/compiler-limitations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
+      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
+&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
+Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
+&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
+&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Fast Linear Algebra</title>
+      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
+      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Solving linear equations&lt;/li&gt;
+&lt;li&gt;Eigenvalue computations&lt;/li&gt;
+&lt;li&gt;Singular value decomposition&lt;/li&gt;
+&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
+&lt;li&gt;etc&amp;hellip;
+And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
+&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
+LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
+BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
+Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
+This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
+Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Skylake Microprocessor</title>
+      <link>https://flecart.github.io/notes/skylake-microprocessor/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/skylake-microprocessor/</guid>
+      <description>&lt;p&gt;The Skylake processor is a 2015 Intel processor.&lt;/p&gt;
+&lt;h4 id=&#34;the-intel-processor&#34;&gt;The Intel Processor&lt;/h4&gt;
+&lt;p&gt;In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits.
+For backwards compatibility intructions have usually just grown.
+They used geographic locations because these are not suable.
+If we want new code to run for old processors, we should need to put specific flags.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Sparse Matrix Vector Multiplication</title>
+      <link>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</guid>
+      <description>&lt;h3 id=&#34;algorithms-for-sparse-matrix-vector--multiplication&#34;&gt;Algorithms for Sparse Matrix-Vector  Multiplication&lt;/h3&gt;
+&lt;h4 id=&#34;compressed-sporse-row&#34;&gt;Compressed Sporse Row&lt;/h4&gt;
+&lt;p&gt;This is an optimized way to store rows for sparse matrices:
+&lt;img src=&#34;https://flecart.github.io/images/notes/Cache Optimization-20250331112244798.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Cache Optimization-20250331112244798&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;sparse-mvm-using-csr&#34;&gt;Sparse MVM using CSR&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;smvm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* Loop over m rows */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;cm&#34;&gt;/* Scalar replacement since reused */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;cm&#34;&gt;/* Loop over non-zero elements in row i */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s analyze this code:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Spatial locality&lt;/strong&gt;: with respect to &lt;code&gt;row_start&lt;/code&gt;, &lt;code&gt;col_idx&lt;/code&gt; and &lt;code&gt;values&lt;/code&gt; we have spatial locality.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Temporal locality&lt;/strong&gt;: with respect to &lt;code&gt;y&lt;/code&gt; we have temporal locality. (Poor temporal with respect to $x$)&lt;/li&gt;
+&lt;li&gt;Good storage efficiency for the sparse matrix.&lt;/li&gt;
+&lt;li&gt;But it is 2x slower than the dense matrix multiplication when the matrix is dense.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;block-csr&#34;&gt;Block CSR&lt;/h4&gt;
+&lt;img src=&#34;https://flecart.github.io/images/notes/Sparse Matrix Vector Multiplication-20250331112834561.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Sparse Matrix Vector Multiplication-20250331112834561&#34;&gt;
+&lt;p&gt;But we cannot do block optimizations for the cache with this storage method.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Recurrent Neural Networks</title>
       <link>https://flecart.github.io/notes/recurrent-neural-networks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -99,47 +201,6 @@ This definition does not include repair time, and assumes the failures are indep
 &lt;p&gt;Birds are very good at producing and reproducing songs by moving their vocal cords complexly (sensory motor learning).
 Birds and Humans do not have much of a common ancestry (last one was fishes).
 71% of the birds, both female and male birds sing, for Zebra finch it is a mating behaviour, so only male sing.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Fast Linear Algebra</title>
-      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
-      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Solving linear equations&lt;/li&gt;
-&lt;li&gt;Eigenvalue computations&lt;/li&gt;
-&lt;li&gt;Singular value decomposition&lt;/li&gt;
-&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
-&lt;li&gt;etc&amp;hellip;
-And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
-&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
-LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
-BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
-Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
-This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
-Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Cache Optimization</title>
-      <link>https://flecart.github.io/notes/cache-optimization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
-      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
-&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
-&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
-&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
-In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
-&lt;p&gt;For example consider this snippet:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
-loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Cloud Computing Services</title>
@@ -464,18 +525,6 @@ They arise naturally in the &lt;a href=&#34;https://flecart.github.io/notes/cent
 The best thing if you want to learn this part actually well is section 2.3 of &lt;a href=&#34;https://link.springer.com/book/9780387310732&#34;&gt;(Bishop 2006)&lt;/a&gt;, so go there my friend :)&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Skylake Microprocessor</title>
-      <link>https://flecart.github.io/notes/skylake-microprocessor/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/skylake-microprocessor/</guid>
-      <description>&lt;p&gt;The Skylake processor is a 2015 Intel processor.&lt;/p&gt;
-&lt;h4 id=&#34;the-intel-processor&#34;&gt;The Intel Processor&lt;/h4&gt;
-&lt;p&gt;In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits.
-For backwards compatibility intructions have usually just grown.
-They used geographic locations because these are not suable.
-If we want new code to run for old processors, we should need to put specific flags.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Anomaly Detection</title>
       <link>https://flecart.github.io/notes/anomaly-detection/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -657,17 +706,6 @@ For example, in &lt;a href=&#34;https://flecart.github.io/notes/cloud-storage&#3
 &lt;h3 id=&#34;knee-jerk-response&#34;&gt;Knee-Jerk Response&lt;/h3&gt;
 &lt;img src=&#34;https://flecart.github.io/images/notes/Neural mechanisms-20250217161536263.webp&#34; width=&#34;649&#34; class=&#34;center&#34; alt=&#34;Neural mechanisms-20250217161536263&#34;/&gt;
 &lt;p&gt;The &lt;strong&gt;knee-jerk reflex&lt;/strong&gt; (also known as the &lt;strong&gt;patellar reflex&lt;/strong&gt;) is a classic example of a &lt;strong&gt;mono-synaptic reflex arc&lt;/strong&gt;, which involves a direct connection between sensory and motor neurons, as well as inhibitory circuits to regulate movement.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Compiler Limitations</title>
-      <link>https://flecart.github.io/notes/compiler-limitations/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
-      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
-&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
-&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
-&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
     </item>
     <item>
       <title>Central Processing Unit</title>
