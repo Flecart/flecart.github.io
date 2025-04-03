@@ -20,6 +20,143 @@
       <description>First blog post</description>
     </item>
     <item>
+      <title>Cloud Storage</title>
+      <link>https://flecart.github.io/notes/cloud-storage/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/cloud-storage/</guid>
+      <description>&lt;h2 id=&#34;object-stores&#34;&gt;Object Stores&lt;/h2&gt;
+&lt;h3 id=&#34;characteristics-of-cloud-systems&#34;&gt;Characteristics of Cloud Systems&lt;/h3&gt;
+&lt;h4 id=&#34;object-storage-design-principles-&#34;&gt;Object storage design principles 🟨++&lt;/h4&gt;
+&lt;p&gt;We don&amp;rsquo;t want the hierarchy that is common in &lt;a href=&#34;https://flecart.github.io/notes/filesystem&#34;&gt;Filesystem&lt;/a&gt;s, so we need to simplify that and have these four principles:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Black-box objects&lt;/li&gt;
+&lt;li&gt;Flat and global &lt;strong&gt;key-value&lt;/strong&gt; model (trivial model, easy to access, without the need to trasverse a file hierarchy).&lt;/li&gt;
+&lt;li&gt;Flexible &lt;strong&gt;metadata&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Commodity hardware (the battery idea of Tesla until 2017).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;object-storage-usages-&#34;&gt;Object storage usages 🟩&lt;/h4&gt;
+&lt;p&gt;Object storage are useful to store things that are usually read-intensive. Some examples are&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Content Delivery Networks</title>
+      <link>https://flecart.github.io/notes/content-delivery-networks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/content-delivery-networks/</guid>
+      <description>&lt;p&gt;CDNs are intermediary servers that replicate read intensive data to provide better performance when user requests them.
+A close relative of CDNs is edge computing (e.g. gaming stations) where lots of computation is done directly close to the user.&lt;/p&gt;
+&lt;h4 id=&#34;types-of-cdns&#34;&gt;Types of CDNs&lt;/h4&gt;
+&lt;p&gt;Mainly three types of CDNs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Highly distributed ones.&lt;/li&gt;
+&lt;li&gt;Database based ones.&lt;/li&gt;
+&lt;li&gt;Ad-hoc CDNs.
+&lt;img src=&#34;https://flecart.github.io/images/notes/Content Delivery Networks-20250403143719218.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Content Delivery Networks-20250403143719218&#34;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;advantages-and-disadvantages&#34;&gt;Advantages and disadvantages&lt;/h4&gt;
+&lt;p&gt;The main reason we use CDNs is to lower the value of latency: we are in fact bringing the data closer to the user.
+We have much less data in length to be transmitted.
+Yet we have some disadvantages too:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Fast Linear Algebra</title>
+      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
+      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Solving linear equations&lt;/li&gt;
+&lt;li&gt;Eigenvalue computations&lt;/li&gt;
+&lt;li&gt;Singular value decomposition&lt;/li&gt;
+&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
+&lt;li&gt;etc&amp;hellip;
+And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
+&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
+LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
+BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
+Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
+This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
+Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Livello applicazione e socket</title>
+      <link>https://flecart.github.io/notes/livello-applicazione-e-socket/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/livello-applicazione-e-socket/</guid>
+      <description>&lt;h1 id=&#34;livello-trasporto&#34;&gt;Livello trasporto&lt;/h1&gt;
+&lt;h2 id=&#34;protocolli-classici&#34;&gt;Protocolli classici&lt;/h2&gt;
+&lt;h3 id=&#34;introduzione-a-tcp-e-upd&#34;&gt;Introduzione a TCP e UPD&lt;/h3&gt;
+&lt;img src=&#34;https://flecart.github.io/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled.png&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;image/universita/ex-notion/Livello applicazione e socket/Untitled&#34;&gt;
+&lt;p&gt;Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (&lt;strong&gt;TCP&lt;/strong&gt;) e lo User Data Protocol (&lt;strong&gt;UDP&lt;/strong&gt;), che possono essere usati in alternativa tra loro.&lt;/p&gt;
+&lt;p&gt;Questo è nel genere di *&lt;em&gt;connession oriented&lt;/em&gt; e non, il primo, TCP è connection oriented, l&amp;rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui &lt;a href=&#34;https://flecart.github.io/notes/0.3.8-servizi-orientati-alla-connessione--e-non-🟨+&#34;&gt;0.3.8 Servizi orientati alla connessione  e non 🟨+&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Memoria virtuale</title>
+      <link>https://flecart.github.io/notes/memoria-virtuale/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/memoria-virtuale/</guid>
+      <description>&lt;h2 id=&#34;memoria-virtuale&#34;&gt;Memoria virtuale&lt;/h2&gt;
+&lt;h3 id=&#34;perché-è-utile-la-mv--&#34;&gt;Perché è utile la MV? 🟨-&lt;/h3&gt;
+&lt;p&gt;I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&amp;rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;caricamento codice dinamico&lt;/strong&gt; Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Crescita dei segmenti stack, heap&lt;/strong&gt;, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gestione degli errori.&lt;/strong&gt; che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;paginazione-a-richiesta-&#34;&gt;Paginazione a richiesta 🟩—&lt;/h3&gt;
+&lt;p&gt;Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in &lt;a href=&#34;https://flecart.github.io/notes/livello-os&#34;&gt;Livello OS&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Paginazione e segmentazione</title>
+      <link>https://flecart.github.io/notes/paginazione-e-segmentazione/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/paginazione-e-segmentazione/</guid>
+      <description>&lt;h1 id=&#34;memoria-sistema-operativo&#34;&gt;Memoria sistema Operativo&lt;/h1&gt;
+&lt;p&gt;Guardare &lt;a href=&#34;https://flecart.github.io/notes/memoria-virtuale&#34;&gt;Memoria virtuale&lt;/a&gt; Per vedere come vengono rimpiazzate le pagine&lt;/p&gt;
+&lt;p&gt;In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)&lt;/p&gt;
+&lt;h2 id=&#34;mmu&#34;&gt;MMU&lt;/h2&gt;
+&lt;p&gt;Controlla se l’accesso di memoria è bono o meno.  (traduzione fra indirizzo logico e fisico)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Sparse Matrix Vector Multiplication</title>
+      <link>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</guid>
+      <description>&lt;h3 id=&#34;algorithms-for-sparse-matrix-vector--multiplication&#34;&gt;Algorithms for Sparse Matrix-Vector  Multiplication&lt;/h3&gt;
+&lt;h4 id=&#34;compressed-sparse-row----&#34;&gt;Compressed Sparse Row  🟨&amp;ndash;&lt;/h4&gt;
+&lt;p&gt;This is an optimized way to store rows for sparse matrices:
+&lt;img src=&#34;https://flecart.github.io/images/notes/Cache Optimization-20250331112244798.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Cache Optimization-20250331112244798&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;sparse-mvm-using-csr&#34;&gt;Sparse MVM using CSR&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;smvm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* Loop over m rows */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;cm&#34;&gt;/* Scalar replacement since reused */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;cm&#34;&gt;/* Loop over non-zero elements in row i */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s analyze this code:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Spatial locality&lt;/strong&gt;: with respect to &lt;code&gt;row_start&lt;/code&gt;, &lt;code&gt;col_idx&lt;/code&gt; and &lt;code&gt;values&lt;/code&gt; we have spatial locality.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Temporal locality&lt;/strong&gt;: with respect to &lt;code&gt;y&lt;/code&gt; we have temporal locality. (Poor temporal with respect to $x$)&lt;/li&gt;
+&lt;li&gt;Good storage efficiency for the sparse matrix.&lt;/li&gt;
+&lt;li&gt;But it is 2x slower than the dense matrix multiplication when the matrix is dense.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;block-csr&#34;&gt;Block CSR&lt;/h4&gt;
+&lt;img src=&#34;https://flecart.github.io/images/notes/Sparse Matrix Vector Multiplication-20250331112834561.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Sparse Matrix Vector Multiplication-20250331112834561&#34;&gt;
+&lt;p&gt;But we cannot do block optimizations for the cache with this storage method.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Conditioning Theory</title>
       <link>https://flecart.github.io/notes/conditioning-theory/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -70,28 +207,6 @@ Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning t
 &lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Fast Linear Algebra</title>
-      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
-      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Solving linear equations&lt;/li&gt;
-&lt;li&gt;Eigenvalue computations&lt;/li&gt;
-&lt;li&gt;Singular value decomposition&lt;/li&gt;
-&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
-&lt;li&gt;etc&amp;hellip;
-And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
-&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
-LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
-BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
-Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
-This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
-Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Skylake Microprocessor</title>
       <link>https://flecart.github.io/notes/skylake-microprocessor/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -102,44 +217,6 @@ Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
 For backwards compatibility intructions have usually just grown.
 They used geographic locations because these are not suable.
 If we want new code to run for old processors, we should need to put specific flags.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Sparse Matrix Vector Multiplication</title>
-      <link>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/sparse-matrix-vector-multiplication/</guid>
-      <description>&lt;h3 id=&#34;algorithms-for-sparse-matrix-vector--multiplication&#34;&gt;Algorithms for Sparse Matrix-Vector  Multiplication&lt;/h3&gt;
-&lt;h4 id=&#34;compressed-sporse-row&#34;&gt;Compressed Sporse Row&lt;/h4&gt;
-&lt;p&gt;This is an optimized way to store rows for sparse matrices:
-&lt;img src=&#34;https://flecart.github.io/images/notes/Cache Optimization-20250331112244798.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Cache Optimization-20250331112244798&#34;&gt;&lt;/p&gt;
-&lt;h4 id=&#34;sparse-mvm-using-csr&#34;&gt;Sparse MVM using CSR&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;smvm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* Loop over m rows */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;cm&#34;&gt;/* Scalar replacement since reused */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;cm&#34;&gt;/* Loop over non-zero elements in row i */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;col_idx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]];&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s analyze this code:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Spatial locality&lt;/strong&gt;: with respect to &lt;code&gt;row_start&lt;/code&gt;, &lt;code&gt;col_idx&lt;/code&gt; and &lt;code&gt;values&lt;/code&gt; we have spatial locality.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Temporal locality&lt;/strong&gt;: with respect to &lt;code&gt;y&lt;/code&gt; we have temporal locality. (Poor temporal with respect to $x$)&lt;/li&gt;
-&lt;li&gt;Good storage efficiency for the sparse matrix.&lt;/li&gt;
-&lt;li&gt;But it is 2x slower than the dense matrix multiplication when the matrix is dense.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;block-csr&#34;&gt;Block CSR&lt;/h4&gt;
-&lt;img src=&#34;https://flecart.github.io/images/notes/Sparse Matrix Vector Multiplication-20250331112834561.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Sparse Matrix Vector Multiplication-20250331112834561&#34;&gt;
-&lt;p&gt;But we cannot do block optimizations for the cache with this storage method.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Recurrent Neural Networks</title>
@@ -788,17 +865,6 @@ A seconda del genere di architettura può collegarsi direttamente in memoria (CI
 &lt;p&gt;Questo bit ha due input, un load e un input, se il load è attivo comincia a storare, altrimenti l&amp;rsquo;output è sempre il bit che ha memoriazzato.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Paginazione e segmentazione</title>
-      <link>https://flecart.github.io/notes/paginazione-e-segmentazione/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/paginazione-e-segmentazione/</guid>
-      <description>&lt;h1 id=&#34;memoria-sistema-operativo&#34;&gt;Memoria sistema Operativo&lt;/h1&gt;
-&lt;p&gt;Guradare &lt;a href=&#34;https://flecart.github.io/notes/memoria-virtuale&#34;&gt;Memoria virtuale&lt;/a&gt; Per vedere come vengono rimpiazzate le pagine&lt;/p&gt;
-&lt;p&gt;In quest sezione andiamo a parlare di come fanno molti processi a venire eseguiti insieme, anche se lo spazio di memoria fisico è lo stesso. Andiamo quindi a parlare di spazio di indirizzi, risoluzione di questi indirizzi logici, segmentazione e paginazione. (e molto di più!)&lt;/p&gt;
-&lt;h2 id=&#34;mmu&#34;&gt;MMU&lt;/h2&gt;
-&lt;p&gt;Controlla se l’accesso di memoria è bono o meno.  (traduzione fra indirizzo logico e fisico)&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Active Learning</title>
       <link>https://flecart.github.io/notes/active-learning/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -1050,23 +1116,6 @@ $$
 $$&lt;p&gt;
 Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( + b)$
 And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Cloud Storage</title>
-      <link>https://flecart.github.io/notes/cloud-storage/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/cloud-storage/</guid>
-      <description>&lt;h2 id=&#34;object-stores&#34;&gt;Object Stores&lt;/h2&gt;
-&lt;h4 id=&#34;object-storage-design-principles-&#34;&gt;Object storage design principles 🟨++&lt;/h4&gt;
-&lt;p&gt;We don&amp;rsquo;t want the hierarchy that is common in &lt;a href=&#34;https://flecart.github.io/notes/filesystem&#34;&gt;Filesystem&lt;/a&gt;s, so we need to simplify that and have these four principles:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Black-box objects&lt;/li&gt;
-&lt;li&gt;Flat and global &lt;strong&gt;key-value&lt;/strong&gt; model (trivial model, easy to access, without the need to trasverse a file hierarchy).&lt;/li&gt;
-&lt;li&gt;Flexible &lt;strong&gt;metadata&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Commodity hardware (the battery idea of Tesla until 2017).&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;object-storage-usages-&#34;&gt;Object storage usages 🟩&lt;/h4&gt;
-&lt;p&gt;Object storage are useful to store things that are usually read-intensive. Some examples are&lt;/p&gt;</description>
     </item>
     <item>
       <title>Counterfactual Invariance</title>
@@ -3198,18 +3247,6 @@ Se c&amp;rsquo;è un trusted key parties il numero delle chiavi si riduce di mol
 &lt;img src=&#34;https://flecart.github.io/images/notes/Key Exchange protocols-20240312110014411.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Key Exchange protocols-20240312110014411&#34;&gt;&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Livello applicazione e socket</title>
-      <link>https://flecart.github.io/notes/livello-applicazione-e-socket/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/livello-applicazione-e-socket/</guid>
-      <description>&lt;h1 id=&#34;livello-trasporto&#34;&gt;Livello trasporto&lt;/h1&gt;
-&lt;h2 id=&#34;protocolli-classici&#34;&gt;Protocolli classici&lt;/h2&gt;
-&lt;h3 id=&#34;introduzione-a-tcp-e-upd&#34;&gt;Introduzione a TCP e UPD&lt;/h3&gt;
-&lt;img src=&#34;https://flecart.github.io/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled.png&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;image/universita/ex-notion/Livello applicazione e socket/Untitled&#34;&gt;
-&lt;p&gt;Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (&lt;strong&gt;TCP&lt;/strong&gt;) e lo User Data Protocol (&lt;strong&gt;UDP&lt;/strong&gt;), che possono essere usati in alternativa tra loro.&lt;/p&gt;
-&lt;p&gt;Questo è nel genere di *&lt;em&gt;connession oriented&lt;/em&gt; e non, il primo, TCP è connection oriented, l&amp;rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui &lt;a href=&#34;https://flecart.github.io/notes/0.3.8-servizi-orientati-alla-connessione--e-non-🟨+&#34;&gt;0.3.8 Servizi orientati alla connessione  e non 🟨+&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Livello di Rete</title>
       <link>https://flecart.github.io/notes/livello-di-rete/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -3715,22 +3752,6 @@ Comunque possiamo ridurci per guardare quanto un sistema sia affidabile a guarda
 &lt;p&gt;Internet (semi-reliable point-to-point communication) and cryptography (specifically, cryptographic hash functions and secure digital signatures).&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;layer---1-consensus&#34;&gt;Layer - 1 Consensus&lt;/h3&gt;
 &lt;p&gt;Ci concentreremo sui protocolli di questo per la maggior parte di quanto faremo! Bitcoin, Ethereum sono tutti a questo livello.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Memoria virtuale</title>
-      <link>https://flecart.github.io/notes/memoria-virtuale/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/memoria-virtuale/</guid>
-      <description>&lt;h2 id=&#34;memoria-virtuale&#34;&gt;Memoria virtuale&lt;/h2&gt;
-&lt;h3 id=&#34;perché-è-utile-la-mv--&#34;&gt;Perché è utile la MV? 🟨-&lt;/h3&gt;
-&lt;p&gt;I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L&amp;rsquo;idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;caricamento codice dinamico&lt;/strong&gt; Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Crescita dei segmenti stack, heap&lt;/strong&gt;, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Gestione degli errori.&lt;/strong&gt; che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;paginazione-a-richiesta-&#34;&gt;Paginazione a richiesta 🟩—&lt;/h3&gt;
-&lt;p&gt;Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in &lt;a href=&#34;https://flecart.github.io/notes/livello-os&#34;&gt;Livello OS&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Message Passing</title>
