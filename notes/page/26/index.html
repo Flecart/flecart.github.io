@@ -199,6 +199,38 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:
+Due Uno Uno Due Uno Due Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno
+Esempio 2 mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; int count = 0; void test(void *s) { for (int i = 0; i &lt; 100000; i&#43;&#43;) { count&#43;= 1; } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); printf(&#34;%d\n&#34;, count); } Vogliamo creare un modello teorico che riesca a rappresentare il concetto di processi concorrenti, questo è il modello concorrente
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Replication and consistency
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Replication and consistency Introduzione Ci sono due vantaggi principali nella replicazione dei dati
+Velocità Vicinanza geografica (quindi meno tempo ad andare a tornare) Maggiore computazione, quindi avere molti più processori che cercano di offrire lo stesso servizio. Affidabilità Così se una sede diventa corrotta, posso avere abbondanza, avere una copia da una altra parte, così non perdo le informazioni! Se una macchina cade in errore, ho altre macchine che lo sostituiscono! Quindi dal punto di vista dell’utente funziona ancora. Ma provare ad avere lo stesso dato in zone diverse porta a grandi problemi riguardo la consistenza! Come facciamo ad avere la garanzia che due cose diverse abbiano la stessa informazione?
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Replication and consistency" href="https://flecart.github.io/notes/replication-and-consistency/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Scheduler
     </h2>
   </header>
@@ -319,37 +351,6 @@ Osservazione La maggior parte dei risultati che dimostro nello spazio ordinario 
   </div>
   <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Analisi multi-variabile" href="https://flecart.github.io/notes/analisi-multi-variabile/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Duality Theory
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>È una branca dell’algebra lineare che ci permette di semplificare tutti i concetti.
-Intro dualità🟩 &lt;img src=&#34;/images/notes/image/universita/ex-notion/Programmazione lineare/Untitled 8.png&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;image/universita/ex-notion/Programmazione lineare/Untitled 8&#34;&gt; Si fa una sorta di trasposta alla matrice di A. y è pari al numero di righe di A La trasformazione al duale è molto facile, ed è abbastanza intuitiva una volta che capiamo che vogliamo andare a fare l’upper bound.
-Dualità asimmetrica 🟥&#43; Teorema debole di dualità 🟩 Slide
-...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Duality Theory" href="https://flecart.github.io/notes/duality-theory/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Insiemi numerici
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p> 💡 Questa prima parte degli appunti è fortemente mancante 1.1 Insiemistica Tutta Questa prima roba di insiemistica è fatta molto meglio nel corso di logica, in particolare in questo documento
-Teoria assiomatica degli insiemi
-1.1.1 Definizione e caratteristiche degli insiemi Definizione di Campo ordinato (operazioni fra certi insiemi, sia per la addizione, per la moltiplicazione e simili) Corpo commutativo
-Sono definiti somma e moltiplicazione e proprietà come commutatività, associatività, distributiva, inversi, opposti, zero e nullo
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Insiemi numerici" href="https://flecart.github.io/notes/insiemi-numerici/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
