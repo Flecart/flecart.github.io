@@ -172,8 +172,8 @@ Slide">
   "keywords": [
     "sistemi-operativi"
   ],
-  "articleBody": "ora abbiamo alcune primitive per passarci i messaggi, vogliamo creare metodo in modo che i processi si possano sincronizzare mandando messaggi.\nla memoria è sempre privata.\nPrimitive Send e receive 🟩 Send\nSpedizione del messaggio input deve avere un identificato al processo su cui spedire. Se si vuole espandere si possono avere multicast e broadcasting ma non li studieremo in questo corso.\nReceive\nRicevi messaggi\nTassonomia dei message passing (!)🟩 Slide\nSincrono\nIn questo caso entrambi send e receive sono bloccanti, quindi non possono andare avanti finché non è mandato e finché non è ricevuto!\nAsincrono\nSimile al precedente, solo che il send non aspetta che il ricevente prenda il messaggio!\nNOTA: non si aspetta che il receiver riceva il messaggio!\nCompletamente asincrono\nnessuno di due aspetta, il receive se nessuno ha inviato non riceve niente!\nThoth proponeva 3, reply receive send, principalmente solo la reply è bloccante.\npiù o meno tutti gli autori avevano una sintassi diversa per il message passing\nEquivalenza fra sincrono asincrono Si può vedere che questi due metodi si possono rivelare equivalenti\nSincrono dato quello asincrono 🟩 Slide\nPer bloccare il asendodevo fare un areceive per un ack, così lo blocco\nNOTA: ed è esattamente questo, un ack aggiuntivo che hai fatto all’esame che ti ha fatto perdere tipo 2 punti, stai attento!\nAsincrono dato quello sincrono 🟩- Slide\nSi vede che il sincrono non è espressivo tanto l’asincrono perché abbiamo bisogno di far uso di un altro processo server.\nProblemi classici 🟨 Filosofi a cena Slide\nBasta ricordarsi di fare anche il filosofo mancino e poi siamo apposto! Sarebbe poi la stessa soluzione proposta in Semafori\nProducer consumer Slide\n",
-  "wordCount" : "275",
+  "articleBody": "ora abbiamo alcune primitive per passarci i messaggi, vogliamo creare metodo in modo che i processi si possano sincronizzare mandando messaggi.\nla memoria è sempre privata.\nPrimitive Send e receive 🟩 Send\nSpedizione del messaggio input deve avere un identificato al processo su cui spedire. Se si vuole espandere si possono avere multicast e broadcasting ma non li studieremo in questo corso.\nReceive\nRicevi messaggi\nTassonomia dei message passing (!)🟩 Slide\nSynchronous In questo caso entrambi send e receive sono bloccanti, quindi non possono andare avanti finché non è mandato e finché non è ricevuto!\nAsynchronous Simile al precedente, solo che il send non aspetta che il ricevente prenda il messaggio!\nNOTA: non si aspetta che il receiver riceva il messaggio!\nCompletamente asincrono\nnessuno di due aspetta, il receive se nessuno ha inviato non riceve niente!\nThoth Proponeva 3, reply receive send, principalmente solo la reply è bloccante. più o meno tutti gli autori avevano una sintassi diversa per il message passing\nEquivalenza fra sincrono asincrono Si può vedere che questi due metodi si possono rivelare equivalenti\nSincrono dato quello asincrono 🟩 Per bloccare il asendodevo fare un areceive per un ack, così lo blocco\nNOTA: ed è esattamente questo, un ack aggiuntivo che hai fatto all’esame che ti ha fatto perdere tipo 2 punti, stai attento!\nAsincrono dato quello sincrono 🟩- Si vede che il sincrono non è espressivo tanto l’asincrono perché abbiamo bisogno di far uso di un altro processo server.\nProblemi classici 🟨 Filosofi a cena Basta ricordarsi di fare anche il filosofo mancino e poi siamo apposto! Sarebbe poi la stessa soluzione proposta in Semafori\nProducer consumer ",
+  "wordCount" : "271",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -286,7 +286,13 @@ Slide">
                 </li>
                 <li>
                     <a href="#tassonomia-dei-message-passing-" aria-label="Tassonomia dei message passing (!)🟩">Tassonomia dei message passing (!)🟩</a><ul>
+                        <ul>
                         
+                <li>
+                    <a href="#synchronous" aria-label="Synchronous">Synchronous</a></li>
+                <li>
+                    <a href="#asynchronous" aria-label="Asynchronous">Asynchronous</a></li></ul>
+                    
                 <li>
                     <a href="#thoth" aria-label="Thoth">Thoth</a></li></ul>
                 </li>
@@ -333,52 +339,32 @@ Slide">
   <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 1">
 </li>
 </ul>
-<p><strong>Sincrono</strong></p>
+<h4 id="synchronous">Synchronous<a hidden class="anchor" aria-hidden="true" href="#synchronous">#</a></h4>
 <p>In questo caso <strong>entrambi send e receive</strong> sono bloccanti, quindi non possono andare avanti finché non è mandato e finché non è ricevuto!</p>
-<p><strong>Asincrono</strong></p>
+<h4 id="asynchronous">Asynchronous<a hidden class="anchor" aria-hidden="true" href="#asynchronous">#</a></h4>
 <p>Simile al precedente, solo che il <strong>send non aspetta</strong> che il ricevente prenda il messaggio!</p>
 <p><strong>NOTA:</strong> non si aspetta che il receiver riceva il messaggio!</p>
 <p><strong>Completamente asincrono</strong></p>
 <p>nessuno di due aspetta, il receive se nessuno ha inviato non riceve niente!</p>
 <h3 id="thoth">Thoth<a hidden class="anchor" aria-hidden="true" href="#thoth">#</a></h3>
-<p>proponeva 3, <strong>reply receive send</strong>, principalmente solo la reply è bloccante.</p>
-<p>più o meno tutti gli autori avevano una sintassi diversa per il message passing</p>
+<p>Proponeva 3, <strong>reply receive send</strong>, principalmente solo la reply è bloccante.
+più o meno tutti gli autori avevano una sintassi diversa per il message passing</p>
 <h2 id="equivalenza-fra-sincrono-asincrono">Equivalenza fra sincrono asincrono<a hidden class="anchor" aria-hidden="true" href="#equivalenza-fra-sincrono-asincrono">#</a></h2>
 <p>Si può vedere che questi due metodi si possono rivelare equivalenti</p>
 <h3 id="sincrono-dato-quello-asincrono-">Sincrono dato quello asincrono 🟩<a hidden class="anchor" aria-hidden="true" href="#sincrono-dato-quello-asincrono-">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 2">
-</li>
-</ul>
+<img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 2">
 <p>Per bloccare il asendodevo fare un areceive per un ack, così lo blocco</p>
 <p>NOTA: ed è esattamente questo, un ack aggiuntivo che hai fatto all’esame che ti ha fatto perdere tipo 2 punti, stai attento!</p>
 <h3 id="asincrono-dato-quello-sincrono--">Asincrono dato quello sincrono 🟩-<a hidden class="anchor" aria-hidden="true" href="#asincrono-dato-quello-sincrono--">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 3">
-</li>
-</ul>
+<img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 3">
 <p>Si vede che il sincrono non è espressivo tanto l’asincrono perché abbiamo bisogno di far uso di un altro processo server.</p>
 <h2 id="problemi-classici-">Problemi classici 🟨<a hidden class="anchor" aria-hidden="true" href="#problemi-classici-">#</a></h2>
 <h3 id="filosofi-a-cena">Filosofi a cena<a hidden class="anchor" aria-hidden="true" href="#filosofi-a-cena">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 4">
-  <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 5">
-</li>
-</ul>
+<img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 4">
+<img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 5">
 <p>Basta ricordarsi di fare anche il filosofo mancino e poi siamo apposto! Sarebbe poi la stessa soluzione proposta in <a href="/notes/semafori">Semafori</a></p>
 <h3 id="producer-consumer">Producer consumer<a hidden class="anchor" aria-hidden="true" href="#producer-consumer">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 6"></li>
-</ul>
-
+<img src="/images/notes/image/universita/ex-notion/Message Passing/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Message Passing/Untitled 6">
 
   </div>
 
