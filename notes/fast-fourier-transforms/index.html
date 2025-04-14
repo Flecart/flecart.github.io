@@ -141,8 +141,8 @@ The same idea applies also for Fourier transforms.">
   "keywords": [
     "advanced-systems-lab"
   ],
-  "articleBody": "The algorithm has been the same, some ideas are in Fourier Series, but architectures change, which means there are new ways to make this algorithm even faster.\nExample of transforms We have learned in Algebra lineare numerica, Cambio di Base that linear transforms are usually a change of basis. They are matrix vector multiplications (additions and multiplications by constants). The optimizations are based on what sorts of transforms we have (e.g. Sparse Matrix Vector Multiplication, or dense versions). The same idea applies also for Fourier transforms.\nDiscrete Fourier Transforms Primitive roots It uses primitive roots of $n$ as coefficients. Discrete Fourier transform computes:\n$$ \\begin{align*}\ny_{k} \u0026= \\sum_{l = 0} ^{n-1} x_{l} \\cdot e^{-2 \\pi i \\frac{kl}{n}}\\ \u0026= \\sum_{l = 0} ^{n-1} x_{l} \\cdot \\omega^{kl}\\ \\end{align*} $$\nWhere $\\omega = e^{-2 \\pi i / n}$ is the primitive root of $n$.\nThe matrix $DFT_{n}$ is a square matrix of size $n$ and the entries are given by:\n$DFT_{n}[k][l] = \\omega^{kl} = e^{-2 \\pi i \\frac{kl}{n}}$\nExample of DFT matrices For example if $n = 2$ we know that the root is $-1$, then the matrix would be: $$ DFT_{2} = \\begin{pmatrix}\n1 \u0026 1\\ 1 \u0026 -1\\ \\end{pmatrix} $$ This has two adds (one add and sub), it would be quite inefficient to write the multiplication part. This is usually called butterflies in signal processing, due to the nature of the circuit.\nfor $n = 4$, the primitive root is $i$ we have:\n$$ DFT_{4} = \\begin{pmatrix} 1 \u0026 1 \u0026 1 \u0026 1\\\\ 1 \u0026 i \u0026 -1 \u0026 -i\\\\ 1 \u0026 -1 \u0026 1 \u0026 -1\\\\ 1 \u0026 -i \u0026 -1 \u0026 i\\\\ \\end{pmatrix} $$If we assume complex everything, it has 12 additions and 4 multiplications. This matrix can be factorized, then we can add it as a series of matrix vector products.\nDecomposing into sparse MVM $$ \\begin{align*} t_{1} \u0026= T_{1}x\\\\ t_{2} \u0026= T_{2}t_{1}\\\\ \\vdots\\\\ t_{k} \u0026= T_{k}t_{k-1}\\\\ y \u0026= t_{k}\\\\ \\end{align*} $$ This makes sense if $T_{i}$ are sparse (see Sparse Matrix Vector Multiplication, and not too many $m$ steps).\nYou can use Group Theory to find this kind of transformations. $$ DFT_{4} = (DFT_{2} \\otimes I_{2}) \\cdot \\text{diag}(1,1,1,i) \\cdot (I_{2} \\otimes DFT_{2})L_{2}^{4} $$ You can see that it is also quite easy to implement it in hardware.\nIt can be similar for size $16$ and radix $4$.\n#### Other transforms IMDCT and DCT are useful transforms for MPEG and JPEG format, while DFT and its inverse can be considered universal transformation tools. FFT transformations General Radix Recursive Cooley-Tukey FFT This is the most general version of DFT, it has a similar structure compared to the previous ones.\n$$ \\begin{align*} DFT_{n} \u0026= (DFT_{n/r} \\otimes I_{r}) \\cdot \\text{diag}(1,1,…,\\omega^{0},\\omega^{1},…,\\omega^{r-1}) \\cdot (I_{n/r} \\otimes DFT_{r})L_{n/r}^{n}\\\n\\end{align*} $$ The diagonal matrix has the roots of unity. This is called the decimation in time frequency. It is possible also to use the decimation in frequency, which is just the transpose. We can decompose everything until we have size two butterfly operations (bunch of adds).\nCost of DFT Independently of recursion (the radix), we have a number of\n$n \\log_{2}(n)$ additions and $n \\log_{2}(n) / 2$ multiplications, but to be real we would need to consider real additions, so we have to multiply everything by two, to get the adds. For multiplication, we have four multiplication and two additions (image it as a matrix) (in reality you use the structure of roots of unity, so in reality you have less adds). Usually best is around radix 8 You will have about $\\leq3n \\log_{2}(n)$ real additions and $\\leq 2n \\log_{2}(n)$ complex multiplications, so upper bound of 5 operations. For a long time radix 2 iterative version was the best version, after superscalar processors like Skylake Microprocessor it has better versions. There is a practical lower bound analysis, but that is like Strassen Fast Linear Algebra, which is not much useful. Recursive vs iterative FFT The recursive version is good for re-use, has better locality. Triple loop is like the blocked MMM in Fast Linear Algebra. Iterative similar, the op count is the same, is slower because of the (log n passes through the data). The code change is quite difficult.\nOther FFTs Pease FFT Highly parallelized with maps and shuffles.\nStockham FFT It is good for vector computers of the 80s, where we have long vectors Six-Step FFT Multi-core FFT Good for Sharing memory. ",
-  "wordCount" : "730",
+  "articleBody": "The algorithm has been the same, some ideas are in Fourier Series, but architectures change, which means there are new ways to make this algorithm even faster.\nExample of transforms We have learned in Algebra lineare numerica, Cambio di Base that linear transforms are usually a change of basis. They are matrix vector multiplications (additions and multiplications by constants). The optimizations are based on what sorts of transforms we have (e.g. Sparse Matrix Vector Multiplication, or dense versions). The same idea applies also for Fourier transforms.\nDiscrete Fourier Transforms Primitive roots 🟩 It uses primitive roots of $n$ as coefficients. Discrete Fourier transform computes:\n$$ \\begin{align*}\ny_{k} \u0026= \\sum_{l = 0} ^{n-1} x_{l} \\cdot e^{-2 \\pi i \\frac{kl}{n}}\\ \u0026= \\sum_{l = 0} ^{n-1} x_{l} \\cdot \\omega^{kl}\\ \\end{align*} $$\nWhere $\\omega = e^{-2 \\pi i / n}$ is the primitive root of $n$.\nThe matrix $DFT_{n}$ is a square matrix of size $n$ and the entries are given by:\n$DFT_{n}[k][l] = \\omega^{kl} = e^{-2 \\pi i \\frac{kl}{n}}$\nExample of DFT matrices 🟩 At each index we will have the $ij$ th unit of root. For example if $n = 2$ we know that the root is $-1$, then the matrix would be: $$ DFT_{2} = \\begin{pmatrix}\n1 \u0026 1\\ 1 \u0026 -1\\ \\end{pmatrix} $$ This has two adds (one add and sub), it would be quite inefficient to write the multiplication part. This is usually called butterflies in signal processing, due to the nature of the circuit.\nfor $n = 4$, the primitive root is $i$ we have:\n$$ DFT_{4} = \\begin{pmatrix} 1 \u0026 1 \u0026 1 \u0026 1\\\\ 1 \u0026 i \u0026 -1 \u0026 -i\\\\ 1 \u0026 -1 \u0026 1 \u0026 -1\\\\ 1 \u0026 -i \u0026 -1 \u0026 i\\\\ \\end{pmatrix} $$If we assume complex everything, it has 12 additions and 4 multiplications. This matrix can be factorized, then we can add it as a series of matrix vector products.\nDecomposing into sparse MVM $$ \\begin{align*} t_{1} \u0026= T_{1}x\\\\ t_{2} \u0026= T_{2}t_{1}\\\\ \\vdots\\\\ t_{k} \u0026= T_{k}t_{k-1}\\\\ y \u0026= t_{k}\\\\ \\end{align*} $$ This makes sense if $T_{i}$ are sparse (see Sparse Matrix Vector Multiplication, and not too many $m$ steps).\nYou can use Group Theory to find this kind of transformations. $$ DFT_{4} = (DFT_{2} \\otimes I_{2}) \\cdot \\text{diag}(1,1,1,i) \\cdot (I_{2} \\otimes DFT_{2})L_{2}^{4} $$ You can see that it is also quite easy to implement it in hardware.\nIt can be similar for size $16$ and radix $4$.\n#### Other transforms IMDCT and DCT are useful transforms for MPEG and JPEG format, while DFT and its inverse can be considered universal transformation tools. FFT transformations General Radix Recursive Cooley-Tukey FFT This is the most general version of DFT, it has a similar structure compared to the previous ones.\n$$ \\begin{align*} DFT_{n} \u0026= (DFT_{n/r} \\otimes I_{r}) \\cdot \\text{diag}(1,1,…,\\omega^{0},\\omega^{1},…,\\omega^{r-1}) \\cdot (I_{n/r} \\otimes DFT_{r})L_{n/r}^{n}\\\n\\end{align*} $$ The diagonal matrix has the roots of unity. This is called the decimation in time frequency. It is possible also to use the decimation in frequency, which is just the transpose. We can decompose everything until we have size two butterfly operations (bunch of adds).\nCost of DFT 🟥 Independently of recursion (the radix), we have a number of\n$n \\log_{2}(n)$ additions and $n \\log_{2}(n) / 2$ multiplications, but to be real we would need to consider real additions, so we have to multiply everything by two, to get the adds. For multiplication, we have four multiplication and two additions (image it as a matrix) (in reality you use the structure of roots of unity, so in reality you have less adds). Usually best is around radix 8 You will have about $\\leq3n \\log_{2}(n)$ real additions and $\\leq 2n \\log_{2}(n)$ complex multiplications, so upper bound of 5 operations. For a long time radix 2 iterative version was the best version, after superscalar processors like Skylake Microprocessor it has better versions. There is a practical lower bound analysis, but that is like Strassen Fast Linear Algebra, which is not much useful. Recursive vs iterative FFT 🟥 The recursive version is good for re-use, has better locality. Triple loop is like the blocked MMM in Fast Linear Algebra. If we have big stages computed, we can continue with the next stage immediately.\nIterative similar, the op count is the same, is slower because of the (log n passes through the data). The code change is quite difficult. If we have much data, then at each iteration we need to load the whole data which could be expensive.\nDecimation in Time and Frequency 🟥 TODO\nOther FFTs Pease FFT Highly parallelized with maps and shuffles.\nStockham FFT It is good for vector computers of the 80s, where we have long vectors Six-Step FFT Multi-core FFT Good for Sharing memory. Fastest Fourier Transform of the West Also known as FFTW, we say.\nIdeas for FFTW Merging Steps In the original version, the original permutation could be very expensive, to load everything. There is no need to keep it as a sperate step, we can fuse it in the next step. This fusion would need more data, because it needs to write to another place (no-inplace computation!). The scaling can also be fused, with the previous or next step (just change the kernel). Strides will change as we recurse for the DFTrec, and we can also interchange input and output to save space. Because of the power of two strides, often it is very difficult to reach peak performance.\nConstants We precompute the constants of the sins and cosines to save time (just need what roots of unity you need in order to compute it). They just depend on the input size, so they precompute it at the beginning of the function.\nBlock un-rolling We un-roll the basic blocks at the end to get longer codes, less recursion (size 32 is good basecase for example).\nProgram Generator We have DAG generator (for many types of FFT), a simplifier for the DAG (specific for the FFT computation).\nAn example of a simplification is when you have $x - y$ and $y - x$, an optimization would be flipping one after you have computed one. Also constants come in pairs (minus and positive version). Reduces register pressure. ",
+  "wordCount" : "1031",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -237,7 +237,7 @@ The same idea applies also for Fourier transforms.">
     <h1 class="post-title entry-hint-parent">
       Fast Fourier Transforms
     </h1>
-    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -254,9 +254,9 @@ The same idea applies also for Fourier transforms.">
                     <a href="#discrete-fourier-transforms" aria-label="Discrete Fourier Transforms">Discrete Fourier Transforms</a><ul>
                         
                 <li>
-                    <a href="#primitive-roots" aria-label="Primitive roots">Primitive roots</a></li>
+                    <a href="#primitive-roots-" aria-label="Primitive roots 🟩">Primitive roots 🟩</a></li>
                 <li>
-                    <a href="#example-of-dft-matrices" aria-label="Example of DFT matrices">Example of DFT matrices</a></li>
+                    <a href="#example-of-dft-matrices-" aria-label="Example of DFT matrices 🟩">Example of DFT matrices 🟩</a></li>
                 <li>
                     <a href="#decomposing-into-sparse-mvm" aria-label="Decomposing into sparse MVM">Decomposing into sparse MVM</a></li></ul>
                 </li></ul>
@@ -268,9 +268,11 @@ The same idea applies also for Fourier transforms.">
                     <a href="#general-radix-recursive-cooley-tukey-fft" aria-label="General Radix Recursive Cooley-Tukey FFT">General Radix Recursive Cooley-Tukey FFT</a><ul>
                         
                 <li>
-                    <a href="#cost-of-dft" aria-label="Cost of DFT">Cost of DFT</a></li>
+                    <a href="#cost-of-dft-" aria-label="Cost of DFT 🟥">Cost of DFT 🟥</a></li>
                 <li>
-                    <a href="#recursive-vs-iterative-fft" aria-label="Recursive vs iterative FFT">Recursive vs iterative FFT</a></li></ul>
+                    <a href="#recursive-vs-iterative-fft-" aria-label="Recursive vs iterative FFT 🟥">Recursive vs iterative FFT 🟥</a></li>
+                <li>
+                    <a href="#decimation-in-time-and-frequency-" aria-label="Decimation in Time and Frequency 🟥">Decimation in Time and Frequency 🟥</a></li></ul>
                 </li>
                 <li>
                     <a href="#other-ffts" aria-label="Other FFTs">Other FFTs</a><ul>
@@ -282,7 +284,23 @@ The same idea applies also for Fourier transforms.">
                 <li>
                     <a href="#six-step-fft" aria-label="Six-Step FFT">Six-Step FFT</a></li>
                 <li>
-                    <a href="#multi-core-fft" aria-label="Multi-core FFT">Multi-core FFT</a>
+                    <a href="#multi-core-fft" aria-label="Multi-core FFT">Multi-core FFT</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#fastest-fourier-transform-of-the-west" aria-label="Fastest Fourier Transform of the West">Fastest Fourier Transform of the West</a><ul>
+                        
+                <li>
+                    <a href="#ideas-for-fftw" aria-label="Ideas for FFTW">Ideas for FFTW</a><ul>
+                        
+                <li>
+                    <a href="#merging-steps" aria-label="Merging Steps">Merging Steps</a></li>
+                <li>
+                    <a href="#constants" aria-label="Constants">Constants</a></li>
+                <li>
+                    <a href="#block-un-rolling" aria-label="Block un-rolling">Block un-rolling</a></li>
+                <li>
+                    <a href="#program-generator" aria-label="Program Generator">Program Generator</a>
                 </li>
             </ul>
             </li>
@@ -298,7 +316,7 @@ The same idea applies also for Fourier transforms.">
 <p>We have learned in <a href="/notes/algebra-lineare-numerica">Algebra lineare numerica</a>, <a href="/notes/cambio-di-base">Cambio di Base</a> that linear transforms are usually a <strong>change of basis</strong>. They are matrix vector multiplications (additions and multiplications by <em>constants</em>). The optimizations are based on what sorts of transforms we have (e.g. <a href="/notes/sparse-matrix-vector-multiplication">Sparse Matrix Vector Multiplication</a>, or dense versions).
 The same idea applies also for Fourier transforms.</p>
 <h3 id="discrete-fourier-transforms">Discrete Fourier Transforms<a hidden class="anchor" aria-hidden="true" href="#discrete-fourier-transforms">#</a></h3>
-<h4 id="primitive-roots">Primitive roots<a hidden class="anchor" aria-hidden="true" href="#primitive-roots">#</a></h4>
+<h4 id="primitive-roots-">Primitive roots 🟩<a hidden class="anchor" aria-hidden="true" href="#primitive-roots-">#</a></h4>
 <p>It uses <strong>primitive</strong> roots of $n$ as coefficients. Discrete Fourier transform computes:</p>
 <p>$$
 \begin{align*}</p>
@@ -309,8 +327,9 @@ $$</p>
 <p>Where $\omega = e^{-2 \pi i / n}$ is the primitive root of $n$.</p>
 <p>The matrix $DFT_{n}$ is a square matrix of size $n$ and the entries are given by:</p>
 <p>$DFT_{n}[k][l] = \omega^{kl} = e^{-2 \pi i \frac{kl}{n}}$</p>
-<h4 id="example-of-dft-matrices">Example of DFT matrices<a hidden class="anchor" aria-hidden="true" href="#example-of-dft-matrices">#</a></h4>
-<p>For example if $n = 2$ we know that the root is $-1$, then the matrix would be:
+<h4 id="example-of-dft-matrices-">Example of DFT matrices 🟩<a hidden class="anchor" aria-hidden="true" href="#example-of-dft-matrices-">#</a></h4>
+<p>At each index we will have the $ij$ th unit of root.
+For example if $n = 2$ we know that the root is $-1$, then the matrix would be:
 $$
 DFT_{2} = \begin{pmatrix}</p>
 <p>1 &amp; 1\
@@ -360,7 +379,7 @@ $$
 The diagonal matrix has the roots of unity. This is called the <strong>decimation in time</strong> frequency.
 It is possible also to use the decimation in frequency, which is just the transpose.
 We can decompose everything until we have size two butterfly operations (bunch of adds).</p>
-<h4 id="cost-of-dft">Cost of DFT<a hidden class="anchor" aria-hidden="true" href="#cost-of-dft">#</a></h4>
+<h4 id="cost-of-dft-">Cost of DFT 🟥<a hidden class="anchor" aria-hidden="true" href="#cost-of-dft-">#</a></h4>
 <p>Independently of recursion (the radix), we have a number of</p>
 <ul>
 <li>$n \log_{2}(n)$ additions and $n \log_{2}(n) / 2$ multiplications, but to be real we would need to consider real additions, so we have to multiply everything by two, to get the adds. For multiplication, we have four multiplication and two additions (image it as a matrix) (in reality you use the structure of roots of unity, so in reality you have less adds). Usually best is around radix 8</li>
@@ -369,10 +388,12 @@ For a long time radix 2 iterative version was the best version, after superscala
 <img src="/images/notes/Fast Fourier Transforms-20250407113518669.webp" style="width: 100%" class="center" alt="Fast Fourier Transforms-20250407113518669">
 There is a practical lower bound analysis, but that is like Strassen <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>, which is not much useful.</li>
 </ul>
-<h4 id="recursive-vs-iterative-fft">Recursive vs iterative FFT<a hidden class="anchor" aria-hidden="true" href="#recursive-vs-iterative-fft">#</a></h4>
-<p>The recursive version is good for <strong>re-use</strong>, has better locality. Triple loop is like the blocked MMM in <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>.
-Iterative similar, the op count is the same, is slower because of the (log n passes through the data).
-The code change is quite difficult.</p>
+<h4 id="recursive-vs-iterative-fft-">Recursive vs iterative FFT 🟥<a hidden class="anchor" aria-hidden="true" href="#recursive-vs-iterative-fft-">#</a></h4>
+<p>The recursive version is good for <strong>re-use</strong>, has better locality. Triple loop is like the blocked MMM in <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>. If we have big stages computed, we can continue with the next stage immediately.</p>
+<p>Iterative similar, the op count is the same, is slower because of the (log n passes through the data).
+The code change is quite difficult. If we have much data, then at each iteration we need to load the whole data which could be expensive.</p>
+<h4 id="decimation-in-time-and-frequency-">Decimation in Time and Frequency 🟥<a hidden class="anchor" aria-hidden="true" href="#decimation-in-time-and-frequency-">#</a></h4>
+<p>TODO</p>
 <h3 id="other-ffts">Other FFTs<a hidden class="anchor" aria-hidden="true" href="#other-ffts">#</a></h3>
 <h4 id="pease-fft">Pease FFT<a hidden class="anchor" aria-hidden="true" href="#pease-fft">#</a></h4>
 <p>Highly parallelized with maps and shuffles.</p>
@@ -385,6 +406,35 @@ The code change is quite difficult.</p>
 <h4 id="multi-core-fft">Multi-core FFT<a hidden class="anchor" aria-hidden="true" href="#multi-core-fft">#</a></h4>
 <p>Good for Sharing memory.
 <img src="/images/notes/Fast Fourier Transforms-20250407113116841.webp" style="width: 100%" class="center" alt="Fast Fourier Transforms-20250407113116841"></p>
+<h2 id="fastest-fourier-transform-of-the-west">Fastest Fourier Transform of the West<a hidden class="anchor" aria-hidden="true" href="#fastest-fourier-transform-of-the-west">#</a></h2>
+<p>Also known as FFTW, we say.</p>
+<h3 id="ideas-for-fftw">Ideas for FFTW<a hidden class="anchor" aria-hidden="true" href="#ideas-for-fftw">#</a></h3>
+<h4 id="merging-steps">Merging Steps<a hidden class="anchor" aria-hidden="true" href="#merging-steps">#</a></h4>
+<ol>
+<li>In the original version, the original permutation could be very expensive, to load everything. There is no need to keep it as a sperate step, we can fuse it in the next step.
+<ol>
+<li>This fusion would need more data, because it needs to write to another place (<em>no-inplace</em> computation!).</li>
+</ol>
+</li>
+<li>The scaling can also be fused, with the previous or next step (just change the kernel).
+<img src="/images/notes/Fast Fourier Transforms-20250414103632830.webp" style="width: 100%" class="center" alt="Fast Fourier Transforms-20250414103632830"></li>
+</ol>
+<p>Strides will change as we recurse for the <code>DFTrec</code>, and we can also interchange input and output to save space. Because of the power of two strides, often it is very difficult to reach peak  performance.</p>
+<h4 id="constants">Constants<a hidden class="anchor" aria-hidden="true" href="#constants">#</a></h4>
+<p>We precompute the constants of the sins and cosines to save time (just need what roots of unity you need in order to compute it).
+They just depend on the input size, so they precompute it at the beginning of the function.</p>
+<h4 id="block-un-rolling">Block un-rolling<a hidden class="anchor" aria-hidden="true" href="#block-un-rolling">#</a></h4>
+<p>We un-roll the basic blocks at the end to get longer codes, less recursion (size 32 is good basecase for example).</p>
+<h4 id="program-generator">Program Generator<a hidden class="anchor" aria-hidden="true" href="#program-generator">#</a></h4>
+<p>We have DAG generator (for many types of FFT), a simplifier for the DAG (specific for the FFT computation).</p>
+<ul>
+<li>An example of a simplification is when you have $x - y$ and $y - x$, an optimization would be flipping one after you have computed one.</li>
+<li>Also constants come in pairs (minus and positive version).
+<ul>
+<li>Reduces register pressure.</li>
+</ul>
+</li>
+</ul>
 
 
   </div>

@@ -199,16 +199,50 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Fast Linear Algebra
+    <h2 class="entry-hint-parent">Message Passing
     </h2>
   </header>
   <div class="entry-content">
-    <p>Many problems in scientific computing include:
-Solving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.
+    <p>ora abbiamo alcune primitive per passarci i messaggi, vogliamo creare metodo in modo che i processi si possano sincronizzare mandando messaggi.
+la memoria è sempre privata.
+Primitive Send e receive 🟩 Send
+Spedizione del messaggio input deve avere un identificato al processo su cui spedire. Se si vuole espandere si possono avere multicast e broadcasting ma non li studieremo in questo corso.
+Receive
+Ricevi messaggi
+Tassonomia dei message passing (!)🟩 Slide
 ...</p>
   </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Fast Linear Algebra" href="https://flecart.github.io/notes/fast-linear-algebra/"></a>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Message Passing" href="https://flecart.github.io/notes/message-passing/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Cloud Storage
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Object Stores Characteristics of Cloud Systems Object storage design principles 🟨&#43;&#43; We don’t want the hierarchy that is common in Filesystems, so we need to simplify that and have these four principles:
+Black-box objects Flat and global key-value model (trivial model, easy to access, without the need to trasverse a file hierarchy). Flexible metadata Commodity hardware (the battery idea of Tesla until 2017). Object storage usages 🟩 Object storage are useful to store things that are usually read-intensive. Some examples are
+...</p>
+  </div>
+  <footer class="entry-footer">18 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Cloud Storage" href="https://flecart.github.io/notes/cloud-storage/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Content Delivery Networks
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>CDNs are intermediary servers that replicate read intensive data to provide better performance when user requests them. A close relative of CDNs is edge computing (e.g. gaming stations) where lots of computation is done directly close to the user.
+Types of CDNs Mainly three types of CDNs:
+Highly distributed ones. Database based ones. Ad-hoc CDNs. Advantages and disadvantages The main reason we use CDNs is to lower the value of latency: we are in fact bringing the data closer to the user. We have much less data in length to be transmitted. Yet we have some disadvantages too:
+...</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Content Delivery Networks" href="https://flecart.github.io/notes/content-delivery-networks/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -301,20 +335,6 @@ sum = 0; for (i = 0; i &lt; n; i&#43;&#43;) sum &#43;= a[i]; return sum; Sum is 
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Skylake Microprocessor
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The Skylake processor is a 2015 Intel processor.
-The Intel Processor In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits. For backwards compatibility intructions have usually just grown. They used geographic locations because these are not suable. If we want new code to run for old processors, we should need to put specific flags.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Skylake Microprocessor" href="https://flecart.github.io/notes/skylake-microprocessor/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">Recurrent Neural Networks
     </h2>
   </header>
@@ -325,21 +345,6 @@ These network can bee seen as chaotic systems (non-linear dynamical systems), se
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Recurrent Neural Networks" href="https://flecart.github.io/notes/recurrent-neural-networks/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Cloud Reliability
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p> Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
-Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary Availability $$ \text{Availability} = \frac{\text{Uptime}}{\text{Uptime} &#43; \text{Downtime}} $$MTTF: Mean Time To Failure $$ \text{MTTF} = \frac{1}{r} $$ This definition does not include repair time, and assumes the failures are independent with each other.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cloud Reliability" href="https://flecart.github.io/notes/cloud-reliability/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
