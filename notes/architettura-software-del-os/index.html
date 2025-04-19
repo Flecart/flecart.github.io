@@ -151,8 +151,8 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
   "keywords": [
     "sistemi-operativi", "☁cloud-computing"
   ],
-  "articleBody": "A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).\nMa se sei un programmatore OS ti interessa capire le componenti principali dell’OS\nSlide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante\nGestione dei processi All’interno del SO, il processo è rappresentato come un processo control block, che in linux è in sched, parte dello scheduler dei processi. Questo è importante perché per esempio per fare una fork, non faccio altro che duplicare questa struttura e settare bene i figli e genitori.\nQuesti sono solitamente messi un un process table o forse una lista per tenerne traccia.\nSlide\nnel parliamo in Processi e thread.\nGestione memoria principale e secondaria Principale\nÈ un array temporaneo(nel senso che non è mantenuto quando viene spento il PC.), indicizzato singolarmente a differenza del secondario, che è indicizzato a blocchi,\nUna parte importante di questa parte è la gestione della memoria virtuale. Come allocare pagine di memoria, deallocarle e simili, ne parliamo in Paginazione e segmentazione\nSecondaria\nLa cosa buona è che questa memoria è permanente, efficienza (ordinare le richieste per non andare qui e lì quando si legge! minimizare tempi per seek) e partizionamento e reliability dei dischi sono problemi che interessano questa parte. Abbiamo parlato di raid in Memoria. e di nuovo in Devices OS.\nSlide\nI/O e filesystem Principalmente per IO servono driver per interagire con specifici hardware, e un sistema di comunicazione che spesso sono buffer e cache.\nSlides\nEsiste un file system virtuale che mappa a tutto (quindi alcune cose non esistono realmente sul disco, potrebbe essere una astrazione utilizzata per esempio per comunicare con i devices.\nCi sono molti filesystem, che però posso gestire in modo differente la forma che hanno sul disco, Ed è per questo che possiamo dire che esistono dei filesystem diversi.\nAnche i processi sono files, la cosa figa di questa astrazioen è che posso utilizzare gli stessi sistemi di protezione file per processi.\nStruttura dei sistemi Obiettivi di design dei SO (4) 🟨 Slide obiettivi nella struttura dei sistemi (4)\nEfficienza\nModularità\nMantenibilità\nEspansibilità\nStruttura del kernel 🟩 Slide riassuntiva\nIl kernel è un unico processo, parte da un main che parte da un initialize in cui raccoglie tutte le risorse del sistema, fa partire tutti i device drivers e crea il PCB del primo processo, anche chiamato init, messo poi nella queue dello scheduler come spiegato in Scheduler. Fatta una volta non è mai più eseguito quel codice di init.\nLo stato kernel è la parte a sinistra dell’immagine, quella parte blu, tutto il giallo, a destra è lo stato user.\nScheduler scegliere il processo da eseguire nello user space Il controllo è passato al processo user, che può fare traps (come fork) o fare I/O, a quel punto è rimesso a codice kernel. Tipologie di struttura OS (2) 🟨++ Solitamente i sistemi sono costruiti in due modi, sistemi semplici senza struttura, che praticamente c’è una prima versione, e poi viene ammassato roba senza struttura generale, fatti quando servono. Solitamente sono insieme di procedure che si chiamano fra di loro, e ben presto sono andate fuori dal loro ambito di interesse diciamo (fuori dal loro scope)\nEsempi di OS semplici:\nUn esempio è free-dos che è quanto installato su un computer senza sistema operativo.\nIn modo simile è MS-DOS, che è stato fatto per i primi personal computer, che non avevano un sistema kernel a livello hardware (non era quindi possibile fare queste protezioni).. In generale in questo ambiente un programma aveva accesso all’intera memoria, e poteva mandare in crash tutto.\nStruttura Free-DOS\nUNIX, è diviso diviso in due parti in kernel e programmi di sistemi, molto semplice, un kernel monolitico, un unico eseguibile, anche questo fu all’epoca limitato enormemente dal suo hardware, e una serie di programmi di sistema.\nDato che c’è una separazione, l’utente è separato dall’interfaccia dal codice kernel. Ma comunque il codice kernel resta vulnerabile, e potrebbe essere modificato e quindi attaccato, o cumunque vulnerabile a bug, anche colposi, distruttivi.\nStruttura UNIX\nStratificazione OS:\nLa struttura a stati è più affidabile dell’altra e rende più facile la programmazione di tale sistema, utili, la logica è la stessa presentata in Architettura e livelli 1, 2, per la divisione a stack del sistema e dei vantaggi che si hanno con questo tipo di architettura.\nEsemplificazione struttura a strati\nStrutture proposte classiche (non fatte, non importanti)\nQuesti sono rimasti accademici\nMa nella pratica questi strati sono rimasti solamente a livello accademico, perché crea overhead anche se si guadagnerebbe in manutentibilità e estensibilità e gestione, quindi molto meno efficiente, inoltre non erano ben chiare le API fra strati. Oggi c’è una forma intermedia (non c’è esattamente la gestione a strati come abbiamo per Web, ma abbiamo una divisione per componenti e responsabilità delle componenti).\nPolitiche e meccanismi 🟩 La suddifivisione politiche e meccanismi è un pattern di software engineering che lo rende molto comodo da gestire.\nInvece che una gestione a strati come per le reti, abbiamo una gestione di politiche e meccanismi ossia abbiamo qualcosa che decide cosa andare a fare e qualcosa che gestisce il come farla.\nEG. un certo modo di memoria allocata per fare qualcosa, quindi indirizzare il sistema verso qualcosa, e MMU che attualmente implementa la decisione politica.\nEsempio Microkernel o MINIX:\nIl kernel è visto come il meccanismo quindi le parti di gestione e politica sono fuori dal kernel. Questo rende la struttura del SO molto mantenibile ed estendibile.\nSlide\nEsempio Mac OS ≤ 9 / Windows 9x:\nPolitiche e meccanismi sono messi tutti nel kernel, perché così imponevo un feeling unico al look and feel suo (obbligato tutti ad avere questi elementi grafici). Questo è un problema praticamente di mercato.\nQuesto era brutto perché la grafica può mandare in crash tutto il sistema. Anche se i nuovi sistemi non dovrebbero avere questo problema.\nCategorizzazione dei Kernel Monolitici Il kernel è un unico programma. Si possono creare moduli che poi vengono caricati. Il problema principale di questo tipo di kernel è che se un modulo bugga crolla l’intero sistema. Un vantaggio è che è molto efficiente perché non deve passare ad astrazioni come per lo stack, basta fare una chiamata di funzione, tanto siamo nello stesso programma. Ed è altamente modularizzabile per poter attaccare nuove funzionalità.\nIn breve:\nVantaggi:\nEfficienza Modularità e mantenibilità (non devo ricompilare tutto, basta runtime). Svantaggio:\nUn modulo può mandare in crash tutto, perché è eseguito nello stesso spazio del kernel.\nSlide\nEsempi sono Linux o BSD.\nMicrokernel L’obiettivo del microkernle è isolare solamente le funzionalità essenziali e tenere solo quelli, tutto il resto interagisce con esso con system call (un esempio è il filesystem che potrebbe essere fuori dal kernel, e avrebbe syscall leggermente diverse rispetto a quelle di linux, per aprire un file allora si chiederebbe a questo processo in user space, che poi fa altre richeste per kernel space)\nBisogna fare un messaggio, la syscall diventano Send! Che sarebbe unico modo per raggiungere il processo che offre il servizio che mi serve.\nVantaggi:\nAltissima modularità e mantenibilità del sistema e semplice da realizzare Assenza di danni di sistema, perché moduli e kernel sono eseguiti in spazio differente. Sicuro e affidabile per la divisione (non ho propagazione di errori e guasti) Molto portabile, che ho solo il microkernel. Svantaggio:\nFortemente Inefficienza rispetto al monolitico, che devo fare message passing e comunicazione.\nSlide di comparazione\nKernel Ibridi Sono dei microkernel modificati, con qualcosa in più forse (aziende per pubblicizzarsi dicevano di avere microkernel, ma con un ibridone, mettendo le cose inefficienti del microkernel dentro il kernel).\nEsempio windows\nCi sono diversi server, che fanno parte di un sottosistema d’ambiente che è in grado di emulare certe cose (sono nascoste le syscall reali del sistema così).\nIl codice per un certo ambiente funziona anche nel sottosistema, un esempio è un WSL.\nLa parte grafica importante per fare i videogiochi, è dentro il kernel, questo ad esempio per MACOS, perché volevano imporre la grafica simile\nMacchine virtuali The fundamental idea behind a virtual machine is to abstract the hardware of a single computer (the CPU, memory, disk drives, network interface cards, and so forth) into several different execution environments, thereby creating the illusion that each separate environment is running on its own private computer. (Silberschatz et al. 2018).\nVirtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.\nÈ virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.\nStoricamente parlando le macchine virtuali erano un primo approccio al multitasking.\nL’idea principale è creare un sistema che possa apparire al sistema operativo come hardware, in questo modo posso utilizzare un programma per emulare un altro sistema operativo. È hypervisor, VMM (virtual machine monitor).\nOvviamente ho uno fortissimo svantaggio in velocità, perché la simulazione software è molto meno efficiente della simulazione hardware. Un collegamento carino è con (Hofstadter 2007), una macchina che sia abbastanza espressiva da poter emulare sé stesso.\nAnalisi vantaggi svantaggi 🟨 Posso avere sistemi operativi differenti sulla stessa macchina o SO, quindi posso sperimentarli senza installarli veramente. Posso simulare architetture differenti, e quindi supporre di avere istruzioni differenti di architettura altra! SO monotask in sistemi multitask. Maggiore sicurezza a bug software, è efficienza energetica. Svantaggi:\nfortemente inefficiente Peso in più sia sulla memoria Context Switch molto frequenti che lo rendono più lento I/O lento. Difficile condividere risorse fra una macchina virtuale o all’altra. Desiderata per virtualizzazione Chiamiamo le proprietà di partizionamento:\nCondividere le risorse della stessa macchina Isolare le macchine diverse, in modo che non possano influenzarsi a livello software, in modo da creare la giusta simulazione, esattamente come macchine fisiche reali, che non possono comunicare fra di loro. E la incapsulazione, con controllo completo di checkpointing, migrazione e replay. Nel caso di servizi cloud, avere queste desiderata rende possibile andare a copiare i dati in giro e riprendere l’esecuzione in un altro hardware, vedere Cloud Computing Services.\nDesiderata principale:\nEfficienza: la virtualizzazione non deve essere troppo lenta, altrimenti non ha senso. Compatibilità: deve essere compatibile con il software esistente (deve eseguire allo stesso modo in macchina virtualizzata o meno). Isolamento: le macchine virtuali devono essere isolate fra di loro. pr Virtualizzazione di Popek and Goldberg Nel 1974 Popek e Goldberg hanno definito i requisiti per la virtualizzazione, che sono:\nDevono esistere una modilità kernel and user. Tutte le istruzioni sensibili devono essere istruzioni privilegiate. Le istruzioni sensibili sono quelle che cambiano lo stato a livello hardware (allocazioni, mappature) Le istruzioni privilegiate sono quelle che usano trap. Al tempo il processore Intel x86 non era virtualizzabile, perché certe istruzioni sensibili (sensitive) non aveva istruzioni privilegiate, e quindi non poteva essere virtualizzato. Per esempio il registro %cs conteneva il livello di privilegio, e non poteva essere virtualizzato (esempio se OS pusha quel registro sulla stack, si dovrebbe aspettare il massimo livello di privilegio), dato che il VMM non poteva catturare la trap ed emulare l’istruzione, non era possibile virtualizzare questa operazione. Per questo usiamo binary translation per questo, ma impatta leggermente la velocità di esecuzione.\nLivello processo o sistema 🟩 Le macchine virtuali di cui abbiamo parlato ora virtualizzano solamente l’hardware, cioè fa finta di avere un sistema hardware.\nMentre altre macchine virtuali provano a virtualizzare a livello di ABI (application binary interface) (che è livello di processo).\nMacchina virtuale a livello di processo (process VM): permette ad un programma di essere eseguito allo stesso modo su qualsiasi piattaforma. Un esempio di questo è la macchina virtuale di Java. Viene eseguita come una normale applicazione all’interno di un SO ospite e supporta un singolo processo. Il suo scopo è fornire un ambiente indipendente dalla piattaforma hardware e dal SO ospite. Vengono virtualizzati sia l’hardware che il sistema operativo. Macchina virtuale a livello di sistema (system VM): permette l’esecuzione di un completo SO, anche con un ISA diverso da quello della macchina reale. Viene virtualizzato esclusivamente e completamente l’hardware. Differenza type 1 and 2 hypervisors type 1 hypervisor and a type 2 hypervisor is that a type 2 makes uses of a host operating system and its file system to create processes, store files, and so on. A type 1 hypervisor has no underlying support and must perform all these functions itself (it runs on the bare metal, come se fosse lui stesso un sistema operativo, è infatti un sistema operativo che non fa altro che fare sistemi operativi!)\nEsistono anche type 0 hypervisors che sono direttamente supporto per macchine virtuali fatte a livello hardware. Esempi di questo sono IBM LPARs and Oracle LDOMs.\nVirtual Machine Monitor Questo è quello che viene chiamato anche type 1 hypervisor. È un sistema operativo che gestisce altri sistemi operativi che eseguono sopra di esso. Chi sta sopra pensa di possedere l’intero hardware, mentre in realtà è la VMM che prova a tradurre o mandare di sotto.\nVirtualizzatori In questa sezione introduciamo alcuni eventi di virtualizzatori.\nQemu 🟩 qemu è un traduttore dinamico come se fosse un compilatore fra una architettura in una altra, fatta a runtime (quindi è un interprete, tipo 10x più lento rispetto esecuzione normale, ma un ordine di grandezza più veloce rispetto altri emulatori).\nCon qemu posso anche dire al processo emulato di utilizzare il mio stesso kernel, nel caso che condivida l’architettura, questo rende la cosa molto più veloce del normale! e.g. KVM (che è il nome dell’Hypervisor per linux). Questo è anche una tipologia di type-2-hypervisor perché attingo al kernel della macchina ospite per fare funzionare più in fretta, e non faccio simulazione sistema totale.\nUtile o per runnare programmi per architettura differente (in questo senso program VM), oppure per emulare un sistema operativo dentro un sistema operativo.\nComando per caricare una macchina virtuale con qemu e utilizzare KVM senza vga, non starebbe sullo schermo senza quella flag. hda gli specifica il file con cui emulare il disco, k il layout del keyboard m è la memoria ram monitor è per poter mandare interrupt dal terminale in cui ho lanciato il mio comando di emulazione. Quando installa prima è installato nella RAM disk, e poi viene utilizzato per l’installazione vera e propria.\nXEN 🟩 XEN è hypervisor livello 1 (SO che permette di fare altri SO virtuali), e utilizzare paravirtualizzazione (si fanno trap and emulate principalmente) , e utilizza una gestione diversa dei drivers che possiede, ossia il Domain0 possiede tutti i drivers fisici (le interazioni con i device le manda alla macchina 0, perché per restare un sistema operativo semplice non riesce a gestire sistemi operativi).\nEsempio di maggiore efficienza\nPer il type 2 hypervisor il SO installato pensa veramente di stare in una macchina sé, quindi fa cose per minimizzare i seek del disco ma in questo caso non deve fare veramente seek, quindi è meno efficiente, facendo una assunzione errata.\nSi utilizzano paravirtualizzazione, ossia devices virtuali più efficienti per questa cosa, ed effettivamente non assumo di stare utilizzando device fisici, ma sono a conoscenza di utilizzare device virtuali, e posso fare ottimizzazioni del caso (che non so quali siano forse per il disco non faccio cose strane per il seek ad esempio).\nIl problema è che essendo a conoscenza, dovrei fare il mio SO in modo che sia compatibile con le hyper all offerte dall hypervisor\nImplementazione della Virtualizzazione Metodi di virtualizzazione Possiamo considerare tre metodi principali di virtualizzazione:\nSimulazione via software sull’host (molto molto lento, tipo 100x volte più lento) Un esempio è QEMU in full emulation. Esecuzione diretta Trap and emulate in cui il VMM intercetta il trap ed esegue l’istruzione equivalente Emulazione con supporto hardware come con le estensioni Intel VT-x e AMD-V. Questo è il metodo più utilizzato oggi giorno. Vedi sezione di istruzioni di virtualizzazione. Add Virtual Machine Control Structure (VMCS) che decide quali istruzioni fanno VMexit, e quando si può cambiare queste informazioni con VMread or write e simili, consentendo all’hypervisor di controllare il comportamento della VM. Dynamic binary translation Necessario quando l’hardware non è totalmente virtualizzabile, quindi introduce delle istruzioni di emulazione in più. Paravirtualizzazione In questo caso il SO virtuale è a conoscenza che esiste un hypervisor quindi può fare delle hypercall per eseguire delle istruzioni sensitive, e in generale è un approccio più veloce invece della virtualizzazione totale di cui abbiamo parlato prima. Però bisogna essere a conoscenza del hypervisor. Quindi andiamo a modificare parti del SO in modo da tenere in considerazione l’esistenza dell’hypervisor, rende più veloce, però bisogna andare a modificare il SO stesso, per ogni SO. Un esempio è XEN. Parametrizzazione SO 🟩 Questo non è proprio un metodo di virtualizzazione di un Sistema Operativo, ma un modo per modificare leggermente alcuni sistemi operativi.\nEssendo libero linux, è molto comodo poter cambiare alcuni parametri e poi ricompilare il kernel seguendo quei parametri. Tanto è tutto open source, quindi si potrebbe fare. Questo permette al kernel di essere molto portabile.\nUna cosa molto importante da capire è che il kernel è una cosa diversa della distribuzione, il kernel è il primo programma che viene caricato dal bootloader e carica il FS e tutto il resto (quindi le cose iniziali), il secondo sono tutte le utility per il kernel che lo rendono utilizzabile da un utente normale.\nComando runnato per la emulazione kernel/distribuzione\nSlide parametrizzazione ++ portabilità (che deve runnare per hardware differentI)\nIstruzioni di virtualizzazione 🟥 Abbiamo aggiunto delle istruzioni di emulazione come VMX ON, VMX OFF, VMLAUNCH, VMRETURN in cui il processore sa di stare emulando, e quindi è più veloce perché esegue l’istruzione in altro modo, forse con istruzione nativa. Pagina wiki fa pensare di essere in kernel mode, ma non è in kernel mode, è come se stesse in un livello di priviliegio intermedio.\nVMLAUNCH\nQueste sono quelle principali istruzioni che permettono la virtualizzazioen a livello software, il fatto che rende l’esecuzione molto più veloce, quindi invece di simulare tutto sopra il sistema operativo attuale (e syscalls attuali) posso accedere ad istruzioni hardware molto più veloci.\nMemoria Virtuale C’è una MMU del sistema operativo che mappa alla VM fisica, che si deve basare all’indirizzo logico, che deve essere risolto dalla MMU reale fino ad avere un indirizzo fisico.\n#### Shadow Page Tables Permettono di evitare l’utilizzo di Shadow page tables, che sono il remapping della pagine virtuali con le pagine fisiche. Ci sono esattamente lo stesso numero di pagine nei sistemi operativi virtuali con il numero di pagine nel shadow page table. Esiste molto overhead di memoria per quanto riguarda questa parte.\nExtended Page Tables Abbiamo in pratica una sezione di traduzione in più per mapparlo a EPT (Extended Page Tables), che mappa le pagine virtuali con le pagine fisiche, e quindi non c’è overhead di memoria, e quindi è molto più efficiente in comparazione con le shadow page tables.\nVirtualizzazione di I/O Problemi di virtualizzazione I/O Si ricorda in Devices OS che solitamente questi usano Direct Memory Access per scrivere per il sistema operativo, però questo spesso non è possibile e bisogna fare qualche interrupt virtuale per risolvere questo problema. Possiamo\nPara virtualizzare l’interfaccia del device Emulare il device I/O. Single Root I/O Virtualization SR-IOV enables hardware-assisted virtualization by partitioning a single PCIe device into multiple Virtual Functions (VFs), which can be assigned directly to virtual machines (VMs) or containers. This reduces overhead caused by traditional software-based I/O virtualization.\nKey Components of SR-IOV:\nPhysical Function (PF) The main PCIe function, fully featured, controlled by the host OS (hypervisor). Manages and configures the Virtual Functions. Virtual Functions (VFs) Lightweight PCIe functions with limited resources, assigned to VMs or containers. Each VM gets direct access to a VF, bypassing the hypervisor for performance gains. References [1] Silberschatz et al. “Operating System Concepts” Wiley 2018\n[2] Hofstadter “I Am a Strange Loop” Basic Books 2007\n",
-  "wordCount" : "3335",
+  "articleBody": "A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).\nMa se sei un programmatore OS ti interessa capire le componenti principali dell’OS\nSlide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante\nGestione dei processi All’interno del SO, il processo è rappresentato come un processo control block, che in linux è in sched, parte dello scheduler dei processi. Questo è importante perché per esempio per fare una fork, non faccio altro che duplicare questa struttura e settare bene i figli e genitori.\nQuesti sono solitamente messi un un process table o forse una lista per tenerne traccia.\nSlide\nnel parliamo in Processi e thread.\nGestione memoria principale e secondaria Principale\nÈ un array temporaneo(nel senso che non è mantenuto quando viene spento il PC.), indicizzato singolarmente a differenza del secondario, che è indicizzato a blocchi,\nUna parte importante di questa parte è la gestione della memoria virtuale. Come allocare pagine di memoria, deallocarle e simili, ne parliamo in Paginazione e segmentazione\nSecondaria\nLa cosa buona è che questa memoria è permanente, efficienza (ordinare le richieste per non andare qui e lì quando si legge! minimizare tempi per seek) e partizionamento e reliability dei dischi sono problemi che interessano questa parte. Abbiamo parlato di raid in Memoria. e di nuovo in Devices OS.\nSlide\nI/O e filesystem Principalmente per IO servono driver per interagire con specifici hardware, e un sistema di comunicazione che spesso sono buffer e cache.\nSlides\nEsiste un file system virtuale che mappa a tutto (quindi alcune cose non esistono realmente sul disco, potrebbe essere una astrazione utilizzata per esempio per comunicare con i devices.\nCi sono molti filesystem, che però posso gestire in modo differente la forma che hanno sul disco, Ed è per questo che possiamo dire che esistono dei filesystem diversi.\nAnche i processi sono files, la cosa figa di questa astrazioen è che posso utilizzare gli stessi sistemi di protezione file per processi.\nStruttura dei sistemi Obiettivi di design dei SO (4) 🟨 Slide obiettivi nella struttura dei sistemi (4)\nEfficienza\nModularità\nMantenibilità\nEspansibilità\nStruttura del kernel 🟩 Slide riassuntiva\nIl kernel è un unico processo, parte da un main che parte da un initialize in cui raccoglie tutte le risorse del sistema, fa partire tutti i device drivers e crea il PCB del primo processo, anche chiamato init, messo poi nella queue dello scheduler come spiegato in Scheduler. Fatta una volta non è mai più eseguito quel codice di init.\nLo stato kernel è la parte a sinistra dell’immagine, quella parte blu, tutto il giallo, a destra è lo stato user.\nScheduler scegliere il processo da eseguire nello user space Il controllo è passato al processo user, che può fare traps (come fork) o fare I/O, a quel punto è rimesso a codice kernel. Tipologie di struttura OS (2) 🟨++ Solitamente i sistemi sono costruiti in due modi, sistemi semplici senza struttura, che praticamente c’è una prima versione, e poi viene ammassato roba senza struttura generale, fatti quando servono. Solitamente sono insieme di procedure che si chiamano fra di loro, e ben presto sono andate fuori dal loro ambito di interesse diciamo (fuori dal loro scope)\nEsempi di OS semplici:\nUn esempio è free-dos che è quanto installato su un computer senza sistema operativo.\nIn modo simile è MS-DOS, che è stato fatto per i primi personal computer, che non avevano un sistema kernel a livello hardware (non era quindi possibile fare queste protezioni).. In generale in questo ambiente un programma aveva accesso all’intera memoria, e poteva mandare in crash tutto.\nStruttura Free-DOS\nUNIX, è diviso diviso in due parti in kernel e programmi di sistemi, molto semplice, un kernel monolitico, un unico eseguibile, anche questo fu all’epoca limitato enormemente dal suo hardware, e una serie di programmi di sistema.\nDato che c’è una separazione, l’utente è separato dall’interfaccia dal codice kernel. Ma comunque il codice kernel resta vulnerabile, e potrebbe essere modificato e quindi attaccato, o cumunque vulnerabile a bug, anche colposi, distruttivi.\nStruttura UNIX\nStratificazione OS:\nLa struttura a stati è più affidabile dell’altra e rende più facile la programmazione di tale sistema, utili, la logica è la stessa presentata in Architettura e livelli 1, 2, per la divisione a stack del sistema e dei vantaggi che si hanno con questo tipo di architettura.\nEsemplificazione struttura a strati\nStrutture proposte classiche (non fatte, non importanti)\nQuesti sono rimasti accademici\nMa nella pratica questi strati sono rimasti solamente a livello accademico, perché crea overhead anche se si guadagnerebbe in manutentibilità e estensibilità e gestione, quindi molto meno efficiente, inoltre non erano ben chiare le API fra strati. Oggi c’è una forma intermedia (non c’è esattamente la gestione a strati come abbiamo per Web, ma abbiamo una divisione per componenti e responsabilità delle componenti).\nPolitiche e meccanismi 🟩 La suddifivisione politiche e meccanismi è un pattern di software engineering che lo rende molto comodo da gestire.\nInvece che una gestione a strati come per le reti, abbiamo una gestione di politiche e meccanismi ossia abbiamo qualcosa che decide cosa andare a fare e qualcosa che gestisce il come farla.\nEG. un certo modo di memoria allocata per fare qualcosa, quindi indirizzare il sistema verso qualcosa, e MMU che attualmente implementa la decisione politica.\nEsempio Microkernel o MINIX:\nIl kernel è visto come il meccanismo quindi le parti di gestione e politica sono fuori dal kernel. Questo rende la struttura del SO molto mantenibile ed estendibile.\nSlide\nEsempio Mac OS ≤ 9 / Windows 9x:\nPolitiche e meccanismi sono messi tutti nel kernel, perché così imponevo un feeling unico al look and feel suo (obbligato tutti ad avere questi elementi grafici). Questo è un problema praticamente di mercato.\nQuesto era brutto perché la grafica può mandare in crash tutto il sistema. Anche se i nuovi sistemi non dovrebbero avere questo problema.\nCategorizzazione dei Kernel Monolitici Il kernel è un unico programma. Si possono creare moduli che poi vengono caricati. Il problema principale di questo tipo di kernel è che se un modulo bugga crolla l’intero sistema. Un vantaggio è che è molto efficiente perché non deve passare ad astrazioni come per lo stack, basta fare una chiamata di funzione, tanto siamo nello stesso programma. Ed è altamente modularizzabile per poter attaccare nuove funzionalità.\nIn breve:\nVantaggi:\nEfficienza Modularità e mantenibilità (non devo ricompilare tutto, basta runtime). Svantaggio:\nUn modulo può mandare in crash tutto, perché è eseguito nello stesso spazio del kernel.\nSlide\nEsempi sono Linux o BSD.\nMicrokernel L’obiettivo del microkernle è isolare solamente le funzionalità essenziali e tenere solo quelli, tutto il resto interagisce con esso con system call (un esempio è il filesystem che potrebbe essere fuori dal kernel, e avrebbe syscall leggermente diverse rispetto a quelle di linux, per aprire un file allora si chiederebbe a questo processo in user space, che poi fa altre richeste per kernel space)\nBisogna fare un messaggio, la syscall diventano Send! Che sarebbe unico modo per raggiungere il processo che offre il servizio che mi serve.\nVantaggi:\nAltissima modularità e mantenibilità del sistema e semplice da realizzare Assenza di danni di sistema, perché moduli e kernel sono eseguiti in spazio differente. Sicuro e affidabile per la divisione (non ho propagazione di errori e guasti) Molto portabile, che ho solo il microkernel. Svantaggio:\nFortemente Inefficienza rispetto al monolitico, che devo fare message passing e comunicazione.\nSlide di comparazione\nKernel Ibridi Sono dei microkernel modificati, con qualcosa in più forse (aziende per pubblicizzarsi dicevano di avere microkernel, ma con un ibridone, mettendo le cose inefficienti del microkernel dentro il kernel).\nEsempio windows\nCi sono diversi server, che fanno parte di un sottosistema d’ambiente che è in grado di emulare certe cose (sono nascoste le syscall reali del sistema così).\nIl codice per un certo ambiente funziona anche nel sottosistema, un esempio è un WSL.\nLa parte grafica importante per fare i videogiochi, è dentro il kernel, questo ad esempio per MACOS, perché volevano imporre la grafica simile\nMacchine virtuali Vedi Virtual Machines.\n",
+  "wordCount" : "1376",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -247,7 +247,7 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
     <h1 class="post-title entry-hint-parent">
       Architettura software del OS
     </h1>
-    <div class="post-meta">16 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -256,7 +256,7 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul><ul>
+        <div class="inner"><ul>
                 <li>
                     <a href="#introduzione-sui-componenti-salto" aria-label="Introduzione sui componenti (salto)">Introduzione sui componenti (salto)</a><ul>
                         
@@ -290,60 +290,7 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
                 </li></ul>
                 </li>
                 <li>
-                    <a href="#macchine-virtuali" aria-label="Macchine virtuali">Macchine virtuali</a><ul>
-                        
-                <li>
-                    <a href="#analisi-vantaggi-svantaggi-" aria-label="Analisi vantaggi svantaggi 🟨">Analisi vantaggi svantaggi 🟨</a><ul>
-                        
-                <li>
-                    <a href="#desiderata-per-virtualizzazione" aria-label="Desiderata per virtualizzazione">Desiderata per virtualizzazione</a></li>
-                <li>
-                    <a href="#virtualizzazione-di-popek-and-goldberg" aria-label="Virtualizzazione di Popek and Goldberg">Virtualizzazione di Popek and Goldberg</a></li></ul>
-                </li>
-                <li>
-                    <a href="#livello-processo-o-sistema-" aria-label="Livello processo o sistema 🟩">Livello processo o sistema 🟩</a><ul>
-                        
-                <li>
-                    <a href="#differenza-type-1-and-2-hypervisors" aria-label="Differenza type 1 and 2 hypervisors">Differenza type 1 and 2 hypervisors</a></li>
-                <li>
-                    <a href="#virtual-machine-monitor" aria-label="Virtual Machine Monitor">Virtual Machine Monitor</a></li></ul>
-                </li>
-                <li>
-                    <a href="#virtualizzatori" aria-label="Virtualizzatori">Virtualizzatori</a><ul>
-                        
-                <li>
-                    <a href="#qemu-" aria-label="Qemu 🟩">Qemu 🟩</a></li>
-                <li>
-                    <a href="#xen-" aria-label="XEN 🟩">XEN 🟩</a></li></ul>
-                </li>
-                <li>
-                    <a href="#implementazione-della-virtualizzazione" aria-label="Implementazione della Virtualizzazione">Implementazione della Virtualizzazione</a><ul>
-                        
-                <li>
-                    <a href="#metodi-di-virtualizzazione" aria-label="Metodi di virtualizzazione">Metodi di virtualizzazione</a></li>
-                <li>
-                    <a href="#parametrizzazione-so-" aria-label="Parametrizzazione SO 🟩">Parametrizzazione SO 🟩</a></li>
-                <li>
-                    <a href="#istruzioni-di-virtualizzazione-" aria-label="Istruzioni di virtualizzazione 🟥">Istruzioni di virtualizzazione 🟥</a></li></ul>
-                </li>
-                <li>
-                    <a href="#memoria-virtuale" aria-label="Memoria Virtuale">Memoria Virtuale</a><ul>
-                        
-                <li>
-                    <a href="#extended-page-tables" aria-label="Extended Page Tables">Extended Page Tables</a></li></ul>
-                </li>
-                <li>
-                    <a href="#virtualizzazione-di-io" aria-label="Virtualizzazione di I/O">Virtualizzazione di I/O</a><ul>
-                        
-                <li>
-                    <a href="#problemi-di-virtualizzazione-io" aria-label="Problemi di virtualizzazione I/O">Problemi di virtualizzazione I/O</a></li>
-                <li>
-                    <a href="#single-root-io-virtualization" aria-label="Single Root I/O Virtualization">Single Root I/O Virtualization</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
+                    <a href="#macchine-virtuali" aria-label="Macchine virtuali">Macchine virtuali</a>
                 </li>
             </ul>
         </div>
@@ -526,194 +473,7 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
 </li>
 </ul>
 <h2 id="macchine-virtuali">Macchine virtuali<a hidden class="anchor" aria-hidden="true" href="#macchine-virtuali">#</a></h2>
-<blockquote>
-<p>The fundamental idea behind a virtual machine is to abstract the hardware
-of a single computer (the CPU, memory, disk drives, network interface cards,
-and so forth) into several different execution environments, thereby creating
-the illusion that each separate environment is running on its own private
-computer. <a href="https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&redir_esc=y">(Silberschatz et al. 2018)</a>.</p></blockquote>
-<blockquote>
-<p>Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.</p></blockquote>
-<p>È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.</p>
-<p>Storicamente parlando le macchine virtuali erano un primo approccio al multitasking.</p>
-<p>L’idea principale è creare un sistema che possa apparire al sistema operativo come hardware, in questo modo posso utilizzare un programma per emulare un altro sistema operativo. È <strong>hypervisor, VMM (virtual machine monitor)</strong>.</p>
-<p>Ovviamente ho uno fortissimo svantaggio in velocità, perché la simulazione software è molto meno efficiente della simulazione hardware. Un collegamento carino è con <a href="https://psycnet.apa.org/record/2007-01197-000">(Hofstadter 2007)</a>, una macchina che sia abbastanza espressiva da poter emulare sé stesso.</p>
-<h3 id="analisi-vantaggi-svantaggi-">Analisi vantaggi svantaggi 🟨<a hidden class="anchor" aria-hidden="true" href="#analisi-vantaggi-svantaggi-">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 16">
-<ul>
-<li>Posso avere sistemi operativi differenti sulla stessa macchina o SO, quindi posso sperimentarli senza installarli veramente.</li>
-<li>Posso simulare architetture differenti, e quindi supporre di avere istruzioni differenti di architettura altra!</li>
-<li>SO monotask in sistemi multitask.</li>
-<li>Maggiore sicurezza a bug software, è efficienza energetica.</li>
-</ul>
-<p><strong>Svantaggi</strong>:</p>
-<ol>
-<li>fortemente inefficiente
-<ol>
-<li>Peso in più sia sulla memoria</li>
-<li>Context Switch molto frequenti che lo rendono più lento</li>
-<li>I/O lento.</li>
-</ol>
-</li>
-<li>Difficile condividere risorse fra una macchina virtuale o all&rsquo;altra.</li>
-</ol>
-<h4 id="desiderata-per-virtualizzazione">Desiderata per virtualizzazione<a hidden class="anchor" aria-hidden="true" href="#desiderata-per-virtualizzazione">#</a></h4>
-<p>Chiamiamo le proprietà di <strong>partizionamento</strong>:</p>
-<ul>
-<li><strong>Condividere</strong> le risorse della stessa macchina</li>
-<li><strong>Isolare</strong> le macchine diverse, in modo che non possano influenzarsi a livello software, in modo da creare la giusta simulazione, esattamente come macchine fisiche reali, che non possono comunicare fra di loro.</li>
-</ul>
-<p>E la <strong>incapsulazione</strong>, con controllo completo di checkpointing, migrazione e replay.
-Nel caso di servizi cloud, avere queste desiderata rende possibile andare a copiare i dati in giro e riprendere l&rsquo;esecuzione in un altro hardware, vedere <a href="/notes/cloud-computing-services">Cloud Computing Services</a>.</p>
-<p><strong>Desiderata principale</strong>:</p>
-<ul>
-<li><strong>Efficienza</strong>: la virtualizzazione non deve essere troppo lenta, altrimenti non ha senso.</li>
-<li><strong>Compatibilità</strong>: deve essere compatibile con il software esistente (deve eseguire allo stesso modo in macchina virtualizzata o meno).</li>
-<li><strong>Isolamento</strong>: le macchine virtuali devono essere isolate fra di loro.
-pr</li>
-</ul>
-<h4 id="virtualizzazione-di-popek-and-goldberg">Virtualizzazione di Popek and Goldberg<a hidden class="anchor" aria-hidden="true" href="#virtualizzazione-di-popek-and-goldberg">#</a></h4>
-<p>Nel 1974 Popek e Goldberg hanno definito i requisiti per la virtualizzazione, che sono:</p>
-<ul>
-<li>Devono esistere una modilità kernel and user.</li>
-<li>Tutte le istruzioni sensibili devono essere istruzioni <strong>privilegiate</strong>.
-<ul>
-<li>Le istruzioni sensibili sono quelle che cambiano lo stato a livello hardware (allocazioni, mappature)</li>
-<li>Le istruzioni privilegiate sono quelle che usano trap.</li>
-</ul>
-</li>
-</ul>
-<p>Al tempo il processore Intel x86 non era virtualizzabile, perché certe istruzioni sensibili (sensitive) non aveva istruzioni privilegiate, e quindi non poteva essere virtualizzato.
-Per esempio il registro %cs conteneva il livello di privilegio, e non poteva essere virtualizzato (esempio se OS pusha quel registro sulla stack, si dovrebbe aspettare il massimo livello di privilegio), dato che il VMM non poteva catturare la trap ed emulare l&rsquo;istruzione, non era possibile virtualizzare questa operazione.
-Per questo usiamo binary translation per questo, ma impatta leggermente la velocità di esecuzione.</p>
-<h3 id="livello-processo-o-sistema-">Livello processo o sistema 🟩<a hidden class="anchor" aria-hidden="true" href="#livello-processo-o-sistema-">#</a></h3>
-<p>Le macchine virtuali di cui abbiamo parlato ora virtualizzano solamente l’hardware, cioè fa finta di avere un sistema hardware.</p>
-<p>Mentre altre macchine virtuali provano a virtualizzare a livello di ABI (application binary interface) (che è livello di processo).</p>
-<ul>
-<li>Macchina virtuale a livello di processo (<strong>process VM)</strong>: permette ad un programma di essere eseguito allo stesso modo su qualsiasi piattaforma. Un esempio di questo è la macchina virtuale di Java.
-Viene eseguita come una normale applicazione all&rsquo;interno di un SO ospite e supporta un singolo processo. Il suo scopo è fornire un ambiente indipendente dalla piattaforma hardware e dal SO ospite. Vengono virtualizzati sia l’hardware che il sistema operativo.</li>
-<li>Macchina virtuale a livello di sistema (<strong>system VM</strong>): permette l&rsquo;esecuzione di un completo SO, anche con un ISA diverso da quello della macchina reale. Viene virtualizzato esclusivamente e completamente <strong>l’hardware</strong>.</li>
-</ul>
-<h4 id="differenza-type-1-and-2-hypervisors">Differenza type 1 and 2 hypervisors<a hidden class="anchor" aria-hidden="true" href="#differenza-type-1-and-2-hypervisors">#</a></h4>
-<p>type 1 hypervisor and a type 2 hypervisor is that a type 2 makes uses of a host operating system and its file system to create processes, store files, and so on. A type 1 hypervisor has no underlying support and must perform all these functions itself (it runs on the bare metal, come se fosse lui stesso un sistema operativo, è infatti un sistema operativo che non fa altro che fare sistemi operativi!)</p>
-<p>Esistono anche type 0 hypervisors che sono direttamente supporto per macchine virtuali fatte a livello hardware. Esempi di questo sono IBM LPARs and Oracle LDOMs.</p>
-<h4 id="virtual-machine-monitor">Virtual Machine Monitor<a hidden class="anchor" aria-hidden="true" href="#virtual-machine-monitor">#</a></h4>
-<p>Questo è quello che viene chiamato anche type 1 hypervisor. È un sistema operativo che gestisce altri sistemi operativi che eseguono sopra di esso. Chi sta sopra pensa di possedere l&rsquo;intero hardware, mentre in realtà è la VMM che prova a tradurre o mandare di sotto.</p>
-<h3 id="virtualizzatori">Virtualizzatori<a hidden class="anchor" aria-hidden="true" href="#virtualizzatori">#</a></h3>
-<p>In questa sezione introduciamo alcuni eventi di virtualizzatori.</p>
-<h4 id="qemu-">Qemu 🟩<a hidden class="anchor" aria-hidden="true" href="#qemu-">#</a></h4>
-<p><strong>qemu</strong> è un traduttore dinamico come se fosse un compilatore fra una architettura in una altra, fatta a runtime (quindi è un interprete, tipo 10x più lento rispetto esecuzione normale, ma un ordine di grandezza più veloce rispetto altri emulatori).</p>
-<p>Con qemu posso anche dire al processo emulato di utilizzare il mio stesso kernel, nel caso che condivida l&rsquo;architettura, questo rende la cosa molto più veloce del normale! e.g. KVM (che è il nome dell’Hypervisor per linux). Questo è anche una tipologia di <strong>type-2-hypervisor</strong> perché attingo al kernel della macchina ospite per fare funzionare più in fretta, e non faccio simulazione sistema totale.</p>
-<p>Utile o per runnare programmi per architettura differente (in questo senso program VM), oppure per emulare un sistema operativo dentro un sistema operativo.</p>
-<ul>
-<li>
-<p>Comando per caricare una macchina virtuale con qemu e utilizzare KVM
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 17"></p>
-<p>senza vga, non starebbe sullo schermo senza quella flag.
-hda gli specifica il file con cui emulare il disco, k il layout del keyboard
-m è la memoria ram
-monitor è per poter mandare interrupt dal terminale in cui ho lanciato il mio comando di emulazione.
-Quando installa prima è installato nella RAM disk, e poi viene utilizzato per l’installazione vera e propria.</p>
-</li>
-</ul>
-<h4 id="xen-">XEN 🟩<a hidden class="anchor" aria-hidden="true" href="#xen-">#</a></h4>
-<p>XEN è hypervisor livello 1 (SO che permette di fare altri SO virtuali), e utilizzare paravirtualizzazione (si fanno trap and emulate principalmente) , e utilizza una gestione diversa dei drivers che possiede, ossia il <strong>Domain0</strong> possiede tutti i drivers fisici (le interazioni con i device le manda alla macchina 0, perché per restare un sistema operativo semplice non riesce a gestire sistemi operativi).</p>
-<p><strong>Esempio di maggiore efficienza</strong></p>
-<p>Per il type 2 hypervisor il SO installato pensa veramente di stare in una macchina sé, quindi fa cose per minimizzare i seek del disco ma in questo caso non deve fare veramente seek, quindi è meno efficiente, facendo una assunzione errata.</p>
-<p>Si utilizzano paravirtualizzazione, ossia devices virtuali più efficienti per questa cosa, ed effettivamente non assumo di stare utilizzando device fisici, ma sono a conoscenza di utilizzare device virtuali, e posso fare ottimizzazioni del caso (che non so quali siano forse per il disco non faccio cose strane per il seek ad esempio).</p>
-<p>Il problema è che essendo a conoscenza, dovrei fare il mio SO in modo che sia compatibile con le hyper all offerte dall hypervisor</p>
-<h3 id="implementazione-della-virtualizzazione">Implementazione della Virtualizzazione<a hidden class="anchor" aria-hidden="true" href="#implementazione-della-virtualizzazione">#</a></h3>
-<h4 id="metodi-di-virtualizzazione">Metodi di virtualizzazione<a hidden class="anchor" aria-hidden="true" href="#metodi-di-virtualizzazione">#</a></h4>
-<p>Possiamo considerare tre metodi principali di virtualizzazione:</p>
-<ul>
-<li>Simulazione via software sull&rsquo;host (molto molto lento, tipo 100x volte più lento)
-<ul>
-<li>Un esempio è QEMU in full emulation.</li>
-</ul>
-</li>
-<li>Esecuzione diretta
-<ul>
-<li>Trap and emulate in cui il VMM intercetta il trap ed esegue l&rsquo;istruzione equivalente</li>
-<li>Emulazione con supporto hardware
-<ul>
-<li>come con le estensioni <strong>Intel VT-x</strong> e <strong>AMD-V</strong>.</li>
-<li>Questo è il metodo più utilizzato oggi giorno.</li>
-<li>Vedi sezione di istruzioni di virtualizzazione.</li>
-<li>Add <strong>Virtual Machine Control Structure</strong> (VMCS) che decide quali istruzioni fanno VMexit, e quando si può cambiare queste informazioni con VMread or write e simili, consentendo all’hypervisor di controllare il comportamento della VM.</li>
-</ul>
-</li>
-<li>Dynamic binary translation
-<ul>
-<li>Necessario quando l&rsquo;hardware non è totalmente virtualizzabile, quindi introduce delle istruzioni di emulazione in più.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Paravirtualizzazione
-<ul>
-<li>In questo caso il SO virtuale è a conoscenza che esiste un hypervisor quindi può fare delle <strong>hypercall</strong> per eseguire delle istruzioni sensitive, e in generale è un approccio più veloce invece della virtualizzazione totale di cui abbiamo parlato prima. Però bisogna essere a conoscenza del hypervisor.</li>
-<li>Quindi andiamo a modificare parti del SO in modo da tenere in considerazione l’esistenza dell’hypervisor, rende più veloce, però bisogna andare a modificare il SO stesso, per ogni SO.</li>
-<li>Un esempio è XEN.</li>
-</ul>
-</li>
-</ul>
-<h4 id="parametrizzazione-so-">Parametrizzazione SO 🟩<a hidden class="anchor" aria-hidden="true" href="#parametrizzazione-so-">#</a></h4>
-<p>Questo non è proprio un metodo di virtualizzazione di un Sistema Operativo, ma un modo per modificare leggermente alcuni sistemi operativi.</p>
-<p>Essendo libero linux, è molto comodo poter cambiare alcuni parametri e poi <strong>ricompilare il kernel seguendo quei parametri</strong>. Tanto è tutto open source, quindi si potrebbe fare. Questo permette al kernel di essere molto portabile.</p>
-<p>Una cosa molto importante da capire è che <strong>il kernel è una cosa diversa della distribuzione</strong>, il kernel è il primo programma che viene caricato dal bootloader e carica il FS e tutto il resto (quindi le cose iniziali), il secondo sono tutte le utility per il kernel che lo rendono utilizzabile da un utente normale.</p>
-<ul>
-<li>
-<p>Comando runnato per la emulazione kernel/distribuzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 18">
-</li>
-<li>
-<p>Slide parametrizzazione ++ portabilità (che deve runnare per hardware differentI)</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 19">
-</li>
-</ul>
-<h4 id="istruzioni-di-virtualizzazione-">Istruzioni di virtualizzazione 🟥<a hidden class="anchor" aria-hidden="true" href="#istruzioni-di-virtualizzazione-">#</a></h4>
-<p>Abbiamo aggiunto delle istruzioni di emulazione come <code>VMX ON, VMX OFF, VMLAUNCH, VMRETURN</code>  in cui il processore sa di stare emulando, e quindi è più veloce perché esegue l&rsquo;istruzione in altro modo, forse con istruzione nativa. Pagina <a href="https://en.wikipedia.org/wiki/X86_virtualization">wiki</a>
-fa pensare di essere in kernel mode, ma non è in kernel mode, è come se stesse in un livello di priviliegio intermedio.</p>
-<p>VMLAUNCH</p>
-<p>Queste sono quelle principali istruzioni che permettono la virtualizzazioen a livello software, il fatto che rende l&rsquo;esecuzione molto più veloce, quindi invece di simulare tutto sopra il sistema operativo attuale (e syscalls attuali) posso accedere ad istruzioni hardware molto più veloci.</p>
-<h3 id="memoria-virtuale">Memoria Virtuale<a hidden class="anchor" aria-hidden="true" href="#memoria-virtuale">#</a></h3>
-<p>C&rsquo;è una MMU del sistema operativo che mappa alla VM fisica, che si deve basare all&rsquo;indirizzo logico, che deve essere risolto dalla MMU reale fino ad avere un indirizzo fisico.</p>
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 20">
-#### Shadow Page Tables
-<p>Permettono di evitare l&rsquo;utilizzo di <strong>Shadow page tables</strong>, che sono il remapping della pagine virtuali con le pagine fisiche.
-Ci sono esattamente lo stesso numero di pagine nei sistemi operativi virtuali con il numero di pagine nel shadow page table.
-Esiste molto overhead di memoria per quanto riguarda questa parte.</p>
-<h4 id="extended-page-tables">Extended Page Tables<a hidden class="anchor" aria-hidden="true" href="#extended-page-tables">#</a></h4>
-<p>Abbiamo in pratica una sezione di traduzione in più per mapparlo a EPT (Extended Page Tables), che mappa le pagine virtuali con le pagine fisiche, e quindi non c&rsquo;è overhead di memoria, e quindi è molto più efficiente in comparazione con le shadow page tables.</p>
-<img src="/images/notes/Architettura software del OS-20250226132408095.webp" style="width: 100%" class="center" alt="Architettura software del OS-20250226132408095">
-<h3 id="virtualizzazione-di-io">Virtualizzazione di I/O<a hidden class="anchor" aria-hidden="true" href="#virtualizzazione-di-io">#</a></h3>
-<h4 id="problemi-di-virtualizzazione-io">Problemi di virtualizzazione I/O<a hidden class="anchor" aria-hidden="true" href="#problemi-di-virtualizzazione-io">#</a></h4>
-<p>Si ricorda  in <a href="/notes/devices-os">Devices OS</a> che solitamente questi usano Direct Memory Access per scrivere per il sistema operativo, però questo spesso non è possibile e bisogna fare qualche interrupt virtuale per risolvere questo problema.
-Possiamo</p>
-<ul>
-<li>Para virtualizzare l&rsquo;interfaccia del device</li>
-<li>Emulare il device I/O.</li>
-</ul>
-<h4 id="single-root-io-virtualization">Single Root I/O Virtualization<a hidden class="anchor" aria-hidden="true" href="#single-root-io-virtualization">#</a></h4>
-<p>SR-IOV enables <strong>hardware-assisted virtualization</strong> by partitioning a single PCIe device into multiple <strong>Virtual Functions (VFs)</strong>, which can be assigned directly to virtual machines (VMs) or containers. This reduces overhead caused by traditional software-based I/O virtualization.</p>
-<p><strong>Key Components of SR-IOV:</strong></p>
-<ol>
-<li><strong>Physical Function (PF)</strong>
-<ul>
-<li>The main PCIe function, fully featured, controlled by the host OS (hypervisor).</li>
-<li>Manages and configures the Virtual Functions.</li>
-</ul>
-</li>
-<li><strong>Virtual Functions (VFs)</strong>
-<ul>
-<li>Lightweight PCIe functions with limited resources, assigned to VMs or containers.</li>
-<li>Each VM gets direct access to a VF, bypassing the hypervisor for performance gains.</li>
-</ul>
-</li>
-</ol>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] Silberschatz et al. <a href="https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&redir_esc=y">“Operating System Concepts”</a> Wiley 2018</p>
-<p>[2] Hofstadter <a href="https://psycnet.apa.org/record/2007-01197-000">“I Am a Strange Loop”</a> Basic Books 2007</p>
+<p>Vedi <a href="/notes/virtual-machines">Virtual Machines</a>.</p>
 
 
   </div>
