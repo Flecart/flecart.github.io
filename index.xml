@@ -20,6 +20,59 @@
       <description>First blog post</description>
     </item>
     <item>
+      <title>Determinanti</title>
+      <link>https://flecart.github.io/notes/determinanti/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/determinanti/</guid>
+      <description>&lt;h2 id=&#34;determinanti&#34;&gt;Determinanti&lt;/h2&gt;
+&lt;p&gt;I determinanti sono un numero associato alle matrici quadrate. Più o meno ne sono il riassunto.&lt;/p&gt;
+&lt;h3 id=&#34;proprietà&#34;&gt;Proprietà&lt;/h3&gt;
+&lt;p&gt;Le prime 3 sono quelle fondamentali per calcolare il tutto, i numeri dopo il 3 sono alcune conseguenze.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;det I = 1&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Cambiare righe → cambiare il segno della determinante.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;(Importante)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Se moltiplico una riga per una costante, il determinante è moltiplicato per questa costante.&lt;/li&gt;
+&lt;li&gt;Se sommo una costante a una riga, allora il determinante è una somma strana&amp;hellip;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Immagine di esempio&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Generative Adversarial Networks</title>
+      <link>https://flecart.github.io/notes/generative-adversarial-networks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
+      <description>&lt;p&gt;Generative Adversarial Network has been introduced in 2014 by Ian Goodfellow (at that time they where still gray and white). Now the images have been improved so much with &lt;a href=&#34;https://flecart.github.io/notes/diffusion-models&#34;&gt;Diffusion Models&lt;/a&gt;. This idea has been considered by Yann LeCun as one of the most important ideas. Nowadays (2025) they are still used for super-resolution and other applications, but it has still some limitations (mainly stability), and now has good competition against other models.
+The resolution purported by GAN is much higher than VAE (see &lt;a href=&#34;https://flecart.github.io/notes/autoencoders#variational-autoencoders&#34;&gt;Autoencoders#Variational Autoencoders&lt;/a&gt;). This is a easy plugin to improve the results of other models (VAE, flow, Diffusion). Also ChatGPT has some sort of adversarial learning for example, not explained in the same manner as here.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Normalizing Flows</title>
+      <link>https://flecart.github.io/notes/normalizing-flows/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/normalizing-flows/</guid>
+      <description>&lt;p&gt;Normalizing flows have both  latent space and can produce tractable &lt;strong&gt;explicit&lt;/strong&gt; probability distributions (closer to &lt;a href=&#34;https://flecart.github.io/notes/autoregressive-modelling&#34;&gt;Autoregressive Modelling&lt;/a&gt;, they have tractable distributions, but not a latent space).&lt;/p&gt;
+&lt;h4 id=&#34;the-main-idea&#34;&gt;The main idea&lt;/h4&gt;
+&lt;p&gt;The intuition here is that we can both have a latent space and some sort of autoregressive modelling.
+We want&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An analytical model that is easy to sample from.&lt;/li&gt;
+&lt;li&gt;We want this distribution to be able to represent complex data.&lt;/li&gt;
+&lt;li&gt;The idea is to use many change of variables,&lt;/li&gt;
+&lt;/ul&gt;
+$$\iint_R f(x,y) \, dx \, dy = \iint_G f(g(u,v),h(u,v)) \, J(u,v) \, du \, dv$$$$
+dx = \left\lvert  \det \left( \frac{ \partial f(z) }{ \partial z }  \right)   \right\rvert dz
+$$&lt;p&gt;
+And you can remember that if we have an invertible matrix $A$ then you can take out the inverse thing.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Autoregressive Modelling</title>
       <link>https://flecart.github.io/notes/autoregressive-modelling/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -46,20 +99,6 @@ If we just use a tabular approach, we&amp;rsquo;ll have a combinatorial explosio
 $$
 \sum_{i} \sum_{j} h(x - i, y - j) f(i, j)
 $$&lt;p&gt;Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un &lt;strong&gt;filter&lt;/strong&gt; che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Normalizing Flows</title>
-      <link>https://flecart.github.io/notes/normalizing-flows/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/normalizing-flows/</guid>
-      <description>&lt;p&gt;Normalizing flows have both  latent space and can produce tractable &lt;strong&gt;explicit&lt;/strong&gt; probability distributions (closer to &lt;a href=&#34;https://flecart.github.io/notes/autoregressive-modelling&#34;&gt;Autoregressive Modelling&lt;/a&gt;)
-The intuition here is that we can both have a latent space and some sort of autoregressive modelling.
-We want&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;An analytical model that is easy to sample from.&lt;/li&gt;
-&lt;li&gt;We want this distribution to be able to represent complex data.&lt;/li&gt;
-&lt;li&gt;The idea is to use many change of variables.&lt;/li&gt;
-&lt;/ul&gt;</description>
     </item>
     <item>
       <title>Architettura software del OS</title>
@@ -990,13 +1029,6 @@ It seems the representation here is often &lt;strong&gt;vocal&lt;/strong&gt;.&lt
 &lt;p&gt;Cluster management could be private or public.&lt;/p&gt;
 &lt;p&gt;Private means every app is managing their own sub-cluster: each app receives a private, &lt;strong&gt;static&lt;/strong&gt; set of resources. Here it is easier to manage hardware for various needs.
 Public means there is a big cluster, like standard third party&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Generative Adversarial Networks</title>
-      <link>https://flecart.github.io/notes/generative-adversarial-networks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
-      <description></description>
     </item>
     <item>
       <title>Notazione Asintotica</title>
@@ -4460,32 +4492,6 @@ Poi sarà importantissimo questa nozione, applicazione di base in ML è Principa
 &lt;/ul&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Se ho una applicazione lineare $F: V \to W$ e un insieme di basi del dominio e del codominio, allora esiste una matrice $A \in M_{m \times n} (\mathbb{R})$ tali che vale il cambio di base.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Determinanti</title>
-      <link>https://flecart.github.io/notes/determinanti/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/determinanti/</guid>
-      <description>&lt;h2 id=&#34;determinanti&#34;&gt;Determinanti&lt;/h2&gt;
-&lt;p&gt;I determinanti sono un numero associato alle matrici quadrate. Più o meno ne sono il riassunto.&lt;/p&gt;
-&lt;h3 id=&#34;proprietà&#34;&gt;Proprietà&lt;/h3&gt;
-&lt;p&gt;Le prime 3 sono quelle fondamentali per calcolare il tutto, i numeri dopo il 3 sono alcune conseguenze.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;det I = 1&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Cambiare righe → cambiare il segno della determinante.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;(Importante)&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Se moltiplico una riga per una costante, il determinante è moltiplicato per questa costante.&lt;/li&gt;
-&lt;li&gt;Se sommo una costante a una riga, allora il determinante è una somma strana&amp;hellip;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Immagine di esempio&lt;/p&gt;</description>
     </item>
     <item>
       <title>Introduzione algebra</title>
