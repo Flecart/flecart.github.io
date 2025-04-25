@@ -13,23 +13,37 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/advanced-systems-lab/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Cache Optimization</title>
-      <link>https://flecart.github.io/notes/cache-optimization/</link>
+      <title>Compiler Limitations</title>
+      <link>https://flecart.github.io/notes/compiler-limitations/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
-      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
-&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
-&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
-&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
-In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
-&lt;p&gt;For example consider this snippet:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
-loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
+      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
+      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
+&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
+Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
+&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
+&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Fast Linear Algebra</title>
+      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
+      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Solving linear equations&lt;/li&gt;
+&lt;li&gt;Eigenvalue computations&lt;/li&gt;
+&lt;li&gt;Singular value decomposition&lt;/li&gt;
+&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
+&lt;li&gt;etc&amp;hellip;
+And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
+&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
+LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
+BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
+Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
+This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
+Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Sparse Matrix Vector Multiplication</title>
@@ -70,6 +84,25 @@ loops cycle through the same instructions, this is an example of temporal locali
 &lt;p&gt;But we cannot do block optimizations for the cache with this storage method.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>Cache Optimization</title>
+      <link>https://flecart.github.io/notes/cache-optimization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/cache-optimization/</guid>
+      <description>&lt;h3 id=&#34;locality-principles&#34;&gt;Locality principles&lt;/h3&gt;
+&lt;p&gt;Remember the two locality principles in &lt;a href=&#34;https://flecart.github.io/notes/memoria&#34;&gt;Memoria&lt;/a&gt;. &lt;strong&gt;Temporal locality&lt;/strong&gt; and &lt;strong&gt;spatial locality&lt;/strong&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;temporal-locality&#34;&gt;Temporal Locality&lt;/h4&gt;
+&lt;p&gt;Some elements just are accessed many times in time. This is an example of a &lt;em&gt;temporal locality&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;spatial-locality&#34;&gt;Spatial locality&lt;/h4&gt;
+&lt;p&gt;Some elements are accessed close to each other, this is an idea of spatial locality.
+In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
+&lt;p&gt;For example consider this snippet:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
+loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Fast Fourier Transforms</title>
       <link>https://flecart.github.io/notes/fast-fourier-transforms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -78,28 +111,6 @@ loops cycle through the same instructions, this is an example of temporal locali
 &lt;h4 id=&#34;example-of-transforms&#34;&gt;Example of transforms&lt;/h4&gt;
 &lt;p&gt;We have learned in &lt;a href=&#34;https://flecart.github.io/notes/algebra-lineare-numerica&#34;&gt;Algebra lineare numerica&lt;/a&gt;, &lt;a href=&#34;https://flecart.github.io/notes/cambio-di-base&#34;&gt;Cambio di Base&lt;/a&gt; that linear transforms are usually a &lt;strong&gt;change of basis&lt;/strong&gt;. They are matrix vector multiplications (additions and multiplications by &lt;em&gt;constants&lt;/em&gt;). The optimizations are based on what sorts of transforms we have (e.g. &lt;a href=&#34;https://flecart.github.io/notes/sparse-matrix-vector-multiplication&#34;&gt;Sparse Matrix Vector Multiplication&lt;/a&gt;, or dense versions).
 The same idea applies also for Fourier transforms.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Fast Linear Algebra</title>
-      <link>https://flecart.github.io/notes/fast-linear-algebra/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/fast-linear-algebra/</guid>
-      <description>&lt;p&gt;Many problems in scientific computing include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Solving linear equations&lt;/li&gt;
-&lt;li&gt;Eigenvalue computations&lt;/li&gt;
-&lt;li&gt;Singular value decomposition&lt;/li&gt;
-&lt;li&gt;LU/Cholesky/QR decompositions&lt;/li&gt;
-&lt;li&gt;etc&amp;hellip;
-And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially )&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;quick-history-of-performance-computing&#34;&gt;Quick History of Performance Computing&lt;/h4&gt;
-&lt;p&gt;Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems.
-LAPACK redesigned the algorithms in previous libraries to have better block-based locality.
-BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3).
-Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
-This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
-Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Skylake Microprocessor</title>
@@ -112,17 +123,6 @@ Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
 For backwards compatibility intructions have usually just grown.
 They used geographic locations because these are not suable.
 If we want new code to run for old processors, we should need to put specific flags.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Compiler Limitations</title>
-      <link>https://flecart.github.io/notes/compiler-limitations/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
-      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
-&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
-&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
-&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
