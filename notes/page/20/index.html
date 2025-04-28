@@ -199,16 +199,48 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bias Variance Trade-off
+    <h2 class="entry-hint-parent">Logistic Regression
     </h2>
   </header>
   <div class="entry-content">
-    <p>This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
-Introduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.
+    <p>Queste note sono molto di base. Per cose leggermente più avanzate bisogna guardare Bayesian Linear Regression, Linear Regression methods.
+Introduzione alla logistic regression Giustificazione del metodo Questo è uno dei modelli classici, creati da Minsky qualche decennio fa In questo caso andiamo direttamente a computare il valore di $P(Y|X)$ durante l’inferenza, quindi si parla di modello discriminativo.
+Introduzione al problema Supponiamo che
+$Y$ siano variabili booleane $X_{i}$ siano variabili continue $X_{i}$ siano indipendenti uno dall’altro. $P(X_{i}| Y= k)$ sono modellate tramite distribuzioni gaussiane $\mathbb{N}(\mu_{ik}, \sigma_{i})$ NOTA! la varianza non dipende dalle feature!, questo mi permetterebbe di poi togliere la cosa quadratico dopo, rendendo poi l’approssimazione lineare Per esempio se utilizziamo nelle immagini, avrebbe senso normalizzare pixel by pixel, e non image wide con un unico valore, è una assunzione, che se funziona dovrebbe poi far andare meglio la regressione logistica! $Y$ è una distribuzione bernoulliana. Ci chiediamo come è fatto $P(Y|X)$?
 ...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bias Variance Trade-off" href="https://flecart.github.io/notes/bias-variance-trade-off/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Logistic Regression" href="https://flecart.github.io/notes/logistic-regression/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">On intuitive notions of probability
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This note will mainly attempt to summarize the introduction of some intuitive notions of probability used in common sense human reasoning. Most of what is said here is available here (Jaynes 2003).
+Three intuitive notions of probability Jaynes presents some forms of inference that are not possible in classical first order or propositional logic, yet they are frequent in human common sense reasoning. Let’s present some rules and some examples along them:
+...</p>
+  </div>
+  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to On intuitive notions of probability" href="https://flecart.github.io/notes/on-intuitive-notions-of-probability/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Storia del web
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Guerre dei browser Prima guerra ~1995
+Fra netscape, una forma di rete (?) che poi viene ripresa da firefox da Mozilla, dopo che è stato mandato in bancarotta da Microsoft (che ha ancora con IE una grandissima fetta del mercato in questo primo periodo).
+Secondo periodo di guerra ~2010
+Quando arriva chrome, che vuole creare un browser che risolva tutti i problemi per creare integrazioni sui browser di altre aziende), mentre IE ha perso interesse per nuove features, che in questo periodo sono capi del proprio mercato.
+...</p>
+  </div>
+  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Storia del web" href="https://flecart.github.io/notes/storia-del-web/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -319,38 +351,6 @@ Relational Data Model: This is the most common data model and uses tables to rep
   </div>
   <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Programmazione lineare" href="https://flecart.github.io/notes/programmazione-lineare/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Norme e Condizionamento
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Errore inerente Bisogna cercare di generalizzare il concetto di errore e lo si fa con la norma
-Norma vettoriale È una funzione da $f: \mathbb{R}^n \to \mathbb{R}$ indicata con due barrette, questa funzione mi dà un concetto di distanza.
-Proprietà della norma Si definisce una norma una funzione che soddisfa queste proprietà
-$\lVert x \rVert \geq 0$ per ogni $x \in \mathbb{R}^{n}$ $\lVert x \rVert = 0 \iff x = 0$ $\lVert \alpha x \rVert = \lvert \alpha \rvert \lVert x \rVert$ per ogni $x \in \mathbb{R}^{n}$ e $\alpha \in \mathbb{R}$ Vale la disuguaglianza triangolare, ossia $\forall x, y \in \mathbb{R}^{n}, \lVert x &#43; y \rVert \leq \lVert x \rVert &#43; \lVert y \rVert$. Convessità Analizzato meglio in Analisi di Convessità. Si può dimostrare tramite la proprietà 3 e 4 che la norma è una funzione convessa. Infatti sia $f$ la funzione che soddisfa le proprietà della norma (quindi effettivamente si può chiamare norma). Allora:
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Norme e Condizionamento" href="https://flecart.github.io/notes/norme-e-condizionamento/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Tecniche algoritmiche
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>In questa nota andiamo a parlare in modo sommario (si impara probabilmente molto meglio con la pratica) di generali tipologie di approcci che esistono per affrontare problemi di tipo algoritmico.
-Divide et impera Introduzione Abbiamo già visto L’utilizzo di questa tecnica per quick e merge sort in Algoritmi di ordinamento
-Questa tecnica si focalizza in tre passi fondamentali:
-Dividere il problema in sotto-problemi Risolvere il sotto-problema Mergiare le soluzioni di questi sotto-problemi. Questa è più una tecnica che si impara di più con la pratica, andremo a fare un problema che utilizza questa tecnica
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Tecniche algoritmiche" href="https://flecart.github.io/notes/tecniche-algoritmiche/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
