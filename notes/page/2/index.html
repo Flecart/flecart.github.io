@@ -199,6 +199,85 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Livello ISA
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>il livello isa è il livello delle istruzioni
+8.1 Struttura Potremmo definire l’architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.
+Istruzioni possibili Registri Solitamente le istruzioni sono divise in due parti:
+8.1.1 Opcode e indirizzamento Opcode
+Questo opcode indica la tipologia di istruzione.
+Per esempio per l’architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Livello ISA" href="https://flecart.github.io/notes/livello-isa/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Memoria
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>4.1 Caratteristiche della Memoria La gerarchia della memoria, più si va giù più spazio si ha, più è lento il caricamento delle informazioni
+4.1.1 Catalogazione della memoria Le tipologie di memoria sono presenti a fianco. In generale più la memoria è veloce da riprendere, più è costosa da memorizzare (c’è poco spazio) 4.1.2 Byte e Word Il libro a pagina 74 parte con la discussione del perché si è preferito evitare la BCD (Binary coded decimal, in cui i numeri da 0 a 9 erano codificato da 4 bit), per questioni di efficienza.
+...</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Memoria" href="https://flecart.github.io/notes/memoria/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Note sull&#39;architettura
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Interrupt Descrizione iniziale 🟩 Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
+Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
+Slide Interrupt Hardware e software
+...</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Note sull&#39;architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Processi e thread
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
+Slide schema generale tabelle
+Processi Il process control block è la struttura di dati principali da comprendere.
+Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria.
+...</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Scheduler
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Il suo scopo principale è gestire l’avvicendamento dei processi. Ad esempio sospendere il processo che chiede I/O. O un sistema time sharing, quando arriva un interrupt sul time.
+Solitamente il nome scheduler è solamente un gestore dell’avvicendamento, si può quindi utilizzare per indicare scheduler di altro tipo.
+Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo scheduling, ossia da quando a quando è eseguito cosa
+Esempio gantt
+...</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Scheduler" href="https://flecart.github.io/notes/scheduler/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Algebra lineare numerica
     </h2>
   </header>
@@ -273,77 +352,6 @@ Short introduction to the statistical methods Bayesian 🟩 $$ p(\theta \mid X) 
   </div>
   <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Parametric Modeling" href="https://flecart.github.io/notes/parametric-modeling/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Communication in the Cloud
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>How can we coordinate services to actually understand what they are doing, or what the user wants them to do? How to manage networks errors? This note will mainly focus on high level communication protocols to coordinate this kind of communication.
-Remote Procedure Calls History and Basic Idea This has been the main idea, introduced in 1984, using the idea of stubs, see (Birrell &amp; Nelson 1984). The system basically calls the remote procedure as if it was local on the high level, but on a lower level a network request is sent. The architecture has remained the same in these years. It hides all the complexity in the stub (marshaling, binding and sending, without caring about the sockets and communication matters). One problem is that it might be hiding the complexity too well. The programmer has surely an ease of programming, but design consideration should consider overloads generated by the network communication.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Communication in the Cloud" href="https://flecart.github.io/notes/communication-in-the-cloud/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Autoregressive Modelling
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.
-The Autoregressive property 🟩 Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:
-$$ p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don’t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we’ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).
-...</p>
-  </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Autoregressive Modelling" href="https://flecart.github.io/notes/autoregressive-modelling/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Backpropagation
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well. An important observation is that this algorithm is linear: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See colah’s blog. Karpathy has a nice resource for this topic too!
-...</p>
-  </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Backpropagation" href="https://flecart.github.io/notes/backpropagation/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Compiler Limitations
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
-What are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Compiler Limitations" href="https://flecart.github.io/notes/compiler-limitations/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Dependency Parsing
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This set of note is still in TODO
-Dependency Grammar has been much bigger in Europe compared to USA, where Chomsky’s grammars ruled. One of the main developers of this theory is Lucien Tesnière (1959):
-“The sentence is an organized whole, the constituent elements of which are words. Every word that belongs to a sentence ceases by itself to be isolated as in the dictionary. Between the word and its neighbors, the mind perceives connections, the totality of which forms the structure of the sentence. The structural connections establish dependency relations between the words. Each connection in principle unites a superior term and an inferior term. The superior term receives the name governor (head). The inferior term receives the name subordinate (dependent).” ~Lucien Tesnière
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Dependency Parsing" href="https://flecart.github.io/notes/dependency-parsing/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
