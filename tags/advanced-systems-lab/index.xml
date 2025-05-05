@@ -13,15 +13,14 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/advanced-systems-lab/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Compiler Limitations</title>
-      <link>https://flecart.github.io/notes/compiler-limitations/</link>
+      <title>Fast Fourier Transforms</title>
+      <link>https://flecart.github.io/notes/fast-fourier-transforms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
-      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
-&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
-&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
-&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
+      <guid>https://flecart.github.io/notes/fast-fourier-transforms/</guid>
+      <description>&lt;p&gt;The algorithm has been the same, some ideas are in &lt;a href=&#34;https://flecart.github.io/notes/fourier-series&#34;&gt;Fourier Series&lt;/a&gt;, but architectures change, which means there are new ways to make this algorithm even faster.&lt;/p&gt;
+&lt;h4 id=&#34;example-of-transforms&#34;&gt;Example of transforms&lt;/h4&gt;
+&lt;p&gt;We have learned in &lt;a href=&#34;https://flecart.github.io/notes/algebra-lineare-numerica&#34;&gt;Algebra lineare numerica&lt;/a&gt;, &lt;a href=&#34;https://flecart.github.io/notes/cambio-di-base&#34;&gt;Cambio di Base&lt;/a&gt; that linear transforms are usually a &lt;strong&gt;change of basis&lt;/strong&gt;. They are matrix vector multiplications (additions and multiplications by &lt;em&gt;constants&lt;/em&gt;). The optimizations are based on what sorts of transforms we have (e.g. &lt;a href=&#34;https://flecart.github.io/notes/sparse-matrix-vector-multiplication&#34;&gt;Sparse Matrix Vector Multiplication&lt;/a&gt;, or dense versions).
+The same idea applies also for Fourier transforms.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Fast Linear Algebra</title>
@@ -44,6 +43,17 @@ BLAS are kernel functions for each computer, while LAPACK are the higher level f
 Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture.
 This is called &lt;strong&gt;autotuning&lt;/strong&gt; because it does a search of possible enumerations and chooses the fastest one.
 Now autotuning has been done a lot for NN systems.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Compiler Limitations</title>
+      <link>https://flecart.github.io/notes/compiler-limitations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/compiler-limitations/</guid>
+      <description>&lt;h4 id=&#34;on-compiler&#34;&gt;On Compiler&lt;/h4&gt;
+&lt;p&gt;Adding compilation flags to &lt;code&gt;gcc&lt;/code&gt; not always makes it faster, it just enables a specific set of optimization methods. It&amp;rsquo;s also good to turn on &lt;em&gt;platform specific&lt;/em&gt; flags to turn on some specific optimization methods to that architecture.
+Remember that compilers are &lt;strong&gt;conservative&lt;/strong&gt;, meaning they do not apply that optimization if they think it does not always apply.&lt;/p&gt;
+&lt;h4 id=&#34;what-are-they-good-at&#34;&gt;What are they good at&lt;/h4&gt;
+&lt;p&gt;Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies&lt;/p&gt;</description>
     </item>
     <item>
       <title>Sparse Matrix Vector Multiplication</title>
@@ -101,16 +111,6 @@ In modern architectures, the a line of cache is usually 64 bytes.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sum is an example of &lt;em&gt;temporal locality&lt;/em&gt; as the same memory location (or register) is accessed many times, and the access of the array &lt;code&gt;a&lt;/code&gt; is an example of spatial locality.
 loops cycle through the same instructions, this is an example of temporal locality.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Fast Fourier Transforms</title>
-      <link>https://flecart.github.io/notes/fast-fourier-transforms/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/fast-fourier-transforms/</guid>
-      <description>&lt;p&gt;The algorithm has been the same, some ideas are in &lt;a href=&#34;https://flecart.github.io/notes/fourier-series&#34;&gt;Fourier Series&lt;/a&gt;, but architectures change, which means there are new ways to make this algorithm even faster.&lt;/p&gt;
-&lt;h4 id=&#34;example-of-transforms&#34;&gt;Example of transforms&lt;/h4&gt;
-&lt;p&gt;We have learned in &lt;a href=&#34;https://flecart.github.io/notes/algebra-lineare-numerica&#34;&gt;Algebra lineare numerica&lt;/a&gt;, &lt;a href=&#34;https://flecart.github.io/notes/cambio-di-base&#34;&gt;Cambio di Base&lt;/a&gt; that linear transforms are usually a &lt;strong&gt;change of basis&lt;/strong&gt;. They are matrix vector multiplications (additions and multiplications by &lt;em&gt;constants&lt;/em&gt;). The optimizations are based on what sorts of transforms we have (e.g. &lt;a href=&#34;https://flecart.github.io/notes/sparse-matrix-vector-multiplication&#34;&gt;Sparse Matrix Vector Multiplication&lt;/a&gt;, or dense versions).
-The same idea applies also for Fourier transforms.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Skylake Microprocessor</title>
