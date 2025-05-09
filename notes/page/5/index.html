@@ -199,6 +199,20 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Sparse Matrix Vector Multiplication
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Algorithms for Sparse Matrix-Vector Multiplication Compressed Sparse Row 🟨– This is an optimized way to store rows for sparse matrices: Sparse MVM using CSR void smvm(int m, const double* values, const int* col_idx, const int* row_start, double* x, double* y) { int i, j; double d; /* Loop over m rows */ for (i = 0; i &lt; m; i&#43;&#43;) { d = y[i]; /* Scalar replacement since reused */ /* Loop over non-zero elements in row i */ for (j = row_start[i]; j &lt; row_start[i &#43; 1]; j&#43;&#43;) { d &#43;= values[j] * x[col_idx[j]]; } y[i] = d; } } Let’s analyze this code:
+Spatial locality: with respect to row_start, col_idx and values we have spatial locality. Temporal locality: with respect to y we have temporal locality. (Poor temporal with respect to $x$) Good storage efficiency for the sparse matrix. But it is 2x slower than the dense matrix multiplication when the matrix is dense. Block CSR But we cannot do block optimizations for the cache with this storage method.
+...</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Sparse Matrix Vector Multiplication" href="https://flecart.github.io/notes/sparse-matrix-vector-multiplication/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">The Exponential Family
     </h2>
   </header>
@@ -253,20 +267,6 @@ Highly distributed ones. Database based ones. Ad-hoc CDNs. Advantages and disadv
   </div>
   <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Content Delivery Networks" href="https://flecart.github.io/notes/content-delivery-networks/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Normalizing Flows
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Normalizing flows have both latent space and can produce tractable explicit probability distributions (closer to Autoregressive Modelling, they have tractable distributions, but not a latent space). This means we are able to get the likelihoods of a certain sample.
-This approach to modelling a flexible distribution is called a normalizing flow because the transformation of a probability distribution through a sequence of mappings is somewhat analogous to the flow of a fluid. From (Bishop &amp; Bishop 2024)
-...</p>
-  </div>
-  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Normalizing Flows" href="https://flecart.github.io/notes/normalizing-flows/"></a>
 </article>
 
 <article class="post-entry"> 
