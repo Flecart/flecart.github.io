@@ -7,7 +7,10 @@
 <meta name="robots" content="index, follow">
 <title>Optimizations for DNN | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="☁cloud-computing">
-<meta name="description" content="Optimizations for DNN - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Mixture of Experts
+There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
+
+One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/optimizations-for-dnn/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
@@ -92,7 +95,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/optimizations-for-dnn/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Optimizations for DNN">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -101,7 +104,10 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Optimizations for DNN">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Mixture of Experts
+There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
+
+One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.">
 
 
 <script type="application/ld+json">
@@ -130,12 +136,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Optimizations for DNN",
   "name": "Optimizations for DNN",
-  "description": "",
+  "description": "Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.\n",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.\n",
+  "wordCount" : "58",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,11 +236,31 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Optimizations for DNN
     </h1>
-    <div class="post-meta">0 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#mixture-of-experts" aria-label="Mixture of Experts">Mixture of Experts</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h3 id="mixture-of-experts">Mixture of Experts<a hidden class="anchor" aria-hidden="true" href="#mixture-of-experts">#</a></h3>
+<p>There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
+<img src="/images/notes/Optimizations for DNN-20250510123829347.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250510123829347"></p>
+<p>One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
