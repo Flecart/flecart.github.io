@@ -20,6 +20,71 @@
       <description>First blog post</description>
     </item>
     <item>
+      <title>Bayesian Linear Regression</title>
+      <link>https://flecart.github.io/notes/bayesian-linear-regression/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/bayesian-linear-regression/</guid>
+      <description>&lt;p&gt;We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the &lt;em&gt;evidence&lt;/em&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;classical-linear-regression&#34;&gt;Classical Linear regression&lt;/h4&gt;
+$$
+y = w^{T}x + \varepsilon
+$$&lt;p&gt;
+Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&amp;rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called &lt;strong&gt;aleatoric uncertainty&lt;/strong&gt;.
+One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&amp;rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Neural Networks</title>
+      <link>https://flecart.github.io/notes/neural-networks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/neural-networks/</guid>
+      <description>&lt;h2 id=&#34;introduction-a-neuron&#34;&gt;Introduction: a neuron&lt;/h2&gt;
+&lt;p&gt;I am lazy, so I&amp;rsquo;m skipping the introduction for this set of notes. Look at Andrew Ng&amp;rsquo;s Coursera course for this part. Historical notes are &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;.
+One can view a perceptron to be a &lt;a href=&#34;https://flecart.github.io/notes/log-linear-models&#34;&gt;Log Linear Models&lt;/a&gt; with the temperature of the softmax that goes to 0 (so that it is an argmax).
+Trained with a stochastic gradient descent with a batch of 1 (this is called the perceptron update rule).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Optimizations for DNN</title>
+      <link>https://flecart.github.io/notes/optimizations-for-dnn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/optimizations-for-dnn/</guid>
+      <description>&lt;h3 id=&#34;mixture-of-experts&#34;&gt;Mixture of Experts&lt;/h3&gt;
+&lt;p&gt;There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
+&lt;img src=&#34;https://flecart.github.io/images/notes/Optimizations for DNN-20250510123829347.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Optimizations for DNN-20250510123829347&#34;&gt;&lt;/p&gt;
+&lt;p&gt;One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.&lt;/p&gt;
+&lt;h4 id=&#34;lora-low-rank-adaptation-&#34;&gt;LoRA: Low-Rank Adaptation 🟨&lt;/h4&gt;
+&lt;p&gt;We only finetune a part of the network, called &lt;strong&gt;lora adapters&lt;/strong&gt;, not the whole thing.
+There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Parametric Human Body Models</title>
+      <link>https://flecart.github.io/notes/parametric-human-body-models/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/parametric-human-body-models/</guid>
+      <description>&lt;h3 id=&#34;an-historical-perspective&#34;&gt;An historical perspective&lt;/h3&gt;
+&lt;h4 id=&#34;the-origins-of-motion-capture&#34;&gt;The origins of motion capture&lt;/h4&gt;
+&lt;p&gt;One of the earliest starts of &lt;em&gt;motion capturing&lt;/em&gt; is the famous horse in 1878 in motion &amp;ldquo;video&amp;rdquo;. This was the start of all the modern cameras. One of the earliest human body motion capture was in military for moving efficiency purposes in 1883. &lt;a href=&#34;https://www.scienceandmediamuseum.org.uk/objects-and-stories/surprising-origins-motion-capture&#34;&gt;This&lt;/a&gt; website has many historical resources on the topic.
+The problem is still a problem in modern times. If we want to create models to mimic humans, it surely could be nice to understand how humans move and think. This is the general line of though of this line of research.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>The Perceptron Model</title>
+      <link>https://flecart.github.io/notes/the-perceptron-model/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/the-perceptron-model/</guid>
+      <description>&lt;p&gt;The &lt;strong&gt;perceptron&lt;/strong&gt; is a fundamental binary linear classifier introduced by &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;. It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.&lt;/p&gt;
+&lt;h3 id=&#34;the-mathematical-definition&#34;&gt;The Mathematical Definition&lt;/h3&gt;
+&lt;p&gt;Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:&lt;/p&gt;
+$$
+z = \mathbf{w}^\top \mathbf{x} + b = \sum_{i=1}^{n} w_i x_i + b
+$$$$
+y = f(z) = 
+\begin{cases}
+1, &amp; \text{if } z \geq 0 \\
+0, &amp; \text{otherwise}
+\end{cases}
+$$&lt;h4 id=&#34;learning-rule&#34;&gt;Learning Rule&lt;/h4&gt;
+&lt;p&gt;Given a labeled dataset $\{ (\mathbf{x}^{(i)}, y^{(i)}) \}_{i=1}^{m}$, the perceptron uses the following weight update rule for misclassified samples ($y^{(i)} \neq f(\mathbf{w}^\top \mathbf{x}^{(i)} + b)$):&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Compute Express Link</title>
       <link>https://flecart.github.io/notes/compute-express-link/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -59,29 +124,6 @@ The difference of egocentric vision compared to standard vision techniques is th
       <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
       <description>&lt;p&gt;Generative Adversarial Network has been introduced in 2014 by Ian Goodfellow (at that time they where still gray and white). Now the images have been improved with &lt;a href=&#34;https://flecart.github.io/notes/diffusion-models&#34;&gt;Diffusion Models&lt;/a&gt;, that can be considered the new paradigm. This idea has been considered by Yann LeCun as one of the most important ideas. Nowadays (2025), they are still used for super-resolution and other applications, but it has still some limitations (mainly stability), and now has good competition against other models.
 The resolution purported by GAN is much higher than VAE (see &lt;a href=&#34;https://flecart.github.io/notes/autoencoders#variational-autoencoders&#34;&gt;Autoencoders#Variational Autoencoders&lt;/a&gt;). This is a easy plugin to improve the results of other models (VAE, flow, Diffusion). Also ChatGPT has some sort of adversarial learning for example, not explained in the same manner as here.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Optimizations for DNN</title>
-      <link>https://flecart.github.io/notes/optimizations-for-dnn/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/optimizations-for-dnn/</guid>
-      <description>&lt;h3 id=&#34;mixture-of-experts&#34;&gt;Mixture of Experts&lt;/h3&gt;
-&lt;p&gt;There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
-&lt;img src=&#34;https://flecart.github.io/images/notes/Optimizations for DNN-20250510123829347.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Optimizations for DNN-20250510123829347&#34;&gt;&lt;/p&gt;
-&lt;p&gt;One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.&lt;/p&gt;
-&lt;h4 id=&#34;lora-low-rank-adaptation&#34;&gt;LoRA: Low-Rank Adaptation&lt;/h4&gt;
-&lt;p&gt;We only finetune a part of the network, called &lt;strong&gt;lora adapters&lt;/strong&gt;, not the whole thing.
-There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Parametric Human Body Models</title>
-      <link>https://flecart.github.io/notes/parametric-human-body-models/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/parametric-human-body-models/</guid>
-      <description>&lt;h3 id=&#34;an-historical-perspective&#34;&gt;An historical perspective&lt;/h3&gt;
-&lt;h4 id=&#34;the-origins-of-motion-capture&#34;&gt;The origins of motion capture&lt;/h4&gt;
-&lt;p&gt;One of the earliest starts of &lt;em&gt;motion capturing&lt;/em&gt; is the famous horse in 1878 in motion &amp;ldquo;video&amp;rdquo;. This was the start of all the modern cameras. One of the earliest human body motion capture was in military for moving efficiency purposes in 1883. &lt;a href=&#34;https://www.scienceandmediamuseum.org.uk/objects-and-stories/surprising-origins-motion-capture&#34;&gt;This&lt;/a&gt; website has many historical resources on the topic.
-The problem is still a problem in modern times. If we want to create models to mimic humans, it surely could be nice to understand how humans move and think. This is the general line of though of this line of research.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Systems for Artificial Intelligence</title>
@@ -1356,18 +1398,6 @@ Ogni operazione in un processore moderno ha in generale un numero di accessi in 
 &lt;p&gt;Questo discorso non tiene più se teniamo in considerazione numeri a precisione infinita, che possono avere un numero arbitrario di accessi in memoria per poter essere computato.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>The Perceptron Model</title>
-      <link>https://flecart.github.io/notes/the-perceptron-model/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/the-perceptron-model/</guid>
-      <description>&lt;p&gt;The &lt;strong&gt;perceptron&lt;/strong&gt; is a fundamental binary linear classifier introduced by &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;. It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.&lt;/p&gt;
-&lt;h3 id=&#34;the-mathematical-definition&#34;&gt;The Mathematical Definition&lt;/h3&gt;
-&lt;p&gt;Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:&lt;/p&gt;
-$$
-z = \mathbf{w}^\top \mathbf{x} + b = \sum_{i=1}^{n} w_i x_i + b
-$$&lt;p&gt;where $b$ is the &lt;strong&gt;bias&lt;/strong&gt; term. The output is determined by the Heaviside step function:&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Massive Parallel Processing</title>
       <link>https://flecart.github.io/notes/massive-parallel-processing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -1529,19 +1559,6 @@ There are other benefits of using Spark instead of the Map reduce Framework:&lt;
 $$
 \text{BIC} = -2 \cdot \ln \hat{L} + k \cdot \ln(n)
 $$&lt;p&gt;where:&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Bayesian Linear Regression</title>
-      <link>https://flecart.github.io/notes/bayesian-linear-regression/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/bayesian-linear-regression/</guid>
-      <description>&lt;p&gt;We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the &lt;em&gt;evidence&lt;/em&gt;.&lt;/p&gt;
-&lt;h4 id=&#34;classical-linear-regression&#34;&gt;Classical Linear regression&lt;/h4&gt;
-$$
-y = w^{T}x + \varepsilon
-$$&lt;p&gt;
-Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&amp;rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called &lt;strong&gt;aleatoric uncertainty&lt;/strong&gt;.
-One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&amp;rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bayesian Optimization</title>
