@@ -13,6 +13,35 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/tags/machine-perception/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Backpropagation</title>
+      <link>https://flecart.github.io/notes/backpropagation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/backpropagation/</guid>
+      <description>&lt;p&gt;Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well.
+An important observation is that this algorithm is &lt;strong&gt;linear&lt;/strong&gt;: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See &lt;a href=&#34;https://colah.github.io/posts/2015-08-Backprop/&#34;&gt;colah&amp;rsquo;s blog&lt;/a&gt;.
+&lt;a href=&#34;https://youtu.be/VMj-3S1tku0?si=wRCObFw7woZTwU56&#34;&gt;Karpathy&lt;/a&gt; has a nice resource for this topic too!
+&lt;a href=&#34;https://www.youtube.com/watch?v=zUazLXZZA2U&amp;list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&#34;&gt;Stanford lecture&lt;/a&gt; on backpropagation is another resource.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Convolutional Neural Network</title>
+      <link>https://flecart.github.io/notes/convolutional-neural-network/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/convolutional-neural-network/</guid>
+      <description>&lt;h2 id=&#34;introduction-to-convolutional-nn&#34;&gt;Introduction to Convolutional NN&lt;/h2&gt;
+&lt;h4 id=&#34;design-goals&#34;&gt;Design Goals&lt;/h4&gt;
+&lt;p&gt;We want to be invariant to some transformations but also at the same time to be specific to some thing.
+Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images.
+Compared to standard Fully connected &lt;a href=&#34;https://flecart.github.io/notes/neural-networks&#34;&gt;Neural Networks&lt;/a&gt;, they reuse weights, making their number of parameter much fewer.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Generative Adversarial Networks</title>
+      <link>https://flecart.github.io/notes/generative-adversarial-networks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
+      <description>&lt;p&gt;Generative Adversarial Network has been introduced in 2014 by Ian Goodfellow (at that time they where still gray and white). Now the images have been improved with &lt;a href=&#34;https://flecart.github.io/notes/diffusion-models&#34;&gt;Diffusion Models&lt;/a&gt;, that can be considered the new paradigm. This idea has been considered by Yann LeCun as one of the most important ideas. Nowadays (2025), they are still used for super-resolution and other applications, but it has still some limitations (mainly stability), and now has good competition against other models.
+The resolution purported by GAN is much higher than VAE (see &lt;a href=&#34;https://flecart.github.io/notes/autoencoders#variational-autoencoders&#34;&gt;Autoencoders#Variational Autoencoders&lt;/a&gt;). This is a easy plugin to improve the results of other models (VAE, flow, Diffusion). Also ChatGPT has some sort of adversarial learning for example, not explained in the same manner as here.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Neural Networks</title>
       <link>https://flecart.github.io/notes/neural-networks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -21,6 +50,26 @@
 &lt;p&gt;I am lazy, so I&amp;rsquo;m skipping the introduction for this set of notes. Look at Andrew Ng&amp;rsquo;s Coursera course for this part. Historical notes are &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;.
 One can view a perceptron to be a &lt;a href=&#34;https://flecart.github.io/notes/log-linear-models&#34;&gt;Log Linear Models&lt;/a&gt; with the temperature of the softmax that goes to 0 (so that it is an argmax).
 Trained with a stochastic gradient descent with a batch of 1 (this is called the perceptron update rule).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>The Perceptron Model</title>
+      <link>https://flecart.github.io/notes/the-perceptron-model/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/the-perceptron-model/</guid>
+      <description>&lt;p&gt;The &lt;strong&gt;perceptron&lt;/strong&gt; is a fundamental binary linear classifier introduced by &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;. It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.&lt;/p&gt;
+&lt;h3 id=&#34;introduction-to-the-perceptron&#34;&gt;Introduction to the Perceptron&lt;/h3&gt;
+&lt;h4 id=&#34;a-mathematical-model-&#34;&gt;A mathematical model 🟩&lt;/h4&gt;
+&lt;p&gt;Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:&lt;/p&gt;
+$$
+z = \mathbf{w}^\top \mathbf{x} + b = \sum_{i=1}^{n} w_i x_i + b
+$$$$
+y = f(z) = 
+\begin{cases}
+1, &amp; \text{if } z \geq 0 \\
+0, &amp; \text{otherwise}
+\end{cases}
+$$&lt;h4 id=&#34;learning-rule-&#34;&gt;Learning Rule 🟩&lt;/h4&gt;
+&lt;p&gt;Given a labeled dataset $\{ (\mathbf{x}^{(i)}, y^{(i)}) \}_{i=1}^{m}$, the perceptron uses the following weight update rule for misclassified samples ($y^{(i)} \neq f(\mathbf{w}^\top \mathbf{x}^{(i)} + b)$):&lt;/p&gt;</description>
     </item>
     <item>
       <title>Parametric Human Body Models</title>
@@ -33,25 +82,6 @@ Trained with a stochastic gradient descent with a batch of 1 (this is called the
 The problem is still a problem in modern times. If we want to create models to mimic humans, it surely could be nice to understand how humans move and think. This is the general line of though of this line of research.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>The Perceptron Model</title>
-      <link>https://flecart.github.io/notes/the-perceptron-model/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/the-perceptron-model/</guid>
-      <description>&lt;p&gt;The &lt;strong&gt;perceptron&lt;/strong&gt; is a fundamental binary linear classifier introduced by &lt;a href=&#34;https://psycnet.apa.org/record/1959-09865-001&#34;&gt;(Rosenblatt 1958)&lt;/a&gt;. It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.&lt;/p&gt;
-&lt;h3 id=&#34;the-mathematical-definition&#34;&gt;The Mathematical Definition&lt;/h3&gt;
-&lt;p&gt;Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:&lt;/p&gt;
-$$
-z = \mathbf{w}^\top \mathbf{x} + b = \sum_{i=1}^{n} w_i x_i + b
-$$$$
-y = f(z) = 
-\begin{cases}
-1, &amp; \text{if } z \geq 0 \\
-0, &amp; \text{otherwise}
-\end{cases}
-$$&lt;h4 id=&#34;learning-rule&#34;&gt;Learning Rule&lt;/h4&gt;
-&lt;p&gt;Given a labeled dataset $\{ (\mathbf{x}^{(i)}, y^{(i)}) \}_{i=1}^{m}$, the perceptron uses the following weight update rule for misclassified samples ($y^{(i)} \neq f(\mathbf{w}^\top \mathbf{x}^{(i)} + b)$):&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Egocentric Vision</title>
       <link>https://flecart.github.io/notes/egocentric-vision/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -59,14 +89,6 @@ $$&lt;h4 id=&#34;learning-rule&#34;&gt;Learning Rule&lt;/h4&gt;
       <description>&lt;p&gt;Egocentric vision is a sub-field of computer vision that studies vision understanding from a centered point of view, that typical of animals.
 One historical thing is MIT 1997 they had to bring around very heavy cameras. Now we have glasses. Other examples of egocentric vision are cars with cameras that see their surrounding, or robots equipped with cameras mimicking human vision.
 The difference of egocentric vision compared to standard vision techniques is the high &lt;em&gt;variability&lt;/em&gt; and &lt;em&gt;instability&lt;/em&gt; of the video, and the concept of movement and interactions inside the image. Standard computer vision is &lt;em&gt;disembodied&lt;/em&gt; and controlled field of view.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Generative Adversarial Networks</title>
-      <link>https://flecart.github.io/notes/generative-adversarial-networks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/generative-adversarial-networks/</guid>
-      <description>&lt;p&gt;Generative Adversarial Network has been introduced in 2014 by Ian Goodfellow (at that time they where still gray and white). Now the images have been improved with &lt;a href=&#34;https://flecart.github.io/notes/diffusion-models&#34;&gt;Diffusion Models&lt;/a&gt;, that can be considered the new paradigm. This idea has been considered by Yann LeCun as one of the most important ideas. Nowadays (2025), they are still used for super-resolution and other applications, but it has still some limitations (mainly stability), and now has good competition against other models.
-The resolution purported by GAN is much higher than VAE (see &lt;a href=&#34;https://flecart.github.io/notes/autoencoders#variational-autoencoders&#34;&gt;Autoencoders#Variational Autoencoders&lt;/a&gt;). This is a easy plugin to improve the results of other models (VAE, flow, Diffusion). Also ChatGPT has some sort of adversarial learning for example, not explained in the same manner as here.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Autoregressive Modelling</title>
@@ -93,34 +115,12 @@ If we just use a tabular approach, we&amp;rsquo;ll have a combinatorial explosio
 &lt;p&gt;This approach to modelling a flexible distribution is called a normalizing flow because the transformation of a probability distribution through a sequence of mappings is somewhat analogous to the flow of a fluid. From &lt;a href=&#34;https://link.springer.com/10.1007/978-3-031-45468-4&#34;&gt;(Bishop &amp;amp; Bishop 2024)&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Backpropagation</title>
-      <link>https://flecart.github.io/notes/backpropagation/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/backpropagation/</guid>
-      <description>&lt;p&gt;Backpropagation is perhaps the most important algorithm of the 21st century. It is used everywhere in machine learning and is also connected to computing marginal distributions. This is why all machine learning scientists and data scientists should understand this algorithm very well.
-An important observation is that this algorithm is &lt;strong&gt;linear&lt;/strong&gt;: the time complexity is the same as the forward pass. Derivatives are unexpectedly cheap to calculate. This took a lot of time to discover. See &lt;a href=&#34;https://colah.github.io/posts/2015-08-Backprop/&#34;&gt;colah&amp;rsquo;s blog&lt;/a&gt;.
-&lt;a href=&#34;https://youtu.be/VMj-3S1tku0?si=wRCObFw7woZTwU56&#34;&gt;Karpathy&lt;/a&gt; has a nice resource for this topic too!&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Recurrent Neural Networks</title>
       <link>https://flecart.github.io/notes/recurrent-neural-networks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://flecart.github.io/notes/recurrent-neural-networks/</guid>
       <description>&lt;p&gt;Recurrent Neural Networks allows us to model &lt;em&gt;arbitrarily long&lt;/em&gt; sequence dependencies, at least in theory. This is very handy, and has many interesting theoretical implication. But here we are also interested in the practical applicability, so we may need to analyze common architectures used to implement these models, the main limitation and drawbacks, the nice properties and some applications.&lt;/p&gt;
 &lt;p&gt;These network can bee seen as &lt;strong&gt;chaotic&lt;/strong&gt; systems (non-linear dynamical systems), see Introduction to Chaos Theory.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Convolutional Neural Network</title>
-      <link>https://flecart.github.io/notes/convolutional-neural-network/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/convolutional-neural-network/</guid>
-      <description>&lt;h2 id=&#34;introduction-to-convolutional-nn&#34;&gt;Introduction to Convolutional NN&lt;/h2&gt;
-&lt;h4 id=&#34;design-goals&#34;&gt;Design Goals&lt;/h4&gt;
-&lt;p&gt;We want to be invariant to some transformations but also at the same time to be specific to some thing&lt;/p&gt;
-&lt;h3 id=&#34;the-convolution-operator--&#34;&gt;The convolution operator 🟩-&lt;/h3&gt;
-$$
-\sum_{i} \sum_{j} h(x - i, y - j) f(i, j)
-$$&lt;p&gt;Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un &lt;strong&gt;filter&lt;/strong&gt; che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

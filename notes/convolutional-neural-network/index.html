@@ -9,11 +9,9 @@
 <meta name="keywords" content="machine-perception">
 <meta name="description" content="Introduction to Convolutional NN
 Design Goals
-We want to be invariant to some transformations but also at the same time to be specific to some thing
-The convolution operator 🟩-
-$$
-\sum_{i} \sum_{j} h(x - i, y - j) f(i, j)
-$$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.">
+We want to be invariant to some transformations but also at the same time to be specific to some thing.
+Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images.
+Compared to standard Fully connected Neural Networks, they reuse weights, making their number of parameter much fewer.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/convolutional-neural-network/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
@@ -98,8 +96,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/convolutional-neural-network/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Convolutional Neural Network">
-  <meta property="og:description" content="Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing
-The convolution operator 🟩- $$ \sum_{i} \sum_{j} h(x - i, y - j) f(i, j) $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.">
+  <meta property="og:description" content="Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing. Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images. Compared to standard Fully connected Neural Networks, they reuse weights, making their number of parameter much fewer.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,11 +107,9 @@ The convolution operator 🟩- $$ \sum_{i} \sum_{j} h(x - i, y - j) f(i, j) $$Il
 <meta name="twitter:title" content="Convolutional Neural Network">
 <meta name="twitter:description" content="Introduction to Convolutional NN
 Design Goals
-We want to be invariant to some transformations but also at the same time to be specific to some thing
-The convolution operator 🟩-
-$$
-\sum_{i} \sum_{j} h(x - i, y - j) f(i, j)
-$$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.">
+We want to be invariant to some transformations but also at the same time to be specific to some thing.
+Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images.
+Compared to standard Fully connected Neural Networks, they reuse weights, making their number of parameter much fewer.">
 
 
 <script type="application/ld+json">
@@ -143,12 +138,12 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
   "@type": "BlogPosting",
   "headline": "Convolutional Neural Network",
   "name": "Convolutional Neural Network",
-  "description": "Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing\nThe convolution operator 🟩- $$ \\sum_{i} \\sum_{j} h(x - i, y - j) f(i, j) $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.\n",
+  "description": "Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing. Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images. Compared to standard Fully connected Neural Networks, they reuse weights, making their number of parameter much fewer.\n",
   "keywords": [
     "machine-perception"
   ],
-  "articleBody": "Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing\nThe convolution operator 🟩- $$ \\sum_{i} \\sum_{j} h(x - i, y - j) f(i, j) $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.\nSlides ed esempi (molto più chiaril) Vedi che per calcolare quell’8 sto facendo cose lineari con tutti pixel intorno ad essa.\nQuesto operatore l’abbiamo già trattato in modo molto breve in Deblur di immagini.\nCorrelation operator $$ (f*g)(t) = \\sum_{\\tau = -\\infty}^{\\infty} f(\\tau)g(t-\\tau) $$Pytorch usually learns correlations, but calls it convolution, because the orientation of the filter is learned does not matter much. The two operations are equivalent given symmetric kernels.\nSome properties and uses Sappiamo tutti che le immagini non sono altro che arrai di valori in un certo intervallo, che rappresentano l’intensità dei colori, o solamente del bianco-grigio nel caso delle immagini grigio nere.\nQueste intensità si potrebbero anche rappresentare come superfici 3d in cui la posizione del pixel identifica x e y, mentre l’intensità la z, abbiamo quindi proprio delle superfici!, delle montagne, valli fiumi etc. Le cose molto interessanti sono cambi di intensità improvvisi (con derivata molto alta) ossia i dirupi, le valli, questo cambio improvviso (il cambio di fase come dice Pedro di Master algorithm) è classico anche in nautura, è la parte con qualche informazione di interesse diciamo.\nTHE IDEA OF DERIVATIVE FOR CHANGES\nSlide finite approssimation of derivative Comparison with Fully Connected Parameter sharing: convolutional networks share the parameters while fully connected do not. Local connectivity: in convolution layers neurons are connected only locally while in fully connected layers neurons are connected globally. HMAX model Hubel and Wiesel Studies A brief history of CNNs h = 1 perché siamo in campo discreto (è anche il minimo h che possiamo considerare in questo setting), quel filtro quindi ci è utile per capire se ci sono dei cambi improvvisi.\nQuesta idea ci permette di costruire il kernel per identificare le linee (visible contours of the image), orizzontali (cambi direzione e avresti verticale). it’s a feature map, of the image to some characteristic of the image. (ti dice se in questa zona è presente, non c’è , o c’è l’opposto del pattern che cercavi).\nSome architectures Deepwise separable convolution Inception architecture 🟨 Andiamo a derfinire un modulo di inception (in cui va a fare in un certo senso scrambling, decomporre e recomporre dati, in che modo vanno ad estrarre delle features io non lo so!).\nComunque questa è l’architettura classica, andare ad utilizzare reti convoluzionali e poi operarle con reti deep (alla fine non molto deep) in modo da collegargli insieme.\nEsempio di inception module Un esempio è GoogleLeNet (molte computazioni in parallelo) https://www.youtube.com/watch?v=VxhSouuSZDY\u0026ab_channel=Udacity 1x1 is to reduce the number of channels (way to reduce the parameter count).\nResidual layers Residual learning is the main concept of these networks, it’s when we have a direct link with the beginning! In pratica diamo la possibilità al neurone di scegliere di non modificare o invece sì l’input credo, provo a chiedermi se posso avere un valore migliore di quanto ho attualmente con qualche peso.\nStructure of residual layer https://arxiv.org/pdf/1512.03385.pdf\nUsually these links help the network learn (lesser vanishing gradient.\nShattered Gradients Most gradient descent methods assume to have a smooth gradient. This is not true anymore with very deep layers. Adding residual layers help ease this problem.\nSmoother Error Surfaces Introducing the residual layer helps in having smoother residual layers: Transfer learning Slide intuizione transfer learning expected graph with performance with transfer learning\n!\nComunque l’intuizione principale del transfer learning è l’idea che i primi layers facciano una sorta di estrazione di features più ad alto livello utili poi ai layers di deep NN. Se questa prima parte l’ho trainata su un corpus enorme, allora gli aspetti che è riuscito a generalizzare potrebbero essere utili anche per altro, e quindi utilizzo i pesi trovati in questa rete anche per altro, senza problemi.\nFine tune o finetuning è un pò rischioso, faccio un freeze di una parte del network più larga, potrei andare a overfittare e fare cose simili! Però ha più senso, ci aiuta a rendere l’intera architettura ancora più focussato in quello che vogliamo fare noi (in un certo senso forse dà via alcune generalizzazioni inutili nel nostro dominio)\nTraining of CNN Backpropagation of CNNs 🟨++ We can unroll the input and output layers as a single linear trasformation of a deep network (with weights adjusted accordingly).\nIntuition of unrolling !\nBut how do we unroll?? We can see everything as a matrix with $[input\\_size \\times output\\_size]$ as you can see from the image in the toggle\nSlide convolution matrix of the weights !\nAfter we have modelled this matrix, we can learn using standard backpropagation we have talked about in Neural Networks.\nUn problema per questo metodo è la matrice è sparsa se input è molto largo, e kernel piccolo, avrei un numero di zeri assurdo, quindi nemmeno molto efficiente da memorizzare in questo modo. (però possiamo computare in modo efficiente, ma questo non lo trattiamo).\nUn altro aspetto di questa matrice è la ripetizione shiftata dei pesi, che sono gli stessi in ogni colonna della matrice, ma solamente shiftato. Questo cambia il modo di fare update dei pesi, si utilizza l’update con average pesato. fra le 4 computazioni delle 4 colonne in esempio.\nTransposed convolutions Dopo che ho fatto troppo downsampling con le CNN, vorrei tornare sù di dimensione (se per esempio un input è un’immagine. Trasposed convolutions ci permettono di tornare su di dimensione. (anche tecniche statistiche credo che funzionino).\nSlide transposed convolutions ! !\nThis technique is called transposed convolution because if we transpose the convolution matrix, we see that we are upscaling the input!. Però non ho capito in che modo funziona!\nDilated convolutions 🟩 Slide intuizione di questo Facciamo una specie di padding interno sul kernel (non vado a contare certe cose, però riesco a ingrandire la receptive field del mio network.\nHa più senso fare sta cosa quando sto analizzando HIGH RESOLUTION IMAGE in cui il valore dei pixel cambia molto poco. Una differenza con le Transposed convolutions (Upconvolution) è il fatto che quelle sono fatte sull’input, questa la facciamo su come viene calcolato il kernel. Sono molto utilizzate in temporal convolution networks, in cui provo a diluire volta per volta lo spazio all’interno del kernel, anche se non so ancora perché va\nUpsampling Nearest-neighbor and bed of nails NN upsampling just repeats the number in the position, while bed of nails is just putting the number in the position and zeroing everything else.\nMax-unpooling You use the equivalent positions of the max-pooling layers, and then put the number in that position there, circled by zeros.\nUpconvolution You have the same thing here:\nStrides, kernels, padding Sum when the things overlap You can also have a learnable kernel (which is an advantage of this method compared to others) Normalization layers Why normalization 🟥 Reasons: Why is normalization a good idea :D?\nSo the quantitative values are comparable from each other (e.g. ages and income) We want the output of the layers to be comparable from each other, the middle outputs are inputs for other layers! We can better control the activation layers. (non vogliamo che faccia come output NaN 😟) Decoupling of the layers. (non dobbiamo andare ad imparare il range di input aspettato, dato che sarà sempre data di stesso tipo) Batch Normalization 🟥 This paper introduces the idea of Batch Normalization.\nAs each layer observes the inputs produced by the layers below, it would be advantageous to achieve the same whitening of the inputs of each layer. By whitening the inputs to each layer, we would take a step towards achieving the fixed distributions of inputs that would remove the ill effects of the internal covariate shift.\nLeCun showed that whitened data speeds up learning, but it was applied only on the input layer. The idea here is to attempt to whiten the input data for every single layer, and this helps. (They call this the internal covariate shift). The thing is that you are learning the normalization parameters.\nProbably the internal covariate shift is not the real reason:\nInstead BatchNorm fundamentally impacts the training process by making the optimization landscape significantly smoother, thus leading to a more predictive and stable behaviour of the gradients\nThis is the most common form of normalization (ma l’idea è sempre la stessa, computare varianza e media, e poi sottrarre media e dividere per varianza). La cosa in più è che vengono aggiunte delle varianze e una media, per denormalizzare l’output, in modo che abbia la forma dei dati migliore possibile.\nIn reality, how it is implemented in pytorch is that $\\mu^{B}$ and $\\sigma^{B}$ are computed for each batch, and then used to normalize the output, they are not learned parameters. But an weighted average is kept for inference.\nBatch normalization makes weights in deeper layers more robust to changes to weights in the shallower layers of the network.\nOther Normalization 🟥 Potremmo provare a normalizzare per canale\nSlide normalizations !!\n",
-  "wordCount" : "1567",
+  "articleBody": "Introduction to Convolutional NN Design Goals We want to be invariant to some transformations but also at the same time to be specific to some thing. Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images. Compared to standard Fully connected Neural Networks, they reuse weights, making their number of parameter much fewer.\nHistorically, they were inspired by the visual cortex of animals, where simple cells respond to specific orientations and complex cells respond to combinations of simple cells. See Hubel and Wiesel experiment, they also saw that there is some hierarchical organization of how the cells communicate with each other.\nThe convolution operator 🟩- $$ \\begin{align*} I'(i,j) \u0026= \\sum_{m=-k}^{k} \\sum_{n=-k}^{k} I(i - m, j - n) K(m, n) \\\\ \u0026= \\sum_{m=-k}^{k} \\sum_{n=-k}^{k} I(i + m, j + n) K(-m, -n) \\end{align*} $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un filter che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.\n$$ (\\mathcal{T \\circ \\text{ shift }})(g) = (\\text{shift} \\circ \\mathcal{T})(g) $$Correlation operator $$ (f*g)(t) = \\sum_{\\tau = -\\infty}^{\\infty} f(\\tau)g(t-\\tau) $$Pytorch usually learns correlations, but calls it convolution, because the orientation of the filter is learned does not matter much. The two operations are equivalent given symmetric kernels.\n$$ I'(i, j) = \\sum_{m = -k}^{k} \\sum_{n = -k}^{k} I(i + m, j + n) K(m, n) $$ With $k = \\text{floor}\\left( \\frac{M}{2} \\right)$ square kernel of size $M$.\nSlides ed esempi (molto più chiaril) Vedi che per calcolare quell’8 sto facendo cose lineari con tutti pixel intorno ad essa.\nQuesto operatore l’abbiamo già trattato in modo molto breve in Deblur di immagini.\nCounting the parameters Convolutional layer $C_{out} = \\text{number of filters}$ $C_{in} = \\text{number of channels}$ $K = \\text{kernel size}$ The number of parameters is just dependent on the above three values, and the presence of the bias:\n$$ \\text{Num Params} = C_{out} \\cdot (C_{in} \\cdot K^{2} + 1) $$ Where $1$ is from the bias parameter.\nSome properties and uses Sappiamo tutti che le immagini non sono altro che arrai di valori in un certo intervallo, che rappresentano l’intensità dei colori, o solamente del bianco-grigio nel caso delle immagini grigio nere.\nQueste intensità si potrebbero anche rappresentare come superfici 3d in cui la posizione del pixel identifica x e y, mentre l’intensità la z, abbiamo quindi proprio delle superfici!, delle montagne, valli fiumi etc. Le cose molto interessanti sono cambi di intensità improvvisi (con derivata molto alta) ossia i dirupi, le valli, questo cambio improvviso (il cambio di fase come dice Pedro di Master algorithm) è classico anche in nautura, è la parte con qualche informazione di interesse diciamo.\nTHE IDEA OF DERIVATIVE FOR CHANGES\nSlide finite approssimation of derivative Comparison with Fully Connected Parameter sharing: convolutional networks share the parameters while fully connected do not. Local connectivity: in convolution layers neurons are connected only locally while in fully connected layers neurons are connected globally. HMAX model 🟥 The fundamental principle of HMAX model is the hierarchy of cells that encode deeper and more complex features (higher receptive fields). The $S$ cell is basically a gaussian. $w_{j}$ is some sort of parameter.\n$$ y = \\exp(- \\frac{1}{2\\sigma^{2}} \\sum_{i} (x_{i} - w_{j})^{2}) $$$$ y_{j} = \\max_{j = 1 \\dots N} x_{j} $$ Trained with unsupervised learning.\nSome what close to transfer learning: after you represented the lower features, you can use them for different tasks and just train the higher layers.\nA brief history of CNNs Neurocognitron, mostly historical, but laying the groundwork for CNNs LeNet-5 one of the first dense nets, for handwritten digits Then you have AI winter until 2012 with AlexNet. Image Filtering Image filtering modifies pixels in an image based on the values of neighboring pixels. The convolution operator is used to apply a filter (kernel) to an image, which can enhance or suppress certain features.\nUsually they are linear transforms, see Spazi vettoriali\nConvolutions h = 1 perché siamo in campo discreto (è anche il minimo h che possiamo considerare in questo setting), quel filtro quindi ci è utile per capire se ci sono dei cambi improvvisi.\nQuesta idea ci permette di costruire il kernel per identificare le linee (visible contours of the image), orizzontali (cambi direzione e avresti verticale). it’s a feature map, of the image to some characteristic of the image. (ti dice se in questa zona è presente, non c’è , o c’è l’opposto del pattern che cercavi).\nVisualization of Learned Features We can recover the image that maximally activates some layer of neurons, from these images we see that convolutional networks are highly sensitive to some kinds of activations, and generally are able to recover complex shapes and patterns starting from those.\nLower level features in layer 2 of AlexNet\nThis actually helped to gain some insight to improve the performance of the network (they reduced the kernel size and went deeper, e.g. VGG model)\nSome architectures Deepwise separable convolution Inception architecture 🟨 Andiamo a derfinire un modulo di inception (in cui va a fare in un certo senso scrambling, decomporre e recomporre dati, in che modo vanno ad estrarre delle features io non lo so!).\nComunque questa è l’architettura classica, andare ad utilizzare reti convoluzionali e poi operarle con reti deep (alla fine non molto deep) in modo da collegargli insieme.\nEsempio di inception module Un esempio è GoogleLeNet (molte computazioni in parallelo) https://www.youtube.com/watch?v=VxhSouuSZDY\u0026ab_channel=Udacity 1x1 is to reduce the number of channels (way to reduce the parameter count) in the following layers! So that the number of input channels is ok.\nResidual layers Residual learning is the main concept of these networks, it’s when we have a direct link with the beginning! In pratica diamo la possibilità al neurone di scegliere di non modificare o invece sì l’input credo, provo a chiedermi se posso avere un valore migliore di quanto ho attualmente con qualche peso.\nStructure of residual layer (He et al. 2016). Usually these links help the network learn (lesser vanishing gradient.\nShattered Gradients Most gradient descent methods assume to have a smooth gradient. This is not true anymore with very deep layers. Adding residual layers help ease this problem. The residual error signal is actually necessary to train these networks, as the following images show. Smoother Error Surfaces Introducing the residual layer helps in having smoother residual layers: Transfer learning Slide intuizione transfer learning expected graph with performance with transfer learning\n!\nComunque l’intuizione principale del transfer learning è l’idea che i primi layers facciano una sorta di estrazione di features più ad alto livello utili poi ai layers di deep NN. Se questa prima parte l’ho trainata su un corpus enorme, allora gli aspetti che è riuscito a generalizzare potrebbero essere utili anche per altro, e quindi utilizzo i pesi trovati in questa rete anche per altro, senza problemi.\nFine tune o finetuning è un pò rischioso, faccio un freeze di una parte del network più larga, potrei andare a overfittare e fare cose simili! Però ha più senso, ci aiuta a rendere l’intera architettura ancora più focussato in quello che vogliamo fare noi (in un certo senso forse dà via alcune generalizzazioni inutili nel nostro dominio)\nTraining of CNN Backpropagation of CNNs 🟨++ We can unroll the input and output layers as a single linear trasformation of a deep network (with weights adjusted accordingly). But how do we unroll?? We can see everything as a matrix with $[input\\_size \\times output\\_size]$ as you can see from the image in the toggle\nAfter we have modeled this matrix, we can learn using standard backpropagation we have talked about in Neural Networks.\nOne problem with this method is that the matrix is sparse if the input is very large and the kernel is small. This would result in a very high number of zeros, making it not very efficient to store in this way.\nAnother aspect of this matrix is the shifted repetition of weights. These weights are the same in each column of the matrix, but simply shifted. This changes how weight updates are performed; a weighted average update is used.\nTransposed Convolutions After too much downsampling with CNNs, I might want to increase the dimension again (for example, if the input is an image). Transposed convolutions allow us to increase the dimension back up. (I believe statistical techniques also work for this).\n! This technique is called transposed convolution because if we transpose the convolution matrix, we see that we are upscaling the input!. Però non ho capito in che modo funziona!\nDilated convolutions 🟩 Slide intuizione di questo Facciamo una specie di padding interno sul kernel (non vado a contare certe cose, però riesco a ingrandire la receptive field del mio network.\nHa più senso fare sta cosa quando sto analizzando HIGH RESOLUTION IMAGE in cui il valore dei pixel cambia molto poco. Una differenza con le Transposed convolutions (Upconvolution) è il fatto che quelle sono fatte sull’input, questa la facciamo su come viene calcolato il kernel. Sono molto utilizzate in temporal convolution networks, in cui provo a diluire volta per volta lo spazio all’interno del kernel, anche se non so ancora perché va\nUpsampling Nearest-neighbor and bed of nails NN upsampling just repeats the number in the position, while bed of nails is just putting the number in the position and zeroing everything else.\nMax-unpooling 🟨 You use the equivalent positions of the max-pooling layers, and then put the number in that position there, circled by zeros. Upconvolution 🟥 You have the same thing here:\nStrides, kernels, padding Sum when the things overlap You can also have a learnable kernel (which is an advantage of this method compared to others) Normalization layers Why normalization 🟨++ Reasons:\nHave a more stable and faster learning More independence between layers (e.g. Layer Norm) Why is normalization a good idea :D?\nSo the quantitative values are comparable from each other (e.g. ages and income) We want the output of the layers to be comparable from each other, the middle outputs are inputs for other layers! We can better control the activation layers. (non vogliamo che faccia come output NaN 😟) Decoupling of the layers. (non dobbiamo andare ad imparare il range di input aspettato, dato che sarà sempre data di stesso tipo) Batch Normalization 🟥 This paper introduces the idea of Batch Normalization.\nAs each layer observes the inputs produced by the layers below, it would be advantageous to achieve the same whitening of the inputs of each layer. By whitening the inputs to each layer, we would take a step towards achieving the fixed distributions of inputs that would remove the ill effects of the internal covariate shift.\nLeCun showed that whitened data speeds up learning, but it was applied only on the input layer. The idea here is to attempt to whiten the input data for every single layer, and this helps. (They call this the internal covariate shift). The thing is that you are learning the normalization parameters.\nProbably the internal covariate shift is not the real reason:\nInstead BatchNorm fundamentally impacts the training process by making the optimization landscape significantly smoother, thus leading to a more predictive and stable behaviour of the gradients\nThis is the most common form of normalization (ma l’idea è sempre la stessa, computare varianza e media, e poi sottrarre media e dividere per varianza). La cosa in più è che vengono aggiunte delle varianze e una media, per denormalizzare l’output, in modo che abbia la forma dei dati migliore possibile.\nIn reality, how it is implemented in pytorch is that $\\mu^{B}$ and $\\sigma^{B}$ are computed for each batch, and then used to normalize the output, they are not learned parameters. But an weighted average is kept for inference.\nBatch normalization makes weights in deeper layers more robust to changes to weights in the shallower layers of the network.\nOther Normalization 🟥 Potremmo provare a normalizzare per canale\nSlide normalizations !!\nReferences [1] He et al. “Deep Residual Learning for Image Recognition” IEEE 2016\n",
+  "wordCount" : "2045",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -243,7 +238,7 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
     <h1 class="post-title entry-hint-parent">
       Convolutional Neural Network
     </h1>
-    <div class="post-meta">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -252,7 +247,7 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul>
                 <li>
                     <a href="#introduction-to-convolutional-nn" aria-label="Introduction to Convolutional NN">Introduction to Convolutional NN</a><ul>
                         <ul>
@@ -264,7 +259,9 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
                     <a href="#the-convolution-operator--" aria-label="The convolution operator 🟩-">The convolution operator 🟩-</a><ul>
                         
                 <li>
-                    <a href="#correlation-operator" aria-label="Correlation operator">Correlation operator</a></li></ul>
+                    <a href="#correlation-operator" aria-label="Correlation operator">Correlation operator</a></li>
+                <li>
+                    <a href="#counting-the-parameters" aria-label="Counting the parameters">Counting the parameters</a></li></ul>
                 </li>
                 <li>
                     <a href="#some-properties-and-uses" aria-label="Some properties and uses">Some properties and uses</a><ul>
@@ -272,11 +269,15 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
                 <li>
                     <a href="#comparison-with-fully-connected" aria-label="Comparison with Fully Connected">Comparison with Fully Connected</a></li>
                 <li>
-                    <a href="#hmax-model" aria-label="HMAX model">HMAX model</a></li>
+                    <a href="#hmax-model-" aria-label="HMAX model 🟥">HMAX model 🟥</a></li>
                 <li>
-                    <a href="#hubel-and-wiesel-studies" aria-label="Hubel and Wiesel Studies">Hubel and Wiesel Studies</a></li>
+                    <a href="#a-brief-history-of-cnns" aria-label="A brief history of CNNs">A brief history of CNNs</a></li>
                 <li>
-                    <a href="#a-brief-history-of-cnns" aria-label="A brief history of CNNs">A brief history of CNNs</a></li></ul>
+                    <a href="#image-filtering" aria-label="Image Filtering">Image Filtering</a></li>
+                <li>
+                    <a href="#convolutions" aria-label="Convolutions">Convolutions</a></li>
+                <li>
+                    <a href="#visualization-of-learned-features" aria-label="Visualization of Learned Features">Visualization of Learned Features</a></li></ul>
                 </li></ul>
                 </li>
                 <li>
@@ -303,7 +304,7 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
                 <li>
                     <a href="#backpropagation-of-cnns-" aria-label="Backpropagation of CNNs 🟨&#43;&#43;">Backpropagation of CNNs 🟨++</a></li>
                 <li>
-                    <a href="#transposed-convolutions" aria-label="Transposed convolutions">Transposed convolutions</a></li>
+                    <a href="#transposed-convolutions" aria-label="Transposed Convolutions">Transposed Convolutions</a></li>
                 <li>
                     <a href="#dilated-convolutions-" aria-label="Dilated convolutions 🟩">Dilated convolutions 🟩</a></li>
                 <li>
@@ -312,23 +313,25 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
                 <li>
                     <a href="#nearest-neighbor-and-bed-of-nails" aria-label="Nearest-neighbor and bed of nails">Nearest-neighbor and bed of nails</a></li>
                 <li>
-                    <a href="#max-unpooling" aria-label="Max-unpooling">Max-unpooling</a></li>
+                    <a href="#max-unpooling-" aria-label="Max-unpooling 🟨">Max-unpooling 🟨</a></li>
                 <li>
-                    <a href="#upconvolution" aria-label="Upconvolution">Upconvolution</a></li></ul>
+                    <a href="#upconvolution-" aria-label="Upconvolution 🟥">Upconvolution 🟥</a></li></ul>
                 </li></ul>
                 </li>
                 <li>
                     <a href="#normalization-layers" aria-label="Normalization layers">Normalization layers</a><ul>
                         
                 <li>
-                    <a href="#why-normalization-" aria-label="Why normalization 🟥">Why normalization 🟥</a></li>
+                    <a href="#why-normalization-" aria-label="Why normalization 🟨&#43;&#43;">Why normalization 🟨++</a></li>
                 <li>
                     <a href="#batch-normalization-" aria-label="Batch Normalization 🟥">Batch Normalization 🟥</a></li>
                 <li>
-                    <a href="#other-normalization-" aria-label="Other Normalization 🟥">Other Normalization 🟥</a>
+                    <a href="#other-normalization-" aria-label="Other Normalization 🟥">Other Normalization 🟥</a></li></ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#references" aria-label="References">References</a>
                 </li>
-            </ul>
-            </li>
             </ul>
         </div>
     </details>
@@ -336,11 +339,28 @@ $$Il prodotto di convoluzione è matematicamente molto contorto, anche se nella 
 
   <div class="post-content"><h2 id="introduction-to-convolutional-nn">Introduction to Convolutional NN<a hidden class="anchor" aria-hidden="true" href="#introduction-to-convolutional-nn">#</a></h2>
 <h4 id="design-goals">Design Goals<a hidden class="anchor" aria-hidden="true" href="#design-goals">#</a></h4>
-<p>We want to be invariant to some transformations but also at the same time to be specific to some thing</p>
+<p>We want to be invariant to some transformations but also at the same time to be specific to some thing.
+Convolutional Neural Networks (CNNs) are a class of deep neural networks that are particularly effective for image processing tasks. They are designed to automatically and adaptively learn spatial hierarchies of features from images.
+Compared to standard Fully connected <a href="/notes/neural-networks">Neural Networks</a>, they reuse weights, making their number of parameter much fewer.</p>
+<p>Historically, they were inspired by the visual cortex of animals, where simple cells respond to specific orientations and complex cells respond to combinations of simple cells. See Hubel and Wiesel experiment, they also saw that there is some hierarchical organization of how the cells communicate with each other.</p>
 <h3 id="the-convolution-operator--">The convolution operator 🟩-<a hidden class="anchor" aria-hidden="true" href="#the-convolution-operator--">#</a></h3>
 $$
-\sum_{i} \sum_{j} h(x - i, y - j) f(i, j)
-$$<p>Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un <strong>filter</strong> che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell’immagine.</p>
+\begin{align*}
+I'(i,j) &= \sum_{m=-k}^{k} \sum_{n=-k}^{k} I(i - m, j - n) K(m, n) \\
+&= \sum_{m=-k}^{k} \sum_{n=-k}^{k} I(i + m, j + n) K(-m, -n)
+\end{align*}
+$$<p>Il prodotto di convoluzione è matematicamente molto contorto, anche se nella pratica è una cosa molto molto semplice. In pratica voglio calcolare il valore di un pixel in funzione di certi suoi vicini, moltiplicati per un <strong>filter</strong> che in pratica è una matrice di pesi, che definisce un pattern lineare a cui sarei interessato di cercare nell&rsquo;immagine.</p>
+$$
+(\mathcal{T \circ \text{ shift }})(g) = (\text{shift} \circ \mathcal{T})(g)
+$$<h4 id="correlation-operator">Correlation operator<a hidden class="anchor" aria-hidden="true" href="#correlation-operator">#</a></h4>
+$$
+(f*g)(t) = \sum_{\tau = -\infty}^{\infty} f(\tau)g(t-\tau)
+$$<p>Pytorch usually learns correlations, but calls it convolution, because the orientation of the filter is learned does not matter much.
+The two operations are <strong>equivalent given symmetric</strong> kernels.</p>
+$$
+I'(i, j) = \sum_{m = -k}^{k} \sum_{n = -k}^{k} I(i + m, j + n) K(m, n)
+$$<p>
+With $k = \text{floor}\left( \frac{M}{2} \right)$ square kernel of size $M$.</p>
 <ul>
 <li>
 <p>Slides ed esempi (molto più chiaril)
@@ -350,11 +370,21 @@ Vedi che per calcolare quell’8 sto facendo cose lineari con tutti pixel intorn
 </li>
 </ul>
 <p>Questo operatore l’abbiamo già trattato in modo molto breve in <a href="/notes/deblur-di-immagini">Deblur di immagini</a>.</p>
-<h4 id="correlation-operator">Correlation operator<a hidden class="anchor" aria-hidden="true" href="#correlation-operator">#</a></h4>
+<h4 id="counting-the-parameters">Counting the parameters<a hidden class="anchor" aria-hidden="true" href="#counting-the-parameters">#</a></h4>
+<ul>
+<li>Convolutional layer
+<ul>
+<li>$C_{out} = \text{number of filters}$</li>
+<li>$C_{in} = \text{number of channels}$</li>
+<li>$K = \text{kernel size}$</li>
+</ul>
+</li>
+</ul>
+<p>The number of parameters is just dependent on the above three values, and the presence of the bias:</p>
 $$
-(f*g)(t) = \sum_{\tau = -\infty}^{\infty} f(\tau)g(t-\tau)
-$$<p>Pytorch usually learns correlations, but calls it convolution, because the orientation of the filter is learned does not matter much.
-The two operations are <strong>equivalent given symmetric</strong> kernels.</p>
+\text{Num Params} = C_{out} \cdot (C_{in} \cdot K^{2} + 1)
+$$<p>
+Where $1$ is from the bias parameter.</p>
 <h3 id="some-properties-and-uses">Some properties and uses<a hidden class="anchor" aria-hidden="true" href="#some-properties-and-uses">#</a></h3>
 <p>Sappiamo tutti che le immagini non sono altro che arrai di valori in un certo intervallo, che rappresentano l’intensità dei colori, o solamente del bianco-grigio nel caso delle immagini grigio nere.</p>
 <p>Queste intensità si potrebbero anche rappresentare come superfici 3d in cui la posizione del pixel identifica x e y, mentre l’intensità la z, abbiamo quindi proprio delle superfici!, delle montagne, valli fiumi etc. Le cose molto interessanti sono cambi di intensità improvvisi (con derivata molto alta) ossia i dirupi, le valli, questo cambio improvviso (il cambio di fase come dice Pedro di Master algorithm) è classico anche in nautura, è la parte con qualche informazione di interesse diciamo.</p>
@@ -367,12 +397,37 @@ The two operations are <strong>equivalent given symmetric</strong> kernels.</p>
 <li><strong>Parameter sharing</strong>: convolutional networks share the parameters while fully connected do not.</li>
 <li><strong>Local connectivity:</strong> in convolution layers neurons are connected only locally while in fully connected layers neurons are connected globally.</li>
 </ul>
-<h4 id="hmax-model">HMAX model<a hidden class="anchor" aria-hidden="true" href="#hmax-model">#</a></h4>
-<h4 id="hubel-and-wiesel-studies">Hubel and Wiesel Studies<a hidden class="anchor" aria-hidden="true" href="#hubel-and-wiesel-studies">#</a></h4>
+<h4 id="hmax-model-">HMAX model 🟥<a hidden class="anchor" aria-hidden="true" href="#hmax-model-">#</a></h4>
+<p>The fundamental principle of HMAX model is the hierarchy of cells that encode deeper and more complex features (higher receptive fields).
+<img src="/images/notes/Convolutional Neural Network-20250520135334007.webp" style="width: 100%" class="center" alt="Convolutional Neural Network-20250520135334007"></p>
+<p>The $S$ cell is basically a gaussian. $w_{j}$ is some sort of parameter.</p>
+$$
+y = \exp(- \frac{1}{2\sigma^{2}} \sum_{i} (x_{i} - w_{j})^{2})
+$$$$
+y_{j} = \max_{j = 1 \dots N} x_{j}
+$$<p>
+Trained with unsupervised learning.</p>
+<p>Some what close to transfer learning: after you represented the lower features, you can use them for different tasks and just train the higher layers.</p>
 <h4 id="a-brief-history-of-cnns">A brief history of CNNs<a hidden class="anchor" aria-hidden="true" href="#a-brief-history-of-cnns">#</a></h4>
+<ul>
+<li>Neurocognitron, mostly historical, but laying the groundwork for CNNs</li>
+<li>LeNet-5 one of the first dense nets, for handwritten digits</li>
+<li>Then you have AI winter until 2012 with AlexNet.</li>
+</ul>
+<h4 id="image-filtering">Image Filtering<a hidden class="anchor" aria-hidden="true" href="#image-filtering">#</a></h4>
+<p>Image filtering modifies pixels in an image based on the values of neighboring pixels. The convolution operator is used to apply a filter (kernel) to an image, which can enhance or suppress certain features.</p>
+<p>Usually they are <strong>linear transforms</strong>, see <a href="/notes/spazi-vettoriali">Spazi vettoriali</a></p>
+<h4 id="convolutions">Convolutions<a hidden class="anchor" aria-hidden="true" href="#convolutions">#</a></h4>
 <img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 2">
 <p>h = 1 perché siamo in campo discreto (è anche il minimo h che possiamo considerare in questo setting), quel filtro quindi ci è utile per capire se ci sono dei cambi improvvisi.</p>
 <p>Questa idea ci permette di costruire il kernel per identificare le linee (visible contours of the image), orizzontali (cambi direzione e avresti verticale). it’s a <strong>feature map</strong>, of the image to some characteristic of the image. (ti dice se in questa zona è presente, non c’è , o c’è l’opposto del pattern che cercavi).</p>
+<h4 id="visualization-of-learned-features">Visualization of Learned Features<a hidden class="anchor" aria-hidden="true" href="#visualization-of-learned-features">#</a></h4>
+<p>We can recover the image that maximally activates some layer of neurons, from these images we see that convolutional networks are highly sensitive to some kinds of activations, and generally are able to recover complex shapes and patterns starting from those.</p>
+<figure class="center">
+<img src="/images/notes/Convolutional Neural Network-20250520142336325.webp" style="width: 100%"   alt="Convolutional Neural Network-20250520142336325" title="Convolutional Neural Network-20250520142336325"/>
+<figcaption><p style="text-align:center;">Lower level features in layer 2 of AlexNet</p></figcaption>
+</figure>
+<p>This actually helped to gain some insight to improve the performance of the network (they reduced the kernel size and went deeper, e.g. VGG model)</p>
 <h2 id="some-architectures">Some architectures<a hidden class="anchor" aria-hidden="true" href="#some-architectures">#</a></h2>
 <h3 id="deepwise-separable-convolution">Deepwise separable convolution<a hidden class="anchor" aria-hidden="true" href="#deepwise-separable-convolution">#</a></h3>
 <h3 id="inception-architecture-">Inception architecture 🟨<a hidden class="anchor" aria-hidden="true" href="#inception-architecture-">#</a></h3>
@@ -385,17 +440,18 @@ Un esempio è GoogleLeNet (molte computazioni in parallelo)</li>
 </ul>
 <img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 3">
   <a href="https://www.youtube.com/watch?v=VxhSouuSZDY&ab_channel=Udacity">https://www.youtube.com/watch?v=VxhSouuSZDY&ab_channel=Udacity</a>
-<p>1x1 is to reduce the number of channels (way to reduce the parameter count).</p>
+<p>1x1 is to reduce the number of channels (way to reduce the parameter count) in the following layers! So that the number of input channels is ok.</p>
 <h3 id="residual-layers">Residual layers<a hidden class="anchor" aria-hidden="true" href="#residual-layers">#</a></h3>
 <p><strong>Residual learning</strong> is the main concept of these networks, it’s when we have a direct link with the beginning! In pratica diamo la possibilità al neurone di scegliere di non modificare o invece sì l’input credo, provo a chiedermi se posso avere un valore migliore di quanto ho attualmente con qualche peso.</p>
 <ul>
-<li>Structure of residual layer</li>
+<li>Structure of residual layer <a href="http://ieeexplore.ieee.org/document/7780459/">(He et al. 2016)</a>.</li>
 </ul>
-<p><a href="https://arxiv.org/pdf/1512.03385.pdf"><a href="https://arxiv.org/pdf/1512.03385.pdf">https://arxiv.org/pdf/1512.03385.pdf</a></a></p>
 <img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 4">
 <p>Usually these links help the network learn (lesser vanishing gradient.</p>
 <h4 id="shattered-gradients">Shattered Gradients<a hidden class="anchor" aria-hidden="true" href="#shattered-gradients">#</a></h4>
-<p>Most gradient descent methods assume to have a smooth gradient. This is not true anymore with very deep layers. Adding residual layers help ease this problem.</p>
+<p>Most gradient descent methods assume to have a smooth gradient. This is not true anymore with very deep layers. Adding residual layers help ease this problem.
+The residual error signal is actually necessary to train these networks, as the following images show.
+<img src="/images/notes/Convolutional Neural Network-20250520142932912.webp" style="width: 100%" class="center" alt="Convolutional Neural Network-20250520142932912"></p>
 <h4 id="smoother-error-surfaces">Smoother Error Surfaces<a hidden class="anchor" aria-hidden="true" href="#smoother-error-surfaces">#</a></h4>
 <p>Introducing the residual layer helps in having smoother residual layers:
 <img src="/images/notes/Convolutional NN-20250206160716966.webp" style="width: 100%" class="center" alt="Convolutional NN-20250206160716966"></p>
@@ -414,26 +470,17 @@ Un esempio è GoogleLeNet (molte computazioni in parallelo)</li>
 <p><strong>Fine tune o finetuning</strong> è un pò rischioso, faccio un freeze di una parte del network più larga, potrei andare a overfittare e fare cose simili! Però ha più senso, ci aiuta a rendere l’intera architettura ancora più focussato in quello che vogliamo fare noi (in un certo senso forse dà via alcune generalizzazioni inutili nel nostro dominio)</p>
 <h2 id="training-of-cnn">Training of CNN<a hidden class="anchor" aria-hidden="true" href="#training-of-cnn">#</a></h2>
 <h3 id="backpropagation-of-cnns-">Backpropagation of CNNs 🟨++<a hidden class="anchor" aria-hidden="true" href="#backpropagation-of-cnns-">#</a></h3>
-<p>We can unroll the input and output layers as a single linear trasformation of a deep network (with weights adjusted accordingly).</p>
-<ul>
-<li>Intuition of unrolling</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 7"></p>
+<p>We can unroll the input and output layers as a single linear trasformation of a deep network (with weights adjusted accordingly).
+<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 7"></p>
 <p>But how do we unroll?? We can see everything as a matrix with $[input\_size \times output\_size]$ as you can see from the image in the toggle</p>
-<ul>
-<li>Slide convolution matrix of the weights</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 8"></p>
-<p>After we have modelled this matrix, we can learn using standard backpropagation we have talked about in <a href="/notes/neural-networks">Neural Networks</a>.</p>
-<p>Un problema per questo metodo è la matrice è <strong>sparsa</strong> se input è molto largo, e kernel piccolo, avrei un  numero di zeri assurdo, quindi nemmeno molto efficiente da memorizzare in questo modo. (però possiamo computare in modo efficiente, ma questo non lo trattiamo).</p>
-<p>Un altro aspetto di questa matrice è la <strong>ripetizione shiftata</strong> dei pesi, che sono gli stessi in ogni colonna della matrice, ma solamente shiftato. Questo cambia il modo di fare update dei pesi, si utilizza l’update con average pesato. fra le 4 computazioni delle 4 colonne in esempio.</p>
-<h3 id="transposed-convolutions">Transposed convolutions<a hidden class="anchor" aria-hidden="true" href="#transposed-convolutions">#</a></h3>
-<p>Dopo che ho fatto troppo downsampling con le CNN, vorrei tornare sù di dimensione (se per esempio un input è un’immagine. Trasposed convolutions ci permettono di tornare su di dimensione. (anche tecniche statistiche credo che funzionino).</p>
-<ul>
-<li>Slide transposed convolutions</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 9">
-!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 10"></p>
+<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 8">
+<p>After we have modeled this matrix, we can learn using standard backpropagation we have talked about in <a href="/notes/neural-networks">Neural Networks</a>.</p>
+<p>One problem with this method is that the matrix is <strong>sparse</strong> if the input is very large and the kernel is small. This would result in a very high number of zeros, making it not very efficient to store in this way.</p>
+<p>Another aspect of this matrix is the <strong>shifted repetition</strong> of weights. These weights are the same in each column of the matrix, but simply shifted. This changes how weight updates are performed; a weighted average update is used.</p>
+<h3 id="transposed-convolutions">Transposed Convolutions<a hidden class="anchor" aria-hidden="true" href="#transposed-convolutions">#</a></h3>
+<p>After too much downsampling with CNNs, I might want to increase the dimension again (for example, if the input is an image). <strong>Transposed convolutions</strong> allow us to increase the dimension back up. (I believe statistical techniques also work for this).</p>
+<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 9">
+!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 10">
 <p>This technique is called transposed convolution because if we transpose the convolution matrix, we see that we are upscaling the input!. Però non ho capito in che modo funziona!</p>
 <h3 id="dilated-convolutions-">Dilated convolutions 🟩<a hidden class="anchor" aria-hidden="true" href="#dilated-convolutions-">#</a></h3>
 <ul>
@@ -448,9 +495,10 @@ Sono molto utilizzate in <strong>temporal convolution networks</strong>, in cui 
 <h3 id="upsampling">Upsampling<a hidden class="anchor" aria-hidden="true" href="#upsampling">#</a></h3>
 <h4 id="nearest-neighbor-and-bed-of-nails">Nearest-neighbor and bed of nails<a hidden class="anchor" aria-hidden="true" href="#nearest-neighbor-and-bed-of-nails">#</a></h4>
 <p>NN upsampling just repeats the number in the position, while bed of nails is just putting the number in the position and zeroing everything else.</p>
-<h4 id="max-unpooling">Max-unpooling<a hidden class="anchor" aria-hidden="true" href="#max-unpooling">#</a></h4>
-<p>You use the equivalent positions of the max-pooling layers, and then put the number in that position there, circled by zeros.</p>
-<h4 id="upconvolution">Upconvolution<a hidden class="anchor" aria-hidden="true" href="#upconvolution">#</a></h4>
+<h4 id="max-unpooling-">Max-unpooling 🟨<a hidden class="anchor" aria-hidden="true" href="#max-unpooling-">#</a></h4>
+<p>You use the equivalent positions of the max-pooling layers, and then put the number in that position there, circled by zeros.
+<img src="/images/notes/Convolutional Neural Network-20250520141951550.webp" style="width: 100%" class="center" alt="Convolutional Neural Network-20250520141951550"></p>
+<h4 id="upconvolution-">Upconvolution 🟥<a hidden class="anchor" aria-hidden="true" href="#upconvolution-">#</a></h4>
 <p>You have the same thing here:</p>
 <ul>
 <li>Strides, kernels, padding</li>
@@ -458,9 +506,12 @@ Sono molto utilizzate in <strong>temporal convolution networks</strong>, in cui 
 <li>You can also have a learnable kernel (which is an advantage of this method compared to others)</li>
 </ul>
 <h2 id="normalization-layers">Normalization layers<a hidden class="anchor" aria-hidden="true" href="#normalization-layers">#</a></h2>
-<h3 id="why-normalization-">Why normalization 🟥<a hidden class="anchor" aria-hidden="true" href="#why-normalization-">#</a></h3>
-<p>Reasons:
-<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 13"></p>
+<h3 id="why-normalization-">Why normalization 🟨++<a hidden class="anchor" aria-hidden="true" href="#why-normalization-">#</a></h3>
+<p>Reasons:</p>
+<ul>
+<li>Have a more stable and faster learning</li>
+<li>More independence between layers (e.g. Layer Norm)</li>
+</ul>
 <p>Why is normalization a good idea :D?</p>
 <ul>
 <li>So the quantitative values are comparable from each other (e.g. ages and income)</li>
@@ -488,6 +539,8 @@ The thing is that you are learning the normalization parameters.</p>
 <li>Slide normalizations</li>
 </ul>
 <p>!!<img src="/images/notes/image/universita/ex-notion/Convolutional NN/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Convolutional NN/Untitled 15"></p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] He et al. <a href="http://ieeexplore.ieee.org/document/7780459/">“Deep Residual Learning for Image Recognition”</a> IEEE  2016</p>
 
 
   </div>
