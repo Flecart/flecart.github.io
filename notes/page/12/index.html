@@ -199,6 +199,50 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Bayesian Optimization
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>While Active Learning looks for the most informative points to recover a true underlying function, Bayesian Optimization is just interested to find the maximum of that function. In Bayesian Optimization, we ask for the best way to find sequentially a set of points $x_{1}, \dots, x_{n}$ to find $\max_{x \in \mathcal{X}} f(x)$ for a certain unknown function $f$. This is what the whole thing is about.
+Definitions First we will introduce some useful definitions in this context. These were also somewhat introduced in N-Bandit Problem, which is one of the classical optimization problems we can find in the literature.
+...</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Bayesian Optimization" href="https://flecart.github.io/notes/bayesian-optimization/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Beta and Dirichlet Distributions
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>The beta distribution The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here’s a structured intuition to grasp its essence:
+Core Concept The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.
+Key Intuitions a. “Pseudo-Counts” Interpretation α acts like “successes” and β like “failures” in a hypothetical experiment. Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data. After observing x real successes and y real failures, the posterior becomes Beta(α&#43;x, β&#43;y). This makes beta the conjugate prior for the binomial distribution (bernoulli process). b. Shape Flexibility Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely. Bell-shaped: When α, β &gt; 1, the distribution peaks at mode = (α-1)/(α&#43;β-2). Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5). U-shaped: When α, β &lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.). Skewed: If α &gt; β, skewed toward 1; if β &gt; α, skewed toward 0. c. Moments Mean: $α/(α&#43;β)$ – your “expected” probability of success. Variance: $αβ / [(α&#43;β)²(α&#43;β&#43;1)]$ – decreases as α and β grow (more confidence). $$ \text{Mode} = \frac{\alpha - 1}{\alpha &#43; \beta - 2} $$The mathematical model $$ \text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1} $$ Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( &#43; b)$ And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Beta and Dirichlet Distributions" href="https://flecart.github.io/notes/beta-and-dirichlet-distributions/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Counterfactual Invariance
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> Machine learning cannot distinguish between causal and environment features.
+Shortcut learning Often we observe shortcut learning: the model learns some dataset dependent shortcuts (e.g. the machine that was used to take the X-ray) to make inference, but this is very brittle, and is not usually able to generalize.
+Shortcut learning happens when there are correlations in the test set between causal and non-causal features. Our object of interest should be the main focus, not the environment around, in most of the cases. For example, a camel in a grass land should still be recognized as a camel, not a cow. One solution could be engineering invariant representations which are independent of the environment. So having a kind of encoder that creates these representations.
+...</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Counterfactual Invariance" href="https://flecart.github.io/notes/counterfactual-invariance/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Cross Validation and Model Selection
     </h2>
   </header>
@@ -296,46 +340,6 @@ The motivation for boosting was a procedure that combines the outputs of many �
   </div>
   <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Ensemble Methods" href="https://flecart.github.io/notes/ensemble-methods/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Fisher&#39;s Linear Discriminant
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>A simple motivation Fisher’s Linear Discriminant is a simple idea used to linearly classify our data. The image above, taken from (Bishop 2006), is the summary of the idea. We clearly see that if we first project using the direction of maximum variance (See Principal Component Analysis) then the data is not linearly separable, but if we take other notions into consideration, then the idea becomes much more cleaner.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Fisher&#39;s Linear Discriminant" href="https://flecart.github.io/notes/fishers-linear-discriminant/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Gaussian Processes
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Gaussian processes can be viewed through a Bayesian lens of the function space: rather than sampling over individual data points, we are now sampling over entire functions. They extend the idea of bayesian linear regression by introducing an infinite number of feature functions for the input XXX.
-In geostatistics, Gaussian processes are referred to as kriging regressions, and many other models, such as Kalman Filters or radial basis function networks, can be understood as special cases of Gaussian processes. In this framework, certain functions are more likely than others, and we aim to model this probability distribution.
-...</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Gaussian Processes" href="https://flecart.github.io/notes/gaussian-processes/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Graph Databases
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>We have first cited the graph data model in the Introduction to Big Data note. Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases. We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles. We call index-free adjacency: we use physical memory pointers to store the graph.
-...</p>
-  </div>
-  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Graph Databases" href="https://flecart.github.io/notes/graph-databases/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

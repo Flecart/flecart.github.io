@@ -152,7 +152,7 @@ If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: w
   "keywords": [
     "machine-perception"
   ],
-  "articleBody": "On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.\nThe Autoregressive property 🟩 Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:\n$$ p(x) = \\prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don’t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we’ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).\nFully Visible Belief Networks 🟨– $$ p(x_{t}) = \\text{Bern}(f_{t}(x_{0:t-1};\\theta_{t}))) $$ If the parameters are different, this model just needs around $\\sum_{i= 0}^{T} \\lvert \\theta_{i} \\rvert$ parameters, where $\\theta_{i}$ parameterizes $f_{t}$\nThis is the idea of fully visible belief networks in the image below: One of the main drawbacks of this model is the simplicity, which means probably it cannot encode many different functions. And heavy dependence on ordering (not all problems are text-like autoregressive).\nNeural Autoregressive Density Estimation 🟨– These are other lecture notes: here, or see paper (Larochelle \u0026 Murray 2011). Here they add a number of hidden states to the model, which makes the model more expressive. This is the idea behind the Neural Autoregressive Density Estimation.\nThey leverage the probability product rule and a weight sharing scheme inspired from restricted Boltzmann machines, to yield an estimator that is both tractable and has good generalization performance.\nThe number of parameters in this model is just $\\mathcal{O}(nd)$ instead of $n^{2}d$ for the previous model. We have that $X \\in \\mathbb{R}^{d \\times n}$ where $n$ is the number of items and $d$ the feature vector length, and $W \\in \\mathbb{R}^{h\\times d}$, and $V \\in \\mathbb{R}^{d \\times h}$ to have a prediction And computing $h_{i + 1}$ starting from the step before is also quite efficient. The $V$ is different for each timestamp. $$ \\frac{1}{T}\\sum_{i = 1}^{T}\\log p(\\boldsymbol{x}^{(i)}) = \\frac{1}{T}\\sum_{i = 1}^{T}\\sum_{j = 1}^{N} \\log p(x_{j}^{(i)} \\mid \\boldsymbol{x}^{(i)}_{",
+  "articleBody": "On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.\nThe Autoregressive property 🟩 Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:\n$$ p(x) = \\prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don’t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we’ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).\nFully Visible Belief Networks 🟨 $$ p(x_{t}) = \\text{Bern}(f_{t}(x_{0:t-1};\\theta_{t}))) $$ If the parameters are different, this model just needs around $\\sum_{i= 0}^{T} \\lvert \\theta_{i} \\rvert$ parameters, where $\\theta_{i}$ parameterizes $f_{t}$\nThis is the idea of fully visible belief networks in the image below: One of the main drawbacks of this model is the simplicity, which means probably it cannot encode many different functions. And heavy dependence on ordering (not all problems are text-like autoregressive).\nNeural Autoregressive Density Estimation 🟨– These are other lecture notes: here, or see paper (Larochelle \u0026 Murray 2011). Here they add a number of hidden states to the model, which makes the model more expressive. This is the idea behind the Neural Autoregressive Density Estimation.\nThey leverage the probability product rule and a weight sharing scheme inspired from restricted Boltzmann machines, to yield an estimator that is both tractable and has good generalization performance.\nThe number of parameters in this model is just $\\mathcal{O}(nd)$ instead of $n^{2}d$ for the previous model. We have that $X \\in \\mathbb{R}^{d \\times n}$ where $n$ is the number of items and $d$ the feature vector length, and $W \\in \\mathbb{R}^{h\\times d}$, and $V \\in \\mathbb{R}^{d \\times h}$ to have a prediction And computing $h_{i + 1}$ starting from the step before is also quite efficient. The $V$ is different for each timestamp. $$ \\frac{1}{T}\\sum_{i = 1}^{T}\\log p(\\boldsymbol{x}^{(i)}) = \\frac{1}{T}\\sum_{i = 1}^{T}\\sum_{j = 1}^{N} \\log p(x_{j}^{(i)} \\mid \\boldsymbol{x}^{(i)}_{",
   "wordCount" : "343",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
@@ -264,7 +264,7 @@ If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: w
                 <li>
                     <a href="#the-autoregressive-property-" aria-label="The Autoregressive property 🟩">The Autoregressive property 🟩</a></li>
                 <li>
-                    <a href="#fully-visible-belief-networks---" aria-label="Fully Visible Belief Networks 🟨&ndash;">Fully Visible Belief Networks 🟨&ndash;</a></li>
+                    <a href="#fully-visible-belief-networks-" aria-label="Fully Visible Belief Networks 🟨">Fully Visible Belief Networks 🟨</a></li>
                 <li>
                     <a href="#neural-autoregressive-density-estimation---" aria-label="Neural Autoregressive Density Estimation 🟨&ndash;">Neural Autoregressive Density Estimation 🟨&ndash;</a></li>
                 <li>
@@ -303,7 +303,7 @@ p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1})
 $$<p>
 If we assume independence between the variables, we don&rsquo;t need many variables to model it $2T$, but this assumption is too strong.
 If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).</p>
-<h4 id="fully-visible-belief-networks---">Fully Visible Belief Networks 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#fully-visible-belief-networks---">#</a></h4>
+<h4 id="fully-visible-belief-networks-">Fully Visible Belief Networks 🟨<a hidden class="anchor" aria-hidden="true" href="#fully-visible-belief-networks-">#</a></h4>
 $$
 p(x_{t}) = \text{Bern}(f_{t}(x_{0:t-1};\theta_{t})))
 $$<p>
@@ -334,7 +334,7 @@ What they have done is to <strong>mask out</strong> every computational path bet
 <li>Criterion is Negative Log Likelihood for binary $x$</li>
 <li>Computing $p(x)$ is just a matter of performing a forward pass</li>
 <li>Sampling however requires $D$ forward passes</li>
-<li>In practice, very large hidden layers necessary</li>
+<li>In practice, <em>very large hidden layers necessary</em>, it makes it a little bit too large, probably it&rsquo;s because the neurons are quite restrained regarding their possible connections that they can have.</li>
 </ul>
 <blockquote>
 <p>The key is to use masks that are designed in such a way that the output is autoregressive for a given ordering of the inputs, i.e. that each input dimension is reconstructed solely from the dimensions preceding it.</p></blockquote>
@@ -364,9 +364,9 @@ they use <strong>temporal causal networks</strong> to attempt to model long rang
 <h4 id="transformers-">Transformers 🟩<a hidden class="anchor" aria-hidden="true" href="#transformers-">#</a></h4>
 <p>See Transformers.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] Germain et al. <a href="https://proceedings.mlr.press/v37/germain15.html">“MADE: Masked Autoencoder for Distribution Estimation”</a> PMLR  2015</p>
+<p>[1] Larochelle &amp; Murray <a href="https://proceedings.mlr.press/v15/larochelle11a.html">“The Neural Autoregressive Distribution Estimator”</a> {JMLR Workshop and Conference Proceedings}  2011</p>
 <p>[2] Devlin et al. <a href="http://arxiv.org/abs/1810.04805">“BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding”</a> arXiv preprint arXiv:1810.04805 2019</p>
-<p>[3] Larochelle &amp; Murray <a href="https://proceedings.mlr.press/v15/larochelle11a.html">“The Neural Autoregressive Distribution Estimator”</a> {JMLR Workshop and Conference Proceedings}  2011</p>
+<p>[3] Germain et al. <a href="https://proceedings.mlr.press/v37/germain15.html">“MADE: Masked Autoencoder for Distribution Estimation”</a> PMLR  2015</p>
 
 
   </div>
