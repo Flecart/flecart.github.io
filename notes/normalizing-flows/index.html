@@ -139,8 +139,8 @@ This approach to modelling a flexible distribution is called a normalizing flow 
   "keywords": [
     "machine-perception"
   ],
-  "articleBody": "Normalizing flows have both latent space and can produce tractable explicit probability distributions (closer to Autoregressive Modelling, they have tractable distributions, but not a latent space). This means we are able to get the likelihoods of a certain sample.\nThis approach to modelling a flexible distribution is called a normalizing flow because the transformation of a probability distribution through a sequence of mappings is somewhat analogous to the flow of a fluid. From (Bishop \u0026 Bishop 2024)\nThe main idea The intuition here is that we can both have a latent space and some sort of autoregressive modelling. We want\nAn analytical model that is easy to sample from. We want this distribution to be able to represent complex data. The idea is to use many change of variables, $$\\iint_R f(x,y) \\, dx \\, dy = \\iint_G f(g(u,v),h(u,v)) \\, J(u,v) \\, du \\, dv$$$$ dx = \\left\\lvert \\det \\left( \\frac{ \\partial f^{-1}(z) }{ \\partial z } \\right) \\right\\rvert dz $$$$ dx = dz \\left\\lvert \\det \\left( \\frac{ \\partial f(z) }{ \\partial z } \\right) \\right\\rvert ^{-1} $$ And you can remember that if we have an invertible matrix $A$ then you can take out the inverse thing.\nNormalizing Flows Normalizing flows are direct application of the change of variables formula. we have three desiderata:\nInvertible Differentiable Preserve dimensionality The model $$ f_{\\theta}: \\mathbb{R}^{d} \\to \\mathbb{R}^{d}, \\text{s.t., } X = f_{\\theta}(Z) \\cap Z = f_{\\theta}^{-1}(X) $$ It is important that the transformation is invertible (but this raises also expressivity concerns, because it limits possible functions).\n$$ p_{X}(x ; \\theta) = p_{z} (f^{-1}_{\\theta}(x)) \\cdot \\left\\lvert \\det \\left( \\frac{ \\partial f^{-1}_{\\theta}(x) }{ \\partial x } \\right) \\right\\rvert $$Parameterizing the transformation We want to find a way to learn the function $f$. The difficulty is having invertible neural networks here, and that it preserves the dimensionality. (Some activations like ReLU are not invertible). And we want to be able to compute the Jacobian efficiently, it is possible to compute it in $O(d)$ if we have a triangular matrix (it is just the diagonal).\n$$ x = f(z) = f_{k} \\circ f_{k - 1} \\circ \\ldots \\circ f_{1}(z) $$$$ p_{X}(x ; \\theta) = p_{Z}(z) \\cdot \\prod_{i = 1}^{k} \\left\\lvert \\det \\left( \\frac{ \\partial f_{i}^{-1}(x) }{ \\partial x } \\right) \\right\\rvert $$The Coupling Layer 🟨 The main idea of a normalizing flow is to couple some invertible transformation to be able to get both the likelihood of generated data and the generation itself. Simply stacking linear layers, though invertible, does not work (stack of linear layers is still a linear layer)\nHere we use a similar idea present in cryptography for the Feistel network, see Block Ciphers, the idea to partition the space of parameters and apply a transformation to only part of the parameters, this technique has been named real NVP (non-volume preserving).\n$$ \\begin{pmatrix} y_{A} \\\\ y_{B} \\end{pmatrix} = \\begin{pmatrix} h(x_{A}, x_{B}; \\theta) \\\\ x_{B} \\end{pmatrix} $$$$ \\begin{pmatrix} x_{A} \\\\ x_{B} \\end{pmatrix} = \\begin{pmatrix} h^{-1}(y_{A}, y_{B}; \\theta) \\\\ y_{B} \\end{pmatrix} $$$$ h(x_{A}, x_{B}; \\theta) = \\exp(\\theta(x_{A})) \\odot x_{B} + \\mu(x_{A}, w) $$ Where $\\odot$ is the element-wise product, and $\\mu$ is a function of $x_{A}$ and $w$ (the parameters). You can see that the inverse is quite easy do get.\n$$ \\frac{\\partial y}{\\partial x} = \\begin{pmatrix} \\frac{\\partial h}{\\partial x_{A}} \u0026 \\frac{\\partial h}{\\partial x_{B}} \\\\ 0 \u0026 I \\end{pmatrix} $$ And this determinant is very easy to compute since it’s a diagonal matrix.\nTraining the flow of transformations $$ \\log p_{x}(x) = \\log p_{z}(f^{-1}_{\\theta}(x)) + \\sum_{i=1}^{k} \\log \\left\\lvert \\det \\left( \\frac{ \\partial f_{i}^{-1}(x) }{ \\partial x } \\right) \\right\\rvert $$ And summing for the whole dataset. Because of the structure, we can explicitly evaluate how probable is the sampled sample.\nCritiques We don’t know how many layers we would need, the same problem we had in Clustering. We use similar idea of Dirichlet Processes, going into continuous mode, or meta parametrization, and you have continuous normalizing flows, which is something close to (Chen et al. 2019), so that you do not need to set up a specific number of layers.\nResolution is quite slow because it preserves dimensions (a lot of computational time).\nPlanar Normalizing Flows Given a latent variable $z \\in \\mathbb{R}^{d}$ and $x \\in \\mathbb{R}^{d}$ the mapping is a function in the form:\n$$ x = f(z) = z + u \\cdot h (w^{T}z + b) $$ Where $f$ is continuously differentiable and $h(\\cdot)$ is a non-linear activation others are learnable parameters.\n$$ p_{z}(z) = \\prod_{i} \\frac{1}{\\sqrt{ 2\\pi }} \\exp(-z^{2}_{i} / 2) $$ Then one can prove that the arg min of this model has the form:\n$$ \\begin{align*} \\arg \\min \\mathcal{L} \u0026= \\arg \\max \\log p_{x}(x) \\\\ \u0026= \\arg \\max \\log p_{z}(z) + \\log \\lvert \\det(J^{-1}) \\rvert \\\\ \u0026= \\arg \\max \\log - \\lvert z \\rvert ^{2} / 2 - \\log \\lvert 1 + h'^{T}u^{T}w \\rvert + \\text{ constant} \\end{align*} $$ Where we have substituted the definition of the Gaussian latent seen that the Jacobian is:\n$$ J = \\frac{\\partial x}{\\partial z} = I + h' \\cdot u^{T}w $$The Architecture Squeeze 🟨– We want to reshape from $4 \\times 4 \\times 1$ to $2 \\times 2\\times 4$ dimensionality thing. Using usually some checked structure to split it into many parts so that we can use flow in parallel So they just change the spatial resolution of the layers.\nFlow step 🟨– Act norm is for example a batch norm see section in Convolutional Neural Network.\n1x1 Convolutions 🟥 1x1 convolutions are generalizations of permutations (i.e. they contain permutations, if the matrix is a permutation matrix), introduced in (Kingma \u0026 Dhariwal 2018).\n$$ W = PL(U + \\text{diag}(s)) $$ Where $L$ is lower triangular, $P$ is a permutation matrix, and $U$ is upper triangular (with 0 on diagonal). One can observe that the log determinant of this matrix is just the sum of $s$, which is quite quick to compute.\nThe weight is in the beta version:\n$$ \\begin{pmatrix} y_{A} \\\\ y_{B} \\end{pmatrix} = \\begin{pmatrix} h(x_{A}, \\beta(x_{B}, W)) \\\\ x_{B} \\end{pmatrix} $$Applications SRFlow It modifies the beta by conditioning on the higher resolution image, in paper SRFlow does this super resolution thing.\nStyleFlow Other works are for example StyleFlow, extension of styleGAN, where you can interpolate between identities, or make other continuous disentangled modifications. They use Normalizing Flows to create encoded weights of the style (conditioned with some attribute, e.g. lighting, head pose etc).\nC-Flow for multi-modal data The idea here is to condition one flow with another flow, and use it for more complex part. This section needs further study, because I did not understand.\nHuman Mesh Recovery Examples are… TODO.\nContinuous Flows TODO.\nAdjoint Sensitivity $$ a(t) = \\frac{ \\partial L }{ \\partial \\boldsymbol{z}(t) } $$ This allows to compute the derivative to update the ODEs.\nReferences [1] Chen et al. “Neural Ordinary Differential Equations” arXiv preprint arXiv:1806.07366 2019\n[2] Bishop \u0026 Bishop “Deep Learning: Foundations and Concepts” Springer International Publishing 2024\n[3] Kingma \u0026 Dhariwal “Glow: Generative Flow with Invertible 1x1 Convolutions” arXiv preprint arXiv:1807.03039 2018\n",
-  "wordCount" : "1166",
+  "articleBody": "Normalizing flows have both latent space and can produce tractable explicit probability distributions (closer to Autoregressive Modelling, they have tractable distributions, but not a latent space). This means we are able to get the likelihoods of a certain sample.\nThis approach to modelling a flexible distribution is called a normalizing flow because the transformation of a probability distribution through a sequence of mappings is somewhat analogous to the flow of a fluid. From (Bishop \u0026 Bishop 2024)\nThe main idea The intuition here is that we can both have a latent space and some sort of autoregressive modelling. We want\nAn analytical model that is easy to sample from. We want this distribution to be able to represent complex data. The idea is to use many change of variables, $$\\iint_R f(x,y) \\, dx \\, dy = \\iint_G f(g(u,v),h(u,v)) \\, J(u,v) \\, du \\, dv$$$$ dx = \\left\\lvert \\det \\left( \\frac{ \\partial f^{-1}(z) }{ \\partial z } \\right) \\right\\rvert dz $$$$ dx = dz \\left\\lvert \\det \\left( \\frac{ \\partial f(z) }{ \\partial z } \\right) \\right\\rvert ^{-1} $$ And you can remember that if we have an invertible matrix $A$ then you can take out the inverse thing.\n$$ \\begin{align*} p_{x}(x) = p_{z}(A^{-1}x) \\lvert \\det(A^{-1}) \\rvert \\\\ p_{x}(x) = p_{z}(f^{-1}(x)) \\left\\lvert \\det\\left( \\frac{ \\partial f^{-1}(x) }{ \\partial x } \\right) \\right\\rvert = p_{z}(f^{-1}(x)) \\left\\lvert \\det\\left( \\frac{ \\partial f(z) }{ \\partial z } \\right) \\right\\rvert^{-1} \\\\ \\end{align*} $$Normalizing Flows Normalizing flows are direct application of the change of variables formula. we have three desiderata:\nInvertible Differentiable Preserve dimensionality The model 🟨 $$ f_{\\theta}: \\mathbb{R}^{d} \\to \\mathbb{R}^{d}, \\text{s.t., } X = f_{\\theta}(Z) \\cap Z = f_{\\theta}^{-1}(X) $$ It is important that the transformation is invertible (but this raises also expressivity concerns, because it limits possible functions).\n$$ p_{X}(x ; \\theta) = p_{z} (f^{-1}_{\\theta}(x)) \\cdot \\left\\lvert \\det \\left( \\frac{ \\partial f^{-1}_{\\theta}(x) }{ \\partial x } \\right) \\right\\rvert $$Parameterizing the transformation 🟥 We want to find a way to learn the function $f$. The difficulty is having invertible neural networks here, and that it preserves the dimensionality. (Some activations like ReLU are not invertible). And we want to be able to compute the Jacobian efficiently, it is possible to compute it in $O(d)$ if we have a triangular matrix (the determinant is just the diagonal).\n$$ x = f(z) = f_{k} \\circ f_{k - 1} \\circ \\ldots \\circ f_{1}(z) $$$$ p_{X}(x ; \\theta) = p_{Z}(z) \\cdot \\prod_{i = 1}^{k} \\left\\lvert \\det \\left( \\frac{ \\partial f_{i}^{-1}(x) }{ \\partial x } \\right) \\right\\rvert $$ Taking the log we have that our final density is:\n$$ \\log p_{X}(x ; \\theta) = \\log p_{Z}(f^{-1}(x)) + \\sum_{i = 1}^{k} \\log \\left\\lvert \\det \\left( \\frac{ \\partial f_{i}^{-1}(x) }{ \\partial x } \\right) \\right\\rvert $$ And we can do for all points in the dataset. A nice thing about invertibility is:\nWe can compute the probability of a true sample We can also generate new samples. The Coupling Layer 🟨 – The main idea of a normalizing flow is to couple some invertible transformation to be able to get both the likelihood of generated data and the generation itself. Simply stacking linear layers, though invertible, does not work (stack of linear layers is still a linear layer)\nHere we use a similar idea present in cryptography for the Feistel network, see Block Ciphers, the idea to partition the space of parameters and apply a transformation to only part of the parameters, this technique has been named real NVP (non-volume preserving). $\\beta$ can be an arbitrarily complex function, since it structure allows to preserve that value.\n$$ \\begin{pmatrix} y_{A} \\\\ y_{B} \\end{pmatrix} = \\begin{pmatrix} h(x_{A}, \\beta_{\\phi}(x_{B}); \\theta) \\\\ x_{B} \\end{pmatrix} $$$$ \\begin{pmatrix} x_{A} \\\\ x_{B} \\end{pmatrix} = \\begin{pmatrix} h^{-1}(y_{A}, \\beta_{\\phi}(y_{B}); \\theta) \\\\ y_{B} \\end{pmatrix} $$$$ h(x_{A}, x_{B}; \\theta) = \\exp(\\theta(x_{A})) \\odot x_{B} + \\mu(x_{A}, w) $$ Where $\\odot$ is the element-wise product, and $\\mu$ is a function of $x_{A}$ and $w$ (the parameters). You can see that the inverse is quite easy do get.\n$$ \\frac{\\partial y}{\\partial x} = \\begin{pmatrix} \\frac{\\partial h}{\\partial x_{A}} \u0026 \\frac{\\partial h}{\\partial x_{B}} \\\\ 0 \u0026 I \\end{pmatrix} $$ And this determinant is very easy to compute since it’s a diagonal matrix. This design makes it good!\nTraining the flow of transformations 🟩 $$ \\log p_{x}(x) = \\log p_{z}(f^{-1}_{\\theta}(x)) + \\sum_{i=1}^{k} \\log \\left\\lvert \\det \\left( \\frac{ \\partial f_{i}^{-1}(x) }{ \\partial x } \\right) \\right\\rvert $$ And summing for the whole dataset. Because of the structure, we can explicitly evaluate how probable is the sampled sample.\nContinuous Normalizing Flows We don’t know how many layers we would need, the same problem we had in Clustering. We use similar idea of Dirichlet Processes, going into continuous mode, or meta parametrization, and you have continuous normalizing flows, which is something close to (Chen et al. 2019), so that you do not need to set up a specific number of layers. This was the main selling point for these kind of models. Flow matching and diffusion models made them quite famous.\nResolution is quite slow because it preserves dimensions (a lot of computational time).\nPlanar Normalizing Flows Given a latent variable $z \\in \\mathbb{R}^{d}$ and $x \\in \\mathbb{R}^{d}$ the mapping is a function in the form:\n$$ x = f(z) = z + u \\cdot h (w^{T}z + b) $$ Where $f$ is continuously differentiable and $h(\\cdot)$ is a non-linear activation others are learnable parameters.\n$$ p_{z}(z) = \\prod_{i} \\frac{1}{\\sqrt{ 2\\pi }} \\exp(-z^{2}_{i} / 2) $$ Then one can prove that the arg min of this model has the form:\n$$ \\begin{align*} \\arg \\min \\mathcal{L} \u0026= \\arg \\max \\log p_{x}(x) \\\\ \u0026= \\arg \\max \\log p_{z}(z) + \\log \\lvert \\det(J^{-1}) \\rvert \\\\ \u0026= \\arg \\max \\log - \\lvert z \\rvert ^{2} / 2 - \\log \\lvert 1 + h'^{T}u^{T}w \\rvert + \\text{ constant} \\end{align*} $$ Where we have substituted the definition of the Gaussian latent seen that the Jacobian is:\n$$ J = \\frac{\\partial x}{\\partial z} = I + h' \\cdot u^{T}w $$The Architecture Squeeze 🟥++ We want to reshape from $4 \\times 4 \\times 1$ to $2 \\times 2\\times 4$ dimensionality thing. One drawback is that at each coupling layer we process only half of the data, shuffling helps plain the processing. Using usually some checked structure to split it into many parts so that we can use flow in parallel So they just change the spatial resolution of the layers.\nFlow step 🟨– Act norm is for example a batch norm see section in Convolutional Neural Network.\n1x1 Convolutions 🟩 1x1 convolutions are generalizations of permutations (i.e. they contain permutations, if the matrix is a permutation matrix), introduced in (Kingma \u0026 Dhariwal 2018).\n$$ W = PL(U + \\text{diag}(s)) $$ Where $L$ is lower triangular, $P$ is a permutation matrix, and $U$ is upper triangular (with 0 on diagonal). One can observe that the log determinant of this matrix is just the sum of $s$, which is quite quick to compute. The log determinant of this matrix would just be $\\sum s_{i}$ because of the above properties.\n$$ \\begin{pmatrix} y_{A} \\\\ y_{B} \\end{pmatrix} = \\begin{pmatrix} h(x_{A}, \\beta(x_{B}, W)) \\\\ x_{B} \\end{pmatrix} $$Small History of Early Flows (Dinh et al. 2015), Nice, introduces a first working version for NF, but just does swapping for the variables, not quite efficient, and uses additive coupling layer. (Dinh et al. 2017): introduces affine coupling layer (adds scale) and a checkboard pattern to better mix the values. (Kingma \u0026 Dhariwal 2018): adds the invertible 1x1 convolutions, first paper that generates something high quality, community now sees NFs as architectures that could actually work. Applications Common applications are:\nSuper-resolution You learn a distribution of possible super resoluted images. Disentanglement of fetures (akin to what they do in stylegans, see Generative Adversarial Networks). Multimodal modeling (related to 3D vision applications). 3D shape modelling (see Parametric Human Body Models). 3D pose estimation SRFlow 🟥 Paper -\u003e (Lugmayr et al. 2020). It modifies the beta by conditioning on the higher resolution image, in paper SRFlow does this super resolution thing. Since it needs to keep the resolution, the input is conditioned in the beta layer. after n encoding step.\nArchitecture from the paper.\nWe have and encoder $u = g_{\\theta}(x)$ that maps the low resolution image to $u$, then activation maps are modulated with this $u$ value, in a manner somewhat similar to StyleGANs, with feature modulation.\nForward: $h^{n+1} = \\exp(\\beta^{n}_{\\theta, s}(u)) \\cdot h^{n} + \\beta_{\\theta, b}(u)$ Inverse: $h^{n} = (h^{n+1} - \\beta_{\\theta, b}(u)) \\odot \\exp(-\\beta^{n}_{\\theta, s}(u))$ Log determinant is: $\\sum \\beta^{n}_{\\theta,s}(u)$\nThe encoding of the features, is somewhat similar to what they do in Log Linear Models. After training, we can have multiple variants of the same image, in plausible versions.\nStyleFlow 🟥 This is the paper -\u003e (Abdal et al. 2021). Other works are for example StyleFlow, extension of styleGAN, described in Generative Adversarial Networks, where you can interpolate between identities, or make other continuous disentangled modifications.\nThey use Normalizing Flows to create encoded weights of the style (conditioned with some attribute, e.g. lighting, head pose etc). You can control some nice features such as:\nHead pose Lighting What they mainly do is changing the mapping between the latent space to the mapped features that they then feed into the synthesis model. They found that the $W$ space of the style features where highly expressive, we want to control the features of this space so that we can better choose exactly the shapes that you need. They use attribute conditioned continuous normalized flows.\nGenerate synthetic data, and collect pairs of latent styles and images. They use a pretrained GAN model to do this part. Probably thousands of samples. From the images, they estimate a set of attributes (light, pose etc.) They use the attributes to condition the NF to generate the latent styles. And they use it for many many blocks. Image from the paper | Conditional continuous normalizing flow (CNF) function block realized as a neural network block. Note that the learned function, conditioned on attribute vector at , can be used for both forward and backward inference.\nThe difference is that we have time input since it is a continuous normalizing flow. You can reverse back, change features and forward to change some features of the face, which is quite cool.\nC-Flow for multi-modal data 🟥 The idea here is to condition one flow with another flow, and use it for more complex part. This section needs further study, because I did not understand.\nHere they introduce the translation between image and point cloud, flow A conditioning, flow B the flow to be conditioned.\nImage from the paper | The two flows can work in different modes of data, but in this way they can share some, not well defined, information\nIn the paper they show results for style transfers in shows. It needs a lot of compute for low resolution (which is the main problem for normalizing flows). And usually they are not so high dimensional.\nOther applications w Pose estimation: You have some poses, and you can find the probability of some poses (so you can take just the highest probability pose in a maximum likelihood fashion).\nPointFlow: From Gaussian point cloud to chairs and similar stuff.\nAdjoint Sensitivity $$ a(t) = \\frac{ \\partial L }{ \\partial \\boldsymbol{z}(t) } $$ This allows to compute the derivative to update the ODEs.\nReferences [1] Dinh et al. “NICE: Non-linear Independent Components Estimation” arXiv preprint arXiv:1410.8516 2015\n[2] Dinh et al. “Density Estimation Using Real NVP” arXiv preprint arXiv:1605.08803 2017\n[3] Kingma \u0026 Dhariwal “Glow: Generative Flow with Invertible 1x1 Convolutions” arXiv preprint arXiv:1807.03039 2018\n[4] Lugmayr et al. “SRFlow: Learning the Super-Resolution Space with Normalizing Flow” Springer International Publishing 2020\n[5] Abdal et al. “StyleFlow: Attribute-conditioned Exploration of StyleGAN-Generated Images Using Conditional Continuous Normalizing Flows” ACM Trans. Graph. Vol. 40(3), pp. 21:1–21:21 2021\n[6] Chen et al. “Neural Ordinary Differential Equations” arXiv preprint arXiv:1806.07366 2019\n[7] Bishop \u0026 Bishop “Deep Learning: Foundations and Concepts” Springer International Publishing 2024\n",
+  "wordCount" : "1992",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -235,7 +235,7 @@ This approach to modelling a flexible distribution is called a normalizing flow 
     <h1 class="post-title entry-hint-parent">
       Normalizing Flows
     </h1>
-    <div class="post-meta">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -252,15 +252,15 @@ This approach to modelling a flexible distribution is called a normalizing flow 
                     <a href="#normalizing-flows" aria-label="Normalizing Flows">Normalizing Flows</a><ul>
                         
                 <li>
-                    <a href="#the-model" aria-label="The model">The model</a></li>
+                    <a href="#the-model-" aria-label="The model 🟨">The model 🟨</a></li>
                 <li>
-                    <a href="#parameterizing-the-transformation" aria-label="Parameterizing the transformation">Parameterizing the transformation</a></li>
+                    <a href="#parameterizing-the-transformation-" aria-label="Parameterizing the transformation 🟥">Parameterizing the transformation 🟥</a></li>
                 <li>
-                    <a href="#the-coupling-layer-" aria-label="The Coupling Layer 🟨">The Coupling Layer 🟨</a></li>
+                    <a href="#the-coupling-layer----" aria-label="The Coupling Layer 🟨 &ndash;">The Coupling Layer 🟨 &ndash;</a></li>
                 <li>
-                    <a href="#training-the-flow-of-transformations" aria-label="Training the flow of transformations">Training the flow of transformations</a></li>
+                    <a href="#training-the-flow-of-transformations-" aria-label="Training the flow of transformations 🟩">Training the flow of transformations 🟩</a></li>
                 <li>
-                    <a href="#critiques" aria-label="Critiques">Critiques</a></li>
+                    <a href="#continuous-normalizing-flows" aria-label="Continuous Normalizing Flows">Continuous Normalizing Flows</a></li>
                 <li>
                     <a href="#planar-normalizing-flows" aria-label="Planar Normalizing Flows">Planar Normalizing Flows</a></li></ul>
                 </li>
@@ -268,27 +268,25 @@ This approach to modelling a flexible distribution is called a normalizing flow 
                     <a href="#the-architecture" aria-label="The Architecture">The Architecture</a><ul>
                         
                 <li>
-                    <a href="#squeeze---" aria-label="Squeeze 🟨&ndash;">Squeeze 🟨&ndash;</a></li>
+                    <a href="#squeeze-" aria-label="Squeeze 🟥&#43;&#43;">Squeeze 🟥++</a></li>
                 <li>
                     <a href="#flow-step---" aria-label="Flow step 🟨&ndash;">Flow step 🟨&ndash;</a></li>
                 <li>
-                    <a href="#1x1-convolutions-" aria-label="1x1 Convolutions 🟥">1x1 Convolutions 🟥</a></li></ul>
+                    <a href="#1x1-convolutions-" aria-label="1x1 Convolutions 🟩">1x1 Convolutions 🟩</a></li>
+                <li>
+                    <a href="#small-history-of-early-flows" aria-label="Small History of Early Flows">Small History of Early Flows</a></li></ul>
                 </li>
                 <li>
                     <a href="#applications" aria-label="Applications">Applications</a><ul>
                         
                 <li>
-                    <a href="#srflow" aria-label="SRFlow">SRFlow</a></li>
+                    <a href="#srflow-" aria-label="SRFlow 🟥">SRFlow 🟥</a></li>
                 <li>
-                    <a href="#styleflow" aria-label="StyleFlow">StyleFlow</a></li>
+                    <a href="#styleflow-" aria-label="StyleFlow 🟥">StyleFlow 🟥</a></li>
                 <li>
-                    <a href="#c-flow-for-multi-modal-data" aria-label="C-Flow for multi-modal data">C-Flow for multi-modal data</a></li>
+                    <a href="#c-flow-for-multi-modal-data-" aria-label="C-Flow for multi-modal data 🟥">C-Flow for multi-modal data 🟥</a></li>
                 <li>
-                    <a href="#human-mesh-recovery" aria-label="Human Mesh Recovery">Human Mesh Recovery</a></li></ul>
-                </li>
-                <li>
-                    <a href="#continuous-flows" aria-label="Continuous Flows">Continuous Flows</a><ul>
-                        
+                    <a href="#other-applications" aria-label="Other applications">Other applications</a></li>
                 <li>
                     <a href="#adjoint-sensitivity" aria-label="Adjoint Sensitivity">Adjoint Sensitivity</a></li></ul>
                 </li></ul>
@@ -319,7 +317,12 @@ $$$$
 dx = dz \left\lvert   \det \left( \frac{ \partial f(z) }{ \partial z }  \right)   \right\rvert ^{-1}
 $$<p>
 And you can remember that if we have an invertible matrix $A$ then you can take out the inverse thing.</p>
-<h3 id="normalizing-flows">Normalizing Flows<a hidden class="anchor" aria-hidden="true" href="#normalizing-flows">#</a></h3>
+$$
+\begin{align*}
+p_{x}(x) = p_{z}(A^{-1}x) \lvert \det(A^{-1}) \rvert \\
+p_{x}(x) = p_{z}(f^{-1}(x)) \left\lvert  \det\left( \frac{ \partial f^{-1}(x) }{ \partial x }  \right)  \right\rvert = p_{z}(f^{-1}(x)) \left\lvert  \det\left( \frac{ \partial f(z) }{ \partial z }  \right)  \right\rvert^{-1} \\
+\end{align*}
+$$<h3 id="normalizing-flows">Normalizing Flows<a hidden class="anchor" aria-hidden="true" href="#normalizing-flows">#</a></h3>
 <p>Normalizing flows are <strong>direct</strong> application of the change of variables formula.
 we have three desiderata:</p>
 <ul>
@@ -327,29 +330,39 @@ we have three desiderata:</p>
 <li>Differentiable</li>
 <li>Preserve dimensionality</li>
 </ul>
-<h4 id="the-model">The model<a hidden class="anchor" aria-hidden="true" href="#the-model">#</a></h4>
+<h4 id="the-model-">The model 🟨<a hidden class="anchor" aria-hidden="true" href="#the-model-">#</a></h4>
 $$
 f_{\theta}: \mathbb{R}^{d} \to \mathbb{R}^{d}, \text{s.t., } X = f_{\theta}(Z) \cap Z = f_{\theta}^{-1}(X)
 $$<p>
 It is important that the transformation is invertible (but this raises also expressivity concerns, because it limits possible functions).</p>
 $$
 p_{X}(x ; \theta) = p_{z} (f^{-1}_{\theta}(x)) \cdot \left\lvert  \det \left( \frac{ \partial f^{-1}_{\theta}(x) }{ \partial x }  \right)   \right\rvert
-$$<h4 id="parameterizing-the-transformation">Parameterizing the transformation<a hidden class="anchor" aria-hidden="true" href="#parameterizing-the-transformation">#</a></h4>
+$$<h4 id="parameterizing-the-transformation-">Parameterizing the transformation 🟥<a hidden class="anchor" aria-hidden="true" href="#parameterizing-the-transformation-">#</a></h4>
 <p>We want to find a way to learn the function $f$. The difficulty is having <em>invertible neural networks</em> here, and that it preserves the dimensionality. (Some activations like ReLU are not invertible).
-And we want to be able to compute the Jacobian efficiently, it is possible to compute it in $O(d)$ if we have a triangular matrix (it is just the diagonal).</p>
+And we want to be able to compute the Jacobian efficiently, it is possible to compute it in $O(d)$ if we have a <strong>triangular matrix</strong> (the determinant is just the diagonal).</p>
 $$
 x  = f(z) = f_{k} \circ f_{k - 1} \circ \ldots \circ f_{1}(z)
 $$$$
 p_{X}(x ; \theta) = p_{Z}(z) \cdot \prod_{i = 1}^{k} \left\lvert  \det \left( \frac{ \partial f_{i}^{-1}(x) }{ \partial x }  \right)   \right\rvert
-$$<h4 id="the-coupling-layer-">The Coupling Layer 🟨<a hidden class="anchor" aria-hidden="true" href="#the-coupling-layer-">#</a></h4>
+$$<p>
+Taking the log we have that our final density is:</p>
+$$
+\log p_{X}(x ; \theta) = \log p_{Z}(f^{-1}(x)) + \sum_{i = 1}^{k} \log \left\lvert  \det \left( \frac{ \partial f_{i}^{-1}(x) }{ \partial x }  \right)   \right\rvert
+$$<p>
+And we can do for all points in the dataset. A nice thing about invertibility is:</p>
+<ul>
+<li>We can compute the probability of a true sample</li>
+<li>We can also generate new samples.</li>
+</ul>
+<h4 id="the-coupling-layer----">The Coupling Layer 🟨 &ndash;<a hidden class="anchor" aria-hidden="true" href="#the-coupling-layer----">#</a></h4>
 <p>The main idea of a normalizing flow is to couple some <strong>invertible</strong> transformation to be able to get both the likelihood of generated data and the generation itself. Simply stacking linear layers, though invertible, does not work (stack of linear layers is still a linear layer)</p>
-<p>Here we use a similar idea present in cryptography for the Feistel network, see <a href="/notes/block-ciphers">Block Ciphers</a>, the idea to partition the space of parameters and apply a transformation to only part of the parameters, this technique has been named real NVP (non-volume preserving).</p>
+<p>Here we use a similar idea present in cryptography for the Feistel network, see <a href="/notes/block-ciphers">Block Ciphers</a>, the idea to partition the space of parameters and apply a transformation to only part of the parameters, this technique has been named real NVP (non-volume preserving).  $\beta$ can be an arbitrarily complex function, since it structure allows to preserve that value.</p>
 $$
 \begin{pmatrix}
 y_{A} \\
 y_{B}
 \end{pmatrix} = \begin{pmatrix}
-h(x_{A}, x_{B}; \theta) \\
+h(x_{A}, \beta_{\phi}(x_{B}); \theta) \\
 x_{B}
 \end{pmatrix}
 $$$$
@@ -357,7 +370,7 @@ $$$$
 x_{A} \\
 x_{B}
 \end{pmatrix} = \begin{pmatrix}
-h^{-1}(y_{A}, y_{B}; \theta) \\
+h^{-1}(y_{A}, \beta_{\phi}(y_{B}); \theta) \\
 y_{B}
 \end{pmatrix}
 $$$$
@@ -370,16 +383,16 @@ $$
 0 & I
 \end{pmatrix}
 $$<p>
-And this determinant is very easy to compute since it&rsquo;s a diagonal matrix.</p>
-<h4 id="training-the-flow-of-transformations">Training the flow of transformations<a hidden class="anchor" aria-hidden="true" href="#training-the-flow-of-transformations">#</a></h4>
+And this determinant is very easy to compute since it&rsquo;s a diagonal matrix. This design makes it good!</p>
+<h4 id="training-the-flow-of-transformations-">Training the flow of transformations 🟩<a hidden class="anchor" aria-hidden="true" href="#training-the-flow-of-transformations-">#</a></h4>
 $$
 \log p_{x}(x) = \log p_{z}(f^{-1}_{\theta}(x)) + \sum_{i=1}^{k} \log \left\lvert  \det \left( \frac{ \partial f_{i}^{-1}(x) }{ \partial x }  \right)   \right\rvert
 $$<p>
 And summing for the whole dataset.
 Because of the structure, we can explicitly evaluate how probable is the sampled sample.</p>
-<h4 id="critiques">Critiques<a hidden class="anchor" aria-hidden="true" href="#critiques">#</a></h4>
+<h4 id="continuous-normalizing-flows">Continuous Normalizing Flows<a hidden class="anchor" aria-hidden="true" href="#continuous-normalizing-flows">#</a></h4>
 <p>We don&rsquo;t know how many layers we would need, the same problem we had in <a href="/notes/clustering">Clustering</a>.
-We use similar idea of <a href="/notes/dirichlet-processes">Dirichlet Processes</a>, going into continuous mode, or meta parametrization, and you have continuous normalizing flows, which is something close to <a href="http://arxiv.org/abs/1806.07366">(Chen et al. 2019)</a>, so that you do not need to set up a specific number of layers.</p>
+We use similar idea of <a href="/notes/dirichlet-processes">Dirichlet Processes</a>, going into continuous mode, or meta parametrization, and you have continuous normalizing flows, which is something close to <a href="http://arxiv.org/abs/1806.07366">(Chen et al. 2019)</a>, so that you do not need to set up a specific number of layers. This was the main selling point for these kind of models. Flow matching and diffusion models made them quite famous.</p>
 <p>Resolution is quite slow because it preserves dimensions (a lot of computational time).</p>
 <h4 id="planar-normalizing-flows">Planar Normalizing Flows<a hidden class="anchor" aria-hidden="true" href="#planar-normalizing-flows">#</a></h4>
 <p>Given a latent variable $z \in \mathbb{R}^{d}$ and $x \in \mathbb{R}^{d}$ the mapping is a function in the form:</p>
@@ -402,21 +415,21 @@ Where we have substituted the definition of the Gaussian latent seen that the Ja
 $$
 J = \frac{\partial x}{\partial z} = I + h'  \cdot u^{T}w
 $$<h3 id="the-architecture">The Architecture<a hidden class="anchor" aria-hidden="true" href="#the-architecture">#</a></h3>
-<h4 id="squeeze---">Squeeze 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#squeeze---">#</a></h4>
-<p>We want to reshape from $4 \times 4 \times 1$ to $2 \times 2\times 4$ dimensionality thing.
+<h4 id="squeeze-">Squeeze 🟥++<a hidden class="anchor" aria-hidden="true" href="#squeeze-">#</a></h4>
+<p>We want to reshape from $4 \times 4 \times 1$ to $2 \times 2\times 4$ dimensionality thing. One drawback is that at each coupling layer we process only half of the data, shuffling helps plain the processing.
 Using usually some checked structure to split it into many parts so that we can use flow in parallel
 So they just change the <strong>spatial resolution</strong> of the layers.</p>
 <h4 id="flow-step---">Flow step 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#flow-step---">#</a></h4>
 <img src="/images/notes/Normalizing Flows-20250420114254149.webp" style="width: 100%" class="center" alt="Normalizing Flows-20250420114254149">
 <p>Act norm is for example a batch norm see section in <a href="/notes/convolutional-neural-network">Convolutional Neural Network</a>.</p>
-<h4 id="1x1-convolutions-">1x1 Convolutions 🟥<a hidden class="anchor" aria-hidden="true" href="#1x1-convolutions-">#</a></h4>
+<h4 id="1x1-convolutions-">1x1 Convolutions 🟩<a hidden class="anchor" aria-hidden="true" href="#1x1-convolutions-">#</a></h4>
 <p>1x1 convolutions are generalizations of permutations (i.e. they contain permutations, if the matrix is a permutation matrix), introduced in <a href="http://arxiv.org/abs/1807.03039">(Kingma &amp; Dhariwal 2018)</a>.</p>
 $$
 W = PL(U + \text{diag}(s))
 $$<p>
 Where $L$ is lower triangular, $P$ is a permutation matrix, and $U$ is upper triangular (with 0 on diagonal).
-One can observe that the log determinant of this matrix is just the sum of $s$, which is quite quick to compute.</p>
-<p>The weight is in the beta version:</p>
+One can observe that the log determinant of this matrix is just the sum of $s$, which is quite quick to compute.
+The log determinant of this matrix would just be $\sum s_{i}$ because of the above properties.</p>
 $$
 \begin{pmatrix}
 y_{A} \\
@@ -425,26 +438,87 @@ y_{B}
 h(x_{A}, \beta(x_{B}, W)) \\
 x_{B}
 \end{pmatrix}
-$$<h3 id="applications">Applications<a hidden class="anchor" aria-hidden="true" href="#applications">#</a></h3>
-<h4 id="srflow">SRFlow<a hidden class="anchor" aria-hidden="true" href="#srflow">#</a></h4>
-<p>It modifies the beta by conditioning on the higher resolution image, in paper SRFlow does this super resolution thing.</p>
-<h4 id="styleflow">StyleFlow<a hidden class="anchor" aria-hidden="true" href="#styleflow">#</a></h4>
-<p>Other works are for example <strong>StyleFlow</strong>, extension of styleGAN, where you can interpolate between identities, or make other continuous <em>disentangled</em> modifications. They use Normalizing Flows to create encoded weights of the style (conditioned with some attribute, e.g. lighting, head pose etc).</p>
-<h4 id="c-flow-for-multi-modal-data">C-Flow for multi-modal data<a hidden class="anchor" aria-hidden="true" href="#c-flow-for-multi-modal-data">#</a></h4>
-<p>The idea here is to condition one flow with another flow, and use it for more complex part. This section needs further study, because I did not understand.</p>
-<h4 id="human-mesh-recovery">Human Mesh Recovery<a hidden class="anchor" aria-hidden="true" href="#human-mesh-recovery">#</a></h4>
-<p>Examples are&hellip; TODO.</p>
-<h3 id="continuous-flows">Continuous Flows<a hidden class="anchor" aria-hidden="true" href="#continuous-flows">#</a></h3>
-<p>TODO.</p>
+$$<h4 id="small-history-of-early-flows">Small History of Early Flows<a hidden class="anchor" aria-hidden="true" href="#small-history-of-early-flows">#</a></h4>
+<ul>
+<li><a href="http://arxiv.org/abs/1410.8516">(Dinh et al. 2015)</a>, Nice, introduces a first working version for NF, but just does swapping for the variables, not quite efficient, and uses additive coupling layer.</li>
+<li><a href="http://arxiv.org/abs/1605.08803">(Dinh et al. 2017)</a>: introduces affine coupling layer (adds scale) and a checkboard pattern to better mix the values.</li>
+<li><a href="http://arxiv.org/abs/1807.03039">(Kingma &amp; Dhariwal 2018)</a>: adds the invertible 1x1 convolutions, first paper that generates something high quality, community now sees NFs as architectures that could actually work.</li>
+</ul>
+<h3 id="applications">Applications<a hidden class="anchor" aria-hidden="true" href="#applications">#</a></h3>
+<p>Common applications are:</p>
+<ul>
+<li>Super-resolution
+<ul>
+<li>You learn a distribution of possible super resoluted images.</li>
+</ul>
+</li>
+<li>Disentanglement of fetures (akin to what they do in stylegans, see <a href="/notes/generative-adversarial-networks">Generative Adversarial Networks</a>).</li>
+<li>Multimodal modeling (related to 3D vision applications).</li>
+<li>3D shape modelling (see <a href="/notes/parametric-human-body-models">Parametric Human Body Models</a>).</li>
+<li>3D pose estimation</li>
+</ul>
+<h4 id="srflow-">SRFlow 🟥<a hidden class="anchor" aria-hidden="true" href="#srflow-">#</a></h4>
+<p>Paper -&gt; (Lugmayr et al. 2020).
+It modifies the beta by conditioning on the higher resolution image, in paper SRFlow does this super resolution thing. Since it needs to keep the resolution, the input is conditioned in the beta layer. after n encoding step.</p>
+<figure class="center">
+<img src="/images/notes/Normalizing Flows-20250524114413996.webp" style="width: 100%"   alt="Normalizing Flows-20250524114413996" title="Normalizing Flows-20250524114413996"/>
+<figcaption><p style="text-align:center;">Architecture from the paper.</p></figcaption>
+</figure>
+<p>We have and encoder $u = g_{\theta}(x)$ that maps the low resolution image to $u$, then activation maps are modulated with this $u$ value, in a manner somewhat similar to <a href="/notes/generative-adversarial-networks">StyleGANs</a>, with <strong>feature modulation</strong>.</p>
+<p>Forward: $h^{n+1} = \exp(\beta^{n}_{\theta, s}(u)) \cdot h^{n} + \beta_{\theta, b}(u)$
+Inverse: $h^{n} = (h^{n+1} - \beta_{\theta, b}(u)) \odot \exp(-\beta^{n}_{\theta, s}(u))$
+Log determinant is: $\sum \beta^{n}_{\theta,s}(u)$</p>
+<p>The encoding of the features, is somewhat similar to what they do in <a href="/notes/log-linear-models">Log Linear Models</a>.
+After training, we can have multiple variants of the same image, in plausible versions.</p>
+<h4 id="styleflow-">StyleFlow 🟥<a hidden class="anchor" aria-hidden="true" href="#styleflow-">#</a></h4>
+<p>This is the paper -&gt; <a href="https://dl.acm.org/doi/10.1145/3447648">(Abdal et al. 2021)</a>.
+Other works are for example <strong>StyleFlow</strong>, extension of styleGAN, described in <a href="/notes/generative-adversarial-networks">Generative Adversarial Networks</a>, where you can <em>interpolate</em> between identities, or make other continuous <em>disentangled</em> modifications.</p>
+<p>They use Normalizing Flows to create encoded weights of the style (conditioned with some attribute, e.g. lighting, head pose etc). You can control some nice features such as:</p>
+<ol>
+<li>Head pose</li>
+<li>Lighting</li>
+</ol>
+<p>What they mainly do is changing the mapping between the latent space to the mapped features that they then feed into the synthesis model.
+They found that the $W$ space of the style features where highly expressive, we want to control the features of this space so that we can better choose exactly the shapes that you need.
+They use <strong>attribute conditioned continuous normalized flows</strong>.</p>
+<ul>
+<li>Generate synthetic data, and collect pairs of latent styles and images. They use a pretrained GAN model to do this part. Probably thousands of samples.</li>
+<li>From the images, they estimate a set of attributes (light, pose etc.)</li>
+<li>They use the attributes to condition the NF to generate the latent styles. And they use it for many many blocks.</li>
+</ul>
+<figure class="center">
+<img src="/images/notes/Normalizing Flows-20250524115608914.webp" style="width: 100%"   alt="Normalizing Flows-20250524115608914" title="Normalizing Flows-20250524115608914"/>
+<figcaption><p style="text-align:center;">Image from the paper | Conditional continuous normalizing flow (CNF) function block realized as a neural network block. Note that the learned function, conditioned on attribute vector at , can be used for both forward and backward inference.</p></figcaption>
+</figure>
+<p>The difference is that we have <em>time input</em> since it is a continuous normalizing flow.
+You can reverse back, change features and forward to change some features of the face, which is quite cool.</p>
+<h4 id="c-flow-for-multi-modal-data-">C-Flow for multi-modal data 🟥<a hidden class="anchor" aria-hidden="true" href="#c-flow-for-multi-modal-data-">#</a></h4>
+<p>The idea here is to condition <em>one flow with another flow</em>, and use it for more complex part. This section needs further study, because I did not understand.</p>
+<p>Here they introduce the translation between image and point cloud, flow A conditioning, flow B the flow to be conditioned.</p>
+<figure class="center">
+<img src="/images/notes/Normalizing Flows-20250524150212839.webp" style="width: 100%"   alt="Normalizing Flows-20250524150212839" title="Normalizing Flows-20250524150212839"/>
+<figcaption><p style="text-align:center;">Image from the paper | The two flows can work in different modes of data, but in this way they can share some, not well defined, information</p></figcaption>
+</figure>
+<p>In the paper they show results for style transfers in shows. It needs a lot of compute for low resolution (which is the main problem for normalizing flows). And usually they are not so high dimensional.</p>
+<h4 id="other-applications">Other applications<a hidden class="anchor" aria-hidden="true" href="#other-applications">#</a></h4>
+<p>w
+<strong>Pose estimation:</strong>
+You have some poses, and you can find the probability of some poses (so you can take just the highest probability pose in a maximum likelihood fashion).</p>
+<p><strong>PointFlow</strong>:
+From Gaussian point cloud to chairs and similar stuff.</p>
 <h4 id="adjoint-sensitivity">Adjoint Sensitivity<a hidden class="anchor" aria-hidden="true" href="#adjoint-sensitivity">#</a></h4>
 $$
 a(t) = \frac{ \partial L }{ \partial \boldsymbol{z}(t) } 
 $$<p>
 This allows to compute the derivative to update the ODEs.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p>[1] Chen et al. <a href="http://arxiv.org/abs/1806.07366">“Neural Ordinary Differential Equations”</a> arXiv preprint arXiv:1806.07366 2019</p>
-<p>[2] Bishop &amp; Bishop <a href="https://link.springer.com/10.1007/978-3-031-45468-4">“Deep Learning: Foundations and Concepts”</a> Springer International Publishing 2024</p>
+<p>[1] Dinh et al. <a href="http://arxiv.org/abs/1410.8516">“NICE: Non-linear Independent Components Estimation”</a> arXiv preprint arXiv:1410.8516 2015</p>
+<p>[2] Dinh et al. <a href="http://arxiv.org/abs/1605.08803">“Density Estimation Using Real NVP”</a> arXiv preprint arXiv:1605.08803 2017</p>
 <p>[3] Kingma &amp; Dhariwal <a href="http://arxiv.org/abs/1807.03039">“Glow: Generative Flow with Invertible 1x1 Convolutions”</a> arXiv preprint arXiv:1807.03039 2018</p>
+<p>[4] Lugmayr et al. “SRFlow: Learning the Super-Resolution Space with Normalizing Flow” Springer International Publishing  2020</p>
+<p>[5] Abdal et al. <a href="https://dl.acm.org/doi/10.1145/3447648">“StyleFlow: Attribute-conditioned Exploration of StyleGAN-Generated Images Using Conditional Continuous Normalizing Flows”</a> ACM Trans. Graph. Vol. 40(3), pp. 21:1&ndash;21:21 2021</p>
+<p>[6] Chen et al. <a href="http://arxiv.org/abs/1806.07366">“Neural Ordinary Differential Equations”</a> arXiv preprint arXiv:1806.07366 2019</p>
+<p>[7] Bishop &amp; Bishop <a href="https://link.springer.com/10.1007/978-3-031-45468-4">“Deep Learning: Foundations and Concepts”</a> Springer International Publishing 2024</p>
 
 
   </div>
