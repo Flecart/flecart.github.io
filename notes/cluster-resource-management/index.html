@@ -9,15 +9,9 @@
 <meta name="keywords" content="☁cloud-computing">
 <meta name="description" content="We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.
 Introduction to the problem
-What is Cluster Resource Management?
+What is Cluster Resource Management? 🟩
 Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou &amp; Kozyrakis 2014), do it differently).
-There are mainly two parts in cluster resource management:
-
-Allocation: deciding how many resources an application.
-Assignment: from which physical machine you can effectively put the application.
-
-Types of management architectures
-We mainly divide the management architectures in three ways:">
+There are mainly two parts in cluster resource management:">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/cluster-resource-management/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
@@ -103,8 +97,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Cluster Resource Management">
   <meta property="og:description" content="We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.
-Introduction to the problem What is Cluster Resource Management? Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou &amp; Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:
-Allocation: deciding how many resources an application. Assignment: from which physical machine you can effectively put the application. Types of management architectures We mainly divide the management architectures in three ways:">
+Introduction to the problem What is Cluster Resource Management? 🟩 Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou &amp; Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -115,15 +108,9 @@ Allocation: deciding how many resources an application. Assignment: from which p
 <meta name="twitter:title" content="Cluster Resource Management">
 <meta name="twitter:description" content="We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.
 Introduction to the problem
-What is Cluster Resource Management?
+What is Cluster Resource Management? 🟩
 Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou &amp; Kozyrakis 2014), do it differently).
-There are mainly two parts in cluster resource management:
-
-Allocation: deciding how many resources an application.
-Assignment: from which physical machine you can effectively put the application.
-
-Types of management architectures
-We mainly divide the management architectures in three ways:">
+There are mainly two parts in cluster resource management:">
 
 
 <script type="application/ld+json">
@@ -152,12 +139,12 @@ We mainly divide the management architectures in three ways:">
   "@type": "BlogPosting",
   "headline": "Cluster Resource Management",
   "name": "Cluster Resource Management",
-  "description": "We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.\nIntroduction to the problem What is Cluster Resource Management? Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou \u0026amp; Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:\nAllocation: deciding how many resources an application. Assignment: from which physical machine you can effectively put the application. Types of management architectures We mainly divide the management architectures in three ways:\n",
+  "description": "We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.\nIntroduction to the problem What is Cluster Resource Management? 🟩 Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou \u0026amp; Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:\n",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.\nIntroduction to the problem What is Cluster Resource Management? Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou \u0026 Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:\nAllocation: deciding how many resources an application. Assignment: from which physical machine you can effectively put the application. Types of management architectures We mainly divide the management architectures in three ways:\n#Centralized: where you have a master-slave architectures #Two-level: where you have a two step allocation process (one proposes, and application accepts or refutes). #Distributed Cluster managers: where you have many many Centralized The resources of the cluster are managed in a single place.\nKubernetes Borg Quasar (Delimitrou \u0026 Kozyrakis 2014). Kubernetes Kubernetes is a container orchestration system. It is a platform that allows you to run containers at scale. It is a system that helps you run and manage containers.\nMonitors and reschedules containers. Provides persistent storage API, and communication APIs between containers. Users interface with a master node, which is responsible for managing the cluster. Nodes are called kubelets. The design is inspired by borg, closed source used by Google. Pods 🟨++ These are a group of containers with the same:\nLifecycle (live and die together). Network Storage volumes They should run a common task. Controlling pod placement You can label certain nodes, and then specify that a pod should run on a node with a certain label, or node-selectors. Kubernetes has also a simple control loop to keep a certain number of pods running.\nif you don’t have hard constraints, then the placement is done by following some affinity, taits, and toleration measures.\nThe service abstraction A service in Kube is a group of pods that work together to offer a certain service. They are usually behind a load balancer. Every service has a\nRequest: resources requested by the container Limit: max resource a container can access. Usage \u003e Request: resources might be available • Usage \u003e Limit: container is throttled or killed Quality of Service 🟩– We can set some quality of service parameters on kubernetes: to have guaranteed requests and limits. We have three possible settings:\nGuaranteed: the requests are equal to the limit. Every container has a requests and limits set. They cannot get more resources, but they are the least likely to get killed, usually used for reliable resource availability. Burstable: if the process needs more resources, it can be killed. At least one container has a limit set. They can use additional resources when available.fdfd Best effort: none of the containers has a limit. Highest protection means less likely to be killed. Example:\napiVersion: v1 kind: Pod metadata: name: qos-example spec: containers: - name: app-container image: nginx resources: requests: cpu: \"250m\" memory: \"256Mi\" limits: cpu: \"500m\" memory: \"512Mi\" This falls into the burstable category, as limits are higher than the requests, if they were equal, then it would have been a guaranteed, if they were not set, then it would have been a best effort pod.\nKeep Alive Sandboxes can be kept alive to process more invocations. Usually sandboxes are kept alive after a request is processed (for some seconds). The cost is that they use more memory. Knative decides the sandbox count as number of inflight requests divided by sandbox parallelism (number of requests that a sandbox can execute in parallel). This is run periodically every 2 seconds. Policies can vary:\nParallelism Keep alive period. Service Mesh 🟥 TODO\nHorizontal Pod Autoscaler 🟥 TODO:\nDirigent Classical FaaS (see Cloud Computing Services) are not low-latency in scheduling functions, cold starts are especially slow.\nClassical FaaS systems Previously, people have focused on single worker node optimizations (startup time, namespace management, container image formats), but the control plane (similar to Control Plane for networks), the part that actually issues the commands, have been overlooked.\nKnative Classically Knative on K8s (but originally build for long workloads, so it has a high latency), classically about 1000 ms to start one function, and about 3000 for 100 functions. The main latency is from the control plane. On average 300 sandbox creations per second on cold start.\nAnalysis of Bottlenecks Each function has multiple hierarchical abstractions to decide the scheduling:\ndeployment ReplicaSet Pods You have a controller for each abstraction, that attempts to make it to the desired state, this created lots of overhead. You have too many controllers. Each controller needs to write to the etcd Database, which is a bottleneck. API server consumes a lot of CPU time, as everything passess through this (serialization bottleneck). Another bottleneck is high number of RPC communications due to the microservice architecture.\nSo in brief, three main bottlenecks:\nHierarchical abstraction with independent controllers Synchronous persistence for cluster updates (Serialization bottlencks) Microservice architecture with per-sandbox sidecars (Communication bottlenecks) Dirigent Innovations This is a simple architecture independent of Kubernetes (difficult to make it compatible).\nAttacking bottlenecks Single controller: One controller for all the abstractions. They abolished hierarchical complex abstractions Mainly three abstractions (Function, sandbox, dataplane, workernode). Highly efficient, some couple of bytes (16), instead of some kilybytes Persistence-free latency-critical operations: Only function, dataplane and workernode are persisted, the other can be reconstructed. The sandbox can get different placement or IP address (cluster manager is quicker), user doesn’t need to know this. Monolithic control and data plane provides simplifying state management and simple deployment, instead of many RPCs. Evaluations The paper compares to Knative and OpenWhisk, on hello-world and busy-loop functions.\nImage from the paper\nWe some some orders of magnitude improvements. Two-level Mesos Mesos is an example of two level cluster managers: One global, central controller and multiple framework schedulers Mesos hands out the so called resource offer to applications, who then decide whether to take the offer or not. Mesos adopts a classical master-slave architecture, akin to what we have seen for Apache Spark, Massive Parallel Processing, Distributed file systems and similars.\nMesos Architecture 🟩– We have three parts:\nWorkers: they continuously send resource usage statistics to the controller. They have some executor API to accept jobs from the application frameworks (Spark, Kube, etc). Controller: decides about resource offerings Application frameworks: decide whether to accept or not, and provides tasks to the workers. Distributed Cluster managers One would start from centralized solutions, and then move to this mode or Two-level only if we see some scalability issue. We have Omega (just a proof of concept, but never actually developed) and Sparrow.\nSparrow Sparrow is an example of a distributed scheduler. The main advantage is being more robust: it doesn’t have a single point of failure anymore.\nSparrow’s main architecture You have a bunch of schedulers, that assign tasks to workers. They do it independently.\nPower of two choices 🟨– This is a way to choose the worker for the task:\nProbing: I query two workers and chose the one that has least load. Assigning: properly starting the task after gathering some info. It creates a lot of network overhead. To reduce this we batch the requests (not probe for every request).\nLate Binding 🟨 This is an optimization to the early binding (solves if I choose a worker that has a very long job queue problem).\nAfter probing, instead of issuing the job, we make a reservation on some workers. When the worker is ready, it notifies the scheduler, and the scheduler assigns the job to the worker and cancels other reservations.\nReferences [1] Delimitrou \u0026 Kozyrakis “Quasar: Resource-Efficient and QoS-aware Cluster Management” Association for Computing Machinery 2014\n",
-  "wordCount" : "1277",
+  "articleBody": "We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.\nIntroduction to the problem What is Cluster Resource Management? 🟩 Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like (Delimitrou \u0026 Kozyrakis 2014), do it differently). There are mainly two parts in cluster resource management:\nAllocation: deciding how many resources an application (techniques for this is presented in Cluster Management Policies. Assignment: from which physical machine you can effectively put the application. Types of management architectures 🟩 We mainly divide the management architectures in three ways:\n#Centralized: where you have a master-slave architectures #Two-level: where you have a two step allocation process (one proposes, and application accepts or refutes). #Distributed Cluster managers: where you have many many Centralized The resources of the cluster are managed in a single place.\nKubernetes Borg Quasar (Delimitrou \u0026 Kozyrakis 2014). Kubernetes Kubernetes is a container orchestration system. It is a platform that allows you to run containers at scale. It is a system that helps you run and manage containers.\nMonitors and reschedules containers. Provides persistent storage API, and communication APIs between containers. Users interface with a master node, which is responsible for managing the cluster. Nodes are called kubelets. The design is inspired by Borg, closed source used by Google. Discovery, naming, is a big problem in the cluster. The same problem is also for LLM services, how do you find the best offerer of a certain service? General architecture of Kubernetes.\nThe inspiration: Borg Cluster Pods 🟨++ These are a group of containers with the same:\nLifecycle (live and die together). Network Storage volumes They should run a common task. Labels and Selectors 🟩 These are used to control node placement: how do you decide where to run a pod? You can label certain nodes, and then specify that a pod should run on a node with a certain label, or node-selectors. Kubernetes has also a simple control loop to keep a certain number of pods running.\nif you don’t have hard constraints, then the placement is done by following some affinity, taits, and toleration measures.\nThe service abstraction 🟨– A service in Kube is a group of pods that work together to offer a certain service. They are usually behind a load balancer. Every service has a\nRequest: resources requested by the container Limit: max resource a container can access. Usage \u003e Request: resources might be available • Usage \u003e Limit: container is throttled or killed Quality of Service 🟨– We can set some quality of service parameters on kubernetes: to have guaranteed requests and limits. We have three possible settings:\nGuaranteed: the requests are equal to the limit. Every container has a requests and limits set. They cannot get more resources, but they are the least likely to get killed, usually used for reliable resource availability. Burstable: if the process needs more resources, it can be killed. At least one container has a limit set. They can use additional resources when available.fdfd Best effort: none of the containers has a limit. Highest protection means less likely to be killed. Example:\napiVersion: v1 kind: Pod metadata: name: qos-example spec: containers: - name: app-container image: nginx resources: requests: cpu: \"250m\" memory: \"256Mi\" limits: cpu: \"500m\" memory: \"512Mi\" This falls into the burstable category, as limits are higher than the requests, if they were equal, then it would have been a guaranteed, if they were not set, then it would have been a best effort pod.\nKeep Alive Sandboxes can be kept alive to process more invocations. Usually sandboxes are kept alive after a request is processed (for some seconds). The cost is that they use more memory. Knative decides the sandbox count as number of inflight requests divided by sandbox parallelism (number of requests that a sandbox can execute in parallel). This is run periodically every 2 seconds. Policies can vary:\nParallelism Keep alive period. Service Mesh 🟥 If you have a bunch of services that need to communicate with each other, it is helpful to have a service mesh. This mesh makes it easier to connect and manage secure traffic between services. One example is Istio. This is a service ran along the main service, that provides:\nData Plane: the part that actually processes the traffic, usually a sidecar container (see Design patterns). Control Plane: configure how communication is managed (security policies, who can talk to another? load balancing and similar). Horizontal Pod Autoscaler 🟥 Kubernetes can scale based on utilization on the machine, this is called Horizontal Pod Autoscaler. You can:\nSet user-define min/max bounds for some resources. Currently only does it with CPU utilization. Dirigent Classical FaaS (see Cloud Computing Services) are not low-latency in scheduling functions, cold starts are especially slow.\nClassical FaaS systems Previously, people have focused on single worker node optimizations (startup time, namespace management, container image formats), but the control plane (similar to Control Plane for networks), the part that actually issues the commands, have been overlooked.\nKnative Classically Knative on K8s (but originally build for long workloads, so it has a high latency), classically about 1000 ms to start one function, and about 3000 for 100 functions. The main latency is from the control plane. On average 300 sandbox creations per second on cold start.\nAnalysis of Bottlenecks Each function has multiple hierarchical abstractions to decide the scheduling:\ndeployment ReplicaSet Pods You have a controller for each abstraction, that attempts to make it to the desired state, this created lots of overhead. You have too many controllers. Each controller needs to write to the etcd Database, which is a bottleneck. API server consumes a lot of CPU time, as everything passess through this (serialization bottleneck). Another bottleneck is high number of RPC communications due to the microservice architecture.\nSo in brief, three main bottlenecks:\nHierarchical abstraction with independent controllers Synchronous persistence for cluster updates (Serialization bottlencks) Microservice architecture with per-sandbox sidecars (Communication bottlenecks) Dirigent Innovations This is a simple architecture independent of Kubernetes (difficult to make it compatible). But remember: this is still a research preview, and has lots of limitations currently.\nAttacking bottlenecks Single controller: One controller for all the abstractions. They abolished hierarchical complex abstractions Mainly three abstractions (Function, sandbox, dataplane, workernode). Highly efficient, some couple of bytes (16), instead of some kilybytes Persistence-free latency-critical operations: Only function, dataplane and workernode are persisted, the other can be reconstructed. The sandbox can get different placement or IP address (cluster manager is quicker), user doesn’t need to know this. Monolithic control and data plane provides simplifying state management and simple deployment, instead of many RPCs. Evaluations The paper compares to Knative and OpenWhisk, on hello-world and busy-loop functions.\nImage from the paper\nWe some some orders of magnitude improvements. Two-level Mesos Mesos is an example of two level cluster managers: One global, central controller and multiple framework schedulers Mesos hands out the so called resource offer to applications, who then decide whether to take the offer or not. Mesos adopts a classical master-slave architecture, akin to what we have seen for Apache Spark, Massive Parallel Processing, Distributed file systems and similars.\nMesos Architecture 🟥++ We have three parts:\nWorkers: they continuously send resource usage statistics to the controller. They have some executor API to accept jobs from the application frameworks (Spark, Kube, etc). Controller: decides about resource offerings Application frameworks: decide whether to accept or not, and provides tasks to the workers. Distributed Cluster managers One would start from centralized solutions, and then move to this mode or Two-level only if we see some scalability issue. We have Omega (just a proof of concept, but never actually developed) and Sparrow.\nSparrow Sparrow is an example of a distributed scheduler. The main advantage is being more robust: it doesn’t have a single point of failure anymore.\nSparrow’s main architecture 🟨– You have a bunch of schedulers, that assign tasks to workers. They do it independently.\nPower of two choices 🟨– This is a way to choose the worker for the task:\nProbing: I query two workers and chose the one that has least load. Assigning: properly starting the task after gathering some info. It creates a lot of network overhead. To reduce this we batch the requests (not probe for every request).\nLate Binding 🟨 This is an optimization to the early binding (solves if I choose a worker that has a very long job queue problem).\nAfter probing, instead of issuing the job, we make a reservation on some workers. When the worker is ready, it notifies the scheduler, and the scheduler assigns the job to the worker and cancels other reservations.\nReferences [1] Delimitrou \u0026 Kozyrakis “Quasar: Resource-Efficient and QoS-aware Cluster Management” Association for Computing Machinery 2014\n",
+  "wordCount" : "1470",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -252,7 +239,7 @@ We mainly divide the management architectures in three ways:">
     <h1 class="post-title entry-hint-parent">
       Cluster Resource Management
     </h1>
-    <div class="post-meta">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -266,9 +253,9 @@ We mainly divide the management architectures in three ways:">
                     <a href="#introduction-to-the-problem" aria-label="Introduction to the problem">Introduction to the problem</a><ul>
                         
                 <li>
-                    <a href="#what-is-cluster-resource-management" aria-label="What is Cluster Resource Management?">What is Cluster Resource Management?</a></li>
+                    <a href="#what-is-cluster-resource-management-" aria-label="What is Cluster Resource Management? 🟩">What is Cluster Resource Management? 🟩</a></li>
                 <li>
-                    <a href="#types-of-management-architectures" aria-label="Types of management architectures">Types of management architectures</a></li></ul>
+                    <a href="#types-of-management-architectures-" aria-label="Types of management architectures 🟩">Types of management architectures 🟩</a></li></ul>
                 </li></ul>
                     
                 <li>
@@ -278,13 +265,15 @@ We mainly divide the management architectures in three ways:">
                     <a href="#kubernetes" aria-label="Kubernetes">Kubernetes</a><ul>
                         
                 <li>
+                    <a href="#the-inspiration-borg-cluster" aria-label="The inspiration: Borg Cluster">The inspiration: Borg Cluster</a></li>
+                <li>
                     <a href="#pods-" aria-label="Pods 🟨&#43;&#43;">Pods 🟨++</a></li>
                 <li>
-                    <a href="#controlling-pod-placement" aria-label="Controlling pod placement">Controlling pod placement</a></li>
+                    <a href="#labels-and-selectors-" aria-label="Labels and Selectors 🟩">Labels and Selectors 🟩</a></li>
                 <li>
-                    <a href="#the-service-abstraction" aria-label="The service abstraction">The service abstraction</a></li>
+                    <a href="#the-service-abstraction---" aria-label="The service abstraction 🟨&ndash;">The service abstraction 🟨&ndash;</a></li>
                 <li>
-                    <a href="#quality-of-service---" aria-label="Quality of Service 🟩&ndash;">Quality of Service 🟩&ndash;</a></li>
+                    <a href="#quality-of-service---" aria-label="Quality of Service 🟨&ndash;">Quality of Service 🟨&ndash;</a></li>
                 <li>
                     <a href="#keep-alive" aria-label="Keep Alive">Keep Alive</a></li>
                 <li>
@@ -320,7 +309,7 @@ We mainly divide the management architectures in three ways:">
                     <a href="#mesos" aria-label="Mesos">Mesos</a><ul>
                         
                 <li>
-                    <a href="#mesos-architecture---" aria-label="Mesos Architecture 🟩&ndash;">Mesos Architecture 🟩&ndash;</a></li></ul>
+                    <a href="#mesos-architecture-" aria-label="Mesos Architecture 🟥&#43;&#43;">Mesos Architecture 🟥++</a></li></ul>
                 </li></ul>
                 </li>
                 <li>
@@ -330,7 +319,7 @@ We mainly divide the management architectures in three ways:">
                     <a href="#sparrow" aria-label="Sparrow">Sparrow</a><ul>
                         
                 <li>
-                    <a href="#sparrows-main-architecture" aria-label="Sparrow&rsquo;s main architecture">Sparrow&rsquo;s main architecture</a></li>
+                    <a href="#sparrows-main-architecture---" aria-label="Sparrow&rsquo;s main architecture 🟨&ndash;">Sparrow&rsquo;s main architecture 🟨&ndash;</a></li>
                 <li>
                     <a href="#power-of-two-choices---" aria-label="Power of two choices 🟨&ndash;">Power of two choices 🟨&ndash;</a></li>
                 <li>
@@ -348,14 +337,14 @@ We mainly divide the management architectures in three ways:">
 
   <div class="post-content"><p>We need to find an efficient and effective manner to allocate the resources around. This is what the resource management layer does.</p>
 <h3 id="introduction-to-the-problem">Introduction to the problem<a hidden class="anchor" aria-hidden="true" href="#introduction-to-the-problem">#</a></h3>
-<h4 id="what-is-cluster-resource-management">What is Cluster Resource Management?<a hidden class="anchor" aria-hidden="true" href="#what-is-cluster-resource-management">#</a></h4>
+<h4 id="what-is-cluster-resource-management-">What is Cluster Resource Management? 🟩<a hidden class="anchor" aria-hidden="true" href="#what-is-cluster-resource-management-">#</a></h4>
 <p>Most of the time, the user specifies an amount of resources, and then the cluster decides how much to allocate (but approaches like <a href="https://doi.org/10.1145/2541940.2541941">(Delimitrou &amp; Kozyrakis 2014)</a>, do it differently).
 There are mainly two parts in cluster resource management:</p>
 <ul>
-<li><strong>Allocation</strong>: deciding how many resources an application.</li>
+<li><strong>Allocation</strong>: deciding how many resources an application (techniques for this is presented in <a href="/notes/cluster-management-policies">Cluster Management Policies</a>.</li>
 <li><strong>Assignment</strong>: from which physical machine you can effectively put the application.</li>
 </ul>
-<h4 id="types-of-management-architectures">Types of management architectures<a hidden class="anchor" aria-hidden="true" href="#types-of-management-architectures">#</a></h4>
+<h4 id="types-of-management-architectures-">Types of management architectures 🟩<a hidden class="anchor" aria-hidden="true" href="#types-of-management-architectures-">#</a></h4>
 <p>We mainly divide the management architectures in three ways:</p>
 <ul>
 <li><a href="/notes#centralized">#Centralized</a>: where you have a master-slave architectures</li>
@@ -376,8 +365,15 @@ There are mainly two parts in cluster resource management:</p>
 <li>Provides persistent storage API, and communication APIs between containers.</li>
 <li>Users interface with a <strong>master node</strong>, which is responsible for managing the cluster.</li>
 <li>Nodes are called <strong>kubelets</strong>.</li>
-<li>The design is inspired by <strong>borg</strong>, closed source used by Google.</li>
+<li>The design is inspired by <strong>Borg</strong>, closed source used by Google.</li>
+<li>Discovery, naming, is a big problem in the cluster. The same problem is also for LLM services, how do you find the best offerer of a certain service?</li>
 </ul>
+<figure class="center">
+<img src="/images/notes/Cluster Resource Management-20250525201453136.webp" style="width: 100%"   alt="Cluster Resource Management-20250525201453136" title="Cluster Resource Management-20250525201453136"/>
+<figcaption><p style="text-align:center;">General architecture of Kubernetes.</p></figcaption>
+</figure>
+<h4 id="the-inspiration-borg-cluster">The inspiration: Borg Cluster<a hidden class="anchor" aria-hidden="true" href="#the-inspiration-borg-cluster">#</a></h4>
+<img src="/images/notes/Cluster Resource Management-20250525201530606.webp" style="width: 100%" class="center" alt="Cluster Resource Management-20250525201530606">
 <h4 id="pods-">Pods 🟨++<a hidden class="anchor" aria-hidden="true" href="#pods-">#</a></h4>
 <p>These are a group of containers with the same:</p>
 <ul>
@@ -386,11 +382,12 @@ There are mainly two parts in cluster resource management:</p>
 <li>Storage volumes</li>
 <li>They should run a common task.</li>
 </ul>
-<h4 id="controlling-pod-placement">Controlling pod placement<a hidden class="anchor" aria-hidden="true" href="#controlling-pod-placement">#</a></h4>
-<p>You can label certain nodes, and then specify that a pod should run on a node with a certain <strong>label</strong>, or <em>node-selectors</em>.
+<h4 id="labels-and-selectors-">Labels and Selectors 🟩<a hidden class="anchor" aria-hidden="true" href="#labels-and-selectors-">#</a></h4>
+<p>These are used to control <strong>node placement</strong>: how do you decide where to run a pod?
+You can label certain nodes, and then specify that a pod should run on a node with a certain <strong>label</strong>, or <em>node-selectors</em>.
 Kubernetes has also a simple control loop to keep a certain number of pods running.</p>
 <p>if you don&rsquo;t have hard constraints, then the placement is done by following some <strong>affinity, taits, and toleration</strong> measures.</p>
-<h4 id="the-service-abstraction">The service abstraction<a hidden class="anchor" aria-hidden="true" href="#the-service-abstraction">#</a></h4>
+<h4 id="the-service-abstraction---">The service abstraction 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#the-service-abstraction---">#</a></h4>
 <p>A service in Kube is a group of pods that work together to offer a certain service.
 They are usually behind a load balancer.
 Every service has a</p>
@@ -399,7 +396,7 @@ Every service has a</p>
 <li>Limit: max resource a container can access.
 Usage &gt; Request: resources might be available • Usage &gt; Limit: container is throttled or killed</li>
 </ul>
-<h4 id="quality-of-service---">Quality of Service 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#quality-of-service---">#</a></h4>
+<h4 id="quality-of-service---">Quality of Service 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#quality-of-service---">#</a></h4>
 <p>We can set some quality of service parameters on kubernetes: to have guaranteed requests and <strong>limits</strong>.
 We have three possible settings:</p>
 <ul>
@@ -434,9 +431,19 @@ Policies can vary:</p>
 <li>Keep alive period.</li>
 </ul>
 <h4 id="service-mesh-">Service Mesh 🟥<a hidden class="anchor" aria-hidden="true" href="#service-mesh-">#</a></h4>
-<p>TODO</p>
+<p>If you have a bunch of services that need to communicate with each other, it is helpful to have a <strong>service mesh</strong>. This mesh makes it easier to connect and manage <em>secure</em> traffic between services. One example is Istio.
+This is a service ran along the main service, that provides:</p>
+<ul>
+<li><strong>Data Plane</strong>: the part that actually processes the traffic, usually a sidecar container (see <a href="/notes/design-patterns">Design patterns</a>).</li>
+<li><strong>Control Plane</strong>: configure how communication is managed (security policies, who can talk to another? load balancing and similar).</li>
+</ul>
 <h4 id="horizontal-pod-autoscaler-">Horizontal Pod Autoscaler 🟥<a hidden class="anchor" aria-hidden="true" href="#horizontal-pod-autoscaler-">#</a></h4>
-<p>TODO:</p>
+<p>Kubernetes can scale based on utilization on the machine, this is called <strong>Horizontal Pod Autoscaler</strong>.
+You can:</p>
+<ul>
+<li>Set user-define min/max bounds for some resources.</li>
+<li>Currently only does it with CPU utilization.</li>
+</ul>
 <h2 id="dirigent">Dirigent<a hidden class="anchor" aria-hidden="true" href="#dirigent">#</a></h2>
 <p>Classical FaaS (see <a href="/notes/cloud-computing-services">Cloud Computing Services</a>) are not low-latency in scheduling functions, cold starts are especially slow.</p>
 <h3 id="classical-faas-systems">Classical FaaS systems<a hidden class="anchor" aria-hidden="true" href="#classical-faas-systems">#</a></h3>
@@ -462,7 +469,8 @@ API server consumes a lot of CPU time, as everything passess through this (<stro
 <li>Microservice architecture with per-sandbox sidecars (Communication bottlenecks)</li>
 </ul>
 <h3 id="dirigent-innovations">Dirigent Innovations<a hidden class="anchor" aria-hidden="true" href="#dirigent-innovations">#</a></h3>
-<p>This is a simple architecture independent of Kubernetes (difficult to make it compatible).</p>
+<p>This is a simple architecture independent of Kubernetes (difficult to make it compatible).
+But remember: this is still a research preview, and has lots of limitations currently.</p>
 <h4 id="attacking-bottlenecks">Attacking bottlenecks<a hidden class="anchor" aria-hidden="true" href="#attacking-bottlenecks">#</a></h4>
 <ul>
 <li><strong>Single controller</strong>: One controller for all the abstractions.
@@ -492,7 +500,7 @@ We some some orders of magnitude improvements.
 <p>Mesos is an example of two level cluster managers: One global, central controller and multiple framework schedulers
 Mesos hands out the so called <strong>resource offer</strong> to applications, who then decide whether to take the offer or not.
 Mesos adopts a classical <strong>master-slave</strong> architecture, akin to what we have seen for <a href="/notes/apache-spark">Apache Spark</a>, <a href="/notes/massive-parallel-processing">Massive Parallel Processing</a>, <a href="/notes/distributed-file-systems">Distributed file systems</a> and similars.</p>
-<h4 id="mesos-architecture---">Mesos Architecture 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#mesos-architecture---">#</a></h4>
+<h4 id="mesos-architecture-">Mesos Architecture 🟥++<a hidden class="anchor" aria-hidden="true" href="#mesos-architecture-">#</a></h4>
 <p>We have three parts:</p>
 <ul>
 <li>Workers: they continuously send resource usage statistics to the controller. They have some <em>executor</em> API to accept jobs from the application frameworks (Spark, Kube, etc).</li>
@@ -504,7 +512,7 @@ Mesos adopts a classical <strong>master-slave</strong> architecture, akin to wha
 We have Omega (just a proof of concept, but never actually developed) and <a href="https://people.eecs.berkeley.edu/~matei/papers/2013/sosp_sparrow.pdf">Sparrow</a>.</p>
 <h3 id="sparrow">Sparrow<a hidden class="anchor" aria-hidden="true" href="#sparrow">#</a></h3>
 <p>Sparrow is an example of a distributed scheduler. The main advantage is being more robust: it doesn&rsquo;t have a single point of failure anymore.</p>
-<h4 id="sparrows-main-architecture">Sparrow&rsquo;s main architecture<a hidden class="anchor" aria-hidden="true" href="#sparrows-main-architecture">#</a></h4>
+<h4 id="sparrows-main-architecture---">Sparrow&rsquo;s main architecture 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#sparrows-main-architecture---">#</a></h4>
 <p>You have a bunch of schedulers, that assign tasks to workers.
 <img src="/images/notes/Cluster Resource Management-20250324152225659.webp" style="width: 100%" class="center" alt="Cluster Resource Management-20250324152225659">
 They do it independently.</p>
