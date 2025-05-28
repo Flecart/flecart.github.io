@@ -15,7 +15,7 @@ Its inputs and outputs
 Intermediate state, control flow, etc.
 Even if do not trust the cloud provider!
 
-The treat model
+The Treat model
 Trust relationships
 
 Everyone trusts the hardware
@@ -109,7 +109,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Confidential Computing">
   <meta property="og:description" content="With confidential computing we want to guarantee confidentiality and integrity of a user’s computation running on a remote (cloud) system, including:
-The program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The treat model Trust relationships
+The program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The Treat model Trust relationships
 Everyone trusts the hardware Users do not trust each other Users DO NOT trust the cloud provider (and its software) Cloud provider does not trust users Who has access to what?">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
@@ -127,7 +127,7 @@ Its inputs and outputs
 Intermediate state, control flow, etc.
 Even if do not trust the cloud provider!
 
-The treat model
+The Treat model
 Trust relationships
 
 Everyone trusts the hardware
@@ -164,12 +164,12 @@ Who has access to what?">
   "@type": "BlogPosting",
   "headline": "Confidential Computing",
   "name": "Confidential Computing",
-  "description": "With confidential computing we want to guarantee confidentiality and integrity of a user’s computation running on a remote (cloud) system, including:\nThe program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The treat model Trust relationships\nEveryone trusts the hardware Users do not trust each other Users DO NOT trust the cloud provider (and its software) Cloud provider does not trust users Who has access to what?\n",
+  "description": "With confidential computing we want to guarantee confidentiality and integrity of a user’s computation running on a remote (cloud) system, including:\nThe program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The Treat model Trust relationships\nEveryone trusts the hardware Users do not trust each other Users DO NOT trust the cloud provider (and its software) Cloud provider does not trust users Who has access to what?\n",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "With confidential computing we want to guarantee confidentiality and integrity of a user’s computation running on a remote (cloud) system, including:\nThe program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The treat model Trust relationships\nEveryone trusts the hardware Users do not trust each other Users DO NOT trust the cloud provider (and its software) Cloud provider does not trust users Who has access to what?\nUsers do not have physical access to hardware Cloud provider has physical access How can you protect memory and CPU while it is running on an untrusted machine? If it was only data or transmission, then encryption would have been a solution, but in this case, we do not trust this.\nWe use trusted computing environments or homomorphic encryption, which means computing on encrypted data, but this is still not scalable.\nTrusted Platform modules Trusted Execution Environments Trust some (hopefully small) remote hardware and software\nTrusted hardware element (e.g., TPM chip) Measures (≈hashes) privileged software Attests (≈signs hash) to a remote user Incorrect attestation → compromised software Allows the user to detect if TCB is tampered, and act accordingly. Here the prevention is relies on the user, but it does not prevents these kinds of attacks. Secure Boot ",
-  "wordCount" : "214",
+  "articleBody": "With confidential computing we want to guarantee confidentiality and integrity of a user’s computation running on a remote (cloud) system, including:\nThe program Its inputs and outputs Intermediate state, control flow, etc. Even if do not trust the cloud provider! The Treat model Trust relationships\nEveryone trusts the hardware Users do not trust each other Users DO NOT trust the cloud provider (and its software) Cloud provider does not trust users Who has access to what?\nUsers do not have physical access to hardware Cloud provider has physical access How can you protect memory and CPU while it is running on an untrusted machine? If it was only data or transmission, then encryption would have been a solution, but in this case, we do not trust this.\nWe use trusted computing environments or homomorphic encryption, which means computing on encrypted data, but this is still not scalable, other is automatic verification of software and hardware isolation.\nTrusted Platform modules Trusted Execution Environments Trust some (hopefully small) remote hardware and software\nTrusted hardware element (e.g., TPM chip) Measures (≈hashes) privileged software Attests (≈signs hash) to a remote user Incorrect attestation → compromised software Allows the user to detect if TCB is tampered, and act accordingly. Here the prevention is relies on the user, but it does not prevents these kinds of attacks. Secure Boot Secure boot: check system integrity before running software\nCertify system to external user TPM is a specialized chip that stores encryption keys specific to the host system for hardware authentication\nGoals: secure attestation and key management Measure \u0026 examine state, send signed certification Example: measure BIOS sha256 to match the expected signature (detect tampers). In google, this chip is called titan. Before running any code, we want to have a trusted system, this chip allows to check for this.\nConfidential Computing key ingredients CPU root of trust Cryptographic keys and secure boot Attestation infrastructure Privileged execution environment Can be implemented with different forms, e.g.: Extended microcode (e.g., Intel SGX encalves) Platform security processor (e.g., AMD SEV confidential VM) Trusted firmware New CPU protection mode (e.g., Intel TXT confidential VM, Arm CCA confidential VM) Trusted software (“monitor”) runs below a de-privileged hypervisor Memory encryption Protects against physical attacks on DRAM Varying degrees of integrity protection Hardware security If some software is implemented on bare metal, and it’s secure it reduces the trusted code base, so we have lesser attack vectors, and we have faster runtime, since it is usually faster in hardware. But not everything is implementable in a scalable manner in hardware, we need to take into account also other factors.\nCHERI Memory Capabilities CHERI stands for Capability Hardware Enhanced RISC Instructions, first chip that implements capabilities in hardware, for fat pointers, i.e. they know where is it possible to read and write.\nOne problem is\nSoftware compability often you need to rewrite parts of your code Revoking: it is still difficult to revoke and reissue all the capabilities. More cache pressure, since memory is larger. But now we can check every read, it is like a sandboxed environment.\nNitro System AWS has AWS Nitro, which is a hardware assisted hypervisor, see document.\nSlide from CCA 2025 ETHz course.\nNitro Cards Custom silicon implementing data encryption for networking and storage Use hardware offload engines with secure key storage integrated in the SoC Encryption keys are only present in plaintext in the protected volatile memory of the Nitro Cards Keys are inaccessible to AWS operators or customer code running on host CPUs A Nitro Card can be sub-divided into multiple virtual functions with SR-IOV (see Virtual Machines and Datacenter Hardware) Nitro Security Chip The Nitro Security Chip is a custom hardware component that provides a secure environment for the Nitro System.\nDevice integrated into the server’s system main board During system boot/reset, controls physical reset pins Ensures Nitro controller completes its secure boot and verifies integrity of the BIOS and system firmware before any processing on CPU can begin To support bare-metal EC2 VMs, Nitro Security chip ensures the host CPU cannot update firmware in bare-metal mode Nitro Hypervisor Nitro Hypervisor code is a cryptographically signed firmware-like component stored on encrypted local storage:\nBy design, the hypervisor is not a general-purpose system: it has no network stack, no file system, no interactive shell → relies instead on physically isolated Nitro cards for I/O → eliminates entire classes of bugs, such as remote networking attacks → even in the unlikely case of a bug, the lack of standard features like interactive shells and file systems makes it a difficult environment for attackers to exploit (not very nice environment). ",
+  "wordCount" : "769",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -264,7 +264,7 @@ Who has access to what?">
     <h1 class="post-title entry-hint-parent">
       Confidential Computing
     </h1>
-    <div class="post-meta">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
   </header> <div class="toc">
@@ -275,7 +275,7 @@ Who has access to what?">
 
         <div class="inner"><ul><ul>
                 <li>
-                    <a href="#the-treat-model" aria-label="The treat model">The treat model</a></li></ul>
+                    <a href="#the-treat-model" aria-label="The Treat model">The Treat model</a></li></ul>
                     
                 <li>
                     <a href="#trusted-platform-modules" aria-label="Trusted Platform modules">Trusted Platform modules</a><ul>
@@ -283,7 +283,23 @@ Who has access to what?">
                 <li>
                     <a href="#trusted-execution-environments" aria-label="Trusted Execution Environments">Trusted Execution Environments</a></li>
                 <li>
-                    <a href="#secure-boot" aria-label="Secure Boot">Secure Boot</a>
+                    <a href="#secure-boot" aria-label="Secure Boot">Secure Boot</a></li>
+                <li>
+                    <a href="#confidential-computing-key-ingredients" aria-label="Confidential Computing key ingredients">Confidential Computing key ingredients</a></li>
+                <li>
+                    <a href="#hardware-security" aria-label="Hardware security">Hardware security</a></li>
+                <li>
+                    <a href="#cheri-memory-capabilities" aria-label="CHERI Memory Capabilities">CHERI Memory Capabilities</a></li></ul>
+                </li>
+                <li>
+                    <a href="#nitro-system" aria-label="Nitro System">Nitro System</a><ul>
+                        
+                <li>
+                    <a href="#nitro-cards" aria-label="Nitro Cards">Nitro Cards</a></li>
+                <li>
+                    <a href="#nitro-security-chip" aria-label="Nitro Security Chip">Nitro Security Chip</a></li>
+                <li>
+                    <a href="#nitro-hypervisor" aria-label="Nitro Hypervisor">Nitro Hypervisor</a>
                 </li>
             </ul>
             </li>
@@ -300,7 +316,7 @@ running on a remote (cloud) system, including:</p>
 <li>Intermediate state, control flow, etc.
 Even <strong>if do not trust the cloud provider</strong>!</li>
 </ul>
-<h4 id="the-treat-model">The treat model<a hidden class="anchor" aria-hidden="true" href="#the-treat-model">#</a></h4>
+<h4 id="the-treat-model">The Treat model<a hidden class="anchor" aria-hidden="true" href="#the-treat-model">#</a></h4>
 <p><strong>Trust relationships</strong></p>
 <ul>
 <li>Everyone trusts the hardware</li>
@@ -314,7 +330,7 @@ Even <strong>if do not trust the cloud provider</strong>!</li>
 <li>Cloud provider has physical access</li>
 </ul>
 <p>How can you protect memory and CPU while it is running on an untrusted machine? If it was only data or transmission, then encryption would have been a solution, but in this case, we do not trust this.</p>
-<p>We use <strong>trusted computing environments</strong> or <strong>homomorphic encryption</strong>, which means computing on encrypted data, but this is still not scalable.</p>
+<p>We use <strong>trusted computing environments</strong> or <strong>homomorphic encryption</strong>, which means computing on encrypted data, but this is still not scalable, other is automatic verification of software and hardware isolation.</p>
 <h3 id="trusted-platform-modules">Trusted Platform modules<a hidden class="anchor" aria-hidden="true" href="#trusted-platform-modules">#</a></h3>
 <h4 id="trusted-execution-environments">Trusted Execution Environments<a hidden class="anchor" aria-hidden="true" href="#trusted-execution-environments">#</a></h4>
 <p>Trust some (hopefully small) remote hardware and software</p>
@@ -329,6 +345,97 @@ Allows the user to <strong>detect</strong> if TCB is tampered, and act according
 </li>
 </ul>
 <h4 id="secure-boot">Secure Boot<a hidden class="anchor" aria-hidden="true" href="#secure-boot">#</a></h4>
+<p>Secure boot: check system integrity before running software</p>
+<ul>
+<li>Certify system to <strong>external user</strong></li>
+</ul>
+<p>TPM is a specialized chip that stores encryption keys specific to the <em>host system</em> for hardware authentication</p>
+<ul>
+<li>Goals: <strong>secure attestation</strong> and <strong>key management</strong></li>
+<li>Measure &amp; examine state, send signed certification</li>
+<li>Example: measure BIOS sha256 to match the expected signature (<strong>detect tampers</strong>).</li>
+</ul>
+<p>In google, this chip is called <strong>titan</strong>.
+Before running any code, we want to have a trusted system, this chip allows to check for this.</p>
+<h4 id="confidential-computing-key-ingredients">Confidential Computing key ingredients<a hidden class="anchor" aria-hidden="true" href="#confidential-computing-key-ingredients">#</a></h4>
+<ol>
+<li>CPU root of trust
+<ul>
+<li>Cryptographic keys and secure boot</li>
+</ul>
+</li>
+<li>Attestation infrastructure</li>
+<li>Privileged execution environment
+Can be implemented with different forms, e.g.:
+<ul>
+<li>Extended microcode (e.g., Intel SGX encalves)</li>
+<li>Platform security processor (e.g., AMD SEV confidential VM)
+<ul>
+<li>Trusted firmware</li>
+</ul>
+</li>
+<li>New CPU protection mode (e.g., Intel TXT confidential VM, Arm CCA confidential VM)
+<ul>
+<li>Trusted software (“monitor”) runs below a de-privileged hypervisor</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Memory encryption
+<ul>
+<li>Protects against physical attacks on DRAM</li>
+<li>Varying degrees of integrity protection</li>
+</ul>
+</li>
+</ol>
+<h4 id="hardware-security">Hardware security<a hidden class="anchor" aria-hidden="true" href="#hardware-security">#</a></h4>
+<p>If some software is implemented on bare metal, and it&rsquo;s secure it <strong>reduces the trusted code base</strong>, so we have lesser attack vectors, and we have <strong>faster runtime</strong>, since it is usually faster in hardware.
+But not everything is implementable in a scalable manner in hardware, we need to take into account also other factors.</p>
+<h4 id="cheri-memory-capabilities">CHERI Memory Capabilities<a hidden class="anchor" aria-hidden="true" href="#cheri-memory-capabilities">#</a></h4>
+<p>CHERI stands for Capability Hardware Enhanced RISC Instructions, first chip that implements <a href="/notes/sicurezza-os">capabilities</a> in hardware, for <strong>fat pointers</strong>, i.e. they know where is it possible to read and write.</p>
+<img src="/images/notes/Confidential Computing-20250528102008999.webp" style="width: 100%" class="center" alt="Confidential Computing-20250528102008999">
+<p>One problem is</p>
+<ul>
+<li><strong>Software compability</strong> often you need to rewrite parts of your code</li>
+<li><strong>Revoking</strong>: it is still difficult to revoke and reissue all the capabilities.</li>
+<li><strong>More cache pressure</strong>, since memory is larger.</li>
+</ul>
+<p>But now we can check every read, it is like a <strong>sandboxed environment</strong>.</p>
+<h3 id="nitro-system">Nitro System<a hidden class="anchor" aria-hidden="true" href="#nitro-system">#</a></h3>
+<p>AWS has <strong>AWS Nitro</strong>, which is a <strong>hardware assisted hypervisor</strong>, see <a href="https://docs.aws.amazon.com/pdfs/whitepapers/latest/security-design-of-aws-nitro-system/security-design-of-aws-nitro-system.pdf">document</a>.</p>
+<figure class="center">
+<img src="/images/notes/Confidential Computing-20250528100515607.webp" style="width: 100%"   alt="Confidential Computing-20250528100515607" title="Confidential Computing-20250528100515607"/>
+<figcaption><p style="text-align:center;">Slide from CCA 2025 ETHz course.</p></figcaption>
+</figure>
+<h4 id="nitro-cards">Nitro Cards<a hidden class="anchor" aria-hidden="true" href="#nitro-cards">#</a></h4>
+<ul>
+<li>Custom silicon implementing data encryption for networking and storage
+<ul>
+<li>Use hardware offload engines with secure key storage integrated in the SoC</li>
+<li>Encryption keys are only present in plaintext in the protected <strong>volatile memory</strong> of the Nitro Cards</li>
+</ul>
+</li>
+<li>Keys are inaccessible to AWS operators or customer code running on host CPUs</li>
+<li>A Nitro Card can be sub-divided into multiple virtual functions with SR-IOV (see <a href="/notes/virtual-machines">Virtual Machines</a> and <a href="/notes/datacenter-hardware">Datacenter Hardware</a>)</li>
+</ul>
+<h4 id="nitro-security-chip">Nitro Security Chip<a hidden class="anchor" aria-hidden="true" href="#nitro-security-chip">#</a></h4>
+<p>The Nitro Security Chip is a custom hardware component that provides a secure environment for the Nitro System.</p>
+<ul>
+<li>Device integrated into the server’s system main board</li>
+<li>During system boot/reset, controls physical reset pins</li>
+<li>Ensures Nitro controller completes its secure boot and verifies integrity of the BIOS
+and system firmware before any processing on CPU can begin</li>
+<li>To support bare-metal EC2 VMs, Nitro Security chip ensures the host CPU
+cannot update firmware in bare-metal mode</li>
+</ul>
+<h4 id="nitro-hypervisor">Nitro Hypervisor<a hidden class="anchor" aria-hidden="true" href="#nitro-hypervisor">#</a></h4>
+<p>Nitro Hypervisor code is a cryptographically signed firmware-like component stored on encrypted local storage:</p>
+<ul>
+<li>By design, the hypervisor is not a general-purpose system: it has no network stack, no file system, no interactive shell
+→ relies instead on physically isolated Nitro cards for I/O
+→ eliminates entire classes of bugs, such as remote networking attacks
+→ even in the unlikely case of a bug, the lack of standard features like interactive shells and file systems makes it a difficult environment for attackers to exploit (not very nice environment).</li>
+</ul>
 
 
   </div>

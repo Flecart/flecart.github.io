@@ -8,7 +8,7 @@
 <title>Garbage Collection | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
 <meta name="description" content="On dangling pointers
-Tombstones 🟩
+Tombstones
 
 
 Slides tombstones
@@ -17,7 +17,7 @@ Slides tombstones
 
 Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.
 Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.
-Keys and locks 🟩
+Keys and locks
 Un pò di overhead in più dal punto di vista della memoria, che è doppio">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/garbage-collection/">
@@ -103,10 +103,10 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/garbage-collection/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Garbage Collection">
-  <meta property="og:description" content="On dangling pointers Tombstones 🟩 Slides tombstones
+  <meta property="og:description" content="On dangling pointers Tombstones Slides tombstones
 Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.
 Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.
-Keys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria, che è doppio">
+Keys and locks Un pò di overhead in più dal punto di vista della memoria, che è doppio">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -116,7 +116,7 @@ Keys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria,
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Garbage Collection">
 <meta name="twitter:description" content="On dangling pointers
-Tombstones 🟩
+Tombstones
 
 
 Slides tombstones
@@ -125,7 +125,7 @@ Slides tombstones
 
 Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.
 Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.
-Keys and locks 🟩
+Keys and locks
 Un pò di overhead in più dal punto di vista della memoria, che è doppio">
 
 
@@ -155,12 +155,12 @@ Un pò di overhead in più dal punto di vista della memoria, che è doppio">
   "@type": "BlogPosting",
   "headline": "Garbage Collection",
   "name": "Garbage Collection",
-  "description": "On dangling pointers Tombstones 🟩 Slides tombstones\nQuando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.\nDopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.\nKeys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria, che è doppio\n",
+  "description": "On dangling pointers Tombstones Slides tombstones\nQuando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.\nDopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.\nKeys and locks Un pò di overhead in più dal punto di vista della memoria, che è doppio\n",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "On dangling pointers Tombstones 🟩 Slides tombstones\nQuando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.\nDopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.\nKeys and locks 🟩 Un pò di overhead in più dal punto di vista della memoria, che è doppio\nOn GC Reference counting 🟩 Quando alloco, mi tengo anche un contatore di riferimenti, ossia puntatori che fanno riferimento a questo blocco. Quando arriva a zero dealloco. Questo è una variabile privata del GC, non è accessibile da nessuna parte dall’esterno.\nCome fare per riferimenti ricorsivi? Se avessimo due elementi che si puntano fra di loro ma non sono accessibili tramite stack?\nCon questa tecnica non è possibile risolverlo bisogna utilizzare il metodo successivo.\nMark and sweep 🟩 Slide tecnica mark and sweep\nDefinito in due parti:\nFase di detection, in cui parto marcando tutto, poi se riesco a raggiungerlo tolgo il mark. remotion vado a rimuovere tutti quelli marcati (alla fine è la stessa cosa marcare non marcare, basta invertire), in questo modo riconosco tutti i pezzi i memoria non raggiungibili e so cosa andare a togliere. Svantaggio principale:\nNon so quando andare a fare mark and sweep:\nOgni tot tempo Quando finisco la memoria (ogni tot memoria). Quando fa GC devo fermare il programma (stop the world) perché non ha senso che inserisco cose quando vado a marcare (pensala come modify list quando ci scorri). Per sistemi realtype non funziona proprio, perché non posso permettermi di bloccare la computazione. Implementazione: invesione dei puntatori 🟨+ Come facciamo ad implementare questa tecnica quando magari è invocata solamente quando ho finito lo spazio? Non possiamo utilizzare la stack, perché la memoria è finita.\nSi utilizza la tecnica di inversione dei puntatori:\nSlide inversione dei puntatori\nStop and copy Slide tecnica stop and copy\nLa heap è divisa in due regioni differenti, quando una è piena (credo) copio tutto nell’altra zona. Questo è buono quando ho pochi blocchi ancora buoni, perché ci metterei molto meno a spostare e emttere nell’altra.y\nBorrow checking (non fatto) Questa è la cosa nuova introdotta da Rust.\nOwnership Lifetimes ",
-  "wordCount" : "378",
+  "articleBody": "On dangling pointers Tombstones Slides tombstones\nQuando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.\nDopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.\nKeys and locks Un pò di overhead in più dal punto di vista della memoria, che è doppio\nOn GC Reference counting Quando alloco, mi tengo anche un contatore di riferimenti, ossia puntatori che fanno riferimento a questo blocco. Quando arriva a zero dealloco. Questo è una variabile privata del GC, non è accessibile da nessuna parte dall’esterno.\nCome fare per riferimenti ricorsivi? Se avessimo due elementi che si puntano fra di loro ma non sono accessibili tramite stack?\nCon questa tecnica non è possibile risolverlo bisogna utilizzare il metodo successivo.\nMark and sweep Slide tecnica mark and sweep\nDefinito in due parti:\nFase di detection, in cui parto marcando tutto, poi se riesco a raggiungerlo tolgo il mark. remotion vado a rimuovere tutti quelli marcati (alla fine è la stessa cosa marcare non marcare, basta invertire), in questo modo riconosco tutti i pezzi i memoria non raggiungibili e so cosa andare a togliere. Svantaggio principale:\nNon so quando andare a fare mark and sweep:\nOgni tot tempo Quando finisco la memoria (ogni tot memoria). Quando fa GC devo fermare il programma (stop the world) perché non ha senso che inserisco cose quando vado a marcare (pensala come modify list quando ci scorri). Per sistemi realtype non funziona proprio, perché non posso permettermi di bloccare la computazione. Implementazione: invesione dei puntatori Come facciamo ad implementare questa tecnica quando magari è invocata solamente quando ho finito lo spazio? Non possiamo utilizzare la stack, perché la memoria è finita.\nSi utilizza la tecnica di inversione dei puntatori:\nSlide inversione dei puntatori\nStop and copy Slide tecnica stop and copy\nLa heap è divisa in due regioni differenti, quando una è piena (credo) copio tutto nell’altra zona. Questo è buono quando ho pochi blocchi ancora buoni, perché ci metterei molto meno a spostare e emttere nell’altra.y\nBorrow checking (non fatto) Questa è la cosa nuova introdotta da Rust.\nOwnership Lifetimes ",
+  "wordCount" : "373",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -269,19 +269,19 @@ Un pò di overhead in più dal punto di vista della memoria, che è doppio">
                     <a href="#on-dangling-pointers" aria-label="On dangling pointers">On dangling pointers</a><ul>
                         
                 <li>
-                    <a href="#tombstones-" aria-label="Tombstones 🟩">Tombstones 🟩</a></li>
+                    <a href="#tombstones" aria-label="Tombstones">Tombstones</a></li>
                 <li>
-                    <a href="#keys-and-locks-" aria-label="Keys and locks 🟩">Keys and locks 🟩</a></li></ul>
+                    <a href="#keys-and-locks" aria-label="Keys and locks">Keys and locks</a></li></ul>
                 </li>
                 <li>
                     <a href="#on-gc" aria-label="On GC">On GC</a><ul>
                         
                 <li>
-                    <a href="#reference-counting-" aria-label="Reference counting 🟩">Reference counting 🟩</a></li>
+                    <a href="#reference-counting" aria-label="Reference counting">Reference counting</a></li>
                 <li>
-                    <a href="#mark-and-sweep-" aria-label="Mark and sweep 🟩">Mark and sweep 🟩</a></li>
+                    <a href="#mark-and-sweep" aria-label="Mark and sweep">Mark and sweep</a></li>
                 <li>
-                    <a href="#implementazione-invesione-dei-puntatori-" aria-label="Implementazione: invesione dei puntatori 🟨&#43;">Implementazione: invesione dei puntatori 🟨+</a></li>
+                    <a href="#implementazione-invesione-dei-puntatori" aria-label="Implementazione: invesione dei puntatori">Implementazione: invesione dei puntatori</a></li>
                 <li>
                     <a href="#stop-and-copy" aria-label="Stop and copy">Stop and copy</a></li></ul>
                 </li>
@@ -301,7 +301,7 @@ Un pò di overhead in più dal punto di vista della memoria, che è doppio">
 </div>
 
   <div class="post-content"><h2 id="on-dangling-pointers">On dangling pointers<a hidden class="anchor" aria-hidden="true" href="#on-dangling-pointers">#</a></h2>
-<h3 id="tombstones-">Tombstones 🟩<a hidden class="anchor" aria-hidden="true" href="#tombstones-">#</a></h3>
+<h3 id="tombstones">Tombstones<a hidden class="anchor" aria-hidden="true" href="#tombstones">#</a></h3>
 <ul>
 <li>
 <p>Slides tombstones</p>
@@ -310,14 +310,14 @@ Un pò di overhead in più dal punto di vista della memoria, che è doppio">
 </ul>
 <p>Quando alloco, alloco anche una tombstone, e tutti i riferimenti passano per quella. (quindi ho due dereference per l’accesso) quando vado a deallocare segno la tombstone come RIP, NULL.</p>
 <p>Dopo molto tempo ho il problema del cimitero che diventa molto grande. Anche se non punta più a niente, il cimitero.</p>
-<h3 id="keys-and-locks-">Keys and locks 🟩<a hidden class="anchor" aria-hidden="true" href="#keys-and-locks-">#</a></h3>
+<h3 id="keys-and-locks">Keys and locks<a hidden class="anchor" aria-hidden="true" href="#keys-and-locks">#</a></h3>
 <p>Un pò di overhead in più dal punto di vista della memoria, che è doppio</p>
 <h2 id="on-gc">On GC<a hidden class="anchor" aria-hidden="true" href="#on-gc">#</a></h2>
-<h3 id="reference-counting-">Reference counting 🟩<a hidden class="anchor" aria-hidden="true" href="#reference-counting-">#</a></h3>
+<h3 id="reference-counting">Reference counting<a hidden class="anchor" aria-hidden="true" href="#reference-counting">#</a></h3>
 <p>Quando alloco, mi tengo anche un <strong>contatore di riferimenti</strong>, ossia puntatori che fanno riferimento a questo blocco. Quando arriva a zero dealloco. Questo è una variabile privata del GC, non è accessibile da nessuna parte dall’esterno.</p>
 <p>Come fare per riferimenti ricorsivi? Se avessimo due elementi che si puntano fra di loro ma non sono accessibili tramite stack?</p>
 <p>Con questa tecnica <strong>non è possibile risolverlo</strong> bisogna utilizzare il metodo successivo.</p>
-<h3 id="mark-and-sweep-">Mark and sweep 🟩<a hidden class="anchor" aria-hidden="true" href="#mark-and-sweep-">#</a></h3>
+<h3 id="mark-and-sweep">Mark and sweep<a hidden class="anchor" aria-hidden="true" href="#mark-and-sweep">#</a></h3>
 <ul>
 <li>
 <p>Slide tecnica mark and sweep</p>
@@ -337,7 +337,7 @@ Un pò di overhead in più dal punto di vista della memoria, che è doppio">
 <li>Quando fa GC devo <strong>fermare il programma (stop the world)</strong> perché non ha senso che inserisco cose quando vado a marcare (pensala come modify list quando ci scorri).</li>
 <li>Per sistemi realtype non funziona proprio, perché non posso permettermi di bloccare la computazione.</li>
 </ol>
-<h3 id="implementazione-invesione-dei-puntatori-">Implementazione: invesione dei puntatori 🟨+<a hidden class="anchor" aria-hidden="true" href="#implementazione-invesione-dei-puntatori-">#</a></h3>
+<h3 id="implementazione-invesione-dei-puntatori">Implementazione: invesione dei puntatori<a hidden class="anchor" aria-hidden="true" href="#implementazione-invesione-dei-puntatori">#</a></h3>
 <p>Come facciamo ad implementare questa tecnica quando magari è invocata solamente quando ho finito lo spazio? Non possiamo utilizzare la stack, perché la memoria è finita.</p>
 <p>Si utilizza la tecnica di <strong>inversione dei puntatori</strong>:</p>
 <ul>

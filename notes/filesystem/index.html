@@ -10,7 +10,7 @@
 <meta name="description" content="Perché filesystem?
 Questa è l&rsquo;idea presa dall&rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
 L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l&rsquo;accesso.
-Informazioni dei files (5&#43;) 🟨
+Informazioni dei files (5&#43;)
 Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro è gestito dall&rsquo;applicazione, non dal file system!">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/filesystem/">
@@ -98,7 +98,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   <meta property="og:title" content="Filesystem">
   <meta property="og:description" content="Perché filesystem? Questa è l’idea presa dall’archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
 L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l’accesso.
-Informazioni dei files (5&#43;) 🟨 Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!">
+Informazioni dei files (5&#43;) Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,7 +110,7 @@ Informazioni dei files (5&#43;) 🟨 Il file è l’unità logica di memorizzazi
 <meta name="twitter:description" content="Perché filesystem?
 Questa è l&rsquo;idea presa dall&rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.
 L’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l&rsquo;accesso.
-Informazioni dei files (5&#43;) 🟨
+Informazioni dei files (5&#43;)
 Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro è gestito dall&rsquo;applicazione, non dal file system!">
 
 
@@ -140,12 +140,12 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
   "@type": "BlogPosting",
   "headline": "Filesystem",
   "name": "Filesystem",
-  "description": "Perché filesystem? Questa è l\u0026rsquo;idea presa dall\u0026rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.\nL’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l\u0026rsquo;accesso.\nInformazioni dei files (5+) 🟨 Il file è l’unità logica di memorizzazione. il formato che c\u0026rsquo;è dentro è gestito dall\u0026rsquo;applicazione, non dal file system!\n",
+  "description": "Perché filesystem? Questa è l\u0026rsquo;idea presa dall\u0026rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.\nL’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l\u0026rsquo;accesso.\nInformazioni dei files (5+) Il file è l’unità logica di memorizzazione. il formato che c\u0026rsquo;è dentro è gestito dall\u0026rsquo;applicazione, non dal file system!\n",
   "keywords": [
     "sistemi-operativi"
   ],
-  "articleBody": "Perché filesystem? Questa è l’idea presa dall’archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.\nL’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l’accesso.\nInformazioni dei files (5+) 🟨 Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!\nLista degli attributi Ci sono un sacco di informazioni memorizzate nei file (un sacco di metadata anche)\nNome Data e ora di accesso o modifica Informazioni sull’ownership e protezione di accesso. Dimensione del file TIpo del file Categorizzazione dei files (3) 🟩- Tipi di files\nPossiamo andare a distinguere i files a seconda del\nContenuto (se contiene codice oggetto, se contiene dati o informazioni) Struttura, se sono plain text sequenze di bytes, oppure dati strutturati come database., e possono anche essere un albero**.** UNIX: files speciali (blocchi o caratteri), pipes, oltre ai classici files e directories. NOTA: ci sono molte cose che sono viste come files, in unix tutto è un file :D. Sono identificati da una coppia di numeri che identificano il device driver Files in sistemi operativi comuni 🟩 I files sono nati con la metafora dell’ufficio:\nArchivi di informazione, che vanno aperti e richiusi (messi nella loro collocazione corretta) È utile conoscere il tipo di file per capire quale utilizzo andiamo a fare di essa.\nC’è un tradeoff, se ho tanti tipi di files, il sistema operativo diventa molto più complesso, se ho troppi pochi potrebbero essere troppo generali.\nSlide tradeoff tipologie di files\nTecniche di identificazione dei file (3) 🟩 Generalmente ci sono 3 modi per riconoscere il tipo di files:\nMagic numbers Attributo tipo del filesystem estensione. Rispettivamente queste tecniche sono utilizzate in:\nWin (estensioni) Mac, informazioni aggiuntive sui files Unix, il magic number all’inizio dei files Slide metodi di riconoscimento nei sistemi di riconoscimento\nUnix riconosce solamente gli eseguibili, in questo senso è minimalista.\nCol magic number riesce anche a riconoscere l’architettura target dell’eseguibile.\nMac OS ha un codice identificativo per un programma che ha creato il file o la risorsa.\nWindows guarda l’estensione. che solitamente sempre da 3 caratteri. (inizilamente il nome del file aveva solo 8 caratteri.\nMetodi di accesso comuni (3) Slide metodi di accesso\nseguenziale\ndiretto\nindicizzato\nUno di particolare interesse è INDICIZZATO, che si usa spesso per i databases:\nSlide metodo di accesso ad indice\nOperazioni sui files 🟨 Slide lista delle operazioni\nL’apertura è una operazione molto costosa, bisogna\nTrovare i files Capire se si hanno i permessi corretti per poter leggere, o scrivere sul file. Questo si collega molto bene con la metafora dell’ufficio e con l’archivio. Se ne ho bisogno vado a prendere dall’archivio e la apro se mi serve. Una volta finito lo si rimette apposto.\nNote sull’apertura e chiusura dei files\nDirectories Introduzione alle directories 🟨 È quindi un file speciale che contiene le informazioni di accesso per la gestione dei files al suo interno.\nA seconda dell’implementazione possono essere degli array lineari oppure degli hashtable. (si pensi a quanto possano essere grandi le directories, se uso una lista diventa molto lento, se invece si sa già che sia piccola si perde del tempo a fare l’hash).\nInformazioni nelle directories (2) 🟨 Slide informazioni delle directories\nSono contenuti i-nodes, che sono degli indici per andare a comprendere la struttura dei files.\nMa può cambiare, questo è un fatto implementativo, potrebbe benissimo anche essere messo nelle entries della directory.\nUNIX → messe negli i-node\nMSDOS → messe nelle dir entries.\nLunghezza dei nomi 🟨 Introduzione al problema della lunghezza dei nomi Anche qui facciamo distinzione fra nomi a lunghezza variabile e nomi fissi, MSDOS al tempo utilizzava nomi fissi con necessariamente estensioni a tre caratteri.\nMetodi per nomi a lunghezza variabile Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare il nome del file Directories a grafo aciclico I files, possono avere più nomi, in questo senso non ho più un albero ma un grafo.\nSlide struttura grafo aciclico Semantica di coerenza 🟥 Dato che i sistemi moderni sono maggiormente tutti multitasking, vogliamo andare a specificare quando una modifica di un file può essere vista da un altro processo.\nimmediato: questa è la semantica che viene utilizzata anche nei sistemi UNIX, una modifica è subito vista da altri programmi. Bisogna chiedersi ora come si faccia ad implementare una cosa di questo genere.\nAFS: è un esempio di file system interplanetario, in cui non era possibile fare una semantica imemdiata (i dati erano sparsi in mezzo al mondo). semantica di coerenza delle sessioni è il nome di questo. ossia il file veniva modificato quando il file era chiuso. Questo era necessario perché ogni write dovevano rendere traffico sulla rete, era troppa questa sincronizzazione e troppo traffico direi.\nLa struttura Inode Allocazione Master Boot Record 🟨+ Slide MBR\nQuesto è il classico modo di fare partizioni, e si possono fare al massimo 4 partizioni.\nPraticamente è una prima sezione del disco, che contiene una piccola tavola di partizioni, indice alla partizione attiva e informazioni per fare il boot, poi individua la sezione della partizione col boot, ed esegue quello per caricare il sistema operativo.\nÈ utile soprattutto per creare delle aree logiche diverse in cui possono esserci diverse informazioni.\n(altro è global partitioning table anche GPT, che permette più partizioni)\nStruttura di una partizione (5) 🟩— Slide spiegazione sezioni logiche della partizione\nUn boot block che c’è sempre Superblock contiene informazioni per mount, ad esempio è qui che si accorge se è stato unmounted o mounted correttamente Alcune cose per gestire spazio libero ed occupato Directory root e poi il filesystem è gestito come pare a seconda dei filesystem Allocazione contigua🟩 Slide allocazione contigua Slide svantaggi allocazione contigua Contigua nel senso che lo metto nel blocco di memoria contiguo libero.\nQuesto è l’implementazione più veloce, facile da indicizzare.\nIl problema principale è che è statico, per esempio non posso allargare il file giallo, si dovrebbe andare a cercare un blocco abbastanza largo per storare questo. Questo è il problema principale.\nInfatti se ho un filesystem si sola lettura viene utilizzato questa tipologia di allocazione ISO9660\nAllocazione concatenata 🟨 Slide allocazione concatenata Slide vantaggi svantaggi\nIn pratica in ogni blocco di dati abbiamo un indice per il prossimo (però è lento perché sono molto sparsi, perché devo fare seek e i file vanno in molti posti, per questo dovrei lanciare defrags molto spesso, ma almeno i file possono crescere ed essere modificati liberamente)\nSVANTAGGI:\nAccesso inefficiente (posso solo inziare dall’inizio a scandire, non posso fare un offset) è che i puntatori possono avere un grosso overhead per blocchi di dati piccoli. (e anche l’assunzione che il blocco di dati non è più una potenza di due). Seek di file, che vengono dispersi per utto il disco Per limitare la frammentazione dei file e l’overhead posso utilizzare cluster\nSlide cluster blocchi\nAllocazione a File Allocation Table (FAT) 🟨+ Slide FAT Slide svantaggi e vantaggi\nIn pratica ho una tabella apparte che mi dice in che modi i blocchi sono concatenati, in questo modo tolgo l’overhead ai blocchi stessi e posso gestirmi apparte sti puntatori.\nSarebbe lento un accesso in più alla tabella fat, ma di solito questa viene caricata in RAM come se fosse una cache, quindi è molto più veloce. (se poi il blocco è grosso si dovrebbe perdere molto di meno).\nSarebbe lenta perché il disco dovrebbe andare avanti indietro ogni volta per accedere al blocco successivo.\nAllocazione indicizzata 🟨++ Slide allocazione indicizzata\nIn pratica ho un blocco di dati che contiene solamente i blocchi di dati del file, questo permette un accesso diretto molto veloce. Però non posso avere una lunghezza a piacere del file, perché il numero di indici in un blocco di dati è limitato (prima aveva dimensione a piacere).\nSlide svantaggi vantaggi2\nSOLUZIONE ALLA LIMITAZIONE INDICI:\nConcatenazione blocchi indici\nSlide soluzione concatenazione\nPerò con questa soluzione torno ai problemi di accesso diretto lento e frammentazione delle allocazioni precedenti (→ prestazione degrada linearmente con i blocchi)\nMultilivello\nIndice multilivello\nQuesta cosa si può rendere ricorsiva, la prestazione degrada logaritmicamente, molto poco abbiamo una sorta di albero here.\nGestione dello spazio libero Bitmap Slide allocazione bitmap\nHo praticamente una bitmap con un bit per ogni cluster, per indicare se è libero occupato, una soluzioen simile è anche utilizzata in Bitmap 🟩 parlando di allocazione di pagine in RAM.\nLista concatenata Slide lista concatenata\nProblemi di frammetazione grossi, dato che i blocchi libero possono praticamente stare ovunque.\nAnche questo metodo l’abbiamo descritto in Paginazione e segmentazione, abbiamo anche una lista di bloccchi liberi per la FAT. ne abbiamo parlato anche in Gestione della memoria per la HEAP, gli algoritmi alla fine sono gli stessi.\nConfronto cluster dati e spazio utilizzato Notiamo che dopo un certo punto se abbiamo un blocco di dati troppo grosso il disco lo utilizziamo poco ma il rate dei dati è molto bello. Quindi se ho dati grossi ho buona roba.\nIn UNIX Multi-livello in unix. Ci sono tanti file piccoli e pochi grandi, quelli grandi possono essere anche molto annidati con l’allocazione indicizzata multilivello. I file piccoli sono molto veloci di accedere, sono praticamente subito accessibile\nLink hard e soft Per sistemi FAT questi non sono possibili solitamente. in unix è identificato dall’inode, se due cose indicano lo stesso inode ecco che posso creare un link, è come se avessi due files per lo stesso inode.\nLa cancellazione logica è proprio chiamata unlink, quando l’ultimo nome del file è tolto allora il file è stato cancellato.\nIl soft link è un file, il so capisce che è un link, ma non si riferisce allo stesso inode.\nCurare e prevenire🟥 Curare il filesystem significa riportare lo stato del filesystem in uno stato coerente, ma non abbiamo garanzie riguardo che i files siano stati tutti salvati correttamente\nil check è uno scan completo di tutto il filesystem\nSlide curare fsck\nPraticamente l’eseguibile fsck si va a ricostruire l’albero degl inode, se non c’è nessuna reference la mette nei lost and found, riporta tutti gli errori di block size e path names.\nPer filesystems che prevengono ,come ext3, prova a vedere tutto come una transazione, quindi va a registrare le operazioni riguardo il filesystem in un singolo file. Dopo ciò si mette a farlo. è idempotente.\nSlide transazioni\nConcatenata FAT\n",
-  "wordCount" : "1762",
+  "articleBody": "Perché filesystem? Questa è l’idea presa dall’archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.\nL’utilizzo principale è dare un interfaccia comune di accesso ai dispositivi. perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l’accesso.\nInformazioni dei files (5+) Il file è l’unità logica di memorizzazione. il formato che c’è dentro è gestito dall’applicazione, non dal file system!\nLista degli attributi Ci sono un sacco di informazioni memorizzate nei file (un sacco di metadata anche)\nNome Data e ora di accesso o modifica Informazioni sull’ownership e protezione di accesso. Dimensione del file TIpo del file Categorizzazione dei files (3) Tipi di files\nPossiamo andare a distinguere i files a seconda del\nContenuto (se contiene codice oggetto, se contiene dati o informazioni) Struttura, se sono plain text sequenze di bytes, oppure dati strutturati come database., e possono anche essere un albero**.** UNIX: files speciali (blocchi o caratteri), pipes, oltre ai classici files e directories. NOTA: ci sono molte cose che sono viste come files, in unix tutto è un file :D. Sono identificati da una coppia di numeri che identificano il device driver Files in sistemi operativi comuni I files sono nati con la metafora dell’ufficio:\nArchivi di informazione, che vanno aperti e richiusi (messi nella loro collocazione corretta) È utile conoscere il tipo di file per capire quale utilizzo andiamo a fare di essa.\nC’è un tradeoff, se ho tanti tipi di files, il sistema operativo diventa molto più complesso, se ho troppi pochi potrebbero essere troppo generali.\nSlide tradeoff tipologie di files\nTecniche di identificazione dei file (3) Generalmente ci sono 3 modi per riconoscere il tipo di files:\nMagic numbers Attributo tipo del filesystem estensione. Rispettivamente queste tecniche sono utilizzate in:\nWin (estensioni) Mac, informazioni aggiuntive sui files Unix, il magic number all’inizio dei files Slide metodi di riconoscimento nei sistemi di riconoscimento\nUnix riconosce solamente gli eseguibili, in questo senso è minimalista.\nCol magic number riesce anche a riconoscere l’architettura target dell’eseguibile.\nMac OS ha un codice identificativo per un programma che ha creato il file o la risorsa.\nWindows guarda l’estensione. che solitamente sempre da 3 caratteri. (inizilamente il nome del file aveva solo 8 caratteri.\nMetodi di accesso comuni (3) Slide metodi di accesso\nseguenziale\ndiretto\nindicizzato\nUno di particolare interesse è INDICIZZATO, che si usa spesso per i databases:\nSlide metodo di accesso ad indice\nOperazioni sui files Slide lista delle operazioni\nL’apertura è una operazione molto costosa, bisogna\nTrovare i files Capire se si hanno i permessi corretti per poter leggere, o scrivere sul file. Questo si collega molto bene con la metafora dell’ufficio e con l’archivio. Se ne ho bisogno vado a prendere dall’archivio e la apro se mi serve. Una volta finito lo si rimette apposto.\nNote sull’apertura e chiusura dei files\nDirectories Introduzione alle directories È quindi un file speciale che contiene le informazioni di accesso per la gestione dei files al suo interno.\nA seconda dell’implementazione possono essere degli array lineari oppure degli hashtable. (si pensi a quanto possano essere grandi le directories, se uso una lista diventa molto lento, se invece si sa già che sia piccola si perde del tempo a fare l’hash).\nInformazioni nelle directories (2) Slide informazioni delle directories\nSono contenuti i-nodes, che sono degli indici per andare a comprendere la struttura dei files.\nMa può cambiare, questo è un fatto implementativo, potrebbe benissimo anche essere messo nelle entries della directory.\nUNIX → messe negli i-node\nMSDOS → messe nelle dir entries.\nLunghezza dei nomi Introduzione al problema della lunghezza dei nomi Anche qui facciamo distinzione fra nomi a lunghezza variabile e nomi fissi, MSDOS al tempo utilizzava nomi fissi con necessariamente estensioni a tre caratteri.\nMetodi per nomi a lunghezza variabile Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare il nome del file Directories a grafo aciclico I files, possono avere più nomi, in questo senso non ho più un albero ma un grafo.\nSlide struttura grafo aciclico Semantica di coerenza Dato che i sistemi moderni sono maggiormente tutti multitasking, vogliamo andare a specificare quando una modifica di un file può essere vista da un altro processo.\nimmediato: questa è la semantica che viene utilizzata anche nei sistemi UNIX, una modifica è subito vista da altri programmi. Bisogna chiedersi ora come si faccia ad implementare una cosa di questo genere.\nAFS: è un esempio di file system interplanetario, in cui non era possibile fare una semantica imemdiata (i dati erano sparsi in mezzo al mondo). semantica di coerenza delle sessioni è il nome di questo. ossia il file veniva modificato quando il file era chiuso. Questo era necessario perché ogni write dovevano rendere traffico sulla rete, era troppa questa sincronizzazione e troppo traffico direi.\nLa struttura Inode Allocazione Master Boot Record Slide MBR\nQuesto è il classico modo di fare partizioni, e si possono fare al massimo 4 partizioni.\nPraticamente è una prima sezione del disco, che contiene una piccola tavola di partizioni, indice alla partizione attiva e informazioni per fare il boot, poi individua la sezione della partizione col boot, ed esegue quello per caricare il sistema operativo.\nÈ utile soprattutto per creare delle aree logiche diverse in cui possono esserci diverse informazioni.\n(altro è global partitioning table anche GPT, che permette più partizioni)\nStruttura di una partizione (5) Slide spiegazione sezioni logiche della partizione\nUn boot block che c’è sempre Superblock contiene informazioni per mount, ad esempio è qui che si accorge se è stato unmounted o mounted correttamente Alcune cose per gestire spazio libero ed occupato Directory root e poi il filesystem è gestito come pare a seconda dei filesystem Allocazione contigua Slide allocazione contigua Slide svantaggi allocazione contigua Contigua nel senso che lo metto nel blocco di memoria contiguo libero.\nQuesto è l’implementazione più veloce, facile da indicizzare.\nIl problema principale è che è statico, per esempio non posso allargare il file giallo, si dovrebbe andare a cercare un blocco abbastanza largo per storare questo. Questo è il problema principale.\nInfatti se ho un filesystem si sola lettura viene utilizzato questa tipologia di allocazione ISO9660\nAllocazione concatenata Slide allocazione concatenata Slide vantaggi svantaggi\nIn pratica in ogni blocco di dati abbiamo un indice per il prossimo (però è lento perché sono molto sparsi, perché devo fare seek e i file vanno in molti posti, per questo dovrei lanciare defrags molto spesso, ma almeno i file possono crescere ed essere modificati liberamente)\nSVANTAGGI:\nAccesso inefficiente (posso solo inziare dall’inizio a scandire, non posso fare un offset) è che i puntatori possono avere un grosso overhead per blocchi di dati piccoli. (e anche l’assunzione che il blocco di dati non è più una potenza di due). Seek di file, che vengono dispersi per utto il disco Per limitare la frammentazione dei file e l’overhead posso utilizzare cluster\nSlide cluster blocchi\nAllocazione a File Allocation Table (FAT) Slide FAT Slide svantaggi e vantaggi\nIn pratica ho una tabella apparte che mi dice in che modi i blocchi sono concatenati, in questo modo tolgo l’overhead ai blocchi stessi e posso gestirmi apparte sti puntatori.\nSarebbe lento un accesso in più alla tabella fat, ma di solito questa viene caricata in RAM come se fosse una cache, quindi è molto più veloce. (se poi il blocco è grosso si dovrebbe perdere molto di meno).\nSarebbe lenta perché il disco dovrebbe andare avanti indietro ogni volta per accedere al blocco successivo.\nAllocazione indicizzata Slide allocazione indicizzata\nIn pratica ho un blocco di dati che contiene solamente i blocchi di dati del file, questo permette un accesso diretto molto veloce. Però non posso avere una lunghezza a piacere del file, perché il numero di indici in un blocco di dati è limitato (prima aveva dimensione a piacere).\nSlide svantaggi vantaggi2\nSOLUZIONE ALLA LIMITAZIONE INDICI:\nConcatenazione blocchi indici\nSlide soluzione concatenazione\nPerò con questa soluzione torno ai problemi di accesso diretto lento e frammentazione delle allocazioni precedenti (→ prestazione degrada linearmente con i blocchi)\nMultilivello\nIndice multilivello\nQuesta cosa si può rendere ricorsiva, la prestazione degrada logaritmicamente, molto poco abbiamo una sorta di albero here.\nGestione dello spazio libero Bitmap Slide allocazione bitmap\nHo praticamente una bitmap con un bit per ogni cluster, per indicare se è libero occupato, una soluzioen simile è anche utilizzata in [Bitmap\nLista concatenata Slide lista concatenata\nProblemi di frammetazione grossi, dato che i blocchi libero possono praticamente stare ovunque.\nAnche questo metodo l’abbiamo descritto in [[Paginazione e segmentazione](/notes/bitmap-\n###-lista-concatenata\n–slide-lista-concatenata\n—-",
+  "wordCount" : "1746",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -253,35 +253,35 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
                 <li>
                     <a href="#perch%c3%a9-filesystem" aria-label="Perché filesystem?">Perché filesystem?</a></li>
                 <li>
-                    <a href="#informazioni-dei-files-5-" aria-label="Informazioni dei files (5&#43;) 🟨">Informazioni dei files (5+) 🟨</a><ul>
+                    <a href="#informazioni-dei-files-5" aria-label="Informazioni dei files (5&#43;)">Informazioni dei files (5+)</a><ul>
                         
                 <li>
                     <a href="#lista-degli-attributi" aria-label="Lista degli attributi">Lista degli attributi</a></li></ul>
                 </li>
                 <li>
-                    <a href="#categorizzazione-dei-files-3--" aria-label="Categorizzazione dei files (3) 🟩-">Categorizzazione dei files (3) 🟩-</a></li>
+                    <a href="#categorizzazione-dei-files-3" aria-label="Categorizzazione dei files (3)">Categorizzazione dei files (3)</a></li>
                 <li>
-                    <a href="#files-in-sistemi-operativi-comuni-" aria-label="Files in sistemi operativi comuni 🟩">Files in sistemi operativi comuni 🟩</a></li>
+                    <a href="#files-in-sistemi-operativi-comuni" aria-label="Files in sistemi operativi comuni">Files in sistemi operativi comuni</a></li>
                 <li>
-                    <a href="#tecniche-di-identificazione-dei-file-3-" aria-label="Tecniche di identificazione dei file (3) 🟩">Tecniche di identificazione dei file (3) 🟩</a></li>
+                    <a href="#tecniche-di-identificazione-dei-file-3" aria-label="Tecniche di identificazione dei file (3)">Tecniche di identificazione dei file (3)</a></li>
                 <li>
                     <a href="#metodi-di-accesso-comuni-3" aria-label="Metodi di accesso comuni (3)">Metodi di accesso comuni (3)</a></li>
                 <li>
-                    <a href="#operazioni-sui-files-" aria-label="Operazioni sui files 🟨">Operazioni sui files 🟨</a></li></ul>
+                    <a href="#operazioni-sui-files" aria-label="Operazioni sui files">Operazioni sui files</a></li></ul>
                     
                 <li>
                     <a href="#directories" aria-label="Directories">Directories</a><ul>
                         
                 <li>
-                    <a href="#introduzione-alle-directories-" aria-label="Introduzione alle directories 🟨">Introduzione alle directories 🟨</a></li>
+                    <a href="#introduzione-alle-directories" aria-label="Introduzione alle directories">Introduzione alle directories</a></li>
                 <li>
-                    <a href="#informazioni-nelle-directories-2-" aria-label="Informazioni nelle directories (2) 🟨">Informazioni nelle directories (2) 🟨</a></li>
+                    <a href="#informazioni-nelle-directories-2" aria-label="Informazioni nelle directories (2)">Informazioni nelle directories (2)</a></li>
                 <li>
-                    <a href="#lunghezza-dei-nomi-" aria-label="Lunghezza dei nomi 🟨">Lunghezza dei nomi 🟨</a></li>
+                    <a href="#lunghezza-dei-nomi" aria-label="Lunghezza dei nomi">Lunghezza dei nomi</a></li>
                 <li>
                     <a href="#directories-a-grafo-aciclico" aria-label="Directories a grafo aciclico">Directories a grafo aciclico</a></li>
                 <li>
-                    <a href="#semantica-di-coerenza-" aria-label="Semantica di coerenza 🟥">Semantica di coerenza 🟥</a></li>
+                    <a href="#semantica-di-coerenza" aria-label="Semantica di coerenza">Semantica di coerenza</a></li>
                 <li>
                     <a href="#la-struttura" aria-label="La struttura">La struttura</a></li>
                 <li>
@@ -291,17 +291,17 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
                     <a href="#allocazione" aria-label="Allocazione">Allocazione</a><ul>
                         
                 <li>
-                    <a href="#master-boot-record-" aria-label="Master Boot Record 🟨&#43;">Master Boot Record 🟨+</a></li>
+                    <a href="#master-boot-record" aria-label="Master Boot Record">Master Boot Record</a></li>
                 <li>
-                    <a href="#struttura-di-una-partizione-5-" aria-label="Struttura di una partizione (5) 🟩—">Struttura di una partizione (5) 🟩—</a></li>
+                    <a href="#struttura-di-una-partizione-5" aria-label="Struttura di una partizione (5)">Struttura di una partizione (5)</a></li>
                 <li>
-                    <a href="#allocazione-contigua" aria-label="Allocazione contigua🟩">Allocazione contigua🟩</a></li>
+                    <a href="#allocazione-contigua" aria-label="Allocazione contigua">Allocazione contigua</a></li>
                 <li>
-                    <a href="#allocazione-concatenata-" aria-label="Allocazione concatenata 🟨">Allocazione concatenata 🟨</a></li>
+                    <a href="#allocazione-concatenata" aria-label="Allocazione concatenata">Allocazione concatenata</a></li>
                 <li>
-                    <a href="#allocazione-a-file-allocation-table-fat-" aria-label="Allocazione a File Allocation Table (FAT) 🟨&#43;">Allocazione a File Allocation Table (FAT) 🟨+</a></li>
+                    <a href="#allocazione-a-file-allocation-table-fat" aria-label="Allocazione a File Allocation Table (FAT)">Allocazione a File Allocation Table (FAT)</a></li>
                 <li>
-                    <a href="#allocazione-indicizzata-" aria-label="Allocazione indicizzata 🟨&#43;&#43;">Allocazione indicizzata 🟨++</a></li></ul>
+                    <a href="#allocazione-indicizzata" aria-label="Allocazione indicizzata">Allocazione indicizzata</a></li></ul>
                 </li>
                 <li>
                     <a href="#gestione-dello-spazio-libero" aria-label="Gestione dello spazio libero">Gestione dello spazio libero</a><ul>
@@ -321,7 +321,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
                 <li>
                     <a href="#link-hard-e-soft" aria-label="Link hard e soft">Link hard e soft</a></li>
                 <li>
-                    <a href="#curare-e-prevenire" aria-label="Curare e prevenire🟥">Curare e prevenire🟥</a></li>
+                    <a href="#curare-e-prevenire" aria-label="Curare e prevenire">Curare e prevenire</a></li>
                 <li>
                     <a href="#concatenata" aria-label="Concatenata">Concatenata</a>
                 </li>
@@ -335,7 +335,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
   <div class="post-content"><h3 id="perché-filesystem">Perché filesystem?<a hidden class="anchor" aria-hidden="true" href="#perché-filesystem">#</a></h3>
 <p>Questa è l&rsquo;idea presa dall&rsquo;archivio, come se fosse un ufficio che deve tenere delle pratiche ordinate in cartelle e cartelloni.</p>
 <p>L’utilizzo principale è dare un <strong>interfaccia comune di accesso ai dispositivi.</strong> perché dispositivi diversi hanno sotto modi di accedere diversi, questa interfaccia facilita molto l&rsquo;accesso.</p>
-<h3 id="informazioni-dei-files-5-">Informazioni dei files (5+) 🟨<a hidden class="anchor" aria-hidden="true" href="#informazioni-dei-files-5-">#</a></h3>
+<h3 id="informazioni-dei-files-5">Informazioni dei files (5+)<a hidden class="anchor" aria-hidden="true" href="#informazioni-dei-files-5">#</a></h3>
 <p>Il file è <strong>l’unità logica di memorizzazione</strong>. il formato che c&rsquo;è dentro è gestito dall&rsquo;applicazione, non dal file system!</p>
 <h4 id="lista-degli-attributi">Lista degli attributi<a hidden class="anchor" aria-hidden="true" href="#lista-degli-attributi">#</a></h4>
 <pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Filesystem/Untitled.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Filesystem/Untitled&quot;&gt;
@@ -350,7 +350,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
 <li>Dimensione del file</li>
 <li>TIpo del file</li>
 </ol>
-<h3 id="categorizzazione-dei-files-3--">Categorizzazione dei files (3) 🟩-<a hidden class="anchor" aria-hidden="true" href="#categorizzazione-dei-files-3--">#</a></h3>
+<h3 id="categorizzazione-dei-files-3">Categorizzazione dei files (3)<a hidden class="anchor" aria-hidden="true" href="#categorizzazione-dei-files-3">#</a></h3>
 <ul>
 <li>
 <p>Tipi di files</p>
@@ -367,7 +367,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
 </ul>
 </li>
 </ul>
-<h3 id="files-in-sistemi-operativi-comuni-">Files in sistemi operativi comuni 🟩<a hidden class="anchor" aria-hidden="true" href="#files-in-sistemi-operativi-comuni-">#</a></h3>
+<h3 id="files-in-sistemi-operativi-comuni">Files in sistemi operativi comuni<a hidden class="anchor" aria-hidden="true" href="#files-in-sistemi-operativi-comuni">#</a></h3>
 <p>I files sono nati con la metafora dell’ufficio:</p>
 <ul>
 <li>Archivi di informazione, che vanno aperti e richiusi (messi nella loro collocazione corretta)</li>
@@ -380,7 +380,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
   <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 3">
 </li>
 </ul>
-<h3 id="tecniche-di-identificazione-dei-file-3-">Tecniche di identificazione dei file (3) 🟩<a hidden class="anchor" aria-hidden="true" href="#tecniche-di-identificazione-dei-file-3-">#</a></h3>
+<h3 id="tecniche-di-identificazione-dei-file-3">Tecniche di identificazione dei file (3)<a hidden class="anchor" aria-hidden="true" href="#tecniche-di-identificazione-dei-file-3">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 4">
 <p>Generalmente ci sono 3 modi per riconoscere il tipo di files:</p>
 <ul>
@@ -427,7 +427,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
   <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 7">
 </li>
 </ul>
-<h3 id="operazioni-sui-files-">Operazioni sui files 🟨<a hidden class="anchor" aria-hidden="true" href="#operazioni-sui-files-">#</a></h3>
+<h3 id="operazioni-sui-files">Operazioni sui files<a hidden class="anchor" aria-hidden="true" href="#operazioni-sui-files">#</a></h3>
 <ul>
 <li>
 <p>Slide lista delle operazioni</p>
@@ -447,12 +447,12 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
 </li>
 </ul>
 <h2 id="directories">Directories<a hidden class="anchor" aria-hidden="true" href="#directories">#</a></h2>
-<h3 id="introduzione-alle-directories-">Introduzione alle directories 🟨<a hidden class="anchor" aria-hidden="true" href="#introduzione-alle-directories-">#</a></h3>
+<h3 id="introduzione-alle-directories">Introduzione alle directories<a hidden class="anchor" aria-hidden="true" href="#introduzione-alle-directories">#</a></h3>
 <pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Filesystem/Untitled 10.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Filesystem/Untitled 10&quot;&gt;
 </code></pre>
 <p>È quindi un <strong>file speciale</strong> che contiene le informazioni di accesso per la gestione dei files al suo interno.</p>
 <p>A seconda dell’implementazione possono essere degli array lineari oppure degli hashtable. (si pensi a quanto possano essere grandi le directories, se uso una lista diventa molto lento, se invece si sa già che sia piccola si perde del tempo a fare l’hash).</p>
-<h3 id="informazioni-nelle-directories-2-">Informazioni nelle directories (2) 🟨<a hidden class="anchor" aria-hidden="true" href="#informazioni-nelle-directories-2-">#</a></h3>
+<h3 id="informazioni-nelle-directories-2">Informazioni nelle directories (2)<a hidden class="anchor" aria-hidden="true" href="#informazioni-nelle-directories-2">#</a></h3>
 <ul>
 <li>
 <p>Slide informazioni delle directories</p>
@@ -463,7 +463,7 @@ Il file è l’unità logica di memorizzazione. il formato che c&rsquo;è dentro
 <p>Ma può cambiare, questo è un fatto implementativo, potrebbe benissimo anche essere messo nelle entries della directory.</p>
 <p>UNIX → messe negli i-node</p>
 <p>MSDOS → messe nelle dir entries.</p>
-<h3 id="lunghezza-dei-nomi-">Lunghezza dei nomi 🟨<a hidden class="anchor" aria-hidden="true" href="#lunghezza-dei-nomi-">#</a></h3>
+<h3 id="lunghezza-dei-nomi">Lunghezza dei nomi<a hidden class="anchor" aria-hidden="true" href="#lunghezza-dei-nomi">#</a></h3>
 <ul>
 <li>Introduzione al problema della lunghezza dei nomi
 <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 12"></li>
@@ -480,14 +480,14 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <li>Slide struttura grafo aciclico
 <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 14"></li>
 </ul>
-<h3 id="semantica-di-coerenza-">Semantica di coerenza 🟥<a hidden class="anchor" aria-hidden="true" href="#semantica-di-coerenza-">#</a></h3>
+<h3 id="semantica-di-coerenza">Semantica di coerenza<a hidden class="anchor" aria-hidden="true" href="#semantica-di-coerenza">#</a></h3>
 <p>Dato che i sistemi moderni sono maggiormente tutti multitasking, vogliamo andare a specificare quando una modifica di un file può essere vista da un altro processo.</p>
 <p><strong>immediato:</strong> questa è la semantica che viene utilizzata anche nei sistemi UNIX, una modifica è subito vista da altri programmi. Bisogna chiedersi ora come si faccia ad implementare una cosa di  questo genere.</p>
 <p><strong>AFS</strong>: è un esempio di file system interplanetario, in cui non era possibile fare una semantica imemdiata (i dati erano sparsi in mezzo al mondo). <strong>semantica di coerenza delle sessioni</strong> è il nome di questo. ossia il file veniva modificato quando il file era chiuso. Questo era necessario perché ogni write dovevano rendere traffico sulla rete, era troppa questa sincronizzazione e troppo traffico direi.</p>
 <h3 id="la-struttura">La struttura<a hidden class="anchor" aria-hidden="true" href="#la-struttura">#</a></h3>
 <h3 id="inode">Inode<a hidden class="anchor" aria-hidden="true" href="#inode">#</a></h3>
 <h2 id="allocazione">Allocazione<a hidden class="anchor" aria-hidden="true" href="#allocazione">#</a></h2>
-<h3 id="master-boot-record-">Master Boot Record 🟨+<a hidden class="anchor" aria-hidden="true" href="#master-boot-record-">#</a></h3>
+<h3 id="master-boot-record">Master Boot Record<a hidden class="anchor" aria-hidden="true" href="#master-boot-record">#</a></h3>
 <ul>
 <li>
 <p>Slide MBR</p>
@@ -498,7 +498,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <p>Praticamente è una prima sezione del disco, che contiene una piccola tavola di partizioni, indice alla partizione attiva e informazioni per fare il boot, poi individua la sezione della partizione col boot, ed esegue quello per caricare il sistema operativo.</p>
 <p>È utile soprattutto per creare delle aree logiche diverse in cui possono esserci diverse informazioni.</p>
 <p>(altro è global partitioning table anche GPT, che permette più partizioni)</p>
-<h3 id="struttura-di-una-partizione-5-">Struttura di una partizione (5) 🟩—<a hidden class="anchor" aria-hidden="true" href="#struttura-di-una-partizione-5-">#</a></h3>
+<h3 id="struttura-di-una-partizione-5">Struttura di una partizione (5)<a hidden class="anchor" aria-hidden="true" href="#struttura-di-una-partizione-5">#</a></h3>
 <pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Filesystem/Untitled 16.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Filesystem/Untitled 16&quot;&gt;
 </code></pre>
 <ul>
@@ -514,7 +514,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <li>Directory root</li>
 <li>e poi il filesystem è gestito come pare a seconda dei filesystem</li>
 </ol>
-<h3 id="allocazione-contigua">Allocazione contigua🟩<a hidden class="anchor" aria-hidden="true" href="#allocazione-contigua">#</a></h3>
+<h3 id="allocazione-contigua">Allocazione contigua<a hidden class="anchor" aria-hidden="true" href="#allocazione-contigua">#</a></h3>
 <ul>
 <li>
 <p>Slide allocazione contigua
@@ -529,7 +529,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <p>Questo è l’implementazione più veloce, facile da indicizzare.</p>
 <p>Il problema principale è che è statico, per esempio non posso allargare il file giallo, si dovrebbe andare a cercare un blocco abbastanza largo per storare questo. Questo è il problema principale.</p>
 <p>Infatti se ho un filesystem si sola lettura viene utilizzato questa tipologia di allocazione ISO9660</p>
-<h3 id="allocazione-concatenata-">Allocazione concatenata 🟨<a hidden class="anchor" aria-hidden="true" href="#allocazione-concatenata-">#</a></h3>
+<h3 id="allocazione-concatenata">Allocazione concatenata<a hidden class="anchor" aria-hidden="true" href="#allocazione-concatenata">#</a></h3>
 <ul>
 <li>
 <p>Slide allocazione concatenata
@@ -554,7 +554,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
   <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 22">
 </li>
 </ul>
-<h3 id="allocazione-a-file-allocation-table-fat-">Allocazione a File Allocation Table (FAT) 🟨+<a hidden class="anchor" aria-hidden="true" href="#allocazione-a-file-allocation-table-fat-">#</a></h3>
+<h3 id="allocazione-a-file-allocation-table-fat">Allocazione a File Allocation Table (FAT)<a hidden class="anchor" aria-hidden="true" href="#allocazione-a-file-allocation-table-fat">#</a></h3>
 <ul>
 <li>
 <p>Slide FAT
@@ -568,7 +568,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <p>In pratica ho una tabella apparte che mi dice in che modi i blocchi sono concatenati, in questo modo tolgo l’overhead ai blocchi stessi e posso gestirmi apparte sti puntatori.</p>
 <p>Sarebbe lento un accesso in più alla tabella fat, ma di solito questa viene caricata in RAM come se fosse una cache, quindi è molto più veloce. (se poi il blocco è grosso si dovrebbe perdere molto di meno).</p>
 <p>Sarebbe lenta perché il disco dovrebbe andare avanti indietro ogni volta per accedere al blocco successivo.</p>
-<h3 id="allocazione-indicizzata-">Allocazione indicizzata 🟨++<a hidden class="anchor" aria-hidden="true" href="#allocazione-indicizzata-">#</a></h3>
+<h3 id="allocazione-indicizzata">Allocazione indicizzata<a hidden class="anchor" aria-hidden="true" href="#allocazione-indicizzata">#</a></h3>
 <ul>
 <li>
 <p>Slide allocazione indicizzata</p>
@@ -614,7 +614,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
   <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 30.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 30">
 </li>
 </ul>
-<p>Ho praticamente una bitmap con un bit per ogni cluster, per indicare se è libero occupato, una soluzioen simile è anche utilizzata in Bitmap 🟩 parlando di allocazione di pagine in RAM.</p>
+<p>Ho praticamente una bitmap con un bit per ogni cluster, per indicare se è libero occupato, una soluzioen simile è anche utilizzata in [Bitmap</p>
 <h3 id="lista-concatenata">Lista concatenata<a hidden class="anchor" aria-hidden="true" href="#lista-concatenata">#</a></h3>
 <ul>
 <li>
@@ -624,7 +624,13 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <p>Problemi di frammetazione grossi, dato che i blocchi libero possono praticamente stare ovunque.</p>
 </li>
 </ul>
-<p>Anche questo metodo l&rsquo;abbiamo descritto in <a href="/notes/paginazione-e-segmentazione">Paginazione e segmentazione</a>, abbiamo anche una lista di bloccchi liberi per la FAT. ne abbiamo parlato anche in <a href="/notes/gestione-della-memoria">Gestione della memoria</a> per la HEAP, gli algoritmi alla fine sono gli stessi.</p>
+<p>Anche questo metodo l&rsquo;abbiamo descritto in [[Paginazione e segmentazione](/notes/bitmap-</p>
+<p>###-lista-concatenata</p>
+<p>&ndash;slide-lista-concatenata</p>
+<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/filesystem/untitled-31.png&quot;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/filesystem/untitled-31&rdquo;&gt;
+&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/filesystem/untitled-32.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/filesystem/untitled-32&rdquo;&gt;</p>
+<p>&mdash;-problemi-di-frammetazione-grossi,-dato-che-i-blocchi-libero-possono-praticamente-stare-ovunque.</p>
+<p>anche-questo-metodo-l-abbiamo-descritto-in-[[paginazione-e-segmentazione), abbiamo anche una lista di bloccchi liberi per la FAT. ne abbiamo parlato anche in <a href="/notes/gestione-della-memoria">Gestione della memoria</a> per la HEAP, gli algoritmi alla fine sono gli stessi.</p>
 <h3 id="confronto-cluster-dati-e-spazio-utilizzato">Confronto cluster dati e spazio utilizzato<a hidden class="anchor" aria-hidden="true" href="#confronto-cluster-dati-e-spazio-utilizzato">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Filesystem/Untitled 33.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Filesystem/Untitled 33">
 <p>Notiamo che dopo un certo punto se abbiamo un blocco di dati troppo grosso il disco lo utilizziamo poco ma il rate dei dati è molto bello. Quindi se ho dati grossi ho buona roba.</p>
@@ -637,7 +643,7 @@ Il metodo a è preferita, perché nel secondo devo leggere in fondo per trovare 
 <p>Per sistemi FAT questi non sono possibili solitamente. in unix è identificato dall’inode, se due cose indicano lo stesso inode ecco che posso creare un link, è come se avessi due files per lo stesso inode.</p>
 <p>La cancellazione logica è proprio chiamata <strong>unlink</strong>, quando l’ultimo nome del file è tolto allora il file è stato cancellato.</p>
 <p>Il soft link è un file, il so capisce che è un link, ma non si riferisce allo stesso inode.</p>
-<h3 id="curare-e-prevenire">Curare e prevenire🟥<a hidden class="anchor" aria-hidden="true" href="#curare-e-prevenire">#</a></h3>
+<h3 id="curare-e-prevenire">Curare e prevenire<a hidden class="anchor" aria-hidden="true" href="#curare-e-prevenire">#</a></h3>
 <p>Curare il filesystem significa riportare lo stato del filesystem in uno stato coerente, ma non abbiamo garanzie riguardo che i files siano stati tutti salvati correttamente</p>
 <p>il check è uno scan completo di tutto il filesystem</p>
 <ul>

@@ -148,8 +148,8 @@ bisogna in questa fase valutare la performance principalmente su indicatori, oss
   "keywords": [
     "📙basi-di-dati"
   ],
-  "articleBody": "Introduzione al design logico Conoscenze sul carico dell’applicazione, ossia se ha più read rispetto a writes per esempio, sono dei priors in pratica Un design concettuale spiegato in precedenza. E si avrà in output un design logico con anche un po’ di documentazione. bisogna in questa fase valutare la performance principalmente su indicatori, ossia una operazione quante istanze visiterà? Invece di garanzie sul numero di transazioni al secondo.\nIndicatori visti (2) Costo di una operazione: viene valutato in termini di numero di occorrenze di entità e associazioni che mediamente vanno visitate per rispondere a una operazione sulla base dì dati; questa schematizzazione è molto forte e, pur nelle semplici valutazioni che svilupperemo, sarà talvolta necessario riferirci a un criterio più fine; Occupazione di memoria: viene valutato in termini dello spazio di memoria (misurato per esempio in numero di byte) necessario per memorizzare i dati descritti dallo schema.\nI volumi sono un concetto importante, sono una stima di quante entries dovranno avere, e serve per avere una idea di come progettare quella cosa. Bisogna utilizzare questi indicatori per valutare in che modo progettare la ristrutturazione e la logica.\nNOTA: C’è un modo molto più complicato per fare questa analisi, ma per questo corso è ok valutare solo queste.\nMetodi di ristrutturazione E-R Redundancies analysis Per la ridondanza bisogna fare una analisi di efficienza per capire se è buono o meno lasciare la ridondanza.\nTipologie di ridondanze (4) 🟨+ Per il prof è importante due cose:\nAttributi derivabili\nAssociazioni derivabili\nAttributi derivabili da cose della stessa entità\nAttributi derivabili da altri\nattributi derivabili da conteggio\nAssociazioni derivabili dalla composizione di altre associazioni in presenza di cicli\nEsempi: Nell’ultimo esempio, basta fare la join per avere quella informazione, un ciclo implica una ridondanza in pratica.\nGeneralizations deletion We need to delete the generalizations because in ER explained in Design del database the generalizations are not possible. A common way to fix this is embed children in the parent or something very similar.\nExample of deletion of generalization (3) 🟩- In un caso abbiamo che il genitore prende tutti i campi. Oppure elimina il genitore e metti due relazioni Oppure crea relazioni col genitore Ma come fare a scegliere la versione corretta? Vogliamo prendere la soluzione che ci permette di minimizzare il numero di accessi, come per esempio se sappiamo che figli e genitori vengono acceduti insieme, ha senso usare la freccia in basso a sinistra! Partitioning or grouping of entities Se una stessa entità ha due attributi molto diverti, ossia c’è solamente un accesso per uno, invece che per tutti, potrebbe avere senso dividerli. In modo simile se ho due entità che vengono spesso accedute assieme potrebbe essere una cosa sensata accorparli assieme.\nL’obiettivo è sempre efficienza degli accessi.\nPartizionamento verticale o orizzontale 🟩- Possiamo fare partizionamento in verticale o in orizzontale Verticale quando spezziamo una entità in due e le relazioniamo (utile quando accediamo solamente certe cose della tavola).\nOrizzontale quando ad esempio provo a dividere correnti e passati (dividere la stessa relazione in più forme!). ### Identifying the primary keys (non fare) Questo passo è chiaramente il passo necessario per utilizzare E-R nel nostro caso. Informazioni necessarie Le chiavi primarie in certi contesti possono essere complessi! E anche utili per identificare, non ho capito bene l’esempio del ferramenta fatto in classe (una nota è che i ferramenta si fanno codici enormi e complessi come chiavi ed è una brutta pratica probabilmente). Notare che saranno usate spesso, quindi non farle grosseeee! La cosa semplice è creare codici identificativi, invece di avere chiavi complesse.\nTraduzione in schema logico Tradurre relazioni 🟩 Questa tabella riassume praticamente tutto. (303 Atzeni) La singola relazione 🟩 Una volta che abbiamo una relazione in E-R possiamo creare una tavola anche per questa parte! L’importante quando facciamo questo, bisogna encodare una referential integrity constraint che è la cosa bella della tabella.\nLa nota è che aggiungere la constraint non è sufficiente per tenere in considerazione vincoli di cardinalità. Anche se è n-aria si può modellizzare senza troppi problemi!\n#### Relazioni ricorsive 🟩 La seconda tabella modella la parte ricorsiva (in teoria le due chiavi foreign dovrebbero essere code e code, ma il nome è migliore in questo modo per esprimere questa relazione) Merge di relazioni A volte può essere utile unire relazione con l’entità, succede spesso per relazioni unarie da una parte, perché così faccio enforcing del 1. È una cosa principalmente pratica, di difficile formalizzazione, ma deve passare l’idea diciamo.\n",
-  "wordCount" : "742",
+  "articleBody": "Introduzione al design logico Conoscenze sul carico dell’applicazione, ossia se ha più read rispetto a writes per esempio, sono dei priors in pratica Un design concettuale spiegato in precedenza. E si avrà in output un design logico con anche un po’ di documentazione. bisogna in questa fase valutare la performance principalmente su indicatori, ossia una operazione quante istanze visiterà? Invece di garanzie sul numero di transazioni al secondo.\nIndicatori visti (2) Costo di una operazione: viene valutato in termini di numero di occorrenze di entità e associazioni che mediamente vanno visitate per rispondere a una operazione sulla base dì dati; questa schematizzazione è molto forte e, pur nelle semplici valutazioni che svilupperemo, sarà talvolta necessario riferirci a un criterio più fine; Occupazione di memoria: viene valutato in termini dello spazio di memoria (misurato per esempio in numero di byte) necessario per memorizzare i dati descritti dallo schema.\nI volumi sono un concetto importante, sono una stima di quante entries dovranno avere, e serve per avere una idea di come progettare quella cosa. Bisogna utilizzare questi indicatori per valutare in che modo progettare la ristrutturazione e la logica.\nNOTA: C’è un modo molto più complicato per fare questa analisi, ma per questo corso è ok valutare solo queste.\nMetodi di ristrutturazione E-R Redundancies analysis Per la ridondanza bisogna fare una analisi di efficienza per capire se è buono o meno lasciare la ridondanza.\nTipologie di ridondanze (4) Per il prof è importante due cose:\nAttributi derivabili\nAssociazioni derivabili\nAttributi derivabili da cose della stessa entità\nAttributi derivabili da altri\nattributi derivabili da conteggio\nAssociazioni derivabili dalla composizione di altre associazioni in presenza di cicli\nEsempi: Nell’ultimo esempio, basta fare la join per avere quella informazione, un ciclo implica una ridondanza in pratica.\nGeneralizations deletion We need to delete the generalizations because in ER explained in Design del database the generalizations are not possible. A common way to fix this is embed children in the parent or something very similar.\nExample of deletion of generalization (3) In un caso abbiamo che il genitore prende tutti i campi. Oppure elimina il genitore e metti due relazioni Oppure crea relazioni col genitore Ma come fare a scegliere la versione corretta? Vogliamo prendere la soluzione che ci permette di minimizzare il numero di accessi, come per esempio se sappiamo che figli e genitori vengono acceduti insieme, ha senso usare la freccia in basso a sinistra! Partitioning or grouping of entities Se una stessa entità ha due attributi molto diverti, ossia c’è solamente un accesso per uno, invece che per tutti, potrebbe avere senso dividerli. In modo simile se ho due entità che vengono spesso accedute assieme potrebbe essere una cosa sensata accorparli assieme.\nL’obiettivo è sempre efficienza degli accessi.\nPartizionamento verticale o orizzontale Possiamo fare partizionamento in verticale o in orizzontale Verticale quando spezziamo una entità in due e le relazioniamo (utile quando accediamo solamente certe cose della tavola).\nOrizzontale quando ad esempio provo a dividere correnti e passati (dividere la stessa relazione in più forme!). ### Identifying the primary keys (non fare) Questo passo è chiaramente il passo necessario per utilizzare E-R nel nostro caso. Informazioni necessarie Le chiavi primarie in certi contesti possono essere complessi! E anche utili per identificare, non ho capito bene l’esempio del ferramenta fatto in classe (una nota è che i ferramenta si fanno codici enormi e complessi come chiavi ed è una brutta pratica probabilmente). Notare che saranno usate spesso, quindi non farle grosseeee! La cosa semplice è creare codici identificativi, invece di avere chiavi complesse.\nTraduzione in schema logico Tradurre relazioni Questa tabella riassume praticamente tutto. (303 Atzeni) La singola relazione Una volta che abbiamo una relazione in E-R possiamo creare una tavola anche per questa parte! L’importante quando facciamo questo, bisogna encodare una referential integrity constraint che è la cosa bella della tabella.\nLa nota è che aggiungere la constraint non è sufficiente per tenere in considerazione vincoli di cardinalità. Anche se è n-aria si può modellizzare senza troppi problemi!\n#### Relazioni ricorsive La seconda tabella modella la parte ricorsiva (in teoria le due chiavi foreign dovrebbero essere code e code, ma il nome è migliore in questo modo per esprimere questa relazione) Merge di relazioni A volte può essere utile unire relazione con l’entità, succede spesso per relazioni unarie da una parte, perché così faccio enforcing del 1. È una cosa principalmente pratica, di difficile formalizzazione, ma deve passare l’idea diciamo.\n",
+  "wordCount" : "736",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -268,29 +268,29 @@ bisogna in questa fase valutare la performance principalmente su indicatori, oss
                     <a href="#redundancies-analysis" aria-label="Redundancies analysis">Redundancies analysis</a><ul>
                         
                 <li>
-                    <a href="#tipologie-di-ridondanze-4-" aria-label="Tipologie di ridondanze (4) 🟨&#43;">Tipologie di ridondanze (4) 🟨+</a></li></ul>
+                    <a href="#tipologie-di-ridondanze-4" aria-label="Tipologie di ridondanze (4)">Tipologie di ridondanze (4)</a></li></ul>
                 </li>
                 <li>
                     <a href="#generalizations-deletion" aria-label="Generalizations deletion">Generalizations deletion</a><ul>
                         
                 <li>
-                    <a href="#example-of-deletion-of-generalization-3--" aria-label="Example of deletion of generalization (3) 🟩-">Example of deletion of generalization (3) 🟩-</a></li></ul>
+                    <a href="#example-of-deletion-of-generalization-3" aria-label="Example of deletion of generalization (3)">Example of deletion of generalization (3)</a></li></ul>
                 </li>
                 <li>
                     <a href="#partitioning-or-grouping-of-entities" aria-label="Partitioning or grouping of entities">Partitioning or grouping of entities</a><ul>
                         
                 <li>
-                    <a href="#partizionamento-verticale-o-orizzontale--" aria-label="Partizionamento verticale o orizzontale 🟩-">Partizionamento verticale o orizzontale 🟩-</a></li></ul>
+                    <a href="#partizionamento-verticale-o-orizzontale" aria-label="Partizionamento verticale o orizzontale">Partizionamento verticale o orizzontale</a></li></ul>
                 </li></ul>
                 </li>
                 <li>
                     <a href="#traduzione-in-schema-logico" aria-label="Traduzione in schema logico">Traduzione in schema logico</a><ul>
                         
                 <li>
-                    <a href="#tradurre-relazioni-" aria-label="Tradurre relazioni 🟩">Tradurre relazioni 🟩</a><ul>
+                    <a href="#tradurre-relazioni" aria-label="Tradurre relazioni">Tradurre relazioni</a><ul>
                         
                 <li>
-                    <a href="#la-singola-relazione-" aria-label="La singola relazione 🟩">La singola relazione 🟩</a></li>
+                    <a href="#la-singola-relazione" aria-label="La singola relazione">La singola relazione</a></li>
                 <li>
                     <a href="#merge-di-relazioni" aria-label="Merge di relazioni">Merge di relazioni</a>
                 </li>
@@ -322,7 +322,7 @@ dallo schema.</p>
 <h2 id="metodi-di-ristrutturazione-e-r">Metodi di ristrutturazione E-R<a hidden class="anchor" aria-hidden="true" href="#metodi-di-ristrutturazione-e-r">#</a></h2>
 <h3 id="redundancies-analysis">Redundancies analysis<a hidden class="anchor" aria-hidden="true" href="#redundancies-analysis">#</a></h3>
 <p>Per la ridondanza bisogna fare una analisi di efficienza per capire se è buono o meno lasciare la ridondanza.</p>
-<h4 id="tipologie-di-ridondanze-4-">Tipologie di ridondanze (4) 🟨+<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-ridondanze-4-">#</a></h4>
+<h4 id="tipologie-di-ridondanze-4">Tipologie di ridondanze (4)<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-ridondanze-4">#</a></h4>
 <p>Per il prof è importante due cose:</p>
 <ul>
 <li>
@@ -350,7 +350,7 @@ cicli</p>
 Nell&rsquo;ultimo esempio, basta fare la join per avere quella informazione, un ciclo implica una ridondanza in pratica.</p>
 <h3 id="generalizations-deletion">Generalizations deletion<a hidden class="anchor" aria-hidden="true" href="#generalizations-deletion">#</a></h3>
 <p>We need to delete the generalizations because in ER explained in <a href="/notes/design-del-database">Design del database</a> the generalizations are not possible. A common way to fix this is embed children in the parent or something very similar.</p>
-<h4 id="example-of-deletion-of-generalization-3--">Example of deletion of generalization (3) 🟩-<a hidden class="anchor" aria-hidden="true" href="#example-of-deletion-of-generalization-3--">#</a></h4>
+<h4 id="example-of-deletion-of-generalization-3">Example of deletion of generalization (3)<a hidden class="anchor" aria-hidden="true" href="#example-of-deletion-of-generalization-3">#</a></h4>
 <ul>
 <li>In un caso abbiamo che il genitore prende tutti i campi.</li>
 <li>Oppure elimina il genitore e metti due relazioni</li>
@@ -362,7 +362,7 @@ Ma come fare a scegliere la versione corretta? Vogliamo prendere la soluzione ch
 <p>Se una stessa entità ha due attributi molto diverti, ossia c&rsquo;è solamente un accesso per uno, invece che per tutti, potrebbe avere senso dividerli.
 In modo simile se ho due entità che vengono spesso accedute assieme potrebbe essere una cosa sensata accorparli assieme.</p>
 <p>L&rsquo;obiettivo è sempre <em>efficienza degli accessi</em>.</p>
-<h4 id="partizionamento-verticale-o-orizzontale--">Partizionamento verticale o orizzontale 🟩-<a hidden class="anchor" aria-hidden="true" href="#partizionamento-verticale-o-orizzontale--">#</a></h4>
+<h4 id="partizionamento-verticale-o-orizzontale">Partizionamento verticale o orizzontale<a hidden class="anchor" aria-hidden="true" href="#partizionamento-verticale-o-orizzontale">#</a></h4>
 <p>Possiamo fare partizionamento in verticale o in orizzontale
 Verticale quando spezziamo una entità in due e le relazioniamo (utile quando accediamo solamente certe cose della tavola).</p>
 <img src="/images/notes/Database logical design-1700652278473.jpeg" style="width: 100%" class="center" alt="Database logical design-1700652278473">
@@ -377,16 +377,16 @@ Questo passo è chiaramente il passo necessario per utilizzare E-R nel nostro ca
 </ul>
 <p>La cosa semplice è creare codici identificativi, invece di avere chiavi complesse.</p>
 <h2 id="traduzione-in-schema-logico">Traduzione in schema logico<a hidden class="anchor" aria-hidden="true" href="#traduzione-in-schema-logico">#</a></h2>
-<h3 id="tradurre-relazioni-">Tradurre relazioni 🟩<a hidden class="anchor" aria-hidden="true" href="#tradurre-relazioni-">#</a></h3>
+<h3 id="tradurre-relazioni">Tradurre relazioni<a hidden class="anchor" aria-hidden="true" href="#tradurre-relazioni">#</a></h3>
 <p>Questa tabella riassume praticamente tutto. (303 Atzeni)
 <img src="/images/notes/Database logical design-1703674035236.jpeg" style="width: 100%" class="center" alt="Database logical design-1703674035236"></p>
-<h4 id="la-singola-relazione-">La singola relazione 🟩<a hidden class="anchor" aria-hidden="true" href="#la-singola-relazione-">#</a></h4>
+<h4 id="la-singola-relazione">La singola relazione<a hidden class="anchor" aria-hidden="true" href="#la-singola-relazione">#</a></h4>
 <p>Una volta che abbiamo una relazione in E-R possiamo creare una tavola anche per questa parte!
 L&rsquo;importante quando facciamo questo, bisogna encodare una <strong>referential integrity constraint</strong> che è la cosa bella della tabella.</p>
 <p>La nota è che aggiungere la constraint non è sufficiente per tenere in considerazione vincoli di cardinalità.
 Anche se è n-aria si può modellizzare senza troppi problemi!</p>
 <img src="/images/notes/Database logical design-1700652936337.jpeg" width="500" class="center" alt="Database logical design-1700652936337"/>
-#### Relazioni ricorsive 🟩
+#### Relazioni ricorsive 
 <img src="/images/notes/Database logical design-1700652734472.jpeg" width="400" class="center" alt="Database logical design-1700652734472"/>
 La seconda tabella modella la parte ricorsiva (in teoria le due chiavi foreign dovrebbero essere code e code, ma il nome è migliore in questo modo per esprimere questa relazione)
 <h4 id="merge-di-relazioni">Merge di relazioni<a hidden class="anchor" aria-hidden="true" href="#merge-di-relazioni">#</a></h4>

@@ -157,8 +157,8 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
   "keywords": [
     "🕸computer-networks"
   ],
-  "articleBody": "Introduzione Spettro del wireless networks (skip) Slide spettro Wirelesss networks\nQuesto solamente la classica differenziazione fra radio, visibile, raggi x raggi gamma etcetera.\nSe andiamo a guardare le onde radio, quelle che ci interessano, se ho frequenza alta ho densità di frequenza alta, se ho frequenza bassa ho alta capacità di suparamento di ostacoli.\nISM è una banda da 2 a 5.0 GHz e c’è tutto il WiFi, bluetooth. (anche wifi a 5 ghz.\nGSM prima rete cellulare a 900, poi 1800 nella seconda versione.\nDivisione statica delle frequenze\nAvre una frequenza comprata è una miniera d’oro, attualmente il prof sta facendo della ricerca su come andare a\nTrasmissione via wireless : bandwidth (!) 🟩 Slide bandwidth\nSolitamente è una ampiezza di frequenza ossia quando è grande un insieme di frequenza (questa è anche la definizione formale da utilizzare). Però è erroneamente utilizzata anche per descrivere il numero di bits trasmessi (che è il bitrate nominale), è un errore voluto perché solitamente se hai una bandwidth maggiore riesci a trasmettere più dati.\nNotare che la velocità del segnale è sempre la stessa che è quella della radiofrquenza (quella della luce), è solamente l’alternarsi di quelle scatolette di colore diverso (codifica diversa).\nSe il segnale è più lungo allora è più facile andare ad interpretare se è uno 0 oppure è uno 1, diciamo che c’è il tradeoff sulla reliability del segnale credo, anche se è principalmente limitato dalla capacità del ricevente\ndef: connettività di link 🟩 Slides connettività\nIl primo è una partizione, poi unidirezionali e bidirezionali.\nNota: solamente sui link direzionali possiamo andare a definire un link simmetrico o asimmetrico.\nLe parole principali sono:\nUnidirezionale Bidirezionale Partizione. Tipologie di wireless Slide introduzione alle tecnologie wireless\nNarrowband system È un frequenza molto piccola in cui si può comunicare (statica diciamo).\nProblemi di privacy perché mi posso connettere alla frequenza e ascoltare quanto viene mandato. Problemi di interferenza se voglio comunicare su questa frequenza con canali diversi Infatti per questa tipologia è molto semplice fare un attacco di Jamming, ossia mando informazioni alla stessa frequenza, impedendo la comunicazione sul canale.\nFrequency Hopping Possiamo utilizzare pseudogeneratori per andare a saltare in modo pseudorandom in spettri di frequenza diversi.\nAbbiamo bisogno di una sincronizzazione di questi salti, quindi un clock comune sarebbe molto comodo. (però dell’hardware per filtri per quelle frequenze ci dovrebbe essere).\nQuesto era soprattuttto un modo per trasmettere nel tentativo di non essere ascoltati. In questo senso di hop, è protetto by design.\nCuriosità: inventata da una attrice di hollywood, Hedy Lamarr (perché il suo canto andava fuori sinc lol) donato poi senza brevetto per salvare i soldati americani.\nDirect sequence spread spectrum🟨 Ne parliamo un po’ meglio in Modulazione wireless\nOssia mando il segnale encodato su tutto lo spettro con un chipping code. E qui si può riutilizzare la metafora del vagone e del treno, nel senso che se è lungo allora riconosco meglio il valore del bit encodato con quella forma.\nIn un certo senso è anche sicura rispetto al narrowband, perché devi conoscere il pattern del chip code per poterlo decodificare correttamente. (vari interlocutori avrebbero un codice non correlata fra di loro, cioè la comunciazione sovrapposta sembra una interferenza casuale) Questo ci permette di riestrarre da molte comunicazioni la nostra comunicazione iniziale.\nIn breve sembra che questa forma di trasmissione sia quella più affidabile per errori (anche la natura in modo naturale può dare interferenze)\nNote sulle generazioni (skip) 1G era solamente come codifica della voce, la differenza principale con la 2G è con la digitalizzazione, con 2G possiamo trasmettere megabytes, però era pagato per la durata di trasmissione (era telefonare per trasmettere bits lol, però era lenta, quindi pagava tanto, questa parte l’abbiamo accennata in Introduzione a reti, dato che la banda era occupata per tempo).\nCon 2.5G andiamo a sfruttare il tempo libero delle altre comunicazioni, ecco la differenza fra commutazione a pacchetto rispetto a commutazione a circuito\n3G era bono 1Mbit si pensava risolveva tutto.\nInfrastruttura wifi Struttura WWAN WMAN 🟨- C’è il problema di scoprire access points, e connettersi ai access point e anche predire il movimento delle persone per prevenire il collegamento alla rete.\nUn altro problema è tipo il cambio dell’indirizzo IP ad ogni cambio di rete connettendoci ad access point diverso, per questo motivo si utilizza una forma mobile di IPv4 per mantenere lo stesso IP (se cambiasse sempre allora non potrei sostenere video o simili quando mi sposto).\nGeostazionario: che gira insieme alla terra, quindi l’abbiamo costantemente sopra la nostra testa questo satellite.\nWLAN Queste sono delle reti ad hoc peer to peer, senza infrastruttura, sono solamente dei nodi che si trovano nella stessa stanza!\nNon abbiamo costi di gestione e manutenzione se siamo senza infrastruttura e possiamo comunicare localmente senza problemi\nBridges with wires Solitamente potremmo avere un access point che sia dual stack con due interfacci una che va in wireless, l’altra in wire, a livello 3 posso fare delle bridging functions,\nSvantaggi wireless 🟨— Location tracking è la cosa di più rilievo riguardo a questo, e anche la cosa più figa perché l’informazione per trackare le persone ci sarebbe 😀\nMultiplexing wireless Slide multiplexing\nDa cui vediamo che abbiamo 4 modi per fare multiplexing dello stesso segnale\nCodice Frequenza del sengale Tempo (non credo abbiamo molto controllo suq uesto lol) E spazio Vogliamo rendere non ambiguo la trasmissione, più dispositivi che utilizzino la stessa risorsa (mezzo di trasmissione di RF diciamo).\nFrequency 🟩 Slide frequenza\nLe energie di canali diversi dovrebbero essere separate, se comunque si vada ad invadere, il filtro dovrebbe essere sufficiente per ignorare gli altri canali, oppure possiamo separare di più le frequenze, questi spazi vuoti sono spazi di guardia\nUn altro lato negativo è che il canale è occupato, quindi quando c’è una asimmetria rispetto al modo in cui è occupato, allora c’è uno spreco.\nTime multiplexing 🟩 Slide time multiplex\nSi va in round robin in pratica, c’è uno spazio di guardia nel tempo. Che è uno spreco.\ne c’è bisongo di sincronizzazione tra i mezzi trasmissivi molto forte. Il vantaggio principale è che posso fare una trasmissione molto densa. (va diciamo a burst, quindi anche questo è uno svantaggio).\nTime and frequency multiplexing 🟩 Slide time and frequency\nViene utilizzato in GSM wifi. (è il provider che fornisce per ogni collegamento il seme per la gene), anche per quesot motivo era una comunicazione per tempo. (pagare telefonate per comunicare 9600 bit al secondo avevano di bitrate, costava molto).\nServe coordinamento preciso:\nMappa dei salti deve essere conosciuto Doppio spazio di guardia, sia per tempo sia per frequenze. (quindi anche qui utilizziamo molto spreco! Code multiplexing 🟩 La magia del CDMA in Modulazione wireless\nSlide code multiplexing\nQuesto sembra molto antiintuitivo, come facciamo ad utilizzare lo stesso canale per comunicare informazioni differenti?\nUtilizzo un codice che mi permette di riestrarre! Che figa la cosa che si può riestrarre dal caos.\nbandwidth efficient ossia maggior bitrate con la minore banda. dal punto di vista dell’user è più lento (singolarmente più lento, ma complessivamente di maggiore utilizzo). Un pò di computazione in più per ricevere e mandare. Space multiplexing 🟩- Slide space multiplexing\nOssia posizioniamo le nostre antenne in zone differenti. (abbiamo tipo tiling problem) (5G prova a ridurre al minimo l’area del segnale)\n",
-  "wordCount" : "1211",
+  "articleBody": "Introduzione Spettro del wireless networks (skip) Slide spettro Wirelesss networks\nQuesto solamente la classica differenziazione fra radio, visibile, raggi x raggi gamma etcetera.\nSe andiamo a guardare le onde radio, quelle che ci interessano, se ho frequenza alta ho densità di frequenza alta, se ho frequenza bassa ho alta capacità di suparamento di ostacoli.\nISM è una banda da 2 a 5.0 GHz e c’è tutto il WiFi, bluetooth. (anche wifi a 5 ghz.\nGSM prima rete cellulare a 900, poi 1800 nella seconda versione.\nDivisione statica delle frequenze\nAvre una frequenza comprata è una miniera d’oro, attualmente il prof sta facendo della ricerca su come andare a\nTrasmissione via wireless : bandwidth (!) Slide bandwidth\nSolitamente è una ampiezza di frequenza ossia quando è grande un insieme di frequenza (questa è anche la definizione formale da utilizzare). Però è erroneamente utilizzata anche per descrivere il numero di bits trasmessi (che è il bitrate nominale), è un errore voluto perché solitamente se hai una bandwidth maggiore riesci a trasmettere più dati.\nNotare che la velocità del segnale è sempre la stessa che è quella della radiofrquenza (quella della luce), è solamente l’alternarsi di quelle scatolette di colore diverso (codifica diversa).\nSe il segnale è più lungo allora è più facile andare ad interpretare se è uno 0 oppure è uno 1, diciamo che c’è il tradeoff sulla reliability del segnale credo, anche se è principalmente limitato dalla capacità del ricevente\ndef: connettività di link Slides connettività\nIl primo è una partizione, poi unidirezionali e bidirezionali.\nNota: solamente sui link direzionali possiamo andare a definire un link simmetrico o asimmetrico.\nLe parole principali sono:\nUnidirezionale Bidirezionale Partizione. Tipologie di wireless Slide introduzione alle tecnologie wireless\nNarrowband system È un frequenza molto piccola in cui si può comunicare (statica diciamo).\nProblemi di privacy perché mi posso connettere alla frequenza e ascoltare quanto viene mandato. Problemi di interferenza se voglio comunicare su questa frequenza con canali diversi Infatti per questa tipologia è molto semplice fare un attacco di Jamming, ossia mando informazioni alla stessa frequenza, impedendo la comunicazione sul canale.\nFrequency Hopping Possiamo utilizzare pseudogeneratori per andare a saltare in modo pseudorandom in spettri di frequenza diversi.\nAbbiamo bisogno di una sincronizzazione di questi salti, quindi un clock comune sarebbe molto comodo. (però dell’hardware per filtri per quelle frequenze ci dovrebbe essere).\nQuesto era soprattuttto un modo per trasmettere nel tentativo di non essere ascoltati. In questo senso di hop, è protetto by design.\nCuriosità: inventata da una attrice di hollywood, Hedy Lamarr (perché il suo canto andava fuori sinc lol) donato poi senza brevetto per salvare i soldati americani.\nDirect sequence spread spectrum Ne parliamo un po’ meglio in Modulazione wireless\nOssia mando il segnale encodato su tutto lo spettro con un chipping code. E qui si può riutilizzare la metafora del vagone e del treno, nel senso che se è lungo allora riconosco meglio il valore del bit encodato con quella forma.\nIn un certo senso è anche sicura rispetto al narrowband, perché devi conoscere il pattern del chip code per poterlo decodificare correttamente. (vari interlocutori avrebbero un codice non correlata fra di loro, cioè la comunciazione sovrapposta sembra una interferenza casuale) Questo ci permette di riestrarre da molte comunicazioni la nostra comunicazione iniziale.\nIn breve sembra che questa forma di trasmissione sia quella più affidabile per errori (anche la natura in modo naturale può dare interferenze)\nNote sulle generazioni (skip) 1G era solamente come codifica della voce, la differenza principale con la 2G è con la digitalizzazione, con 2G possiamo trasmettere megabytes, però era pagato per la durata di trasmissione (era telefonare per trasmettere bits lol, però era lenta, quindi pagava tanto, questa parte l’abbiamo accennata in Introduzione a reti, dato che la banda era occupata per tempo).\nCon 2.5G andiamo a sfruttare il tempo libero delle altre comunicazioni, ecco la differenza fra commutazione a pacchetto rispetto a commutazione a circuito\n3G era bono 1Mbit si pensava risolveva tutto.\nInfrastruttura wifi Struttura WWAN WMAN C’è il problema di scoprire access points, e connettersi ai access point e anche predire il movimento delle persone per prevenire il collegamento alla rete.\nUn altro problema è tipo il cambio dell’indirizzo IP ad ogni cambio di rete connettendoci ad access point diverso, per questo motivo si utilizza una forma mobile di IPv4 per mantenere lo stesso IP (se cambiasse sempre allora non potrei sostenere video o simili quando mi sposto).\nGeostazionario: che gira insieme alla terra, quindi l’abbiamo costantemente sopra la nostra testa questo satellite.\nWLAN Queste sono delle reti ad hoc peer to peer, senza infrastruttura, sono solamente dei nodi che si trovano nella stessa stanza!\nNon abbiamo costi di gestione e manutenzione se siamo senza infrastruttura e possiamo comunicare localmente senza problemi\nBridges with wires Solitamente potremmo avere un access point che sia dual stack con due interfacci una che va in wireless, l’altra in wire, a livello 3 posso fare delle bridging functions,\nSvantaggi wireless Location tracking è la cosa di più rilievo riguardo a questo, e anche la cosa più figa perché l’informazione per trackare le persone ci sarebbe 😀\nMultiplexing wireless Slide multiplexing\nDa cui vediamo che abbiamo 4 modi per fare multiplexing dello stesso segnale\nCodice Frequenza del sengale Tempo (non credo abbiamo molto controllo suq uesto lol) E spazio Vogliamo rendere non ambiguo la trasmissione, più dispositivi che utilizzino la stessa risorsa (mezzo di trasmissione di RF diciamo).\nFrequency Slide frequenza\nLe energie di canali diversi dovrebbero essere separate, se comunque si vada ad invadere, il filtro dovrebbe essere sufficiente per ignorare gli altri canali, oppure possiamo separare di più le frequenze, questi spazi vuoti sono spazi di guardia\nUn altro lato negativo è che il canale è occupato, quindi quando c’è una asimmetria rispetto al modo in cui è occupato, allora c’è uno spreco.\nTime multiplexing Slide time multiplex\nSi va in round robin in pratica, c’è uno spazio di guardia nel tempo. Che è uno spreco.\ne c’è bisongo di sincronizzazione tra i mezzi trasmissivi molto forte. Il vantaggio principale è che posso fare una trasmissione molto densa. (va diciamo a burst, quindi anche questo è uno svantaggio).\nTime and frequency multiplexing Slide time and frequency\nViene utilizzato in GSM wifi. (è il provider che fornisce per ogni collegamento il seme per la gene), anche per quesot motivo era una comunicazione per tempo. (pagare telefonate per comunicare 9600 bit al secondo avevano di bitrate, costava molto).\nServe coordinamento preciso:\nMappa dei salti deve essere conosciuto Doppio spazio di guardia, sia per tempo sia per frequenze. (quindi anche qui utilizziamo molto spreco! Code multiplexing La magia del CDMA in Modulazione wireless\nSlide code multiplexing\nQuesto sembra molto antiintuitivo, come facciamo ad utilizzare lo stesso canale per comunicare informazioni differenti?\nUtilizzo un codice che mi permette di riestrarre! Che figa la cosa che si può riestrarre dal caos.\nbandwidth efficient ossia maggior bitrate con la minore banda. dal punto di vista dell’user è più lento (singolarmente più lento, ma complessivamente di maggiore utilizzo). Un pò di computazione in più per ricevere e mandare. Space multiplexing Slide space multiplexing\nOssia posizioniamo le nostre antenne in zone differenti. (abbiamo tipo tiling problem) (5G prova a ridurre al minimo l’area del segnale)\n",
+  "wordCount" : "1202",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -269,9 +269,9 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
                 <li>
                     <a href="#spettro-del-wireless-networks-skip" aria-label="Spettro del wireless networks (skip)">Spettro del wireless networks (skip)</a></li>
                 <li>
-                    <a href="#trasmissione-via-wireless--bandwidth--" aria-label="Trasmissione via wireless : bandwidth (!) 🟩">Trasmissione via wireless : bandwidth (!) 🟩</a></li>
+                    <a href="#trasmissione-via-wireless--bandwidth-" aria-label="Trasmissione via wireless : bandwidth (!)">Trasmissione via wireless : bandwidth (!)</a></li>
                 <li>
-                    <a href="#def-connettivit%c3%a0-di-link-" aria-label="def: connettività di link 🟩">def: connettività di link 🟩</a></li></ul>
+                    <a href="#def-connettivit%c3%a0-di-link" aria-label="def: connettività di link">def: connettività di link</a></li></ul>
                 </li>
                 <li>
                     <a href="#tipologie-di-wireless" aria-label="Tipologie di wireless">Tipologie di wireless</a><ul>
@@ -281,7 +281,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
                 <li>
                     <a href="#frequency-hopping" aria-label="Frequency Hopping">Frequency Hopping</a></li>
                 <li>
-                    <a href="#direct-sequence-spread-spectrum" aria-label="Direct sequence spread spectrum🟨">Direct sequence spread spectrum🟨</a></li>
+                    <a href="#direct-sequence-spread-spectrum" aria-label="Direct sequence spread spectrum">Direct sequence spread spectrum</a></li>
                 <li>
                     <a href="#note-sulle-generazioni-skip" aria-label="Note sulle generazioni (skip)">Note sulle generazioni (skip)</a></li></ul>
                 </li>
@@ -289,27 +289,27 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
                     <a href="#infrastruttura-wifi" aria-label="Infrastruttura wifi">Infrastruttura wifi</a><ul>
                         
                 <li>
-                    <a href="#struttura-wwan-wman--" aria-label="Struttura WWAN WMAN 🟨-">Struttura WWAN WMAN 🟨-</a></li>
+                    <a href="#struttura-wwan-wman" aria-label="Struttura WWAN WMAN">Struttura WWAN WMAN</a></li>
                 <li>
                     <a href="#wlan" aria-label="WLAN">WLAN</a></li>
                 <li>
                     <a href="#bridges-with-wires" aria-label="Bridges with wires">Bridges with wires</a></li>
                 <li>
-                    <a href="#svantaggi-wireless-" aria-label="Svantaggi wireless 🟨—">Svantaggi wireless 🟨—</a></li></ul>
+                    <a href="#svantaggi-wireless" aria-label="Svantaggi wireless">Svantaggi wireless</a></li></ul>
                 </li>
                 <li>
                     <a href="#multiplexing-wireless" aria-label="Multiplexing wireless">Multiplexing wireless</a><ul>
                         
                 <li>
-                    <a href="#frequency-" aria-label="Frequency 🟩">Frequency 🟩</a></li>
+                    <a href="#frequency" aria-label="Frequency">Frequency</a></li>
                 <li>
-                    <a href="#time-multiplexing-" aria-label="Time multiplexing 🟩">Time multiplexing 🟩</a></li>
+                    <a href="#time-multiplexing" aria-label="Time multiplexing">Time multiplexing</a></li>
                 <li>
-                    <a href="#time-and-frequency-multiplexing-" aria-label="Time and frequency multiplexing 🟩">Time and frequency multiplexing 🟩</a></li>
+                    <a href="#time-and-frequency-multiplexing" aria-label="Time and frequency multiplexing">Time and frequency multiplexing</a></li>
                 <li>
-                    <a href="#code-multiplexing-" aria-label="Code multiplexing 🟩">Code multiplexing 🟩</a></li>
+                    <a href="#code-multiplexing" aria-label="Code multiplexing">Code multiplexing</a></li>
                 <li>
-                    <a href="#space-multiplexing--" aria-label="Space multiplexing 🟩-">Space multiplexing 🟩-</a>
+                    <a href="#space-multiplexing" aria-label="Space multiplexing">Space multiplexing</a>
                 </li>
             </ul>
             </li>
@@ -337,7 +337,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 </li>
 </ul>
 <p>Avre una frequenza comprata è una miniera d&rsquo;oro, attualmente il prof sta facendo della ricerca su come andare a</p>
-<h3 id="trasmissione-via-wireless--bandwidth--">Trasmissione via wireless : bandwidth (!) 🟩<a hidden class="anchor" aria-hidden="true" href="#trasmissione-via-wireless--bandwidth--">#</a></h3>
+<h3 id="trasmissione-via-wireless--bandwidth-">Trasmissione via wireless : bandwidth (!)<a hidden class="anchor" aria-hidden="true" href="#trasmissione-via-wireless--bandwidth-">#</a></h3>
 <ul>
 <li>
 <p>Slide bandwidth</p>
@@ -347,7 +347,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <p>Solitamente è una <strong>ampiezza di frequenza</strong> ossia quando è grande un insieme di frequenza (questa è anche la definizione formale da utilizzare). Però è erroneamente utilizzata anche per descrivere il numero di bits trasmessi (che è il <strong>bitrate nominale</strong>), è un errore voluto perché solitamente se hai una bandwidth maggiore riesci a trasmettere più dati.</p>
 <p>Notare che la velocità del segnale è sempre la stessa che è quella della radiofrquenza (quella della luce), è solamente l&rsquo;alternarsi di quelle scatolette di colore diverso (codifica diversa).</p>
 <p>Se <strong>il segnale è più lungo</strong> allora è più facile andare ad interpretare se è uno 0 oppure è uno 1, diciamo che c&rsquo;è il tradeoff sulla reliability del segnale credo, anche se è principalmente limitato dalla capacità del ricevente</p>
-<h3 id="def-connettività-di-link-">def: connettività di link 🟩<a hidden class="anchor" aria-hidden="true" href="#def-connettività-di-link-">#</a></h3>
+<h3 id="def-connettività-di-link">def: connettività di link<a hidden class="anchor" aria-hidden="true" href="#def-connettività-di-link">#</a></h3>
 <ul>
 <li>
 <p>Slides connettività</p>
@@ -386,7 +386,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <p>Abbiamo bisogno di una <strong>sincronizzazione</strong> di questi salti, quindi un clock comune sarebbe molto comodo. (però dell’hardware per filtri per quelle frequenze ci dovrebbe essere).</p>
 <p>Questo era soprattuttto un modo per trasmettere nel tentativo di non essere ascoltati. In questo senso di hop, è protetto by design.</p>
 <p>Curiosità: inventata da una attrice di hollywood, Hedy Lamarr (perché il suo canto andava fuori sinc lol) donato poi senza brevetto per salvare i soldati americani.</p>
-<h3 id="direct-sequence-spread-spectrum">Direct sequence spread spectrum🟨<a hidden class="anchor" aria-hidden="true" href="#direct-sequence-spread-spectrum">#</a></h3>
+<h3 id="direct-sequence-spread-spectrum">Direct sequence spread spectrum<a hidden class="anchor" aria-hidden="true" href="#direct-sequence-spread-spectrum">#</a></h3>
 <p>Ne parliamo un po&rsquo; meglio in <a href="/notes/modulazione-wireless">Modulazione wireless</a></p>
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 10">
 <p>Ossia mando il segnale encodato su <strong>tutto lo spettro</strong> con un chipping code. E qui si può riutilizzare la metafora del vagone e del treno, nel senso che se è lungo allora riconosco meglio il valore del bit encodato con quella forma.</p>
@@ -397,7 +397,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <p>Con 2.5G andiamo a sfruttare il tempo libero delle altre comunicazioni, ecco la differenza fra commutazione a pacchetto rispetto a commutazione a circuito</p>
 <p>3G era bono 1Mbit si pensava risolveva tutto.</p>
 <h2 id="infrastruttura-wifi">Infrastruttura wifi<a hidden class="anchor" aria-hidden="true" href="#infrastruttura-wifi">#</a></h2>
-<h3 id="struttura-wwan-wman--">Struttura WWAN WMAN 🟨-<a hidden class="anchor" aria-hidden="true" href="#struttura-wwan-wman--">#</a></h3>
+<h3 id="struttura-wwan-wman">Struttura WWAN WMAN<a hidden class="anchor" aria-hidden="true" href="#struttura-wwan-wman">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 11">
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 12">
 <p>C&rsquo;è il problema di scoprire access points, e connettersi ai access point e anche predire il movimento delle persone per prevenire il collegamento alla rete.</p>
@@ -410,7 +410,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <h3 id="bridges-with-wires">Bridges with wires<a hidden class="anchor" aria-hidden="true" href="#bridges-with-wires">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 14">
 <p>Solitamente potremmo avere un access point che sia <strong>dual stack</strong> con due interfacci una che va in wireless, l’altra in wire, a livello 3 posso fare delle bridging functions,</p>
-<h3 id="svantaggi-wireless-">Svantaggi wireless 🟨—<a hidden class="anchor" aria-hidden="true" href="#svantaggi-wireless-">#</a></h3>
+<h3 id="svantaggi-wireless">Svantaggi wireless<a hidden class="anchor" aria-hidden="true" href="#svantaggi-wireless">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 15">
 <img src="/images/notes/image/universita/ex-notion/Tecnologia Wireless/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Tecnologia Wireless/Untitled 16">
 <p>Location tracking è la cosa di più rilievo riguardo a questo, e anche la cosa più figa perché l’informazione per trackare le persone ci sarebbe 😀</p>
@@ -429,7 +429,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <li>E spazio</li>
 </ol>
 <p>Vogliamo rendere non ambiguo la trasmissione, più dispositivi che utilizzino la stessa risorsa (mezzo di trasmissione di RF diciamo).</p>
-<h3 id="frequency-">Frequency 🟩<a hidden class="anchor" aria-hidden="true" href="#frequency-">#</a></h3>
+<h3 id="frequency">Frequency<a hidden class="anchor" aria-hidden="true" href="#frequency">#</a></h3>
 <ul>
 <li>
 <p>Slide frequenza</p>
@@ -438,7 +438,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 </ul>
 <p>Le energie di canali diversi dovrebbero essere separate, se comunque si vada ad invadere, il filtro dovrebbe essere sufficiente per ignorare gli altri canali, oppure possiamo separare di più le frequenze, questi spazi vuoti sono <strong>spazi di guardia</strong></p>
 <p>Un altro lato negativo è che il canale è occupato, quindi quando c&rsquo;è una asimmetria rispetto al modo in cui è occupato, allora c&rsquo;è uno spreco.</p>
-<h3 id="time-multiplexing-">Time multiplexing 🟩<a hidden class="anchor" aria-hidden="true" href="#time-multiplexing-">#</a></h3>
+<h3 id="time-multiplexing">Time multiplexing<a hidden class="anchor" aria-hidden="true" href="#time-multiplexing">#</a></h3>
 <ul>
 <li>
 <p>Slide time multiplex</p>
@@ -447,7 +447,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 </ul>
 <p>Si va in round robin in pratica, c’è uno spazio di guardia nel tempo. Che è uno spreco.</p>
 <p>e c’è bisongo di <strong>sincronizzazione tra i mezzi trasmissivi</strong> molto forte. Il vantaggio principale è che posso fare una trasmissione molto densa. (va diciamo a burst, quindi anche questo è uno svantaggio).</p>
-<h3 id="time-and-frequency-multiplexing-">Time and frequency multiplexing 🟩<a hidden class="anchor" aria-hidden="true" href="#time-and-frequency-multiplexing-">#</a></h3>
+<h3 id="time-and-frequency-multiplexing">Time and frequency multiplexing<a hidden class="anchor" aria-hidden="true" href="#time-and-frequency-multiplexing">#</a></h3>
 <ul>
 <li>
 <p>Slide time and frequency</p>
@@ -462,7 +462,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <ul>
 <li>Doppio spazio di guardia, sia per tempo sia per frequenze. (quindi anche qui utilizziamo molto spreco!</li>
 </ul>
-<h3 id="code-multiplexing-">Code multiplexing 🟩<a hidden class="anchor" aria-hidden="true" href="#code-multiplexing-">#</a></h3>
+<h3 id="code-multiplexing">Code multiplexing<a hidden class="anchor" aria-hidden="true" href="#code-multiplexing">#</a></h3>
 <p>La magia del CDMA in <a href="/notes/modulazione-wireless">Modulazione wireless</a></p>
 <ul>
 <li>
@@ -477,7 +477,7 @@ ISM è una banda da 2 a 5.0 GHz e c&rsquo;è tutto il WiFi, bluetooth. (anche wi
 <li>dal punto di vista dell’user è più lento (singolarmente più lento, ma complessivamente di maggiore utilizzo).</li>
 <li>Un pò di computazione in più per ricevere e mandare.</li>
 </ul>
-<h3 id="space-multiplexing--">Space multiplexing 🟩-<a hidden class="anchor" aria-hidden="true" href="#space-multiplexing--">#</a></h3>
+<h3 id="space-multiplexing">Space multiplexing<a hidden class="anchor" aria-hidden="true" href="#space-multiplexing">#</a></h3>
 <ul>
 <li>
 <p>Slide space multiplexing</p>

@@ -8,7 +8,7 @@
 <title>Normalizzazione dei database | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📙basi-di-dati, 📓big-data">
 <meta name="description" content="Introduzione alla normalizzazione
-Perché si normalizza? 🟩
+Perché si normalizza?
 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità.
 Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.">
 <meta name="author" content="Xuanqiang &#39;Angelo&#39; Huang">
@@ -95,7 +95,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/normalizzazione-dei-database/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Normalizzazione dei database">
-  <meta property="og:description" content="Introduzione alla normalizzazione Perché si normalizza? 🟩 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.">
+  <meta property="og:description" content="Introduzione alla normalizzazione Perché si normalizza? Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -106,7 +106,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Normalizzazione dei database">
 <meta name="twitter:description" content="Introduzione alla normalizzazione
-Perché si normalizza? 🟩
+Perché si normalizza?
 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità.
 Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.">
 
@@ -137,12 +137,12 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
   "@type": "BlogPosting",
   "headline": "Normalizzazione dei database",
   "name": "Normalizzazione dei database",
-  "description": "Introduzione alla normalizzazione Perché si normalizza? 🟩 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.\n",
+  "description": "Introduzione alla normalizzazione Perché si normalizza? Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.\n",
   "keywords": [
     "📙basi-di-dati", "📓big-data"
   ],
-  "articleBody": "Introduzione alla normalizzazione Perché si normalizza? 🟩 Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.\nTipologie di anomalie 🟩 Ridondanze, non vorrei avere la stessa informazione espressa più volte in troppi punti. Update non consistente, quando per aggiornare un singolo valore devo aggiornare moltissime altre tuple dipendenti da essa. Deletion non consistente, la presenza di certe entità è strettamente dipendente da presenza di altri, nell’esempio in questione sulle slides, se elimino tutti gli utenti, elimino anche i progetti su cui hanno partecipato, mentre invece dovrebbero essere separati. Insertion, ad esempio se non posso inserire un certa entry finché una altra proprietà legata (ma per il resto indipendente non è stata definita, nell’esempio del prof provare ad inserire un lavoratore, ma senza progetto.) Ci possono essere molte forme di non-normalizzazione per i database. La figura seguente riassume il concetto (preso da qui). Forme di integrità 🟩 Integrità atomica: ogni cella deve avere un singolo valore, non può avere delle tavole innestate e non ci devono essere righe ripetute (ridondanze). Integrità di dominio: ogni valore della cella deve possedere valori che appartengono al dominio della colonna. Integrità relazionale: Foreign key values must either be NULL or match an existing value in the referenced table’s primary key. Dipendenze funzionali Vogliamo cercare di identificare le dipendenze funzionali e separarle, questo aiuta a creare qualità nel database La dipendenza funzionale è un vincolo di integrità speciale, simile a quello relazionale spiegato in Relational Model\nDefinizione formale di dipendenza funzionale 🟩 Data una relazione $r$ sullo schema $R(X)$ due sottoinsiemi non vuoti di attributi $Y$ e $Z$ sono detti funzionalmente dipendenti per ogni coppia di tuple $t_{1}$ e $t_{2}$ in $r$ con stessi valori per tutti gli attributi in $Y$ abbiamo che questi hanno gli stessi valori anche su $Z$.\nOsservazioni:\nFunzione, perché in un certo senso il primo insieme è il dominio, e il secondo è il codominio, ed è come se ci fosse una funzione che li associ. Esistono dipendenze funzionali banali quelli il cui il secondo insieme di attributi è un sottoinsieme del primo. Dipendenza funzionale con chiave essendo unica, non abbiamo duplicati di chiave, quindi l’implica implicito nella definizione ha sempre l’ipotesi falsa, quindi è sempre vero (guarda logica per capire il senso della mia frase). Livelli di normalizzazione Definizione formale Boyce e Codd (!) 🟩– Una relazione $r$\tsi dice in forma normale di Boyce e Codd se per ogni dipendenza funzionale non banale $X \\to A$ definita sulla relazione, $X$ contiene una chiave $K$ di $r$, cioè $X$ è una super-chiave di $r$\nQuesta il professor Ghislayn lo chiama anche forma normale 3.5 Ossia vogliamo solamente dipendenza funzionali tramite chiavi, e non in altro modo, altrimenti probabilmente avrò una ripetizione. Per esempio, con questa forma normale non sono accettate parti di chiavi che dipendono da altre chiavi, mentre con la terza forma normale questo era tollerato.\nL’idea principale è che una tavola fa una singola cosa e niente altro.\nPrima forma normale 🟩 Questo è la stessa cosa delle integrità atomica.\nSeconda forma normale 🟩 Possiede la prima forma normale e deve essere che ogni colonna non chiave deve essere dipendente dall’intera chiave, e non una sotto parte. Altrimenti possiamo andare a denormalizzare.\nDefinizione terza forma normale 🟩– È una forma leggermente più rilassata, utile per normalizzare anche quando BC non è possibile fare.\nUna relazione $r$ è in terza forma normale se per ogni dipendenza funzionale $X \\to Y$ non banale vengono verificate una delle due condizioni:\n$X$ ha una chiave di $r$ Ogni attributo di $Y$ appartiene ad almeno una chiave di $r$ Il primo dovrebbe corrispondere a Boyce Codd. Il secondo credo sia nuovo, possiamo dire quindi che sia una estensione, che permette la definizione di normalizzazione essere applicata a più cose. Questa decomposizione è sempre possibile, abbiamo un teorema che lo dice.\nIntuitivamente, possiamo dire che è in terza forma normale se è in seconda e non ci sono dipendenze funzionali fra le non chiavi stesse, altrimenti possiamo scomporre ancora.\nLa pagina Wikipedia asserisce questo requisito:\ntutti gli attributi non-chiave dipendono soltanto dalla chiave, ovvero non esistono dipendenze funzionali tra attributi non-chiave.\nChe è molto più semplice da ricordare, e in un certo senso simile a Boyce-Codd.\nNel contesto di NoSQL NoSQL va a rilassare questi constraints, per questo motivo abbiamo\nData eterogeneo (no tabulare) Nested data (no prima forma normale) Data denomalizzato (non abbiamo boyce Codd o altra forma normalizzata) not having to join brings a significant performance improvement in reads\nQuesto è uno dei motivi per cui i dati sono solitamente non normalizzati nei big data attuali. Metodi di normalizzazione Decomposizione senza perdita 🟩 Sia dato un insieme di attributi $X$ e una decomposizione, non partizione, in $X_{1}$ e $X_{2}$, abbiamo che la relazione $r$ si decompone senza perdita su $X_{1}$ e $X_{2}$ quando la join delle due è uguale a $r$. ossia: $\\pi_{X_{1}}(r) \\bowtie \\pi_{X_{2}}(r) = r$\nQuesta è una necessità per ricostruire le informazioni iniziali senza nessuna perdita. Si può notare che talvolta seguendo in modo cielo le dipendenze funzionali che si possono trovare seguendo una via di Boyce and Codd, non è sufficiente per mantenere questa proprietà tanto importante.\nPrendiamo un esempio con perdita (perché vado a ricostruire un esempio con più informazioni): Questa non è una cosa che vogliamo!\nUn modo per risolvere questo è aggiungere degli attributi fittizi che ci aiutano a discriminare sulle cose che ci servono. Ci fanno da specie di chiave.\nConservazione delle dipendenze 🟩 Questo permette di mantenere i vincoli di integrità.\nUna decomposizione preserva la dipendenza se ogni dipendenza funzionale dello schema originale ha attributi che compaiono nello stesso schema, altrimenti non è possibile rilevare le dipendenze funzionali (Atzeni, pagina 332)\nCioè se spezzo una dipendenza funzionale in tavole diverse, questa proprietà non viene soddisfatta, perché non sarei più in grado di trackarlo.\nPrendiamo un esempio in cui questa caratteristica si dimostra utile\nNormalizzazione nello schema concettuale 🟨– Possiamo utilizzare questa idea anche nella parte di sviluppo di schemi E-R. Se riconosco a questo livello che c’è una dipendenza funzionale, questo mi da indicazioni su come continuare lo sviluppo di questo. Nell’esempio sulle slides motiva un partizionamento verticale, vedi Database logical design.\n",
-  "wordCount" : "1087",
+  "articleBody": "Introduzione alla normalizzazione Perché si normalizza? Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità. Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come Cloud Storage, Distributed file systems potrebbero risultare più effettivi.\nTipologie di anomalie Ridondanze, non vorrei avere la stessa informazione espressa più volte in troppi punti. Update non consistente, quando per aggiornare un singolo valore devo aggiornare moltissime altre tuple dipendenti da essa. Deletion non consistente, la presenza di certe entità è strettamente dipendente da presenza di altri, nell’esempio in questione sulle slides, se elimino tutti gli utenti, elimino anche i progetti su cui hanno partecipato, mentre invece dovrebbero essere separati. Insertion, ad esempio se non posso inserire un certa entry finché una altra proprietà legata (ma per il resto indipendente non è stata definita, nell’esempio del prof provare ad inserire un lavoratore, ma senza progetto.) Ci possono essere molte forme di non-normalizzazione per i database. La figura seguente riassume il concetto (preso da qui). Forme di integrità Integrità atomica: ogni cella deve avere un singolo valore, non può avere delle tavole innestate e non ci devono essere righe ripetute (ridondanze). Integrità di dominio: ogni valore della cella deve possedere valori che appartengono al dominio della colonna. Integrità relazionale: Foreign key values must either be NULL or match an existing value in the referenced table’s primary key. Dipendenze funzionali Vogliamo cercare di identificare le dipendenze funzionali e separarle, questo aiuta a creare qualità nel database La dipendenza funzionale è un vincolo di integrità speciale, simile a quello relazionale spiegato in Relational Model\nDefinizione formale di dipendenza funzionale Data una relazione $r$ sullo schema $R(X)$ due sottoinsiemi non vuoti di attributi $Y$ e $Z$ sono detti funzionalmente dipendenti per ogni coppia di tuple $t_{1}$ e $t_{2}$ in $r$ con stessi valori per tutti gli attributi in $Y$ abbiamo che questi hanno gli stessi valori anche su $Z$.\nOsservazioni:\nFunzione, perché in un certo senso il primo insieme è il dominio, e il secondo è il codominio, ed è come se ci fosse una funzione che li associ. Esistono dipendenze funzionali banali quelli il cui il secondo insieme di attributi è un sottoinsieme del primo. Dipendenza funzionale con chiave essendo unica, non abbiamo duplicati di chiave, quindi l’implica implicito nella definizione ha sempre l’ipotesi falsa, quindi è sempre vero (guarda logica per capire il senso della mia frase). Livelli di normalizzazione Definizione formale Boyce e Codd (!) Una relazione $r$\tsi dice in forma normale di Boyce e Codd se per ogni dipendenza funzionale non banale $X \\to A$ definita sulla relazione, $X$ contiene una chiave $K$ di $r$, cioè $X$ è una super-chiave di $r$\nQuesta il professor Ghislayn lo chiama anche forma normale 3.5 Ossia vogliamo solamente dipendenza funzionali tramite chiavi, e non in altro modo, altrimenti probabilmente avrò una ripetizione. Per esempio, con questa forma normale non sono accettate parti di chiavi che dipendono da altre chiavi, mentre con la terza forma normale questo era tollerato.\nL’idea principale è che una tavola fa una singola cosa e niente altro.\nPrima forma normale Questo è la stessa cosa delle integrità atomica.\nSeconda forma normale Possiede la prima forma normale e deve essere che ogni colonna non chiave deve essere dipendente dall’intera chiave, e non una sotto parte. Altrimenti possiamo andare a denormalizzare.\nDefinizione terza forma normale È una forma leggermente più rilassata, utile per normalizzare anche quando BC non è possibile fare.\nUna relazione $r$ è in terza forma normale se per ogni dipendenza funzionale $X \\to Y$ non banale vengono verificate una delle due condizioni:\n$X$ ha una chiave di $r$ Ogni attributo di $Y$ appartiene ad almeno una chiave di $r$ Il primo dovrebbe corrispondere a Boyce Codd. Il secondo credo sia nuovo, possiamo dire quindi che sia una estensione, che permette la definizione di normalizzazione essere applicata a più cose. Questa decomposizione è sempre possibile, abbiamo un teorema che lo dice.\nIntuitivamente, possiamo dire che è in terza forma normale se è in seconda e non ci sono dipendenze funzionali fra le non chiavi stesse, altrimenti possiamo scomporre ancora.\nLa pagina Wikipedia asserisce questo requisito:\ntutti gli attributi non-chiave dipendono soltanto dalla chiave, ovvero non esistono dipendenze funzionali tra attributi non-chiave.\nChe è molto più semplice da ricordare, e in un certo senso simile a Boyce-Codd.\nNel contesto di NoSQL NoSQL va a rilassare questi constraints, per questo motivo abbiamo\nData eterogeneo (no tabulare) Nested data (no prima forma normale) Data denomalizzato (non abbiamo boyce Codd o altra forma normalizzata) not having to join brings a significant performance improvement in reads\nQuesto è uno dei motivi per cui i dati sono solitamente non normalizzati nei big data attuali. Metodi di normalizzazione Decomposizione senza perdita Sia dato un insieme di attributi $X$ e una decomposizione, non partizione, in $X_{1}$ e $X_{2}$, abbiamo che la relazione $r$ si decompone senza perdita su $X_{1}$ e $X_{2}$ quando la join delle due è uguale a $r$. ossia: $\\pi_{X_{1}}(r) \\bowtie \\pi_{X_{2}}(r) = r$\nQuesta è una necessità per ricostruire le informazioni iniziali senza nessuna perdita. Si può notare che talvolta seguendo in modo cielo le dipendenze funzionali che si possono trovare seguendo una via di Boyce and Codd, non è sufficiente per mantenere questa proprietà tanto importante.\nPrendiamo un esempio con perdita (perché vado a ricostruire un esempio con più informazioni): Questa non è una cosa che vogliamo!\nUn modo per risolvere questo è aggiungere degli attributi fittizi che ci aiutano a discriminare sulle cose che ci servono. Ci fanno da specie di chiave.\nConservazione delle dipendenze Questo permette di mantenere i vincoli di integrità.\nUna decomposizione preserva la dipendenza se ogni dipendenza funzionale dello schema originale ha attributi che compaiono nello stesso schema, altrimenti non è possibile rilevare le dipendenze funzionali (Atzeni, pagina 332)\nCioè se spezzo una dipendenza funzionale in tavole diverse, questa proprietà non viene soddisfatta, perché non sarei più in grado di trackarlo.\nPrendiamo un esempio in cui questa caratteristica si dimostra utile\nNormalizzazione nello schema concettuale Possiamo utilizzare questa idea anche nella parte di sviluppo di schemi E-R. Se riconosco a questo livello che c’è una dipendenza funzionale, questo mi da indicazioni su come continuare lo sviluppo di questo. Nell’esempio sulle slides motiva un partizionamento verticale, vedi Database logical design.\n",
+  "wordCount" : "1076",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -251,29 +251,29 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
                     <a href="#introduzione-alla-normalizzazione" aria-label="Introduzione alla normalizzazione">Introduzione alla normalizzazione</a><ul>
                         
                 <li>
-                    <a href="#perch%c3%a9-si-normalizza-" aria-label="Perché si normalizza? 🟩">Perché si normalizza? 🟩</a></li>
+                    <a href="#perch%c3%a9-si-normalizza" aria-label="Perché si normalizza?">Perché si normalizza?</a></li>
                 <li>
-                    <a href="#tipologie-di-anomalie-" aria-label="Tipologie di anomalie 🟩">Tipologie di anomalie 🟩</a></li>
+                    <a href="#tipologie-di-anomalie" aria-label="Tipologie di anomalie">Tipologie di anomalie</a></li>
                 <li>
-                    <a href="#forme-di-integrit%c3%a0-" aria-label="Forme di integrità 🟩">Forme di integrità 🟩</a></li></ul>
+                    <a href="#forme-di-integrit%c3%a0" aria-label="Forme di integrità">Forme di integrità</a></li></ul>
                 </li>
                 <li>
                     <a href="#dipendenze-funzionali" aria-label="Dipendenze funzionali">Dipendenze funzionali</a><ul>
                         
                 <li>
-                    <a href="#definizione-formale-di-dipendenza-funzionale-" aria-label="Definizione formale di dipendenza funzionale 🟩">Definizione formale di dipendenza funzionale 🟩</a></li></ul>
+                    <a href="#definizione-formale-di-dipendenza-funzionale" aria-label="Definizione formale di dipendenza funzionale">Definizione formale di dipendenza funzionale</a></li></ul>
                 </li>
                 <li>
                     <a href="#livelli-di-normalizzazione" aria-label="Livelli di normalizzazione">Livelli di normalizzazione</a><ul>
                         
                 <li>
-                    <a href="#definizione-formale-boyce-e-codd----" aria-label="Definizione formale Boyce e Codd (!) 🟩&ndash;">Definizione formale Boyce e Codd (!) 🟩&ndash;</a></li>
+                    <a href="#definizione-formale-boyce-e-codd-" aria-label="Definizione formale Boyce e Codd (!)">Definizione formale Boyce e Codd (!)</a></li>
                 <li>
-                    <a href="#prima-forma-normale-" aria-label="Prima forma normale 🟩">Prima forma normale 🟩</a></li>
+                    <a href="#prima-forma-normale" aria-label="Prima forma normale">Prima forma normale</a></li>
                 <li>
-                    <a href="#seconda-forma-normale-" aria-label="Seconda forma normale 🟩">Seconda forma normale 🟩</a></li>
+                    <a href="#seconda-forma-normale" aria-label="Seconda forma normale">Seconda forma normale</a></li>
                 <li>
-                    <a href="#definizione-terza-forma-normale---" aria-label="Definizione terza forma normale 🟩&ndash;">Definizione terza forma normale 🟩&ndash;</a></li>
+                    <a href="#definizione-terza-forma-normale" aria-label="Definizione terza forma normale">Definizione terza forma normale</a></li>
                 <li>
                     <a href="#nel-contesto-di-nosql" aria-label="Nel contesto di NoSQL">Nel contesto di NoSQL</a></li></ul>
                 </li>
@@ -281,11 +281,11 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
                     <a href="#metodi-di-normalizzazione" aria-label="Metodi di normalizzazione">Metodi di normalizzazione</a><ul>
                         
                 <li>
-                    <a href="#decomposizione-senza-perdita-" aria-label="Decomposizione senza perdita 🟩">Decomposizione senza perdita 🟩</a></li>
+                    <a href="#decomposizione-senza-perdita" aria-label="Decomposizione senza perdita">Decomposizione senza perdita</a></li>
                 <li>
-                    <a href="#conservazione-delle-dipendenze-" aria-label="Conservazione delle dipendenze 🟩">Conservazione delle dipendenze 🟩</a></li>
+                    <a href="#conservazione-delle-dipendenze" aria-label="Conservazione delle dipendenze">Conservazione delle dipendenze</a></li>
                 <li>
-                    <a href="#normalizzazione-nello-schema-concettuale---" aria-label="Normalizzazione nello schema concettuale 🟨&ndash;">Normalizzazione nello schema concettuale 🟨&ndash;</a>
+                    <a href="#normalizzazione-nello-schema-concettuale" aria-label="Normalizzazione nello schema concettuale">Normalizzazione nello schema concettuale</a>
                 </li>
             </ul>
             </li>
@@ -295,10 +295,10 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
 </div>
 
   <div class="post-content"><h3 id="introduzione-alla-normalizzazione">Introduzione alla normalizzazione<a hidden class="anchor" aria-hidden="true" href="#introduzione-alla-normalizzazione">#</a></h3>
-<h4 id="perché-si-normalizza-">Perché si normalizza? 🟩<a hidden class="anchor" aria-hidden="true" href="#perché-si-normalizza-">#</a></h4>
+<h4 id="perché-si-normalizza">Perché si normalizza?<a hidden class="anchor" aria-hidden="true" href="#perché-si-normalizza">#</a></h4>
 <p>Cercare di aumentare la qualità del nostro database, perché praticamente andiamo a risolvere delle anomalie possibili al nostro interno, e questo aiuta per la qualità.
 Solitamente queste anomalie sono interessanti per sistemi write intensive, in cui vogliamo mantenere i nostri dati in una forma buona. Però capita non raramente che vogliamo solamente leggere. In quei casi sistemi come <a href="/notes/cloud-storage">Cloud Storage</a>, <a href="/notes/distributed-file-systems">Distributed file systems</a> potrebbero risultare più effettivi.</p>
-<h4 id="tipologie-di-anomalie-">Tipologie di anomalie 🟩<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-anomalie-">#</a></h4>
+<h4 id="tipologie-di-anomalie">Tipologie di anomalie<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-anomalie">#</a></h4>
 <ul>
 <li><strong>Ridondanze</strong>, non vorrei avere la stessa informazione espressa più volte in troppi punti.</li>
 <li><strong>Update non consistente</strong>, quando per aggiornare un singolo valore devo aggiornare moltissime altre tuple dipendenti da essa.</li>
@@ -307,7 +307,7 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
 </ul>
 <p>Ci possono essere molte forme di non-normalizzazione per i database. La figura seguente riassume il concetto (preso da <a href="https://www.youtube.com/watch?v=PnDL6PAaHxs&list=PLs5KPrcFtb0VNNaVquF0Tj8tSfiZMRvoz&index=39&ab_channel=GhislainFourny%27slectures">qui</a>).
 <img src="/images/notes/Normalizzazione dei database-20241126150701858.webp" style="width: 100%" class="center" alt="Normalizzazione dei database-20241126150701858"></p>
-<h4 id="forme-di-integrità-">Forme di integrità 🟩<a hidden class="anchor" aria-hidden="true" href="#forme-di-integrità-">#</a></h4>
+<h4 id="forme-di-integrità">Forme di integrità<a hidden class="anchor" aria-hidden="true" href="#forme-di-integrità">#</a></h4>
 <ul>
 <li><strong>Integrità atomica</strong>: ogni cella deve avere un singolo valore, non può avere delle tavole innestate e non ci devono essere righe ripetute (ridondanze).</li>
 <li><strong>Integrità di dominio</strong>: ogni valore della cella deve possedere valori che appartengono al dominio della colonna.</li>
@@ -316,7 +316,7 @@ Solitamente queste anomalie sono interessanti per sistemi write intensive, in cu
 <h3 id="dipendenze-funzionali">Dipendenze funzionali<a hidden class="anchor" aria-hidden="true" href="#dipendenze-funzionali">#</a></h3>
 <p>Vogliamo cercare di identificare le dipendenze funzionali e separarle, questo aiuta a creare qualità nel database
 La dipendenza funzionale è un <strong>vincolo di integrità</strong> speciale, simile a quello relazionale spiegato in <a href="/notes/relational-model">Relational Model</a></p>
-<h4 id="definizione-formale-di-dipendenza-funzionale-">Definizione formale di dipendenza funzionale 🟩<a hidden class="anchor" aria-hidden="true" href="#definizione-formale-di-dipendenza-funzionale-">#</a></h4>
+<h4 id="definizione-formale-di-dipendenza-funzionale">Definizione formale di dipendenza funzionale<a hidden class="anchor" aria-hidden="true" href="#definizione-formale-di-dipendenza-funzionale">#</a></h4>
 <p>Data una relazione $r$ sullo schema $R(X)$ due sottoinsiemi non vuoti di attributi $Y$ e $Z$ sono detti funzionalmente dipendenti per ogni coppia di tuple $t_{1}$ e $t_{2}$ in $r$ con stessi valori per tutti gli attributi in $Y$ abbiamo che questi hanno gli stessi valori anche su $Z$.</p>
 <p><strong>Osservazioni</strong>:</p>
 <ol>
@@ -325,17 +325,17 @@ La dipendenza funzionale è un <strong>vincolo di integrità</strong> speciale, 
 <li><strong>Dipendenza funzionale con chiave</strong> essendo unica, non abbiamo duplicati di chiave, quindi l&rsquo;implica implicito nella definizione ha sempre l&rsquo;ipotesi falsa, quindi è sempre vero (guarda logica per capire il senso della mia frase).</li>
 </ol>
 <h3 id="livelli-di-normalizzazione">Livelli di normalizzazione<a hidden class="anchor" aria-hidden="true" href="#livelli-di-normalizzazione">#</a></h3>
-<h4 id="definizione-formale-boyce-e-codd----">Definizione formale Boyce e Codd (!) 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#definizione-formale-boyce-e-codd----">#</a></h4>
+<h4 id="definizione-formale-boyce-e-codd-">Definizione formale Boyce e Codd (!)<a hidden class="anchor" aria-hidden="true" href="#definizione-formale-boyce-e-codd-">#</a></h4>
 <blockquote>
 <p>Una relazione $r$	si dice in <em>forma normale di Boyce e Codd</em> se per ogni dipendenza funzionale non banale $X \to A$ definita sulla relazione, $X$ contiene una chiave $K$ di $r$, cioè $X$ è una super-chiave di $r$</p></blockquote>
 <p>Questa il professor Ghislayn lo chiama anche forma normale 3.5
 Ossia vogliamo solamente dipendenza funzionali tramite chiavi, e non in altro modo, altrimenti probabilmente avrò una ripetizione. Per esempio, con questa forma normale non sono accettate parti di chiavi che dipendono da altre chiavi, mentre con la terza forma normale questo era tollerato.</p>
 <p>L&rsquo;idea principale è che <strong>una tavola</strong> fa una singola cosa e niente altro.</p>
-<h4 id="prima-forma-normale-">Prima forma normale 🟩<a hidden class="anchor" aria-hidden="true" href="#prima-forma-normale-">#</a></h4>
+<h4 id="prima-forma-normale">Prima forma normale<a hidden class="anchor" aria-hidden="true" href="#prima-forma-normale">#</a></h4>
 <p>Questo è la stessa cosa delle integrità atomica.</p>
-<h4 id="seconda-forma-normale-">Seconda forma normale 🟩<a hidden class="anchor" aria-hidden="true" href="#seconda-forma-normale-">#</a></h4>
+<h4 id="seconda-forma-normale">Seconda forma normale<a hidden class="anchor" aria-hidden="true" href="#seconda-forma-normale">#</a></h4>
 <p>Possiede la prima forma normale e deve essere che <strong>ogni colonna</strong> non chiave deve essere dipendente <strong>dall&rsquo;intera</strong> chiave, e non una sotto parte. Altrimenti possiamo andare a denormalizzare.</p>
-<h4 id="definizione-terza-forma-normale---">Definizione terza forma normale 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#definizione-terza-forma-normale---">#</a></h4>
+<h4 id="definizione-terza-forma-normale">Definizione terza forma normale<a hidden class="anchor" aria-hidden="true" href="#definizione-terza-forma-normale">#</a></h4>
 <p>È una forma leggermente più rilassata, utile per normalizzare anche quando BC non è possibile fare.</p>
 <blockquote>
 <p>Una relazione $r$ è <em>in terza forma normale</em> se per ogni dipendenza funzionale $X \to Y$ non banale vengono verificate una delle due condizioni:</p>
@@ -363,7 +363,7 @@ Questa decomposizione è <strong>sempre possibile</strong>, abbiamo un teorema c
 <p>Questo è uno dei motivi per cui i dati sono solitamente non normalizzati nei big data attuali.
 <img src="/images/notes/Normalizzazione dei database-20241008152812803.webp" style="width: 100%" class="center" alt="Normalizzazione dei database-20241008152812803"></p>
 <h3 id="metodi-di-normalizzazione">Metodi di normalizzazione<a hidden class="anchor" aria-hidden="true" href="#metodi-di-normalizzazione">#</a></h3>
-<h4 id="decomposizione-senza-perdita-">Decomposizione senza perdita 🟩<a hidden class="anchor" aria-hidden="true" href="#decomposizione-senza-perdita-">#</a></h4>
+<h4 id="decomposizione-senza-perdita">Decomposizione senza perdita<a hidden class="anchor" aria-hidden="true" href="#decomposizione-senza-perdita">#</a></h4>
 <blockquote>
 <p>Sia dato un insieme di attributi $X$ e una decomposizione, non partizione, in $X_{1}$ e $X_{2}$, abbiamo che la relazione $r$ <em>si decompone senza perdita</em> su $X_{1}$ e $X_{2}$ quando la join delle due è uguale a $r$. ossia: $\pi_{X_{1}}(r) \bowtie  \pi_{X_{2}}(r) = r$</p></blockquote>
 <p>Questa è una necessità per <strong>ricostruire le informazioni iniziali</strong> senza nessuna perdita.
@@ -372,13 +372,13 @@ Si può notare che talvolta seguendo in modo cielo le dipendenze funzionali che 
 <img src="/images/notes/Normalizzazione dei database-1703751658408.jpeg" style="width: 100%" class="center" alt="Normalizzazione dei database-1703751658408"></p>
 <p>Questa non è una cosa che vogliamo!</p>
 <p>Un modo per risolvere questo è aggiungere degli attributi fittizi che ci aiutano a discriminare sulle cose che ci servono. Ci fanno da specie di chiave.</p>
-<h4 id="conservazione-delle-dipendenze-">Conservazione delle dipendenze 🟩<a hidden class="anchor" aria-hidden="true" href="#conservazione-delle-dipendenze-">#</a></h4>
+<h4 id="conservazione-delle-dipendenze">Conservazione delle dipendenze<a hidden class="anchor" aria-hidden="true" href="#conservazione-delle-dipendenze">#</a></h4>
 <p>Questo permette di <strong>mantenere i vincoli di integrità</strong>.</p>
 <blockquote>
 <p>Una decomposizione <strong>preserva la dipendenza</strong> se ogni dipendenza funzionale dello schema originale ha attributi che compaiono nello stesso schema, altrimenti non è possibile rilevare le dipendenze funzionali (Atzeni, pagina 332)</p></blockquote>
 <p>Cioè se spezzo una dipendenza funzionale in tavole diverse, questa proprietà non viene soddisfatta, perché non sarei più in grado di trackarlo.</p>
 <p>Prendiamo un esempio in cui questa caratteristica si dimostra utile</p>
-<h4 id="normalizzazione-nello-schema-concettuale---">Normalizzazione nello schema concettuale 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#normalizzazione-nello-schema-concettuale---">#</a></h4>
+<h4 id="normalizzazione-nello-schema-concettuale">Normalizzazione nello schema concettuale<a hidden class="anchor" aria-hidden="true" href="#normalizzazione-nello-schema-concettuale">#</a></h4>
 <p>Possiamo utilizzare questa idea anche nella parte di sviluppo  di schemi E-R.
 Se riconosco a questo livello che c&rsquo;è una dipendenza funzionale, questo mi da indicazioni su come continuare lo sviluppo di questo. Nell&rsquo;esempio sulle slides motiva un partizionamento verticale, vedi <a href="/notes/database-logical-design">Database logical design</a>.</p>
 

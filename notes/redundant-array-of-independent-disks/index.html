@@ -139,8 +139,8 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "Introduzione ai Redundant Array of Indipendent Disks I RAID ne abbiamo citato per la prima volta in Memoria. Come facciamo a stare su alla velocità del processore se questa va a crescere in modo esponenziale? Parallelizzazione della ricerca!. Ecco perché ci serve raid (oltre alla ridondanza quindi più sicuro). E possono anche fallire. → ammette recovery.\nE una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostituire anche quando stanno runnando.\nSpeed Analysis RAID Capacity Max failures Read speedup Write speedup Max reads Max writes L0 24 GiB 0 ≈ 6x ≈ 6x 1 1 L1 12 GiB 3 ≈ 3x ≈ 3x 2 1 L2 16 GiB 2 ≈ 4x ≈ 4x 1 1 L3 20 GiB 1 ≈ 5x ≈ 5x 1 1 L4 20 GiB 1 1x 1x 5 1 L5 20 GiB 1 1x 1x 6 3 The important thing to keep in mind is if the raid version is bit-wise or block wise. Having disks bit wise can help you speedup single writes or reads, having them block-wise help them do it concurrently. livello 0 (striping) 🟩 I dati vengono messi su più dischi. Viene utilizzato per applicazioni in cui serve velocità, senza interesse di perdita di dati. Ad esempio in dipartimento ci mettono copie di SO per aggiornare il sistema operativo.\nUTILIZZI:\nper grandi trasferimenti di dati, efficiente, in particolare se la quantità di dati richiesta è relativamente grande rispetto alla dimensione degli strip\nper un gran numero di richieste indipendenti efficiente, in particolare se la quantità di dati richiesta è paragonabile alla dimensione degli strip\nSlide RAID 0\nSlides from Bologna Operating Systems Course 2023\nSlides from ETHz Course CCA 2025\nLivello 1 (mirroring) 🟩 Ci sono 2n dischi e metà sono delle copie esatte. In questo caso la scrittura è più lenta della lettura, si può vedere però che offre una semplice e buona forma di ridondanza.\nTollera un singolo guasto al massimo, o più dischi differenti (non devono essere le due copie diciamo). Si dice fault tolerance livello 1.\nNested RAID 🟨++ We can nest raid 0 with 1 or the reverse. It has tradeoffs with respect to the I/O bandwidth. More used for large disk arrays usually present in the cloud.\nLivello 2 🟨– Si usano codici di Hamming a livello bit livello 3 🟩 Si usano bit di parità, ma lo facciamo a livello del singolo bit, mentre il livello 4 lo fa a livello del blocco.\nLivello 4 🟨– La differenza col livello 3 è che questo livello è molto più Coarse-Grained (see Cloud Reliability), quindi ha una banda minore, ma latenza minore per letture larghe.\nUtilizzo un intero disco solamente per la parità su un disco. così se si rompe un disco riesco a ricostruire le informazioni di quel disco.\nNon è efficiente perché se cambio un dato devo andare sempre a fare due write su dischi diversi. E poi continuo sempre a scrivere sullo stesso disco! Quindi fai finta 4 write contemporanei, per aggiornare gli altri dischi! Per questo c’è il bottleneck\nLivello 5 🟩– Se c’è un disco rotto si rallenta, ma non si perdono dei dati! è il funzionamento degradato dei raid. Non ho problemi di bottleneck, e ho ancora la velocità del livello 1\nLivello 6 🟨++ http://www.cs.unibo.it/~renzo/doc/p245-blaum\nQuesto è per cose sicure, riesce a tollerare livello 2 fino a due dischi rotti. Ovviamente è una parità diversa, in modo che riesco ad avere più fault tolerance. Si utilizza un XOR in diagonale e questo sembra funzionare, anche se non ho capito perché.\nIntuizione mia In pratica qualunque modo prendi due dischi non di check (se uno è un disco di check è molto ez). Allora puoi fare questo: Recovery dei dischi in alto a sinistra e in basso a destra, questi si possono recoverare solamente con i bits diagonali, quindi posso già farlo. Utilizzo questi strips recuperati e utilizzo quelli orizzontali per recuperare l’altro della stessa row, poi utilizzo diagonale per recuperare quelli corrispondenti in row diverse e continuo così e riesco a recuperare tutto., Sarebbe molto utile fare un esempio per mostrare questo, ma spero che il me futuro quando legge questo riesca a ricordarsi l’esempio su carta. ",
-  "wordCount" : "701",
+  "articleBody": "Introduzione ai Redundant Array of Indipendent Disks I RAID ne abbiamo citato per la prima volta in Memoria. Come facciamo a stare su alla velocità del processore se questa va a crescere in modo esponenziale? Parallelizzazione della ricerca!. Ecco perché ci serve raid (oltre alla ridondanza quindi più sicuro). E possono anche fallire. → ammette recovery.\nE una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostituire anche quando stanno runnando.\nSpeed Analysis RAID Capacity Max failures Read speedup Write speedup Max reads Max writes L0 24 GiB 0 ≈ 6x ≈ 6x 1 1 L1 12 GiB 3 ≈ 3x ≈ 3x 2 1 L2 16 GiB 2 ≈ 4x ≈ 4x 1 1 L3 20 GiB 1 ≈ 5x ≈ 5x 1 1 L4 20 GiB 1 1x 1x 5 1 L5 20 GiB 1 1x 1x 6 3 The important thing to keep in mind is if the raid version is bit-wise or block wise. Having disks bit wise can help you speedup single writes or reads, having them block-wise help them do it concurrently. livello 0 (striping) I dati vengono messi su più dischi. Viene utilizzato per applicazioni in cui serve velocità, senza interesse di perdita di dati. Ad esempio in dipartimento ci mettono copie di SO per aggiornare il sistema operativo.\nUTILIZZI:\nper grandi trasferimenti di dati, efficiente, in particolare se la quantità di dati richiesta è relativamente grande rispetto alla dimensione degli strip\nper un gran numero di richieste indipendenti efficiente, in particolare se la quantità di dati richiesta è paragonabile alla dimensione degli strip\nSlide RAID 0\nSlides from Bologna Operating Systems Course 2023\nSlides from ETHz Course CCA 2025\nLivello 1 (mirroring) Ci sono 2n dischi e metà sono delle copie esatte. In questo caso la scrittura è più lenta della lettura, si può vedere però che offre una semplice e buona forma di ridondanza.\nTollera un singolo guasto al massimo, o più dischi differenti (non devono essere le due copie diciamo). Si dice fault tolerance livello 1.\nNested RAID We can nest raid 0 with 1 or the reverse. It has tradeoffs with respect to the I/O bandwidth. More used for large disk arrays usually present in the cloud.\nLivello 2 Si usano codici di Hamming a livello bit livello 3 Si usano bit di parità, ma lo facciamo a livello del singolo bit, mentre il livello 4 lo fa a livello del blocco.\nLivello 4 La differenza col livello 3 è che questo livello è molto più Coarse-Grained (see Cloud Reliability), quindi ha una banda minore, ma latenza minore per letture larghe.\nUtilizzo un intero disco solamente per la parità su un disco. così se si rompe un disco riesco a ricostruire le informazioni di quel disco.\nNon è efficiente perché se cambio un dato devo andare sempre a fare due write su dischi diversi. E poi continuo sempre a scrivere sullo stesso disco! Quindi fai finta 4 write contemporanei, per aggiornare gli altri dischi! Per questo c’è il bottleneck\nLivello 5 Se c’è un disco rotto si rallenta, ma non si perdono dei dati! è il funzionamento degradato dei raid. Non ho problemi di bottleneck, e ho ancora la velocità del livello 1\nLivello 6 http://www.cs.unibo.it/~renzo/doc/p245-blaum\nQuesto è per cose sicure, riesce a tollerare livello 2 fino a due dischi rotti. Ovviamente è una parità diversa, in modo che riesco ad avere più fault tolerance. Si utilizza un XOR in diagonale e questo sembra funzionare, anche se non ho capito perché.\nIntuizione mia In pratica qualunque modo prendi due dischi non di check (se uno è un disco di check è molto ez). Allora puoi fare questo: Recovery dei dischi in alto a sinistra e in basso a destra, questi si possono recoverare solamente con i bits diagonali, quindi posso già farlo. Utilizzo questi strips recuperati e utilizzo quelli orizzontali per recuperare l’altro della stessa row, poi utilizzo diagonale per recuperare quelli corrispondenti in row diverse e continuo così e riesco a recuperare tutto., Sarebbe molto utile fare un esempio per mostrare questo, ma spero che il me futuro quando legge questo riesca a ricordarsi l’esempio su carta. ",
+  "wordCount" : "693",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -252,23 +252,23 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
                     <a href="#speed-analysis" aria-label="Speed Analysis">Speed Analysis</a></li></ul>
                 </li>
                 <li>
-                    <a href="#livello-0-striping-" aria-label="livello 0 (striping) 🟩">livello 0 (striping) 🟩</a></li>
+                    <a href="#livello-0-striping" aria-label="livello 0 (striping)">livello 0 (striping)</a></li>
                 <li>
-                    <a href="#livello-1-mirroring--" aria-label="Livello 1 (mirroring)  🟩">Livello 1 (mirroring)  🟩</a><ul>
+                    <a href="#livello-1-mirroring" aria-label="Livello 1 (mirroring)">Livello 1 (mirroring)</a><ul>
                         
                 <li>
-                    <a href="#nested-raid-" aria-label="Nested RAID 🟨&#43;&#43;">Nested RAID 🟨++</a></li></ul>
+                    <a href="#nested-raid" aria-label="Nested RAID">Nested RAID</a></li></ul>
                 </li>
                 <li>
-                    <a href="#livello-2---" aria-label="Livello 2 🟨&ndash;">Livello 2 🟨&ndash;</a></li>
+                    <a href="#livello-2" aria-label="Livello 2">Livello 2</a></li>
                 <li>
-                    <a href="#livello-3-" aria-label="livello 3 🟩">livello 3 🟩</a></li>
+                    <a href="#livello-3" aria-label="livello 3">livello 3</a></li>
                 <li>
-                    <a href="#livello-4---" aria-label="Livello 4 🟨&ndash;">Livello 4 🟨&ndash;</a></li>
+                    <a href="#livello-4" aria-label="Livello 4">Livello 4</a></li>
                 <li>
-                    <a href="#livello-5---" aria-label="Livello 5 🟩&ndash;">Livello 5 🟩&ndash;</a></li>
+                    <a href="#livello-5" aria-label="Livello 5">Livello 5</a></li>
                 <li>
-                    <a href="#livello-6-" aria-label="Livello 6 🟨&#43;&#43;">Livello 6 🟨++</a>
+                    <a href="#livello-6" aria-label="Livello 6">Livello 6</a>
                 </li>
             </ul>
         </div>
@@ -358,7 +358,7 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
       </tr>
   </tbody>
 </table>
-<h3 id="livello-0-striping-">livello 0 (striping) 🟩<a hidden class="anchor" aria-hidden="true" href="#livello-0-striping-">#</a></h3>
+<h3 id="livello-0-striping">livello 0 (striping)<a hidden class="anchor" aria-hidden="true" href="#livello-0-striping">#</a></h3>
 <p>I dati vengono messi su più dischi. Viene utilizzato per applicazioni in cui serve velocità, senza interesse di perdita di dati. Ad esempio in dipartimento ci mettono copie di SO per aggiornare il sistema operativo.</p>
 <p>UTILIZZI:</p>
 <ul>
@@ -384,32 +384,32 @@ paragonabile alla dimensione degli strip</p>
 <img src="/images/notes/Redundant Array of Independent Disks-20250526184856815.webp" style="width: 100%"   alt="Redundant Array of Independent Disks-20250526184856815" title="Redundant Array of Independent Disks-20250526184856815"/>
 <figcaption><p style="text-align:center;">Slides from ETHz Course CCA 2025</p></figcaption>
 </figure>
-<h3 id="livello-1-mirroring--">Livello 1 (mirroring)  🟩<a hidden class="anchor" aria-hidden="true" href="#livello-1-mirroring--">#</a></h3>
+<h3 id="livello-1-mirroring">Livello 1 (mirroring)<a hidden class="anchor" aria-hidden="true" href="#livello-1-mirroring">#</a></h3>
 <p>Ci sono 2n dischi e metà sono delle copie esatte.
 <img src="/images/notes/image/universita/ex-notion/Devices OS/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Devices OS/Untitled 11"></p>
 <img src="/images/notes/Redundant Array of Independent Disks-20250526185149670.webp" style="width: 100%" class="center" alt="Redundant Array of Independent Disks-20250526185149670">
 <p>In questo caso <strong>la scrittura è più lenta della lettura</strong>, si può vedere però che offre una semplice e buona forma di ridondanza.</p>
 <p>Tollera un singolo guasto al massimo, o più dischi differenti (non devono essere le due copie diciamo). Si dice <strong>fault tolerance livello 1</strong>.</p>
-<h4 id="nested-raid-">Nested RAID 🟨++<a hidden class="anchor" aria-hidden="true" href="#nested-raid-">#</a></h4>
+<h4 id="nested-raid">Nested RAID<a hidden class="anchor" aria-hidden="true" href="#nested-raid">#</a></h4>
 <p>We can nest raid 0 with 1 or the reverse. It has tradeoffs with respect to the I/O bandwidth.
 <img src="/images/notes/Devices OS-20250326134150502.webp" style="width: 100%" class="center" alt="Devices OS-20250326134150502">
 More used for <strong>large disk arrays</strong> usually present in the cloud.</p>
-<h3 id="livello-2---">Livello 2 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#livello-2---">#</a></h3>
+<h3 id="livello-2">Livello 2<a hidden class="anchor" aria-hidden="true" href="#livello-2">#</a></h3>
 <p>Si usano codici di Hamming a livello bit
 <img src="/images/notes/Devices OS-20250326133253365.webp" style="width: 100%" class="center" alt="Devices OS-20250326133253365"></p>
-<h3 id="livello-3-">livello 3 🟩<a hidden class="anchor" aria-hidden="true" href="#livello-3-">#</a></h3>
+<h3 id="livello-3">livello 3<a hidden class="anchor" aria-hidden="true" href="#livello-3">#</a></h3>
 <p>Si usano bit di parità, ma lo facciamo a livello del singolo bit, mentre il livello 4 lo fa a livello del blocco.</p>
 <img src="/images/notes/Devices OS-20250326133510899.webp" style="width: 100%" class="center" alt="Devices OS-20250326133510899">
-<h3 id="livello-4---">Livello 4 🟨&ndash;<a hidden class="anchor" aria-hidden="true" href="#livello-4---">#</a></h3>
+<h3 id="livello-4">Livello 4<a hidden class="anchor" aria-hidden="true" href="#livello-4">#</a></h3>
 <p>La differenza col livello 3 è che questo livello è molto più Coarse-Grained (see <a href="/notes/cloud-reliability">Cloud Reliability</a>), quindi ha una banda minore, ma latenza minore per letture larghe.</p>
 <img src="/images/notes/image/universita/ex-notion/Devices OS/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Devices OS/Untitled 12">
 <p>Utilizzo un intero disco solamente per la parità su un disco. così se si rompe un disco riesco a ricostruire le informazioni di quel disco.</p>
 <p>Non è efficiente perché se cambio un dato devo andare sempre a fare <strong>due write su dischi diversi</strong>. E poi continuo sempre a scrivere sullo stesso disco! Quindi fai finta 4 write contemporanei, per aggiornare gli altri dischi! Per questo c&rsquo;è il bottleneck</p>
-<h3 id="livello-5---">Livello 5 🟩&ndash;<a hidden class="anchor" aria-hidden="true" href="#livello-5---">#</a></h3>
+<h3 id="livello-5">Livello 5<a hidden class="anchor" aria-hidden="true" href="#livello-5">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Devices OS/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Devices OS/Untitled 13">
 <p>Se c&rsquo;è un disco rotto si rallenta, ma non si perdono dei dati! è il <strong>funzionamento degradato</strong> dei raid.
 Non ho problemi di bottleneck, e ho ancora la velocità del livello 1</p>
-<h3 id="livello-6-">Livello 6 🟨++<a hidden class="anchor" aria-hidden="true" href="#livello-6-">#</a></h3>
+<h3 id="livello-6">Livello 6<a hidden class="anchor" aria-hidden="true" href="#livello-6">#</a></h3>
 <img src="/images/notes/image/universita/ex-notion/Devices OS/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Devices OS/Untitled 14">
 <img src="/images/notes/image/universita/ex-notion/Devices OS/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Devices OS/Untitled 15">
 <p><a href="http://www.cs.unibo.it/~renzo/doc/p245-blaum"><a href="http://www.cs.unibo.it/~renzo/doc/p245-blaum">http://www.cs.unibo.it/~renzo/doc/p245-blaum</a></a></p>
