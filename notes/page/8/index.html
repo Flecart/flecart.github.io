@@ -199,16 +199,61 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">HTTP e REST
+    <h2 class="entry-hint-parent">Parametric Modeling
     </h2>
   </header>
   <div class="entry-content">
-    <p>HTTP is the acronym for HyperText Transfer Protocol.
-Caratteristiche principali (3) Comunicazioni fra client e server, e quanto sono comunicate le cose si chiude la connessione e ci sono politiche di caching molto bone (tipo con i proxy) Generico: perché è un protocollo utilizzato per caricare moltissime tipologie di risorse! Stateless, ossia non vengono mantenute informazioni su scambi vecchi, in un certo modo ne abbiamo parlato in Sicurezza delle reti quando abbiamo parlato di firewall stateless. Solitamente possiamo intendere questo protocollo come utile per scambiare risorse di cui abbiamo parlato in Uniform Resource Identifier.
+    <p>In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
+Short introduction to the statistical methods Bayesian $$ p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) $$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.
 ...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to HTTP e REST" href="https://flecart.github.io/notes/http-e-rest/"></a>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Parametric Modeling" href="https://flecart.github.io/notes/parametric-modeling/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Compiler Limitations
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
+What are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies
+...</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Compiler Limitations" href="https://flecart.github.io/notes/compiler-limitations/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Dependency Parsing
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This set of note is still in TODO
+Dependency Grammar has been much bigger in Europe compared to USA, where Chomsky’s grammars ruled. One of the main developers of this theory is Lucien Tesnière (1959):
+“The sentence is an organized whole, the constituent elements of which are words. Every word that belongs to a sentence ceases by itself to be isolated as in the dictionary. Between the word and its neighbors, the mind perceives connections, the totality of which forms the structure of the sentence. The structural connections establish dependency relations between the words. Each connection in principle unites a superior term and an inferior term. The superior term receives the name governor (head). The inferior term receives the name subordinate (dependent).” ~Lucien Tesnière
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Dependency Parsing" href="https://flecart.github.io/notes/dependency-parsing/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Devices OS
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Devices Categorizzazione (6) Trasferimento dei dati Accesso al device sinfonia del trasferimento condivisone fra processi Velocità del trasferimento I/O direction (scrittura o lettura) Vediamo che molte caratteristiche sono riguardo il trasferimento
+Slide categorizzazione I/O
+Blocchi o caratteri Slide devices blocchi o caratteri
+Tecniche di gestione devices (4) Buffering Possiamo mettere un buffer per favorire la comunicazione fra i devices. la cosa migliore che fa è creare maggiore efficienza. Un altro motivo è la velocità diversa di consumo.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Devices OS" href="https://flecart.github.io/notes/devices-os/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -296,49 +341,6 @@ Some applications: Businesses use sentiment analysis to understand if users are 
   </div>
   <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Sentiment Analysis" href="https://flecart.github.io/notes/sentiment-analysis/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Sparse Matrix Vector Multiplication
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Algorithms for Sparse Matrix-Vector Multiplication Compressed Sparse Row This is an optimized way to store rows for sparse matrices: Sparse MVM using CSR void smvm(int m, const double* values, const int* col_idx, const int* row_start, double* x, double* y) { int i, j; double d; /* Loop over m rows */ for (i = 0; i &lt; m; i&#43;&#43;) { d = y[i]; /* Scalar replacement since reused */ /* Loop over non-zero elements in row i */ for (j = row_start[i]; j &lt; row_start[i &#43; 1]; j&#43;&#43;) { d &#43;= values[j] * x[col_idx[j]]; } y[i] = d; } } Let’s analyze this code:
-Spatial locality: with respect to row_start, col_idx and values we have spatial locality. Temporal locality: with respect to y we have temporal locality. (Poor temporal with respect to $x$) Good storage efficiency for the sparse matrix. But it is 2x slower than the dense matrix multiplication when the matrix is dense. Block CSR But we cannot do block optimizations for the cache with this storage method.
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Sparse Matrix Vector Multiplication" href="https://flecart.github.io/notes/sparse-matrix-vector-multiplication/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">The Exponential Family
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This is the generalization of the family of function where Softmax Function belongs. Many many functions are part of this family, most of the distributions that are used in science are part of the exponential family, e.g. beta, Gaussian, Bernoulli, Categorical distribution, Gamma, Beta, Poisson, are all part of the exponential family. The useful thing is the generalization power of this set of functions: if you prove something about this family, you prove it for every distribution that is part of this family. This family of functions is also closely linked too Generalized Linear Models (GLMs).
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to The Exponential Family" href="https://flecart.github.io/notes/the-exponential-family/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Transliteration systems
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>This note is still a TODO.
-Transliteration is learning learning a function to map strings in one character set to strings in another character set. The basic example is in multilingual applications, where it is needed to have the same string written in different languages.
-The goal is to develop a probabilistic model that can map strings from input vocabulary $\Sigma$ to an output vocabulary $\Omega$.
-We will extend the concepts presented in Automi e Regexp for Finite state automata to a weighted version. You will also need knowledge from Descrizione linguaggio for definitions of alphabets and strings, Kleene Star operations.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Transliteration systems" href="https://flecart.github.io/notes/transliteration-systems/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
