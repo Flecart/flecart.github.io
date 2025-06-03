@@ -43,6 +43,80 @@ These providers collectively control the majority of the global cloud infrastruc
 &lt;p&gt;Cloud computing transforms traditional IT cost structures by shifting expenses from &lt;strong&gt;capital expenditures (CapEx)&lt;/strong&gt;, such as purchasing servers and data centers, to &lt;strong&gt;operational expenditures (OpEx)&lt;/strong&gt;, where users pay only for the resources they consume.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>Confidential Computing</title>
+      <link>https://flecart.github.io/notes/confidential-computing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/confidential-computing/</guid>
+      <description>&lt;p&gt;With confidential computing we want to guarantee confidentiality and integrity of a user’s computation
+running on a remote (cloud) system, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The program&lt;/li&gt;
+&lt;li&gt;Its inputs and outputs&lt;/li&gt;
+&lt;li&gt;Intermediate state, control flow, etc.
+Even &lt;strong&gt;if do not trust the cloud provider&lt;/strong&gt;!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;introduction-to-confidential-computing&#34;&gt;Introduction to Confidential Computing&lt;/h3&gt;
+&lt;h4 id=&#34;the-treat-model&#34;&gt;The Treat model&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Trust relationships&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Everyone trusts the hardware&lt;/li&gt;
+&lt;li&gt;Users do not trust each other&lt;/li&gt;
+&lt;li&gt;Users &lt;strong&gt;DO NOT&lt;/strong&gt; trust the cloud provider (and its software)&lt;/li&gt;
+&lt;li&gt;Cloud provider does not trust users&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Who has access to what?&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Container Virtualization</title>
+      <link>https://flecart.github.io/notes/container-virtualization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/container-virtualization/</guid>
+      <description>&lt;h2 id=&#34;containers&#34;&gt;Containers&lt;/h2&gt;
+&lt;p&gt;In this note, we introduce the famous docker containers. We also explore how &lt;a href=&#34;https://flecart.github.io/notes#linux-containers&#34;&gt;#Linux Containers&lt;/a&gt; are implemented, and some parts of how &lt;a href=&#34;https://flecart.github.io/notes#docker&#34;&gt;#Docker&lt;/a&gt; works.&lt;/p&gt;
+&lt;h4 id=&#34;what-is-a-container&#34;&gt;What is a Container&lt;/h4&gt;
+&lt;p&gt;We have explored &lt;a href=&#34;https://flecart.github.io/notes/virtual-machines&#34;&gt;Virtual Machines&lt;/a&gt; in some past section.
+Containers do not virtualize everything, but just the environment where the application is run. This includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Libraries&lt;/li&gt;
+&lt;li&gt;Binaries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We can see it as a &lt;em&gt;lightweight&lt;/em&gt; VM, even if they do not offer the full level of isolation of traditional virtual machines.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Datacenter Hardware</title>
+      <link>https://flecart.github.io/notes/datacenter-hardware/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/datacenter-hardware/</guid>
+      <description>&lt;p&gt;We want to optimize the parts of the datacenter hardware such that the cost of operating the datacenter as a &lt;em&gt;whole&lt;/em&gt; would be lower, we need to think about it as a whole.&lt;/p&gt;
+&lt;h3 id=&#34;datacenter-cpus&#34;&gt;Datacenter CPUs&lt;/h3&gt;
+&lt;h4 id=&#34;desktop-cpu-vs-cloud-cpu&#34;&gt;Desktop CPU vs Cloud CPU&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Isolation&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Desktop CPUs have low isolation, they are used by a single user.&lt;/li&gt;
+&lt;li&gt;Cloud CPUs have high isolation, they are shared among &lt;strong&gt;different&lt;/strong&gt; users.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Workload and performance&lt;/strong&gt;: usually high workloads and moving a lot of data around.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;They have a spectrum of low and high end cores, so that if you have high parallelism you can use lower cores, while for resource intensive tasks, its better to have high end cores, especially for latency critical tasks.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Virtual Machines</title>
+      <link>https://flecart.github.io/notes/virtual-machines/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/virtual-machines/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;The fundamental idea behind a virtual machine is to abstract the hardware
+of a single computer (the CPU, memory, disk drives, network interface cards,
+and so forth) into several different execution environments, thereby creating
+the illusion that each separate environment is running on its own private
+computer. &lt;a href=&#34;https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&amp;redir_esc=y&#34;&gt;(Silberschatz et al. 2018)&lt;/a&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Compute Express Link</title>
       <link>https://flecart.github.io/notes/compute-express-link/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -126,29 +200,6 @@ It needs $\mathcal{O}(n^{3})$ memory.&lt;/p&gt;
 Yet, this does not model &lt;em&gt;connectivity&lt;/em&gt;, and might vary from frame to frame if it is a video.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Confidential Computing</title>
-      <link>https://flecart.github.io/notes/confidential-computing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/confidential-computing/</guid>
-      <description>&lt;p&gt;With confidential computing we want to guarantee confidentiality and integrity of a user’s computation
-running on a remote (cloud) system, including:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The program&lt;/li&gt;
-&lt;li&gt;Its inputs and outputs&lt;/li&gt;
-&lt;li&gt;Intermediate state, control flow, etc.
-Even &lt;strong&gt;if do not trust the cloud provider&lt;/strong&gt;!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;the-treat-model&#34;&gt;The Treat model&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;Trust relationships&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Everyone trusts the hardware&lt;/li&gt;
-&lt;li&gt;Users do not trust each other&lt;/li&gt;
-&lt;li&gt;Users &lt;strong&gt;DO NOT&lt;/strong&gt; trust the cloud provider (and its software)&lt;/li&gt;
-&lt;li&gt;Cloud provider does not trust users&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Who has access to what?&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Diffusion Models</title>
       <link>https://flecart.github.io/notes/diffusion-models/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -213,21 +264,6 @@ The problem is still a problem in modern times. If we want to create models to m
 &lt;p&gt;The goal of the transformation is that the new space will have a richer internal representation that is better suited to solving downstream tasks. &lt;a href=&#34;https://link.springer.com/10.1007/978-3-031-45468-4&#34;&gt;(Bishop &amp;amp; Bishop 2024)&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Virtual Machines</title>
-      <link>https://flecart.github.io/notes/virtual-machines/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/virtual-machines/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;The fundamental idea behind a virtual machine is to abstract the hardware
-of a single computer (the CPU, memory, disk drives, network interface cards,
-and so forth) into several different execution environments, thereby creating
-the illusion that each separate environment is running on its own private
-computer. &lt;a href=&#34;https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&amp;redir_esc=y&#34;&gt;(Silberschatz et al. 2018)&lt;/a&gt;.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Autoencoders</title>
       <link>https://flecart.github.io/notes/autoencoders/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -240,25 +276,6 @@ computer. &lt;a href=&#34;https://books.google.ch/books/about/Operating_System_C
 Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all&amp;rsquo;originale.
 Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione.
 Possiamo infatti osservare che se &lt;strong&gt;spazio latente = spazio originale, loss di ricostruzione = 0&lt;/strong&gt; perché basta imparare l&amp;rsquo;identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all&amp;rsquo;originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c&amp;rsquo;è una leggera perdita in questo senso.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Datacenter Hardware</title>
-      <link>https://flecart.github.io/notes/datacenter-hardware/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/datacenter-hardware/</guid>
-      <description>&lt;p&gt;We want to optimize the parts of the datacenter hardware such that the cost of operating the datacenter as a &lt;em&gt;whole&lt;/em&gt; would be lower, we need to think about it as a whole.&lt;/p&gt;
-&lt;h3 id=&#34;datacenter-cpus&#34;&gt;Datacenter CPUs&lt;/h3&gt;
-&lt;h4 id=&#34;desktop-cpu-vs-cloud-cpu&#34;&gt;Desktop CPU vs Cloud CPU&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Isolation&lt;/strong&gt;:
-&lt;ul&gt;
-&lt;li&gt;Desktop CPUs have low isolation, they are used by a single user.&lt;/li&gt;
-&lt;li&gt;Cloud CPUs have high isolation, they are shared among &lt;strong&gt;different&lt;/strong&gt; users.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Workload and performance&lt;/strong&gt;: usually high workloads and moving a lot of data around.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;They have a spectrum of low and high end cores, so that if you have high parallelism you can use lower cores, while for resource intensive tasks, its better to have high end cores, especially for latency critical tasks.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Convolutional Neural Network</title>
@@ -329,22 +346,6 @@ The architecture has remained the same in these years.
 It hides all the complexity in the stub (marshaling, binding and sending, without caring about the sockets and communication matters).
 One problem is that it might be &lt;em&gt;hiding&lt;/em&gt; the complexity &lt;strong&gt;too well&lt;/strong&gt;.
 The programmer has surely an ease of programming, but design consideration should consider overloads generated by the network communication.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Container Virtualization</title>
-      <link>https://flecart.github.io/notes/container-virtualization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/container-virtualization/</guid>
-      <description>&lt;h2 id=&#34;containers&#34;&gt;Containers&lt;/h2&gt;
-&lt;p&gt;In this note, we introduce the famous docker containers. We also explore how &lt;a href=&#34;https://flecart.github.io/notes#linux-containers&#34;&gt;#Linux Containers&lt;/a&gt; are implemented, and some parts of how &lt;a href=&#34;https://flecart.github.io/notes#docker&#34;&gt;#Docker&lt;/a&gt; works.&lt;/p&gt;
-&lt;h4 id=&#34;what-is-a-container&#34;&gt;What is a Container&lt;/h4&gt;
-&lt;p&gt;We have explored &lt;a href=&#34;https://flecart.github.io/notes/virtual-machines&#34;&gt;Virtual Machines&lt;/a&gt; in some past section.
-Containers do not virtualize everything, but just the environment where the application is run. This includes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Libraries&lt;/li&gt;
-&lt;li&gt;Binaries&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;We can see it as a &lt;em&gt;lightweight&lt;/em&gt; VM, even if they do not offer the full level of isolation of traditional virtual machines.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Content Delivery Networks</title>
