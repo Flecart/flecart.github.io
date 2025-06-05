@@ -13,6 +13,34 @@
     <language>en</language>
     <atom:link href="https://flecart.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Optimizations for DNN</title>
+      <link>https://flecart.github.io/notes/optimizations-for-dnn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/optimizations-for-dnn/</guid>
+      <description>&lt;h3 id=&#34;mixture-of-experts&#34;&gt;Mixture of Experts&lt;/h3&gt;
+&lt;p&gt;There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
+&lt;img src=&#34;https://flecart.github.io/images/notes/Optimizations for DNN-20250510123829347.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Optimizations for DNN-20250510123829347&#34;&gt;&lt;/p&gt;
+&lt;p&gt;One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.&lt;/p&gt;
+&lt;h4 id=&#34;lora-low-rank-adaptation&#34;&gt;LoRA: Low-Rank Adaptation&lt;/h4&gt;
+&lt;p&gt;We only finetune a part of the network, called &lt;strong&gt;lora adapters&lt;/strong&gt;, not the whole thing.
+There are two matrices here, a matrix A and B, they are some sort of an &lt;a href=&#34;https://flecart.github.io/notes/autoencoders&#34;&gt;Autoencoders&lt;/a&gt;, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Virtual Machines</title>
+      <link>https://flecart.github.io/notes/virtual-machines/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://flecart.github.io/notes/virtual-machines/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;The fundamental idea behind a virtual machine is to abstract the hardware
+of a single computer (the CPU, memory, disk drives, network interface cards,
+and so forth) into several different execution environments, thereby creating
+the illusion that each separate environment is running on its own private
+computer. &lt;a href=&#34;https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&amp;redir_esc=y&#34;&gt;(Silberschatz et al. 2018)&lt;/a&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Communication in the Cloud</title>
       <link>https://flecart.github.io/notes/communication-in-the-cloud/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -61,21 +89,6 @@ Even &lt;strong&gt;if do not trust the cloud provider&lt;/strong&gt;!&lt;/li&gt;
       <description>&lt;p&gt;The cloud is inefficient, and it looks like we can improve a lot on this side. Computer Science with their systems have reached &lt;em&gt;industrial scales&lt;/em&gt; and can be compared to build airports, highways and metro systems in terms of &lt;strong&gt;public infrastructure&lt;/strong&gt;, yet, due to their &lt;em&gt;immaterial&lt;/em&gt; and &lt;em&gt;intangible&lt;/em&gt; nature, the perception of these systems do not match their perceived reality by the majority of the people.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;While classical engineering designs physical objects, computer science designs virtual objects ~&lt;em&gt;Gustavo Alonso CCA Lecture 14 May 2025 ETH Zürich&lt;/em&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Virtual Machines</title>
-      <link>https://flecart.github.io/notes/virtual-machines/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/virtual-machines/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;The fundamental idea behind a virtual machine is to abstract the hardware
-of a single computer (the CPU, memory, disk drives, network interface cards,
-and so forth) into several different execution environments, thereby creating
-the illusion that each separate environment is running on its own private
-computer. &lt;a href=&#34;https://books.google.ch/books/about/Operating_System_Concepts.html?id=FHJlDwAAQBAJ&amp;redir_esc=y&#34;&gt;(Silberschatz et al. 2018)&lt;/a&gt;.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Cloud Computing Services</title>
@@ -467,19 +480,6 @@ Containers do not virtualize everything, but just the environment where the appl
 &lt;li&gt;&lt;strong&gt;Stateless&lt;/strong&gt;, ossia non vengono mantenute informazioni su scambi vecchi, in un certo modo ne abbiamo parlato in &lt;a href=&#34;https://flecart.github.io/notes/sicurezza-delle-reti&#34;&gt;Sicurezza delle reti&lt;/a&gt; quando abbiamo parlato di firewall stateless.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Solitamente possiamo intendere questo protocollo come utile per &lt;strong&gt;scambiare risorse&lt;/strong&gt; di cui abbiamo parlato in &lt;a href=&#34;https://flecart.github.io/notes/uniform-resource-identifier&#34;&gt;Uniform Resource Identifier&lt;/a&gt;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Optimizations for DNN</title>
-      <link>https://flecart.github.io/notes/optimizations-for-dnn/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://flecart.github.io/notes/optimizations-for-dnn/</guid>
-      <description>&lt;h3 id=&#34;mixture-of-experts&#34;&gt;Mixture of Experts&lt;/h3&gt;
-&lt;p&gt;There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
-&lt;img src=&#34;https://flecart.github.io/images/notes/Optimizations for DNN-20250510123829347.webp&#34; style=&#34;width: 100%&#34; class=&#34;center&#34; alt=&#34;Optimizations for DNN-20250510123829347&#34;&gt;&lt;/p&gt;
-&lt;p&gt;One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.&lt;/p&gt;
-&lt;h4 id=&#34;lora-low-rank-adaptation&#34;&gt;LoRA: Low-Rank Adaptation&lt;/h4&gt;
-&lt;p&gt;We only finetune a part of the network, called &lt;strong&gt;lora adapters&lt;/strong&gt;, not the whole thing.
-There are two matrices here, a matrix A and B, they are some sort of an &lt;a href=&#34;https://flecart.github.io/notes/autoencoders&#34;&gt;Autoencoders&lt;/a&gt;, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Architettura software del OS</title>
