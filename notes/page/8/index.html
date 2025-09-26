@@ -199,161 +199,154 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Memoria
+    <h2 class="entry-hint-parent">Fast Linear Algebra
     </h2>
   </header>
   <div class="entry-content">
-    <p>4.1 Caratteristiche della Memoria La gerarchia della memoria, più si va giù più spazio si ha, più è lento il caricamento delle informazioni
-4.1.1 Catalogazione della memoria Le tipologie di memoria sono presenti a fianco. In generale più la memoria è veloce da riprendere, più è costosa da memorizzare (c’è poco spazio) 4.1.2 Byte e Word Il libro a pagina 74 parte con la discussione del perché si è preferito evitare la BCD (Binary coded decimal, in cui i numeri da 0 a 9 erano codificato da 4 bit), per questioni di efficienza.
-...</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Memoria" href="https://flecart.github.io/notes/memoria/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Note sull&#39;architettura
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Interrupt Descrizione iniziale Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
-Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
-Slide Interrupt Hardware e software
-Questi segnali sono utilizzati per indicare eventi che dovrebbero essere gestiti (come end of I/O, divisione per 0, ma anche semplicemente syscall e passare livello kernel).
-...</p>
-  </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Note sull&#39;architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Processi e thread
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
-Slide schema generale tabelle
-Processi Il process control block è la struttura di dati principali da comprendere.
-Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria.
+    <p>Many problems in scientific computing include:
+Solving linear equations Eigenvalue computations Singular value decomposition LU/Cholesky/QR decompositions etc… And the userbase is quite large for this types of computation (number of scientists in the world is growing exponentially ) Quick History of Performance Computing Early seventies it was EISPACK and LINPACK. Then In similar years Matlab was invented, which simplified a lot compared to previous systems. LAPACK redesigned the algorithms in previous libraries to have better block-based locality. BLAS are kernel functions for each computer, while LAPACK are the higher level functions build on top of BLAS (1, 2,3). Then another innovation was ATLAS, which automatically generates the code for BLAS for each architecture. This is called autotuning because it does a search of possible enumerations and chooses the fastest one. Now autotuning has been done a lot for NN systems.
 ...</p>
   </div>
   <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
+  <a class="entry-link" aria-label="post link to Fast Linear Algebra" href="https://flecart.github.io/notes/fast-linear-algebra/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Algebra lineare numerica
+    <h2 class="entry-hint-parent">Clustering
     </h2>
   </header>
   <div class="entry-content">
-    <p>In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular.
+    <p>Gaussian Mixture Models This set takes inspiration from chapter 9.2 of (Bishop 2006). We assume that the reader already knows quite well what is a Gaussian Mixture Model and we will just restate the models here. We will discuss the problem of estimating the best possible parameters (so, this is a density estimation problem) when the data is generated by a mixture of Gaussians.
+$$ \mathcal{N}(x \mid \mu, \Sigma) = \frac{1}{\sqrt{ 2\pi }} \frac{1}{\lvert \Sigma \rvert^{1/2} } \exp \left( -\frac{1}{2} (x - \mu)^{T} \Sigma^{-1}(x - \mu) \right) $$Problem statement $$ p(z) = \prod_{i = 1}^{k} \pi_{i}^{z_{i}} $$ Because we know that $z$ is a $k$ dimensional vector that has a single digit indicating which Gaussian was chosen.
 ...</p>
   </div>
-  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Algebra lineare numerica" href="https://flecart.github.io/notes/algebra-lineare-numerica/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Clustering" href="https://flecart.github.io/notes/clustering/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Bias Variance Trade-off
+    <h2 class="entry-hint-parent">Markov Chains
     </h2>
   </header>
   <div class="entry-content">
-    <p>This note should be considered deprecated. There is not much about Bias Variance Trade-off, and its quite random and old. For a correct derivation for this, you should consider looking at Linear Regression methods.
-Introduction È una cosa ormai risaputa che c’è una sorta di trade-off fra la varianza e il bias per una certo modello. Aumentare la varianza del modello certamente ci permetterà di avere un modello che abbia un errore di training molto basso, però appena vede dei dati nuovi non sarà in grado di generalizzare correttamente. Dall’altra parte avere un bias alto significa avere un modello eccessivamente semplice, poco flessibile, che comunque allenato non riesce ad avere una grande accuratezza né in fase di allenamento, né di in fase di validazione o di test.
+    <p>Introduzione alle catene di Markov La proprietà di Markov Una sequenza di variabili aleatorie $X_{1}, X_{2}, X_{3}, \dots$ gode della proprietà di Markov se vale:
+$$ P(X_{n}| X_{n - 1}, X_{n - 2}, \dots, X_{1}) = P(X_{n}|X_{n-1}) $$ Ossia posso scordarmi tutta la storia precedente, mi interessa solamente lo stato precedente per sapere la probabilità attuale.
+Da un punto di vista filosofico/fisico, ha senso perché mi sta dicendo che posso predire lo stato successivo se ho una conoscenza (completa, (lo dico io completo, originariamente non esiste)) del presente.
 ...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Bias Variance Trade-off" href="https://flecart.github.io/notes/bias-variance-trade-off/"></a>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Markov Chains" href="https://flecart.github.io/notes/markov-chains/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Analysis Methods in Neural Science
+    <h2 class="entry-hint-parent">HTTP e REST
     </h2>
   </header>
   <div class="entry-content">
-    <p>This note is just a collection of past useful notes to know to apply machine learning methods for the analysis of topics interesting in the neural sciences.
-Estimators You need to know all Parametric Modeling. We want to estimate unknown random variables with some observations.
-Maximum Likelihood See Bayesian Linear Regression.
-Bias-Variance Decomposition Fisher Information See Parametric Modeling#Fisher information.
-Applications Echo-locating bats Bats use echo location to locate the target, a platform. Bats use to click slightly left and right compared to their direction of motion.
+    <p>HTTP is the acronym for HyperText Transfer Protocol.
+Caratteristiche principali (3) Comunicazioni fra client e server, e quanto sono comunicate le cose si chiude la connessione e ci sono politiche di caching molto bone (tipo con i proxy) Generico: perché è un protocollo utilizzato per caricare moltissime tipologie di risorse! Stateless, ossia non vengono mantenute informazioni su scambi vecchi, in un certo modo ne abbiamo parlato in Sicurezza delle reti quando abbiamo parlato di firewall stateless. Solitamente possiamo intendere questo protocollo come utile per scambiare risorse di cui abbiamo parlato in Uniform Resource Identifier.
 ...</p>
   </div>
-  <footer class="entry-footer">1 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Data Analysis Methods in Neural Science" href="https://flecart.github.io/notes/data-analysis-methods-in-neural-science/"></a>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to HTTP e REST" href="https://flecart.github.io/notes/http-e-rest/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Parametric Modeling
+    <h2 class="entry-hint-parent">Compiler Limitations
     </h2>
   </header>
   <div class="entry-content">
-    <p>In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
-Short introduction to the statistical methods Bayesian $$ p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) $$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.
+    <p>On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
+What are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies
 ...</p>
   </div>
-  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Parametric Modeling" href="https://flecart.github.io/notes/parametric-modeling/"></a>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Compiler Limitations" href="https://flecart.github.io/notes/compiler-limitations/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Dependency Parsing
+    <h2 class="entry-hint-parent">Diffusion Models
     </h2>
   </header>
   <div class="entry-content">
-    <p>This set of note is still in TODO
-Dependency Grammar has been much bigger in Europe compared to USA, where Chomsky’s grammars ruled. One of the main developers of this theory is Lucien Tesnière (1959):
-“The sentence is an organized whole, the constituent elements of which are words. Every word that belongs to a sentence ceases by itself to be isolated as in the dictionary. Between the word and its neighbors, the mind perceives connections, the totality of which forms the structure of the sentence. The structural connections establish dependency relations between the words. Each connection in principle unites a superior term and an inferior term. The superior term receives the name governor (head). The inferior term receives the name subordinate (dependent).” ~Lucien Tesnière
+    <p>Diffusion is a physical process that models random motion, first analyzed by Brown when studying pollen grains in water. In this section, we will first analyze a simplified 1-dimensional version, and then delve into diffusion models for images, the ones closest to (Ho et al. 2020).
+The Diffusion Process This note follows original Einstein’s presentation, here we have a simplified version.
+Let’s suppose we have a particle at $t = 0$ at some position $i$. We have a probability of jumping to the left of $p$ to right of $q$, the rest is staying at the same position.
 ...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Dependency Parsing" href="https://flecart.github.io/notes/dependency-parsing/"></a>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Diffusion Models" href="https://flecart.github.io/notes/diffusion-models/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Devices OS
+    <h2 class="entry-hint-parent">Fast Fourier Transforms
     </h2>
   </header>
   <div class="entry-content">
-    <p>Devices Categorizzazione (6) Trasferimento dei dati Accesso al device sinfonia del trasferimento condivisone fra processi Velocità del trasferimento I/O direction (scrittura o lettura) Vediamo che molte caratteristiche sono riguardo il trasferimento
-Slide categorizzazione I/O
-Blocchi o caratteri Slide devices blocchi o caratteri
-Tecniche di gestione devices (4) Buffering Possiamo mettere un buffer per favorire la comunicazione fra i devices. la cosa migliore che fa è creare maggiore efficienza. Un altro motivo è la velocità diversa di consumo.
+    <p>The algorithm has been the same, some ideas are in Fourier Series, but architectures change, which means there are new ways to make this algorithm even faster.
+Example of transforms We have learned in Algebra lineare numerica, Cambio di Base that linear transforms are usually a change of basis. They are matrix vector multiplications (additions and multiplications by constants). The optimizations are based on what sorts of transforms we have (e.g. Sparse Matrix Vector Multiplication, or dense versions). The same idea applies also for Fourier transforms.
 ...</p>
   </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Devices OS" href="https://flecart.github.io/notes/devices-os/"></a>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Fast Fourier Transforms" href="https://flecart.github.io/notes/fast-fourier-transforms/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Language Models
+    <h2 class="entry-hint-parent">RL Function Approximation
     </h2>
   </header>
   <div class="entry-content">
-    <p>In order to understand language models we need to understand structured prediction. If you are familiar with Sentiment Analysis, where given an input text we need to classify it in a binary manner, in this case the output space usually scales in an exponential manner. The output has some structure, for example it could be a tree, it could be a set of words etc… This usually needs an intersection between statistics and computer science.
+    <p>These algorithms are good for scaling state spaces, but not actions spaces.
+The Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
+A simple parametrization The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don’t need to explicitly explore every single state in the state space.
 ...</p>
   </div>
-  <footer class="entry-footer">2 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Language Models" href="https://flecart.github.io/notes/language-models/"></a>
+  <footer class="entry-footer">14 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to RL Function Approximation" href="https://flecart.github.io/notes/rl-function-approximation/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Sicurezza OS
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Possiamo classificare tre aree generali quando si parla di sicurezza informatica:
+Hardware Software human-ware. Non tratteremo in particolare esattamente come ogni campo viene declinato, però possiamo
+Una altra tendenza generale è che più è complessa più è insicura. e questo senso di insicurezza cresce in modo maggiore rispetto al lineare.
+Security principles Open Design perché così può essere scrutata da più persone Economy of mechanism spiegata sotto. Fail-safe defaults questo molto importante perché molti sistemi hanno dei default che possono essere exploitati. Complete mediation: così abbiamo qualcosa che tracka tutti gli accessi, che controlla gli accessi. Least privilege questo va a braccetto con il fail-safe. Privilege separation così possiamo mettere in modo indipendente un privilegio per qualcos’altro. CIA properties Ne abbiamo parlato in modo leggermente inverso in Sicurezza delle reti e in Notions of Security. In questo caso sono
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Sicurezza OS" href="https://flecart.github.io/notes/sicurezza-os/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">IPSec protocol
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!
+Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l’implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to IPSec protocol" href="https://flecart.github.io/notes/ipsec-protocol/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://flecart.github.io/notes/page/7/">
-      «&nbsp;Prev&nbsp;7/37
+      «&nbsp;Prev&nbsp;7/38
     </a>
-    <a class="next" href="https://flecart.github.io/notes/page/9/">Next&nbsp;9/37&nbsp;»
+    <a class="next" href="https://flecart.github.io/notes/page/9/">Next&nbsp;9/38&nbsp;»
     </a>
   </nav>
 </footer>

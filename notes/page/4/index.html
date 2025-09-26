@@ -199,73 +199,59 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Recurrent Neural Networks
+    <h2 class="entry-hint-parent">Optimizations for DNN
     </h2>
   </header>
   <div class="entry-content">
-    <p>Recurrent Neural Networks allows us to model arbitrarily long sequence dependencies, at least in theory (this is also why they seem a very nice choice in theory for time series). This is very handy, and has many interesting theoretical implication. But here we are also interested in the practical applicability, so we may need to analyze common architectures used to implement these models, the main limitation and drawbacks, the nice properties and some applications.
-...</p>
-  </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Recurrent Neural Networks" href="https://flecart.github.io/notes/recurrent-neural-networks/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Skylake Microprocessor
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The Skylake processor is a 2015 Intel processor.
-The Intel Processor In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits. For backwards compatibility intructions have usually just grown. They used geographic locations because these are not suable. If we want new code to run for old processors, we should need to put specific flags.
-...</p>
-  </div>
-  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Skylake Microprocessor" href="https://flecart.github.io/notes/skylake-microprocessor/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Sparse Matrix Vector Multiplication
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Algorithms for Sparse Matrix-Vector Multiplication Compressed Sparse Row This is an optimized way to store rows for sparse matrices: Sparse MVM using CSR void smvm(int m, const double* values, const int* col_idx, const int* row_start, double* x, double* y) { int i, j; double d; /* Loop over m rows */ for (i = 0; i &lt; m; i&#43;&#43;) { d = y[i]; /* Scalar replacement since reused */ /* Loop over non-zero elements in row i */ for (j = row_start[i]; j &lt; row_start[i &#43; 1]; j&#43;&#43;) { d &#43;= values[j] * x[col_idx[j]]; } y[i] = d; } } Let’s analyze this code:
-Spatial locality: with respect to row_start, col_idx and values we have spatial locality. Temporal locality: with respect to y we have temporal locality. (Poor temporal with respect to $x$) Good storage efficiency for the sparse matrix. But it is 2x slower than the dense matrix multiplication when the matrix is dense. Block CSR But we cannot do block optimizations for the cache with this storage method.
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Sparse Matrix Vector Multiplication" href="https://flecart.github.io/notes/sparse-matrix-vector-multiplication/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">The Perceptron Model
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The perceptron is a fundamental binary linear classifier introduced by (Rosenblatt 1958). It maps an input vector $\mathbf{x} \in \mathbb{R}^n$ to an output $y \in \{0,1\}$ using a weighted sum followed by a threshold function.
-Introduction to the Perceptron A mathematical model Given an input vector $\mathbf{x} = (x_1, x_2, \dots, x_n)$ and a weight vector $\mathbf{w} = (w_1, w_2, \dots, w_n)$, the perceptron computes:
-$$ z = \mathbf{w}^\top \mathbf{x} &#43; b = \sum_{i=1}^{n} w_i x_i &#43; b $$$$ y = f(z) = \begin{cases} 1, &amp; \text{if } z \geq 0 \\ 0, &amp; \text{otherwise} \end{cases} $$Learning Rule Given a labeled dataset $\{ (\mathbf{x}^{(i)}, y^{(i)}) \}_{i=1}^{m}$, the perceptron uses the following weight update rule for misclassified samples ($y^{(i)} \neq f(\mathbf{w}^\top \mathbf{x}^{(i)} &#43; b)$):
-...</p>
-  </div>
-  <footer class="entry-footer">3 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to The Perceptron Model" href="https://flecart.github.io/notes/the-perceptron-model/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Transformers
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Transformers, introduced in NLP language translation in (Vaswani et al. 2017), are one of the cornerstones of modern deep learning. For this reason, it is quite important to understand how they are done.
-Introduction to Transformers Transformers are called in this manner because they transform the input data space into another with the same dimensionality.
-The goal of the transformation is that the new space will have a richer internal representation that is better suited to solving downstream tasks. (Bishop &amp; Bishop 2024)
+    <p>Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.
+LoRA: Low-Rank Adaptation We only finetune a part of the network, called lora adapters, not the whole thing. There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:
 ...</p>
   </div>
   <footer class="entry-footer">10 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Transformers" href="https://flecart.github.io/notes/transformers/"></a>
+  <a class="entry-link" aria-label="post link to Optimizations for DNN" href="https://flecart.github.io/notes/optimizations-for-dnn/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Queueing Theory
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> Queueing theory is the theory behind what happens when you have lots of jobs, scarce resources, and subsequently long queues and delays. It is literally the “theory of queues”: what makes queues appear and how to make them go away.
+This is basically what happens in clusters, where you have a limited number of workers that need to execute a number of jobs.
+We need some little maths to model the stochastic process of request arrivals.
+...</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Queueing Theory" href="https://flecart.github.io/notes/queueing-theory/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Redundant Array of Independent Disks
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Introduzione ai Redundant Array of Indipendent Disks I RAID ne abbiamo citato per la prima volta in Memoria. Come facciamo a stare su alla velocità del processore se questa va a crescere in modo esponenziale? Parallelizzazione della ricerca!. Ecco perché ci serve raid (oltre alla ridondanza quindi più sicuro). E possono anche fallire. → ammette recovery.
+E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostituire anche quando stanno runnando.
+...</p>
+  </div>
+  <footer class="entry-footer">4 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Redundant Array of Independent Disks" href="https://flecart.github.io/notes/redundant-array-of-independent-disks/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Synapses
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Synapses are the connections that exist between one neuron and another, so we can think of them as the communication channel between neurons.
+Gap Junctions Electrical based These are also called Gap Junctions These are more direct connections between neurons, allowing excitation ions to pass through quite directly (this is the difference compared to chemically based ones). It’s a circuit more similar to an electronic one because it’s faster. The end of the presynapsic part is called axon bouton, or axon terminal. Another characteristic of these kinds of synapses is that they are two-way channels.
+...</p>
+  </div>
+  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Synapses" href="https://flecart.github.io/notes/synapses/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -284,31 +270,30 @@ Image from here
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Container Virtualization
+    <h2 class="entry-hint-parent">The Neuron
     </h2>
   </header>
   <div class="entry-content">
-    <p>Containers In this note, we introduce the famous docker containers. We also explore how #Linux Containers are implemented, and some parts of how #Docker works.
-What is a Container We have explored Virtual Machines in some past section. Containers do not virtualize everything, but just the environment where the application is run. This includes:
-Libraries Binaries We can see it as a lightweight VM, even if they do not offer the full level of isolation of traditional virtual machines.
+    <p>Introduction to the Course What is a neural system? A neural system is an intricately organized network of specialized cells—primarily neurons, along with a variety of supportive glial cells—that processes and transmits information via electrical and chemical signals. In biological organisms, such systems underpin the entire nervous system, coordinating functions that range from basic reflexes to the complex interplay of perception, thought, and behavior. Early studies in neurobiology revealed that even simple neural circuits can generate coordinated responses, while modern neuroscience has shown that vast, hierarchically structured networks (such as the central and peripheral nervous systems) are responsible for the rich tapestry of animal behavior and cognition
 ...</p>
   </div>
-  <footer class="entry-footer">6 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Container Virtualization" href="https://flecart.github.io/notes/container-virtualization/"></a>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to The Neuron" href="https://flecart.github.io/notes/the-neuron/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Datacenter Hardware
+    <h2 class="entry-hint-parent">Virtual Machines
     </h2>
   </header>
   <div class="entry-content">
-    <p>We want to optimize the parts of the datacenter hardware such that the cost of operating the datacenter as a whole would be lower, we need to think about it as a whole.
-Datacenter CPUs Desktop CPU vs Cloud CPU Isolation: Desktop CPUs have low isolation, they are used by a single user. Cloud CPUs have high isolation, they are shared among different users. Workload and performance: usually high workloads and moving a lot of data around. They have a spectrum of low and high end cores, so that if you have high parallelism you can use lower cores, while for resource intensive tasks, its better to have high end cores, especially for latency critical tasks.
+    <p> The fundamental idea behind a virtual machine is to abstract the hardware of a single computer (the CPU, memory, disk drives, network interface cards, and so forth) into several different execution environments, thereby creating the illusion that each separate environment is running on its own private computer. (Silberschatz et al. 2018).
+Virtualization allows a single computer to host multiple virtual machines, each potentially running a completely different operating system.
+È virtuale nel senso che la macchina virtuale ha la stessa percezione della realtà di una macchina reale. Qualcosa che non è la realtà ma appare molto simile ad essa.
 ...</p>
   </div>
-  <footer class="entry-footer">19 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Datacenter Hardware" href="https://flecart.github.io/notes/datacenter-hardware/"></a>
+  <footer class="entry-footer">13 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Virtual Machines" href="https://flecart.github.io/notes/virtual-machines/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -328,24 +313,38 @@ Slide componenti OS alto livello Introduzione sui componenti (salto) Questa part
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Cloud Reliability
+    <h2 class="entry-hint-parent">Advanced 3D Representations
     </h2>
   </header>
   <div class="entry-content">
-    <p> Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
-Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary Reliability and Factors of Influence Reliability is the probability that a system will perform its intended function without failure over a specified period of time. There are many factors that influence this value:
+    <p>3D representations In this section, we present some of the most common 3D representations used in computer graphics and computer vision. Each representation has its own advantages and disadvantages, and the choice of representation often depends on the specific application.
+Voxels With voxels we discretize 3D space into a 3d grid, it is an intuitive manner to represent the data, but it has limited resolution. It needs $\mathcal{O}(n^{3})$ memory.
+Points and Volumetric primitives We can discretize surfaces into 3D points. Yet, this does not model connectivity, and might vary from frame to frame if it is a video.
 ...</p>
   </div>
-  <footer class="entry-footer">8 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Cloud Reliability" href="https://flecart.github.io/notes/cloud-reliability/"></a>
+  <footer class="entry-footer">12 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Advanced 3D Representations" href="https://flecart.github.io/notes/advanced-3d-representations/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Autoencoders
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>In questa serie di appunti proviamo a descrivere tutto quello che sappiamo al meglio riguardanti gli autoencoders Blog di riferimento Blog secondario che sembra buono
+Introduzione agli autoencoders L’idea degli autoencoders è rappresentare la stessa cosa attraverso uno spazio minore, in un certo senso è la compressione con loss. Per cosa intendiamo qualunque tipologia di dato, che può spaziare fra immagini, video, testi, musica e simili. Qualunque cosa che noi possiamo rappresentare in modo digitale possiamo costruirci un autoencoder. Una volta scelta una tipologia di dato, come per gli algoritmi di compressione, valutiamo come buono il modello che riesce a comprimere in modo efficiente e decomprimere in modo fedele rispetto all’originale. Abbiamo quindi un trade-off fra spazio latente, che è lo spazio in cui sono presenti gli elementi compressi, e la qualità della ricostruzione. Possiamo infatti osservare che se spazio latente = spazio originale, loss di ricostruzione = 0 perché basta imparare l’identità. In questo senso si può dire che diventa sensato solo quando lo spazio originale sia minore di qualche fattore rispetto all’originale. Quando si ha questo, abbiamo più difficoltà di ricostruzione, e c’è una leggera perdita in questo senso.
+...</p>
+  </div>
+  <footer class="entry-footer">9 min&nbsp;·&nbsp;Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Autoencoders" href="https://flecart.github.io/notes/autoencoders/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://flecart.github.io/notes/page/3/">
-      «&nbsp;Prev&nbsp;3/37
+      «&nbsp;Prev&nbsp;3/38
     </a>
-    <a class="next" href="https://flecart.github.io/notes/page/5/">Next&nbsp;5/37&nbsp;»
+    <a class="next" href="https://flecart.github.io/notes/page/5/">Next&nbsp;5/38&nbsp;»
     </a>
   </nav>
 </footer>
