@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Optimizing Single-Core CPU software | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Fully exploiting the abilities of modern hardware is hard. Commonly written software does not fully exploit all of the underlying hardware optimization abilities, and often needs specialized software to achieve better utilization. This post will explore some of the most common optimization techniques for single-core binaries executing in modern hardware. We will cover concepts as Instruction-Level Parallelism, cache analysis for specific computations and briefly touch over vectorization. We conclude with a short example showcasing how these techniques are actually used and an analysis of these results. We report a maximum of 10x speedup over the standard naïve matrix-matrix multiplication code.">
+<meta name="author" content="
+By Xuanqiang &#39;Angelo&#39; Huang">
+<link rel="canonical" href="https://flecart.github.io/posts/2025-10-21-optimizing-single-core-cpu-software/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/posts/2025-10-21-optimizing-single-core-cpu-software/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/posts/2025-10-21-optimizing-single-core-cpu-software/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Optimizing Single-Core CPU software">
+  <meta property="og:description" content="Fully exploiting the abilities of modern hardware is hard. Commonly written software does not fully exploit all of the underlying hardware optimization abilities, and often needs specialized software to achieve better utilization. This post will explore some of the most common optimization techniques for single-core binaries executing in modern hardware. We will cover concepts as Instruction-Level Parallelism, cache analysis for specific computations and briefly touch over vectorization. We conclude with a short example showcasing how these techniques are actually used and an analysis of these results. We report a maximum of 10x speedup over the standard naïve matrix-matrix multiplication code.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-10-21T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-21T00:00:00+00:00">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Optimizing Single-Core CPU software">
+<meta name="twitter:description" content="Fully exploiting the abilities of modern hardware is hard. Commonly written software does not fully exploit all of the underlying hardware optimization abilities, and often needs specialized software to achieve better utilization. This post will explore some of the most common optimization techniques for single-core binaries executing in modern hardware. We will cover concepts as Instruction-Level Parallelism, cache analysis for specific computations and briefly touch over vectorization. We conclude with a short example showcasing how these techniques are actually used and an analysis of these results. We report a maximum of 10x speedup over the standard naïve matrix-matrix multiplication code.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://flecart.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Optimizing Single-Core CPU software",
+      "item": "https://flecart.github.io/posts/2025-10-21-optimizing-single-core-cpu-software/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Optimizing Single-Core CPU software",
+  "name": "Optimizing Single-Core CPU software",
+  "description": "Fully exploiting the abilities of modern hardware is hard. Commonly written software does not fully exploit all of the underlying hardware optimization abilities, and often needs specialized software to achieve better utilization. This post will explore some of the most common optimization techniques for single-core binaries executing in modern hardware. We will cover concepts as Instruction-Level Parallelism, cache analysis for specific computations and briefly touch over vectorization. We conclude with a short example showcasing how these techniques are actually used and an analysis of these results. We report a maximum of 10x speedup over the standard naïve matrix-matrix multiplication code.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Introduction When a human first learns to program, the first concepts typically encountered are control flow, statements, loops, then functions, recursive calls, types, classes. If the person continues with this journey, an encounter with ideas like design patterns, architectural patterns, and software engineering practices are quite likely. In one way or another, these abstractions enable its general user to write portable software, without ever considering the microarchitecture that actually runs the compiled binaries beneath all the these abstractions. This is Computer Science’s fundamental magic: abstraction and implementation. However, sometimes abstractions are not so cleanly separated; they interact in complex manners that go beyond just exposing interfaces and implementing these interfaces, they actually influence each other in complex manners. As every complex system, they may display some strange feedback loops ((Hofstadter 2007)). But this is another story.\nIn this article, we will focus on practical ideas of implementation of fast software. This goal is not achievable by staying at some precise level of abstraction, but needs to consider the entire software stack, from compiler to cache systems to hardware optimizations of the specific microarchitecture that runs that software. We will focus specifically on single core optimizations of the software.\nThe next sections will be divided as follows: in we will discuss historical progress in writing fast software, including the introduction of super-scalar architectures BLAS/LAPACK ((Angerson et al. 1990)), FFTW ((Frigo \u0026 Johnson 1998)), vectorization. Then we will move on with a discussion of the main established techniques of optimization possibilities that new hardware is enabling. Finally, we end with clear examples and experiments on how such written software is evidently faster in running in modern architectures.\nMotivation Every computer scientist knows about compilers, cache mechanisms and some CPU architecture optimizations. However, few know about the optimizations that super-scalar architectures and later vectorization instructions have introduced in the last 30-40 years.\nSuper-scalar architectures have inherent form of parallelism; they execute more than one instruction per cycle using different parallel execution ports. Refer to the Intel i7 Skylake architecture for an example. Two things are important to notice here:\nEach architecture has usually more integer operation ports than floating point operations, which means flops are usually the bottleneck of the computation The upper limit of flops per cycle is easy to compute, and if you know the frequency of the core you can compute the flops per second. For example, in the figure we have two floating operation ports, each can execute one fused add-multiply operation per cycle, meaning four flops per cycle. If your processor runs at 4.8 Ghz, then your overall maximum theoretical upper bound is 19.2 Gigaflops per second. This value is usually never reachable due to data dependency patterns in the computation or memory transfer bottlenecks. Example of Intel Skylake microarchitecture. We can observe the memory hierarchy, with latency and throughput counted as number of cycles needed to fetch the request, and number of doubles that can be stored or retrieved in a single instruction cycle. On the left we see the different execution ports. On the bottom left, we observe the instruction decoder and automatic out-of-order execution hardware engine (instruction pool). Slide from ASL ETH 2024 course. See here.\nCompilers have limitations. Compilers are not able to optimize natively for these architectures. One requirement for compilers is the correctness of the compilation. Sadly, floating point operations do not possess associativity as one of their property. For example, consider the the following case:\n#include int main() { double a = 1e16; double b = -1e16; double c = 1.0; double res1 = (a + b) + c; double res2 = a + (b + c); std::cout \u003c\u003c \"(a + b) + c = \" \u003c\u003c res1 \u003c\u003c std::endl; // 0 std::cout \u003c\u003c \"a + (b + c) = \" \u003c\u003c res2 \u003c\u003c std::endl; // 1 return 0; } Due to possible cases of overflow or underflow, floating-point operators adopt different approximation strategies that ultimately lead to different results. As we will see, this property is an important one.\nHistorical Results Modern processor architectures commonly support the parallel execution of independent instructions through multiple execution ports, a design principle known as superscalar execution ((Johnson 1989)). However, effective exploitation of these hardware capabilities requires software that is explicitly written or optimized to take advantage of instruction-level parallelism (ILP), register renaming, and out-of-order execution.\nEstablished linear algebra libraries such as LAPACK and BLAS have historically served as high-performance, portable foundations for numerical computations across platforms ((Angerson et al. 1990)). The ATLAS project further advanced this line of work by introducing automated empirical tuning techniques, enabling the generation of optimized kernels for different hardware configurations ((Whaley \u0026 Dongarra 1998)).\nDespite their effectiveness, these libraries primarily target general matrix and vector operations, and may not yield optimal performance for more specialized computational workloads. This limitation has motivated the development of domain-specific software frameworks such as FFTW, which exploits the structure of the fast Fourier transform to achieve high efficiency on a wide range of platforms ((Frigo \u0026 Johnson 2005), (Frigo \u0026 Johnson 1998)). Note that here it is the mathematical structure itself that enabled certain kinds of optimization in its relative hardware. It’s nice to observe such interplay between mathematical structures, software compositions and hardware architectures within this subfield of computer science.\nEvery relevant fast numerical software is somewhat inspired to these libraries. Modern PyTorch ((Paszke et al. 2019)), numpy library, use LAPACK and BLAS cores underneath to have a performance close to the theoretical upper limit.\nIn this post, we will mainly explore the optimizations that were introduced within the LAPACK libraries.\nOptimization Strategies In this section, we will explore established optimization techniques for single-core superscalar architectures. We will be exploring established techniques, nevertheless, they have proved to be valid after decades of architecture design. For example, some of the recent optimizations on GPU architectures have clear and recognizable ideas taken from these pioneering works ((Dao et al. 2022)). Here we mainly focus on matrix-matrix multiplication.\nInstruction Level Parallelism If a program is written in a certain manner where some data dependencies are present, we cannot leverage full throughput of the processor. However, if we rewrite the computation to include both cycle unrolling and different accumulators, we can exploit the underlying hardware optimizations and reach a far better performance. As you can see with the examples below, we can have a 2x performance improvement with just this little trick. Simple but effective technique.\nMini Matrix-Matrix Multiplication Examples of forms of computation. (a) we see classical matrix-matrix multiplication: for each row and column we have a single value in C. Potentially for big matrices every element in B needs to be loaded again and again, creating memory bottlenecks. (b) blocked matrix matrix multiplication, where we better exploit cache locality to operate on the matrices. (c) Outer product for better ILP, only applied to very small matrices in the inner loop.\nTo understand this section, you will need a clear bachelor-level understanding of how CPU cache systems work. Another personally surprising reason why other more efficient algorithms for MMM multiplication are not actually faster than a good implementation of the naïve algorithm is due to cache-friendlyness limitations as we will see.\nWhen optimizing matrix-matrix multiplication (MMM) for single-core execution, a major bottleneck emerges not in arithmetic but in data movement, particularly cache misses. To understand and mitigate this, we analyze the cache behavior of naïve vs. blocked matrix multiplication. This section will guide you through that analysis and show how a seemingly simple refactoring, blocking, dramatically improves performance. Blocking is the idea of dividing the whole matrix-matrix multiplication in many smaller cache-friendly block-level matrix multiplications.\nNow, we consider the standard triple-loop implementation of matrix multiplication. We make the following assumptions:\nall matrices are stored in row-major order All the matrices are square matrices of size $n \\times n$: for (int i = 0; i \u003c n; ++i) for (int j = 0; j \u003c n; ++j) for (int k = 0; k \u003c n; ++k) C[i][j] += A[i][k] * B[k][j]; In contrast, a blocked-matrix multiplication of block size $b \u003c n$ and $b$ divides $n$ is:\nfor (int ii = 0; ii \u003c n; ii += b) for (int jj = 0; jj \u003c n; jj += b) for (int kk = 0; kk \u003c n; kk += b) for (int i = ii; i \u003c ii + b; ++i) for (int j = jj; j \u003c jj + b; ++j) for (int k = kk; k \u003c kk + b; ++k) C[i][j] += A[i][k] * B[k][j]; As we will observe this version better exploits a cache’s spatial locality. %% we try to put some images to explain why this is better, needs one image per section I think. %%\nCache Miss Analysis: Naive vs Blocked In the following analysis, we will only consider cache size, but in real systems ((Angerson et al. 1990) ), also TLB page size and other cache configurations like associativity, size, and line size, are kept into consideration.\nIn the naïve implementation, we repeatedly access entire rows of $A$, columns of $B$, and write single entries of $C$. Due to row-major layout, accessing columns of B is especially harmful because it causes non-contiguous memory accesses. We we assume a single row of $B$ is big enough that it doesn’t fit into the cache, this means we will load a whole line block for every access in $B$.\nEach access to a new element in a row or column causes a cache miss unless it’s already cached. We assume here a common cache block of 8 doubles and cache size of $\\gamma \\ll n$, we estimate:\nAccessing a row of $A$ causes $n / 8$ misses. Accessing a column of $B$ (non-contiguous) causes $n^{2}$ misses. So each entry computation causes about $9n / 8$ misses. Total number of entries computed: $n^{2}$. Total cache misses: $9n^{3} / 8$. Now compare this with blocked matrix multiplication, where the matrix is split into sub-blocks of size $b \\times b$. If we pick $b$ such that the entire sub-multiplication of blocks of size $b\\times b$ fits in the cache, we can observe far fewer losses. Let $\\gamma$ be the cache size as before. We require:\n$$ \\begin{align*} 3b^{2} \u0026\\leq \\gamma \u0026 \\text{ One block each of A, B, C} \\\\ \\implies \u0026b = \\sqrt{ \\frac{\\gamma}{3} } \\end{align*} $$$$ (n / b)^{2} \\cdot nb / 4 = n^{3} / 4b $$We can observe the number of cache misses is far lower compared to the previous case. The bigger the $b$ is better here.\nMicro Matrix-Matrix Multiplication After applying blocking to make our computation cache-friendly, we can push optimization even further by going to the register level. The idea is to trade faster and more parallelized register operations with a little higher number of operations.\nAnalysis of Loop Reordering. In a standard i-j-k ordering with indices set as #Mini Matrix-Matrix Multiplication, for each fixed (i,j) pair, we’re essentially computing a dot product: just 2n operations with $n$ data dependent additions. This has a lower instruction-level parallelism and lower number of operations compared to the next version:\nIf we flip to k-i-j ordering, we can observe the following. For each fixed $k$ we’re now performing a rank-1 update: taking an entire column from matrix A and an entire row from matrix B, and doing an outer product that updates the entire C block. This gives us $2n^{2}$ operations that are almost completely independent, correctly leveraging both instruction level parallelism and faster access with Cache blocks.\nWhat makes micro-MMMs so effective is that they exploit a balance between cache locality and instruction-level parallelism. The blocks are small enough that data stays in registers, but the computation pattern generates enough independent operations to keep all execution ports busy.\nLibraries like ATLAS, OpenBLAS, and Intel MKL all use variations of this technique. They’ll typically have hand-optimized micro-kernels for different tile sizes (2×2, 4×4, 6×8, etc.) depending on the target architecture’s register file size and execution port configuration.\nOther Operations Up until now, we covered some classical but general techniques for modern CPU architectures in the matrix-matrix setting. Sometimes we can take other considerations into account and further optimize by taking these into account.\nStrength Reduction. See the wikipedia page. Here we will just give the general idea. If we look at Agner Fog’s tables, we observe that most of the division operations are slow in terms of cycles with respect to multiplication. This motivates substituting some complex operations with equivalent or similar precision operations. With a similar idea, sometimes it is useful to cache or pre-compute intermediary results. Most of the times, it is difficult to identify when you can optimize with this tricks. Lots of the optimizations come from experience, or just a lot of trial and error.\nVectorization Operations Once we’ve optimized for instruction-level parallelism and cache locality, the next powerful lever is data-level parallelism, also known as vectorization.\nVectorization is the process of transforming scalar operations (working on one data element at a time) into SIMD (Single Instruction, Multiple Data) instructions that operate on multiple data elements in parallel. On x86 architectures, these are realized via AVX (Advanced Vector Extensions), SSE, or the newer AVX-512 instruction sets.\nA simple example: instead of computing\nfor (int i = 0; i \u003c 4; ++i) C[i] = A[i] + B[i]; the compiler or programmer can generate a single SIMD instruction that does all four additions at once—assuming A, B, and C are properly aligned and stored contiguously. This is possible thanks to SIMD registers implemented in every modern architecture:\nAVX: 256-bit registers → 4 doubles or 8 floats AVX-512: 512-bit registers → 8 doubles or 16 floats Using these, you can execute operations like fused multiply-add (FMA) on multiple elements at once, within a single cycle. This gives a multiplicative factor to throughput, but only if your data layout and dependencies allow it.\n(a) a visual representation of AVX-style SIMD operations. Each SIMD register packs multiple doubles, and SIMD instructions operate element-wise on all packed values, executed as a single operation. (b) normal operations in for loop (4 times more operations)\nHand-Vectorization: Intrinsics and Assembly In many occasions, auto-vectorization, is not able to rewrite the computation in a manner that is compatible to vectorization: examples like loading from different parts of the memory, shuffling operations are beyond current compiler abilities. For this reason, if we already know the target architecture of our code, we can have some benefit by writing intrinsics: these are C-like wrappers for low-level SIMD instructions. For example, using AVX intrinsics:\n#include __m256d a = _mm256_load_pd(\u0026A[i]); __m256d b = _mm256_load_pd(\u0026B[i]); __m256d c = _mm256_add_pd(a, b); _mm256_store_pd(\u0026C[i], c); You now manually pack, compute, and unpack using 256-bit wide registers. This has the highest performance gain in terms of throughput when the computation is compute bound, but it suffers from portability since this code runs only on machines with AVX intrinsics (mostly intel machines). In many cases, when data movement is the bottleneck, having these instructions would not even have any significant gain.\nThe next and final section will show a real example of these techniques applied in practice.\nExperiments We proceed with showing concrete results of the above optimization methods for two cases: (1) simple sum with Instruction-Level Parallelism, and (2) common matrix-matrix multiplication operations.\nWe run the experiments on an Intel Core i7-1280P, based on the Alder Lake architecture, with a base frequency of:\nPerformance cores: 1.8 GHz Efficient cores: 1.3 GHz This architecture features two ports for floating-point operations, and typical multiplication and addition instructions take four clock cycles.\nL1 Cache (Data): 48 KB (Golden Cove) L2 Cache: 1.25 MB (Golden Cove) L3 Cache: 24 MB total (3 MB × 8 Gracemont cores) Experiment code is released in the github page. We compile our code using GCC 13.3.0 with the following flags -O3 -march=native -ffast-math -fno-tree-vectorize -mfma -mavx2 We deactivate turboboost on the computer by setting the flag in /sys/devices/system/cpu/intel_pstate/no_turbo to 1 in the Linux System. The results are an average over 100 runs per function assuming cold cache, i.e. the values have not been loaded before into the CPU caches.\nResults We report speedups compared to the naïve baseline version. We observe a simple vectorization is able to provide the greatest speedup. Even simple ILP changes are enough to double the original performance. If we analyze the flops/cycle, we can observe the current version is far from optimal performance, but it is enough to showcase how simple methods can greatly enhance performance with these computations.\nInstruction-Level Parallelism. We observe that if we just unroll the loop, it is difficult to get any important speedup. Only if we add accumulators, we get more of the benefits present due to the intrinsic hardware parallelization primitives.\nMicro and Mini Matrix-Matrix-Multiplication. Remember, these techniques are useful to exploit better cache friendliness for the architecture, they become important when the matrix size grows, and whole matrices don’t fit into the caches anymore. If they do fit, these techniques lose their winning point. With the current architecture and cache size above, the working set (set of floating point numbers that are often re-used, sharing time-locality) of the matrix matrix multiplication is mostly the entire $B$ matrix, one row of $A$ and a cache line for $C$ for the standard matrix matrix multiplication: we approximate the needed size to be a single matrix, then we have that with $N \u003e \\sqrt{ \\frac{48000}{4} } \\approx 109$ the matrix does not fit into the L1 cache anymore (we divided by 4 since each floating point is 4 bytes) and starting from $N \u003e 559$ it does not fit into the L2 cache anymore.\nOn the slowdowns. We further notice that in the cold cache scenario, the small values for matrix size lose some of its time. Another slowdown that we observe and that we have not covered in this post is due to TLB cache misses for virtual paging, which is particularly relevant especially for power of two. You can observe that $512 \\cdot 4$ is exactly half of page size in common Linux systems.\nConclusion In this post, we covered the most common and established optimization techniques for single core CPU optimization. In particular, we covered important concepts like instruction-level parallelism, cache analysis and examples of cache friendly reformulation of the computations and showed how they can improve the performance of software in practice, delivering real speedups. We briefly touched over existing optimized software, like LAPACK/BLAS ((Angerson et al. 1990)) and frameworks like PyTorch that use these libraries underneath. Out in the wild, there are far more optimization techniques designed for some specific kinds of computation ((Frigo \u0026 Johnson 1998), (Dao et al. 2022)), sparse computations, or GPU operations.\nCitation If you want to reference this work cite it as:\nHuang, Xuanqiang Angelo “Optimizing Single-Core CPU software.” X. Angelo Huang’s Blog (Jul 2025). http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software\nOr:\n@article{huang2025optimizingsingle, title = \"Optimizing Single-Core CPU software.\", author = \"Huang, Xuanqiang Angelo\", journal = \"flecart.github.io\", year = \"2025\", month = \"Jul\", url = \"",
+  "wordCount" : "3283",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-10-21T00:00:00Z",
+  "dateModified": "2025-10-21T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang 'Angelo' Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/posts/2025-10-21-optimizing-single-core-cpu-software/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Optimizing Single-Core CPU software
+    </h1>
+    <div class="post-meta"><span title='2025-10-21 00:00:00 +0000 UTC'>October 21, 2025</span>&nbsp;·&nbsp;Reading Time: 16 minutes&nbsp;·&nbsp;
+By Xuanqiang &#39;Angelo&#39; Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a><ul>
+                        
+                <li>
+                    <a href="#motivation" aria-label="Motivation">Motivation</a></li>
+                <li>
+                    <a href="#historical-results" aria-label="Historical Results">Historical Results</a></li></ul>
+                </li>
+                <li>
+                    <a href="#optimization-strategies" aria-label="Optimization Strategies">Optimization Strategies</a><ul>
+                        
+                <li>
+                    <a href="#instruction-level-parallelism" aria-label="Instruction Level Parallelism">Instruction Level Parallelism</a></li>
+                <li>
+                    <a href="#mini-matrix-matrix-multiplication" aria-label="Mini Matrix-Matrix Multiplication">Mini Matrix-Matrix Multiplication</a><ul>
+                        
+                <li>
+                    <a href="#cache-miss-analysis-naive-vs-blocked" aria-label="Cache Miss Analysis: Naive vs Blocked">Cache Miss Analysis: Naive vs Blocked</a></li></ul>
+                </li>
+                <li>
+                    <a href="#micro-matrix-matrix-multiplication" aria-label="Micro Matrix-Matrix Multiplication">Micro Matrix-Matrix Multiplication</a><ul>
+                        
+                <li>
+                    <a href="#analysis-of-loop-reordering" aria-label="Analysis of Loop Reordering.">Analysis of Loop Reordering.</a></li></ul>
+                </li>
+                <li>
+                    <a href="#other-operations" aria-label="Other Operations">Other Operations</a></li>
+                <li>
+                    <a href="#vectorization-operations" aria-label="Vectorization Operations">Vectorization Operations</a><ul>
+                        
+                <li>
+                    <a href="#hand-vectorization-intrinsics-and-assembly" aria-label="Hand-Vectorization: Intrinsics and Assembly">Hand-Vectorization: Intrinsics and Assembly</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#experiments" aria-label="Experiments">Experiments</a><ul>
+                        
+                <li>
+                    <a href="#results" aria-label="Results">Results</a></li></ul>
+                </li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a></li></ul>
+                    
+                <li>
+                    <a href="#citation" aria-label="Citation">Citation</a></li>
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>When a human first learns to program, the first concepts typically encountered are control flow, statements, loops, then functions, recursive calls, types, classes. If the person continues with this journey, an encounter with ideas like design patterns, architectural patterns, and software engineering practices are quite likely. In one way or another, these abstractions enable its general user to write portable software, without ever considering the microarchitecture that actually runs the compiled binaries beneath all the these abstractions. This is Computer Science&rsquo;s fundamental magic: <strong>abstraction and implementation.</strong>
+However, sometimes abstractions are not so <em>cleanly</em> separated; they interact in complex manners that go beyond just exposing interfaces and implementing these interfaces, they actually influence each other in complex manners. As every complex system, they may display some strange feedback loops (<a href="https://psycnet.apa.org/record/2007-01197-000">(Hofstadter 2007)</a>). But this is another story.</p>
+<p>In this article, we will focus on practical ideas of implementation of <strong>fast</strong> software. This goal is not achievable by staying at some precise level of abstraction, but needs to consider the entire software stack, from compiler to cache systems to hardware optimizations of the <em>specific</em> microarchitecture that runs that software. We will focus specifically on single core optimizations of the software.</p>
+<p>The next sections will be divided as follows: in we will discuss historical progress in writing fast software, including the introduction of super-scalar architectures BLAS/LAPACK (<a href="https://ieeexplore.ieee.org/document/129995">(Angerson et al. 1990)</a>), FFTW (<a href="http://ieeexplore.ieee.org/document/681704/">(Frigo &amp; Johnson 1998)</a>), vectorization. Then we will move on with a discussion of the main established techniques of optimization possibilities that new hardware is enabling. Finally, we end with clear examples and experiments on how such written software is evidently faster in running in modern architectures.</p>
+<h3 id="motivation">Motivation<a hidden class="anchor" aria-hidden="true" href="#motivation">#</a></h3>
+<p>Every computer scientist knows about compilers, cache mechanisms and some CPU architecture optimizations. However, few know about the optimizations that super-scalar architectures and later vectorization instructions have introduced in the last 30-40 years.</p>
+<p><strong>Super-scalar architectures</strong> have inherent form of parallelism; they execute more than one instruction per cycle using different parallel <em>execution ports</em>. Refer to the Intel i7 Skylake architecture for an example. Two things are important to notice here:</p>
+<ol>
+<li>Each architecture has usually more integer operation ports than floating point operations, which means flops are usually the bottleneck of the computation</li>
+<li>The upper limit of flops per cycle is easy to compute, and if you know the frequency of the core you can compute the flops per second. For example, in the figure we have two floating operation ports, each can execute one fused add-multiply operation per cycle, meaning four flops per cycle. If your processor runs at 4.8 Ghz, then your overall maximum theoretical upper bound is 19.2 Gigaflops per second. This value is usually never reachable due to data dependency patterns in the computation or memory transfer bottlenecks.</li>
+</ol>
+<figure class="center">
+<img src="/images/posts/Writing FastCode-20250625192406855.png" style="width: 100%"   alt="Writing FastCode-20250625192406855" title="Writing FastCode-20250625192406855"/>
+<figcaption><p style="text-align:center;">Example of Intel Skylake microarchitecture. We can observe the memory hierarchy, with latency and throughput counted as number of cycles needed to fetch the request, and number of doubles that can be stored or retrieved in a single instruction cycle. On the left we see the different execution ports. On the bottom left, we observe the instruction decoder and automatic out-of-order execution hardware engine (instruction pool). Slide from ASL ETH 2024 course. See <a href="https://acl.inf.ethz.ch/teaching/fastcode/2024/slides/03-architecture-core.pdf">here</a>.</p></figcaption>
+</figure>
+<p><strong>Compilers have limitations.</strong> Compilers are not able to optimize natively for these architectures. One requirement for compilers is the <strong>correctness</strong> of the compilation. Sadly, floating point operations do not possess associativity as one of their property.
+For example, consider the the following case:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1e16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1e16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">c</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">res1</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;(a + b) + c = &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">res1</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;a + (b + c) = &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">res2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Due to possible cases of overflow or underflow, floating-point operators adopt different approximation strategies that ultimately lead to different results. As we will see, this property is an important one.</p>
+<h3 id="historical-results">Historical Results<a hidden class="anchor" aria-hidden="true" href="#historical-results">#</a></h3>
+<p>Modern processor architectures commonly support the parallel execution of independent instructions through multiple execution ports, a design principle known as <em>superscalar execution</em> (<a href="https://vlsiweb.stanford.edu/people/alum/pdf/8906_MikeJohnson_SuperScalar_Processor_Design.pdf">(Johnson 1989)</a>). However, effective exploitation of these hardware capabilities requires software that is explicitly written or optimized to take advantage of instruction-level parallelism (ILP), register renaming, and out-of-order execution.</p>
+<p>Established linear algebra libraries such as LAPACK and BLAS have historically served as high-performance, portable foundations for numerical computations across platforms (<a href="https://ieeexplore.ieee.org/document/129995">(Angerson et al. 1990)</a>). The ATLAS project further advanced this line of work by introducing automated empirical tuning techniques, enabling the generation of optimized kernels for different hardware configurations (<a href="http://ieeexplore.ieee.org/document/1437325/">(Whaley &amp; Dongarra 1998)</a>).</p>
+<p>Despite their effectiveness, these libraries primarily target general matrix and vector operations, and may not yield optimal performance for more specialized computational workloads. This limitation has motivated the development of domain-specific software frameworks such as FFTW, which exploits the structure of the fast Fourier transform to achieve high efficiency on a wide range of platforms (<a href="http://ieeexplore.ieee.org/document/1386650/">(Frigo &amp; Johnson 2005)</a>, <a href="http://ieeexplore.ieee.org/document/681704/">(Frigo &amp; Johnson 1998)</a>). Note that here it is the mathematical structure itself that enabled certain kinds of optimization in its relative hardware. It&rsquo;s nice to observe such interplay between mathematical structures, software compositions and hardware architectures within this subfield of computer science.</p>
+<p>Every relevant fast numerical software is somewhat inspired to these libraries. Modern PyTorch (<a href="https://arxiv.org/abs/1912.01703v1">(Paszke et al. 2019)</a>), <code>numpy</code> library, use LAPACK and BLAS cores underneath to have a performance close to the theoretical upper limit.</p>
+<p>In this post, we will mainly explore the optimizations that were introduced within the LAPACK libraries.</p>
+<h2 id="optimization-strategies">Optimization Strategies<a hidden class="anchor" aria-hidden="true" href="#optimization-strategies">#</a></h2>
+<p>In this section, we will explore established optimization techniques for single-core superscalar architectures. We will be exploring <em>established</em> techniques, nevertheless, they have proved to be valid after decades of architecture design. For example, some of the recent optimizations on GPU architectures have clear and recognizable ideas taken from these pioneering works (<a href="/notes/optimizing-single-core-cpu-software#daoFLASHATTENTIONFastMemoryefficient2022">(Dao et al. 2022)</a>).
+Here we mainly focus on matrix-matrix multiplication.</p>
+<h3 id="instruction-level-parallelism">Instruction Level Parallelism<a hidden class="anchor" aria-hidden="true" href="#instruction-level-parallelism">#</a></h3>
+<p>If a program is written in a certain manner where some data dependencies are present, we cannot leverage full throughput of the processor. However, if we rewrite the computation to include both cycle unrolling and different accumulators, we can exploit the underlying hardware optimizations and reach a far better performance.
+As you can see with the examples below, we can have a 2x performance improvement with just this little trick. Simple but effective technique.</p>
+<h3 id="mini-matrix-matrix-multiplication">Mini Matrix-Matrix Multiplication<a hidden class="anchor" aria-hidden="true" href="#mini-matrix-matrix-multiplication">#</a></h3>
+<figure class="center">
+<img src="/images/posts/Writing FastCode-20250706220629150.png" style="width: 100%"   alt="Writing FastCode-20250706220629150" title="Writing FastCode-20250706220629150"/>
+<figcaption><p style="text-align:center;">Examples of forms of computation. (a) we see classical matrix-matrix multiplication: for each row and column we have a single value in C. Potentially for big matrices every element in B needs to be loaded again and again, creating memory bottlenecks. (b) blocked matrix matrix multiplication, where we better exploit cache locality to operate on the matrices. (c) Outer product for better ILP, only applied to very small matrices in the inner loop.</p></figcaption>
+</figure>
+<p>To understand this section, you will need a clear bachelor-level understanding of how CPU cache systems work. Another personally surprising reason why other more efficient algorithms for MMM multiplication are not actually faster than a good implementation of the naïve algorithm is due to cache-friendlyness limitations as we will see.</p>
+<p>When optimizing matrix-matrix multiplication (MMM) for single-core execution, a major bottleneck emerges not in arithmetic but in <strong>data movement</strong>, particularly cache misses. To understand and mitigate this, we analyze the cache behavior of naïve vs. blocked matrix multiplication. This section will guide you through that analysis and show how a seemingly simple refactoring, <strong>blocking</strong>, dramatically improves performance.
+Blocking is the idea of dividing the whole matrix-matrix multiplication in many smaller cache-friendly block-level matrix multiplications.</p>
+<p>Now, we consider the standard triple-loop implementation of matrix multiplication. We make the following assumptions:</p>
+<ul>
+<li>all matrices are stored in row-major order</li>
+<li>All the matrices are square matrices of size $n \times n$:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span></span></code></pre></div><p>In contrast, a blocked-matrix multiplication of block size $b < n$ and $b$ divides $n$ is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">ii</span> <span class="o">+=</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">jj</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">jj</span> <span class="o">+=</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">kk</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">kk</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">kk</span> <span class="o">+=</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ii</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ii</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">jj</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">jj</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">kk</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">kk</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span></span></code></pre></div><p>As we will observe this version better exploits a cache&rsquo;s spatial locality.
+%% we try to put some images to explain why this is better, needs one image per section I think. %%</p>
+<h4 id="cache-miss-analysis-naive-vs-blocked">Cache Miss Analysis: Naive vs Blocked<a hidden class="anchor" aria-hidden="true" href="#cache-miss-analysis-naive-vs-blocked">#</a></h4>
+<p>In the following analysis, we will only consider cache size, but in real systems (<a href="https://ieeexplore.ieee.org/document/129995">(Angerson et al. 1990)</a> ), also TLB page size and other cache configurations like associativity, size, and line size, are kept into consideration.</p>
+<p>In the naïve implementation, we repeatedly access entire rows of $A$, columns of $B$, and write single entries of $C$. Due to row-major layout, accessing columns of <code>B</code> is especially harmful because it causes <em>non-contiguous memory accesses</em>. We we assume a single row of $B$ is big enough that it doesn&rsquo;t fit into the cache, this means we will load a whole line block for every access in $B$.</p>
+<p>Each access to a new element in a row or column causes a cache miss unless it’s already cached. We assume here a common cache block of 8 doubles and cache size of  $\gamma \ll n$, we estimate:</p>
+<ul>
+<li>Accessing a row of $A$ causes $n / 8$ misses.</li>
+<li>Accessing a column of $B$ (non-contiguous) causes $n^{2}$ misses.</li>
+<li>So each entry computation causes about $9n / 8$ misses.</li>
+<li>Total number of entries computed: $n^{2}$.</li>
+<li><strong>Total cache misses</strong>: $9n^{3} / 8$.</li>
+</ul>
+<p>Now compare this with <strong>blocked matrix multiplication</strong>, where the matrix is split into sub-blocks of size $b \times b$.
+If we pick $b$ such that the entire sub-multiplication of blocks of size $b\times b$ fits in the cache, we can observe far fewer losses. Let $\gamma$ be the cache size as before. We require:</p>
+$$
+\begin{align*}
+3b^{2} &\leq \gamma & \text{ One block each of A, B, C}
+\\
+\implies &b = \sqrt{ \frac{\gamma}{3} }
+\end{align*}
+$$$$
+(n / b)^{2} \cdot nb / 4 = n^{3} / 4b
+$$<p>We can observe the number of cache misses is far lower compared to the previous case. The bigger the $b$ is better here.</p>
+<h3 id="micro-matrix-matrix-multiplication">Micro Matrix-Matrix Multiplication<a hidden class="anchor" aria-hidden="true" href="#micro-matrix-matrix-multiplication">#</a></h3>
+<p>After applying blocking to make our computation cache-friendly, we can push optimization even further by going to the <strong>register level</strong>. The idea is to trade faster and more parallelized register operations with a little higher number of operations.</p>
+<h4 id="analysis-of-loop-reordering">Analysis of Loop Reordering.<a hidden class="anchor" aria-hidden="true" href="#analysis-of-loop-reordering">#</a></h4>
+<p>In a standard <code>i-j-k</code> ordering with indices set as <a href="/posts#mini-matrix-matrix-multiplication">#Mini Matrix-Matrix Multiplication</a>, for each fixed <code>(i,j)</code> pair, we&rsquo;re essentially computing a dot product: just <code>2n</code> operations with $n$ data dependent additions. This has a lower instruction-level parallelism and lower number of operations compared to the next version:</p>
+<p>If we flip to <code>k-i-j</code> ordering, we can observe the following. For each fixed $k$ we&rsquo;re now performing a <strong>rank-1 update</strong>: taking an entire column from matrix A and an entire row from matrix B, and doing an <em>outer product</em> that updates the entire C block. This gives us $2n^{2}$ operations that are almost completely independent, correctly leveraging both instruction level parallelism and faster access with Cache blocks.</p>
+<p>What makes micro-MMMs so effective is that they exploit a balance between cache locality and instruction-level parallelism. The blocks are small enough that data stays in registers, but the computation pattern generates enough independent operations to keep all execution ports busy.</p>
+<p>Libraries like ATLAS, OpenBLAS, and Intel MKL all use variations of this technique. They&rsquo;ll typically have hand-optimized micro-kernels for different tile sizes (2×2, 4×4, 6×8, etc.) depending on the target architecture&rsquo;s register file size and execution port configuration.</p>
+<h3 id="other-operations">Other Operations<a hidden class="anchor" aria-hidden="true" href="#other-operations">#</a></h3>
+<p>Up until now, we covered some classical but <em>general</em> techniques for modern CPU architectures in the matrix-matrix setting.
+Sometimes we can take other considerations into account and further optimize by taking these into account.</p>
+<p><strong>Strength Reduction.</strong> See the <a href="https://en.wikipedia.org/wiki/Strength_reduction">wikipedia page</a>. Here we will just give the general idea.
+If we look at <a href="https://www.agner.org/optimize/instruction_tables.pdf">Agner Fog&rsquo;s tables</a>, we observe that most of the division operations are slow in terms of cycles with respect to multiplication. This motivates substituting some complex operations with equivalent or similar precision operations.
+With a similar idea, sometimes it is useful to cache or pre-compute intermediary results.
+Most of the times, it is difficult to identify when you can optimize with this tricks. Lots of the optimizations come from experience, or just a lot of trial and error.</p>
+<h3 id="vectorization-operations">Vectorization Operations<a hidden class="anchor" aria-hidden="true" href="#vectorization-operations">#</a></h3>
+<p>Once we’ve optimized for instruction-level parallelism and cache locality, the next powerful lever is <strong>data-level parallelism</strong>, also known as <strong>vectorization</strong>.</p>
+<p>Vectorization is the process of transforming scalar operations (working on one data element at a time) into <strong>SIMD</strong> (Single Instruction, Multiple Data) instructions that operate on multiple data elements in parallel. On x86 architectures, these are realized via AVX (Advanced Vector Extensions), SSE, or the newer AVX-512 instruction sets.</p>
+<p>A simple example: instead of computing</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span></code></pre></div><p>the compiler or programmer can generate a single SIMD instruction that does all four additions at once—assuming <code>A</code>, <code>B</code>, and <code>C</code> are properly aligned and stored contiguously.
+This is possible thanks to <strong>SIMD</strong> registers implemented in every modern architecture:</p>
+<ul>
+<li>AVX: 256-bit registers → 4 doubles or 8 floats</li>
+<li>AVX-512: 512-bit registers → 8 doubles or 16 floats</li>
+</ul>
+<p>Using these, you can execute operations like fused multiply-add (<code>FMA</code>) on multiple elements at once, <em>within a single cycle</em>. This gives a multiplicative factor to throughput, <strong>but only if your data layout and dependencies allow it</strong>.</p>
+<figure class="center">
+<img src="/images/posts/Writing FastCode-20250706222603479.png" style="width: 100%"   alt="Writing FastCode-20250706222603479" title="Writing FastCode-20250706222603479"/>
+<figcaption><p style="text-align:center;"> (a) a visual representation of AVX-style SIMD operations. Each SIMD register packs multiple doubles, and SIMD instructions operate element-wise on all packed values, executed as a single operation. (b) normal operations in for loop (4 times more operations)</p></figcaption>
+</figure>
+<h4 id="hand-vectorization-intrinsics-and-assembly">Hand-Vectorization: Intrinsics and Assembly<a hidden class="anchor" aria-hidden="true" href="#hand-vectorization-intrinsics-and-assembly">#</a></h4>
+<p>In many occasions, auto-vectorization, is not able to rewrite the computation in a manner that is compatible to vectorization: examples like loading from different parts of the memory, shuffling operations are beyond current compiler abilities.
+For this reason, if we already know the target architecture of our code, we can have some benefit by writing <strong>intrinsics</strong>: these are C-like wrappers for low-level SIMD instructions. For example, using AVX intrinsics:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;immintrin.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">__m256d</span> <span class="n">a</span> <span class="o">=</span> <span class="n">_mm256_load_pd</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="n">__m256d</span> <span class="n">b</span> <span class="o">=</span> <span class="n">_mm256_load_pd</span><span class="p">(</span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="n">__m256d</span> <span class="n">c</span> <span class="o">=</span> <span class="n">_mm256_add_pd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">_mm256_store_pd</span><span class="p">(</span><span class="o">&amp;</span><span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">c</span><span class="p">);</span>
+</span></span></code></pre></div><p>You now manually pack, compute, and unpack using 256-bit wide registers. This has the <strong>highest performance</strong> gain in terms of throughput when the computation is compute bound, but it suffers from <strong>portability</strong> since this code runs only on machines with AVX intrinsics (mostly intel machines).
+In many cases, when data movement is the bottleneck, having these instructions would not even have any significant gain.</p>
+<p>The next and final section will show a <strong>real example</strong> of these techniques applied in practice.</p>
+<h2 id="experiments">Experiments<a hidden class="anchor" aria-hidden="true" href="#experiments">#</a></h2>
+<p>We proceed with showing concrete results of the above optimization methods for two cases: (1) simple sum with Instruction-Level Parallelism, and (2) common matrix-matrix multiplication operations.</p>
+<p>We run the experiments on an <strong>Intel Core i7-1280P</strong>, based on the <strong>Alder Lake</strong> architecture, with a base frequency of:</p>
+<ul>
+<li><strong>Performance cores</strong>: 1.8 GHz</li>
+<li><strong>Efficient cores</strong>: 1.3 GHz</li>
+</ul>
+<p>This architecture features <strong>two ports for floating-point operations</strong>, and typical <strong>multiplication and addition</strong> instructions take <strong>four clock cycles</strong>.</p>
+<ul>
+<li><strong>L1 Cache (Data)</strong>: 48 KB (Golden Cove)</li>
+<li><strong>L2 Cache</strong>: 1.25 MB (Golden Cove)</li>
+<li><strong>L3 Cache</strong>: 24 MB total (3 MB × 8 Gracemont cores)
+Experiment code is released in the <a href="https://github.com/Flecart/single-core-cpu-fastcode">github</a> page.
+We compile our code using <strong>GCC 13.3.0</strong> with the following flags  <code>-O3 -march=native -ffast-math -fno-tree-vectorize -mfma -mavx2</code>
+We deactivate turboboost on the computer by setting the flag in <code>/sys/devices/system/cpu/intel_pstate/no_turbo</code> to 1 in the Linux System.</li>
+</ul>
+<p>The results are an average over 100 runs per function assuming cold cache, i.e. the values have not been loaded before into the CPU caches.</p>
+<h3 id="results">Results<a hidden class="anchor" aria-hidden="true" href="#results">#</a></h3>
+<figure class="center">
+<img src="/images/posts/Writing FastCode-20250707221045550.png" style="width: 100%"   alt="Writing FastCode-20250707221045550" title="Writing FastCode-20250707221045550"/>
+<figcaption><p style="text-align:center;">We report speedups compared to the naïve baseline version. We observe a simple vectorization is able to provide the greatest speedup. Even simple ILP changes are enough to double the original performance. If we analyze the flops/cycle, we can observe the current version is far from optimal performance, but it is enough to showcase how simple methods can greatly enhance performance with these computations.</p></figcaption>
+</figure>
+<p><strong>Instruction-Level Parallelism.</strong> We observe that if we just unroll the loop, it is difficult to get any important speedup. Only if we add accumulators, we get more of the benefits present due to the intrinsic hardware parallelization primitives.</p>
+<p><strong>Micro and Mini Matrix-Matrix-Multiplication</strong>. Remember, these techniques are useful to exploit better cache friendliness for the architecture, they become important when the matrix size grows, and whole matrices don&rsquo;t fit into the caches anymore. If they do fit, these techniques lose their winning point.
+With the current architecture and cache size above, the working set (set of floating point numbers that are often re-used, sharing time-locality) of the matrix matrix multiplication is mostly the entire $B$ matrix, one row of $A$ and a cache line for $C$ for the standard matrix matrix multiplication: we approximate the needed size to be a single matrix, then we have that with $N > \sqrt{ \frac{48000}{4} } \approx 109$ the matrix does not fit into the L1 cache anymore (we divided by 4 since each floating point is 4 bytes) and starting from $N > 559$ it does not fit into the L2 cache anymore.</p>
+<p><strong>On the slowdowns.</strong> We further notice that in the cold cache scenario, the small values for matrix size lose some of its time. Another slowdown that we observe and that we have not covered in this post is due to TLB cache misses for virtual paging, which is particularly relevant especially for power of two. You can observe that $512 \cdot 4$ is exactly half of page size in common Linux systems.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>In this post, we covered the most common and established optimization techniques for single core CPU optimization. In particular, we covered important concepts like instruction-level parallelism, cache analysis and examples of cache friendly reformulation of the computations and showed how they can improve the performance of software <strong>in practice</strong>, delivering real speedups. We briefly touched over existing optimized software, like LAPACK/BLAS (<a href="https://ieeexplore.ieee.org/document/129995">(Angerson et al. 1990)</a>) and frameworks like PyTorch that use these libraries underneath.
+Out in the wild, there are far more optimization techniques designed for some specific kinds of computation (<a href="http://ieeexplore.ieee.org/document/681704/">(Frigo &amp; Johnson 1998)</a>, <a href="/notes/optimizing-single-core-cpu-software#daoFLASHATTENTIONFastMemoryefficient2022">(Dao et al. 2022)</a>), sparse computations, or GPU operations.</p>
+<h1 id="citation">Citation<a hidden class="anchor" aria-hidden="true" href="#citation">#</a></h1>
+<p>If you want to reference this work cite it as:</p>
+<blockquote>
+<p>Huang, Xuanqiang Angelo &ldquo;Optimizing Single-Core CPU software.&rdquo; X. Angelo Huang&rsquo;s Blog (Jul 2025). <a href="http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software"><a href="http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software">http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software</a></a></p></blockquote>
+<p>Or:</p>
+<pre tabindex="0"><code>@article{huang2025optimizingsingle,
+  title   = &#34;Optimizing Single-Core CPU software.&#34;,
+  author  = &#34;Huang, Xuanqiang Angelo&#34;,
+  journal = &#34;flecart.github.io&#34;,
+  year    = &#34;2025&#34;,
+  month   = &#34;Jul&#34;,
+  url     = &#34;&lt;a href=&#34;http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software/&#34;&#34;&gt;http://flecart.github.io/posts/2025-07-07-optimizing-single-core-cpu-software/&#34;&lt;/a&gt;
+}
+</code></pre><h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p id=frigoDesignImplementationFFTW32005>[1] Frigo & Johnson <a href="http://ieeexplore.ieee.org/document/1386650/">“The Design and Implementation of FFTW3”</a> Proceedings of the IEEE Vol. 93(2), pp. 216--231 2005
+ </p>
+<p id=angersonLAPACKPortableLinear1990>[2] Angerson et al. <a href="https://ieeexplore.ieee.org/document/129995">“LAPACK: A Portable Linear Algebra Library for High-Performance Computers”</a> Supercomputing '90:Proceedings of the 1990 ACM/IEEE Conference on Supercomputing  1990
+ </p>
+<p id=whaleyAutomaticallyTunedLinear1998>[3] Whaley & Dongarra <a href="http://ieeexplore.ieee.org/document/1437325/">“Automatically Tuned Linear Algebra Software”</a> IEEE  1998
+ </p>
+<p id=frigoFFTWAdaptiveSoftware1998>[4] Frigo & Johnson <a href="http://ieeexplore.ieee.org/document/681704/">“FFTW: An Adaptive Software Architecture for the FFT”</a> IEEE  1998
+ </p>
+<p id=daoFLASHATTENTIONFastMemoryefficient2022>[5] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc.  2022
+ </p>
+<p id=paszkePyTorchImperativeStyle2019>[6] Paszke et al. <a href="https://arxiv.org/abs/1912.01703v1">“PyTorch: An Imperative Style, High-Performance Deep Learning Library”</a> None 2019
+ </p>
+<p id=hofstadterAmStrangeLoop2007>[7] Hofstadter <a href="https://psycnet.apa.org/record/2007-01197-000">“I Am a Strange Loop”</a> Basic Books 2007
+ </p>
+<p id=johnsonSuperScalarProcessorDesign1989>[8] Johnson <a href="https://vlsiweb.stanford.edu/people/alum/pdf/8906_MikeJohnson_SuperScalar_Processor_Design.pdf">“Super-Scalar Processor Design”</a>  1989
+ </p>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://flecart.github.io/hello-world/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Hello World</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on x"
+            href="https://x.com/intent/tweet/?text=Optimizing%20Single-Core%20CPU%20software&amp;url=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f&amp;title=Optimizing%20Single-Core%20CPU%20software&amp;summary=Optimizing%20Single-Core%20CPU%20software&amp;source=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f&title=Optimizing%20Single-Core%20CPU%20software">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on whatsapp"
+            href="https://api.whatsapp.com/send?text=Optimizing%20Single-Core%20CPU%20software%20-%20https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on telegram"
+            href="https://telegram.me/share/url?text=Optimizing%20Single-Core%20CPU%20software&amp;url=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Optimizing Single-Core CPU software on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Optimizing%20Single-Core%20CPU%20software&u=https%3a%2f%2fflecart.github.io%2fposts%2f2025-10-21-optimizing-single-core-cpu-software%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
