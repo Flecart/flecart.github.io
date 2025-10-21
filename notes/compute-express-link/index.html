@@ -104,6 +104,8 @@ NVM is a kind of non volatile memory that is used as a storage device that is cl
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2025-06-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-02T00:00:00+00:00">
     <meta property="article:tag" content="☁Cloud-Computing">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -150,8 +152,8 @@ NVM is a kind of non volatile memory that is used as a storage device that is cl
   "articleBody": "This allows us to extend the memory hierarchy (see Memoria) that we have today. The problem is that we have heterogeneous access patterns specifications and hardware. One of the main trends is disaggregation: we want to be able to scale different resources independently.\nIntroduction to CXL (Compute Express Link) This is a new part of the memory hierarchy.\nNVM is a kind of non volatile memory that is used as a storage device that is close to the device (others are network attached or slower than network part anyways. It is persistent and has low latency. It is used in the memory hierarchy to extend the memory capacity.\nThe main advantages are:\nIndependent scaling of memory and compute Improved resource utilization Enhanced fault tolerance Disadvantages are:\nComplexity in coherence and consistency, and synchronization. In cloud systems usually is important to individuate the Hyper scalers which is the app, or group of apps, that are taking the most resources in the cloud.\nCXL protocols PCIe connects devices to the CPU. It is a point-to-point connection usually used for FPGAs, GPU and network parts to the CPU. CXL extends the PCIe for heterogenous computing and server disaggregation usages\nCXL.io: based on PCIe, it does the same thing basically (device discovery, DMA, I/O virtualization and DMA). CXL.cache: this is a cache coherent protocol, it allows the CPU to access memory from other devices. CXL.mem: this is a memory coherent protocol, it allows the CPU to access memory from other devices. CXL Devices There are three types of devices\nCXL Type 1: Accelerator devices, they are used for compute acceleration. They can access memory from the CPU and other devices. (io and cache, sits at the place of standard coherence protocols) CXL Type 2: Accelerator devices that need all the protocols. CXL Type 3: Memory devices, they are memory devices that can be accessed by the CPU and other devices. They are used for memory expansion. (io and mem) On Memory Coherence Memory coherence is a property of a system that ensures that all copies of a memory location are consistent. This is important for parallel computing, where multiple processors can access the same memory location.\nFor example, if you have two CPUs that modify a shared cache line, you need to ensure that the cache line is consistent across all CPUs. This is done by using a cache coherence protocol, which ensures that all copies of the cache line are consistent.\nMESI protocol One of the most famous protocols is MESI: If you want to read x, you go from invalid to shared state If you want to write x, you go to exclusive state and after write it is modified state. All can be represented by a state diagram, see Grammatiche Regolari. Snoop Filters It is implemented through snooping, that act as gatekeeper for bus snooping. It tracks which caches hold copies of specific cache blocks and only broadcasts snoop requests when they are truly needed.\nDirectory Controller It is a centralized structure that tracks the state of each cache line in the system. It is used to reduce the amount of snooping traffic on the bus. It is used in large systems with many caches.\nCoherence in CXL We want to have a coherence across all the devices (non only cache, but also accelerators!) attached to our system\nThe CXL.mem is able to\nVersion 1.0: memory expansion (machines are able to split the memory into zones that are responsibility of some specific devices). Version 2.0: memory pooling Version 3.2: memory sharing, but not implemented yet (it is far more complex, and not clear if it will be helpful). This is some sort of asymmetric protocol, I don’t know what it means.\nThen you send CXL transactions which are the basic commands that you send back and forth to solve this. Some transactions can be implicit and explicit. But they still have the problem of cache coherence during crashes.\n",
   "wordCount" : "657",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-02T00:00:00Z",
+  "dateModified": "2025-06-02T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -243,7 +245,7 @@ NVM is a kind of non volatile memory that is used as a storage device that is cl
     <h1 class="post-title entry-hint-parent">
       Compute Express Link
     </h1>
-    <div class="post-meta">Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-02 00:00:00 +0000 UTC'>June 2, 2025</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

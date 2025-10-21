@@ -103,6 +103,8 @@ Tail Latency Phenomenon Tail latency refers to the high-end response time experi
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2025-01-18T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-18T00:00:00+00:00">
     <meta property="article:tag" content="📓Big-Data">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -149,8 +151,8 @@ This significant delays that can degrade user experience or system reliability."
   "articleBody": "Some specific phenomenons in modern systems happen only when we scale into large systems. This note will gather some observations about the most important phenomena we observe at these scales.\nTail Latency Phenomenon Tail latency refers to the high-end response time experienced by When scaling our services, using Massive Parallel Processing, and similar technology, it is not rare that a small percentage of requests in a system experience a high-end response time, typically measured at the 95th or 99th percentile. This significant delays that can degrade user experience or system reliability.\nSource of the Bottlenecks These outliers often result from resource contention, network variability, or workload spikes. Often it is caused by an overload of a specific resource in the system. Recall from Cloud Storage, that data-centers, have a limited availability of CPU cores, RAM, storage, network bandwidth. If one of these resources is full, then the machines could suffer from high latency.\nTypical latencies We observe that simply reading from the disk, already brings a latency of 20ms.\nIf we compare this with the throughput, it’s quite easy to see something on the order of MegaBytes per second.\nThese values are important to consider as the user’s waiting time is exactly the sum of the initial latency + time of transmission.\nHedge Requests Reducing tail latency is critical in latency-sensitive systems, such as cloud services, where even occasional delays can lead to cascading performance issues or customer dissatisfaction.\nOne big problems becomes identifying the source of latency, and then connecting to the machine to solve it.\nOne common approach is called Hedge Requests:\nBasically, do all tasks twice. Monitor, and start tasks when you notice some stragglers. This is what it’s done in (Dean \u0026 Ghemawat 2008). With the first solution, the cluster should be twice as slow, because it has to do so much more computation.\nSolving Disk-IO For example, if the disk-io is the bottleneck, using Apache Spark or MapReduce helps to solve this problem, as we are now reading from disk in parallel.\nLaw’s of speedups Amdahl’s Law Amdahl’s Law quantifies the potential speedup of a system when a portion of its workload is parallelized. It states that the overall improvement is limited by the fraction of the workload that remains sequential. We assume we have a constant problem size.\nMathematically, the speedup $S$ is given by $S = \\frac{1}{(1 - P) + \\frac{P}{N}}$, where $P$ is the parallelizable fraction, and $N$ is the number of parallel processing units. This principle highlights the diminishing returns of adding more resources when the sequential portion dominates, emphasizing the importance of optimizing both parallel and sequential components for maximum performance gains.\nThe takeaway from here is that not everything is parallelizable or speedable with just more machines.\n$$ S = \\frac{1}{(1 - P)}$$Gustafson’s Law Gustafson’s Law provides an alternative perspective to Amdahl’s Law, focusing on scalability in parallel computing. It asserts that increasing the problem size can maintain efficiency as more processors are added, rather than being limited by a fixed workload. The speedup SS is expressed as S=P⋅N+(1−P)S = P \\cdot N + (1 - P), where PP is the fraction of work that scales with parallelism, and NN is the number of processors. By emphasizing the expansion of parallel workloads, Gustafson’s Law highlights the potential for achieving greater performance by leveraging the computational power of modern systems effectively.\nReferences [1] Dean \u0026 Ghemawat “MapReduce: Simplified Data Processing on Large Clusters” Communications of the ACM Vol. 51(1), pp. 107--113 2008 ",
   "wordCount" : "582",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-18T00:00:00Z",
+  "dateModified": "2025-01-18T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -242,7 +244,7 @@ This significant delays that can degrade user experience or system reliability."
     <h1 class="post-title entry-hint-parent">
       Performance at Large Scales
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-18 00:00:00 +0000 UTC'>January 18, 2025</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

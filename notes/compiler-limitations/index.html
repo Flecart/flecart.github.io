@@ -102,6 +102,8 @@ What are they good at Compilers are good at: mapping program to machine ▪ regi
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2025-03-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-03-03T00:00:00+00:00">
     <meta property="article:tag" content="Advanced-Systems-Lab">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -147,8 +149,8 @@ Compilers are good at: mapping program to machine ▪ register allocation ▪ in
   "articleBody": "On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.\nWhat are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies\nCommon limitations Compilers are not good at: algorithmic restructuring ▪ for example to increase ILP, locality, etc. ▪ cannot deal with choices Compilers are not good at: overcoming “optimization blockers” ▪ potential memory aliasing ▪ potential procedure side-effects\nExample: the compiler is not able to optimize this part of code because it should work also for aliasing as this example.\nCommon optimizations Done by the compiler Code motion: Usually compilers are good at this (static function dependency analysis) Strength reduction The idea here is to substitute the same operation with something that is faster, for example $16 \\cdot x = x \\ll 4$. Function inlining: most of the time it is able to do compiler inlining. Not always done. It could be side effects or other things that are not provable that slow it down anyways. Memory accesses: if there are useless memory accesses, that would be very hard to optimize automatically. (they do not handle aliasing). In some cases the compiler can do some aliasing checks. There are some hints (restrict, pragma ivdep, or some other compiler flags that assume there is no alias anywhere) What the compiler cannot do Common subexpression optimization if you need too many arithmetic dependencies, often the compiler is not able to do it. Scalar replacement: usually you have to do it by yourself, because compiler cannot assume memory aliasing. Basically, when an address of memory is used multiple times, it is useful to add it as a variable, because it assumes it will be the same thing in memory, as it can change in the mean time. Vector Instructions Vector instructions just do the same operation to a set of data (usually 2,4,8…). Many operations on images are the same but on different data, this is also why vector instructions are used. Another one is linear algebra since they assume independent operations on a lot of data. So many many operations could benefit from vector instructions. Historically, it was introduced on MMX on integers, then SSE with 128 bits, then AVX family with 256 and now AVX-512, for floating points. There are many many operations in this family, it has also made obsolete common optimization frameworks explored in Fast Linear Algebra.\n",
   "wordCount" : "455",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-03-03T00:00:00Z",
+  "dateModified": "2025-03-03T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -240,7 +242,7 @@ Compilers are good at: mapping program to machine ▪ register allocation ▪ in
     <h1 class="post-title entry-hint-parent">
       Compiler Limitations
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-03-03 00:00:00 +0000 UTC'>March 3, 2025</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

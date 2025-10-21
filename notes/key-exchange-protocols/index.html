@@ -112,6 +112,8 @@ Protocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi s
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2024-06-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-06-02T00:00:00+00:00">
     <meta property="article:tag" content="🛡️Cybersecurity">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -166,8 +168,8 @@ TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptograp
   "articleBody": "Metodi di key exchange\nTrusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti) Merkle Puzzles DH protocol Trusted Third parties Squared Key problem Un problema abbastanza ovvio è che per storare le chiavi di tutti c’è una necessità $O(n^{2})$ on $O(n)$ users Se c’è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!\nProtocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography) Questa è la base del servizio di Kerberos! Il servizio di sopra è sicuro su Choosen plaintext, dato che Eve non capisce niente senza le chiavi!\nQuindi in pratica vengono scambiate due cose, un ticket e la chiave segreta, creati da TTP che sa creare segreti e conosce singole chiavi di tutte.\nAssumendo CPA security l’attaccante non può sapere niente su $k_{AB}$, che sembra roba random. Problema:\nTTP è il single node of failure se viene compromesso tutto viene compromesso, è un obiettivo troppo Juicy. Può essere soggetto a replay attacks senza problemi (ad esempio rimandando quanto mandato da Alice (es. se è stato comprato qualcosa, se si ripete tutto si compra di nuovo, questo è un danno)). La cosa carina è che usa solo chiavi simmetriche, niente di nuovo rispetto Classical Cyphers, OTP and Stream Ciphers, Block Ciphers. Merkle Puzzles vogliamo cercare di risolvere problemi di origliamento (eavesdrop, senza modifiche varie sul messaggio. Avversario passivo. Vogliamo farlo senza avere un #Trusted Third parties, ma vogliamo usare solamente symmetric crypto. La cosa è che questo è possibile, ma molto inefficiente per cui inutili nella pratica.\nThe puzzle protocol Suppose we have $E(k, m)$ with $k \\in \\left\\{ 0, 1 \\right\\}^{128}$. Define $E(P, message)$ and $P = 0^{96} \\mid b_{1}\\dots b_{32}$, and a $x_{i} \\in \\left\\{ 0, 1 \\right\\}^{128}$and we want to find $P$ back by some sort of brute-force.\nAlice:\nCreates $2^{32}$ puzzles by creating $E(0^{96} \\mid P_{i}, \\text{ \"Puzzle \\#}x_{i} \\text{\"} \\mid k_{i})$ Sends every puzzle to Bob Bob: Chooses a puzzle randomly and tries to solve it (try all possible $P_{i}$), when the first part matches, the puzzle is solved Send $x_{j}$ to Alice Alice: Check what puzzle was chosen, then $k_{j}$ is the shared key. Quadratic Gap Alice and Bob to $O(n)$ work to create and solve a single puzzle. An attacker would need to break all the $2^{32}$ keys, so it is $O(n^{2})$ cost, which is $2^{64}$.\nTo increase the security, they should make $n$ bigger, but it would be very very slower. The nice idea is that participant has linear time, while the attacker needs squared time. It is called quadratic gap. We don´t know if quadratic gap is the best gap we can do, but intuition says so.\nDiffie-Hellman Protocol In this case we have a exponential gap between participant and attacker.\nIntroduzione DH Questo è quello che abbiamo studiato anche a Olycyber quindi è più facile. È basato su una costruzione matematica molto simile a RSA.\nIn pratica così\nScelgo $p$ primo largo Scelgo $g$ Alice sceglie $a$, e manda $g^{a}$ a Bob Bob fa lo stesso con $b$ Il segreto è $g^{ab}$ , che è difficile da capire con i moduli, faremo una analisi di sicurezza in seguito. Best algorithm for attacking this is $\\exp (O(\\sqrt[3]{ n})$, it is the Generalize Field Sieve (with a very high constant, like 80), not explained here here.\nDifficulty comparison Simmetric cipher DH Elliptic Curve 80 bits 1024 bits 160 bits 128 bits 3072 bits (in reality about 2048) 256 bits 256 bits 15360 bits 512 bits Attacco a DH DH è insicuro dal punto di vista del Man in the middle. Perché se uno in mezzo intercetta, può usare la sua chiave privata al posto di quella dell’altro interlocutore. Tanto conosce il valore di $g$ e gli basta questo. ",
   "wordCount" : "635",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-06-02T00:00:00Z",
+  "dateModified": "2024-06-02T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -259,7 +261,7 @@ TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptograp
     <h1 class="post-title entry-hint-parent">
       Key Exchange protocols
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

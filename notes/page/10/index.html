@@ -200,6 +200,21 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Variational Inference
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>$$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
+Laplace approximation Introduction to the Idea $$ \psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 9 minutes&nbsp;·&nbsp;
+By Xuanqiang &#39;Angelo&#39; Huang</footer>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Multi Variable Derivatives
     </h2>
   </header>
@@ -207,7 +222,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <p>Multi-variable derivative To the people that are not used to matrix derivatives (like me) it could be useful to see how $$ \frac{ \partial u^{T}Su }{ \partial u } = 2Su $$ First, we note that if you derive with respect to some matrix, the output will be of the same dimension of that matrix. That notation is just deriving every single component independently and then joining them together, so it will be better understood as as $$ \frac{ \partial u^{T}Su }{ \partial u } = \begin{bmatrix} \frac{ \partial u^{T}Su }{ \partial u_{1} } \ \dots \ \frac{ \partial u^{T}Su }{ \partial u_{M} } \ \end{bmatrix} $$ So we can prove each derivative independently, it&#39;s just a lot of manual work! We see that $u^{T}Su$ is just a quadratic form, studied in Massimi minimi multi-variabile#Forme quadratiche so it is just computing this: $$ u^{T}Su = \sum_{i, j = 1, 1}^{M} u_{i}u_{j}S_{ij} \implies \frac{ \partial u^{T}Su }{ \partial u_{1} } =2u_{1}S_{11} &#43; \sum_{j \neq 1}^{M}(u_{j}S_{1j} &#43; u_{j}S_{j1}) = 2\left( u_{1}S_{11} &#43; \sum_{j \neq 1}u_{j}S_{1j} \right) = 2(Su)_{1} $$ Last equation is true because $S$ is a symmetric matrix, then we easily see that indeed it’s true that indeed it’s the first row of the $Su$ matrix multiplied by 2.
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 5 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-12-26 00:00:00 +0000 UTC'>December 26, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Multi Variable Derivatives" href="https://flecart.github.io/notes/multi-variable-derivatives/"></a>
 </article>
@@ -229,21 +244,6 @@ By Xuanqiang &#39;Angelo&#39; Huang</footer>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Variational Inference
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>$$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
-Laplace approximation Introduction to the Idea $$ \psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.
-...</p>
-  </div>
-  <footer class="entry-footer">Reading Time: 9 minutes&nbsp;·&nbsp;
-By Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Variational Inference" href="https://flecart.github.io/notes/variational-inference/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">Asymmetric Cryptography
     </h2>
   </header>
@@ -253,7 +253,7 @@ Formal definition of Public Key Encryption We define a 3-tuple formed as follows
 $G$ is the generator for the private and public keys, from now on identified as $(pk, sk)$ (public key and secret key) $E(pk, m)$ the encryption algorithm, that takes the $pk$ and the message in input $D(sk, c)$ the decryption algorithm, that takes the $sk$ and the ciphertext in input. Now is this definition useful? i don’t think so! We can’t create theorems for it, too general I suppose. Is it clear? yes! I think this is the usefulness of maths in many occasions, it delivers some complex information in a concise and understandable manner.
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 8 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 8 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Asymmetric Cryptography" href="https://flecart.github.io/notes/asymmetric-cryptography/"></a>
 </article>
@@ -268,7 +268,7 @@ By Xuanqiang &#39;Angelo&#39; Huang</footer>
 Questa cosa vale anche per uno spazio n-dimensionale, non soltanto due, ma per semplicità di introduzione di questo lo faccio con 2
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 8 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 8 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Spazi vettoriali" href="https://flecart.github.io/notes/spazi-vettoriali/"></a>
 </article>
@@ -283,7 +283,7 @@ By Xuanqiang &#39;Angelo&#39; Huang</footer>
 Classical Linear regression $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty. One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it’s the exact same thing as the previous, so if we look for the MLE estimate now we get
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 9 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 9 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Bayesian Linear Regression" href="https://flecart.github.io/notes/bayesian-linear-regression/"></a>
 </article>
@@ -300,7 +300,7 @@ Note introduttive Diagramma di Gantt Questo è il diagramma per presentare lo sc
 Esempio gantt
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 7 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Scheduler" href="https://flecart.github.io/notes/scheduler/"></a>
 </article>
@@ -315,43 +315,43 @@ By Xuanqiang &#39;Angelo&#39; Huang</footer>
 Gestire l’esecuzione di più programmi assieme (concorrenza), tramite virtualizzazione CPU e Memoria Gestire le risorse (Quindi I/O, RAM, Memoria, Networking) Fornisce una interfaccia di programmazione (API) molto più generale e potente, in grado di astrarre da dettagli di livello basso, vicini all’Hardware (come device drivers). Quindi in breve il SO è n programma che crea un ambiente civile per i programmi in cui interagire, e facilita molto il lavoro al programmatore per la sua interfaccia nuova. (si potrebbe dire che sia una macchina virtuale con un suo linguaggio (che è l’API) se seguiamo la terminologia di Macchine Astratte)
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 4 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
   <a class="entry-link" aria-label="post link to Introduzione SO" href="https://flecart.github.io/notes/introduzione-so/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Livello ISA
+    <h2 class="entry-hint-parent">Note sull&#39;architettura
     </h2>
   </header>
   <div class="entry-content">
-    <p>il livello isa è il livello delle istruzioni
-8.1 Struttura Potremmo definire l’architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.
-Istruzioni possibili Registri Solitamente le istruzioni sono divise in due parti:
-8.1.1 Opcode e indirizzamento Opcode
-Questo opcode indica la tipologia di istruzione.
-Per esempio per l’architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.
+    <p>Interrupt Descrizione iniziale Di interrupt e trap se n’è parlato un pò in Livello ISA di architettura, ora andiamo ad approfondire come viene gestito a livello SO.
+Un interrupt è un segnale che viene mandato o da un dispositivo hardware (di solito dopo la fine di un processo input output) oppure da software, in questo caso viene chiamato trap che è un interrupt software sincrono..
+Slide Interrupt Hardware e software
+Questi segnali sono utilizzati per indicare eventi che dovrebbero essere gestiti (come end of I/O, divisione per 0, ma anche semplicemente syscall e passare livello kernel).
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 4 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 8 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Livello ISA" href="https://flecart.github.io/notes/livello-isa/"></a>
+  <a class="entry-link" aria-label="post link to Note sull&#39;architettura" href="https://flecart.github.io/notes/note-sullarchitettura/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Memoria
+    <h2 class="entry-hint-parent">Processi e thread
     </h2>
   </header>
   <div class="entry-content">
-    <p>4.1 Caratteristiche della Memoria La gerarchia della memoria, più si va giù più spazio si ha, più è lento il caricamento delle informazioni
-4.1.1 Catalogazione della memoria Le tipologie di memoria sono presenti a fianco. In generale più la memoria è veloce da riprendere, più è costosa da memorizzare (c’è poco spazio) 4.1.2 Byte e Word Il libro a pagina 74 parte con la discussione del perché si è preferito evitare la BCD (Binary coded decimal, in cui i numeri da 0 a 9 erano codificato da 4 bit), per questioni di efficienza.
+    <p>Il processo e la gestione dell’esecuzione è uno dei compiti principali dei sistemi operativi. Lo vuole fare in maniera efficace ed efficiente, come descritto in Note sull’architettura.
+Slide schema generale tabelle
+Processi Il process control block è la struttura di dati principali da comprendere.
+Ha una tabella dei file aperti, che sono dei file descriptor (all’interno della propria struttura di dati), riferiti a una tabella dell’interno sistema credo, e questi puntano a un VNode che permette di localizzarlo nella memoria secondaria.
 ...</p>
   </div>
-  <footer class="entry-footer">Reading Time: 8 minutes&nbsp;·&nbsp;
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang</footer>
-  <a class="entry-link" aria-label="post link to Memoria" href="https://flecart.github.io/notes/memoria/"></a>
+  <a class="entry-link" aria-label="post link to Processi e thread" href="https://flecart.github.io/notes/processi-e-thread/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

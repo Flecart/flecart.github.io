@@ -107,6 +107,8 @@ caricamento codice dinamico Per esempio anche a caricare il codice di un compila
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2024-08-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-08-28T00:00:00+00:00">
     <meta property="article:tag" content="Sistemi-Operativi">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -157,8 +159,8 @@ Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Liv
   "articleBody": "Memoria virtuale Perché è utile la MV? I programmi non usano tutta la memoria, ma pensano di averla tutta disponibile dal suo punto di vista. L’idea principale è che molte zone di memoria sono inutili per lungo tempo, possono essere utilizzati per altro.\ncaricamento codice dinamico Per esempio anche a caricare il codice di un compilatore è diviso in fasi, se andiamo a caricare tutto, stiamo utilizzando solo un pezzo piccolo, tanta inefficienza, se una pagina contiene una parte del compilatore potrei caricare in memoria solamente le parti eseguite sul momento, giusto per fare un esempio diciamo. Crescita dei segmenti stack, heap, ad esempio ci permette di far crescere come ci pare la stack, e anche caricare solamente le parti della stack che ci servono, e mantenere la memoria libera per altro. Gestione degli errori. che utilizzerà i dati solamente della parte di gestione di memoria attuale diciamo. Paginazione a richiesta Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Livello OS.\nSlide paginazione a richiesta\nin pratica nella cache è presente un bit, chiamato valid bit, che ci dice se la pagina correntemente caricata è valida o meno.\nSe non è presente una pagina valida, allora chiamiamo trap di page fault, e il pager si occupa di caricare la nuova pagina ed aggiornare la pagina vecchia.\nEsempio di demand paging\nNOTA: la memoria secondaria con questo metodo ha l’intero contenuto, in questo senso la memoria principale è utilizzata come se fosse cache.\nEsempio completo con page fault\n*ALGORITMO GENERALE DI DEMAND PAGING\nSlide demand paging\nNOTA: la cosa importante è il fatto che invalida subito la pagina scelta da sostituire. Non vorremmo che se un altro processo chieda quella pagina possa ancora scriverci o leggerci (e quindi problemi di concorrenza).\nMemoria di Swap In realtà quando un intero processo è caricato in memoria secondaria, questa parte in memoria secondaria è l’area di swap.\nMa questo metodo qui è come se fosse uno swap pigro. (se un processo è vecchio, nel senso che non utilizza la pagina per tanto tempo, è probabile che la sua memoria è messa in memoria secondaria).\nil termine swap area per indicare l’area del disco utilizzata per ospitare le pagine in memoria secondaria\nAlgoritmi di rimpiazzamento AKA Paginazione.\nObiettivo del rimpiazzamento Quando la memoria centrale è piena, come si gestisce il processo di rimpiazzamento? In che modo si decide quale sia la pagina da togliere? Su quali basi andare a valutare per fare questa decisione?\nUtilità, nel senso meno utilizzata Sarà utilizzata fra più tempo. Minimizzare il numero di page faults possibili. vorremmo evitare di togliere e rimpiazzare subito.\nNUMERO DI FRAME E PAGE FAULTS\nNon è che il numero dei frame aumenta implica che il numero di faults sia minore? Ma stranamente non è sempre così, gli algoritmi di rimpiazzamento potrebbero fare peggio se hai troppa memoria, per esempio [Algoritmi FIFO\nQuesto fenomeno è proprio studiato, ed è conosciuto nel nome di [[Anomalia di belady\nStringa di riferimenti È la sequenza degl iindirizzi di memoria al quale un processo accede durante la sua esecuzione, (ci importa solamente il numero di pagina!) Questo ci dà un criterio per valutare quanto buona è una pagina in memoria\nSlide stringa di riferimenti\nAlgoritmi FIFO Questo l’abbiamo studiato anche in [[Scheduler](/notes/algoritmi-fifo-\nquesto-fenomeno-è-proprio-studiato,-ed-è-conosciuto-nel-nome-di-[[anomalia-di-belady-\n###-stringa-di-riferimenti-\nè-la-sequenza-degl-iindirizzi-di-memoria-al-quale-un-processo-accede-durante-la-sua-esecuzione,-(ci-importa-solamente-il-numero-di-pagina!)-questo-ci-dà-un-criterio-per-valutare-quanto-buona-è-una-pagina-in-memoria\n–slide-stringa-di-riferimenti\n—-",
   "wordCount" : "1763",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
+  "dateModified": "2024-08-28T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -250,7 +252,7 @@ Questo è un aspetto della cache delle pagine di cui abbiamo già parlato in Liv
     <h1 class="post-title entry-hint-parent">
       Memoria virtuale
     </h1>
-    <div class="post-meta">Reading Time: 9 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 9 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

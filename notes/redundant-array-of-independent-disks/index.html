@@ -100,6 +100,8 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2025-06-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-04T00:00:00+00:00">
     <meta property="article:tag" content="☁Cloud-Computing">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -143,8 +145,8 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
   "articleBody": "Introduzione ai Redundant Array of Indipendent Disks I RAID ne abbiamo citato per la prima volta in Memoria. Come facciamo a stare su alla velocità del processore se questa va a crescere in modo esponenziale? Parallelizzazione della ricerca!. Ecco perché ci serve raid (oltre alla ridondanza quindi più sicuro). E possono anche fallire. → ammette recovery.\nE una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostituire anche quando stanno runnando.\nSpeed Analysis RAID Capacity Max failures Read speedup Write speedup Max reads Max writes L0 24 GiB 0 ≈ 6x ≈ 6x 1 1 L1 12 GiB 3 ≈ 3x ≈ 3x 2 1 L2 16 GiB 2 ≈ 4x ≈ 4x 1 1 L3 20 GiB 1 ≈ 5x ≈ 5x 1 1 L4 20 GiB 1 1x 1x 5 1 L5 20 GiB 1 1x 1x 6 3 The important thing to keep in mind is if the raid version is bit-wise or block wise. Having disks bit wise can help you speedup single writes or reads, having them block-wise help them do it concurrently. livello 0 (striping) I dati vengono messi su più dischi. Viene utilizzato per applicazioni in cui serve velocità, senza interesse di perdita di dati. Ad esempio in dipartimento ci mettono copie di SO per aggiornare il sistema operativo.\nUTILIZZI:\nper grandi trasferimenti di dati, efficiente, in particolare se la quantità di dati richiesta è relativamente grande rispetto alla dimensione degli strip\nper un gran numero di richieste indipendenti efficiente, in particolare se la quantità di dati richiesta è paragonabile alla dimensione degli strip\nSlide RAID 0\nSlides from Bologna Operating Systems Course 2023\nSlides from ETHz Course CCA 2025\nLivello 1 (mirroring) Ci sono 2n dischi e metà sono delle copie esatte. In questo caso la scrittura è più lenta della lettura, si può vedere però che offre una semplice e buona forma di ridondanza.\nTollera un singolo guasto al massimo, o più dischi differenti (non devono essere le due copie diciamo). Si dice fault tolerance livello 1.\nNested RAID We can nest raid 0 with 1 or the reverse. It has tradeoffs with respect to the I/O bandwidth. More used for large disk arrays usually present in the cloud.\nLivello 2 Si usano codici di Hamming a livello bit livello 3 Si usano bit di parità, ma lo facciamo a livello del singolo bit, mentre il livello 4 lo fa a livello del blocco.\nLivello 4 La differenza col livello 3 è che questo livello è molto più Coarse-Grained (see Cloud Reliability), quindi ha una banda minore, ma latenza minore per letture larghe.\nUtilizzo un intero disco solamente per la parità su un disco. così se si rompe un disco riesco a ricostruire le informazioni di quel disco.\nNon è efficiente perché se cambio un dato devo andare sempre a fare due write su dischi diversi. E poi continuo sempre a scrivere sullo stesso disco! Quindi fai finta 4 write contemporanei, per aggiornare gli altri dischi! Per questo c’è il bottleneck\nLivello 5 Se c’è un disco rotto si rallenta, ma non si perdono dei dati! è il funzionamento degradato dei raid. Non ho problemi di bottleneck, e ho ancora la velocità del livello 1\nLivello 6 http://www.cs.unibo.it/~renzo/doc/p245-blaum\nQuesto è per cose sicure, riesce a tollerare livello 2 fino a due dischi rotti. Ovviamente è una parità diversa, in modo che riesco ad avere più fault tolerance. Si utilizza un XOR in diagonale e questo sembra funzionare, anche se non ho capito perché.\nIntuizione mia In pratica qualunque modo prendi due dischi non di check (se uno è un disco di check è molto ez). Allora puoi fare questo: Recovery dei dischi in alto a sinistra e in basso a destra, questi si possono recoverare solamente con i bits diagonali, quindi posso già farlo. Utilizzo questi strips recuperati e utilizzo quelli orizzontali per recuperare l’altro della stessa row, poi utilizzo diagonale per recuperare quelli corrispondenti in row diverse e continuo così e riesco a recuperare tutto., Sarebbe molto utile fare un esempio per mostrare questo, ma spero che il me futuro quando legge questo riesca a ricordarsi l’esempio su carta. ",
   "wordCount" : "693",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-04T00:00:00Z",
+  "dateModified": "2025-06-04T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -236,7 +238,7 @@ E una altra cosa bella dei raid è che sono hot-swappable cioè li puoi sostitui
     <h1 class="post-title entry-hint-parent">
       Redundant Array of Independent Disks
     </h1>
-    <div class="post-meta">Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-04 00:00:00 +0000 UTC'>June 4, 2025</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

@@ -97,6 +97,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2024-10-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-10-30T00:00:00+00:00">
     <meta property="article:tag" content="💬Natural-Language-Processing">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -138,8 +140,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "articleBody": "In order to understand language models we need to understand structured prediction. If you are familiar with Sentiment Analysis, where given an input text we need to classify it in a binary manner, in this case the output space usually scales in an exponential manner. The output has some structure, for example it could be a tree, it could be a set of words etc… This usually needs an intersection between statistics and computer science.\nImage that summarizes the space of a structured prediction task\nDefinition of a language model A language model is defined as a distribution over a $\\Sigma^{*}$ (See Descrizione linguaggio for the Kleene star and the alphabet). So it assigns probabilities to $y \\in \\Sigma^{*}$. Remember: every element in $\\Sigma^{*}$ is finite. This is important.\nBut we need to be careful about some details. As $\\Sigma^{*}$ is an infinite set it’s not trivial to define a probability distribution over it. This motivates us to have two other definitions\nGlobally normalized language models We define a scoring function $\\Sigma^{*} \\to \\mathbb{R}$ and the normalize it over all $y \\in \\Sigma^{*}$. We define a scoring function $s$. Then we can do the following:\n$$ p(y) := \\frac{\\exp(-s(y))}{\\sum_{y' \\in \\Sigma^{*}} \\exp(- s(y'))} := \\frac{1}{Z} \\exp(- s(y)) $$ The $Z$ is a sum over an infinite set, which is often difficult to compute. Sometimes it is computable instead, the negative is for historical purposes: more similar to physics models Other problem is that the normalizer sometimes doesn’t converge. These are also sometimes called energy based LMs.\nLocally normalized language models In this case, we try to take advantage of the structure of the strings, which is just a concatenation of the elements in an alphabet. Another advantage is not calculating the hideous partition function. We need a $EOS$ token and $BOS$ token in this case. Those are needed to model the starting symbol and the end symbol. Locally normalized language models model the conditional distribution $p(y \\mid \\boldsymbol{y})$ which means given a string $\\boldsymbol{y} \\in \\Sigma^{*}$ try to predict $y \\in \\Sigma$.\n$$ p(\\boldsymbol{y}) = p(y_{1} \\mid BOS) p(y_{2} \\mid BOS y_{1}) \\dots p(y_{n} \\mid \\boldsymbol{y}_{",
   "wordCount" : "356",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-10-30T00:00:00Z",
+  "dateModified": "2024-10-30T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -231,7 +233,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Language Models
     </h1>
-    <div class="post-meta">Reading Time: 2 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-10-30 00:00:00 +0000 UTC'>October 30, 2024</span>&nbsp;·&nbsp;Reading Time: 2 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

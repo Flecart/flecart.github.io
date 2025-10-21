@@ -106,6 +106,8 @@ Theorem Statement $$ \left( \sum_{i = 1}^{n} x_{i}y_{i} \right) ^{2} \leq \left(
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2024-08-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-08-11T00:00:00+00:00">
     <meta property="article:tag" content="⚗Linear-Algebra">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -155,8 +157,8 @@ We have equality if and only if $u$ and $v$ are linearly dependent (this one is 
   "articleBody": "This note briefly states and proves one of the most famous inequalities in geometry/analysis.\nTheorem Statement $$ \\left( \\sum_{i = 1}^{n} x_{i}y_{i} \\right) ^{2} \\leq \\left( \\sum_{i= 1}^{n} x^{2}_{i} \\right) \\left( \\sum_{i = 1}^{n} y^{2}_{i} \\right) $$$$ \\lvert \\langle u, v \\rangle \\rvert ^{2} \\leq \\langle u, u \\rangle \\cdot \\langle v, v \\rangle $$ with $u = \\left( x_{1}, \\dots, x_{n} \\right)$ and $v = \\left( y_{1}, \\dots, y_{n} \\right)$ and the $\\langle \\cdot, \\cdot \\rangle$ operator is the inner product. We have equality if and only if $u$ and $v$ are linearly dependent (this one is easy to prove if seen from the vectorial view).\nThere are many possible proofs, but the easy one is just doing some counts:\nProof: direct counts This is the most stupid proof possible, just expand every possible count!\nFrom the hypothesis, we have that\n$$ \\sum_{i = 1}^{n}(x^{2}_{i}y^{2}_{i}) + \\sum_{i \\neq j}^{n} (x_{i}y_{i}x_{j}y_{j}) \\leq \\sum_{i = 1}^{n}(x^{2}_{i}y^{2}_{i}) + \\sum_{i \\neq j}^{n} (x_{i}^{2}y^{2}_{j}) $$$$ \\sum_{i \\neq j}^{n} (x_{i}y_{i}x_{j}y_{j}) = 2\\sum_{i \u003c j}^{n} (x_{i}y_{i}x_{j}y_{j}) \\leq^{?} \\sum_{i \\neq j}^{n} (x_{i}^{2}y^{2}_{j}) $$$$ \\left( x_{i}y_{j} - x_{j}y_{i} \\right) ^{2} \\geq 0 \\implies x^{2}_{i}y^{2}_{j} + x^{2}_{j}y^{2}_{i} - 2x_{i}y_{i}x_{j}y_{j} \\geq 0 \\implies x^{2}_{i}y^{2}_{j} + x^{2}_{j}y^{2}_{i} \\geq 2x_{i}y_{i}x_{j}y_{j} $$ And when you sum up for all the couples $(i, j)$ you get the above inequality. This also tells you why it’s easy to check if $x_{i} = \\lambda y_{i}$ for some $\\lambda \\in \\mathbb{R}$ then the above sum is 0, so we have equality.\nDrawback: this proof works only on a specific inner product, general proof shouldn’t assume something about the product, but you get the gist of why it does work in this case anyway.\nProof: general approach Let’s consider the function $f(t) = \\lVert u - tv \\rVert^{2}$, we observe that $\\forall t \\in \\mathbb{R}$ we have that $f(t) \\geq 0$. Now let’s expand this product\n$$ f(t) = \\langle u - tv, u - tv \\rangle = \\langle u, u \\rangle - 2t \\langle u, v \\rangle + t^{2} \\langle v, v \\rangle = t^{2} \\lVert v^{2} \\rVert - 2 \\langle u, v \\rangle t + \\lVert u^{2} \\rVert $$Now we use high school knowledge, as the function is always non-negative and it’s a simple $\\mathbb{R} \\to \\mathbb{R}$ function, we know that the discriminant should be non-positive, which means $b^{2} - 4ac \\leq 0$, let’s impose this condition on the function and we’ll have that:\n$$ 4\\lvert \\langle u, v \\rangle \\rvert ^{2} - 4 \\lVert v^{2} \\rVert \\lVert u^{2} \\rVert \\leq 0 \\implies \\lvert \\langle u, v \\rangle \\rvert ^{2} \\leq \\langle u, u \\rangle \\cdot \\langle v, v \\rangle $$ Which ends the proof $\\square$.\nApplications In this section I would like to list some known applications of this inequality. The inequality is a classical one, so one should expect many applications. I will try to expand this section when I see some during my studies.\nCovariance-Variance relations $$ Cov(X, Y)^{2} \\leq Var(X) Var(Y) $$$$\\rho_{X, Y} = \\frac{Cov(X, Y)}{\\sqrt{ Var(X) Var(Y) }}$$$$\\mathbb{E}_{x, y}[XY]^{2} \\leq \\mathbb{E}_{x}[X^{2}]\\mathbb{E}_{y}[Y^{2}]$$ In order to apply this, you just need to see that the expectation operator can be viewed as a inner product on the space of random variables, so let’s prove this first: Let’s consider a probability space $(\\Omega, \\mathcal{F}, \\mathbb{P})$ with $\\Omega$ the sample space, $\\mathcal{F}$ the sigma algebra and $\\mathbb{P}$ the probability measure on this space, let’s also define $X, Y$ to be random variables, i.e. functions from $\\Omega$ to $\\mathbb{R}$. In order to prove that the expectation operator is a inner product we need to check three conditions:\nLinearity Symmetry Positive definiteness They should be all trivial to verify, so we move on. Now that we have this link, it’s easy to prove the original construct with covariance and variance: we just need to substitute the correct variables.\n",
   "wordCount" : "630",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-11T00:00:00Z",
+  "dateModified": "2024-08-11T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -248,7 +250,7 @@ We have equality if and only if $u$ and $v$ are linearly dependent (this one is 
     <h1 class="post-title entry-hint-parent">
       Cauchy-Schwarz Inequality
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-11 00:00:00 +0000 UTC'>August 11, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>

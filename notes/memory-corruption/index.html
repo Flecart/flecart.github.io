@@ -107,6 +107,8 @@ Every new function call allocates a new block, with his local variables. How the
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2024-06-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-06-02T00:00:00+00:00">
     <meta property="article:tag" content="🛡️Cybersecurity">
       <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -157,8 +159,8 @@ We use C, as it is the easiest way to show how this could be attacked.">
   "articleBody": "First of all, we need to have a strong understanding of how a program allocates memory during its execution. See Memoria, Memoria virtuale and other notes about Nomi e Scope, Gestione della memoria. The thing you have to remember is that\nEvery new function call allocates a new block, with his local variables. How the calling parameters are stored in the stack How the heap is allocated (common heap algos are in Gestione della memoria) How the stack grows (and how it can overflow it, and overwriting important data). Common attack vectors We use C, as it is the easiest way to show how this could be attacked.\nThe threat model Attacker’s goal:\nInject malicious code into a program and execute it (Return Object Programming) Gain all privileges and capabilities of the target program (e.g. setuid) System’s goal:\nprevent code injection Integrity – program should execute faithfully, as programmer intended Crashes should be handled gracefully Attacker’s capability:\nsubmit arbitrary input to the program Environment variables Command line parameters Contents of files Network data The thing is that it is highly variable. Stack smash example Some functions don't have boundary controls, for example `strcpy` or `gets` and are vulnerable to stack overflows. Common defenses Compiler Hardening These are just hardening attempts, which means it makes the attack more difficult, but still not impossible to execute.\nStack canaries Just a random string that is checked before returning. This allows you to check if there has been a stack overflow. Usually this can be bypassed if you can leak the value of the canary before-hand.\nNon executable stacks So you can’t execute the shell-code you have just wrote in the stack! :).\nOs hardening Some hardening at the OS level to prevent common exploits.\nAddress-Space Layout Randomization (ASLR) The location of the data and code are always randomized when the program is loaded. This makes it more difficult to have exploits jumping around the code! Example ROP attacks are more difficult. (ROP = Return-oriented-programming, method that allows you to control where the program jumps by overwriting return addresses.)\nSome rules Use memory safe languages Example: C is not memory safe, see Teoria dei Tipi. using safe languages allow you to have provable guarantees that the type is always respected and stuff like this!\nData vs Code You need to differentiate the data with the code. They are two very different things! Many different exploits use data to be interpreted as code, and thus have this bug.\nPatch! Patch as soon as you can. most of the vulnerabilities are discovered but then left to be, without been patched for a long time. (e.g. exploit kits for these vulnerabilities) Automatic patches are the best.\n",
   "wordCount" : "449",
   "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-06-02T00:00:00Z",
+  "dateModified": "2024-06-02T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Xuanqiang 'Angelo' Huang"
@@ -250,7 +252,7 @@ We use C, as it is the easiest way to show how this could be attacked.">
     <h1 class="post-title entry-hint-parent">
       Memory Corruption
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang &#39;Angelo&#39; Huang
 
 </div>
