@@ -19,7 +19,7 @@ Another example of code reuse can be the “has-a” relation composition, which
 With aggregations, we can also see delegation calls, when you have a class, and call a method of that class.
 ">
 <meta name="author" content="
-By Xuanqiang &#39;Angelo&#39; Huang">
+By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/inheritance/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
@@ -157,14 +157,14 @@ With aggregations, we can also see delegation calls, when you have a class, and 
   "keywords": [
     
   ],
-  "articleBody": "Difference between Inheritance and Subtyping We say that a subclass is inheritance and subtyping. We have studied subtyping in Typing and Subtyping and it entails mainly two things:\nLiskov Substitution Polymorphism of the types While inheritance is just the code reuse and specialization. Another example of code reuse can be the “has-a” relation composition, which couples two objects together. With aggregations, we can also see delegation calls, when you have a class, and call a method of that class. Type relations between Mutable and Immutable The cleanest solution between these two methods is just to separate the interfaces since:\nIf Mutable \u003c Immutable, we violate behavioural subtyping. If Immutable \u003c Mutable, we violate the syntactic subtyping, since mutable is wider interface usually (not always!). Java has a bad design because Immutable \u003c Mutable.\nSeparation can be done in two ways usually:\nAggregation with delegation (this is not a bad idea actually). This solution might lead to lots of boilerplate code. Access methods for local methods. Common superclass. We can also inherit without subtyping (like C++ does support that with private or protected inheritance, but not safely, also Eiffel). Inheritance might be sometimes unnecessary. Suggestions for good code We should not change to dynamically-bound methods, this can lead to many kinds of unexpected behaviours. We should not inherit from classes that change often. Use subclassing only if there is an “is-a” relation: Focus on Syntactic and behavioral subtypes. Do not rely on implementation details: Use precise documentation (contracts where possible). When evolving superclasses, do not mess around with dynamically-bound methods: Do not add or remove calls, or change the order of calls. Do not specialize superclasses that are expected to change often. Method Resolution Languages differ in method resolution in classes, you need to be able to resolve them correctly yourself, the main difference between the methods we explored are the following:\nJava:\nChooses most type specific method among the hierarchy This means method declaration in all possible overloads. C#\nThis is bound statically. Chooses the most specific method in the class of the receiver. Impotant to control the override if we want methods to behave effectively.\nBinary Methods For standard binary methods like equal to, we would like the subtype to have the same parameter of itself, but we know that this is not typesafe. We now want some methods to resolve these.\nType Tests We could make explicit type tests, and get the more general value, for example: boolean equals(Object o) { if (o instanceof Circle) { Circle c = (Circle) o; // check equality } else return false; } But this is very very tedious to write, and check everytime. Luckily nowadays we have copilots.\nProblems- Tedious to write- Code is not extensible- Requires type cast\nVisitor Patterns Double invocation, also called the visitor patter, see Design patterns. class Shape { Shape intersect( Shape s ){ return s.intersectShape( this ); } Shape intersectShape( Shape s ){ // general code for all shapes } Shape intersectRectangle( Rectangle r ){ return intersectShape( r ); } } We call more specialized methods.\nOverloading Overloading and Dynamic resolution of the method, but we are not solving the typesafety problem. class Shape { Shape intersect( Shape s ) { // general code for all shapes } } class Rectangle : Shape { Rectangle intersect( Rectangle r ) { // efficient code for two rectangles } } static Shape intersect( Shape s1, Shape s2 ) { return( s1 as dynamic ).intersect( s2 as dynamic ); } In this case, the method is resolved to the Rectangle only if both methods are Rectangle, if any of them, or if I remove the dynamic resolution of any of the methods then, it will call the Shape method.\nMultiple Dispatch This is relatively a new method to handle the dispatch of the methods. It is implemented in languages like, CLU, Cecil, Fortress, MultiJava, not any that I know of.\n▪ Problems\nPerformance overhead of method look-up at run time Extra requirements are needed to ensure there is a“unique best method” for every call I would also personally add that it would be difficult and expensive to implement everything. This has a drawback.\nInformation Hiding Basic Principles Hide implementation details Reduce dependencies between modules Classes can be understood, reused,and modified in isolation. One classical principle is having interfaces and their implementations, in this manner you expose only the contract, or interface in front of it.\nJava and Eiffel Access Modifiers public: Client interface\nprotected: Subclass + friend interface (within the same package)\n(Default/Package-Private): Friend interface (within the same package)\nprivate: Implementation\nEiffel: clients clause in feature declarations\nfeature { ANY }: Client interface (accessible to all classes) feature { T }: Friend interface for class T (accessible only to class T and its descendants) feature { NONE }: Implementation (accessible only by the object itself, using this) Note: All exports inherently include subclasses (descendants). Overriding or Hiding? class Super {...private void m( ){ System.out.println(“Super”); }public void test( Super v ){ v.m( ); }} class Sub extends Super {public void m( ){ System.out.println(“Sub”); }} Super v = new Sub( );v.test( v ); Private methods cannot be overidden, just hidden. We say override if the method was accessible from the subclass. Fragile Base Class Problem When we change the base class, we might break the subclasses. This makes modification of badly done abstractions very costly, for this reason it would be also suggested to have as few abstaction chains as possible. Here is an example of such a problem:\nclass C {int x;public void inc1( ){ this.inc2( ); }private void inc2( ){ x++; }} class CS extends C {public void inc2( ) { inc1( ); }} CS cs = new CS( 5 );cs.inc2( );System.out.println( cs.x ); If you change from private to protected or public, then you would see the problems!\nMultiple Inheritance The main idea here is when a single type can have several supertypes, which forms a DAG. This allows also for code re-use.\nSimulating Multiple Inheritance Languages like Java or C# do not allow for multiple inheritance. If that is needed, then it is simulated with aggregation.\nImage from the course slides\n",
-  "wordCount" : "1025",
+  "articleBody": "Difference between Inheritance and Subtyping We say that a subclass is inheritance and subtyping. We have studied subtyping in Typing and Subtyping and it entails mainly two things:\nLiskov Substitution Polymorphism of the types While inheritance is just the code reuse and specialization. Another example of code reuse can be the “has-a” relation composition, which couples two objects together. With aggregations, we can also see delegation calls, when you have a class, and call a method of that class. Type relations between Mutable and Immutable The cleanest solution between these two methods is just to separate the interfaces since:\nIf Mutable \u003c Immutable, we violate behavioural subtyping. If Immutable \u003c Mutable, we violate the syntactic subtyping, since mutable is wider interface usually (not always!). Java has a bad design because Immutable \u003c Mutable.\nSeparation can be done in two ways usually:\nAggregation with delegation (this is not a bad idea actually). This solution might lead to lots of boilerplate code. Access methods for local methods. Common superclass. We can also inherit without subtyping (like C++ does support that with private or protected inheritance, but not safely, also Eiffel). Inheritance might be sometimes unnecessary. Suggestions for good code We should not change to dynamically-bound methods, this can lead to many kinds of unexpected behaviours. We should not inherit from classes that change often. Use subclassing only if there is an “is-a” relation: Focus on Syntactic and behavioral subtypes. Do not rely on implementation details: Use precise documentation (contracts where possible). When evolving superclasses, do not mess around with dynamically-bound methods: Do not add or remove calls, or change the order of calls. Do not specialize superclasses that are expected to change often. Method Resolution Languages differ in method resolution in classes, you need to be able to resolve them correctly yourself, the main difference between the methods we explored are the following:\nJava:\nChooses most type specific method among the hierarchy\nThis means method declaration in all possible overloads.\nFirst looks at the static declaration of the function, if it’s not present, then you can already return the error\nCheck if the function is accessible at that level.\nDynamic binding, that is the standard in Java, but you could also have static methods. This is enough to generate the bytecode.\nAt run time we:\nCompute receiver reference, then we can look at the class of the receiver (going up in the class hierarchy, and finding the most specific type). C#\nThis is bound statically. Chooses the most specific method in the class of the receiver. Impotant to control the override if we want methods to behave effectively.\nBinary Methods For standard binary methods like equal to, we would like the subtype to have the same parameter of itself, but we know that this is not typesafe. We now want some methods to resolve these.\nType Tests We could make explicit type tests, and get the more general value, for example: boolean equals(Object o) { if (o instanceof Circle) { Circle c = (Circle) o; // check equality } else return false; } But this is very very tedious to write, and check everytime. Luckily nowadays we have copilots.\nProblems- Tedious to write- Code is not extensible- Requires type cast\nVisitor Patterns Double invocation, also called the visitor patter, see Design patterns. class Shape { Shape intersect( Shape s ){ return s.intersectShape( this ); } Shape intersectShape( Shape s ){ // general code for all shapes } Shape intersectRectangle( Rectangle r ){ return intersectShape( r ); } } We call more specialized methods.\nOverloading Overloading and Dynamic resolution of the method, but we are not solving the typesafety problem. class Shape { Shape intersect( Shape s ) { // general code for all shapes } } class Rectangle : Shape { Rectangle intersect( Rectangle r ) { // efficient code for two rectangles } } static Shape intersect( Shape s1, Shape s2 ) { return( s1 as dynamic ).intersect( s2 as dynamic ); } In this case, the method is resolved to the Rectangle only if both methods are Rectangle, if any of them, or if I remove the dynamic resolution of any of the methods then, it will call the Shape method.\nMultiple Dispatch This is relatively a new method to handle the dispatch of the methods. It is implemented in languages like, CLU, Cecil, Fortress, MultiJava, not any that I know of.\nProblems Performance overhead of method look-up at run time Extra requirements are needed to ensure there is a“unique best method” for every call I would also personally add that it would be difficult and expensive to implement everything. This has a drawback.\nInformation Hiding Basic Principles Hide implementation details Reduce dependencies between modules Classes can be understood, reused,and modified in isolation. One classical principle is having interfaces and their implementations, in this manner you expose only the contract, or interface in front of it.\nClient Interface Check out here for a discussion. But the rough idea is everything that you need to define the public methods.\nClass name is the unique identifier for a class. Think of it as the title of a blueprint. A class is a template for creating objects, and the class name is how you refer to that template. Type parameters and their bounds This concept relates to generics, which allow you to write classes and methods that can work with any data type. Super-class (also called a parent class or base class) is a class from which another class inherits. This is the core of the “is-a” relationship in inheritance. Super-interfaces is an interface that a class implements or that another interface extends. An interface is like a contract that specifies what a class must do (i.e., what methods it must have) but not how it must do them. Signatures of exported methods and fields This refers to the declarations of the methods and variables (fields) that are accessible from outside the class. “Exported” typically means public, protected, or (in some languages) package-private. anything that isn’t private. Client interface of direct superclass is the set of all public (and protected) methods and fields of the one class it directly inherits from. Subclass Interface This topic describes the special implementation-level relationship between a superclass (parent) and a subclass (child).\nThis “subclass interface” is a special set of tools given only to the subclasses to help them build upon the parent’s functionality. This is most often managed using the protected keyword. It’s the collection of fields and methods that a superclass exposes only to its subclasses, but not to the general public.\nFriend Interface The main idea is that with friends I can access all the private and protected methods of another class.\nThis set of concepts describes a pattern for managing tightly coupled classes—classes that must work together very closely to function.\nThis pattern is about breaking the normal rules of encapsulation (private, public) in a controlled, explicit way, usually for performance or to hide complex internal details.\nJava and Eiffel Access Modifiers Mostly three types of access modifiers that we list here. Also remember that overrides can only be about more visible methods, not less visible ones. The default access level in Java is package-private.\npublic: Client interface\nprotected: Subclass + friend interface (within the same package)\n(Default/Package-Private): Friend interface (within the same package)\nprivate: Implementation\nThis means we can access any variable within the same class only. Eiffel: clients clause in feature declarations\nfeature { ANY }: Client interface (accessible to all classes) feature { T }: Friend interface for class T (accessible only to class T and its descendants) feature { NONE }: Implementation (accessible only by the object itself, using this, and only using the this keyword, and not other keywords, most languages cannot express this) Note: All exports inherently include subclasses (descendants). Overriding or Hiding? class Super {...private void m( ){ System.out.println(“Super”); }public void test( Super v ){ v.m( ); }} class Sub extends Super {public void m( ){ System.out.println(“Sub”); }} Super v = new Sub( );v.test( v ); Private methods cannot be overidden, just hidden. We say override if the method was accessible from the subclass. Fragile Base Class Problem When we change the base class, we might break the subclasses. This makes modification of badly done abstractions very costly, for this reason it would be also suggested to have as few abstaction chains as possible. Here is an example of such a problem:\nclass C {int x;public void inc1( ){ this.inc2( ); }private void inc2( ){ x++; }} class CS extends C {public void inc2( ) { inc1( ); }} CS cs = new CS( 5 );cs.inc2( );System.out.println( cs.x ); If you change from private to protected or public, then you would see the problems!\nMultiple Inheritance The main idea here is when a single type can have several supertypes, which forms a DAG. This allows also for code re-use.\nSimulating Multiple Inheritance Languages like Java or C# do not allow for multiple inheritance. If that is needed, then it is simulated with aggregation.\nImage from the course slides\nProblems with Multiple Inheritance Diamond Problem: The classic problem where a class inherits from two classes that both inherit from a common superclass. This can lead to ambiguity about which inherited properties or methods to use. The main problem here is how to solve the ambiguity. Resolving Ambiguities In C++ the ambiguities are resolved by the client (but its bad since the client needs to know the implementation details, which is not always granted). We can also override both methods, but this is ok only if we are specializing something similar, if their usage is different, then it’s not sure if this is the correct behaviour. Or we can Rename as Eiffel does. But when we have a diamond it’s really difficult. How many fields should we instantiate? Should they be different for the two we have?\nVirtual and Non-Virtual Inheritance Non-Virtual means we will have two copies of the superclass, while virtual means we will have only one copy of the superclass. C++ supports both virtual and non-virtual inheritance. By default it uses non-virtual inheritance, but you can specify virtual inheritance using the virtual keyword, but this adds some runtime overhead (we need to add the virtual keyword in the inheritance part). When virtual is used, the baseclass is called only once, by the smallest subclass.\ngraph TD A --\u003e B A --\u003e C B --\u003e D B --\u003e A2[\"Stack: A/B\"] C --\u003e A3[\"Stack: A/C\"] D --\u003e A4[\"Stack: A/B/C/D\"] graph TD A --\u003e B A --\u003e C B --\u003e D B --\u003e A2[\"Stack: A (p)/B\"] C --\u003e A3[\"Stack: A(p)/C\"] D --\u003e A4[\"Stack: A, pointed by both C/D /B\"] Pros and Cons for Multiple-Inheritance Pros Cons Increases expressiveness Ambiguity resolution - Explicit selection - Merging - Renaming Avoids overhead of delegation pattern Repeated inheritance - Complex semantics - Initialization Complicated! Linearization Mixins and traits provide a form of reuse- Methods and state that can be mixed into various classes- Example: Functionality to persist an object. Python, Ruby, Scala, Squeak Smalltalk. So it’s a different way to add functionality to classes.\nTraits Traints can extend exactly one superclass. They solve the diamond problem with linearization, we will analyze this phenomenon later. ▪ Traits are very dynamic,which complicates staticreasoning▪ Traits do not know howtheir superclasses getinitialized▪ Traits do not know whichmethods they override▪ Traits do not know wheresuper-calls are bound to\ntrait Backup extends Cell { var backup: Int = 0 override def put( v: Int ) = { // Save the old value before calling the next put (super.put) backup = value super.put( v ) } def undo = { super.put( backup ) } } class Cell { var value: Int = 0 def put( v: Int ) = { value = v } def get: Int = value } object Main1 { def main( args: Array[ String ] ) = { val a = new Cell with Backup a.put( 5 ) // value=5, backup=0 a.put( 3 ) // value=3, backup=5 (value before put(3) was 5) a.undo // value is set back to backup (5) println( a.get ) // Output: 5 } } Mathematical Model for Linearization The key concept to understanding the semantics of Scala traits: bring types in a linear order\nDefine overriding and super-calls according to this order (so easy resolution). For a class or trait C extends C’ with C₁ … with Cₙ the linearization L(C) is C, L(Cₙ) • … • L(C₁) • L(C')\n$$ \\epsilon • B = B $$$$ (a, A) • B = \\begin{cases} a, (A • B) \u0026 \\text{if } a \\neq B \\\\ A • B \u0026 \\text{otherwise} \\end{cases} $$Method Selection with Linearization Slide from Course Slides\nProblems with Traits ",
+  "wordCount" : "2121",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-10-09T00:00:00Z",
   "dateModified": "2025-10-09T00:00:00Z",
   "author":{
     "@type": "Person",
-    "name": "Xuanqiang 'Angelo' Huang"
+    "name": "Xuanqiang Angelo Huang"
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -253,8 +253,8 @@ With aggregations, we can also see delegation calls, when you have a class, and 
     <h1 class="post-title entry-hint-parent">
       Inheritance
     </h1>
-    <div class="post-meta"><span title='2025-10-09 00:00:00 +0000 UTC'>October 9, 2025</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
-By Xuanqiang &#39;Angelo&#39; Huang
+    <div class="post-meta"><span title='2025-10-09 00:00:00 +0000 UTC'>October 9, 2025</span>&nbsp;·&nbsp;Reading Time: 10 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang
 
 </div>
   </header> <div class="toc">
@@ -293,6 +293,12 @@ By Xuanqiang &#39;Angelo&#39; Huang
                 <li>
                     <a href="#basic-principles" aria-label="Basic Principles">Basic Principles</a></li>
                 <li>
+                    <a href="#client-interface" aria-label="Client Interface">Client Interface</a></li>
+                <li>
+                    <a href="#subclass-interface" aria-label="Subclass Interface">Subclass Interface</a></li>
+                <li>
+                    <a href="#friend-interface" aria-label="Friend Interface">Friend Interface</a></li>
+                <li>
                     <a href="#java-and-eiffel-access-modifiers" aria-label="Java and Eiffel Access Modifiers">Java and Eiffel Access Modifiers</a></li>
                 <li>
                     <a href="#overriding-or-hiding" aria-label="Overriding or Hiding?">Overriding or Hiding?</a></li>
@@ -305,7 +311,29 @@ By Xuanqiang &#39;Angelo&#39; Huang
                         <ul>
                         
                 <li>
-                    <a href="#simulating-multiple-inheritance" aria-label="Simulating Multiple Inheritance">Simulating Multiple Inheritance</a>
+                    <a href="#simulating-multiple-inheritance" aria-label="Simulating Multiple Inheritance">Simulating Multiple Inheritance</a></li>
+                <li>
+                    <a href="#problems-with-multiple-inheritance" aria-label="Problems with Multiple Inheritance">Problems with Multiple Inheritance</a></li>
+                <li>
+                    <a href="#resolving-ambiguities" aria-label="Resolving Ambiguities">Resolving Ambiguities</a></li>
+                <li>
+                    <a href="#virtual-and-non-virtual-inheritance" aria-label="Virtual and Non-Virtual Inheritance">Virtual and Non-Virtual Inheritance</a></li>
+                <li>
+                    <a href="#pros-and-cons-for-multiple-inheritance" aria-label="Pros and Cons for Multiple-Inheritance">Pros and Cons for Multiple-Inheritance</a></li></ul>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#linearization" aria-label="Linearization">Linearization</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#traits" aria-label="Traits">Traits</a></li>
+                <li>
+                    <a href="#mathematical-model-for-linearization" aria-label="Mathematical Model for Linearization">Mathematical Model for Linearization</a></li>
+                <li>
+                    <a href="#method-selection-with-linearization" aria-label="Method Selection with Linearization">Method Selection with Linearization</a></li>
+                <li>
+                    <a href="#problems-with-traits" aria-label="Problems with Traits">Problems with Traits</a>
                 </li>
             </ul>
             </ul>
@@ -375,8 +403,25 @@ With aggregations, we can also see <strong>delegation</strong> calls, when you h
 <p>Languages differ in method resolution in classes, you need to be able to resolve them correctly yourself, the main difference between the methods we explored are the following:</p>
 <p><strong>Java</strong>:</p>
 <ul>
-<li>Chooses most type specific method among the hierarchy</li>
-<li>This means method declaration in all possible overloads.</li>
+<li>
+<p>Chooses most type specific method among the hierarchy</p>
+</li>
+<li>
+<p>This means method declaration in all possible overloads.</p>
+</li>
+<li>
+<p>First looks at the static declaration of the function, if it&rsquo;s not present, then you can already return the error</p>
+</li>
+<li>
+<p>Check if the function is accessible at that level.</p>
+</li>
+<li>
+<p><strong>Dynamic binding</strong>, that is the standard in Java, but you could also have static methods. This is enough to generate the bytecode.</p>
+</li>
+</ul>
+<p>At run time we:</p>
+<ul>
+<li>Compute receiver reference, then we can look at the class of the receiver (going up in the class hierarchy, and finding the most specific type).</li>
 </ul>
 <p><strong>C#</strong></p>
 <ul>
@@ -437,8 +482,8 @@ We now want some methods to resolve these.</p>
 </span></span></code></pre></div><p>In this case, the method is resolved to the Rectangle only if both methods are Rectangle, if any of them, or if I remove the dynamic resolution of any of the methods then, it will call the Shape method.</p>
 <h4 id="multiple-dispatch">Multiple Dispatch<a hidden class="anchor" aria-hidden="true" href="#multiple-dispatch">#</a></h4>
 <p>This is relatively a new method to handle the dispatch of the methods. It is implemented in languages like, CLU, Cecil, Fortress, MultiJava, not any that I know of.</p>
-<p>▪ Problems</p>
 <ul>
+<li>Problems</li>
 <li>Performance overhead of method look-up at run time</li>
 <li>Extra requirements are needed to ensure there is a“unique best method” for every call</li>
 <li>I would also personally add that it would be difficult and expensive to implement everything.</li>
@@ -452,7 +497,52 @@ We now want some methods to resolve these.</p>
 <li>Classes can be understood, reused,and modified in isolation.</li>
 </ul>
 <p>One classical principle is having interfaces and their implementations, in this manner you expose only the contract, or interface in front of it.</p>
+<h4 id="client-interface">Client Interface<a hidden class="anchor" aria-hidden="true" href="#client-interface">#</a></h4>
+<p>Check out <a href="https://gemini.google.com/share/56d51d9e8752">here</a> for a discussion. But the rough idea is everything that you need to define the public methods.</p>
+<ul>
+<li>Class name
+<ul>
+<li>is the unique identifier for a class. Think of it as the title of a blueprint. A class is a template for creating objects, and the class name is how you refer to that template.</li>
+</ul>
+</li>
+<li>Type parameters and their bounds
+<ul>
+<li>This concept relates to <strong>generics</strong>, which allow you to write classes and methods that can work with any data type.</li>
+</ul>
+</li>
+<li>Super-class
+<ul>
+<li>(also called a parent class or base class) is a class from which another class <em>inherits</em>. This is the core of the &ldquo;is-a&rdquo; relationship in inheritance.</li>
+</ul>
+</li>
+<li>Super-interfaces
+<ul>
+<li>is an interface that a class <em>implements</em> or that another interface <em>extends</em>. An interface is like a contract that specifies <em>what</em> a class must do (i.e., what methods it must have) but not <em>how</em> it must do them.</li>
+</ul>
+</li>
+<li>Signatures of exported methods and fields
+<ul>
+<li>This refers to the <em>declarations</em> of the methods and variables (fields) that are accessible from <em>outside</em> the class. &ldquo;Exported&rdquo; typically means <code>public</code>, <code>protected</code>, or (in some languages) package-private. anything that isn&rsquo;t <code>private</code>.</li>
+</ul>
+</li>
+<li>Client interface of direct superclass
+<ul>
+<li>is the set of all <code>public</code> (and <code>protected</code>) methods and fields of the one class it directly inherits from.</li>
+</ul>
+</li>
+</ul>
+<h4 id="subclass-interface">Subclass Interface<a hidden class="anchor" aria-hidden="true" href="#subclass-interface">#</a></h4>
+<p>This topic describes the special implementation-level relationship between a <strong>superclass</strong> (parent) and a <strong>subclass</strong> (child).</p>
+<p>This &ldquo;subclass interface&rdquo; is a special set of tools given <em>only</em> to the subclasses to help them build upon the parent&rsquo;s functionality. This is most often managed using the <code>protected</code> keyword.
+It&rsquo;s the collection of fields and methods that a superclass exposes <em>only</em> to its subclasses, but <em>not</em> to the general public.</p>
+<h4 id="friend-interface">Friend Interface<a hidden class="anchor" aria-hidden="true" href="#friend-interface">#</a></h4>
+<p>The main idea is that with friends I can access all the private and protected methods of another class.</p>
+<p>This set of concepts describes a pattern for managing <strong>tightly coupled classes</strong>—classes that must work together very closely to function.</p>
+<p>This pattern is about breaking the normal rules of encapsulation (<code>private</code>, <code>public</code>) in a controlled, explicit way, usually for performance or to hide complex internal details.</p>
 <h4 id="java-and-eiffel-access-modifiers">Java and Eiffel Access Modifiers<a hidden class="anchor" aria-hidden="true" href="#java-and-eiffel-access-modifiers">#</a></h4>
+<p>Mostly three types of access modifiers that we list here.
+Also remember that overrides can only be about more visible methods, not less visible ones.
+The default access level in Java is package-private.</p>
 <ul>
 <li>
 <p><code>public</code>: <strong>Client interface</strong></p>
@@ -465,13 +555,16 @@ We now want some methods to resolve these.</p>
 </li>
 <li>
 <p><code>private</code>: <strong>Implementation</strong></p>
+<ul>
+<li>This means we can access any variable within the same class only.</li>
+</ul>
 </li>
 <li>
 <p><strong>Eiffel: <code>clients</code> clause in feature declarations</strong></p>
 <ul>
 <li><code>feature { ANY }</code>: <strong>Client interface</strong> (accessible to all classes)</li>
 <li><code>feature { T }</code>: <strong>Friend interface</strong> for class <code>T</code> (accessible only to class <code>T</code> and its descendants)</li>
-<li><code>feature { NONE }</code>: <strong>Implementation</strong> (accessible only by the object itself, using <code>this</code>)</li>
+<li><code>feature { NONE }</code>: <strong>Implementation</strong> (accessible only by the object itself, using <code>this</code>, and only using the this keyword, and not other keywords, most languages cannot express this)</li>
 <li><strong>Note:</strong> All exports inherently include <strong>subclasses</strong> (descendants).</li>
 </ul>
 </li>
@@ -500,6 +593,136 @@ If that is needed, then it is simulated with <strong>aggregation</strong>.</p>
 <img src="/images/notes/Inheritance-20251016124123668.webp" style="width: 100%"   alt="Inheritance-20251016124123668" title="Inheritance-20251016124123668"/>
 <figcaption><p style="text-align:center;"> Image from the course slides</p></figcaption>
 </figure>
+<h4 id="problems-with-multiple-inheritance">Problems with Multiple Inheritance<a hidden class="anchor" aria-hidden="true" href="#problems-with-multiple-inheritance">#</a></h4>
+<ul>
+<li><strong>Diamond Problem</strong>: The classic problem where a class inherits from two classes that both inherit from a common superclass. This can lead to <em>ambiguity</em> about which inherited properties or methods to use. The main problem here is how to solve the ambiguity.</li>
+</ul>
+<h4 id="resolving-ambiguities">Resolving Ambiguities<a hidden class="anchor" aria-hidden="true" href="#resolving-ambiguities">#</a></h4>
+<ol>
+<li>In C++ the ambiguities are resolved <strong>by the client</strong> (but its bad since the client needs to know the implementation details, which is not always granted).</li>
+<li>We can also <strong>override both method</strong>s, but this is ok only if we are specializing something similar, if their usage is different, then it&rsquo;s not sure if this is the correct behaviour.</li>
+<li>Or we can Rename as Eiffel does.</li>
+</ol>
+<p>But when we have a diamond it&rsquo;s really difficult. How many fields should we instantiate? Should they be different for the two we have?</p>
+<h4 id="virtual-and-non-virtual-inheritance">Virtual and Non-Virtual Inheritance<a hidden class="anchor" aria-hidden="true" href="#virtual-and-non-virtual-inheritance">#</a></h4>
+<p>Non-Virtual means we will have two copies of the superclass, while virtual means we will have only one copy of the superclass.
+C++ supports both virtual and non-virtual inheritance. By default it uses non-virtual inheritance, but you can specify virtual inheritance using the <code>virtual</code> keyword, but this adds some <strong>runtime overhead</strong> (we need to add the virtual keyword in the inheritance part).
+When virtual is used, the baseclass is called only once, by the smallest subclass.</p>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TD
+    A --&gt; B
+    A --&gt; C
+    B --&gt; D
+    B --&gt; A2[&#34;Stack: A/B&#34;]
+    C --&gt; A3[&#34;Stack: A/C&#34;]
+    D --&gt; A4[&#34;Stack: A/B/C/D&#34;]
+</code></pre><pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TD
+    A --&gt; B
+    A --&gt; C
+    B --&gt; D
+    B --&gt; A2[&#34;Stack: A (p)/B&#34;]
+    C --&gt; A3[&#34;Stack: A(p)/C&#34;]
+    D --&gt; A4[&#34;Stack: A, pointed by both C/D /B&#34;]
+</code></pre><h4 id="pros-and-cons-for-multiple-inheritance">Pros and Cons for Multiple-Inheritance<a hidden class="anchor" aria-hidden="true" href="#pros-and-cons-for-multiple-inheritance">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Pros</strong></th>
+          <th><strong>Cons</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Increases expressiveness</strong></td>
+          <td><strong>Ambiguity resolution</strong></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>- Explicit selection</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>- Merging</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>- Renaming</td>
+      </tr>
+      <tr>
+          <td><strong>Avoids overhead of delegation pattern</strong></td>
+          <td><strong>Repeated inheritance</strong></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>- Complex semantics</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>- Initialization</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><strong>Complicated!</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="linearization">Linearization<a hidden class="anchor" aria-hidden="true" href="#linearization">#</a></h2>
+<p>Mixins and traits provide a form of reuse- Methods and state that can be mixed into various classes- Example: Functionality to persist an object. Python, Ruby, Scala, Squeak Smalltalk. So it&rsquo;s a different way to add functionality to classes.</p>
+<h4 id="traits">Traits<a hidden class="anchor" aria-hidden="true" href="#traits">#</a></h4>
+<p>Traints can extend exactly one superclass.
+They solve the diamond problem with <strong>linearization</strong>, we will analyze this phenomenon later.
+▪ Traits are very dynamic,which complicates staticreasoning▪ Traits do not know howtheir superclasses getinitialized▪ Traits do not know whichmethods they override▪ Traits do not know wheresuper-calls are bound to</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scala" data-lang="scala"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">trait</span> <span class="nc">Backup</span> <span class="k">extends</span> <span class="nc">Cell</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">var</span> <span class="n">backup</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">override</span> <span class="k">def</span> <span class="n">put</span><span class="o">(</span> <span class="n">v</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Save the old value before calling the next put (super.put)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">backup</span> <span class="k">=</span> <span class="n">value</span>
+</span></span><span class="line"><span class="cl">    <span class="k">super</span><span class="o">.</span><span class="n">put</span><span class="o">(</span> <span class="n">v</span> <span class="o">)</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="n">undo</span> <span class="k">=</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">super</span><span class="o">.</span><span class="n">put</span><span class="o">(</span> <span class="n">backup</span> <span class="o">)</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Cell</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">var</span> <span class="n">value</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="n">put</span><span class="o">(</span> <span class="n">v</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="k">=</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="n">get</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">value</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">object</span> <span class="nc">Main1</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="n">main</span><span class="o">(</span> <span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span> <span class="kt">String</span> <span class="o">]</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Cell</span> <span class="k">with</span> <span class="nc">Backup</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span><span class="o">.</span><span class="n">put</span><span class="o">(</span> <span class="mi">5</span> <span class="o">)</span>  <span class="c1">// value=5, backup=0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">a</span><span class="o">.</span><span class="n">put</span><span class="o">(</span> <span class="mi">3</span> <span class="o">)</span>  <span class="c1">// value=3, backup=5 (value before put(3) was 5)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">a</span><span class="o">.</span><span class="n">undo</span>      <span class="c1">// value is set back to backup (5)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">println</span><span class="o">(</span> <span class="n">a</span><span class="o">.</span><span class="n">get</span> <span class="o">)</span> <span class="c1">// Output: 5
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><h4 id="mathematical-model-for-linearization">Mathematical Model for Linearization<a hidden class="anchor" aria-hidden="true" href="#mathematical-model-for-linearization">#</a></h4>
+<p>The key concept to understanding the semantics of Scala traits: bring <strong>types in a linear order</strong></p>
+<ul>
+<li>Define overriding and super-calls according to this order (so easy resolution).</li>
+</ul>
+<p>For a class or trait <strong>C extends C&rsquo; with C₁ &hellip; with Cₙ</strong>
+the linearization L(C) is C, L(Cₙ) • &hellip; • L(C₁) • L(C')</p>
+$$
+\epsilon • B = B
+$$$$
+(a, A) • B = \begin{cases} a, (A • B) & \text{if } a \neq B \\ A • B & \text{otherwise} \end{cases}
+$$<h4 id="method-selection-with-linearization">Method Selection with Linearization<a hidden class="anchor" aria-hidden="true" href="#method-selection-with-linearization">#</a></h4>
+<figure class="center">
+<img src="/images/notes/Inheritance-20251023114640691.webp" style="width: 100%"   alt="Inheritance-20251023114640691" title="Inheritance-20251023114640691"/>
+<figcaption><p style="text-align:center;">Slide from <a href="https://ethz.ch/content/dam/ethz/special-interest/infk/chair-program-method/pm/documents/Education/Courses/as2025/coop/lecture_03_inheritance_split.pdf">Course Slides</a></p></figcaption>
+</figure>
+<h4 id="problems-with-traits">Problems with Traits<a hidden class="anchor" aria-hidden="true" href="#problems-with-traits">#</a></h4>
+
 
   </div>
 
