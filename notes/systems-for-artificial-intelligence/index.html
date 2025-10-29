@@ -145,7 +145,7 @@ Image from here">
     "☁cloud-computing"
   ],
   "articleBody": "At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.\nImage from here\nThis is the general pipeline of model development, training, and inference.\nOne note is that the real ML code in this systems is very small, see (Sculley et al. 2015), there are massive maintenance costs in common ML systems.\nData Curation Collection and Cleaning Garbage in -\u003e Garbage out ~old wisdom\nThe first part of every machine learning system is collect and curate good quality data. Work in this part of building machine learning systems mostly consist in:\nAggregating data Identifying correct sources of the data Remove not good data, labeling it so that it has high quality, and similar. Identify anomalies/outliers, and filtering it. Very difficult to distinguish from noise. Fill empty values Having correct labels (e.g. (Deng et al. 2009) initial big effort, which is very expensive) Analyzing preprocessing costs We need to distinguish from online and offline preprocessing requirements. These functions will use lots of resources on the CPU and often become part of the bottleneck (see here), from personal statistics, it was about 30% just for data preprocessing. Sometimes, it also consumes more data than the training itself! The professor Ana Klimovic shows how scaling the preprocessing and training client can speed up sometimes by 100x in some cases, see here.\nImage from the course slides\nModel Development In this section, we want to build a nice model for our problem, design new architectures, tune hyperparameters, and validate the accuracy. There is not so much from the system side that can be said about model development; this is another area of research.\nAutomated searches This is somewhat similar to what fast performance optimization community has done with LAPACK, BLAS, see Fast Linear Algebra.\nWe have: Model search:\nExplore automatically different architectures to find the best one, obviously very performance intensive. Neural Architecture Search, where you could also use things like RL to find the best one. Hyper-parameter tuning:\nSearch for the best hyperparameters for a model batch size, learning rate, number of layers, activation fucntions, optimizers, and other similar things that could be considered to tune this aspect. Training Pipeline The training pipeline is the output of the model development phase. If you do not track all the dependencies, you wont be able to do things like this:\nRetrain models with new data Track data and code for debugging Capture dependencies for deployment Audit training for compliance (e.g., data privacy policies) Then it would also enable for validation and versioning and usually does not need lot of expertise in machine learning, this is the MLOps side of things.\nUsual Training Stages After (Bommasani et al. 2022), we mostly train big ML models and then:\nPretrain: we train the model on a large dataset, usually unsupervised, to learn general features of the data. Fine-tune: we train the model on a smaller dataset, usually supervised, to learn specific features of the data. Alignment: we train the model to align its behavior with human values and preferences or based on some reliability metrics. Continual Training Usually models need to be retrained to\nInclude new data Adapt do domain shifts or data shifts E.g. hairstyle, fashion shifts. Data deletion E.g. GDPR, or similar laws. This means you need to incorporate new training methods starting from an existing one. It is probably difficult to balance different tradeoff, from accuracy to reliability and compliance. For example some threshold to trigger retraining to check for concept drifts. And this would then enable for data selection policies to take the correct data for retraining. See (B{\"o}ther et al. 2025).\nTraining Parallelization Training is one of the most compute intensive parts of the machine learning pipeline. We need to distinguish the data itself with the parameters data (weights of the model most of the time, or hyperparameters and similar things).\nData parallelism: partition the data and run multiple copies of the model, which synchronize to exchange model weight updates.\nAbout model parallelism:\nTensor Parallelism: we divide layer inference across nodes Pipeline Parallelism: We divide models across nodes. Parameter Server This is a classical way to implement distributed training. Basically, every worker has a copy of the model, and they send the gradients to the parameter server, which then aggregates them and sends them back to all workers. This is a good way to implement distributed training, but it has some drawbacks:\nThe parameter server can become a bottleneck, especially if there are many workers. The parameter server can become a single point of failure, which can be problematic if it goes down. AllReduce Parallelism ",
-  "wordCount" : "2372",
+  "wordCount" : "2520",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-04T00:00:00Z",
   "dateModified": "2025-06-04T00:00:00Z",
@@ -292,6 +292,10 @@ By Xuanqiang Angelo Huang
                     <a href="#causes-of-faults" aria-label="Causes of Faults">Causes of Faults</a></li>
                 <li>
                     <a href="#pipelined-checkpoints" aria-label="Pipelined Checkpoints">Pipelined Checkpoints</a></li>
+                <li>
+                    <a href="#3d-parallel" aria-label="3D Parallel">3D Parallel</a></li>
+                <li>
+                    <a href="#fully-sharded-data-parallel" aria-label="Fully Sharded Data Parallel">Fully Sharded Data Parallel</a></li>
                 <li>
                     <a href="#weight-for-a-single-model-training" aria-label="Weight for a Single Model Training">Weight for a Single Model Training</a></li></ul>
                 </li>
@@ -448,6 +452,7 @@ the GPUs. While training, two consecutive pipeline stages exchange intermediate 
 between the devices (imbalanced partitioning).</p>
 <img src="/images/notes/Systems for Artificial Intelligence-20250501113842247.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501113842247">
 <p>This form of parallelism is useful if you do not have a machine big enough to fit the whole model, but many machines, so you load the weights at each stage of the pipeline to compute the forward pass, pipelining makes the bubble time smaller, thus making the model more efficient.</p>
+<p>Needs to communicate a lot less, only the end of one forward or backward, so it&rsquo;s usually done across different nodes, since it&rsquo;s more sparse.</p>
 <h4 id="memory-efficient-pipeline">Memory efficient Pipeline<a hidden class="anchor" aria-hidden="true" href="#memory-efficient-pipeline">#</a></h4>
 <p>Another example of a pipeline is <a href="https://proceedings.mlr.press/v202/kim23l.html">(Kim et al. 2023)</a>, they introduce the one forward and one backward approach, in figure:</p>
 <figure class="center">
@@ -465,6 +470,7 @@ Where $\mu$ is the number of micro batches.</p>
 <h4 id="tensor-parallelism">Tensor Parallelism<a hidden class="anchor" aria-hidden="true" href="#tensor-parallelism">#</a></h4>
 <p>Computing different parts of the tensor can be done in parallel, with different parts of the data. Even if a model can fit on a single GPU, it could benefit from tensor parallelism by splitting that part.</p>
 <img src="/images/notes/Systems for Artificial Intelligence-20250501114138612.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501114138612">
+<p>This is used within a node usually, because it needs to communicate a lot.</p>
 <h4 id="sync-or-async-training">Sync or Async Training<a hidden class="anchor" aria-hidden="true" href="#sync-or-async-training">#</a></h4>
 <p>Synchronous training is usually slow, there will be probably <strong>stragglers</strong>, for example see <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">(Dean &amp; Barroso 2013)</a>.
 Synchronous training: workers operate in lockstep to update the model weights at each iteration</p>
@@ -507,6 +513,14 @@ It saves two orders of magnitude compared to standard epoch checkpointing.</p>
 <blockquote>
 <p>CheckFreq only maintains two checkpoints on disk at any given time; one completed checkpoint
 and the other in-flight.</p></blockquote>
+<h4 id="3d-parallel">3D Parallel<a hidden class="anchor" aria-hidden="true" href="#3d-parallel">#</a></h4>
+<p>!<a href="/notes/systems-for-artificial-intelligence-20251028100341053.webp-"> Slides from Large Scale AI Engineering Course</a>
+This is usually how it&rsquo;s implemented for large scale training of models across clusters of GPUs, for very very big models. So there are lots of infrastructure working with these methods.</p>
+<h4 id="fully-sharded-data-parallel">Fully Sharded Data Parallel<a hidden class="anchor" aria-hidden="true" href="#fully-sharded-data-parallel">#</a></h4>
+<p>This method reduces the memory usage for training by a lot, but makes implementation more difficult, and more communication overheads. So, it mostly depends on your memory availability regarding this part.
+At scale it&rsquo;s not very useful, most of the people would use ZeRO-1 or ZeRO-2 (usually doesn&rsquo;t give a good improvement over the first version).
+Here we are talking about <strong>Zero Redundancy Optimizer</strong>.</p>
+<img src="/images/notes/Systems for Artificial Intelligence-20251028100947782.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20251028100947782">
 <h4 id="weight-for-a-single-model-training">Weight for a Single Model Training<a hidden class="anchor" aria-hidden="true" href="#weight-for-a-single-model-training">#</a></h4>
 <p>Training a model often requires much more memory compared to inference, let&rsquo;s take an example to understand why.</p>
 <ul>
@@ -592,23 +606,23 @@ Individual ML jobs do not make good use of GPUs, some are more memory intensive,
 </ul>
 <p>Orion is an example of this kind of <strong>interference aware</strong> scheduling.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=huangGPipeEfficientTraining2019>[1] Huang et al. <a href="https://papers.nips.cc/paper_files/paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html">“GPipe: Efficient Training of Giant Neural Networks Using Pipeline Parallelism”</a> Curran Associates, Inc.  2019
+<p id=sculleyHiddenTechnicalDebt2015>[1] Sculley et al. <a href="https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">“Hidden Technical Debt in Machine Learning Systems”</a> Curran Associates, Inc.  2015
  </p>
-<p id=bommasaniOpportunitiesRisksFoundation2022>[2] Bommasani et al. <a href="http://arxiv.org/abs/2108.07258">“On the Opportunities and Risks of Foundation Models”</a> arXiv preprint arXiv:2108.07258 2022
+<p id=mohanCheckFreqFrequentFineGrained2021>[2] Mohan et al. “CheckFreq: Frequent, Fine-Grained DNN Checkpointing” 19th USENIX Conference on File and Storage Technologies  2021
  </p>
-<p id=mohanCheckFreqFrequentFineGrained2021>[3] Mohan et al. “CheckFreq: Frequent, Fine-Grained DNN Checkpointing” 19th USENIX Conference on File and Storage Technologies  2021
+<p id=kimBPipeMemoryBalancedPipeline2023>[3] Kim et al. <a href="https://proceedings.mlr.press/v202/kim23l.html">“BPipe: Memory-Balanced Pipeline Parallelism for Training Large Language Models”</a> PMLR  2023
  </p>
-<p id=deanTailScale2013>[4] Dean & Barroso <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">“The Tail at Scale”</a> Commun. ACM Vol. 56(2), pp. 74--80 2013
+<p id=botherModynDataCentricMachine2025>[4] B{\"o}ther et al. <a href="http://arxiv.org/abs/2312.06254">“Modyn: Data-Centric Machine Learning Pipeline Orchestration”</a> None 2025
  </p>
-<p id=daoFLASHATTENTIONFastMemoryefficient2022>[5] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc.  2022
+<p id=bommasaniOpportunitiesRisksFoundation2022>[5] Bommasani et al. <a href="http://arxiv.org/abs/2108.07258">“On the Opportunities and Risks of Foundation Models”</a> arXiv preprint arXiv:2108.07258 2022
  </p>
-<p id=botherModynDataCentricMachine2025>[6] B{\"o}ther et al. <a href="http://arxiv.org/abs/2312.06254">“Modyn: Data-Centric Machine Learning Pipeline Orchestration”</a> None 2025
+<p id=huangGPipeEfficientTraining2019>[6] Huang et al. <a href="https://papers.nips.cc/paper_files/paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html">“GPipe: Efficient Training of Giant Neural Networks Using Pipeline Parallelism”</a> Curran Associates, Inc.  2019
  </p>
-<p id=sculleyHiddenTechnicalDebt2015>[7] Sculley et al. <a href="https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">“Hidden Technical Debt in Machine Learning Systems”</a> Curran Associates, Inc.  2015
+<p id=dengImageNetLargescaleHierarchical2009>[7] Deng et al. <a href="https://ieeexplore.ieee.org/document/5206848">“ImageNet: A Large-Scale Hierarchical Image Database”</a> 2009 IEEE Conference on Computer Vision and Pattern Recognition  2009
  </p>
-<p id=kimBPipeMemoryBalancedPipeline2023>[8] Kim et al. <a href="https://proceedings.mlr.press/v202/kim23l.html">“BPipe: Memory-Balanced Pipeline Parallelism for Training Large Language Models”</a> PMLR  2023
+<p id=deanTailScale2013>[8] Dean & Barroso <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">“The Tail at Scale”</a> Commun. ACM Vol. 56(2), pp. 74--80 2013
  </p>
-<p id=dengImageNetLargescaleHierarchical2009>[9] Deng et al. <a href="https://ieeexplore.ieee.org/document/5206848">“ImageNet: A Large-Scale Hierarchical Image Database”</a> 2009 IEEE Conference on Computer Vision and Pattern Recognition  2009
+<p id=daoFLASHATTENTIONFastMemoryefficient2022>[9] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc.  2022
  </p>
 
   </div>
