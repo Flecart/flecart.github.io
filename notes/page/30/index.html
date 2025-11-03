@@ -200,6 +200,42 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Monitor
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Questo è un modo di più alto livello per creare programmazione concorrente.
+Introduzione ai monitor Questo costrutto per la programmazione concorrente, prende molto dalla programmazione agli oggetti, abbiamo delle variabili presenti al monitor, private solamente accessibili ad essa, tramite procedure che sono mutex automaticamente!
+Elementi costituenti Dati locali Sequenza di inizializzazione Procedure di entrata Appena provo a chiamare una procedura, questa è fatta già in mutua esclusione!.
+E possono modificare dati locali solo tramite chiamate a sue procedure
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang</footer>
+  <a class="entry-link" aria-label="post link to Monitor" href="https://flecart.github.io/notes/monitor/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Programmi Concorrenti
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Vorremmo cercare di stabilire una teoria riguardante programmi che vengono eseguiti appunto concorrentemente, senza una esecuzione classica uno dpo l’altro
+Esempio mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; void test(void *s) { for (int i = 0; i &lt; 10; i&#43;&#43;) { printf(&#34;%s\n&#34;, s); for (int j = 0; j &lt; 100000000; j&#43;&#43;); } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, (void *)test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, (void *)test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); } Example output:
+Due Uno Uno Due Uno Due Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno Due Uno
+Esempio 2 mini-programma rallentamento
+#include &lt;stdio.h&gt; #include &lt;pthread.h&gt; int count = 0; void test(void *s) { for (int i = 0; i &lt; 100000; i&#43;&#43;) { count&#43;= 1; } } int main(int argc, char *argv[]) { pthread_t t1, t2; pthread_create(&amp;t1, NULL, test, &#34;Uno&#34;); pthread_create(&amp;t2, NULL, test, &#34;Due&#34;); pthread_join(t1, NULL); pthread_join(t2, NULL); printf(&#34;%d\n&#34;, count); } Vogliamo creare un modello teorico che riesca a rappresentare il concetto di processi concorrenti, questo è il modello concorrente
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang</footer>
+  <a class="entry-link" aria-label="post link to Programmi Concorrenti" href="https://flecart.github.io/notes/programmi-concorrenti/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Syncronous model
     </h2>
   </header>
@@ -325,39 +361,6 @@ Dualità asimmetrica Teorema debole di dualità Slide
   <footer class="entry-footer"><span title='2024-08-06 00:00:00 +0000 UTC'>August 6, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang</footer>
   <a class="entry-link" aria-label="post link to Duality Theory" href="https://flecart.github.io/notes/duality-theory/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Stirling&#39;s Approximation
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>$$ x! \approx x^{x}e^{-x}\sqrt{ 2\pi x } \iff \ln x! \approx x\ln x - x &#43; \frac{1}{2} \ln(2\pi x) $$This proof (more like an interesting justification). is taken from page 2 of (MacKay 2003).
-$$ P(r \mid \lambda) = \frac{e^{-\lambda}\lambda^{r}}{r!} $$$$ e^{-\lambda} \frac{\lambda^{\lambda}}{\lambda!} \approx \frac{1}{\sqrt{ 2\pi \lambda }} \implies \lambda! \approx \lambda^{\lambda}e^{-\lambda}\sqrt{ 2\pi \lambda } $$ Which finishes the derivation of the approximation.
-Approximation of the binomial A quick derivation with the Stirling’s approximation gives a nice approximation for log of the binomials
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-08-06 00:00:00 +0000 UTC'>August 6, 2024</span>&nbsp;·&nbsp;Reading Time: 1 minute&nbsp;·&nbsp;
-By Xuanqiang Angelo Huang</footer>
-  <a class="entry-link" aria-label="post link to Stirling&#39;s Approximation" href="https://flecart.github.io/notes/stirlings-approximation/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Insiemi numerici
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p> 💡 Questa prima parte degli appunti è fortemente mancante 1.1 Insiemistica Tutta Questa prima roba di insiemistica è fatta molto meglio nel corso di logica, in particolare in questo documento
-Teoria assiomatica degli insiemi
-1.1.1 Definizione e caratteristiche degli insiemi Definizione di Campo ordinato (operazioni fra certi insiemi, sia per la addizione, per la moltiplicazione e simili) Corpo commutativo
-Sono definiti somma e moltiplicazione e proprietà come commutatività, associatività, distributiva, inversi, opposti, zero e nullo
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
-By Xuanqiang Angelo Huang</footer>
-  <a class="entry-link" aria-label="post link to Insiemi numerici" href="https://flecart.github.io/notes/insiemi-numerici/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
