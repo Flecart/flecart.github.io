@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Livello applicazione e socket | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🕸computer-networks">
-<meta name="description" content="Livello trasporto
-Protocolli classici
-Introduzione a TCP e UPD
-
-Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (TCP) e lo User Data Protocol (UDP), che possono essere usati in alternativa tra loro.
-Questo è nel genere di *connession oriented e non, il primo, TCP è connection oriented, l&rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione  e non">
+<meta name="description" content="Livello applicazione e socket - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/livello-applicazione-e-socket/">
@@ -98,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/livello-applicazione-e-socket/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Livello applicazione e socket">
-  <meta property="og:description" content="Livello trasporto Protocolli classici Introduzione a TCP e UPD Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (TCP) e lo User Data Protocol (UDP), che possono essere usati in alternativa tra loro.
-Questo è nel genere di *connession oriented e non, il primo, TCP è connection oriented, l’altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione e non">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,12 +104,7 @@ Questo è nel genere di *connession oriented e non, il primo, TCP è connection 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Livello applicazione e socket">
-<meta name="twitter:description" content="Livello trasporto
-Protocolli classici
-Introduzione a TCP e UPD
-
-Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (TCP) e lo User Data Protocol (UDP), che possono essere usati in alternativa tra loro.
-Questo è nel genere di *connession oriented e non, il primo, TCP è connection oriented, l&rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione  e non">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -144,12 +133,12 @@ Questo è nel genere di *connession oriented e non, il primo, TCP è connection 
   "@type": "BlogPosting",
   "headline": "Livello applicazione e socket",
   "name": "Livello applicazione e socket",
-  "description": "Livello trasporto Protocolli classici Introduzione a TCP e UPD Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (TCP) e lo User Data Protocol (UDP), che possono essere usati in alternativa tra loro.\nQuesto è nel genere di *connession oriented e non, il primo, TCP è connection oriented, l\u0026rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione e non\n",
+  "description": "",
   "keywords": [
     "🕸computer-networks"
   ],
-  "articleBody": "Livello trasporto Protocolli classici Introduzione a TCP e UPD Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (TCP) e lo User Data Protocol (UDP), che possono essere usati in alternativa tra loro.\nQuesto è nel genere di *connession oriented e non, il primo, TCP è connection oriented, l’altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione e non\nTCP\nConnection oriented (garantire il ripristino dell’ordinamento dei pacchetti e la ri-trasmissione dei pacchetti perduti) Numero dell’ordine (a cui riceve ack per questo numero) Controllare la velocità di invio → Finestra scorrevole La parte importante di questo è che la congestione si può allargare a macchia d’olio all’interno di internet, e questo è una cosa molto brutta! Quindi prova a risolvere gli errori di comunicazione di rete, cercando di garantire una buona trasmissione. Il problema è l’efficienza, si possono inviare segmenti in più e congestionare la rete.\nSi può dire che questa è la semantica diversa.\nCon la tree-way handshake si apre una connessione socket, quindi una coppia porta IP, per poter comunicare!\nUDP\nÈ semplice perché non fa tutte le cose di TCP (no duplicati, no riordinamento, no checks) Tipo connectionless Socket Slide immagini\nIl protocollo TCP richiede a due dispositivi che intendano comunicare di effettuare preventivamente la configurazione dei parametri del socket TCP, originando in questo modo un canale virtuale di tipo punto a punto tra due socket, ovvero tra due applicazioni di livello superiore alle quali vengono smistati i pacchetti da TCP. Quindi sono degli estremi di comunicazione!\nDef socket\nUn socket è un punto di arrivo o partenza (virtuale) dei dati a livello trasporto, dal quale è in atto l’invio e la ricezione di pacchetti destinati a un’applicazione, ed equivale a una coppia: (indirizzo IP, numero di porta dell’applicazione). Una volta instaurata la configurazione punto a punto tra due socket, attraverso lo scambio di pacchetti di configurazione, può iniziare lo scambio dei dati a livello trasporto. In questo senso si dice che è un trasporto TCP/IP, perché prima configurazione per IP poi effettivamente scambio.\nLa richiesta di connessione\nLa connessione viene instaurata con una richiesta di uno dei due host (il client) nei confronti dell’host server.\nIndirizzo IP del server Numero della porta per l’applicazione (questo viene verificato dal server se qualche servizio ci è aperto, se sì risponde, e il client invia la configurazione). Poi iniziano a dialogare e alla fine liberano la porta, è una connessione punto a punto!. Quando il server riceve il pacchetto, va a verificare se ha la porta aperta, se tutto va bene manda un messaggio di conferma, e il client invia un pacchetto di configurazione, allora possono cominciare a comunicare.\nWelcoming socket and client sockets\nWelcoming è l’unico socket di ricezione di un server, che prende tutto e manda al thread corretto.\nClient sockets sono i molteplici sockets che il server utilizza per comunicare con il singolo client, vengono solitamente istanziati grazie al welcoming socket dopo che ho fatto richiesta di connessione.\nControllo della congestione TCP (2) Questa parte ora è trattata meglio in [[Livello di trasporto](/notes/0.3.8-servizi-orientati-alla-connessione–e-non-\ntcp\n1.-connection-oriented-(garantire-il-ripristino-dell’ordinamento-dei-pacchetti-e-la-ri-trasmissione-dei-pacchetti-perduti) 2.-numero-dell’ordine-(a-cui-riceve-ack-per-questo-numero) 3.-controllare-la-velocità-di-invio-→-finestra-scorrevole la-parte-importante-di-questo-è-che-la-congestione-si-può-allargare-a-macchia-d’olio-all-interno-di-internet,-e-questo-è-una-cosa-molto-brutta!\nquindi-prova-a-risolvere-gli-errori-di-comunicazione-di-rete,-cercando-di-garantire-una-buona-trasmissione.-il-problema-è-l-efficienza,-si-possono-inviare-segmenti-in-più-e-congestionare-la-rete.\nsi-può-dire-che-questa-è-la-semantica-diversa.\ncon-la-tree-way-handshake-si-apre-una-connessione-socket,-quindi-una-coppia-porta-ip,-per-poter-comunicare!\nudp\n1.-è-semplice-perché-non-fa-tutte-le-cose-di-tcp-(no-duplicati,-no-riordinamento,-no-checks) 2.-tipo-connectionless\n###-socket ",
-  "wordCount" : "2652",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2023-06-12T00:00:00Z",
   "dateModified": "2023-06-12T00:00:00Z",
@@ -244,257 +233,12 @@ Questo è nel genere di *connession oriented e non, il primo, TCP è connection 
     <h1 class="post-title entry-hint-parent">
       Livello applicazione e socket
     </h1>
-    <div class="post-meta"><span title='2023-06-12 00:00:00 +0000 UTC'>June 12, 2023</span>&nbsp;·&nbsp;Reading Time: 13 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2023-06-12 00:00:00 +0000 UTC'>June 12, 2023</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#livello-trasporto" aria-label="Livello trasporto">Livello trasporto</a><ul>
-                        
-                <li>
-                    <a href="#protocolli-classici" aria-label="Protocolli classici">Protocolli classici</a><ul>
-                        
-                <li>
-                    <a href="#introduzione-a-tcp-e-upd" aria-label="Introduzione a TCP e UPD">Introduzione a TCP e UPD</a></li>
-                <li>
-                    <a href="#socket" aria-label="Socket">Socket</a></li>
-                <li>
-                    <a href="#controllo-della-congestione-tcp-2" aria-label="Controllo della congestione TCP (2)">Controllo della congestione TCP (2)</a></li>
-                <li>
-                    <a href="#finestra-scorrevole" aria-label="Finestra scorrevole">Finestra scorrevole</a></li>
-                <li>
-                    <a href="#multiplexing-e-demultiplexing-e-porte" aria-label="Multiplexing e Demultiplexing e porte">Multiplexing e Demultiplexing e porte</a></li></ul>
-                </li>
-                <li>
-                    <a href="#applicazione" aria-label="Applicazione">Applicazione</a><ul>
-                        
-                <li>
-                    <a href="#introduzione-livello-applicazione-non-fo" aria-label="Introduzione livello applicazione (non fo)">Introduzione livello applicazione (non fo)</a></li>
-                <li>
-                    <a href="#http1-non-fare" aria-label="HTTP1 (non fare)">HTTP1 (non fare)</a></li>
-                <li>
-                    <a href="#domain-name-system" aria-label="Domain Name System">Domain Name System</a><ul>
-                        
-                <li>
-                    <a href="#iterativoricorsivo" aria-label="Iterativo/Ricorsivo">Iterativo/Ricorsivo</a></li>
-                <li>
-                    <a href="#typosquatting-attack" aria-label="Typosquatting attack">Typosquatting attack</a></li></ul>
-                </li>
-                <li>
-                    <a href="#sulla-connessione" aria-label="Sulla connessione">Sulla connessione</a></li>
-                <li>
-                    <a href="#architetture-a-livello-applicazione" aria-label="Architetture a livello applicazione">Architetture a livello applicazione</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h1 id="livello-trasporto">Livello trasporto<a hidden class="anchor" aria-hidden="true" href="#livello-trasporto">#</a></h1>
-<h2 id="protocolli-classici">Protocolli classici<a hidden class="anchor" aria-hidden="true" href="#protocolli-classici">#</a></h2>
-<h3 id="introduzione-a-tcp-e-upd">Introduzione a TCP e UPD<a hidden class="anchor" aria-hidden="true" href="#introduzione-a-tcp-e-upd">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled">
-<p>Il quarto livello dei protocolli dell’architettura di Internet è il livello trasporto (transport), ed è basato su due protocolli in particolare: il Transmission Control Protocol (<strong>TCP</strong>) e lo User Data Protocol (<strong>UDP</strong>), che possono essere usati in alternativa tra loro.</p>
-<p>Questo è nel genere di *<em>connession oriented</em> e non, il primo, TCP è connection oriented, l&rsquo;altro no, questa è l’unica differenza fra i due. Questa differenza è spiegata in maggior dettaglio qui [0.3.8 Servizi orientati alla connessione  e non</p>
-<p><strong>TCP</strong></p>
-<ol>
-<li>Connection oriented (garantire il ripristino dell’ordinamento dei pacchetti e la ri-trasmissione dei pacchetti perduti)</li>
-<li><strong>Numero</strong> dell’ordine (a cui riceve ack per questo numero)</li>
-<li>Controllare la velocità di invio → Finestra scorrevole
-La parte importante di questo è che la congestione si può <strong>allargare a macchia d’olio</strong> all&rsquo;interno di internet, e questo è una cosa molto brutta!</li>
-</ol>
-<p>Quindi prova a risolvere gli errori di comunicazione di rete, cercando di garantire una buona trasmissione. Il problema è l&rsquo;efficienza, si possono inviare segmenti in più e <strong>congestionare la rete</strong>.</p>
-<p>Si può dire che questa è la semantica diversa.</p>
-<p>Con la <strong>tree-way handshake</strong> si apre una connessione socket, quindi una coppia porta IP, per poter comunicare!</p>
-<p><strong>UDP</strong></p>
-<ol>
-<li>È semplice perché non fa tutte le cose di TCP (no duplicati, no riordinamento, no checks)</li>
-<li>Tipo connectionless</li>
-</ol>
-<h3 id="socket">Socket<a hidden class="anchor" aria-hidden="true" href="#socket">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 1">
-<ul>
-<li>
-<p>Slide immagini</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 2">
-</li>
-</ul>
-<p>Il protocollo TCP richiede a due dispositivi che intendano comunicare di effettuare preventivamente la configurazione dei parametri del socket TCP, originando in questo modo un <strong>canale virtuale di tipo punto a punto tra due socket</strong>, ovvero tra due applicazioni di livello superiore alle quali vengono smistati i pacchetti da TCP. Quindi sono degli estremi di comunicazione!</p>
-<p><em>Def socket</em></p>
-<p>Un socket è un punto di arrivo o partenza (virtuale) dei dati a livello trasporto, dal quale è in atto l’invio e la ricezione di pacchetti destinati a un’applicazione, ed equivale a una coppia: (<strong>indirizzo IP, numero di porta dell’applicazione</strong>). Una volta instaurata la configurazione punto a punto tra due socket, attraverso lo scambio di pacchetti di configurazione, può iniziare lo scambio dei dati a livello trasporto. In questo senso si dice che è un trasporto TCP/IP, perché prima configurazione per IP poi effettivamente scambio.</p>
-<p><em>La richiesta di connessione</em></p>
-<p>La connessione viene instaurata con una richiesta di uno dei due host (il client) nei confronti dell’host server.</p>
-<ol>
-<li>Indirizzo IP del server</li>
-<li>Numero della porta per l&rsquo;applicazione (questo viene verificato dal server se qualche servizio ci è aperto, se sì risponde, e il client invia la configurazione).</li>
-<li>Poi iniziano a dialogare e alla fine liberano la porta, è una connessione punto a punto!.</li>
-</ol>
-<p>Quando il server riceve il pacchetto, va a verificare se ha la porta aperta, se tutto va bene manda un messaggio di conferma, e il client invia un pacchetto di configurazione, allora possono cominciare a comunicare.</p>
-<p><em>Welcoming socket and client sockets</em></p>
-<p>Welcoming è l&rsquo;unico socket di ricezione di un server, che prende tutto e manda al thread corretto.</p>
-<p>Client sockets sono i molteplici sockets che il server utilizza per comunicare con il singolo client, vengono solitamente istanziati grazie al welcoming socket dopo che ho fatto richiesta di connessione.</p>
-<h3 id="controllo-della-congestione-tcp-2">Controllo della congestione TCP (2)<a hidden class="anchor" aria-hidden="true" href="#controllo-della-congestione-tcp-2">#</a></h3>
-<p>Questa parte ora è trattata meglio in [[Livello di trasporto](/notes/0.3.8-servizi-orientati-alla-connessione&ndash;e-non-</p>
-<p><strong>tcp</strong></p>
-<p>1.-connection-oriented-(garantire-il-ripristino-dell’ordinamento-dei-pacchetti-e-la-ri-trasmissione-dei-pacchetti-perduti)
-2.-<strong>numero</strong>-dell’ordine-(a-cui-riceve-ack-per-questo-numero)
-3.-controllare-la-velocità-di-invio-→-finestra-scorrevole
-la-parte-importante-di-questo-è-che-la-congestione-si-può-<strong>allargare-a-macchia-d’olio</strong>-all-interno-di-internet,-e-questo-è-una-cosa-molto-brutta!</p>
-<p>quindi-prova-a-risolvere-gli-errori-di-comunicazione-di-rete,-cercando-di-garantire-una-buona-trasmissione.-il-problema-è-l-efficienza,-si-possono-inviare-segmenti-in-più-e-<strong>congestionare-la-rete</strong>.</p>
-<p>si-può-dire-che-questa-è-la-semantica-diversa.</p>
-<p>con-la-<strong>tree-way-handshake</strong>-si-apre-una-connessione-socket,-quindi-una-coppia-porta-ip,-per-poter-comunicare!</p>
-<p><strong>udp</strong></p>
-<p>1.-è-semplice-perché-non-fa-tutte-le-cose-di-tcp-(no-duplicati,-no-riordinamento,-no-checks)
-2.-tipo-connectionless</p>
-<p>###-socket
-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-applicazione-e-socket/untitled-1.png&quot;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-applicazione-e-socket/untitled-1&rdquo;&gt;</p>
-<p>&ndash;slide-immagini</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-applicazione-e-socket/untitled-2.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-applicazione-e-socket/untitled-2&rdquo;&gt;</p>
-<p>il-protocollo-tcp-richiede-a-due-dispositivi-che-intendano-comunicare-di-effettuare-preventivamente-la-configurazione-dei-parametri-del-socket-tcp,-originando-in-questo-modo-un-<strong>canale-virtuale-di-tipo-punto-a-punto-tra-due-socket</strong>,-ovvero-tra-due-applicazioni-di-livello-superiore-alle-quali-vengono-smistati-i-pacchetti-da-tcp.-quindi-sono-degli-estremi-di-comunicazione!</p>
-<p><em>def-socket</em></p>
-<p>un-socket-è-un-punto-di-arrivo-o-partenza-(virtuale)-dei-dati-a-livello-trasporto,-dal-quale-è-in-atto-l’invio-e-la-ricezione-di-pacchetti-destinati-a-un’applicazione,-ed-equivale-a-una-coppia:-(<strong>indirizzo-ip,-numero-di-porta-dell’applicazione</strong>).-una-volta-instaurata-la-configurazione-punto-a-punto-tra-due-socket,-attraverso-lo-scambio-di-pacchetti-di-configurazione,-può-iniziare-lo-scambio-dei-dati-a-livello-trasporto.-in-questo-senso-si-dice-che-è-un-trasporto-tcp/ip,-perché-prima-configurazione-per-ip-poi-effettivamente-scambio.</p>
-<p><em>la-richiesta-di-connessione</em></p>
-<p>la-connessione-viene-instaurata-con-una-richiesta-di-uno-dei-due-host-(il-client)-nei-confronti-dell’host-server.</p>
-<p>1.-indirizzo-ip-del-server
-2.-numero-della-porta-per-l-applicazione-(questo-viene-verificato-dal-server-se-qualche-servizio-ci-è-aperto,-se-sì-risponde,-e-il-client-invia-la-configurazione).
-3.-poi-iniziano-a-dialogare-e-alla-fine-liberano-la-porta,-è-una-connessione-punto-a-punto!.</p>
-<p>quando-il-server-riceve-il-pacchetto,-va-a-verificare-se-ha-la-porta-aperta,-se-tutto-va-bene-manda-un-messaggio-di-conferma,-e-il-client-invia-un-pacchetto-di-configurazione,-allora-possono-cominciare-a-comunicare.</p>
-<p><em>welcoming-socket-and-client-sockets</em></p>
-<p>welcoming-è-l-unico-socket-di-ricezione-di-un-server,-che-prende-tutto-e-manda-al-thread-corretto.</p>
-<p>client-sockets-sono-i-molteplici-sockets-che-il-server-utilizza-per-comunicare-con-il-singolo-client,-vengono-solitamente-istanziati-grazie-al-welcoming-socket-dopo-che-ho-fatto-richiesta-di-connessione.</p>
-<p>###-controllo-della-congestione-tcp-(2)</p>
-<p>questa-parte-ora-è-trattata-meglio-in-[[livello-di-trasporto)</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 3">
-</li>
-<li>
-<p>Schema</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 4">
-</li>
-</ul>
-<p>TCP utilizza un protocollo molto particolare, e a prima vista non intuitivo per gestire la congestione della rete.</p>
-<p>L’idea generale è che provo ad aumentare l’invio finché posso, e quando mi accorgo che inizio a perdere <strong>chiudo tutto</strong> e ricomincio dal singolo pacchetto.</p>
-<p>Come si è detto in precedenza, TCP richiede una conferma per ogni pacchetto inviato. La distanza tra due dispositivi che scambiano pacchetti a livello trasporto può essere molto significativa. Il tempo per inviare un pacchetto e ottenere la conferma dell’avvenuta ricezione può quindi diventare dell’ordine dei secondi.
-Il problema del controllo di flusso dei pacchetti nel protocollo TCP si basa su due scopi apparentemente in contraddizione tra loro.</p>
-<ol>
-<li>è quello di <strong>saturare</strong> il più possibile la rete di pacchetti, inviandoli a un ritmo elevato. Questo favorisce l’utilizzo delle risorse e le prestazioni della rete (si spediscono e si ricevono tanti bit al secondo). Se si decidesse di inviare un pacchetto e aspettare l’arrivo della conferma, la rete sarebbe usata solo in minima percentuale, e si riuscirebbero a spedire solo pochi bit al secondo. Quindi la rete, pur essendo veloce nell’invio dei bit, verrebbe sfruttata al minimo delle potenzialità. E’ quindi evidente quanto sia opportuno <strong>spedire i pacchetti a un ritmo il più veloce possibile</strong>.</li>
-<li><strong>Evitare di saturare la rete</strong> occorre evitare che un ritmo di invio troppo elevato possa causare il sorgere della <strong>congestione</strong> nei router intermedi del cammino dei pacchetti, dal mittente TCP (client) al destinatario TCP (server). Se un router si trova a dover inoltrare troppi
-pacchetti, provenienti da flussi TCP diversi, i pacchetti si accumulano fino ad andare perduti e la rete va in crisi. In tal caso si deve ricorrere a una tecnica di controllo della congestione.
-Una forma di congestione può comparire anche sul destinatario finale, nel caso in cui esso non sia in grado di ricevere i pacchetti inviati troppo velocemente. In tal caso si deve ricorrere a una tecnica di controllo di flusso.</li>
-</ol>
-<h3 id="finestra-scorrevole"><strong>Finestra scorrevole</strong><a hidden class="anchor" aria-hidden="true" href="#finestra-scorrevole">#</a></h3>
-<p>Si parla di metodi di congestione, viene trattato meglio in <a href="/notes/livello-di-trasporto">Livello di trasporto</a>
-<img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 5"></p>
-<p>Osservando l’esempio, partendo con SW uguale a 1, se la conferma è ricevuta, la finestra viene raddoppiata, spedendo due pacchetti al massimo ritmo di invio. Se entrambi i pacchetti vengono confermati, si passa alla finestra di dimensione quattro, inviando quattro pacchetti al massimo ritmo di invio. Se i pacchetti sono confermati si passa a finestra di otto pacchetti. A
-questo punto, nell’esempio, almeno uno degli otto pacchetti non viene confermato. Si suppone che questo fatto sia dovuto a un router congestionato e quindi si rallenta il ritmo di invio ripartendo dalla finestra minima (pari a uno). Il massimo grado sostenibile di invio per la rete in esame nell’esempio è stato quindi ottenuto con finestra pari a quattro.</p>
-<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 6.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Livello applicazione e socket/Untitled 6&quot;&gt;
-</code></pre>
-<p>TCP usa un meccanismo per il controllo di flusso, detto a finestra scorrevole (sliding window), e un meccanismo per il controllo della congestione, basato sul dimensionamento della finestra scorrevole. Tutto ciò per cercare il massimo ritmo di spedizione che possa garantire l’inoltro dei pacchetti da parte del router più lento del cammino, e prevenire la saturazione del destinatario
-finale.</p>
-<p><strong>Idea della sliding window</strong></p>
-<p>La finestra scorrevole è un <strong>valore intero</strong>, cha parte da un valore minimo (ad esempio il valore uno). L’idea alla base del controllo di flusso a finestra scorrevole è quello di spedire non più di Sliding Window pacchetti consecutivi, a partire dall’ultimo pacchetto non confermato, e quindi attendere la ricezione di una conferma.
-Un valore di SW uguale a 1 significa che solo un pacchetto può essere spedito, poi occorre aspettare di ricevere la conferma della ricezione. In questo caso la rete è poco utilizzata. Ogni volta che alcuni pacchetti spediti sono confermati, allora è possibile spedire i pacchetti successivi mantenendosi entro il limite massimo di SW pacchetti dall’ultimo pacchetto non ancora confermato. Eventuali pacchetti non confermati sono rispediti fino al ricevimento della conferma.</p>
-<p>Il senso di questo meccanismo è quello di lasciare in sospeso non più di SW pacchetti, per evitare
-di saturare il mittente. Questo meccanismo, molto semplificato, realizza il controllo di flusso di TCP.
-Se i pacchetti vengono confermati, si può adottare un meccanismo dinamico per accelerare gradualmente il ritmo di invio dei pacchetti, ovvero la dimensione della finestra SW, fino a che non si nota la perdita di almeno un pacchetto tra quelli inviati.</p>
-<p><strong>Comportamento a perdita di pacchetti</strong></p>
-<p>Se i pacchetti vanno perduti, TCP assume anche che la causa di ciò sia la presenza di un router intermedio congestionato, e quindi rallenta il ritmo di invio dei pacchetti per dare modo al router congestionato di smaltire i pacchetti accumulati. Tale meccanismo, sommariamente descritto, è il meccanismo di controllo della congestione di rete di TCP.</p>
-<h3 id="multiplexing-e-demultiplexing-e-porte">Multiplexing e Demultiplexing e porte<a hidden class="anchor" aria-hidden="true" href="#multiplexing-e-demultiplexing-e-porte">#</a></h3>
-<p>Questi termini non hanno una traduzione diretta con l&rsquo;italiano, la cosa più simile possibile è aggregare e disaggregare, perché da una unica scheda direte arriva tutto, questa cosa deve essere demultiplexata alla porta corretta, e multiplexata all&rsquo;unica scheda di rete che si ha.</p>
-<p>Le well known ports sono di solito minori di 1023.</p>
-<p>Le porte alte sono decise da noi, basta che nell ostess ocomputer non ci sia un conflitto di porte.</p>
-<p>Multiplexing perché ho molte porte, ma unica scheda di rete, quindi far girare da una unica source tutto il resto. (per il mandante serve0</p>
-<p>Demultiplexing perché così posso mandare alla porta corretta, ricevendo</p>
-<ul>
-<li>
-<p>Slide multiplexing</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 7">
-</li>
-</ul>
-<p>In pratica il server con una singola porta non sarebbe in grado di rispondere a connessioni multiple! Ricorda che socket è end-to-end, non saprei a quale client starei parlando.</p>
-<p>Si parla quindi di <strong>welcoming socket</strong> per il server, e quando si stabilisce la connessione ti dice in quale porta andare sopra per continuare a comunicare.</p>
-<ul>
-<li>
-<p>Esempio di demux server</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 8">
-</li>
-</ul>
-<h2 id="applicazione">Applicazione<a hidden class="anchor" aria-hidden="true" href="#applicazione">#</a></h2>
-<h3 id="introduzione-livello-applicazione-non-fo">Introduzione livello applicazione (non fo)<a hidden class="anchor" aria-hidden="true" href="#introduzione-livello-applicazione-non-fo">#</a></h3>
-<p>Il livello applicazione dei protocolli di Internet contiene l’implementazione delle funzioni e dei servizi che permettono alle applicazioni di rete in esecuzione sull’host di spedire e ricevere i dati. I protocolli sottostanti di Presentazione e Sessione, previsti dallo Standard ISO/OSI, non sono quasi mai considerati nell’architettura dei protocolli di Internet.</p>
-<p>Il livello Applicazione si appoggia direttamente sul livello trasporto e, in particolare, molte applicazioni che richiedono servizi connection-oriented si basano sul protocollo TCP, attraverso numeri di porta che nel tempo sono diventati standard “de facto”.
-Ad esempio, la spedizione e il trasferimento dei messaggi di posta elettronica, basati sul protocollo di livello applicazione Simple Mail Transfer Protocol (SMTP) è comunemente associata alla porta di livello applicazione 25. La porta 80 è destinata al protocollo di trasferimento di ipertesti HyperText Transfer Protocol (HTTP) alla base del trasferimento delle pagine di siti del World Wide Web.</p>
-<p>Altri esempi di protocolli e servizi che si collocano al livello applicazione sono il protocollo e servizio di Domain Name Service (DNS) e i protocolli IMAP e POP3 per la consegna della posta elettronica.
-Una dettagliata illustrazione sul mondo dei servizi e protocolli applicativi di Internet sarà oggetto di un modulo apposito</p>
-<h3 id="http1-non-fare">HTTP1 (non fare)<a hidden class="anchor" aria-hidden="true" href="#http1-non-fare">#</a></h3>
-<p>All&rsquo;inizio bisognava <strong>aprire connessione</strong> per ogni singolo file che bisognava richiedere, quindi molto lento, ora sappiamo riuscire a creare socket di connessione che non si chiudono subito</p>
-<p>Molto bene è descritto in <a href="/notes/http-e-rest">HTTP e REST</a></p>
-<h3 id="domain-name-system">Domain Name System<a hidden class="anchor" aria-hidden="true" href="#domain-name-system">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 9">
-<ul>
-<li>Immagine di spiegazione</li>
-</ul>
-<img src="/images/notes/image/universita/ex-notion/Livello applicazione e socket/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello applicazione e socket/Untitled 10">
-<p>Vorremmo avere un metodo molto semplice per umani per poter trovare un sito, ma il livello di rete non li sa gestire, ha bisogno di IP, allora ho bisogno di alcuni server dedicati che mi restituiscono l&rsquo;IP dato un nome di dominio! Questo è <strong>unico</strong>, altrimenti ci sarebbe ambiguità riguardo al nome. E altra cosa, ci sono i server DNS che sappiano dare l’IP corretto a seguito del DNS.</p>
-<p><strong>Problema</strong></p>
-<p>Gli utenti di Internet preferiscono usare nomi mnemonici per identificare le risorse in rete, ad esempio nomi di host appartenenti a una certa rete, oppure indirizzi di e-mail di utenti di una certa rete. Anche le reti, risultano spesso facilmente identificabili attraverso i nomi di dominio della rete. I nomi di dominio hanno quindi lo stesso senso degli indirizzi IP, e infatti vengono assegnati da enti internazionali, come gli indirizzi IP, per evitare confusione e nomi duplicati. Le risorse appartenenti a un dominio possono avere nomi scelti arbitrariamente (ad esempio nomi di host, indirizzi di e-mail) purchè non siano duplicati all’interno del dominio stesso. Nomi di risorse duplicati sono ammessi in domini diversi, (ad esempio, <a href="mailto:pippo@topolinia.it"><a href="mailto:pippo@topolinia.it">pippo@topolinia.it</a></a> e <a href="mailto:pippo@paperopoli.com"><a href="mailto:pippo@paperopoli.com">pippo@paperopoli.com</a></a>). I nomi di dominio hanno una struttura gerarchica del tipo (nomerisorsa.sottodominio.sottodominio.dominioradice). Ad esempio <a href="http://www.informatica.unibo.it/"><a href="https://www.informatica.unibo.it">www.informatica.unibo.it</a></a> è il nome dell’host che agisce da web server per il sottodominio informatica, del sottodominio Università di Bologna, del sottodominio di livello massimo .it (Italia). In realtà il dominio radice del mondo, che esiste implicitamente, non si scrive mai. Tutto ciò è comodo ma viola le esigenze del livello rete e dei router che pretendono solo indirizzi IP.</p>
-<p><strong>DNS per risolvere il problema</strong></p>
-<p>Per risolvere il problema, è nato il servizio Domain Name System (DNS) che attraverso una gerarchia di server e un protocollo standard per le richieste permette di risolvere l’associazione tra nome della risorsa e indirizzo IP. Ogni host in rete deve conoscere un server DNS al quale inviare le richieste e ogni server DNS deve conoscere almeno un server DNS di livello superiore. I server di livello superiore conoscono un numero sempre maggiore di nomi e relativi indirizzi IP, ma sono sempre meno per motivi di costo.</p>
-<p>L’esempio mostra come viene soddisfatta una richiesta DNS a seconda del punto della rete di server DNS dalla quale parte. Se un server DNS non conosce la risposta passa la richiesta al livello superiore, finché qualcuno non conosce l’indirizzo IP.</p>
-<p><strong>Note sull&rsquo;affidabilità</strong></p>
-<p>È una cosa molto brutta tenere un singolo server che possieda questo server DNS, perché se fallisce nessuno può più raggiungerlo!. Quindi vogliamo andare a creare una <strong>alta ridondanza</strong> riguardo questo server DNS.</p>
-<ol>
-<li>Replicare servizi anche in zone differenti (ne basta una su e il servizio apparentemente è su, ecco il sistema distribuito!).</li>
-</ol>
-<h4 id="iterativoricorsivo">Iterativo/Ricorsivo<a hidden class="anchor" aria-hidden="true" href="#iterativoricorsivo">#</a></h4>
-<p>Iterativo il DNS ti risponde col nuovo dns server da contattare per poter avere una risposta</p>
-<p>Ricoversivo quando il DNS stesso va a chiedere, e quindi quando ti risponde ti da già il risultato corretto.</p>
-<p>Quindi in un caso si pone molto più onere sul client che ha richiesto, nel secondo caso si pone onere sul server DNS. Quindi a seconda di quanto hai bisogno puoi fare l’uno o l’altro direi.</p>
-<h4 id="typosquatting-attack">Typosquatting attack<a hidden class="anchor" aria-hidden="true" href="#typosquatting-attack">#</a></h4>
-<p>Questo è un attacco sui DNS. Sappiamo che questo servizi risolvono testo in IPs che poi vengono utilizzati per mandare le richieste sulla rete. Però questo approccio è attaccabile da domini che hanno codifiche diverse, ma carattere uguale all&rsquo;utilizzatore.
-In questo modo un utente può essere ingannato a cliccare su quell&rsquo;url, anche se il domain name originale è diverso perché invece di A scrive А, per esempio hex-dump di <code>A А</code> è <code>41 20 d0 90 a</code> vediamo chiaramente che la seconda A in cirillico è rappresentato da tre bytes, anche se sembrano esattamente essere uguali. Questo può essere utilizzato e attaccato.</p>
-<h3 id="sulla-connessione">Sulla connessione<a hidden class="anchor" aria-hidden="true" href="#sulla-connessione">#</a></h3>
-<p>Riassumento, per poterci connettere sulla rete abbiamo bisogno di queste informazioni e stack di rete qui:</p>
-<ul>
-<li>Stack TCP/IP</li>
-<li>firewall</li>
-<li>(IP, default router, maschera di rete)</li>
-<li>DNS</li>
-<li>DHCP</li>
-</ul>
-<h3 id="architetture-a-livello-applicazione">Architetture a livello applicazione<a hidden class="anchor" aria-hidden="true" href="#architetture-a-livello-applicazione">#</a></h3>
-<ul>
-<li>Client/server</li>
-<li>Peer To peer</li>
-</ul>
-<p>Le applicazioni e i servizi su Internet possono essere realizzati secondo almeno due modalità architetturali distinte: Architettura Client/Server e architettura Peer to Peer (P2P).</p>
-<ol>
-<li>
-<p><strong>Client/Server</strong>, i Client sono host che spediscono richieste di servizio ai Server. I Server sono i soli host sui quali sono in esecuzione i servizi che permettono di soddisfare le richieste. Un esempio di servizi di tipo Client/Server sono: il servizio DNS, dove ogni host può agire da client spedendo richieste degli indirizzi IP ai DNS server, oppure il servizio World Wide Web,
-e il servizio di posta elettronica, entrambi basati su client che chiedono pagine web o spediscono e-mail, e server che mantengono le informazioni o memorizzano le e-mail spedite.</p>
-</li>
-<li>
-<p><strong>Peer to Peer</strong> (P2P), invece, tutti gli host sono contemporaneamente sia client che server. Ogni host agisce da Server cercando di soddisfare, se possibile, le richieste ricevute da altri host. Ogni host agisce da Client quando spedisce ad altri host le sue richieste, o per conto personale, o per cercare di soddisfare richieste di terzi. Un esempio di servizi P2P sono: i
-servizi di condivisione dati (file-sharing) basati su protocolli Freenet, Gnutella, Kazaa.
-Esistono anche servizi ibridi, nei quali esistono server che aiutano solo a trovare più rapidamente gli host P2P migliori per comunicare e implementare servizi P2P (esempio: file-sharing con Napster).</p>
-</li>
-</ol>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

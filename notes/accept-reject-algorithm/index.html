@@ -7,18 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Accept Reject algorithm | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Some useful links
-Main results: https://jblevins.org/notes/accept-reject
-Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
-La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
-Introduzione al metodo
-Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto.
-L&rsquo;idea principale è:
-
-Conosco la funzione densità della funzione $f$ che voglio andare a generare
-Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density. (che è la densità che utilizzo per calcolare il target che non conosco molto bene).
-
-Ma devono esserci due cose:">
+<meta name="description" content="Accept Reject algorithm - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/accept-reject-algorithm/">
@@ -104,11 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/accept-reject-algorithm/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Accept Reject algorithm">
-  <meta property="og:description" content="Some useful links Main results: https://jblevins.org/notes/accept-reject
-Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
-La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
-Introduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:
-Conosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density. (che è la densità che utilizzo per calcolare il target che non conosco molto bene). Ma devono esserci due cose:">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -117,18 +102,7 @@ Conosco la funzione densità della funzione $f$ che voglio andare a generare Rie
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Accept Reject algorithm">
-<meta name="twitter:description" content="Some useful links
-Main results: https://jblevins.org/notes/accept-reject
-Intuition: https://en.wikipedia.org/wiki/Rejection_sampling
-La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).
-Introduzione al metodo
-Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto.
-L&rsquo;idea principale è:
-
-Conosco la funzione densità della funzione $f$ che voglio andare a generare
-Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density. (che è la densità che utilizzo per calcolare il target che non conosco molto bene).
-
-Ma devono esserci due cose:">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -157,12 +131,12 @@ Ma devono esserci due cose:">
   "@type": "BlogPosting",
   "headline": "Accept Reject algorithm",
   "name": "Accept Reject algorithm",
-  "description": "Some useful links Main results: https://jblevins.org/notes/accept-reject\nIntuition: https://en.wikipedia.org/wiki/Rejection_sampling\nLa cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).\nIntroduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L\u0026rsquo;idea principale è:\nConosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density. (che è la densità che utilizzo per calcolare il target che non conosco molto bene). Ma devono esserci due cose:\n",
+  "description": "",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Some useful links Main results: https://jblevins.org/notes/accept-reject\nIntuition: https://en.wikipedia.org/wiki/Rejection_sampling\nLa cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).\nIntroduzione al metodo Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto. L’idea principale è:\nConosco la funzione densità della funzione $f$ che voglio andare a generare Riesco a generare seguendo una funzione semplice, la chiamo $g$, candidate density. (che è la densità che utilizzo per calcolare il target che non conosco molto bene). Ma devono esserci due cose:\nDue densità devono avere lo stesso supporto La funzione $\\frac{f}{g}$ deve essere limitata superiormente. (perché è come l’esempio del lago in cui lancio cose dentro per approssimarne il valore). Allora sia $M$ il limite superiore, un buon modo per fare sampling sarà allora $$ U \\leq \\frac{1}{M} \\frac{f(Y)}{g(Y)} $$ Ossia genero $Y$ usando g, e genero $U$ in modo uniforme normale Guardo se viene soddisfatta la funzione di sopra Se sì prendo, altrimenti rifiuto e continuo così. Dimostrazione Probability of accepting dato una certa $M$ allora ho probabilità $\\frac{1}{M}$ di accettare un sample generato in questo modo, vedere dimostrazione su wikipedia. Ma qui diamo una altro valore:\n$$ \\mathbb{P}\\left( U \\leq \\frac{f(Y)}{Mg(Y)} \\right) \\ = \\int_{-\\infty}^{+\\infty} \\int _{-\\infty}^{f(Y)/f(X)M} 1 \\, du g(y) \\, dy $$$$ = \\int_{-\\infty}^{+\\infty} \\frac{1}{M} \\frac{f(y)}{g(y)} g(y) \\, dy = \\frac{1}{M} $$ E si ha la soluzione.\nAverage waiting time (!) $$ c = \\sup_{x} \\frac{f(x)}{g(x)} $$ Ad intuito questo sarebbe il valore di $M$ migliore, perché è quello con probabilità migliore per fare sampling, ma non so bene perché si potrebbe considerare come un concetto di tempo.\nWith Unnormalized density ossia tale per cui l’integrale su tutto il supporto non è 1, ma un valore $k$, si può dire che questo algoritmo funziona lo stesso. Il motivo che è stato dato è che questa costante si può tirare fuori e messa dentro $M$ e quindi sarebbe come il dato precedente.\nconsideriamo $\\tilde{f}$ e $\\tilde{g}$ tale che entrambi non siano normalizzati, magari con costanti diversi, e supponiamo che anche questi siano limitati su $\\tilde{M}$.\n$$ \\frac{i}{\\tilde{M} \\cdot k} $$ Dove $k = \\int _{-\\infty}^{+\\infty} f(x) \\, dx$ dato che non è normalizzato.\n",
-  "wordCount" : "373",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -257,87 +231,12 @@ Ma devono esserci due cose:">
     <h1 class="post-title entry-hint-parent">
       Accept Reject algorithm
     </h1>
-    <div class="post-meta">Reading Time: 2 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#some-useful-links" aria-label="Some useful links">Some useful links</a></li>
-                <li>
-                    <a href="#introduzione-al-metodo" aria-label="Introduzione al metodo">Introduzione al metodo</a></li>
-                <li>
-                    <a href="#dimostrazione" aria-label="Dimostrazione">Dimostrazione</a></li>
-                <li>
-                    <a href="#probability-of-accepting" aria-label="Probability of accepting">Probability of accepting</a></li>
-                <li>
-                    <a href="#average-waiting-time-" aria-label="Average waiting time (!)">Average waiting time (!)</a></li>
-                <li>
-                    <a href="#with-unnormalized-density" aria-label="With Unnormalized density">With Unnormalized density</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h4 id="some-useful-links">Some useful links<a hidden class="anchor" aria-hidden="true" href="#some-useful-links">#</a></h4>
-<p>Main results: <a href="https://jblevins.org/notes/accept-reject"><a href="https://jblevins.org/notes/accept-reject">https://jblevins.org/notes/accept-reject</a></a></p>
-<p>Intuition: <a href="https://en.wikipedia.org/wiki/Rejection_sampling"><a href="https://en.wikipedia.org/wiki/Rejection_sampling">https://en.wikipedia.org/wiki/Rejection_sampling</a></a></p>
-<p>La cosa è che faccio sampling fra due distribuzioni diverse e devo settare anche un parametro (e a seconda di certe cose diventa molto lento).</p>
-<h4 id="introduzione-al-metodo">Introduzione al metodo<a hidden class="anchor" aria-hidden="true" href="#introduzione-al-metodo">#</a></h4>
-<p>Vorrei utilizzare una funzione $g$ per generarne una altra, questo è il fulcro del concetto.
-L&rsquo;idea principale è:</p>
-<ol>
-<li>Conosco la funzione densità della funzione $f$ che voglio andare a generare</li>
-<li>Riesco a generare seguendo una funzione semplice, la chiamo $g$, <strong>candidate density</strong>. (che è la densità che utilizzo per calcolare il target che non conosco molto bene).</li>
-</ol>
-<p>Ma devono esserci due cose:</p>
-<ol>
-<li>Due densità devono avere lo stesso supporto</li>
-<li>La funzione $\frac{f}{g}$ deve essere limitata superiormente. (perché è come l&rsquo;esempio del lago in cui lancio cose dentro per approssimarne il valore).
-Allora sia $M$ il limite superiore, un buon modo per fare sampling sarà allora
-$$
-U \leq \frac{1}{M} \frac{f(Y)}{g(Y)}
-$$
-Ossia</li>
-<li>genero $Y$ usando g, e genero $U$ in modo uniforme normale</li>
-<li>Guardo se viene soddisfatta la funzione di sopra</li>
-<li>Se sì prendo, altrimenti rifiuto e continuo così.</li>
-</ol>
-<h4 id="dimostrazione">Dimostrazione<a hidden class="anchor" aria-hidden="true" href="#dimostrazione">#</a></h4>
-<img src="/images/notes/Inverse Transform-1700141332706.jpeg" style="width: 100%" class="center" alt="Inverse Transform-1700141332706">
-<h4 id="probability-of-accepting">Probability of accepting<a hidden class="anchor" aria-hidden="true" href="#probability-of-accepting">#</a></h4>
-<p>dato una certa $M$ allora ho probabilità $\frac{1}{M}$ di accettare un sample generato in questo modo, vedere dimostrazione su <a href="https://en.wikipedia.org/wiki/Rejection_sampling#Theory">wikipedia</a>.
-Ma qui diamo una altro valore:</p>
-$$
-\mathbb{P}\left( U \leq \frac{f(Y)}{Mg(Y)} \right) \
-= \int_{-\infty}^{+\infty} \int _{-\infty}^{f(Y)/f(X)M} 1 \, du g(y) \, dy
-$$$$
-= \int_{-\infty}^{+\infty} \frac{1}{M} \frac{f(y)}{g(y)} g(y) \, dy = \frac{1}{M}
-$$<p>
-E si ha la soluzione.</p>
-<h4 id="average-waiting-time-">Average waiting time (!)<a hidden class="anchor" aria-hidden="true" href="#average-waiting-time-">#</a></h4>
-$$
-c = \sup_{x} \frac{f(x)}{g(x)}
-$$<p>
-Ad intuito questo sarebbe il valore di $M$ migliore, perché è quello con probabilità migliore per fare sampling, ma non so bene perché si potrebbe considerare come un concetto di tempo.</p>
-<h4 id="with-unnormalized-density">With Unnormalized density<a hidden class="anchor" aria-hidden="true" href="#with-unnormalized-density">#</a></h4>
-<p>ossia tale per cui l&rsquo;integrale su tutto il supporto non è 1, ma un valore $k$, si può dire che questo algoritmo funziona lo stesso.
-Il motivo che è stato dato è che questa costante si può tirare fuori e messa dentro $M$ e quindi sarebbe come il dato precedente.</p>
-<p>consideriamo $\tilde{f}$ e $\tilde{g}$ tale che entrambi non siano normalizzati, magari con costanti diversi, e supponiamo che anche questi siano limitati su $\tilde{M}$.</p>
-$$
-\frac{i}{\tilde{M} \cdot k}
-$$<p>
-Dove $k = \int _{-\infty}^{+\infty} f(x) \, dx$ dato che non è normalizzato.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

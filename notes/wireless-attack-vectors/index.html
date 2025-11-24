@@ -7,13 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Wireless attack vectors | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🛡️cybersecurity">
-<meta name="description" content="In this note we will talk about some common ways to attack wireless based devices.
-Attacking an automated door
-Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)
-Jamming
-This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space.
-But with Frequency hopping this attack is solved. See Tecnologia Wireless#Frequency Hopping
-But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in Notions of Security#CIAA principles of security.) if the initial seed is known.">
+<meta name="description" content="Wireless attack vectors - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/wireless-attack-vectors/">
@@ -99,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/wireless-attack-vectors/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Wireless attack vectors">
-  <meta property="og:description" content="In this note we will talk about some common ways to attack wireless based devices.
-Attacking an automated door Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)
-Jamming This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space. But with Frequency hopping this attack is solved. See Tecnologia Wireless#Frequency Hopping But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in Notions of Security#CIAA principles of security.) if the initial seed is known.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -112,13 +104,7 @@ Jamming This is the easiest way to attack. Just send many signals to make a cert
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Wireless attack vectors">
-<meta name="twitter:description" content="In this note we will talk about some common ways to attack wireless based devices.
-Attacking an automated door
-Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)
-Jamming
-This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space.
-But with Frequency hopping this attack is solved. See Tecnologia Wireless#Frequency Hopping
-But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in Notions of Security#CIAA principles of security.) if the initial seed is known.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -147,12 +133,12 @@ But this method could be easily known and observed (enables eavesdropping, again
   "@type": "BlogPosting",
   "headline": "Wireless attack vectors",
   "name": "Wireless attack vectors",
-  "description": "In this note we will talk about some common ways to attack wireless based devices.\nAttacking an automated door Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)\nJamming This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space. But with Frequency hopping this attack is solved. See Tecnologia Wireless#Frequency Hopping But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in Notions of Security#CIAA principles of security.) if the initial seed is known.\n",
+  "description": "",
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "In this note we will talk about some common ways to attack wireless based devices.\nAttacking an automated door Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)\nJamming This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space. But with Frequency hopping this attack is solved. See Tecnologia Wireless#Frequency Hopping But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in Notions of Security#CIAA principles of security.) if the initial seed is known.\nFrom this we conclude that\nIf the modulation used is known If the initial seed is known. We can eavesdrop. Rolling code In some systems like automated doors, they just check for a sequence of signals, if that is present open the door. This is clearly easily attacked by replay attacks. So, a common way to protect against those types of attacks is to use a rolling code. With rolling code both transmitter and receiver have a PRNG. The transmitter sends codes based on the PRNG, and receiver tries to get those messages. He tries to see codes in a large frame window, so that a missed code doesn’t dis-align it too much. This makes replay attacks more difficult (usually it is good enough), but does not prevent them: if the attacker captures too many codes then it can be broken!\nChallenge and response More secure way to handle these is using challenge-response protocols. The door generates a nonce to the receiver. The receiver than uses a common secret to cipher it and return back to the door. This needs a back and forth not present in the previous methods. With these in place, we can authenticate the client, and solve replay attacks.\nDefenses of IEEE 802.11 The physical layer There are usually no defenses against attacks on the physical layer of the wifi network stack. Electromagnetic radiations are transmitted freely in the space. Some solutions are for example use paints that absorb most of the radio waves. The Mac layer Inter-Frame spaces DoS Remember that the mac layer uses silent periods, called SIFS, PIFS, DIFS to orchestrate the communication Mac Wifi#Inter-Frame spaces. There is a easy denial of service attack with this protocol: just permanently communicate before the end of a PIFS, so it’s just you that does it.\nSSID Hiding This link is an interesting resource regarding this topic. Let’s ask: is it secure to hid the SSID of your wi-fi network? Answer: No, you are using security by obscurity Classical Cyphers#On security of cipher explains why it is a bad idea.\nMAC whitelisting Also, this is not a good idea, because it is easy to spoof the wanted MAC if an attacker really wanted to.\nDisassociation attack Some packets, like disassociation packets are sent in clear, with no need for authentication of the request. This makes easy to send disassociation packets to make a terminal disconnect from the access point.\nSee here. The solution for this problem is to authenticate the terminal with WPA or other ciphers.\nRogue AP As SSID (see briefly Wifi 802-11), are public, it’s possible to spoof the network, and put an access point that is not the real one, but pretends to be. In this way, you can receive passwords or other secrets that pass through this AP.\nWi-fi Cryptography WEP protocol Has two operating modes, shared key and open system.\nWEP Shared Key Challenge and response framework is used, like this: But as the nonce is in clear, the key can be recovered using Known plain-text attacks and other similar to those! And it’s possible to do it in every session.\nWEP Open System With this protocol, the sender and receiver already have the secret key in common. Then the sender does this to create the cipher text: RC4_seed(IV | k), then uses this OTP and Stream Ciphers#Stream Ciphers to generate the key used to cipher the messages. The message is split to $n$ blocks at the beginning, so there are like blocks of messages. The problem is that after 30k packages is almost sure collision that would allow an attacker to recover the plain-text, as they share the same IV. So this is not secure at all.\nWPA protocol Stands for WiFi protected access. This protocol solves some of the common problems of WEP security. It can be divided into 3 channel based categories and two cipher-based categories.\nPSK Enterprise WPS For the channels And TKIP(Temporal Key Integrity Protocol) and CCMP (Counter Mode Cipher Block Chaining Message Authentication Code Protocol) for cipher modes. TKIP is wep compatible. CCMP uses AES with CBC. WPA with TKIP has been deprecated.\nWPA-PSK So, a WPA that uses phase shift keying to send the messages. Using the TKIP, it has problems like WEP, so it is not used anymore.\nCCMP version is still quite used, usually in domestic systems. It is still reliable.\nWPS With these system, there is no need for a password. But it needs a physical access to the access point. Example of this method is a button or PIN on the wifi router.\nWPA-Enterprise This method is used on WANs, for example Unibo WAN uses this method. They use an external server for authentication, called RADIUS (Remote Authentication Dial-In User Service). WPA3 WPA2 was possible to have a Replay attack, as the used nonce was cached to make the authentication faster. WPA3 solved this problem, so it can be considered as the most secure method.\n",
-  "wordCount" : "925",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-06-02T00:00:00Z",
   "dateModified": "2024-06-02T00:00:00Z",
@@ -247,163 +233,12 @@ But this method could be easily known and observed (enables eavesdropping, again
     <h1 class="post-title entry-hint-parent">
       Wireless attack vectors
     </h1>
-    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#attacking-an-automated-door" aria-label="Attacking an automated door">Attacking an automated door</a><ul>
-                        
-                <li>
-                    <a href="#jamming" aria-label="Jamming">Jamming</a></li>
-                <li>
-                    <a href="#rolling-code" aria-label="Rolling code">Rolling code</a></li>
-                <li>
-                    <a href="#challenge-and-response" aria-label="Challenge and response">Challenge and response</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#defenses-of-ieee-80211" aria-label="Defenses of IEEE 802.11">Defenses of IEEE 802.11</a><ul>
-                        
-                <li>
-                    <a href="#the-physical-layer" aria-label="The physical layer">The physical layer</a></li>
-                <li>
-                    <a href="#the-mac-layer" aria-label="The Mac layer">The Mac layer</a><ul>
-                        
-                <li>
-                    <a href="#inter-frame-spaces-dos" aria-label="Inter-Frame spaces DoS">Inter-Frame spaces DoS</a></li>
-                <li>
-                    <a href="#ssid-hiding" aria-label="SSID Hiding">SSID Hiding</a></li>
-                <li>
-                    <a href="#mac-whitelisting" aria-label="MAC whitelisting">MAC whitelisting</a></li>
-                <li>
-                    <a href="#disassociation-attack" aria-label="Disassociation attack">Disassociation attack</a></li>
-                <li>
-                    <a href="#rogue-ap" aria-label="Rogue AP">Rogue AP</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#wi-fi-cryptography" aria-label="Wi-fi Cryptography">Wi-fi Cryptography</a><ul>
-                        
-                <li>
-                    <a href="#wep-protocol" aria-label="WEP protocol">WEP protocol</a><ul>
-                        
-                <li>
-                    <a href="#wep-shared-key" aria-label="WEP Shared Key">WEP Shared Key</a></li>
-                <li>
-                    <a href="#wep-open-system" aria-label="WEP Open System">WEP Open System</a></li></ul>
-                </li>
-                <li>
-                    <a href="#wpa-protocol" aria-label="WPA protocol">WPA protocol</a><ul>
-                        
-                <li>
-                    <a href="#wpa-psk" aria-label="WPA-PSK">WPA-PSK</a></li>
-                <li>
-                    <a href="#wps" aria-label="WPS">WPS</a></li>
-                <li>
-                    <a href="#wpa-enterprise" aria-label="WPA-Enterprise">WPA-Enterprise</a></li>
-                <li>
-                    <a href="#wpa3" aria-label="WPA3">WPA3</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>In this note we will talk about some common ways to attack wireless based devices.</p>
-<h3 id="attacking-an-automated-door">Attacking an automated door<a hidden class="anchor" aria-hidden="true" href="#attacking-an-automated-door">#</a></h3>
-<p>Usually these doors are opened by radio frequency keys, and can be opened easily (e.g. replay attacks, Jam the frequency)</p>
-<h4 id="jamming">Jamming<a hidden class="anchor" aria-hidden="true" href="#jamming">#</a></h4>
-<p>This is the easiest way to attack. Just send many signals to make a certain frequency un-usable in our space.
-But with Frequency hopping this attack is solved. See <a href="/notes/tecnologia-wireless#frequency-hopping">Tecnologia Wireless#Frequency Hopping</a>
-But this method could be easily known and observed (enables eavesdropping, against confidentiality, a principle in <a href="/notes/notions-of-security#ciaa-principles-of-security">Notions of Security#CIAA principles of security</a>.) if the initial seed is known.</p>
-<p>From this we conclude that</p>
-<ul>
-<li>If the modulation used is known</li>
-<li>If the initial seed is known.
-We can eavesdrop.</li>
-</ul>
-<h4 id="rolling-code">Rolling code<a hidden class="anchor" aria-hidden="true" href="#rolling-code">#</a></h4>
-<p>In some systems like automated doors, they just check for a sequence of signals, if that is present open the door. This is clearly easily attacked by <strong>replay attacks</strong>.
-So, a common way to protect against those types of attacks is to use a <strong>rolling code</strong>.
-With rolling code both transmitter and receiver have a PRNG. The transmitter sends codes based on the PRNG, and receiver tries to get those messages. He tries to see codes in a large frame window, so that a missed code doesn&rsquo;t dis-align it too much.
-This makes replay attacks more difficult (usually it is good enough), but does not prevent them: if the attacker captures too many codes then it can be broken!</p>
-<h4 id="challenge-and-response">Challenge and response<a hidden class="anchor" aria-hidden="true" href="#challenge-and-response">#</a></h4>
-<p>More secure way to handle these is using <strong>challenge-response protocols</strong>.
-The door generates a <strong>nonce</strong> to the receiver. The receiver than uses a common secret to cipher it and return back to the door. This needs a back and forth not present in the previous methods.
-<img src="/images/notes/Wireless attack vectors-20240411112506089.webp" style="width: 100%" class="center" alt="Wireless attack vectors-20240411112506089">
-With these in place, we can <strong>authenticate</strong> the client, and solve replay attacks.</p>
-<h2 id="defenses-of-ieee-80211">Defenses of IEEE 802.11<a hidden class="anchor" aria-hidden="true" href="#defenses-of-ieee-80211">#</a></h2>
-<h3 id="the-physical-layer">The physical layer<a hidden class="anchor" aria-hidden="true" href="#the-physical-layer">#</a></h3>
-<p>There are usually no defenses against attacks on the physical layer of the wifi network stack. <a href="/notes/onde-elettromagnetiche">Electromagnetic radiations</a> are transmitted freely in the space.
-Some solutions are for example use paints that absorb most of the radio waves.
-<img src="/images/notes/Wireless attack vectors-20240411113254182.webp" style="width: 100%" class="center" alt="Wireless attack vectors-20240411113254182"></p>
-<h3 id="the-mac-layer">The Mac layer<a hidden class="anchor" aria-hidden="true" href="#the-mac-layer">#</a></h3>
-<h4 id="inter-frame-spaces-dos">Inter-Frame spaces DoS<a hidden class="anchor" aria-hidden="true" href="#inter-frame-spaces-dos">#</a></h4>
-<p>Remember that the mac layer uses silent periods, called SIFS, PIFS, DIFS to orchestrate the communication <a href="/notes/mac-wifi#inter-frame-spaces">Mac Wifi#Inter-Frame spaces</a>.
-There is a easy denial of service attack with this protocol: just permanently communicate before the end of a PIFS, so it&rsquo;s just you that does it.</p>
-<h4 id="ssid-hiding">SSID Hiding<a hidden class="anchor" aria-hidden="true" href="#ssid-hiding">#</a></h4>
-<p>This <a href="https://fractionalciso.com/should-you-hide-your-wi-fi-ssid/">link</a> is an interesting resource regarding this topic.
-Let&rsquo;s ask: is it secure to hid the SSID of your wi-fi network?
-Answer: No, you are using security by obscurity <a href="/notes/classical-cyphers#on-security-of-cipher">Classical Cyphers#On security of cipher</a> explains why it is a bad idea.</p>
-<h4 id="mac-whitelisting">MAC whitelisting<a hidden class="anchor" aria-hidden="true" href="#mac-whitelisting">#</a></h4>
-<p>Also, this is not a good idea, because it is easy to <strong>spoof</strong> the wanted MAC if an attacker really wanted to.</p>
-<h4 id="disassociation-attack">Disassociation attack<a hidden class="anchor" aria-hidden="true" href="#disassociation-attack">#</a></h4>
-<p>Some packets, like disassociation packets are sent in clear, with no need for authentication of the request. This makes easy to send disassociation packets to make a terminal disconnect from the access point.</p>
-<p>See <a href="https://nordvpn.com/cybersecurity/glossary/disassociation-attack/">here</a>. The solution for this problem is to authenticate the terminal with WPA or other ciphers.</p>
-<h4 id="rogue-ap">Rogue AP<a hidden class="anchor" aria-hidden="true" href="#rogue-ap">#</a></h4>
-<p>As SSID (see briefly <a href="/notes/wifi-802-11">Wifi 802-11</a>), are public, it&rsquo;s possible to <strong>spoof</strong> the network, and put an access point that is not the real one, but pretends to be. In this way, you can receive passwords or other secrets that pass through this AP.</p>
-<h2 id="wi-fi-cryptography">Wi-fi Cryptography<a hidden class="anchor" aria-hidden="true" href="#wi-fi-cryptography">#</a></h2>
-<h3 id="wep-protocol">WEP protocol<a hidden class="anchor" aria-hidden="true" href="#wep-protocol">#</a></h3>
-<p>Has two operating modes, shared key and open system.</p>
-<h4 id="wep-shared-key">WEP Shared Key<a hidden class="anchor" aria-hidden="true" href="#wep-shared-key">#</a></h4>
-<p>Challenge and response framework is used, like this:
-<img src="/images/notes/Wireless attack vectors-20240411112506089.webp" style="width: 100%" class="center" alt="Wireless attack vectors-20240411112506089"></p>
-<p>But as the <strong>nonce</strong> is in clear, the key can be recovered using Known plain-text attacks and other similar to those! And it&rsquo;s possible to do it in <strong>every session</strong>.</p>
-<h4 id="wep-open-system">WEP Open System<a hidden class="anchor" aria-hidden="true" href="#wep-open-system">#</a></h4>
-<p>With this protocol, the sender and receiver already have the secret key in common.
-Then the sender does this to create the cipher text:
-<code>RC4_seed(IV | k)</code>, then uses this <a href="/notes/otp-and-stream-ciphers#stream-ciphers">OTP and Stream Ciphers#Stream Ciphers</a> to generate the key used to cipher the messages.
-The message is split to $n$ blocks at the beginning, so there are like blocks of messages.
-The problem is that after 30k packages is <strong>almost sure collision</strong> that would allow an attacker to recover the plain-text, as they share the same IV.
-So this is not secure at all.</p>
-<h3 id="wpa-protocol">WPA protocol<a hidden class="anchor" aria-hidden="true" href="#wpa-protocol">#</a></h3>
-<p>Stands for WiFi protected access.
-This protocol solves some of the common problems of WEP security. It can be divided into 3 channel based categories and two cipher-based categories.</p>
-<ol>
-<li>PSK</li>
-<li>Enterprise</li>
-<li>WPS
-For the channels
-And TKIP(Temporal Key Integrity Protocol) and CCMP (Counter Mode Cipher Block Chaining Message Authentication Code Protocol) for cipher modes. TKIP is wep compatible. CCMP uses <a href="/notes/block-ciphers#advanced-encryption-standard">AES</a> with CBC.</li>
-</ol>
-<p>WPA with TKIP has been deprecated.</p>
-<h4 id="wpa-psk">WPA-PSK<a hidden class="anchor" aria-hidden="true" href="#wpa-psk">#</a></h4>
-<p>So, a WPA that uses phase shift keying to send the messages. Using the TKIP, it has problems like WEP, so it is not used anymore.</p>
-<p>CCMP version is still quite used, usually in <strong>domestic systems</strong>. It is still reliable.</p>
-<h4 id="wps">WPS<a hidden class="anchor" aria-hidden="true" href="#wps">#</a></h4>
-<p>With these system, there is <em>no need for a password</em>. But it needs a physical access to the access point. Example of this method is a button or PIN on the wifi router.</p>
-<h4 id="wpa-enterprise">WPA-Enterprise<a hidden class="anchor" aria-hidden="true" href="#wpa-enterprise">#</a></h4>
-<p>This method is used on WANs, for example Unibo WAN uses this method.
-They use an <em>external server</em> for authentication, called <strong>RADIUS</strong> (Remote Authentication Dial-In User Service).
-<img src="/images/notes/Wireless attack vectors-20240411120024065.webp" style="width: 100%" class="center" alt="Wireless attack vectors-20240411120024065"></p>
-<h4 id="wpa3">WPA3<a hidden class="anchor" aria-hidden="true" href="#wpa3">#</a></h4>
-<p>WPA2 was possible to have a Replay attack, as the used nonce was cached to make the authentication faster.
-WPA3 solved this problem, so it can be considered as the most secure method.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

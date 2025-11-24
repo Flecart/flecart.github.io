@@ -7,14 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Polimorfismo | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Introduzione
-Monoforfo
-Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.
-
-Polimorfismo
-Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).
-
-A program part is polymorphic if it can be used for objects of several classes">
+<meta name="description" content="Polimorfismo - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/polimorfismo/">
@@ -100,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/polimorfismo/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Polimorfismo">
-  <meta property="og:description" content="Introduzione Monoforfo Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.
-Polimorfismo Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).
-A program part is polymorphic if it can be used for objects of several classes">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -113,14 +104,7 @@ A program part is polymorphic if it can be used for objects of several classes">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Polimorfismo">
-<meta name="twitter:description" content="Introduzione
-Monoforfo
-Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.
-
-Polimorfismo
-Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).
-
-A program part is polymorphic if it can be used for objects of several classes">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -149,12 +133,12 @@ A program part is polymorphic if it can be used for objects of several classes">
   "@type": "BlogPosting",
   "headline": "Polimorfismo",
   "name": "Polimorfismo",
-  "description": "Introduzione Monoforfo Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.\nPolimorfismo Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).\nA program part is polymorphic if it can be used for objects of several classes\n",
+  "description": "",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "Introduzione Monoforfo Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.\nPolimorfismo Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).\nA program part is polymorphic if it can be used for objects of several classes\nTipologie di Polimorfismo (3) ad-hoc polymorphism questo è anche chiamato overloading in cui vado a definire un nuova funzione (con lo stesso nome) che accetti il nuovo tipo di dato. subtype polymorphism parametric polymorphism Ad-hoc (3) Questo è molto simile al tipo somma, solamente fatto da un punto di vista funzionale (i domini devono essere separati).\nIn C sono molto conosciute questa tipologia di polimorfismo. Però ci sono anche forme comuni, come l’operatori aritmetici.\nL’invocazione è anche chiamato dispatch , quando abbiamo risolto l’overloading, ossia abbiamo fatto il dispatch dell’invocazione, allora l’overloading scompare e viene eseguita una specifica funzione. Questa funzione può essere fatta in modo statico oppure dinamico.\nRiassumendo:\nDefinisco stesso nome che prendono tipi diversi Avviene un dispatch statico o dinamico Una volta avvenuto il dispatch, la funzione eseguita è univocamente identificata. Statico o dinamico nel dispatch\nDispatch è il processo che va a decidere la funzione overloadata da chiamare, questo processo si può classificare come dinamico se avviene durante il runtime (come solitamente è per le interfacce) oppure statico quando avviene e a tempo di compilazione (come solitamente avviene per le funzioni overloaddate).\nDi sottotipo Possiamo andare a dire che un tipo S è sottotipo di un tipo T, indicato con $S \u003c: T$, quando S può essere utilizzato in qualunque occasione al posto di T. Questo è anche chiamato come principio di sostituzione di Liskov, vedi Classi OOP\nSetTheory per sottotipi Slide polimorfismo di sottotipo\nQuesto concetto l’abbiamo anche accennato in Algebra dei tipi quando abbiamo parlato di coercizione.\npraticamente quando abbiamo un tipo più specifico $S$ che andiamo ad indicare con $S \u003c: T$, allora quando ho S e devo utilizzare T, lo posso fare, questo perché S contiene tutte le caratteristiche di T.\nSolitamente questa è una relazione di preordine ossia riflessiva e transitiva, spesso anche antisimmetrica, quindi è spesso un ordine parziale.\nSi può dire che esiste un rapporto di specificazione (parola da utilizzare nell’orale per bella figura lel) perché S è più specifico di T, in questo senso possiamo utilizzare S in ogni posto in cui c’è T.\nTipologie di sottotipaggio (2) Per questa parte possiamo andare a definire un concetto di sottotipaggio per profondità o per larghezza.\nPer larghezza: basta che il sottotipo abbia molti più campi! in questo senso Dog \u003c Animal, perché anche dog posso utilizzarlo come un animal, dato che ha tutte le cose di animal. (l’unica differenza col duck typing è il fatto che T qui è esplicito, mentre nel duck typing non mi importa del tipo, solamente dello stesso utilizzo).\nDifferenza fra duck e width subtyping per chatGPT\nWidth subtyping is a form of subtype polymorphism where a type is considered a subtype of another type if it has at least the same properties and methods as the supertype. This means that a subtype can have more properties and methods than the supertype, but it must at least have all of the ones that are defined in the supertype. This is called “width” because it is based on the width of the type’s interface.\nDuck typing, on the other hand, is a more dynamic approach to type checking where the type of an object is determined by its behavior at runtime rather than its static type. In other words, if it walks like a duck and quacks like a duck, then it must be a duck. This means that two objects with different types can still be treated as if they have the same type if they share the same behavior.\nIn summary, width subtyping is based on the interface of a type and allows for subtype polymorphism, while duck typing is based on the behavior of an object at runtime and allows for more dynamic type checking.\nPer profondità: Quando un campo ha un tipo che sia un sottotipo di un altro. Questo è visto molte meno volte, però si può fare. Questa ha però delle particolarità, è importante introdurre il concetto di covariante per tipi quando le parti del record mantengono la stessa direzione di sottotipaggio. Quando abbiamo due tipi che sono covarianti, possiamo utilizzarli solo per le letture. In scrittura però potremmo avere dei campi non inizializzati, quindi non va molto bene. (nell’esempio avremmo un animale in output in scrittura, mentre gli abbiamo dato un dog e ci aspettavamo un dog in output). (queste nozioni di covarianza comunque sono sempre in funzione del contesto).\nIn pratica vado a rimpiazzare i campi del record con dei sottotipi, questo è buono per cose immutabili, for example, you can assign 1.5 to the ‘x’ field of a real point (a record with two real fields), but you can’t do the same to the ‘x’ field of an integer point (which, however, is a deep subtype of the real point type) because 1.5 is not an integer.\nCovariante e Controvariante e consumo (!!) Abbiamo trattato più recentemente di queste regole in Typing and Subtyping. È stato spiegato meglio.\nSlide covariante, controvariante e consumi e produzione Esempio strano\nQuesta nozione si basa sull’inversione fra produzione e consumazione.\nAvevamo detto che abbiamo una relazione di sottotipo, perché DogHouse \u003c AnimalHouse quindi sono covarianti rispetto a Dog \u003c Animal House. Ma nella fase di consumo, questo si inverte, quindi si può dire che siano controvarianti.\nIn breve:\nConsumo (input) → Controvariante Produzione (output) → Covariante Il motivo per cui succede è che Dog fn utilizza i campi di Dog, che sono più estesi, posso sostituire a questo consumo anche animal, che utilizza i campi di animal, quindi sono anche presenti in Dog, ecco che il rapporto si inverte\nPossiamo fare un parallelo fra le funzioni di consumo e quelle di produzione.\nSussunzione Con sussunzione andiamo a parlare di quando possiamo fare l’inferenza di sottotipaggio ossia se è vero o meno che un tipo è sottotipo di un altro (e quindi possibile utilizzare S al posto di T in qualunque luogo).\nPossiamo fare la sussunzione in modo estensionale o intensionale quindi o:\nCaratterizzando tutti gli elementi del sottotipo Parlare di predicati e domini. Teoria dei Tipi#Tipo estensionali o intensionali abbiamo parlato di estensionale o intensionale.\nEsempi di sussunzione Polimorfismo parametrico Il problema che il polimorfismo parametrico risolve rispetto a quello di sottotipo è il fatto che per ritrovare l’informazione iniziale, c’è bisogno di castin. Con il polimorfismo parametrico non avremo più bisogno di questo.\nTipi parametrici Quando abbiamo delle operazioni anche se non conosciamo esattamente cosa c’è sotto, però riguardo la struttura so bene cosa vanno a fare. (un esempio riguardo a questo è il sort).\nQuesta parametrizzazione ci permette di definire delle cose per tutti i tipi che possiedono quella funzione (ricorda i tratti di rust), ed è per questo che possiamo dire che sia un tipo universale. Questa cosa che vale per tutti ci permette di poter provare dei teoremi a gratis.\nUpper Bounds We can infer which methods are available by setting the upper bounds (methods that are present) with respect to a generic type.\nFor example, if a class extends from\ninterface Comparable\u003cT\u003e {int compareTo( T o );} Then we know that at least the method compareTo is implemented within this function. If not we cannot assume anything for the model.\nSubtyping with Generics Generic types aresubtypes of theirdeclared supertypes Type variables aresubtypes of their upperbounds But different instantiations are unrelated directly. They cannot neither be covariant parameter types, neither contravariant. Make sure you know some examples where this is valid.\nCovariance is unsafe when a generic type argument is used for variables that are written by clients- Mutable fields- Method arguments Contravariance isunsafe when a generictype argument is usedfor variables that areread by clients- Fields- Method results The standard solution in Java is non-variancy, which means the types are neither covariant or contravariant, they just are not compatible with each other. Sometimes this is over restrictive though. Covariant generics would need lots of runtime checks for every field update and argument passing, which is a lot.\nCovariance and Contravariance Annotations We can make generics support covariance or contravariance if that generic only uses the type parameter in covariant or contravariant settings. Scalla allows for these kinds of settings:\nclass Random[ +T ] { // +T indicates covariance def next: T = { ... } } // ---------------------------------------------------- // Subtyping Check: Covariance allows Random[String] to be treated as Random[AnyRef] // (i.e., Random[String] \u003c: Random[AnyRef]) val r: Random[ AnyRef ] = new Random\u003ca href=\"/notes\"\u003e String \u003c/a\u003e // Good. Covariance allows this assignment because String \u003c: AnyRef. // Usage Check: 'a' will be inferred as AnyRef because 'r's static type is Random[AnyRef] val a = r.next // Good. 'r.next' returns a T, which resolves to AnyRef here. // ---------------------------------------------------- class Random[ +T ] { // +T indicates covariance def next: T = { ... } // Error! A covariant type parameter [+T] cannot appear in a contravariant position, // such as a method argument position (input). def initialize( i: T ) = { ... } // Scalac: Error. Covariant type T appears in contravariant position. Doesn't even compile. } We can do a similar thing for contravariant generics.\nUsing Parametric Polimorphism Parametric polimorphis is the other way along side subtyping and overloading or overriding methods to provide ways to generalize code.\nAdding Type Parameters class Person { ... } class Student extends Person { ... } class PersonComp implements Comparator\u003cPerson\u003e {int compare( Person fst, Person snd ) { ... }} interface Comparator\u003cT\u003e {int compare( T fst, T snd );} class TreeSet\u003cF, E extends F\u003e {TreeSet( Comparator\u003cF\u003e c ) { ... }... } TreeSet\u003cPerson, Student\u003e s =new TreeSet\u003cPerson, Student\u003e( new PersonComp() ); We could not use personcomp without defining the F, because student does not implement that comparator, even if students are persons. The above is too low level to be useful.\nThe main drawbacks are:\nThe client needs to understand exactly what needs to go there. We need to understand how to use those. Type instantiation: after a type has been instantiated we cannot change it anymore, so it has some bad dynamicism. Allowing different comparisons class PersonComp\u003cT extends Person\u003e implements Comparator\u003cT\u003e {int compare( T fst, T snd ) { ... }} TreeSet\u003cStudent\u003e s =new TreeSet\u003cStudent\u003e( new PersonComp\u003cStudent\u003e() ); We can also define it in the above manner, and instantiate the correct comparisor. But:\nThe client still needs to understand how personComp works We need to have foresight to understand the cases we need to run that simple little thing. This is a bad way to implement it. Using Existential Types We now have a\n“There exists a type argument T such that c has typeCollection T\", and this is instantiated automatically by the type system. You can use it like this:\nstatic void printAll( Collection\u003c?\u003e c ) {for ( Object e : c ) { System.out.println( e ); }} Collection\u003cString\u003e c = new ArrayList\u003cString\u003e( ); ... printAll( c ); After that we can bound the wildcard types correctly when needed.\nstatic void printFormatted(Collection\u003c? extends Format\u003e c) { for (Format e : c) { String s = e.format(80); System.out.println(s); } } We basically can set up subtype or supertype relations between the bounds using the existential quantifier in java!\nThe existence of this flexible type system allows now to define the tree comparator as:\nclass TreeSet\u003cE\u003e {TreeSet( Comparator\u003c? super E\u003e c ) { ... }... } Which is really nice and concise.\nType Erasure For backwards compatibility all this generics system (which was introduced in Java 5) all the type generics annotation is erased at the bytecode level.\nSlide from ETHz COOP course\n. This means lots of information is lost (you cannot do instance of, you cannot do .class to check the correct type instantiation), and doesn't even allow for arrays of generic types.the underlying mechanism (erasure) sometimes _shows through_, forcing developers to think about how it works internally. For this reason it is called a **leaky abstraction**. Yet this is not the same for C#, which has this information!\nJava Generics are Turing Complete class T { } class N\u003cZ\u003e { } // A generic class C with type parameter X, // which extends the generic class N with a complex type argument class C\u003cX\u003e extends N\u003cN\u003c? super C\u003cC\u003cX\u003e\u003e\u003e\u003e { /** * A method that takes an argument of type C and returns * a generic type N with a lower-bounded wildcard. */ public N\u003c? super C\u003cT\u003e\u003e foo(C\u003cT\u003e c) { return c; } } The only thing that we need to check if whether the type C is a subtype of N\u003c? super C\u003e. This leads to a stack overflow in the compiler. This means we need to check if the class:N\u003c? super C",
-  "wordCount" : "2633",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -249,402 +233,12 @@ A program part is polymorphic if it can be used for objects of several classes">
     <h1 class="post-title entry-hint-parent">
       Polimorfismo
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 13 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
-                        
-                <li>
-                    <a href="#monoforfo" aria-label="Monoforfo">Monoforfo</a></li></ul>
-                </li>
-                <li>
-                    <a href="#polimorfismo" aria-label="Polimorfismo">Polimorfismo</a><ul>
-                        
-                <li>
-                    <a href="#tipologie-di-polimorfismo-3" aria-label="Tipologie di Polimorfismo (3)">Tipologie di Polimorfismo (3)</a></li>
-                <li>
-                    <a href="#ad-hoc-3" aria-label="Ad-hoc (3)">Ad-hoc (3)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#di-sottotipo" aria-label="Di sottotipo">Di sottotipo</a><ul>
-                        
-                <li>
-                    <a href="#settheory-per-sottotipi" aria-label="SetTheory per sottotipi">SetTheory per sottotipi</a></li>
-                <li>
-                    <a href="#tipologie-di-sottotipaggio-2" aria-label="Tipologie di sottotipaggio (2)">Tipologie di sottotipaggio (2)</a></li>
-                <li>
-                    <a href="#covariante-e-controvariante-e-consumo-" aria-label="Covariante e Controvariante e consumo (!!)">Covariante e Controvariante e consumo (!!)</a></li>
-                <li>
-                    <a href="#sussunzione" aria-label="Sussunzione">Sussunzione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#polimorfismo-parametrico" aria-label="Polimorfismo parametrico">Polimorfismo parametrico</a><ul>
-                        
-                <li>
-                    <a href="#tipi-parametrici" aria-label="Tipi parametrici">Tipi parametrici</a><ul>
-                        
-                <li>
-                    <a href="#upper-bounds" aria-label="Upper Bounds">Upper Bounds</a></li>
-                <li>
-                    <a href="#subtyping-with-generics" aria-label="Subtyping with Generics">Subtyping with Generics</a></li>
-                <li>
-                    <a href="#covariance-and-contravariance-annotations" aria-label="Covariance and Contravariance Annotations">Covariance and Contravariance Annotations</a></li></ul>
-                </li>
-                <li>
-                    <a href="#using-parametric-polimorphism" aria-label="Using Parametric Polimorphism">Using Parametric Polimorphism</a><ul>
-                        
-                <li>
-                    <a href="#adding-type-parameters" aria-label="Adding Type Parameters">Adding Type Parameters</a></li>
-                <li>
-                    <a href="#allowing-different-comparisons" aria-label="Allowing different comparisons">Allowing different comparisons</a></li>
-                <li>
-                    <a href="#using-existential-types" aria-label="Using Existential Types">Using Existential Types</a></li>
-                <li>
-                    <a href="#type-erasure" aria-label="Type Erasure">Type Erasure</a></li>
-                <li>
-                    <a href="#java-generics-are-turing-complete" aria-label="Java Generics are Turing Complete">Java Generics are Turing Complete</a></li></ul>
-                </li>
-                <li>
-                    <a href="#c-landscape" aria-label="C&#43;&#43; Landscape">C++ Landscape</a><ul>
-                        
-                <li>
-                    <a href="#templating-in-c" aria-label="Templating in C&#43;&#43;">Templating in C++</a></li>
-                <li>
-                    <a href="#concepts" aria-label="Concepts">Concepts</a></li>
-                <li>
-                    <a href="#template-metaprogramming" aria-label="Template Metaprogramming">Template Metaprogramming</a></li>
-                <li>
-                    <a href="#comparisons-with-parametric-polimorphism" aria-label="Comparisons with Parametric Polimorphism">Comparisons with Parametric Polimorphism</a></li></ul>
-                </li>
-                <li>
-                    <a href="#ibridazione-con-polimorfismo-di-sottotipo" aria-label="Ibridazione con polimorfismo di sottotipo">Ibridazione con polimorfismo di sottotipo</a></li>
-                <li>
-                    <a href="#esempi-di-utilizzo-di-polimorfismo-parametrico-e-di-sottotipo" aria-label="Esempi di utilizzo di polimorfismo parametrico e di sottotipo">Esempi di utilizzo di polimorfismo parametrico e di sottotipo</a></li>
-                <li>
-                    <a href="#tipi-maybe-e-result" aria-label="Tipi maybe e result">Tipi maybe e result</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
-<h3 id="monoforfo">Monoforfo<a hidden class="anchor" aria-hidden="true" href="#monoforfo">#</a></h3>
-<p>Quando non posso utilizzare un tipo come parametro. Ossia non possiamo definire una funzione generica.</p>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled">
-<h2 id="polimorfismo">Polimorfismo<a hidden class="anchor" aria-hidden="true" href="#polimorfismo">#</a></h2>
-<p>Polimorfismo, come dice il nome, significa avere tante forme, in questo caso tanti tipi. Ma avere tanti tipi non è una cosa ambigua? Questa cosa si risolve solitamente a compile time (facendo checks di sottotipo, oppure dispatch della funzione corretta).</p>
-<blockquote>
-<p>A program part is polymorphic if it can be used for objects of several classes</p></blockquote>
-<h3 id="tipologie-di-polimorfismo-3">Tipologie di Polimorfismo (3)<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-polimorfismo-3">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 1">
-<ul>
-<li><strong>ad-hoc polymorphism</strong> questo è anche chiamato overloading in cui vado a definire un nuova funzione (con lo stesso nome) che accetti il nuovo tipo di dato.</li>
-<li><strong>subtype polymorphism</strong></li>
-<li><strong>parametric polymorphism</strong></li>
-</ul>
-<h3 id="ad-hoc-3">Ad-hoc (3)<a hidden class="anchor" aria-hidden="true" href="#ad-hoc-3">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 2">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 3">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 4">
-<p>Questo è molto simile al tipo somma, solamente fatto da un punto di vista funzionale (<strong>i domini devono essere separati</strong>).</p>
-<p>In C sono molto conosciute questa tipologia di polimorfismo. Però ci sono anche forme comuni, come l&rsquo;operatori aritmetici.</p>
-<p>L&rsquo;invocazione è anche chiamato <strong>dispatch</strong> , quando abbiamo risolto l&rsquo;overloading, ossia abbiamo fatto il dispatch dell&rsquo;invocazione, allora l&rsquo;overloading scompare e viene eseguita una specifica funzione. Questa funzione può essere fatta in modo statico oppure dinamico.</p>
-<p>Riassumendo:</p>
-<ul>
-<li>Definisco stesso nome che prendono tipi diversi</li>
-<li>Avviene un dispatch statico o dinamico</li>
-<li>Una volta avvenuto il dispatch, la funzione eseguita è univocamente identificata.</li>
-</ul>
-<p><em>Statico o dinamico nel dispatch</em></p>
-<p>Dispatch è il processo che va a decidere la funzione overloadata da chiamare, questo processo si può classificare come <strong>dinamico</strong> se avviene durante il runtime (come solitamente è per le interfacce) oppure <strong>statico</strong> quando avviene e a tempo di compilazione (come solitamente avviene per le funzioni overloaddate).</p>
-<h2 id="di-sottotipo">Di sottotipo<a hidden class="anchor" aria-hidden="true" href="#di-sottotipo">#</a></h2>
-<p>Possiamo andare a dire che un tipo S è sottotipo di un tipo T, indicato con $S <: T$, quando S può essere utilizzato in qualunque occasione al posto di T. Questo è anche chiamato come <strong>principio di sostituzione di Liskov</strong>, vedi <a href="/notes/classi-oop">Classi OOP</a></p>
-<h3 id="settheory-per-sottotipi">SetTheory per sottotipi<a hidden class="anchor" aria-hidden="true" href="#settheory-per-sottotipi">#</a></h3>
-<ul>
-<li>
-<p>Slide polimorfismo di sottotipo</p>
-  <img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 5">
-  <img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 6">
-</li>
-</ul>
-<p>Questo concetto l&rsquo;abbiamo anche accennato in <a href="/notes/algebra-dei-tipi">Algebra dei tipi</a> quando abbiamo parlato di coercizione.</p>
-<p>praticamente quando abbiamo un tipo più specifico $S$ che andiamo ad indicare con $S <: T$, allora quando ho S e devo utilizzare T, lo posso fare, questo perché S contiene tutte le caratteristiche di T.</p>
-<p>Solitamente questa è una relazione di <strong>preordine</strong> ossia riflessiva e transitiva, spesso anche antisimmetrica, quindi è spesso un <strong>ordine parziale</strong>.</p>
-<p>Si può dire che esiste un <strong>rapporto di specificazione</strong> (parola da utilizzare nell&rsquo;orale per bella figura lel) perché S è più specifico di T, in questo senso possiamo utilizzare S in ogni posto in cui c&rsquo;è T.</p>
-<h3 id="tipologie-di-sottotipaggio-2">Tipologie di sottotipaggio (2)<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-sottotipaggio-2">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 7">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 8">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 9">
-<p>Per questa parte possiamo andare a definire un concetto di <strong>sottotipaggio per profondità o per larghezza</strong>.</p>
-<p><em>Per larghezza</em>: basta che il sottotipo abbia molti più campi! in questo senso Dog &lt; Animal, perché anche dog posso utilizzarlo come un animal, dato che ha tutte le cose di animal. (l&rsquo;unica differenza col duck typing è il fatto che T qui è esplicito, mentre nel duck typing non mi importa del tipo, solamente dello stesso utilizzo).</p>
-<ul>
-<li>
-<p>Differenza fra duck e width subtyping per chatGPT</p>
-<p>Width subtyping is a form of subtype polymorphism where a type is considered a subtype of another type if it has at least the same properties and methods as the supertype. This means that a subtype can have more properties and methods than the supertype, but it must at least have all of the ones that are defined in the supertype. This is called &ldquo;width&rdquo; because it is based on the width of the type&rsquo;s interface.</p>
-<p>Duck typing, on the other hand, is a more dynamic approach to type checking where the type of an object is determined by its behavior at runtime rather than its static type. In other words, if it walks like a duck and quacks like a duck, then it must be a duck. This means that two objects with different types can still be treated as if they have the same type if they share the same behavior.</p>
-<p>In summary, width subtyping is based on the interface of a type and allows for subtype polymorphism, while duck typing is based on the behavior of an object at runtime and allows for more dynamic type checking.</p>
-</li>
-</ul>
-<p><em>Per profondità</em>: Quando un campo ha un tipo che sia un sottotipo di un altro. Questo è visto molte meno volte, però si può fare. Questa ha però delle particolarità, è importante introdurre il concetto di <strong>covariante</strong> per tipi quando le parti del record mantengono la stessa direzione di sottotipaggio. Quando abbiamo due tipi che sono covarianti, possiamo utilizzarli solo per le <strong>letture</strong>. In scrittura però potremmo avere dei campi non inizializzati, quindi non va molto bene. (nell&rsquo;esempio avremmo un animale in output in scrittura, mentre gli abbiamo dato un dog e ci aspettavamo un dog in output). (queste nozioni di covarianza comunque sono sempre in funzione del contesto).</p>
-<p>In pratica vado a rimpiazzare i campi del record con dei sottotipi, questo è buono per cose immutabili, for example, you can assign 1.5 to the &lsquo;x&rsquo; field of a real point (a record with two real fields), but you can&rsquo;t do the same to the &lsquo;x&rsquo; field of an integer point (which, however, is a deep subtype of the real point type) because 1.5 is not an integer.</p>
-<h3 id="covariante-e-controvariante-e-consumo-">Covariante e Controvariante e consumo (!!)<a hidden class="anchor" aria-hidden="true" href="#covariante-e-controvariante-e-consumo-">#</a></h3>
-<p>Abbiamo trattato più recentemente di queste regole in <a href="/notes/typing-and-subtyping">Typing and Subtyping</a>.
-È stato spiegato meglio.</p>
-<ul>
-<li>
-<p>Slide covariante, controvariante e consumi e produzione
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 10"></p>
-  <img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 11">
-</li>
-<li>
-<p>Esempio strano</p>
-  <img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 12">
-</li>
-</ul>
-<p>Questa nozione si basa sull&rsquo;inversione fra produzione e consumazione.</p>
-<p>Avevamo detto che abbiamo una relazione di sottotipo, perché DogHouse &lt; AnimalHouse quindi sono covarianti rispetto a Dog &lt; Animal House. Ma nella fase di consumo, questo si inverte, quindi si può dire che siano controvarianti.</p>
-<p>In breve:</p>
-<ol>
-<li>Consumo (input) → Controvariante</li>
-<li>Produzione (output) → Covariante</li>
-</ol>
-<p>Il motivo per cui succede è che Dog fn utilizza i campi di Dog, che sono più estesi, posso sostituire a questo consumo anche animal, che utilizza i campi di animal, quindi sono anche presenti in Dog, ecco che il rapporto si inverte</p>
-<p>Possiamo fare un parallelo fra le funzioni di consumo e quelle di produzione.</p>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 13">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 14">
-<h3 id="sussunzione">Sussunzione<a hidden class="anchor" aria-hidden="true" href="#sussunzione">#</a></h3>
-<p>Con sussunzione andiamo a parlare di quando possiamo fare <strong>l&rsquo;inferenza di sottotipaggio</strong> ossia se è vero o meno che un tipo è sottotipo di un altro (e quindi possibile utilizzare S al posto di T in qualunque luogo).</p>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 15">
-<p>Possiamo fare la sussunzione in modo estensionale o intensionale quindi o:</p>
-<ol>
-<li>Caratterizzando tutti gli elementi del sottotipo</li>
-<li>Parlare di predicati e domini.</li>
-</ol>
-<p><a href="/notes/teoria-dei-tipi#tipo-estensionali-o-intensionali">Teoria dei Tipi#Tipo estensionali o intensionali</a>  abbiamo parlato di estensionale o intensionale.</p>
-<ul>
-<li>
-<p>Esempi di <strong>sussunzione</strong>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 16"></p>
-  <img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 17">
-</li>
-</ul>
-<h2 id="polimorfismo-parametrico">Polimorfismo parametrico<a hidden class="anchor" aria-hidden="true" href="#polimorfismo-parametrico">#</a></h2>
-<p>Il problema che il polimorfismo parametrico risolve rispetto a quello di sottotipo è il fatto che per ritrovare l&rsquo;informazione iniziale, c&rsquo;è bisogno di castin.
-Con il polimorfismo parametrico non avremo più bisogno di questo.</p>
-<h3 id="tipi-parametrici">Tipi parametrici<a hidden class="anchor" aria-hidden="true" href="#tipi-parametrici">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 18">
-<p>Quando abbiamo delle operazioni anche se non conosciamo esattamente cosa c&rsquo;è sotto, però riguardo la struttura so bene cosa vanno a fare. (un esempio riguardo a questo è il sort).</p>
-<p>Questa parametrizzazione ci permette di definire delle cose per tutti i tipi che possiedono quella funzione (ricorda i tratti di rust), ed è per questo che possiamo dire che sia un <strong>tipo universale</strong>. Questa cosa che vale per tutti ci permette di poter provare dei teoremi a gratis.</p>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 19">
-<h4 id="upper-bounds">Upper Bounds<a hidden class="anchor" aria-hidden="true" href="#upper-bounds">#</a></h4>
-<p>We can infer which methods are available by setting the upper bounds (methods that are present) with respect to a generic type.</p>
-<p>For example, if a class extends from</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">interface</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="kt">int</span><span class="w"> </span><span class="nf">compareTo</span><span class="p">(</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="p">);}</span><span class="w">
-</span></span></span></code></pre></div><p>Then we know that at least the method compareTo is implemented within this function. If not we cannot assume anything for the model.</p>
-<h4 id="subtyping-with-generics">Subtyping with Generics<a hidden class="anchor" aria-hidden="true" href="#subtyping-with-generics">#</a></h4>
-<ul>
-<li>Generic types aresubtypes of theirdeclared supertypes</li>
-<li>Type variables aresubtypes of their upperbounds</li>
-</ul>
-<p>But <strong>different instantiations are unrelated directly</strong>.
-They cannot neither be covariant parameter types, neither contravariant. Make sure you know some examples where this is valid.</p>
-<ul>
-<li>Covariance is unsafe when a generic type argument is used for variables that are written by clients- Mutable fields- Method arguments</li>
-<li>Contravariance isunsafe when a generictype argument is usedfor variables that areread by clients- Fields- Method results</li>
-</ul>
-<p>The standard solution in Java is <strong>non-variancy</strong>, which means the types are neither covariant or contravariant, they just are not compatible with each other. Sometimes this is over restrictive though.
-Covariant generics would need lots of runtime checks for every field update and argument passing, which is a lot.</p>
-<h4 id="covariance-and-contravariance-annotations">Covariance and Contravariance Annotations<a hidden class="anchor" aria-hidden="true" href="#covariance-and-contravariance-annotations">#</a></h4>
-<p>We can make generics support covariance or contravariance if that generic only uses the type parameter in covariant or contravariant settings.
-Scalla allows for these kinds of settings:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scala" data-lang="scala"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Random</span><span class="o">[</span> <span class="kt">+T</span> <span class="o">]</span> <span class="o">{</span> <span class="c1">// +T indicates covariance
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">def</span> <span class="n">next</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// ----------------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Subtyping Check: Covariance allows Random[String] to be treated as Random[AnyRef]
-</span></span></span><span class="line"><span class="cl"><span class="c1">// (i.e., Random[String] &lt;: Random[AnyRef])
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">val</span> <span class="n">r</span><span class="k">:</span> <span class="kt">Random</span><span class="o">[</span> <span class="kt">AnyRef</span> <span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&#34;/notes&#34;</span><span class="o">&gt;</span> <span class="nc">String</span> <span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="c1">// Good. Covariance allows this assignment because String &lt;: AnyRef.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="c1">// Usage Check: &#39;a&#39; will be inferred as AnyRef because &#39;r&#39;s static type is Random[AnyRef]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="n">r</span><span class="o">.</span><span class="n">next</span> <span class="c1">// Good. &#39;r.next&#39; returns a T, which resolves to AnyRef here.
-</span></span></span><span class="line"><span class="cl"><span class="c1">// ----------------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Random</span><span class="o">[</span> <span class="kt">+T</span> <span class="o">]</span> <span class="o">{</span> <span class="c1">// +T indicates covariance
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">def</span> <span class="n">next</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// Error! A covariant type parameter [+T] cannot appear in a contravariant position,
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// such as a method argument position (input).
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">def</span> <span class="n">initialize</span><span class="o">(</span> <span class="n">i</span><span class="k">:</span> <span class="kt">T</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span> <span class="c1">// Scalac: Error. Covariant type T appears in contravariant position. Doesn&#39;t even compile.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
-</span></span></code></pre></div><p>We can do a similar thing for contravariant generics.</p>
-<h3 id="using-parametric-polimorphism">Using Parametric Polimorphism<a hidden class="anchor" aria-hidden="true" href="#using-parametric-polimorphism">#</a></h3>
-<p>Parametric polimorphis is the other way along side <a href="/notes/typing-and-subtyping">subtyping</a> and overloading or overriding methods to provide ways to generalize code.</p>
-<h4 id="adding-type-parameters">Adding Type Parameters<a hidden class="anchor" aria-hidden="true" href="#adding-type-parameters">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Person</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">PersonComp</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="kt">int</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">fst</span><span class="p">,</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">snd</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">interface</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="kt">int</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">fst</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">snd</span><span class="w"> </span><span class="p">);}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">F</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">TreeSet</span><span class="p">(</span><span class="w"> </span><span class="n">Comparator</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}...</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">Person</span><span class="p">,</span><span class="w"> </span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="k">new</span><span class="w"> </span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">Person</span><span class="p">,</span><span class="w"> </span><span class="n">Student</span><span class="o">&gt;</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PersonComp</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></div><p>We could not use personcomp without defining the F, because student does not implement that comparator, even if students are persons. The above is too low level to be useful.</p>
-<p>The main drawbacks are:</p>
-<ul>
-<li>The client needs to understand exactly what needs to go there. We need to understand how to use those.</li>
-<li>Type instantiation: after a type has been instantiated we cannot change it anymore, so it has some bad dynamicism.</li>
-</ul>
-<h4 id="allowing-different-comparisons">Allowing different comparisons<a hidden class="anchor" aria-hidden="true" href="#allowing-different-comparisons">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">PersonComp</span><span class="o">&lt;</span><span class="n">T</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Person</span><span class="o">&gt;</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Comparator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="kt">int</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">fst</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">snd</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="k">new</span><span class="w"> </span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PersonComp</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></div><p>We can also define it in the above manner, and instantiate the correct comparisor.
-But:</p>
-<ol>
-<li>The client still needs to understand how personComp works</li>
-<li>We need to have foresight to understand the cases we need to run that simple little thing.
-This is a bad way to implement it.</li>
-</ol>
-<h4 id="using-existential-types">Using Existential Types<a hidden class="anchor" aria-hidden="true" href="#using-existential-types">#</a></h4>
-<p>We now have a</p>
-<ul>
-<li>“There exists a type argument T such that c has typeCollection T&quot;, and this is instantiated automatically by the type system.</li>
-</ul>
-<p>You can use it like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printAll</span><span class="p">(</span><span class="w"> </span><span class="n">Collection</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="p">}}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Collection</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="w"> </span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">printAll</span><span class="p">(</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></div><p>After that we can <strong>bound the wildcard types correctly</strong> when needed.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printFormatted</span><span class="p">(</span><span class="n">Collection</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Format</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Format</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="n">80</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div><p>We basically can set up subtype or supertype relations between the bounds using the existential quantifier in java!</p>
-<p>The existence of this flexible type system allows now to define the tree comparator as:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">TreeSet</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">TreeSet</span><span class="p">(</span><span class="w"> </span><span class="n">Comparator</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">E</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}...</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div><p>Which is really nice and concise.</p>
-<h4 id="type-erasure">Type Erasure<a hidden class="anchor" aria-hidden="true" href="#type-erasure">#</a></h4>
-<p>For backwards compatibility all this generics system (which was introduced in Java 5) all the type generics annotation is erased at the bytecode level.</p>
-<figure class="center">
-<img src="/images/notes/Polimorfismo-20251106105426737.webp" style="width: 100%"   alt="Polimorfismo-20251106105426737" title="Polimorfismo-20251106105426737"/>
-<figcaption><p style="text-align:center;"> Slide from ETHz COOP course</p></figcaption>
-</figure>.
-This means lots of information is lost (you cannot do instance of, you cannot do .class to check the correct type instantiation), and doesn't even allow for arrays of generic types.the underlying mechanism (erasure) sometimes _shows through_, forcing developers to think about how it works internally. For this reason it is called a **leaky abstraction**.
-<p>Yet this is not the same for C#, which has this information!</p>
-<h4 id="java-generics-are-turing-complete">Java Generics are Turing Complete<a hidden class="anchor" aria-hidden="true" href="#java-generics-are-turing-complete">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">T</span><span class="w"> </span><span class="p">{</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">N</span><span class="o">&lt;</span><span class="n">Z</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// A generic class C with type parameter X, </span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// which extends the generic class N with a complex type argument </span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">C</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">N</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">C</span><span class="o">&lt;</span><span class="n">C</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;&gt;&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * A method that takes an argument of type C&lt;T&gt; and returns 
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * a generic type N with a lower-bounded wildcard.
-</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">N</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">C</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">C</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div><p>The only thing that we need to check if whether the type <code>C&lt;T&gt;</code> is a subtype of <code>N&lt;? super C&lt;T&gt;&gt;</code>. This leads to a stack overflow in the compiler.
-This means we need to check if the class:<code>N&lt;? super C&lt;C&lt;X&gt;&gt;&gt;</code> a subtype <code>? super C&lt;T&gt;</code>. This is true if
-<code>C&lt;T&gt; &lt;: N&lt;? super C&lt;C&lt;X&gt;&gt;&gt;</code>, this is true if <code> N&lt;N&lt;? super C&lt;C&lt;X&gt;&gt;&gt;&gt; &lt;: N&lt;? super C&lt;C&lt;X&gt;&gt;&gt;</code>.
-The type checker can invent types that are never written, but present in the process! And these are infinite, which means it is indecidable.</p>
-<h3 id="c-landscape">C++ Landscape<a hidden class="anchor" aria-hidden="true" href="#c-landscape">#</a></h3>
-<h4 id="templating-in-c">Templating in C++<a hidden class="anchor" aria-hidden="true" href="#templating-in-c">#</a></h4>
-<p>There are two main differences compared to Java code:</p>
-<ul>
-<li>Here we <strong>do not check return types</strong></li>
-<li>And we do not check availability of methods, <strong>until they are instantiated</strong>.</li>
-</ul>
-<p>We can add upper bounds, like require, to templates too!</p>
-<h4 id="concepts">Concepts<a hidden class="anchor" aria-hidden="true" href="#concepts">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="k">concept</span> <span class="n">Comparable</span> <span class="o">=</span> <span class="k">requires</span><span class="p">(</span> <span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span> <span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="n">a</span><span class="p">.</span><span class="n">compareTo</span><span class="p">(</span> <span class="n">b</span> <span class="p">)</span> <span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="k">requires</span> <span class="n">Comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Queue</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">elem</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Queue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ... other members and methods
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
-</span></span></code></pre></div><p>We can check if bounds are satisfied in this manner, statically, but only from c++20.
-For backward compatibility, even if you don&rsquo;t add requires, it will compile, even if it shouldn&rsquo;t if we don&rsquo;t include the requirement part.
-The C++ compiler will check its presence when you actually instantiate the class and attempt to use it.</p>
-<h4 id="template-metaprogramming">Template Metaprogramming<a hidden class="anchor" aria-hidden="true" href="#template-metaprogramming">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="kt">int</span> <span class="n">n</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Fact</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">Fact</span><span class="o">&lt;</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;::</span><span class="n">val</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Fact</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><p>The compiler generates the instantiations and effectively computes the values!</p>
-<h4 id="comparisons-with-parametric-polimorphism">Comparisons with Parametric Polimorphism<a hidden class="anchor" aria-hidden="true" href="#comparisons-with-parametric-polimorphism">#</a></h4>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Generic Types</th>
-          <th style="text-align: left">Templates</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">- Modular type checking of generic class</td>
-          <td style="text-align: left">- Type checking per instantiation</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">- Overhead (e.g., upper bounds)</td>
-          <td style="text-align: left">- Flexibility like with structural typing</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">- Run-time support desirable</td>
-          <td style="text-align: left">- No need for run-time support</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">- Typically no meta-programming</td>
-          <td style="text-align: left">- Meta-programming is Turing-complete</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="ibridazione-con-polimorfismo-di-sottotipo">Ibridazione con polimorfismo di sottotipo<a hidden class="anchor" aria-hidden="true" href="#ibridazione-con-polimorfismo-di-sottotipo">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 20">
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 21.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 21">
-<p>A volte non vogliamo che la nostra funzione vada per tutti, senza quindi conoscere come è fatto sotto, vorremmo avere certe funzioni (quindi un sottotipo del tipo generale), per esempio nei tratti di rust possiamo dire che questa nostra funzione vada per tutte in cui è definita una certa funzione/interfaccia/tratto, in questo senso andiamo ad utilizzare un sottotipo</p>
-<p>Array c&rsquo;erano già all&rsquo;inizio, lo puoi utilizzare covariante in entrambe le direzioni, mentre altrimenti non ti permetterebbe di utilizzare in entrambe le direzioni (vuole che tu sia prima sicuro se vuoi utilizzarlo come consumer o producer. un buon modo per ricordarsi è <strong>PECS</strong> producer deve estender, mentre consumer deve fare super.</p>
-<p>Abbiamo sempre che è safe, nel senso che ritorna sempre un tipo senza bloccarsi (e posso sapere a tempo di compilazione cosa vada a ritornare).</p>
-<h3 id="esempi-di-utilizzo-di-polimorfismo-parametrico-e-di-sottotipo">Esempi di utilizzo di polimorfismo parametrico e di sottotipo<a hidden class="anchor" aria-hidden="true" href="#esempi-di-utilizzo-di-polimorfismo-parametrico-e-di-sottotipo">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Polimorfismo/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Polimorfismo/Untitled 22">
-<h3 id="tipi-maybe-e-result">Tipi maybe e result<a hidden class="anchor" aria-hidden="true" href="#tipi-maybe-e-result">#</a></h3>
-<p>Questi sono alcuni tipi ispirati alle monadi, solamente capire in che formato sono:</p>
-<ul>
-<li>Maybe: Some qualcosa&gt; + None</li>
-<li>Result: come le promises di js, possiamo esprimere i risultati di errore e nel caso sia andato tutto bene.</li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

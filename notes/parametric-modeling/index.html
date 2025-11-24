@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Parametric Modeling | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
-Short introduction to the statistical methods
-Bayesian
-$$
-p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) 
-$$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.">
+<meta name="description" content="Parametric Modeling - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/parametric-modeling/">
@@ -98,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/parametric-modeling/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Parametric Modeling">
-  <meta property="og:description" content="In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
-Short introduction to the statistical methods Bayesian $$ p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) $$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,12 +104,7 @@ Short introduction to the statistical methods Bayesian $$ p(\theta \mid X) = \fr
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Parametric Modeling">
-<meta name="twitter:description" content="In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.
-Short introduction to the statistical methods
-Bayesian
-$$
-p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) 
-$$The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -144,12 +133,12 @@ $$The quantity $P(X \mid \theta)$ could be very complicated if our model is comp
   "@type": "BlogPosting",
   "headline": "Parametric Modeling",
   "name": "Parametric Modeling",
-  "description": "In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.\nShort introduction to the statistical methods Bayesian $$ p(\\theta \\mid X) = \\frac{1}{z}p(X \\mid \\theta) p(\\theta) $$The quantity $P(X \\mid \\theta)$ could be very complicated if our model is complicated.\n",
+  "description": "",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.\nShort introduction to the statistical methods Bayesian $$ p(\\theta \\mid X) = \\frac{1}{z}p(X \\mid \\theta) p(\\theta) $$The quantity $P(X \\mid \\theta)$ could be very complicated if our model is complicated.\nFrequentist $$ \\hat{\\theta}_{ML} = \\arg \\max_{\\theta} \\log p_{\\theta}(x_{1}, \\dots, x_{n}) $$$$ \\hat{\\theta}_{ML} = \\arg \\max_{\\theta} \\log \\sum_{i = 1}^{n} p_{\\theta}(x_{i}) $$ This is how maximum likelihood estimators naturally arise with the frequentist approach. This is asymptotically true.\nUsually with enough data and big models, frequentist’s methods are preferred.\nStatistical learning $$ \\hat{\\theta}_{SL} = \\arg \\min_{\\theta} \\mathcal{R}(f) = \\arg \\min_{\\theta} \\mathbb{E}_{X, Y} \\mathcal{L} (f(X), Y) $$$$ \\hat{R}(f) = \\frac{1}{n} \\sum_{i = 1}^{n} \\mathcal{L}(f(x_{i}), y_{i}) $$ And then choose the best $f$ from his family of functions\nThree problems in statistical learning The goal of statistical learning is to find a function $f : \\mathcal{X} \\to \\mathcal{Y}$ such that the error rate is minimized. We define the error rate to be just the cases where $f(x) \\neq y$. Let’s have so a simple model:\n$$ \\lim_{ n \\to \\infty } \\frac{1}{n} \\sum_{i= 1}^{N}\\mathbb{1} \\left\\{ f(x_{i}) \\neq y_{i} \\right\\} = \\mathbb{E}_{\\mathcal{x}, \\mathcal{y} \\sim p^{*}} [\\mathbb{1} \\left\\{ f(x) \\neq y \\right\\} ] $$$$ \\min_{f}\\mathbb{E}_{\\mathcal{x}, \\mathcal{y} \\sim p^{*}} [\\mathbb{1} \\left\\{ f(x) \\neq y \\right\\} ] $$ We don’t know anything about $f$, we need to have some assumptions, the easiest is to define a hypothesis class. We don’t know the starting distribution $p^{*}$, we solve this by collecting training samples so that we have an estimate of the starting distribution. (This is the fundamental problem in machine learning, we have empirical distribution, never the true distribution!) The risk $\\mathcal{R}$ is not differentiable, we solve this by choosing a loss function $\\mathcal{L} : \\mathcal{Y} \\times \\mathcal{Y} \\to \\mathbb{R}$ such that this is differentiable. We can write the starting problem in the following way as a proxy for the expected value. $$ \\min_{f \\in \\mathcal{H}} \\frac{1}{n} \\sum_{i \\leq n} \\mathcal{L} (f(x_{i}), y_{i}) $$ This image summarizes the whole pipeline Let’s have a simple example. Let’s attempt to chose the hypothesis class for the iris setosa classification problem. We arbitrarily choose $X$ and $Y$ to be\n$Y \\sim Bern(0.5)$ $X\\mid Y \\sim \\mathcal{N(\\mu_{y}, \\Sigma)}$ Then we can use Bayes rule to find $P(Y=y \\mid X = x) \\propto P(X = x \\mid Y = y) P(Y = y)$ and we can define then a simple loss, for example the classical binary cross entropy loss.\nBayesian and Frequentist head to head Estimators Estimators are functions or procedures that in this context of parametric models allow us to pin-point the correct parameters $\\theta$, in the case of the frequentist view, or give a distribution over possible $\\theta$s. Usually the generating function is called a density function parameterized by the $\\theta$ so we have to define the class of models and likelihood first.\nWe will mainly focus in this setting with the Maximum likelihood estimator\nThe Maximum Likelihood Estimator $$ \\mathcal{L}(\\theta) = \\prod_{i=1}^{n} f(X^{(i)} ; \\theta) $$Definition of MLE $$ \\hat{\\theta}_{ML} = \\arg \\max_{\\theta} \\mathcal{L}(\\theta) $$Sometimes is useful to consider the log-likelihood because sums are usually easier to handle. We will indicate the log version with $\\ell(\\theta)$. Usually the loss is the likelihood of the data, this is why it’s called Maximum Likelihood estimator.\nProperties of the MLE The important thing here is to be able to name the properties, not prove them. You can see a good presentation of these properties with (Wasserman 2004) chapter 9 (page 127 on wards). Three main properties concern us:\nConsistency: (meaning it will converge to the true parameter, if modelling assumptions are correct e.g. function family) In formula it means that a point estimator $\\hat{\\theta}_{n}$ of a $\\theta$ is consistent if it converges in probability which is: $$ \\forall \\varepsilon \u003e 0, \\mathbb{P}(\\lvert \\hat{\\theta}_{n} - \\theta \\rvert \u003e \\varepsilon) \\to_{n \\to \\infty} 0 $$ See Central Limit Theorem and Law of Large Numbers for definition of convergence in probability, the proof is not trivial and has many technicalities. Asymptotic efficiency: For well-behaved estimators, the MLE has the smallest variance for large $n$. - For example the median estimator satisfies $\\sqrt{ n } (\\theta_{\\text{ median}} - \\theta_{*}) = \\mathcal{N}\\left( 0, \\sigma^{2} \\frac{\\pi}{2} \\right)$, but the MLE doesn’t have that $\\pi$ factor. Asymptotically normal: meaning the error will be Gaussian if we have too many samples. Which means that $$ \\frac{\\hat{\\theta} - \\theta_{*}}{\\text{standard error}} \\sim \\mathcal{N}(0, 1) $$ Informally, this theorem states that the distribution of the parameters $\\theta$ that we find with MLE follows a normal distribution $\\mathcal{N}(\\theta_{*}, se)$. This theorem holds also for estimated standard errors. The interesting thing is that with this method we can build asymptotic confidence intervals for MLE, which can come quite handy in many occasions, and rival the bayesian approach for confidence intervals. The proof is quite hard, it is presented in the appendix of Chapter 9 of (Wasserman 2004). Equivariance meaning: if $\\hat{\\theta}$ is MLE of $\\theta$ then for any given $g$ we have that $g(\\hat{\\theta})$ is the MLE of $g(\\theta)$. I don’t know what is this useful for, but nice to know. We will discuss these properties one by one. These properties are the reason why MLE is preferred over other estimators, such as means or medians.\n$$ \\lim_{ n \\to \\infty } \\mathbb{E} \\left[ (\\hat{\\theta}_{ML} - \\theta_{0})^{2} \\right] = \\frac{1}{I_{n}(\\theta_{0})} $$ Where $I_{n}$ is the fisher information. Every estimator is lower bounded by this. (this is the maximum efficiency) and it’s very important.\nBiases usually are good if it includes information that is correct with the data. (helps it learn faster, an example of why bias works is the Stein estimator, but I didn’t understood exactly why). Simple cases and reasoning for first principles usually helps you build the intuition to attack more complex cases. This is something you would need to keep in mind.\nMLE is overconfident See Sur and Candes 2018\nOne can show that there are many examples where logistic regression (see Linear Regression methods) is quite biased. This is a problem especially with high dimensional data. There are some numerical instabilities with correlated features, especially when we are trying to invert something small (floating point imprecisions!)\nYou can see it quite easily: Remember that the ordinary least squares solution is $(X^{T}X)^{-1}X^{T}y$, let’s suppose we use Singular Value Decomposition and write $X = V^{T}DU$ then we have $X^{T}X = U^{T}DVV^{T}DU = U^{T}D^{2}U$ Inverting this we get $U^{T}D^{-2}U$ and multiplying with the original one we get $\\beta = U^{T}D^{-1}Vy$ but the matrix $D^{-1}$ is quite unstable, especially when you are inverting small numbers.\nOne nice thing about this decomposition is that the inference is just $X\\beta = V^{T}Vy$ and that is a nice form.\nRao-Cramer Bound Professor says this bound has same principle with the Heisenberg’s uncertainty principle with the Cauchy-Schwarz inequality somehow. But I don’t know about that. Rao-Cramer bound is a general bound on the variance of any unbiased estimator. This is the least possible error for unbiased estimator, which is a way to say that you know that you got the best for that class of functions.P\nLet’s consider a likelihood $p(y \\mid \\theta)$, for $\\theta \\in \\Theta$ which is our parameter space, and some samples $y_{1}, \\dots, y_{n} \\sim p(y \\mid \\theta_{0})$, using a particular $\\theta_{0}$. We want to know how precisely can we estimate the value $\\theta_{0}$ given $n$ samples. So let’s define an estimator $\\hat{\\theta}$ and consider the expected deviation $\\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta_{0})^{2} \\right]$, which tells us how much can the estimated value $\\hat{\\theta}$ vary compared to the ground truth. One nice thing is that this holds for every distribution.\nScore function $$ \\Lambda := \\frac{ \\partial }{ \\partial \\theta } \\log p(y \\mid \\theta) = \\frac{\\left( \\frac{ \\partial }{ \\partial \\theta } p(y \\mid \\theta) \\right)}{p(y \\mid \\theta)} $$$$ b_{\\hat{\\theta}} = \\mathbb{E}_{y \\mid \\theta} [ \\hat{\\theta} (y_{1}, \\dots, y_{n})] - \\theta $$$$ \\mathbf{E}_{y \\mid \\theta} \\Lambda = \\int p(y \\mid \\theta) \\cdot \\frac{1}{p(y \\mid \\theta)} \\frac{ \\partial }{ \\partial \\theta } p(y \\mid \\theta) \\, dy = \\int \\frac{ \\partial }{ \\partial \\theta } p(y \\mid \\theta) \\, dy = \\frac{ \\partial }{ \\partial \\theta } 1 = 0 $$ which is an interesting result.\nScore estimator Covariance $$ \\mathbf{E}_{y \\mid \\theta} \\left[ \\Lambda \\cdot \\hat{\\theta} \\right] = \\frac{ \\partial }{ \\partial \\theta } \\int p(y \\mid \\theta) \\hat{\\theta} \\, dy = \\frac{ \\partial }{ \\partial \\theta } \\mathbf{E}_{y \\mid \\theta} \\left[ \\hat{\\theta} \\right] = \\frac{ \\partial }{ \\partial \\theta } \\left( \\mathbf{E}_{y \\mid \\theta} \\left[ \\hat{\\theta} \\right] - \\theta \\right) + 1 = \\frac{ \\partial }{ \\partial \\theta } b_{\\hat{\\theta}} + 1 $$ And the first part is surprisingly the bias of our estimator, so we want to see how much we can lower the bias value when we want to assess these kinds of problems.\nWe now consider the cross correlation between $\\Lambda$ and $\\hat{\\theta}$\n$$ \\mathbf{E}_{y \\mid \\theta} \\left[ ( \\Lambda - \\mathbf{E} \\Lambda)( \\hat{\\theta} - \\mathbf{E} \\hat{\\theta}) \\right] = \\mathbf{E}_{y \\mid \\theta}\\left[ \\Lambda \\cdot \\hat{\\theta} \\right] - \\mathbf{E}_{y \\mid \\theta} \\left[ \\Lambda \\mathbf{E} \\hat{\\theta} \\right] = \\mathbb{E}_{y \\mid \\theta} \\left[ \\Lambda \\cdot \\hat{\\theta} \\right] $$$$ \\mathbb{E}_{y \\mid \\theta} \\left[ \\Lambda \\cdot \\hat{\\theta} \\right] ^{2} = \\left( \\mathbf{E}_{y \\mid \\theta} \\left[ ( \\Lambda)( \\hat{\\theta} - \\mathbf{E} \\hat{\\theta}) \\right] \\right)^{2} \\leq \\mathbf{E}_{y \\mid \\theta}\\left[ \\Lambda^{2} \\right] \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\mathbf{E} \\hat{\\theta}) ^{2} \\right] $$$$ \\begin{align} \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\mathbf{E} \\hat{\\theta}) ^{2} \\right] \u0026= \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] - 2 \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta) (\\mathbf{E} \\hat{\\theta} - \\theta) \\right] + \\mathbf{E}_{ y \\mid \\theta} \\left[ (\\mathbf{E} \\hat{\\theta} - \\theta)^{2} \\right] \\\\ \u0026= \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] - 2 \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta) b_{\\hat{\\theta}} \\right] + b^{2}_{\\hat{\\theta}} \\\\ \u0026= \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] - b^{2}_{\\hat{\\theta}} \\end{align} $$ Which is just $= \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] - b^{2}_{\\hat{\\theta}}$\nFinal Bound Putting everything together we have that\n$$ \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] \\geq\n\\frac{\\mathbb{E}{y \\mid \\theta} \\left[ \\Lambda \\cdot \\hat{\\theta} \\right] ^{2}}{\\mathbf{E}{y \\mid \\theta}\\left[ \\Lambda^{2} \\right] } + b^{2}_{\\hat{\\theta}} \\frac{\\left( \\frac{ \\partial }{ \\partial \\theta } b_{\\hat{\\theta}} + 1 \\right)^{2}}{\\mathbf{E}{y \\mid \\theta}\\left[ \\Lambda^{2} \\right] } + b^{2}{\\hat{\\theta}} $$\nIf we have an unbiased estimator, which means that $b_{\\hat{\\theta}} = 0$ then we have that the expected difference of the models is always greater than the expected value of the double power of the score, also known as the fisher information in maths:\n$$ \\mathbf{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] \\geq \\frac{1}{\\mathbf{E}_{y \\mid \\theta} \\left[ \\Lambda^{2} \\right] } = \\frac{1}{I_{n}(\\theta_{0})} $$ If instead we have a biased estimator, sometimes is advantageous because the numerator could actually be smaller.\nFisher information If the information is high, it means the log likelihood changes fast. This is measure of information of how X changes with respect to $\\theta$.\nDefinition of Fisher information Fisher information is defined as the variance of the score function. We discovered that the fisher information has something to do with the Rao-Cramer bound, let’s briefly analyze that:\n$$ \\mathbf{E}_{y \\mid \\theta} \\left[ \\Lambda^{2} \\right] = \\int p(y \\mid \\theta) \\left( \\frac{ \\partial }{ \\partial \\theta } \\log p(y \\mid \\theta) \\right)^{2} \\, dy =: I^{(1)}(\\theta) $$ Where $I(\\theta)$ is the fisher information, the expected value of the squared score function.\n$$ I(\\theta) = Var(\\Lambda) = \\mathbb{E}_{y \\mid \\theta}[(\\Lambda - \\mathbb{E}_{y \\mid \\theta}[\\Lambda])^{2}] $$ And simplifying, as we know that the mean of the score function is 0.\nFisher information could also be written as the derivative with respect of theta of the score function, if $\\log p(y \\mid \\theta)$ is twice differentiable. See wikipedia.\nThe Multi-variable case $$ I^{(n)} (\\theta) = \\int p(y_{1}\\dots y_{n} \\mid \\theta) \\left( \\frac{ \\partial }{ \\partial \\theta } \\log p(y_{1} \\dots y_{n}) \\right)^{2} \\, dy_{1}\\dots dy_{n} $$$$ \\int p(y_{1}\\dots y_{n} \\mid \\theta) \\left( \\frac{ \\partial }{ \\partial \\theta } \\log p(y_{1} \\dots y_{n}) \\right)^{2} \\, dy_{1}\\dots dy_{n} = \\int p(y_{1}\\dots y_{n} \\mid \\theta) \\left( \\sum \\Lambda_{i}^{2} \\right) \\, dy_{1}\\dots dy_{n} = n I^{(1)}(\\theta) $$ Which is a nice property of the fisher information\nFisher for Gaussian $$ I(\\theta) = \\frac{n}{\\sigma^{2}} $$$$ \\mathbb{E}_{y \\mid \\theta} \\left[ (\\hat{\\theta} - \\theta)^{2} \\right] \\geq \\frac{1}{I(\\theta)} = \\frac{\\sigma^{2}}{n} $$ Since the MLE estimate has indeed that variance, then we say it is efficient unbiased, it hits the lower bound of the variance.\nStein estimator If we use this estimator we have that it is consistently better than the MLE, but we can’t prove that this is the best ever possible. This has been known as stein’s paradox for some time. See here. This video gives a nice intuition about Stein’s estimator, you can visualize it as a biased estimator that concentrates variance by warping the space closer to the origin, so that all the candidate solutions are acqually closer to the true solution.\nWe have to assume we have a multivariate random variable with $\\mathbb{R}^{d}$ with $d \\geq 3$ the exact details are not important, but we want to say that MLE is not always the best, this is the surprising fact.\n$$ \\hat{\\theta}_{JS} := \\left( 1 - \\frac{(d - 2)\\sigma^{2}}{\\lVert y \\rVert ^{2}} \\right) y $$$$ \\mathbb{E}\\left[ (\\hat{\\theta}_{JS}- \\theta_{0})^{2} \\right] \\leq \\mathbb{E}\\left[ (\\hat{\\theta}_{MLE}- \\theta_{0})^{2} \\right] $$References [1] Vapnik “Estimation of Dependences Based on Empirical Data” Springer 2006 [2] Wasserman “All of Statistics: A Concise Course in Statistical Inference” Springer Science \\\u0026 Business Media 2004 [3] Murphy “Machine Learning: A Probabilistic Perspective” None 2012 ",
-  "wordCount" : "2290",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-13T00:00:00Z",
   "dateModified": "2025-01-13T00:00:00Z",
@@ -244,288 +233,12 @@ $$The quantity $P(X \mid \theta)$ could be very complicated if our model is comp
     <h1 class="post-title entry-hint-parent">
       Parametric Modeling
     </h1>
-    <div class="post-meta"><span title='2025-01-13 00:00:00 +0000 UTC'>January 13, 2025</span>&nbsp;·&nbsp;Reading Time: 11 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-13 00:00:00 +0000 UTC'>January 13, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#short-introduction-to-the-statistical-methods" aria-label="Short introduction to the statistical methods">Short introduction to the statistical methods</a><ul>
-                        
-                <li>
-                    <a href="#bayesian" aria-label="Bayesian">Bayesian</a></li>
-                <li>
-                    <a href="#frequentist" aria-label="Frequentist">Frequentist</a></li>
-                <li>
-                    <a href="#statistical-learning" aria-label="Statistical learning">Statistical learning</a></li>
-                <li>
-                    <a href="#three-problems-in-statistical-learning" aria-label="Three problems in statistical learning">Three problems in statistical learning</a></li>
-                <li>
-                    <a href="#bayesian-and-frequentist-head-to-head" aria-label="Bayesian and Frequentist head to head">Bayesian and Frequentist head to head</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#estimators" aria-label="Estimators">Estimators</a><ul>
-                        
-                <li>
-                    <a href="#the-maximum-likelihood-estimator" aria-label="The Maximum Likelihood Estimator">The Maximum Likelihood Estimator</a><ul>
-                        
-                <li>
-                    <a href="#definition-of-mle" aria-label="Definition of MLE">Definition of MLE</a></li>
-                <li>
-                    <a href="#properties-of-the-mle" aria-label="Properties of the MLE">Properties of the MLE</a></li>
-                <li>
-                    <a href="#mle-is-overconfident" aria-label="MLE is overconfident">MLE is overconfident</a></li></ul>
-                </li>
-                <li>
-                    <a href="#rao-cramer-bound" aria-label="Rao-Cramer Bound">Rao-Cramer Bound</a><ul>
-                        
-                <li>
-                    <a href="#score-function" aria-label="Score function">Score function</a></li>
-                <li>
-                    <a href="#score-estimator-covariance" aria-label="Score estimator Covariance">Score estimator Covariance</a></li>
-                <li>
-                    <a href="#final-bound" aria-label="Final Bound">Final Bound</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#fracmathbbe_y-mid-theta-left-lambda-cdot-hattheta-right-2mathbfe_y-mid-thetaleft-lambda2-right---b2_hattheta" aria-label="\frac{\mathbb{E}{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right] ^{2}}{\mathbf{E}{y \mid \theta}\left[ \Lambda^{2} \right] } &#43; b^{2}_{\hat{\theta}}">\frac{\mathbb{E}{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right] ^{2}}{\mathbf{E}{y \mid \theta}\left[ \Lambda^{2} \right] } + b^{2}_{\hat{\theta}}</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#fisher-information" aria-label="Fisher information">Fisher information</a><ul>
-                        
-                <li>
-                    <a href="#definition-of-fisher-information" aria-label="Definition of Fisher information">Definition of Fisher information</a></li>
-                <li>
-                    <a href="#the-multi-variable-case" aria-label="The Multi-variable case">The Multi-variable case</a></li>
-                <li>
-                    <a href="#fisher-for-gaussian" aria-label="Fisher for Gaussian">Fisher for Gaussian</a></li></ul>
-                </li>
-                <li>
-                    <a href="#stein-estimator" aria-label="Stein estimator">Stein estimator</a></li></ul>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>In this note we will first talk about briefly some of the main differences of the three main approaches regarding statistics: the bayesian, the frequentist and the statistical learning methods and then present the concept of the estimator, compare how the approaches differ from method to method, we will explain maximum likelihood estimator and the Rao-Cramer Bound.</p>
-<h3 id="short-introduction-to-the-statistical-methods">Short introduction to the statistical methods<a hidden class="anchor" aria-hidden="true" href="#short-introduction-to-the-statistical-methods">#</a></h3>
-<h4 id="bayesian">Bayesian<a hidden class="anchor" aria-hidden="true" href="#bayesian">#</a></h4>
-$$
-p(\theta \mid X) = \frac{1}{z}p(X \mid \theta) p(\theta) 
-$$<p>The quantity $P(X \mid \theta)$ could be very complicated if our model is complicated.</p>
-<h4 id="frequentist">Frequentist<a hidden class="anchor" aria-hidden="true" href="#frequentist">#</a></h4>
-$$
-\hat{\theta}_{ML} = \arg \max_{\theta} \log p_{\theta}(x_{1}, \dots, x_{n})
-$$$$
-\hat{\theta}_{ML} = \arg \max_{\theta} \log \sum_{i = 1}^{n} p_{\theta}(x_{i})
-$$<p>
-This is how <strong>maximum likelihood estimators</strong> naturally arise with the frequentist approach. This is asymptotically true.</p>
-<p>Usually with <em>enough data</em> and big models, frequentist&rsquo;s methods are preferred.</p>
-<h4 id="statistical-learning">Statistical learning<a hidden class="anchor" aria-hidden="true" href="#statistical-learning">#</a></h4>
-$$
-\hat{\theta}_{SL} = \arg \min_{\theta} \mathcal{R}(f) = \arg \min_{\theta} \mathbb{E}_{X, Y} \mathcal{L} (f(X), Y)
-$$$$
-\hat{R}(f) = \frac{1}{n} \sum_{i = 1}^{n} \mathcal{L}(f(x_{i}), y_{i})
-$$<p>
-And then choose the best $f$ from his family of functions</p>
-<h4 id="three-problems-in-statistical-learning">Three problems in statistical learning<a hidden class="anchor" aria-hidden="true" href="#three-problems-in-statistical-learning">#</a></h4>
-<p>The goal of statistical learning is to find a function $f : \mathcal{X} \to \mathcal{Y}$ such that the error rate is minimized. We define the error rate to be just the cases where $f(x) \neq y$.
-Let&rsquo;s have so a simple model:</p>
-$$
-\lim_{ n \to \infty }  \frac{1}{n} \sum_{i= 1}^{N}\mathbb{1} \left\{ f(x_{i}) \neq y_{i}  \right\} 
-= \mathbb{E}_{\mathcal{x}, \mathcal{y} \sim p^{*}} [\mathbb{1} \left\{ f(x) \neq y \right\} ]
-$$$$
-\min_{f}\mathbb{E}_{\mathcal{x}, \mathcal{y} \sim p^{*}} [\mathbb{1} \left\{ f(x) \neq y \right\} ]
-$$<ol>
-<li>We don&rsquo;t know anything about $f$, we need to have some assumptions, the easiest is to define a <em>hypothesis class</em>.</li>
-<li>We don&rsquo;t know the starting distribution $p^{*}$, we solve this by collecting <em>training samples</em> so that we have an estimate of the starting distribution. (This is the <em>fundamental</em> problem in machine learning, we have empirical distribution, never the true distribution!)</li>
-<li>The risk $\mathcal{R}$ is not <strong>differentiable</strong>, we solve this by choosing a <strong>loss function</strong> $\mathcal{L} : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}$ such that this is differentiable.
-We can write the starting problem in the following way as a proxy for the expected value.
-$$
-\min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i \leq n} \mathcal{L} (f(x_{i}), y_{i})
-$$</li>
-</ol>
-<p>This image summarizes the whole pipeline
-<img src="/images/notes/Parametric Models-20240926153044335.webp" style="width: 100%" class="center" alt="Parametric Models-20240926153044335"></p>
-<p>Let&rsquo;s have a simple example. Let&rsquo;s attempt to chose the hypothesis class for the iris setosa classification problem.
-We arbitrarily choose $X$ and $Y$ to be</p>
-<ol>
-<li>$Y \sim Bern(0.5)$</li>
-<li>$X\mid Y \sim \mathcal{N(\mu_{y}, \Sigma)}$</li>
-</ol>
-<p>Then we can use Bayes rule to find $P(Y=y \mid X = x) \propto P(X = x \mid Y = y) P(Y = y)$ and we can define then a simple loss, for example the classical binary cross entropy loss.</p>
-<h4 id="bayesian-and-frequentist-head-to-head">Bayesian and Frequentist head to head<a hidden class="anchor" aria-hidden="true" href="#bayesian-and-frequentist-head-to-head">#</a></h4>
-<img src="/images/notes/Parametric Models-20240810200203475.webp" style="width: 100%" class="center" alt="Parametric Models-20240810200203475">
-<h2 id="estimators">Estimators<a hidden class="anchor" aria-hidden="true" href="#estimators">#</a></h2>
-<p>Estimators are functions or procedures that in this context of parametric models allow us to pin-point the correct parameters $\theta$, in the case of the frequentist view, or give a distribution over possible $\theta$s. Usually the generating function is called a <strong>density</strong> function parameterized by the $\theta$ so we have to define the class of models and likelihood first.</p>
-<p>We will mainly focus in this setting with the Maximum likelihood estimator</p>
-<h3 id="the-maximum-likelihood-estimator">The Maximum Likelihood Estimator<a hidden class="anchor" aria-hidden="true" href="#the-maximum-likelihood-estimator">#</a></h3>
-$$
-\mathcal{L}(\theta) = \prod_{i=1}^{n} f(X^{(i)} ; \theta)
-$$<h4 id="definition-of-mle">Definition of MLE<a hidden class="anchor" aria-hidden="true" href="#definition-of-mle">#</a></h4>
-$$
-\hat{\theta}_{ML} = \arg \max_{\theta} \mathcal{L}(\theta)
-$$<p>Sometimes is useful to consider the <strong>log-likelihood</strong> because sums are usually easier to handle. We will indicate the log version with $\ell(\theta)$.
-Usually the loss is the likelihood of the data, this is why it&rsquo;s called Maximum <em>Likelihood</em> estimator.</p>
-<h4 id="properties-of-the-mle">Properties of the MLE<a hidden class="anchor" aria-hidden="true" href="#properties-of-the-mle">#</a></h4>
-<p>The important thing here is to be able to name the properties, not prove them. You can see a good presentation of these properties with <a href="https://link.springer.com/book/10.1007/978-0-387-21736-9">(Wasserman 2004)</a> chapter 9 (page 127 on wards).
-Three main properties concern us:</p>
-<ol>
-<li><strong>Consistency</strong>: (meaning it will converge to the true parameter, if modelling assumptions are correct e.g. function family)
-<ul>
-<li>In formula it means that a point estimator $\hat{\theta}_{n}$  of a $\theta$ is consistent if it converges in probability which is:
-$$
-	\forall \varepsilon > 0, \mathbb{P}(\lvert \hat{\theta}_{n} - \theta \rvert  > \varepsilon) \to_{n \to \infty} 0
-$$</li>
-<li>See <a href="/notes/central-limit-theorem-and-law-of-large-numbers">Central Limit Theorem and Law of Large Numbers</a> for definition of convergence in probability, the proof is not trivial and has many technicalities.</li>
-</ul>
-</li>
-<li><strong>Asymptotic efficiency</strong>: For well-behaved estimators, the MLE has the smallest variance for large $n$.
-- For example the median estimator satisfies $\sqrt{ n } (\theta_{\text{ median}} - \theta_{*}) = \mathcal{N}\left( 0, \sigma^{2} \frac{\pi}{2} \right)$, but the MLE doesn&rsquo;t have that $\pi$ factor.</li>
-<li><strong>Asymptotically normal</strong>: meaning the error will be Gaussian if we have too many samples. Which means that
-$$
-\frac{\hat{\theta} - \theta_{*}}{\text{standard error}} \sim \mathcal{N}(0, 1)
-$$
-<ul>
-<li>Informally, this theorem states that the distribution of the parameters $\theta$  that we find with MLE follows a normal distribution $\mathcal{N}(\theta_{*}, se)$. This theorem holds also for estimated standard errors. The interesting thing is that with this method we can build <strong>asymptotic confidence intervals</strong> for MLE, which can come quite handy in many occasions, and rival the bayesian approach for confidence intervals.</li>
-<li>The proof is quite hard, it is presented in the appendix of Chapter 9 of <a href="https://link.springer.com/book/10.1007/978-0-387-21736-9">(Wasserman 2004)</a>.</li>
-</ul>
-</li>
-<li><strong>Equivariance</strong> meaning: if $\hat{\theta}$ is MLE of $\theta$ then for any given $g$ we have that $g(\hat{\theta})$ is the MLE of $g(\theta)$. I don&rsquo;t know what is this useful for, but nice to know.</li>
-</ol>
-<p>We will discuss these properties one by one. These properties are the reason why MLE is preferred over other estimators, such as means or medians.</p>
-$$
-\lim_{ n \to \infty } \mathbb{E} \left[  (\hat{\theta}_{ML} - \theta_{0})^{2} \right]  = \frac{1}{I_{n}(\theta_{0})}
-$$<p>
-Where $I_{n}$ is the <strong>fisher information</strong>. Every estimator is lower bounded by this. (this is the maximum efficiency) and it&rsquo;s very important.</p>
-<p>Biases usually are good if it includes information that is correct with the data. (helps it learn faster, an example of why bias works is the Stein estimator, but I didn&rsquo;t understood exactly why).
-Simple cases and reasoning for first principles usually helps you build the intuition to attack more complex cases. This is something you would need to keep in mind.</p>
-<h4 id="mle-is-overconfident">MLE is overconfident<a hidden class="anchor" aria-hidden="true" href="#mle-is-overconfident">#</a></h4>
-<p>See Sur and Candes 2018</p>
-<p>One can show that there are many examples where logistic regression (see <a href="/notes/linear-regression-methods">Linear Regression methods</a>) is quite biased. This is a problem especially with <strong>high dimensional</strong> data.
-There are some <em>numerical instabilities</em> with correlated features, especially when we are trying to invert something small (floating point imprecisions!)</p>
-<p>You can see it quite easily:
-Remember that the <em>ordinary least squares solution</em> is $(X^{T}X)^{-1}X^{T}y$, let&rsquo;s suppose we use <a href="/notes/singular-value-decomposition">Singular Value Decomposition</a> and write $X = V^{T}DU$ then we have $X^{T}X = U^{T}DVV^{T}DU = U^{T}D^{2}U$ Inverting this we get $U^{T}D^{-2}U$ and multiplying with the original one we get $\beta = U^{T}D^{-1}Vy$  but the matrix $D^{-1}$ is quite unstable, especially when you are inverting small numbers.</p>
-<p>One nice thing about this decomposition is that the inference is just $X\beta = V^{T}Vy$ and that is a nice form.</p>
-<h3 id="rao-cramer-bound">Rao-Cramer Bound<a hidden class="anchor" aria-hidden="true" href="#rao-cramer-bound">#</a></h3>
-<p>Professor says this bound has same principle with the Heisenberg&rsquo;s uncertainty principle with the Cauchy-Schwarz inequality somehow. But I don&rsquo;t know about that.
-Rao-Cramer bound is a general bound on the variance of <strong>any unbiased estimator</strong>. This is the least possible error for unbiased estimator, which is a way to say that you know that you got the best for that class of functions.P</p>
-<p>Let&rsquo;s consider a likelihood $p(y \mid \theta)$, for $\theta \in \Theta$ which is our parameter space, and some samples $y_{1}, \dots, y_{n} \sim p(y \mid \theta_{0})$, using a particular $\theta_{0}$.
-We want to know <em>how precisely</em> can we estimate the value $\theta_{0}$ given $n$ samples. So let&rsquo;s define an estimator $\hat{\theta}$ and consider the <strong>expected deviation</strong> $\mathbf{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta_{0})^{2} \right]$, which tells us how much can the estimated value $\hat{\theta}$ vary compared to the ground truth.
-One nice thing is that this holds for every distribution.</p>
-<h4 id="score-function">Score function<a hidden class="anchor" aria-hidden="true" href="#score-function">#</a></h4>
-$$
-\Lambda := \frac{ \partial  }{ \partial \theta }  \log p(y \mid \theta) = \frac{\left( \frac{ \partial  }{ \partial \theta } p(y \mid \theta) \right)}{p(y \mid \theta)}
-$$$$
-b_{\hat{\theta}} = \mathbb{E}_{y \mid \theta} [ \hat{\theta} (y_{1}, \dots, y_{n})] - \theta
-$$$$
-\mathbf{E}_{y \mid \theta} \Lambda 
-=  \int p(y \mid \theta) \cdot \frac{1}{p(y \mid \theta)} \frac{ \partial  }{ \partial \theta } p(y \mid \theta) \, dy 
-=  \int \frac{ \partial  }{ \partial \theta } p(y \mid \theta) \, dy 
-= \frac{ \partial  }{ \partial \theta } 1 = 0 
-$$<p>
-which is an interesting result.</p>
-<h4 id="score-estimator-covariance">Score estimator Covariance<a hidden class="anchor" aria-hidden="true" href="#score-estimator-covariance">#</a></h4>
-$$
-\mathbf{E}_{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right]  
-= \frac{ \partial  }{ \partial \theta }  \int p(y \mid \theta) \hat{\theta} \, dy 
-= \frac{ \partial }{ \partial \theta } \mathbf{E}_{y \mid \theta} \left[ \hat{\theta} \right] 
-= \frac{ \partial }{ \partial \theta }  \left( \mathbf{E}_{y \mid \theta} \left[ \hat{\theta} \right]  - \theta \right)  + 1 
-= \frac{ \partial  }{ \partial \theta } b_{\hat{\theta}} + 1
-$$<p>
-And the first part is surprisingly the <strong>bias</strong> of our estimator, so we want to see how much we can lower the <em>bias</em> value when we want to assess these kinds of problems.</p>
-<p>We now consider the cross correlation between $\Lambda$ and $\hat{\theta}$</p>
-$$
-\mathbf{E}_{y \mid \theta} \left[ ( \Lambda - \mathbf{E} \Lambda)( \hat{\theta} - \mathbf{E} \hat{\theta}) \right] 
-= \mathbf{E}_{y \mid \theta}\left[ \Lambda \cdot \hat{\theta} \right] - \mathbf{E}_{y \mid \theta} \left[ \Lambda \mathbf{E} \hat{\theta} \right] 
-= \mathbb{E}_{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right] 
-$$$$
-\mathbb{E}_{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right] ^{2} = 
-\left( \mathbf{E}_{y \mid \theta} \left[ ( \Lambda)( \hat{\theta} - \mathbf{E} \hat{\theta}) \right] \right)^{2} \leq \mathbf{E}_{y \mid \theta}\left[ \Lambda^{2} \right]  \mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \mathbf{E} \hat{\theta}) ^{2} \right] 
-$$$$
-\begin{align}
-\mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \mathbf{E} \hat{\theta}) ^{2} \right] 
-&=
-\mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \theta)^{2} \right] - 2  \mathbf{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta) (\mathbf{E} \hat{\theta} - \theta) \right]  + \mathbf{E}_{ y \mid \theta} \left[ (\mathbf{E} \hat{\theta} - \theta)^{2} \right] 
- \\
-&= \mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \theta)^{2} \right] - 2  \mathbf{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta) b_{\hat{\theta}} \right]  + b^{2}_{\hat{\theta}} \\
-&= \mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \theta)^{2} \right] - b^{2}_{\hat{\theta}}
-\end{align}
-$$<p>
-Which is just $= \mathbf{E}_{y \mid \theta} \left[  (\hat{\theta} - \theta)^{2} \right] - b^{2}_{\hat{\theta}}$</p>
-<h4 id="final-bound">Final Bound<a hidden class="anchor" aria-hidden="true" href="#final-bound">#</a></h4>
-<p>Putting everything together we have that</p>
-<p>$$
-\mathbf{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta)^{2} \right]
-\geq</p>
-<h1 id="fracmathbbe_y-mid-theta-left-lambda-cdot-hattheta-right-2mathbfe_y-mid-thetaleft-lambda2-right---b2_hattheta">\frac{\mathbb{E}<em>{y \mid \theta} \left[ \Lambda \cdot \hat{\theta} \right] ^{2}}{\mathbf{E}</em>{y \mid \theta}\left[ \Lambda^{2} \right] } + b^{2}_{\hat{\theta}}<a hidden class="anchor" aria-hidden="true" href="#fracmathbbe_y-mid-theta-left-lambda-cdot-hattheta-right-2mathbfe_y-mid-thetaleft-lambda2-right---b2_hattheta">#</a></h1>
-<p>\frac{\left( \frac{ \partial  }{ \partial \theta } b_{\hat{\theta}} + 1 \right)^{2}}{\mathbf{E}<em>{y \mid \theta}\left[ \Lambda^{2} \right] } + b^{2}</em>{\hat{\theta}}
-$$</p>
-<p>If we have an <strong>unbiased estimator</strong>, which means that $b_{\hat{\theta}} = 0$ then we have that the expected difference of the models is always greater than the expected value of the double power of the score, also known as the <strong>fisher information</strong> in maths:</p>
-$$
- \mathbf{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta)^{2} \right] \geq \frac{1}{\mathbf{E}_{y \mid \theta} \left[ \Lambda^{2} \right] } = \frac{1}{I_{n}(\theta_{0})}
-$$<p>
-If instead we have a biased estimator, sometimes is advantageous because the numerator could actually be smaller.</p>
-<h3 id="fisher-information">Fisher information<a hidden class="anchor" aria-hidden="true" href="#fisher-information">#</a></h3>
-<p>If the information is high, it means the log likelihood changes fast. This is measure of information of how X changes with respect to $\theta$.</p>
-<h4 id="definition-of-fisher-information">Definition of Fisher information<a hidden class="anchor" aria-hidden="true" href="#definition-of-fisher-information">#</a></h4>
-<p>Fisher information is defined as the <strong>variance of the score function</strong>.
-We discovered that the fisher information has something to do with the Rao-Cramer bound, let&rsquo;s briefly analyze that:</p>
-$$
-\mathbf{E}_{y \mid \theta} \left[ \Lambda^{2} \right] 
-= \int p(y \mid \theta) \left( \frac{ \partial  }{ \partial \theta } \log p(y \mid \theta)  \right)^{2}  \, dy =: I^{(1)}(\theta)
-$$<p>
-Where $I(\theta)$ is the fisher information, the expected value of the squared score function.</p>
-$$
-I(\theta) = Var(\Lambda) = \mathbb{E}_{y \mid \theta}[(\Lambda - \mathbb{E}_{y \mid \theta}[\Lambda])^{2}]
-$$<p>
-And simplifying, as we know that the mean of the score function is 0.</p>
-<p>Fisher information could also be written as the derivative with respect of theta of the score function, if $\log p(y \mid \theta)$ is twice differentiable. See <a href="https://en.wikipedia.org/wiki/Fisher_information#Definition">wikipedia</a>.</p>
-<h4 id="the-multi-variable-case">The Multi-variable case<a hidden class="anchor" aria-hidden="true" href="#the-multi-variable-case">#</a></h4>
-$$
-I^{(n)} (\theta) = \int p(y_{1}\dots y_{n} \mid \theta) \left( \frac{ \partial  }{ \partial \theta } \log p(y_{1} \dots y_{n}) \right)^{2} \, dy_{1}\dots dy_{n} 
-$$$$
-\int p(y_{1}\dots y_{n} \mid \theta) \left( \frac{ \partial  }{ \partial \theta } \log p(y_{1} \dots y_{n}) \right)^{2} \, dy_{1}\dots dy_{n}  = \int  p(y_{1}\dots y_{n} \mid \theta) \left( \sum \Lambda_{i}^{2} \right) \, dy_{1}\dots dy_{n}   = n I^{(1)}(\theta)
-$$<p>
-Which is a nice property of the fisher information</p>
-<h4 id="fisher-for-gaussian">Fisher for Gaussian<a hidden class="anchor" aria-hidden="true" href="#fisher-for-gaussian">#</a></h4>
-$$
-I(\theta) = \frac{n}{\sigma^{2}}
-$$$$
-\mathbb{E}_{y \mid \theta} \left[ (\hat{\theta} - \theta)^{2} \right] \geq \frac{1}{I(\theta)} = \frac{\sigma^{2}}{n}
-$$<p>
-Since the MLE estimate has indeed that variance, then we say it is efficient unbiased, it hits the lower bound of the variance.</p>
-<h3 id="stein-estimator">Stein estimator<a hidden class="anchor" aria-hidden="true" href="#stein-estimator">#</a></h3>
-<p>If we use this estimator we have that it is <strong>consistently better</strong> than the MLE, but we can&rsquo;t prove that this is the best ever possible. This has been known as stein&rsquo;s paradox for some time. See <a href="https://www.youtube.com/watch?v=cUqoHQDinCM&ab_channel=Mathemaniac">here</a>. This video gives a nice intuition about Stein&rsquo;s estimator, you can visualize it as a biased estimator that concentrates variance by warping the space closer to the origin, so that all the candidate solutions are acqually closer to the true solution.</p>
-<p>We have to assume we have a multivariate random variable with $\mathbb{R}^{d}$ with $d \geq 3$ the exact details are not important, but we want to say that MLE is not always the best, this is the surprising fact.</p>
-$$
-\hat{\theta}_{JS} := \left( 1 - \frac{(d - 2)\sigma^{2}}{\lVert y \rVert ^{2}} \right) y
-$$$$
-\mathbb{E}\left[ (\hat{\theta}_{JS}- \theta_{0})^{2}  \right] 
-\leq \mathbb{E}\left[ (\hat{\theta}_{MLE}- \theta_{0})^{2}  \right] 
-$$<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=vapnikEstimationDependencesBased2006>[1] Vapnik <a href="http://link.springer.com/10.1007/0-387-34239-7">“Estimation of Dependences Based on Empirical Data”</a> Springer 2006
- </p>
-<p id=wassermanAllStatisticsConcise2004>[2] Wasserman <a href="https://link.springer.com/book/10.1007/978-0-387-21736-9">“All of Statistics: A Concise Course in Statistical Inference”</a> Springer Science \& Business Media 2004
- </p>
-<p id=murphyMachineLearningProbabilistic2012>[3] Murphy <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">“Machine Learning: A Probabilistic Perspective”</a> None 2012
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

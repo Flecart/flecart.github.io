@@ -7,44 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Beta and Dirichlet Distributions | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="The beta distribution
-The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here&rsquo;s a structured intuition to grasp its essence:
-Core Concept
-The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.
-Key Intuitions
-a. &ldquo;Pseudo-Counts&rdquo; Interpretation
-
-α acts like &ldquo;successes&rdquo; and β like &ldquo;failures&rdquo; in a hypothetical experiment.
-
-Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data.
-
-
-After observing x real successes and y real failures, the posterior becomes Beta(α&#43;x, β&#43;y). This makes beta the conjugate prior for the binomial distribution (bernoulli process).
-
-b. Shape Flexibility
-
-Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely.
-Bell-shaped: When α, β &gt; 1, the distribution peaks at mode = (α-1)/(α&#43;β-2).
-
-Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5).
-
-
-U-shaped: When α, β &lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.).
-Skewed: If α &gt; β, skewed toward 1; if β &gt; α, skewed toward 0.
-
-c. Moments
-
-Mean: $α/(α&#43;β)$ – your &ldquo;expected&rdquo; probability of success.
-Variance: $αβ / [(α&#43;β)²(α&#43;β&#43;1)]$ – decreases as α and β grow (more confidence).
-
-$$
-\text{Mode} = \frac{\alpha - 1}{\alpha &#43; \beta - 2}
-$$The mathematical model
-$$
-\text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1}
-$$
-Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( &#43; b)$
-And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$">
+<meta name="description" content="Beta and Dirichlet Distributions - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/beta-and-dirichlet-distributions/">
@@ -130,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/beta-and-dirichlet-distributions/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Beta and Dirichlet Distributions">
-  <meta property="og:description" content="The beta distribution The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here’s a structured intuition to grasp its essence:
-Core Concept The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.
-Key Intuitions a. “Pseudo-Counts” Interpretation α acts like “successes” and β like “failures” in a hypothetical experiment. Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data. After observing x real successes and y real failures, the posterior becomes Beta(α&#43;x, β&#43;y). This makes beta the conjugate prior for the binomial distribution (bernoulli process). b. Shape Flexibility Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely. Bell-shaped: When α, β &gt; 1, the distribution peaks at mode = (α-1)/(α&#43;β-2). Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5). U-shaped: When α, β &lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.). Skewed: If α &gt; β, skewed toward 1; if β &gt; α, skewed toward 0. c. Moments Mean: $α/(α&#43;β)$ – your “expected” probability of success. Variance: $αβ / [(α&#43;β)²(α&#43;β&#43;1)]$ – decreases as α and β grow (more confidence). $$ \text{Mode} = \frac{\alpha - 1}{\alpha &#43; \beta - 2} $$The mathematical model $$ \text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1} $$ Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( &#43; b)$ And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -143,44 +104,7 @@ Key Intuitions a. “Pseudo-Counts” Interpretation α acts like “successes�
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Beta and Dirichlet Distributions">
-<meta name="twitter:description" content="The beta distribution
-The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here&rsquo;s a structured intuition to grasp its essence:
-Core Concept
-The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.
-Key Intuitions
-a. &ldquo;Pseudo-Counts&rdquo; Interpretation
-
-α acts like &ldquo;successes&rdquo; and β like &ldquo;failures&rdquo; in a hypothetical experiment.
-
-Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data.
-
-
-After observing x real successes and y real failures, the posterior becomes Beta(α&#43;x, β&#43;y). This makes beta the conjugate prior for the binomial distribution (bernoulli process).
-
-b. Shape Flexibility
-
-Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely.
-Bell-shaped: When α, β &gt; 1, the distribution peaks at mode = (α-1)/(α&#43;β-2).
-
-Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5).
-
-
-U-shaped: When α, β &lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.).
-Skewed: If α &gt; β, skewed toward 1; if β &gt; α, skewed toward 0.
-
-c. Moments
-
-Mean: $α/(α&#43;β)$ – your &ldquo;expected&rdquo; probability of success.
-Variance: $αβ / [(α&#43;β)²(α&#43;β&#43;1)]$ – decreases as α and β grow (more confidence).
-
-$$
-\text{Mode} = \frac{\alpha - 1}{\alpha &#43; \beta - 2}
-$$The mathematical model
-$$
-\text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1}
-$$
-Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( &#43; b)$
-And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -209,12 +133,12 @@ And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$">
   "@type": "BlogPosting",
   "headline": "Beta and Dirichlet Distributions",
   "name": "Beta and Dirichlet Distributions",
-  "description": "The beta distribution The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here\u0026rsquo;s a structured intuition to grasp its essence:\nCore Concept The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.\nKey Intuitions a. \u0026ldquo;Pseudo-Counts\u0026rdquo; Interpretation α acts like \u0026ldquo;successes\u0026rdquo; and β like \u0026ldquo;failures\u0026rdquo; in a hypothetical experiment. Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data. After observing x real successes and y real failures, the posterior becomes Beta(α+x, β+y). This makes beta the conjugate prior for the binomial distribution (bernoulli process). b. Shape Flexibility Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely. Bell-shaped: When α, β \u0026gt; 1, the distribution peaks at mode = (α-1)/(α+β-2). Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5). U-shaped: When α, β \u0026lt; 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.). Skewed: If α \u0026gt; β, skewed toward 1; if β \u0026gt; α, skewed toward 0. c. Moments Mean: $α/(α+β)$ – your \u0026ldquo;expected\u0026rdquo; probability of success. Variance: $αβ / [(α+β)²(α+β+1)]$ – decreases as α and β grow (more confidence). $$ \\text{Mode} = \\frac{\\alpha - 1}{\\alpha + \\beta - 2} $$The mathematical model $$ \\text{Beta} (x \\mid a, b) = \\frac{1}{B(a, b)} \\cdot x^{a -1 }(1 - x)^{b - 1} $$ Where $B(a, b) = \\Gamma(a) \\Gamma(b) / \\Gamma( + b)$ And $\\Gamma(t) = \\int_{0}^{\\infty}e^{-x}x^{t - 1} \\, dx$\n",
+  "description": "",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "The beta distribution The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here’s a structured intuition to grasp its essence:\nCore Concept The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: α (alpha) and β (beta). These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.\nKey Intuitions a. “Pseudo-Counts” Interpretation α acts like “successes” and β like “failures” in a hypothetical experiment. Example: If you use Beta(5, 3), it’s as if you’ve observed 5 successes and 3 failures before seeing actual data. After observing x real successes and y real failures, the posterior becomes Beta(α+x, β+y). This makes beta the conjugate prior for the binomial distribution (bernoulli process). b. Shape Flexibility Uniform distribution: When α = β = 1, all values in [0, 1] are equally likely. Bell-shaped: When α, β \u003e 1, the distribution peaks at mode = (α-1)/(α+β-2). Symmetric if α = β (e.g., Beta(5, 5) is centered at 0.5). U-shaped: When α, β \u003c 1, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.). Skewed: If α \u003e β, skewed toward 1; if β \u003e α, skewed toward 0. c. Moments Mean: $α/(α+β)$ – your “expected” probability of success. Variance: $αβ / [(α+β)²(α+β+1)]$ – decreases as α and β grow (more confidence). $$ \\text{Mode} = \\frac{\\alpha - 1}{\\alpha + \\beta - 2} $$The mathematical model $$ \\text{Beta} (x \\mid a, b) = \\frac{1}{B(a, b)} \\cdot x^{a -1 }(1 - x)^{b - 1} $$ Where $B(a, b) = \\Gamma(a) \\Gamma(b) / \\Gamma( + b)$ And $\\Gamma(t) = \\int_{0}^{\\infty}e^{-x}x^{t - 1} \\, dx$\nVisualization \u0026 Parameter Tuning Mean and Variance Control:\nTo design a beta distribution with mean μ and variance σ², solve: α = μ(μ(1−μ)/σ² − 1) β = (1−μ)(μ(1−μ)/σ² − 1)\nExample: For μ = 0.5, σ² = 0.01, use Beta(12, 12). Dirichlet Distribution The Dirichlet Distribution is a generalization of the Beta distribution.\nA mathematical definition $$ \\text{Dir}(\\rho_{1}, \\dots \\rho_{k};\\alpha_{1}, \\dots, \\alpha_{k}) = \\frac{1}{B(\\alpha)} \\prod_{i = 1}^{k} \\rho_{i}^{\\alpha_{i} - 1} $$$$ \\Gamma(x) = \\int_{0}^{\\infty} t^{x - 1} e^{-t} dt $$ And it is has the nice property of $\\Gamma(x + 1) = x \\Gamma(x)$ and $\\Gamma(1) = 1$, this is why we can see this distribution as a generalization of the factorial. The important thing to note about this distribution is that it is the conjugate prior of the multinomial distribution. See here. So, if we have a multinomial distribution with a Dirichlet prior, then the posterior is also a Dirichlet distribution. This allows us to sort of update our prior with the data we have, which is a nice property for bayesian inference. You can learn more about prior updates in Bayesian Linear Regression.\nDP effectively defines a conjugate prior for arbitrary measurable spaces.\nThe following sections have content brought to you by (Murphy 2012).\nComputing the posterior Recall the multinomial distribution is $p(\\mathcal{D}|\\theta) = \\prod_{k=1}^K \\theta_k^{N_k}$\nThen we see that the Dirichlet is the conjugate prior for this distribution, so the posterior is: $$ % Posterior proportionality \\begin{align} p(\\theta|\\mathcal{D}) \u0026\\propto p(\\mathcal{D}|\\theta)p(\\theta) \\\n% Posterior calculation \u0026\\propto \\prod_{k=1}^K \\theta_k^{N_k} \\theta_k^{\\alpha_k-1} = \\prod_{k=1}^K \\theta_k^{\\alpha_k+N_k-1} \\\n\u0026= \\text{Dir}(\\theta|\\alpha_1 + N_1,\\ldots,\\alpha_K + N_K) \\end{align} $$ Which is the correct Posterior.\nThe Mode of the distribution Using Lagrange Multipliers, we can find that the mode of the Dirichlet distribution is:\n$$ \\hat{\\theta}_{k} = \\frac{N_{k}+\\alpha_{k} - 1}{N+\\sum_{i=1}^{K} \\alpha_{i} - K} $$ Where $K$ is the number of clusters, $N$ is the number of new samples after running the multinomial process. We notice that its form is quite nice when we set the uniform prior $\\forall k \\in K, \\alpha_{k} = 1$.\nThe Posterior predictive $$ \\begin{align} p(X = j|\\mathcal{D}) \u0026= \\int p(X = j|\\theta)p(\\theta|\\mathcal{D})d\\theta \\\n\u0026= \\int p(X = j|\\theta_j)\\left[\\int p(\\theta_{-j},\\theta_j|\\mathcal{D})d\\theta_{-j}\\right] d\\theta_j \\\n\u0026= \\int \\theta_jp(\\theta_j|\\mathcal{D})d\\theta_j = \\mathbb{E}[\\theta_j|\\mathcal{D}] = \\frac{\\alpha_j + N_j}{\\sum_k(\\alpha_k + N_k)} = \\frac{\\alpha_j + N_j}{\\sum_{k}\\alpha_{k} + N}\n\\end{align} $$ We notice that this is a form of Bayesian Smoothing.\nReferences [1] Murphy “Machine Learning: A Probabilistic Perspective” None 2012 ",
-  "wordCount" : "689",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-02-01T00:00:00Z",
   "dateModified": "2025-02-01T00:00:00Z",
@@ -309,160 +233,12 @@ And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$">
     <h1 class="post-title entry-hint-parent">
       Beta and Dirichlet Distributions
     </h1>
-    <div class="post-meta"><span title='2025-02-01 00:00:00 +0000 UTC'>February 1, 2025</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-02-01 00:00:00 +0000 UTC'>February 1, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#the-beta-distribution" aria-label="The beta distribution">The beta distribution</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#core-concept" aria-label="Core Concept">Core Concept</a></li>
-                <li>
-                    <a href="#key-intuitions" aria-label="Key Intuitions">Key Intuitions</a><ul>
-                        
-                <li>
-                    <a href="#a-pseudo-counts-interpretation" aria-label="a. &ldquo;Pseudo-Counts&rdquo; Interpretation">a. &ldquo;Pseudo-Counts&rdquo; Interpretation</a></li>
-                <li>
-                    <a href="#b-shape-flexibility" aria-label="b. Shape Flexibility">b. Shape Flexibility</a></li>
-                <li>
-                    <a href="#c-moments" aria-label="c. Moments">c. Moments</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-mathematical-model" aria-label="The mathematical model">The mathematical model</a></li>
-                <li>
-                    <a href="#visualization--parameter-tuning" aria-label="Visualization &amp; Parameter Tuning">Visualization &amp; Parameter Tuning</a></li></ul>
-                    
-                <li>
-                    <a href="#dirichlet-distribution" aria-label="Dirichlet Distribution">Dirichlet Distribution</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#a-mathematical-definition" aria-label="A mathematical definition">A mathematical definition</a></li>
-                <li>
-                    <a href="#computing-the-posterior" aria-label="Computing the posterior">Computing the posterior</a></li>
-                <li>
-                    <a href="#the-mode-of-the-distribution" aria-label="The Mode of the distribution">The Mode of the distribution</a></li>
-                <li>
-                    <a href="#the-posterior-predictive" aria-label="The Posterior predictive">The Posterior predictive</a></li></ul>
-                    </ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h1 id="the-beta-distribution">The beta distribution<a hidden class="anchor" aria-hidden="true" href="#the-beta-distribution">#</a></h1>
-<p>The beta distribution is a powerful tool for modeling probabilities and proportions between 0 and 1. Here&rsquo;s a structured intuition to grasp its essence:</p>
-<h3 id="core-concept">Core Concept<a hidden class="anchor" aria-hidden="true" href="#core-concept">#</a></h3>
-<p>The beta distribution, defined on $[0, 1]$, is parameterized by two shape parameters: <strong>α (alpha)</strong> and <strong>β (beta)</strong>. These parameters dictate the distribution’s shape, allowing it to flexibly represent beliefs about probabilities, rates, or proportions.</p>
-<h3 id="key-intuitions">Key Intuitions<a hidden class="anchor" aria-hidden="true" href="#key-intuitions">#</a></h3>
-<h4 id="a-pseudo-counts-interpretation"><strong>a. &ldquo;Pseudo-Counts&rdquo; Interpretation</strong><a hidden class="anchor" aria-hidden="true" href="#a-pseudo-counts-interpretation">#</a></h4>
-<ul>
-<li><strong>α</strong> acts like &ldquo;successes&rdquo; and <strong>β</strong> like &ldquo;failures&rdquo; in a hypothetical experiment.
-<ul>
-<li>Example: If you use <strong>Beta(5, 3)</strong>, it’s as if you’ve observed <strong>5 successes</strong> and <strong>3 failures</strong> <em>before seeing actual data</em>.</li>
-</ul>
-</li>
-<li>After observing <strong>x real successes</strong> and <strong>y real failures</strong>, the posterior becomes <strong>Beta(α+x, β+y)</strong>. This makes beta the <strong>conjugate prior</strong> for the binomial distribution (bernoulli process).</li>
-</ul>
-<h4 id="b-shape-flexibility"><strong>b. Shape Flexibility</strong><a hidden class="anchor" aria-hidden="true" href="#b-shape-flexibility">#</a></h4>
-<ul>
-<li><strong>Uniform distribution</strong>: When <strong>α = β = 1</strong>, all values in [0, 1] are equally likely.</li>
-<li><strong>Bell-shaped</strong>: When <strong>α, β &gt; 1</strong>, the distribution peaks at <strong>mode = (α-1)/(α+β-2)</strong>.
-<ul>
-<li>Symmetric if <strong>α = β</strong> (e.g., <strong>Beta(5, 5)</strong> is centered at 0.5).</li>
-</ul>
-</li>
-<li><strong>U-shaped</strong>: When <strong>α, β &lt; 1</strong>, density spikes at 0 and 1 (useful for modeling polarization, meaning we believe the model to only produce values at 0 or 1, not in the middle.).</li>
-<li><strong>Skewed</strong>: If <strong>α &gt; β</strong>, skewed toward 1; if <strong>β &gt; α</strong>, skewed toward 0.</li>
-</ul>
-<h4 id="c-moments"><strong>c. Moments</strong><a hidden class="anchor" aria-hidden="true" href="#c-moments">#</a></h4>
-<ul>
-<li><strong>Mean</strong>: $α/(α+β)$ – your &ldquo;expected&rdquo; probability of success.</li>
-<li><strong>Variance</strong>: $αβ / [(α+β)²(α+β+1)]$ – decreases as <strong>α</strong> and <strong>β</strong> grow (more confidence).</li>
-</ul>
-$$
-\text{Mode} = \frac{\alpha - 1}{\alpha + \beta - 2}
-$$<h3 id="the-mathematical-model">The mathematical model<a hidden class="anchor" aria-hidden="true" href="#the-mathematical-model">#</a></h3>
-$$
-\text{Beta} (x \mid a, b) = \frac{1}{B(a, b)} \cdot x^{a -1 }(1 - x)^{b - 1}
-$$<p>
-Where $B(a, b) = \Gamma(a) \Gamma(b) / \Gamma( + b)$
-And $\Gamma(t) = \int_{0}^{\infty}e^{-x}x^{t - 1} \, dx$</p>
-<h3 id="visualization--parameter-tuning">Visualization &amp; Parameter Tuning<a hidden class="anchor" aria-hidden="true" href="#visualization--parameter-tuning">#</a></h3>
-<ul>
-<li><strong>Mean and Variance Control</strong>:<br>
-To design a beta distribution with mean <strong>μ</strong> and variance <strong>σ²</strong>, solve:
-<ul>
-<li><strong>α = μ(μ(1−μ)/σ² − 1)</strong></li>
-<li><strong>β = (1−μ)(μ(1−μ)/σ² − 1)</strong><br>
-Example: For <strong>μ = 0.5</strong>, <strong>σ² = 0.01</strong>, use <strong>Beta(12, 12)</strong>.</li>
-</ul>
-</li>
-</ul>
-<h2 id="dirichlet-distribution">Dirichlet Distribution<a hidden class="anchor" aria-hidden="true" href="#dirichlet-distribution">#</a></h2>
-<p>The Dirichlet Distribution is a generalization of the Beta distribution.</p>
-<h4 id="a-mathematical-definition">A mathematical definition<a hidden class="anchor" aria-hidden="true" href="#a-mathematical-definition">#</a></h4>
-$$
-\text{Dir}(\rho_{1}, \dots \rho_{k};\alpha_{1}, \dots, \alpha_{k}) = \frac{1}{B(\alpha)} \prod_{i = 1}^{k} \rho_{i}^{\alpha_{i} - 1}
-$$$$
-\Gamma(x) = \int_{0}^{\infty} t^{x - 1} e^{-t} dt
-$$<p>
-And it is has the nice property of $\Gamma(x + 1) = x \Gamma(x)$ and $\Gamma(1) = 1$, this is why we can see this distribution as a generalization of the factorial.
-The important thing to note about this distribution is that it is the conjugate prior of the multinomial distribution. See <a href="https://chatgpt.com/share/675c58f1-c9cc-8009-94cc-e5e4dd1a2f16">here</a>.
-So, if we have a multinomial distribution with a Dirichlet prior, then the posterior is also a Dirichlet distribution. This allows us to sort of update our prior with the data we have, which is a nice property for bayesian inference. You can learn more about prior updates in <a href="/notes/bayesian-linear-regression">Bayesian Linear Regression</a>.</p>
-<blockquote>
-<p>DP effectively defines a conjugate prior for arbitrary measurable spaces.</p></blockquote>
-<p>The following sections have content brought to you by <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">(Murphy 2012)</a>.</p>
-<h4 id="computing-the-posterior">Computing the posterior<a hidden class="anchor" aria-hidden="true" href="#computing-the-posterior">#</a></h4>
-<p>Recall the multinomial distribution is $p(\mathcal{D}|\theta) = \prod_{k=1}^K \theta_k^{N_k}$</p>
-<p>Then we see that the Dirichlet is the conjugate prior for this distribution, so the posterior is:
-$$
-% Posterior proportionality
-\begin{align}
-p(\theta|\mathcal{D}) &amp;\propto p(\mathcal{D}|\theta)p(\theta)  \</p>
-<p>% Posterior calculation
-&amp;\propto \prod_{k=1}^K \theta_k^{N_k} \theta_k^{\alpha_k-1} = \prod_{k=1}^K \theta_k^{\alpha_k+N_k-1} \</p>
-<p>&amp;= \text{Dir}(\theta|\alpha_1 + N_1,\ldots,\alpha_K + N_K)
-\end{align}
-$$
-Which is the correct Posterior.</p>
-<h4 id="the-mode-of-the-distribution">The Mode of the distribution<a hidden class="anchor" aria-hidden="true" href="#the-mode-of-the-distribution">#</a></h4>
-<p>Using <a href="/notes/lagrange-multipliers">Lagrange Multipliers</a>, we can find that the mode of the Dirichlet distribution is:</p>
-$$
-\hat{\theta}_{k} = \frac{N_{k}+\alpha_{k} - 1}{N+\sum_{i=1}^{K} \alpha_{i} - K}
-$$<p>
-Where $K$ is the number of clusters, $N$ is the number of new samples after running the multinomial process.
-We notice that its form is quite nice when we set the uniform prior $\forall k \in K, \alpha_{k} = 1$.</p>
-<h4 id="the-posterior-predictive">The Posterior predictive<a hidden class="anchor" aria-hidden="true" href="#the-posterior-predictive">#</a></h4>
-<p>$$
-\begin{align}
-p(X = j|\mathcal{D}) &amp;= \int p(X = j|\theta)p(\theta|\mathcal{D})d\theta
-\</p>
-<p>&amp;= \int p(X = j|\theta_j)\left[\int p(\theta_{-j},\theta_j|\mathcal{D})d\theta_{-j}\right] d\theta_j
-\</p>
-<p>&amp;= \int \theta_jp(\theta_j|\mathcal{D})d\theta_j = \mathbb{E}[\theta_j|\mathcal{D}] = \frac{\alpha_j + N_j}{\sum_k(\alpha_k + N_k)} = \frac{\alpha_j + N_j}{\sum_{k}\alpha_{k} + N}</p>
-<p>\end{align}
-$$
-We notice that this is a form of Bayesian Smoothing.</p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=murphyMachineLearningProbabilistic2012>[1] Murphy <a href="https://mitpress.mit.edu/9780262018029/machine-learning/">“Machine Learning: A Probabilistic Perspective”</a> None 2012
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

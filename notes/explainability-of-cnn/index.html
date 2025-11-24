@@ -7,16 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Explainability of CNN | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Introduction
-Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.
-Visualizzazione dei hidden layers
-
-
-Slide visualization
-  
-
-
-Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.">
+<meta name="description" content="Explainability of CNN - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/explainability-of-cnn/">
@@ -102,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/explainability-of-cnn/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Explainability of CNN">
-  <meta property="og:description" content="Introduction Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.
-Visualizzazione dei hidden layers Slide visualization
-Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -113,16 +102,7 @@ Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia pi
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Explainability of CNN">
-<meta name="twitter:description" content="Introduction
-Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.
-Visualizzazione dei hidden layers
-
-
-Slide visualization
-  
-
-
-Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -151,12 +131,12 @@ Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia pi
   "@type": "BlogPosting",
   "headline": "Explainability of CNN",
   "name": "Explainability of CNN",
-  "description": "Introduction Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.\nVisualizzazione dei hidden layers Slide visualization\nPotremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.\n",
+  "description": "",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Introduction Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.\nVisualizzazione dei hidden layers Slide visualization\nPotremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.\nForse questo è anche il metodo con cui vengono generate le immagini??\nExamples of extracted patterns\nProbabilmente tutte le CNN vanno quindi a tentare ad estrarre questo genere di patterns dall’immagine iniziale.\nRicreazione di immagini Vogliamo computare la rappresentazione interna dell’immagine, ossia l’attivazione prodotta da una certa immagine, e da questo possiamo sintetizzare una immagine e poi continuare a fare gradient descent su questa per massimizzare. Una volta al minimo dovremmo avere l’immagine migliore per questo layer.\nSlide di esempio\nPer un certo layer non c’è differenza fra quei 6 immagini\nQuindi prima partivamo da noise, da questo partiamo da una immagine già e guardiamo in che modo è rappresentato in questo layer.\nSlide sulla tecnica di solito utilizzata per queste\nSi puònotare che è più difficile recovery dell’immagine nei layers lontani, probabilmente perché sta creando una specie di astrazione dell’immagine iniziale, quindi l’immagine sarebbe l’immagine dell’astrazione. Riusciamo a visualizzare una astrazione, che sembra una contraddizione.\nInceptionism Style transfer Come facciamo a ricreare una immagine utilizzando lo stile di un certo autore?\nEsempi di risultati con style transfer\nMa come facciamo a catturare un concetto astratto di stile di un certo autore?\nConcetto di stile di un autore Non vogliamo solamente avere un contenuto simile (come abbiamo fatto prima, nei primi layers è una cosa abbastanza semplice) vorremmo proprio essere in grado di catturare lo stile dell’artista. Quindi da un punto di vista astratto\nSlides stile autore\nCi interessa la correlazione fra features maps di un certo livello, e quando abbiamo una immagine vogliamo allenare per massimizzare la similitudine con la correlazione fra le feature maps.\nData manifolds perché facile ingannare le reti Si può vedere che con le tecniche dello stile si possono ingannare molto facilmente le reti di sopra. Questo è perché fanno delle classificazioni, fanno discriminazione anziché generazione. Ossia con generazione provo a stimare la probabilità iniziale che si sia creato la cosa che vogliamo classficiare e con questa probabilità poi andiamo a fare la predizione.\nInvece nelle tecniche discriminazione vanno solamente a fare una discriminazione di dati, una cosa statistica. (la frontiera può essere molto diversa rispetto alla funzione che lo ha generata diciamo.\nSeguendo comunque il ragionamento sui manifolds di data possiamo dire che è molto improbabile ~0, che generando a caso, sia una immagine sensata. Infatti lo spazio delle immagini è enorme, la maggior parte sono ranodm per umani, però stiamo provando a fare questo un modello di discriminazione (quindi è chiaro che molte zone che per noi non hanno senso, sono rappresentate nella rete neurale come categorizzate in un certo modo).\nAutoencoders Vogliamo cercare di cambiare lo spazio in modo che la parte delle immagini sensate sia meglio descrivibile, vogliamo andare in pratica a creare una descrizione compatta di quello che vogliamo analizzare. Con gli autoencoder andremo proprio a comprimere il data manifold e poi lavorare su questa compressione.\nSlide intuizione autoencoder\nQuello che vorremmo fare è una funzione identità per certe cose (dato che sono meno, non possiamo fare altro che perdere altre informazioni, ma vogliamo solamente perdere informazioni che non ci servano).\nPossiblità della compressione\nLa compressione dovrebbe essere possibile perché stiamo cercando regolarità nel data, cosa che ci dovrebbe essere perché noi umani riusciamo a riconoscere questi pattern, non riusciamo ad insegnarlo ad una macchina. (quando è molto random però non si può comprimere, stranamente il random è la cosa con più informazione in termini di teoria dell’informazione, ma meno informazione per noi umani, che strana questa asimmetria).\nCaratteristiche della compressione\nSlide caratteristiche\nLa cosa di maggior rilievo è il fatto del loss, che non riusciamo a fare un reverse che diventi proprio uguale! E poi funziona solamente con data simili (con caratteristiche fortemente correlate fra di loro.\n",
-  "wordCount" : "694",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -251,130 +231,12 @@ Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia pi
     <h1 class="post-title entry-hint-parent">
       Explainability of CNN
     </h1>
-    <div class="post-meta">Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduction" aria-label="Introduction">Introduction</a><ul>
-                        
-                <li>
-                    <a href="#visualizzazione-dei-hidden-layers" aria-label="Visualizzazione dei hidden layers">Visualizzazione dei hidden layers</a></li>
-                <li>
-                    <a href="#ricreazione-di-immagini" aria-label="Ricreazione di immagini">Ricreazione di immagini</a></li></ul>
-                </li>
-                <li>
-                    <a href="#inceptionism" aria-label="Inceptionism">Inceptionism</a></li>
-                <li>
-                    <a href="#style-transfer" aria-label="Style transfer">Style transfer</a><ul>
-                        
-                <li>
-                    <a href="#concetto-di-stile-di-un-autore" aria-label="Concetto di stile di un autore">Concetto di stile di un autore</a></li></ul>
-                </li>
-                <li>
-                    <a href="#data-manifolds" aria-label="Data manifolds">Data manifolds</a><ul>
-                        
-                <li>
-                    <a href="#perch%c3%a9-facile-ingannare-le-reti" aria-label="perché facile ingannare le reti">perché facile ingannare le reti</a></li>
-                <li>
-                    <a href="#autoencoders" aria-label="Autoencoders">Autoencoders</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
-<p>Capire in che modo una rete convoluzionale ci può dare insight migliori su come funzionano questi networks.</p>
-<h3 id="visualizzazione-dei-hidden-layers">Visualizzazione dei hidden layers<a hidden class="anchor" aria-hidden="true" href="#visualizzazione-dei-hidden-layers">#</a></h3>
-<ul>
-<li>
-<p>Slide visualization</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled">
-</li>
-</ul>
-<p>Potremmo fissare una immagine anche a caso, e modificare la x in modo che sia più simile a quanto vuole computare il neurone. In questo modo genero una immagine che generi una activation forte nel neuron trainato, e si potrebbe dire che sia il genere di immagine che viene generata da essa.</p>
-<p>Forse questo è anche il metodo con cui vengono generate le immagini??</p>
-<ul>
-<li>
-<p>Examples of extracted patterns</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 1">
-</li>
-</ul>
-<p>Probabilmente tutte le CNN vanno quindi a tentare ad estrarre questo genere di patterns dall’immagine iniziale.</p>
-<h3 id="ricreazione-di-immagini">Ricreazione di immagini<a hidden class="anchor" aria-hidden="true" href="#ricreazione-di-immagini">#</a></h3>
-<p>Vogliamo <strong>computare la rappresentazione interna dell’immagine</strong>, ossia l’attivazione prodotta da una certa immagine, e da questo possiamo sintetizzare una immagine e poi continuare a fare gradient descent su questa per massimizzare. Una volta al minimo dovremmo avere l’immagine migliore per questo layer.</p>
-<ul>
-<li>
-<p>Slide di esempio</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 2">
-<p>Per un certo layer non c’è differenza fra quei 6 immagini</p>
-</li>
-</ul>
-<p>Quindi prima partivamo da noise, da questo partiamo da una immagine già e guardiamo in che modo è rappresentato in questo layer.</p>
-<ul>
-<li>
-<p>Slide sulla tecnica di solito utilizzata per queste</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 3">
-</li>
-</ul>
-<p>Si puònotare che è <strong>più difficile recovery dell’immagine nei layers lontani</strong>, probabilmente perché sta creando una specie di astrazione dell’immagine iniziale, quindi l’immagine sarebbe l’immagine dell’astrazione. Riusciamo a visualizzare una astrazione, che sembra una contraddizione.</p>
-<h2 id="inceptionism">Inceptionism<a hidden class="anchor" aria-hidden="true" href="#inceptionism">#</a></h2>
-<h2 id="style-transfer">Style transfer<a hidden class="anchor" aria-hidden="true" href="#style-transfer">#</a></h2>
-<p>Come facciamo a ricreare una immagine utilizzando lo stile di un certo autore?</p>
-<ul>
-<li>
-<p>Esempi di risultati con style transfer</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 4">
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 5">
-</li>
-</ul>
-<p>Ma come facciamo a catturare un concetto astratto di stile di un certo autore?</p>
-<h3 id="concetto-di-stile-di-un-autore">Concetto di stile di un autore<a hidden class="anchor" aria-hidden="true" href="#concetto-di-stile-di-un-autore">#</a></h3>
-<p>Non vogliamo solamente avere un contenuto simile (come abbiamo fatto prima, nei primi layers è una cosa abbastanza semplice) vorremmo proprio essere in grado di <strong>catturare lo stile dell’artista</strong>. Quindi da un punto di vista astratto</p>
-<ul>
-<li>
-<p>Slides stile autore</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 6">
-</li>
-</ul>
-<p>Ci interessa la <strong>correlazione fra features maps</strong> di un certo livello, e quando abbiamo una immagine vogliamo allenare per massimizzare la similitudine con la correlazione fra le feature maps.</p>
-<h2 id="data-manifolds">Data manifolds<a hidden class="anchor" aria-hidden="true" href="#data-manifolds">#</a></h2>
-<h3 id="perché-facile-ingannare-le-reti">perché facile ingannare le reti<a hidden class="anchor" aria-hidden="true" href="#perché-facile-ingannare-le-reti">#</a></h3>
-<p>Si può vedere che con le tecniche dello stile si possono <strong>ingannare molto facilmente le reti</strong> di sopra. Questo è perché fanno delle classificazioni, fanno discriminazione anziché generazione. Ossia con generazione provo a stimare la probabilità iniziale che si sia creato la cosa che vogliamo classficiare e con questa probabilità poi andiamo a fare la predizione.</p>
-<p>Invece nelle tecniche discriminazione vanno solamente a fare una discriminazione di dati, una cosa statistica. (la frontiera può essere molto diversa rispetto alla funzione che lo ha generata diciamo.</p>
-<p>Seguendo comunque il ragionamento sui manifolds di data possiamo dire che <strong>è molto improbabile ~0, che generando a caso, sia una immagine sensata</strong>. Infatti lo spazio delle immagini è enorme, la maggior parte sono ranodm per umani, però stiamo provando a fare questo un modello di discriminazione (quindi è chiaro che molte zone che per noi non hanno senso, sono rappresentate nella rete neurale come categorizzate in un certo modo).</p>
-<h3 id="autoencoders">Autoencoders<a hidden class="anchor" aria-hidden="true" href="#autoencoders">#</a></h3>
-<p>Vogliamo cercare di cambiare lo spazio in modo che la parte delle immagini sensate sia meglio descrivibile, vogliamo andare in pratica a creare una descrizione compatta di quello che vogliamo analizzare. Con gli autoencoder andremo proprio a <strong>comprimere il data manifold</strong> e poi lavorare su questa compressione.</p>
-<ul>
-<li>
-<p>Slide intuizione autoencoder</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 7">
-<p>Quello che vorremmo fare è una funzione identità per certe cose (dato che sono meno, non possiamo fare altro che perdere altre informazioni, ma vogliamo solamente perdere informazioni che non ci servano).</p>
-</li>
-</ul>
-<p><strong>Possiblità della compressione</strong></p>
-<p>La compressione dovrebbe essere possibile perché <strong>stiamo cercando regolarità nel data</strong>, cosa che ci dovrebbe essere perché noi umani riusciamo a riconoscere questi pattern, non riusciamo ad insegnarlo ad una macchina. (quando è molto random però non si può comprimere, stranamente il random è la cosa con più informazione in termini di teoria dell’informazione, ma meno informazione per noi umani, che strana questa asimmetria).</p>
-<p><strong>Caratteristiche della compressione</strong></p>
-<ul>
-<li>
-<p>Slide caratteristiche</p>
-  <img src="/images/notes/image/universita/ex-notion/Explainability of CNN/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Explainability of CNN/Untitled 8">
-</li>
-</ul>
-<p>La cosa di maggior rilievo è il fatto del <strong>loss</strong>, che non riusciamo a fare un reverse che diventi proprio uguale! E poi funziona solamente con data simili (con caratteristiche fortemente correlate fra di loro.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,27 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Top-down Parser | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Top-down
-Algoritmo di parsing
-
-
-Slide
-  
-
-
-Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
-
-
-Esempio di esecuzione
-  
-
-
-Commenti efficienza di sopra
-È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
-$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
-
-
-Slide">
+<meta name="description" content="Top-down Parser - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/top-down-parser/">
@@ -113,12 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/top-down-parser/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Top-down Parser">
-  <meta property="og:description" content="Top-down Algoritmo di parsing Slide
-Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
-Esempio di esecuzione
-Commenti efficienza di sopra È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
-$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
-Slide">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -129,27 +104,7 @@ Slide">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Top-down Parser">
-<meta name="twitter:description" content="Top-down
-Algoritmo di parsing
-
-
-Slide
-  
-
-
-Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).
-
-
-Esempio di esecuzione
-  
-
-
-Commenti efficienza di sopra
-È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo
-$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)
-
-
-Slide">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -178,12 +133,12 @@ Slide">
   "@type": "BlogPosting",
   "headline": "Top-down Parser",
   "name": "Top-down Parser",
-  "description": "Top-down Algoritmo di parsing Slide\nQuesto si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).\nEsempio di esecuzione\nCommenti efficienza di sopra È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo\n$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)\nSlide\n",
+  "description": "",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "Top-down Algoritmo di parsing Slide\nQuesto si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).\nEsempio di esecuzione\nCommenti efficienza di sopra È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo\n$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)\nSlide\nSi può rendere molto più efficiente con un valore di lookahead.\nFirst e Follow Utilizzeremo il simbolo $ per segnalare la fine di una stringa, così può godere della prefix property, che è una cosa fondamentale per le DPDA, vedi Linguaggi Deterministici e DPDA.\nFirst intro Slide\nIn pratica è un insieme che contiene i primi caratteri possibili per tutti! (ad ochio attento si può notare quanto sia importante per il lookahead, andiamo in pratica a considerare le produzioni che abbiano il simbolo di lookahead).\nEsempio di uso e in-uso di first\nCalcolo del first Interessante in questa parte l’utilizzo dell’insieme dei simboli annullabili che abbiamo descritto in Semplificazione grammatiche., sembra sia legata molto al first\nSlide\nL’intuizione di maggior rilievo per questo algoritmo è che in quel modo si sta facendo un or , unione fra tutti i simboli che sono annullabili.\nQuesto algoritmo si può estendere in modo quasi banale ai non terminali che non sono annullabili (perché basta prendere il primo carattere\nSlide che descrive per simboli non annullabili\nEsempi del calcolo del first\nFollow intro Slide\nQuindi un terminale appartiene a follow terminale se può comparire dopo\nUna cosa particolare di questa definizione è il terminale $.\nA volte ci può interessare sapere cosa viene dopo un non terminale annullabile così possiamo decidere di annullarlo e tenere il prossimo.\nMini esempio\nCalcolo del follow Slide algo\nDa notare che per calcolare questa funzione abbiamo bisogno del first!\nEsempio 1\nEsempio 2\nGrammatiche LL(1) Tabella di parsing intro LL(1) Definizione\nHo una tabella che mappa (NT, T) → produzione.\nIn pratica una tabella di parsing ci dà una idea del modo in cui comportarci per ogni singolo input e ogni terminale, è quindi fondamentale per capire in che modo espandersi…\nOssia se ho un NT sulla stack e vedo con lookahead 1 un terminale, allora provo a capire con quale produzione posso espandere.\nAlgoritmo per riempimento tabella Algoritmo calcolo della tabella\nSe il first di qualcosa che voglio mettere è noto, allora è easy…\nAltrimenti la metto per l’intera riga.\nTh sui LL(1) (chiede molto) Definizione di grammatica LL(1)\nEnunciato e dimo\nLa dimostrazione di questo è molti dalla costruzione della tabella di parsing. (in particolare l’unici modi che ci importano per dimostrare se un linguaggio è LL(1) è questo oppure la costruzione della tabella d parsing).\nEsempio grammatica in forma sopra\nEsempio 2\nParser LL(1) ! Slide Algo pseudocodice\nL’idea è principalmente di utilizzare la tabella di parsing per capire quale produzione utilizzare quando ho un non terminale!\nQuanto ho terminali li poppo dalla pila (se non posso poppare ritorno errore) Quando ho non-terminali vado a guardare nella tabella, se non ho niente fallisco Alla fine se ho svuotato la pila e letto tutto sono molto felice. Esempio di parsing 1\nEsempio 2\nesempio 3\nTh. ling regolare → generabile da LL(1) Dalla lezione 14 (credo)\nCon i teoremi espressi in Grammatiche Regolari, posso trasformare l’espressione regolare in DFA e poi il dfa minimo in grammatica regolare da questo posso creare la grammatica LL1, vogliamo ora dire che possiamo sempre farlo (nel toggle c’è il piccolo algoritmino utilizzato per creare la grammatica).\nDimo\nMini lemma:\nOgni grammatica regolare con solo produzioni $V \\implies aW$ e produzioni epsilon è una grammatica LL(1)\nIl motivo è che i first di ogni produzione di un non terminale sono diversi fra di loro, perché sono tutti parte dell’alfabeto e sono unici. E i follow sono sempre stringa terminale, quindi per il teorema di caratterizzazione dei linguaggi LL(1), questo è un linguaggio LL(k).\nSi può verificare che questo è il tipo di grammatica che si estrae da un automa minimo, quindi il teorema è soddisfatto.\nGrammatiche LL(k) Generalizzazione first follow e tabella Slide\nIntuizione\nOra il first ha la concezione dei **primi k **, lettere che possono essere anche minori di k, nel caso in cui io abbia già una stringa terminale. Ma non posso avere minore di K se non è terminale!!!!\nAllo stesso modo follow k sono i primi k caratteri che possono seguire il nostro non terminale.\nLa tabella è generata esattamente nello stesso modo**,* solo che bisogna fare un pò di attenzione alle colonne, che ora possono essere di dimensione molto maggiore rispetto alla dimensione dell’alfabeto (potenze di esse, almeno potenzialmente, poi nella pratica io mi metto a storare quello che mi serve.\nEsempio di utilizzo di first e follow generali\nTeoremi (4) su LL(k) Slide\nQuesti teoremi ci danno una forte relazione fra\ngrammatica ambigua → non è LL(k) con questa anche la sua contronominale ricorsiva sinistra → non LL(k) essere LL(k) → essere un linguaggio libero deterministico → Non ambigua esiste L deterministico tale che non ci sia G di class LL(k) (quindi i linguaggi LL(k) non bastano per avere tutti i linguaggi deterministici! Gerarchia classi di linguaggi LL(k) Slide\nQuello che si può osservare è che ogni classe di linguaggio con k maggiore include quella con k minore. Il motivo intuitivo che non è presente nella slide è tipo: se posso riconoscerlo guardando una lettera più avanti, lo posso ancora fare guardandone 2 o più…\nSi può notare che non tutti i linguaggi liberi deterministici sono riconosciuti da linguaggi LL(k), si può osservare l’esempio di sotto.\nLibero det not implies LL(k) esempio Incompletezza dei linguagg LL(1)\nIn questo caso è solamente enunciato che non si può modellare la grammatica così trovata per renderla di classe LL(k).\nPerò intuitivamente si può capire che avrei bisogni di un k infinito per poter scegliere fra le due produzioni, riesco sempre a trovare un k che non funzioni…\nEsercizio a caso\n",
-  "wordCount" : "993",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -278,307 +233,12 @@ Slide">
     <h1 class="post-title entry-hint-parent">
       Top-down Parser
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#top-down" aria-label="Top-down">Top-down</a><ul>
-                        
-                <li>
-                    <a href="#algoritmo-di-parsing" aria-label="Algoritmo di parsing">Algoritmo di parsing</a></li>
-                <li>
-                    <a href="#commenti-efficienza-di-sopra" aria-label="Commenti efficienza di sopra">Commenti efficienza di sopra</a></li></ul>
-                </li>
-                <li>
-                    <a href="#first-e-follow" aria-label="First e Follow">First e Follow</a><ul>
-                        
-                <li>
-                    <a href="#first-intro" aria-label="First intro">First intro</a></li>
-                <li>
-                    <a href="#calcolo-del-first" aria-label="Calcolo del first">Calcolo del first</a></li>
-                <li>
-                    <a href="#follow-intro" aria-label="Follow intro">Follow intro</a></li>
-                <li>
-                    <a href="#calcolo-del-follow" aria-label="Calcolo del follow">Calcolo del follow</a></li></ul>
-                </li>
-                <li>
-                    <a href="#grammatiche-ll1" aria-label="Grammatiche LL(1)">Grammatiche LL(1)</a><ul>
-                        
-                <li>
-                    <a href="#tabella-di-parsing-intro-ll1" aria-label="Tabella di parsing intro LL(1)">Tabella di parsing intro LL(1)</a></li>
-                <li>
-                    <a href="#algoritmo-per-riempimento-tabella" aria-label="Algoritmo per riempimento tabella">Algoritmo per riempimento tabella</a></li>
-                <li>
-                    <a href="#th-sui-ll1-chiede-molto" aria-label="Th sui LL(1) (chiede molto)">Th sui LL(1) (chiede molto)</a></li>
-                <li>
-                    <a href="#parser-ll1-" aria-label="Parser LL(1) !">Parser LL(1) !</a></li>
-                <li>
-                    <a href="#th-ling-regolare--generabile-da-ll1" aria-label="Th. ling regolare → generabile da LL(1)">Th. ling regolare → generabile da LL(1)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#grammatiche-llk" aria-label="Grammatiche LL(k)">Grammatiche LL(k)</a><ul>
-                        
-                <li>
-                    <a href="#generalizzazione-first-follow-e-tabella" aria-label="Generalizzazione first follow e tabella">Generalizzazione first follow e tabella</a></li>
-                <li>
-                    <a href="#teoremi-4-su-llk" aria-label="Teoremi (4) su LL(k)">Teoremi (4) su LL(k)</a></li>
-                <li>
-                    <a href="#gerarchia-classi-di-linguaggi-llk" aria-label="Gerarchia classi di linguaggi LL(k)">Gerarchia classi di linguaggi LL(k)</a></li>
-                <li>
-                    <a href="#libero-det-not-implies-llk" aria-label="Libero det not implies LL(k)">Libero det not implies LL(k)</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="top-down">Top-down<a hidden class="anchor" aria-hidden="true" href="#top-down">#</a></h2>
-<h3 id="algoritmo-di-parsing">Algoritmo di parsing<a hidden class="anchor" aria-hidden="true" href="#algoritmo-di-parsing">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 1">
-</li>
-</ul>
-<p>Questo si potrebbe considerare come algoritmo classico di parsing con non determinismo. (vado avanti, ed esploro tutto, senza look ahead).</p>
-<ul>
-<li>
-<p>Esempio di esecuzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 2">
-</li>
-</ul>
-<h3 id="commenti-efficienza-di-sopra">Commenti efficienza di sopra<a hidden class="anchor" aria-hidden="true" href="#commenti-efficienza-di-sopra">#</a></h3>
-<p>È molto inefficiente, in particolare si potrebbe trovare una compessità esponenziale del tipo</p>
-<p>$O(b^{|w|})$, con b il massimo numero di produzioni. (la produzione maggiore la espando sempre!)</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 3">
-</li>
-</ul>
-<p>Si può rendere molto più efficiente con un valore di lookahead.</p>
-<h2 id="first-e-follow">First e Follow<a hidden class="anchor" aria-hidden="true" href="#first-e-follow">#</a></h2>
-<p>Utilizzeremo il simbolo <strong>$</strong> per segnalare la fine di una stringa, così può godere della prefix property, che è una cosa fondamentale per le DPDA, vedi <a href="/notes/linguaggi-deterministici-e-dpda">Linguaggi Deterministici e DPDA</a>.</p>
-<h3 id="first-intro">First intro<a hidden class="anchor" aria-hidden="true" href="#first-intro">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 4">
-</li>
-</ul>
-<p>In pratica è un insieme che contiene i primi caratteri possibili per tutti! (ad ochio attento si può notare quanto sia importante per il lookahead, andiamo in pratica a considerare le produzioni che abbiano il simbolo di lookahead).</p>
-<ul>
-<li>
-<p>Esempio di uso e in-uso di first</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 5">
-</li>
-</ul>
-<h3 id="calcolo-del-first">Calcolo del first<a hidden class="anchor" aria-hidden="true" href="#calcolo-del-first">#</a></h3>
-<p>Interessante in questa parte l&rsquo;utilizzo dell&rsquo;insieme dei simboli annullabili che abbiamo descritto in <a href="/notes/semplificazione-grammatiche">Semplificazione grammatiche</a>., sembra sia legata molto al first</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 6">
-</li>
-</ul>
-<p>L&rsquo;intuizione di maggior rilievo per questo algoritmo è che in quel modo si sta facendo un <strong>or</strong> , unione fra tutti i simboli che sono annullabili.</p>
-<p>Questo algoritmo si può estendere in modo quasi banale ai non terminali che non sono annullabili (perché basta prendere il primo carattere</p>
-<ul>
-<li>
-<p>Slide che descrive per simboli non annullabili</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 7">
-</li>
-<li>
-<p>Esempi del calcolo del first</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 8">
-</li>
-</ul>
-<h3 id="follow-intro">Follow intro<a hidden class="anchor" aria-hidden="true" href="#follow-intro">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 9">
-</li>
-</ul>
-<p>Quindi un terminale appartiene a follow terminale se può comparire dopo</p>
-<p>Una cosa particolare di questa definizione è il terminale $.</p>
-<p>A volte ci può interessare sapere cosa viene dopo un non terminale <strong>annullabile</strong> così possiamo decidere di annullarlo e tenere il prossimo.</p>
-<ul>
-<li>
-<p>Mini esempio</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 10">
-</li>
-</ul>
-<h3 id="calcolo-del-follow">Calcolo del follow<a hidden class="anchor" aria-hidden="true" href="#calcolo-del-follow">#</a></h3>
-<ul>
-<li>
-<p>Slide algo</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 11">
-</li>
-</ul>
-<p>Da notare che per calcolare questa funzione abbiamo bisogno del first!</p>
-<ul>
-<li>
-<p>Esempio 1</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 12">
-</li>
-<li>
-<p>Esempio 2</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 13">
-</li>
-</ul>
-<h2 id="grammatiche-ll1">Grammatiche LL(1)<a hidden class="anchor" aria-hidden="true" href="#grammatiche-ll1">#</a></h2>
-<h3 id="tabella-di-parsing-intro-ll1">Tabella di parsing intro LL(1)<a hidden class="anchor" aria-hidden="true" href="#tabella-di-parsing-intro-ll1">#</a></h3>
-<ul>
-<li>
-<p>Definizione</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 14">
-</li>
-</ul>
-<p>Ho una tabella che mappa (NT, T) → produzione.</p>
-<p>In pratica una tabella di parsing ci dà una idea del modo in cui comportarci per ogni singolo input e ogni terminale, è quindi fondamentale per capire in che modo espandersi…</p>
-<p>Ossia se ho un NT sulla stack e vedo con lookahead 1 un terminale, allora provo a capire con quale produzione posso espandere.</p>
-<h3 id="algoritmo-per-riempimento-tabella"><strong>Algoritmo per riempimento tabella</strong><a hidden class="anchor" aria-hidden="true" href="#algoritmo-per-riempimento-tabella">#</a></h3>
-<ul>
-<li>
-<p>Algoritmo calcolo della tabella</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 15">
-</li>
-</ul>
-<p>Se il first di qualcosa che voglio mettere è noto, allora è easy…</p>
-<p>Altrimenti la metto per l&rsquo;intera riga.</p>
-<h3 id="th-sui-ll1-chiede-molto">Th sui LL(1) (chiede molto)<a hidden class="anchor" aria-hidden="true" href="#th-sui-ll1-chiede-molto">#</a></h3>
-<ul>
-<li>
-<p>Definizione di grammatica LL(1)</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 16">
-</li>
-<li>
-<p>Enunciato e dimo</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 17">
-</li>
-</ul>
-<p>La dimostrazione di questo è molti dalla costruzione della tabella di parsing. (in particolare l&rsquo;unici modi che ci importano per dimostrare se un linguaggio è LL(1) è questo oppure la costruzione della tabella d parsing).</p>
-<ul>
-<li>
-<p>Esempio grammatica in forma sopra</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 18">
-</li>
-<li>
-<p>Esempio 2</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 19">
-</li>
-</ul>
-<h3 id="parser-ll1-">Parser LL(1) !<a hidden class="anchor" aria-hidden="true" href="#parser-ll1-">#</a></h3>
-<ul>
-<li>
-<p>Slide Algo pseudocodice</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 20">
-</li>
-</ul>
-<p>L&rsquo;idea è principalmente di utilizzare la tabella di parsing per capire quale produzione utilizzare quando ho un non terminale!</p>
-<ol>
-<li>Quanto ho terminali li poppo dalla pila (se non posso poppare ritorno errore)</li>
-<li>Quando ho non-terminali vado a guardare nella tabella, se non ho niente fallisco</li>
-<li>Alla fine se ho svuotato la pila e letto tutto sono molto felice.</li>
-</ol>
-<ul>
-<li>
-<p>Esempio di parsing 1</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 21.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 21">
-</li>
-<li>
-<p>Esempio 2</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 22">
-</li>
-<li>
-<p>esempio 3</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 23.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 23">
-</li>
-</ul>
-<h3 id="th-ling-regolare--generabile-da-ll1">Th. ling regolare → generabile da LL(1)<a hidden class="anchor" aria-hidden="true" href="#th-ling-regolare--generabile-da-ll1">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 24.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 24">
-<p>Dalla lezione 14 (credo)</p>
-<p>Con i teoremi espressi in <a href="/notes/grammatiche-regolari">Grammatiche Regolari</a>, posso trasformare l&rsquo;espressione regolare in DFA e poi il dfa minimo in <strong>grammatica regolare</strong> da questo posso creare la grammatica LL1, vogliamo ora dire che possiamo sempre farlo (nel toggle c&rsquo;è il piccolo algoritmino utilizzato per creare la grammatica).</p>
-<ul>
-<li>
-<p>Dimo</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 25.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 25">
-</li>
-</ul>
-<p><strong>Mini lemma:</strong></p>
-<blockquote>
-<p>Ogni grammatica regolare con solo produzioni $V \implies aW$  e produzioni epsilon è una grammatica LL(1)</p></blockquote>
-<p>Il motivo è che i first di ogni produzione di un non terminale sono diversi fra di loro, perché sono tutti parte dell&rsquo;alfabeto e sono unici. E i follow sono sempre stringa terminale, quindi per il teorema di caratterizzazione dei linguaggi LL(1), questo è un linguaggio LL(k).</p>
-<p>Si può verificare che questo è il tipo di grammatica che si estrae da un automa minimo, quindi il teorema è soddisfatto.</p>
-<h2 id="grammatiche-llk">Grammatiche LL(k)<a hidden class="anchor" aria-hidden="true" href="#grammatiche-llk">#</a></h2>
-<h3 id="generalizzazione-first-follow-e-tabella">Generalizzazione first follow e tabella<a hidden class="anchor" aria-hidden="true" href="#generalizzazione-first-follow-e-tabella">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 26.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 26">
-</li>
-</ul>
-<p><strong>Intuizione</strong></p>
-<p>Ora il first ha la concezione dei **primi k **, lettere che possono essere anche minori di k, nel caso in cui io abbia già una stringa terminale. Ma non posso avere minore di K se non è terminale!!!!</p>
-<p>Allo stesso modo follow k sono i primi k caratteri che possono seguire il nostro non terminale.</p>
-<p>La tabella è generata esattamente nello stesso modo**,* solo che bisogna fare un pò di attenzione alle colonne, che ora possono essere di dimensione molto maggiore rispetto alla dimensione dell&rsquo;alfabeto (potenze di esse, almeno potenzialmente, poi nella pratica io mi metto a storare quello che mi serve.</p>
-<ul>
-<li>
-<p>Esempio di utilizzo di first e follow generali</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 27.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 27">
-</li>
-</ul>
-<h3 id="teoremi-4-su-llk">Teoremi (4) su LL(k)<a hidden class="anchor" aria-hidden="true" href="#teoremi-4-su-llk">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 28.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 28">
-</li>
-</ul>
-<p>Questi teoremi ci danno una forte relazione fra</p>
-<ol>
-<li>grammatica ambigua → non è LL(k)  con questa anche la sua contronominale</li>
-<li>ricorsiva sinistra → non LL(k)</li>
-<li>essere LL(k) → essere un linguaggio libero deterministico → Non ambigua</li>
-<li>esiste L deterministico tale che non ci sia G di class LL(k) (quindi i linguaggi LL(k) non bastano per avere tutti i linguaggi deterministici!</li>
-</ol>
-<h3 id="gerarchia-classi-di-linguaggi-llk">Gerarchia classi di linguaggi LL(k)<a hidden class="anchor" aria-hidden="true" href="#gerarchia-classi-di-linguaggi-llk">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 29.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 29">
-</li>
-</ul>
-<p>Quello che si può osservare è che ogni classe di linguaggio con k maggiore include quella con k minore. Il motivo intuitivo che non è presente nella slide è tipo: se posso riconoscerlo guardando una lettera più avanti, lo posso ancora fare guardandone 2 o più…</p>
-<p>Si può notare che non tutti i linguaggi liberi deterministici sono riconosciuti da linguaggi LL(k), si può osservare l&rsquo;esempio di sotto.</p>
-<h3 id="libero-det-not-implies-llk">Libero det not implies LL(k)<a hidden class="anchor" aria-hidden="true" href="#libero-det-not-implies-llk">#</a></h3>
-<ul>
-<li>
-<p>esempio Incompletezza dei linguagg LL(1)</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 30.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 30">
-</li>
-</ul>
-<p>In questo caso è solamente enunciato che non si può modellare la grammatica così trovata per renderla di classe LL(k).</p>
-<p>Però intuitivamente si può capire che avrei bisogni di un k infinito per poter scegliere fra le due produzioni, riesco sempre a trovare un k che non funzioni…</p>
-<ul>
-<li>
-<p>Esercizio a caso</p>
-  <img src="/images/notes/image/universita/ex-notion/Top-down Parser/Untitled 31.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Top-down Parser/Untitled 31"></li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

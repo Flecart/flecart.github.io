@@ -7,17 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Semafori | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Introduzione
-Concetto principale
-È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
-Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
-
-due o più processi possono cooperare attraverso semplici
-segnali, in modo tale che un processo possa essere bloccato
-in specifici punti del suo programma finché non riceve un
-segnale da un altro processo
-Primitive dei semafori
-Il semaforo solitamente è una variabile intera non negativa.">
+<meta name="description" content="Semafori - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/semafori/">
@@ -103,10 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/semafori/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Semafori">
-  <meta property="og:description" content="Introduzione Concetto principale È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
-Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
-due o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo
-Primitive dei semafori Il semaforo solitamente è una variabile intera non negativa.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -115,17 +102,7 @@ Primitive dei semafori Il semaforo solitamente è una variabile intera non negat
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Semafori">
-<meta name="twitter:description" content="Introduzione
-Concetto principale
-È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice
-Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.
-
-due o più processi possono cooperare attraverso semplici
-segnali, in modo tale che un processo possa essere bloccato
-in specifici punti del suo programma finché non riceve un
-segnale da un altro processo
-Primitive dei semafori
-Il semaforo solitamente è una variabile intera non negativa.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -154,12 +131,12 @@ Il semaforo solitamente è una variabile intera non negativa.">
   "@type": "BlogPosting",
   "headline": "Semafori",
   "name": "Semafori",
-  "description": "Introduzione Concetto principale È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice\nQuesto è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.\ndue o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo\nPrimitive dei semafori Il semaforo solitamente è una variabile intera non negativa.\n",
+  "description": "",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Introduzione Concetto principale È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice\nQuesto è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.\ndue o più processi possono cooperare attraverso semplici segnali, in modo tale che un processo possa essere bloccato in specifici punti del suo programma finché non riceve un segnale da un altro processo\nPrimitive dei semafori Il semaforo solitamente è una variabile intera non negativa.\nV anche chiamato sem_wait.\nDa verhogen utilizzata per rilasciare una risorsa. Di solito è implementata aumentando il valore di un semaforo.\nP, anche chiamato sem_post.\nDa proberen per attendere evento o rilascio di una risorsa. Di solito è implementata decrementando il valore del semaforo solo se è positivo non nullo.\nInvarianti per i semafori (!!!)\nSlide invarianti\nImplementazione classica della CS Programma concorrente con semafori per CS\nImplementazione classica di P e V (ricordare da metterle nella CS)\nSi può notare che tutte le 4 proprietà espresse per la concorrenza sembrano essere soddisfatte.\nOltre a questo bisogna avere una struttura di dati (Queue) che tenga conto dei processi che stanno aspettando la risorsa dietro questo semaforo, in modo da poter ricominciare.\nSi potrebbe in questo caso anche disabilitare l’interrupt! Perché tanto ora non è dentro lo scope del programmatore, è dentro lo scope del semaforo! Per i multicore si possono utilizzare le soluzioni trattate in parti precedenti.\nVantaggi dei semafori Fairness data dalla politica FIFO utilizzata per la struttura di dati della coda\nSlide\nBusy waiting molto minore\nInterleaving controllato? Boh non ho capito il concetto di questa frase\nSemafori binari Descrizione generale Sono semafori che possono solamente avere come valore 0 e 1.\nTODO: dire anche cosa succede per l’attesa dei due…\nImplementazione Implementazione semaforo binario\nI semafori binari ci garantiscono mutua esclusione\nSemafori binari equiv. semafori normali Implementazione dei semafori con semafori binari\nImplementazione di semafori binari con semafori\nProblemi classici Producer consumer Abbiamo due agenti, un programma che produce una risorsa e un agente che la consuma. Questa comunicazione di disponibilità di un valore avviene attraverso una singola variabile condivisa.\nProprietà importanti\nProducer non può scrivere la zona di memoria comune prima che il consumer l’abbia consumato Consumer non deve leggere due volte la stessa cosa. No deadlock né starvation In questo caso sono come delle sezioni critiche alternate passing the baton perché è come se passasse il testimone, e vanno avanti in modo alternato.\nSoluzione\nLimited Buffer La descrizione del problema è molto simile, la differenza è che si utilizza un buffer condiviso per lo scambio di informazioni, non una singola variabile, il resto delle proprietà è molto simile.\nSoluzione\nOsservazioni personali\nNon c’è deadlock perché si bloccherebbero assieme solo se sia empty sia full sono 0, ma questo sarebbe un problema di inizializzazione. Dining philophers Ho 5 filosofi intorno a una tavola che devono acquisire le due bacchette (risorse condivise) per mangiare, altrimenti pensano.\nInvarianti\nResource hierarchy solution\nSoluzione\nIn questa soluzione si crea una gerarchia di priorità per chi deve acquisire la fork, con una rottura di simmetria per l’ultima.\nIl problema è che non è libero da starvation.\nPagina wiki\nAltre soluzioni\nOsservazioni personali\nCredo ci sia starvation perché non c’è niente che mi garantisca che non ci sia.\nRoba da buttare, riguardo dining\nPseudocodice per il problema dei dining filosophers che utilizza il token, e la struttura ad anello inizializza 5 semafori, solo uno sarà a 1 sarà quello attivo direi. 5 booleani che indicano la disponibilità. inizializzo 5 numeri che identificano il numero delle volte che si ha mangiato Alla fine di ogni ciclo di mangiata viene incrementato il numero, e questo numero viene incrementato solamente da un unico thread, quello di un certo filosofo, quindi non devo metterci il mutex, o forse sì??. Quindi fra gli attivi voglio solamente chi ha il token e chi può mangiare. bool done = false; while (!done): waiting_for_token = true, // anche done può essere utilizzato come waiting for token. [enter CS] if (disponibile left): prendi left if (disponibile right): prendi right waiting_for_token = false; // done = true qui, invece che sotto. make calls to take left and right. else: release left [exit CS] if (has both forks): eat() releaseLeft() signal left is available releaseRight() signal right is available done = true; else: go to sleep (try again lather, if not done)) passtoken to next waiting for token. - somebody is waiting for token if 1. Is not eating 2. Has not finished Quindi ci metto il check booleano sopra. Readers and writers Questo è uno dei problemi più importanti, adremo in seguito a sviluppare il concetto di awaiting.\nCi sono due tipi di processi che devono leggere un database. I lettori accedono al database per leggerlo, gli scrittori per scriverlo, fatto è che i lettori possono leggere quanto vogliono, quando però uno ci vuole scrivere, nessun altro ci può andare a leggere.\nUn solo scrittore, che blocca tutti\nSe nessuno scrive tutti possono leggere.\nInvarianti da rispettare\nSoluzione Readers and Writers con semafori\nStarvation degli scrittori\nQuesta soluzione ha il drawback del fatto che starvation per i scrittori.\nQuesta è una soluzione che funziona ma vorremmo trovare un metodo per descrivere tutti i problemi con await, in modo molto clean.\nPriorità ai scrittori con await framework Vogliamo in questa parte trattare di una soluzione che non metta in starvation gli scrittori, ma mette in starvation i lettori in questo caso.\nSlide soluzione\nLa soluzione è quasi la stessa, ma si cambia la condizione di entrata per i lettori che sarà quando non c’è nessun scrittore che sta scrivendo e nemmeno nessuno che sta aspettando di scrivere.\nScegliere quale soluzione utilizzare dipende molto dall’ambiente in cui stiamo, dipende se vogliamo più gente che scriva o più gente che legga (di solito per un database c’è molta gente ch elegge e poca che scrive).\nProblema del barbiere addormentato Slide\nFramework per semafori Andiamo in questa parte a creare un framework generale per la discussione di problemi con await con i semafori.\nFramework semafori Andrews (4) Notazione con Await (2) Notazione (andrews Await)\nQuindi la sintassi diventa di due parametri in particoalre\nStatement atomico Statemento atomico con await su una condizione booleana. Molto interessante notare che è questo ciò che stato implementato con Javascript! Ed è una cosa molto clean questo paradigma :D.\nSoluzione readers and writers con await (generale)\nSi noti che questa soluzione è equivalente alla soluzione dei semafori, ma è scritta in modo molto più clean.\nImplementazione await con semafori Note sulle variabili di implementazione\nLe note principali sono i semafori e i waiting.\nImplementazione in slide\ni quadrati sono degli if non deterministici, nel senso che posso riordinarli come mi pare e sarebbe comunque apposto\nSu signal, ci dà un idea di quanti processi possono andare avanti dato un cambiamento di stato.\nLa modifica sul waiting[i]- - non è un write non protetto??? No perché sempre passaggi di testimoni! Siamo sempre in una sezione critica, ma divisa fra più processi grazie a questo meccanismo passing the baton.\nInfatti è per questo che possono fare waiting[i]- - senza apparentemente essere in mutua esclusione!.\nNota che sembra interessante è che questo baton viene continuamente passato da processo a un altro da signal ad un altro finché non posso più fare signal.\nNota sui passaggi di testimoni\nLa mutex è sempre rilasciata attraverso la tecnica del passing the baton, in qui il mutex è rilasciato da processi diversi, si può espandere su molti processi diversi la mutua esclusione… Cavolo però credo sia molto difficile sbagliarci qualcosa no? boh.\nReaders and writers con await (!) Slide soluzione\nSoluzione in singola slide (e con signal ottimizzato)\nConsiderazioni finali (3) I semafori pongono forti problemi di leggibilità dato che sono costrutti a basso livello sparsi in mezzo al codice.\nÈ possibile inoltre compiere errori stupidi in modo molto facile, come scambiare P o V, omettere Po V.\nE pone un sacco di responsabilità sul prorammatore che deve gestire lui in modo corretto le risorse e definire gli accessi.\n",
-  "wordCount" : "1338",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -254,357 +231,12 @@ Il semaforo solitamente è una variabile intera non negativa.">
     <h1 class="post-title entry-hint-parent">
       Semafori
     </h1>
-    <div class="post-meta">Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
-                        
-                <li>
-                    <a href="#concetto-principale" aria-label="Concetto principale">Concetto principale</a></li>
-                <li>
-                    <a href="#primitive-dei-semafori" aria-label="Primitive dei semafori">Primitive dei semafori</a></li>
-                <li>
-                    <a href="#implementazione-classica-della-cs" aria-label="Implementazione classica della CS">Implementazione classica della CS</a></li>
-                <li>
-                    <a href="#vantaggi-dei-semafori" aria-label="Vantaggi dei semafori">Vantaggi dei semafori</a></li></ul>
-                </li>
-                <li>
-                    <a href="#semafori-binari" aria-label="Semafori binari">Semafori binari</a><ul>
-                        
-                <li>
-                    <a href="#descrizione-generale" aria-label="Descrizione generale">Descrizione generale</a></li>
-                <li>
-                    <a href="#implementazione" aria-label="Implementazione">Implementazione</a></li>
-                <li>
-                    <a href="#semafori-binari-equiv-semafori-normali" aria-label="Semafori binari equiv. semafori normali">Semafori binari equiv. semafori normali</a></li></ul>
-                </li>
-                <li>
-                    <a href="#problemi-classici" aria-label="Problemi classici">Problemi classici</a><ul>
-                        
-                <li>
-                    <a href="#producer-consumer" aria-label="Producer consumer">Producer consumer</a></li>
-                <li>
-                    <a href="#limited-buffer" aria-label="Limited Buffer">Limited Buffer</a></li>
-                <li>
-                    <a href="#dining-philophers" aria-label="Dining philophers">Dining philophers</a></li>
-                <li>
-                    <a href="#readers-and-writers" aria-label="Readers and writers">Readers and writers</a></li>
-                <li>
-                    <a href="#priorit%c3%a0-ai-scrittori-con-await-framework" aria-label="Priorità ai scrittori con await framework">Priorità ai scrittori con await framework</a></li>
-                <li>
-                    <a href="#problema-del-barbiere-addormentato" aria-label="Problema del barbiere addormentato">Problema del barbiere addormentato</a></li></ul>
-                </li>
-                <li>
-                    <a href="#framework-per-semafori" aria-label="Framework per semafori">Framework per semafori</a><ul>
-                        
-                <li>
-                    <a href="#framework-semafori-andrews-4" aria-label="Framework semafori Andrews (4)">Framework semafori Andrews (4)</a></li>
-                <li>
-                    <a href="#notazione-con-await-2" aria-label="Notazione con Await (2)">Notazione con Await (2)</a></li>
-                <li>
-                    <a href="#implementazione-await-con-semafori" aria-label="Implementazione await con semafori">Implementazione await con semafori</a></li>
-                <li>
-                    <a href="#readers-and-writers-con-await-" aria-label="Readers and writers con await (!)">Readers and writers con await (!)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#considerazioni-finali-3" aria-label="Considerazioni finali (3)">Considerazioni finali (3)</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
-<h3 id="concetto-principale">Concetto principale<a hidden class="anchor" aria-hidden="true" href="#concetto-principale">#</a></h3>
-<p>È sempre stato introdotto da Dijkstra, 1965 (Cooperating Sequential Processes) utilizzato come strumento di cooperazione semplice</p>
-<p>Questo è un sistema fortemente ispirato dai semafori che regolano gli incroci stradali.</p>
-<blockquote>
-<p>due o più processi possono cooperare attraverso semplici
-segnali, in modo tale che un processo possa essere bloccato
-in specifici punti del suo programma finché non riceve un
-segnale da un altro processo</p></blockquote>
-<h3 id="primitive-dei-semafori">Primitive dei semafori<a hidden class="anchor" aria-hidden="true" href="#primitive-dei-semafori">#</a></h3>
-<p>Il semaforo solitamente è una <strong>variabile intera non negativa</strong>.</p>
-<p><strong>V</strong> anche chiamato <code>sem_wait</code>.</p>
-<p>Da <em>verhogen</em> utilizzata per <strong>rilasciare una risorsa</strong>. Di solito è implementata <em>aumentando</em> il valore di un semaforo.</p>
-<p><strong>P</strong>, anche chiamato <code>sem_post</code>.</p>
-<p>Da <em>proberen</em> per attendere evento o rilascio di una risorsa. Di solito è implementata <em>decrementando</em>  il valore del semaforo <strong>solo se è positivo non nullo</strong>.</p>
-<p><strong>Invarianti per i semafori  (!!!)</strong></p>
-<ul>
-<li>
-<p>Slide invarianti</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled">
-</li>
-</ul>
-<h3 id="implementazione-classica-della-cs">Implementazione classica della CS<a hidden class="anchor" aria-hidden="true" href="#implementazione-classica-della-cs">#</a></h3>
-<ul>
-<li>
-<p>Programma concorrente con semafori per CS</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 1">
-</li>
-<li>
-<p>Implementazione classica di P e V (ricordare da metterle nella CS)</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 2">
-</li>
-</ul>
-<p>Si può notare che tutte le 4 proprietà espresse per la concorrenza sembrano essere soddisfatte.</p>
-<p>Oltre a questo bisogna avere una <strong>struttura di dati (Queue)</strong> che tenga conto dei processi che stanno aspettando la risorsa dietro questo semaforo, in modo da poter ricominciare.</p>
-<p>Si potrebbe in questo caso anche disabilitare l&rsquo;interrupt! Perché tanto ora non è dentro lo scope del programmatore, è dentro lo scope del semaforo! Per i multicore si possono utilizzare le soluzioni trattate in parti precedenti.</p>
-<h3 id="vantaggi-dei-semafori">Vantaggi dei semafori<a hidden class="anchor" aria-hidden="true" href="#vantaggi-dei-semafori">#</a></h3>
-<ul>
-<li>
-<p>Fairness data dalla politica FIFO utilizzata per la struttura di dati della coda</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 3">
-</li>
-</ul>
-</li>
-<li>
-<p>Busy waiting molto minore</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 4">
-</li>
-<li>
-<p>Interleaving controllato? Boh non ho capito il concetto di questa frase</p>
-</li>
-</ul>
-<h2 id="semafori-binari">Semafori binari<a hidden class="anchor" aria-hidden="true" href="#semafori-binari">#</a></h2>
-<h3 id="descrizione-generale">Descrizione generale<a hidden class="anchor" aria-hidden="true" href="#descrizione-generale">#</a></h3>
-<p>Sono semafori che possono solamente avere come valore 0 e 1.</p>
-<p>TODO: dire anche cosa succede per l’attesa dei due…</p>
-<h3 id="implementazione">Implementazione<a hidden class="anchor" aria-hidden="true" href="#implementazione">#</a></h3>
-<ul>
-<li>
-<p>Implementazione semaforo binario</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 5">
-</li>
-</ul>
-<p>I semafori binari ci <strong>garantiscono mutua esclusione</strong></p>
-<h3 id="semafori-binari-equiv-semafori-normali">Semafori binari equiv. semafori normali<a hidden class="anchor" aria-hidden="true" href="#semafori-binari-equiv-semafori-normali">#</a></h3>
-<ul>
-<li>
-<p>Implementazione dei semafori con semafori binari</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 6">
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 7">
-</li>
-<li>
-<p>Implementazione di semafori binari con semafori</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 8">
-</li>
-</ul>
-<h2 id="problemi-classici">Problemi classici<a hidden class="anchor" aria-hidden="true" href="#problemi-classici">#</a></h2>
-<h3 id="producer-consumer">Producer consumer<a hidden class="anchor" aria-hidden="true" href="#producer-consumer">#</a></h3>
-<p>Abbiamo due agenti, un programma che produce una risorsa e un agente che la consuma. Questa comunicazione di disponibilità di un valore avviene attraverso una <strong>singola variabile condivisa.</strong></p>
-<p><strong>Proprietà importanti</strong></p>
-<ul>
-<li>Producer non può scrivere la zona di memoria comune prima che il consumer l&rsquo;abbia consumato</li>
-<li>Consumer non deve leggere due volte la stessa cosa.</li>
-<li>No deadlock né starvation</li>
-</ul>
-<p>In questo caso sono come delle sezioni critiche alternate  <strong>passing the baton</strong> perché è come se passasse il testimone, e vanno avanti in modo alternato.</p>
-<ul>
-<li>
-<p>Soluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 9">
-</li>
-</ul>
-<h3 id="limited-buffer">Limited Buffer<a hidden class="anchor" aria-hidden="true" href="#limited-buffer">#</a></h3>
-<p>La descrizione del problema è molto simile, la differenza è che si utilizza un <strong>buffer condiviso</strong> per lo scambio di informazioni, non una singola variabile, il resto delle proprietà è molto simile.</p>
-<ul>
-<li>
-<p>Soluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 10">
-</li>
-</ul>
-<p><strong>Osservazioni personali</strong></p>
-<ul>
-<li>Non c&rsquo;è deadlock perché si bloccherebbero assieme solo se sia empty sia full sono 0, ma questo sarebbe un problema di inizializzazione.</li>
-</ul>
-<h3 id="dining-philophers">Dining philophers<a hidden class="anchor" aria-hidden="true" href="#dining-philophers">#</a></h3>
-<p>Ho 5 filosofi intorno a una tavola che devono acquisire le due bacchette (risorse condivise) per mangiare, altrimenti pensano.</p>
-<ul>
-<li>
-<p>Invarianti</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 11">
-</li>
-</ul>
-<p><strong>Resource hierarchy solution</strong></p>
-<ul>
-<li>
-<p>Soluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 12">
-</li>
-</ul>
-<p>In questa soluzione si crea una gerarchia di priorità per chi deve acquisire la fork, con una rottura di simmetria per l’ultima.</p>
-<p>Il problema è che non è libero da starvation.</p>
-<p>Pagina <a href="https://en.wikipedia.org/wiki/Dining_philosophers_problem#Resource_hierarchy_solution">wiki</a></p>
-<ul>
-<li>
-<p>Altre soluzioni</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 13">
-</li>
-</ul>
-<p><strong>Osservazioni personali</strong></p>
-<p>Credo ci sia starvation perché non c&rsquo;è niente che mi garantisca che non ci sia.</p>
-<ul>
-<li>
-<p>Roba da buttare, riguardo dining</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Pseudocodice</span> <span class="n">per</span> <span class="n">il</span> <span class="n">problema</span> <span class="n">dei</span> <span class="n">dining</span> <span class="n">filosophers</span> <span class="n">che</span> <span class="n">utilizza</span> <span class="n">il</span> <span class="n">token</span><span class="p">,</span> <span class="n">e</span> <span class="n">la</span>
-</span></span><span class="line"><span class="cl"><span class="n">struttura</span> <span class="n">ad</span> <span class="n">anello</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">inizializza</span> <span class="mi">5</span> <span class="n">semafori</span><span class="p">,</span> <span class="n">solo</span> <span class="n">uno</span> <span class="n">sarà</span> <span class="n">a</span> <span class="mi">1</span> <span class="n">sarà</span> <span class="n">quello</span> <span class="n">attivo</span> <span class="n">direi</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl"><span class="mi">5</span> <span class="n">booleani</span> <span class="n">che</span> <span class="n">indicano</span> <span class="n">la</span> <span class="n">disponibilità</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl"><span class="n">inizializzo</span> <span class="mi">5</span> <span class="n">numeri</span> <span class="n">che</span> <span class="n">identificano</span> <span class="n">il</span> <span class="n">numero</span> <span class="n">delle</span> <span class="n">volte</span> <span class="n">che</span> <span class="n">si</span> <span class="n">ha</span> <span class="n">mangiato</span>
-</span></span><span class="line"><span class="cl"><span class="n">Alla</span> <span class="n">fine</span> <span class="n">di</span> <span class="n">ogni</span> <span class="n">ciclo</span> <span class="n">di</span> <span class="n">mangiata</span> <span class="n">viene</span> <span class="n">incrementato</span> <span class="n">il</span> <span class="n">numero</span><span class="p">,</span> <span class="n">e</span> <span class="n">questo</span> <span class="n">numero</span> <span class="n">viene</span>
-</span></span><span class="line"><span class="cl"><span class="n">incrementato</span> <span class="n">solamente</span> <span class="n">da</span> <span class="n">un</span> <span class="n">unico</span> <span class="kr">thread</span><span class="p">,</span> <span class="n">quello</span> <span class="n">di</span> <span class="n">un</span> <span class="n">certo</span> <span class="n">filosofo</span><span class="p">,</span> <span class="n">quindi</span>
-</span></span><span class="line"><span class="cl"><span class="n">non</span> <span class="n">devo</span> <span class="n">metterci</span> <span class="n">il</span> <span class="n">mutex</span><span class="p">,</span> <span class="n">o</span> <span class="n">forse</span> <span class="n">sì</span><span class="o">??</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl"><span class="n">Quindi</span> <span class="n">fra</span> <span class="n">gli</span> <span class="n">attivi</span> <span class="n">voglio</span> <span class="n">solamente</span> <span class="n">chi</span> <span class="n">ha</span> <span class="n">il</span> <span class="n">token</span> <span class="n">e</span> <span class="n">chi</span> <span class="n">può</span> <span class="n">mangiare</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">done</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">	<span class="n">waiting_for_token</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span> <span class="c1">// anche done può essere utilizzato come waiting for token.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">[</span><span class="n">enter</span> <span class="n">CS</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">disponibile</span> <span class="n">left</span><span class="p">)</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">		<span class="n">prendi</span> <span class="n">left</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">disponibile</span> <span class="n">right</span><span class="p">)</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">			<span class="n">prendi</span> <span class="n">right</span>
-</span></span><span class="line"><span class="cl">			<span class="n">waiting_for_token</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// done = true qui, invece che sotto.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="n">make</span> <span class="n">calls</span> <span class="n">to</span> <span class="n">take</span> <span class="n">left</span> <span class="n">and</span> <span class="n">right</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl">		<span class="k">else</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">			<span class="n">release</span> <span class="n">left</span>
-</span></span><span class="line"><span class="cl">	<span class="p">[</span><span class="n">exit</span> <span class="n">CS</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">has</span> <span class="n">both</span> <span class="n">forks</span><span class="p">)</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">		<span class="n">eat</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="n">releaseLeft</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="n">signal</span> <span class="n">left</span> <span class="n">is</span> <span class="n">available</span>
-</span></span><span class="line"><span class="cl">		<span class="n">releaseRight</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="n">signal</span> <span class="n">right</span> <span class="n">is</span> <span class="n">available</span>
-</span></span><span class="line"><span class="cl">		<span class="n">done</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="k">else</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">		<span class="n">go</span> <span class="n">to</span> <span class="n">sleep</span> <span class="p">(</span><span class="k">try</span> <span class="n">again</span> <span class="n">lather</span><span class="p">,</span> <span class="k">if</span> <span class="n">not</span> <span class="n">done</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">	<span class="n">passtoken</span> <span class="n">to</span> <span class="n">next</span> <span class="n">waiting</span> <span class="k">for</span> <span class="n">token</span><span class="p">.</span>
-</span></span><span class="line"><span class="cl"><span class="o">-</span> <span class="n">somebody</span> <span class="n">is</span> <span class="n">waiting</span> <span class="k">for</span> <span class="n">token</span> <span class="k">if</span>
-</span></span><span class="line"><span class="cl"><span class="mf">1.</span> <span class="n">Is</span> <span class="n">not</span> <span class="n">eating</span>
-</span></span><span class="line"><span class="cl"><span class="mf">2.</span> <span class="n">Has</span> <span class="n">not</span> <span class="n">finished</span>
-</span></span><span class="line"><span class="cl"><span class="n">Quindi</span> <span class="n">ci</span> <span class="n">metto</span> <span class="n">il</span> <span class="n">check</span> <span class="n">booleano</span> <span class="n">sopra</span><span class="p">.</span>
-</span></span></code></pre></div></li>
-</ul>
-<h3 id="readers-and-writers">Readers and writers<a hidden class="anchor" aria-hidden="true" href="#readers-and-writers">#</a></h3>
-<p>Questo è uno dei problemi più importanti, adremo in seguito a sviluppare il concetto di awaiting.</p>
-<p>Ci sono due tipi di processi che devono leggere un database. I lettori accedono al database per leggerlo, gli scrittori per scriverlo, fatto è che i lettori possono leggere quanto vogliono, quando però uno ci vuole scrivere, nessun altro ci può andare a leggere.</p>
-<ul>
-<li>
-<p>Un solo scrittore, che blocca tutti</p>
-</li>
-<li>
-<p>Se nessuno scrive tutti possono leggere.</p>
-</li>
-<li>
-<p>Invarianti da rispettare</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 14">
-</li>
-<li>
-<p>Soluzione Readers and Writers con semafori</p>
-<p><strong>Starvation degli scrittori</strong></p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 15">
-<p>Questa soluzione ha il drawback del fatto che <strong>starvation</strong> per i scrittori.</p>
-</li>
-</ul>
-<p>Questa è una soluzione che funziona ma vorremmo trovare un metodo per descrivere tutti i problemi con await, in modo molto clean.</p>
-<h3 id="priorità-ai-scrittori-con-await-framework">Priorità ai scrittori con await framework<a hidden class="anchor" aria-hidden="true" href="#priorità-ai-scrittori-con-await-framework">#</a></h3>
-<p>Vogliamo in questa parte trattare di una soluzione che non metta in starvation gli scrittori, ma mette in starvation i lettori in questo caso.</p>
-<ul>
-<li>
-<p>Slide soluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 16">
-</li>
-</ul>
-<p>La soluzione è quasi la stessa, ma si cambia la condizione di entrata per i lettori che sarà quando non c&rsquo;è nessun scrittore che sta scrivendo e <strong>nemmeno</strong> nessuno che sta aspettando di scrivere.</p>
-<p>Scegliere quale soluzione utilizzare dipende molto dall’ambiente in cui stiamo, dipende se vogliamo più gente che scriva o più gente che legga (di solito per un database c&rsquo;è molta gente ch elegge e poca che scrive).</p>
-<h3 id="problema-del-barbiere-addormentato">Problema del barbiere addormentato<a hidden class="anchor" aria-hidden="true" href="#problema-del-barbiere-addormentato">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 17">
-</li>
-</ul>
-<h2 id="framework-per-semafori">Framework per semafori<a hidden class="anchor" aria-hidden="true" href="#framework-per-semafori">#</a></h2>
-<p>Andiamo in questa parte a creare un framework generale per la discussione di problemi con await con i semafori.</p>
-<h3 id="framework-semafori-andrews-4">Framework semafori Andrews (4)<a hidden class="anchor" aria-hidden="true" href="#framework-semafori-andrews-4">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 18">
-<h3 id="notazione-con-await-2">Notazione con Await (2)<a hidden class="anchor" aria-hidden="true" href="#notazione-con-await-2">#</a></h3>
-<ul>
-<li>
-<p>Notazione (andrews Await)</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 19">
-</li>
-</ul>
-<p>Quindi la sintassi diventa di due parametri in particoalre</p>
-<ol>
-<li>Statement atomico</li>
-<li>Statemento atomico con await su una condizione booleana.</li>
-</ol>
-<p>Molto interessante notare che è questo ciò che stato implementato con Javascript! Ed è una cosa molto clean questo paradigma :D.</p>
-<ul>
-<li>
-<p>Soluzione readers and writers con await (generale)</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 20">
-</li>
-</ul>
-<p>Si noti che questa soluzione è equivalente alla soluzione dei semafori, ma è scritta in modo molto più clean.</p>
-<h3 id="implementazione-await-con-semafori">Implementazione await con semafori<a hidden class="anchor" aria-hidden="true" href="#implementazione-await-con-semafori">#</a></h3>
-<ul>
-<li>
-<p>Note sulle variabili di implementazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 21.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 21">
-</li>
-</ul>
-<p>Le note principali sono i semafori e i waiting.</p>
-<ul>
-<li>
-<p>Implementazione in slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 22">
-<p>i quadrati sono degli if non deterministici, nel senso che posso riordinarli come mi pare e sarebbe comunque apposto</p>
-</li>
-</ul>
-<p><strong>Su signal</strong>, ci dà un idea di quanti processi possono andare avanti dato un cambiamento di stato.</p>
-<p>La modifica sul waiting[i]- - non è un write non protetto??? No perché sempre passaggi di testimoni! Siamo sempre in una sezione critica, ma divisa fra più processi grazie a questo meccanismo passing the baton.</p>
-<p>Infatti è per questo che possono fare waiting[i]- - senza apparentemente essere in mutua esclusione!.</p>
-<p>Nota che sembra interessante è che questo baton viene continuamente passato da processo a un altro da signal ad un altro finché non posso più fare signal.</p>
-<p><strong>Nota sui passaggi di testimoni</strong></p>
-<p>La mutex è sempre rilasciata attraverso la tecnica del passing the baton, in qui il mutex è rilasciato da processi diversi, si può espandere su molti processi diversi la mutua esclusione… Cavolo però credo sia molto difficile sbagliarci qualcosa no? boh.</p>
-<h3 id="readers-and-writers-con-await-">Readers and writers con await (!)<a hidden class="anchor" aria-hidden="true" href="#readers-and-writers-con-await-">#</a></h3>
-<ul>
-<li>
-<p>Slide soluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 23.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 23">
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 24.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 24">
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 25.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 25">
-</li>
-<li>
-<p>Soluzione in singola slide (e con signal ottimizzato)</p>
-  <img src="/images/notes/image/universita/ex-notion/Semafori/Untitled 26.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semafori/Untitled 26">
-</li>
-</ul>
-<h2 id="considerazioni-finali-3">Considerazioni finali (3)<a hidden class="anchor" aria-hidden="true" href="#considerazioni-finali-3">#</a></h2>
-<p>I semafori pongono <strong>forti problemi di leggibilità</strong> dato che sono costrutti a basso livello sparsi in mezzo al codice.</p>
-<p>È possibile inoltre compiere <strong>errori stupidi</strong> in modo molto facile, come scambiare P o V, omettere Po V.</p>
-<p>E pone un <strong>sacco di responsabilità sul prorammatore</strong> che deve gestire lui in modo corretto le risorse e definire gli accessi.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

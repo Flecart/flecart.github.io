@@ -7,8 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>IPSec protocol | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🛡️cybersecurity">
-<meta name="description" content="Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!
-Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l&rsquo;implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.">
+<meta name="description" content="IPSec protocol - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/ipsec-protocol/">
@@ -94,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/ipsec-protocol/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="IPSec protocol">
-  <meta property="og:description" content="Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!
-Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l’implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -106,8 +104,7 @@ Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="IPSec protocol">
-<meta name="twitter:description" content="Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!
-Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l&rsquo;implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -136,12 +133,12 @@ Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da 
   "@type": "BlogPosting",
   "headline": "IPSec protocol",
   "name": "IPSec protocol",
-  "description": "Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!\nPerché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l\u0026rsquo;implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.\n",
+  "description": "",
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!\nPerché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l’implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.\nVirtual Private Networks Virtual because it doesn’t exist, it is built upon real network and private because only you can have access.\nÈ una cosa molto utile per implementare cose come i VPN di aziende. Solitamente solo per questo, in altro non è implementato perché è troppo complesso, per poco di guadagno.\nNota l’imbustamento e imbustamento è fatto nei router nell’esempio qui, ma può essre fatto anche di computer.\nIn qualche modo, che non ho capito, lo puoi vedere come se fosse la stessa rete, perché l’IP locale è messo nell’IP sec credo, anche se non sono molto sicuro\nTypes of VPN architectures Gateway to gateway Host-to gateway Host to host The names are self esplicative.\nGaranzie IPsec Tutte le caratteristiche della CIA in questo caso vengono soddisfatte, a livello subito sopra quello di rete (quindi garanzia molto buona :D) Vedi Notions of Security, l’unica cosa non fatta a questo livello è implementazione dell’autenticazione dell’utente, abbiamo solo sull’origine, quindi necessitiamo qualcosa di più per farlo a livello dell’utente.\nIntegrità dei dati Confidenzialità Autenticazione dell’origine (credo perché conoscono solamente la chiave della VPN) Prevenzione dei replay attack Con Jocelyn vengono aggiunti anche altre due\nAccess control (quindi chi può accedere a cosa) La cosa bella di applicare la sicurezza a questo livello è che diventa trasparente rispetto agli utilizzi da utenti non bene addestrati o applicazioni che la ignorano. In ogni caso ho le garanzie di sopra.\nTunnelling mode (2) Tunneling mode Routers IPsec aware, quando sono i routers che mettono su il protocollo Questo metodo solitamente viene utilizzato per reti VPN, perché è il router che si occupa di decriptare ed inoltrare a livello rete locale. Tunnel Mode SA: Protects the entire IP packet by encapsulating it within a new IP packet. Transport mode Host IPsec-aware, in modo che siano solamente gli host che siano aware, mentre i routers non sanno niente, e si comportano in modo normale in questo modo, secondo una connessione IP. Transport Mode SA: Protects the payload of IP packets, leaving the IP header intact. In questo caso viene cryptato solo il payload, viene utilizzato in host-host Security Headers - Service Models Sembra end-to-end, che dovrebbe essere una garanzia a livello trasporto, dato che alla fine solamente gli utenti finali dovrebbero ricevere il messaggio. Possono essere Authentication header (AH) oppure Encapsulation Security Protocol (ESP), la prima non fornisce la confidenzialità, mentre la seconda anche la confidenzialità. Questa è praticamente la differenza principale.\nAH ha il vantaggio che utilizzi meno energie perché non devi metterti a cifrare (ESP è sicuro con chi sta parlando, per esempio uno streaming può far uso di AH, dato che non ho bisogno di cifrare il tutto). È la versione più comune Tunnel mode con confidenzialità per gli usi in VPN. In entrambi i metodi esiste un sequence number che viene utilizzato per evitare replay attacks. In entrambi c’è un hash per l’integrità.\nSecurity Association(4) Security Association (SA): A set of parameters that define the security services and mechanisms for protecting communication between two network entities. Purpose: Establishes shared security attributes to secure data exchange, ensuring confidentiality, integrity, and authenticity. Prima di mettermi a scambiare messaggi, devo essere sicuro con chi sto parlando, quindi vogliamo andare a creare una security association, scambio di chiavi e algoritmi di criptazione comune, solo da una direzione verso l’altra. I due parametri SPI e l’IP di destinazione identificano una SA in modo univoco. Poi ci sono parametri che vanno ad identificare cose come tipologia di cifrario utilizzato, o tipologia di algoritmo utilizzato per l’integrità. Tutte le associations dovrebbero usare sequence numbers per evitare replay attacks.\nSecurity association parameters Uses usually three parameters\nSecurity Parameter Index (32 bit) è un identificatore della SA. IP destination e sorgente Identifier of the security protocol (ESP or AH). Altre chiavi di codifica e decodifica. Security Association Database Posso anche creare un database di SA questo si chiama SAD\nC’è una security associazione fra tunnel e ogni host\nCose che vengono memorizzate qui sono:\nIdentificatore di SA, SPI Chiavi di cifratura e algo di cifratura Interfaccia di inizio e arrivo della SA MAC e chiave di MAC Establishing a SA This is somewhat similar to SSL, because they first need to negotiate security parameters.\nInitiation: A request is made to establish a secure communication channel. Negotiation: Parameters such as encryption methods and keys are negotiated (e.g., via IKE). Creation: An SA is created with the agreed-upon parameters and stored in the SAD. Maintenance: SAs are monitored and periodically re-negotiated before expiration. IPsec Datagram Si noti che anche il pacchetto di livello trasporto è cifrato, quindi anche l’indirizzo di porta e l’indirizzo IP finale dovrà essere cifrato\nIl modo con cui queste vengono programmate è attraverso alcune regole del router (che controllano se il datagramma va verso certi host, oppure parte da certi host e simili).\nKey Determination Protocol Quello che viene usato in questo caso è chiamato IKEv2. Che è una versione di Diffie-Hellman in Key Exchange protocols. Ma risolve i problemi di Man in the middle, autenticando le due parti. E risolve anche problemi di denial of service dovuti al costo di computazione di diffie-hellman. Per il problema di flooding usano delle specie di cookie autenticati, che sono creati da chi vuole comunicare (firmati da questi diciamo). Poi usano un cifrario a chiave asymmetric come curve ellittiche o RSA\nIKEv2 Questo è un protocollo di scambio chiavi, per certi versi simile a Diffie Hellman spiegato in Key Exchange protocols.\nAbbiamo sempre Alice e Bob, rispettivamente chiave privata $a, b$ con gruppo $g$, primo $p$, e modulo messo d’accordo. Poi si scambiano come da consuetudine $g^{a} \\mod p, N_{a}$ da $A \\to B$ e uguale e contrario da $B \\to A$. La chiave segreta sarà $K = f(g^{ab} \\mod p, N_{a}, N_{b}$ e poi altra roba di integrità che non ho capito. Dovrei descriverlo meglio.\nIKE contenders Photuris SKIP ISAKMP TODO: approfondisci cosa sono queste. Why IPsec is not used Complexity in its setup (una cosa è spesso è molto lento perché richiede molti scambi, ha un overhead grosso). Bad compatibility with NAT (needs to know IP-port pair to route the packet) Application level security is often easier to implement ",
-  "wordCount" : "1123",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-05-28T00:00:00Z",
   "dateModified": "2024-05-28T00:00:00Z",
@@ -236,182 +233,12 @@ Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da 
     <h1 class="post-title entry-hint-parent">
       IPSec protocol
     </h1>
-    <div class="post-meta"><span title='2024-05-28 00:00:00 +0000 UTC'>May 28, 2024</span>&nbsp;·&nbsp;Reading Time: 6 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-05-28 00:00:00 +0000 UTC'>May 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#virtual-private-networks" aria-label="Virtual Private Networks">Virtual Private Networks</a><ul>
-                        
-                <li>
-                    <a href="#types-of-vpn-architectures" aria-label="Types of VPN architectures">Types of VPN architectures</a></li></ul>
-                </li>
-                <li>
-                    <a href="#garanzie-ipsec" aria-label="Garanzie IPsec">Garanzie IPsec</a></li>
-                <li>
-                    <a href="#tunnelling-mode-2" aria-label="Tunnelling mode (2)">Tunnelling mode (2)</a><ul>
-                        
-                <li>
-                    <a href="#tunneling-mode" aria-label="Tunneling mode">Tunneling mode</a></li>
-                <li>
-                    <a href="#transport-mode" aria-label="Transport mode">Transport mode</a></li></ul>
-                </li>
-                <li>
-                    <a href="#security-headers---service-models" aria-label="Security Headers - Service Models">Security Headers - Service Models</a></li>
-                <li>
-                    <a href="#security-association4" aria-label="Security Association(4)">Security Association(4)</a><ul>
-                        
-                <li>
-                    <a href="#security-association-parameters" aria-label="Security association parameters">Security association parameters</a></li>
-                <li>
-                    <a href="#security-association-database" aria-label="Security Association Database">Security Association Database</a></li>
-                <li>
-                    <a href="#establishing-a-sa" aria-label="Establishing a SA">Establishing a SA</a></li></ul>
-                </li>
-                <li>
-                    <a href="#ipsec-datagram" aria-label="IPsec Datagram">IPsec Datagram</a></li>
-                <li>
-                    <a href="#key-determination-protocol" aria-label="Key Determination Protocol">Key Determination Protocol</a><ul>
-                        
-                <li>
-                    <a href="#ikev2" aria-label="IKEv2">IKEv2</a></li>
-                <li>
-                    <a href="#ike-contenders" aria-label="IKE contenders">IKE contenders</a></li></ul>
-                </li>
-                <li>
-                    <a href="#why-ipsec-is-not-used" aria-label="Why IPsec is not used">Why IPsec is not used</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>Questo è un protocollo di sicurezza a livello Rete e non più a livello socket!</p>
-<p>Perché vorremmo avere sicurezza a questo livello? È una cosa troppo comune da dover mettere a livello superiore (ma solitamente viene messa a questo livello per la sicurezza, quindi non è implementata ovunque per dire), quindi IPsec vuole facilitare l&rsquo;implementazione dei principi CIA a un livello più basso, in modo che sia flessibile e customization.</p>
-<h3 id="virtual-private-networks">Virtual Private Networks<a hidden class="anchor" aria-hidden="true" href="#virtual-private-networks">#</a></h3>
-<p>Virtual because it doesn&rsquo;t exist, it is built upon real network and private because only you can have access.</p>
-<p>È una cosa molto utile per implementare cose come i <strong>VPN</strong> di aziende. Solitamente solo per questo, in altro non è implementato perché è troppo complesso, per poco di guadagno.</p>
-<img src="/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Sicurezza delle reti/Untitled 20">
-<p>Nota l&rsquo;imbustamento e imbustamento è fatto nei router nell&rsquo;esempio qui, ma può essre fatto anche di computer.</p>
-<p>In qualche modo, che non ho capito, lo puoi vedere come se fosse la stessa rete, perché l’IP locale è messo nell&rsquo;IP sec credo, anche se non sono molto sicuro</p>
-<h4 id="types-of-vpn-architectures">Types of VPN architectures<a hidden class="anchor" aria-hidden="true" href="#types-of-vpn-architectures">#</a></h4>
-<ul>
-<li>Gateway to gateway</li>
-<li>Host-to gateway</li>
-<li>Host to host</li>
-</ul>
-<p>The names are self esplicative.</p>
-<h3 id="garanzie-ipsec">Garanzie IPsec<a hidden class="anchor" aria-hidden="true" href="#garanzie-ipsec">#</a></h3>
-<p>Tutte le caratteristiche della <strong>CIA</strong> in questo caso vengono soddisfatte, a livello subito sopra quello di rete (quindi garanzia molto buona :D) Vedi <a href="/notes/notions-of-security">Notions of Security</a>, l&rsquo;unica cosa non fatta a questo livello è implementazione dell&rsquo;autenticazione dell&rsquo;utente, abbiamo solo sull&rsquo;origine, quindi necessitiamo qualcosa di più per farlo a livello dell&rsquo;utente.</p>
-<ul>
-<li>Integrità dei dati</li>
-<li>Confidenzialità</li>
-<li>Autenticazione dell’origine (credo perché conoscono solamente la chiave della VPN)</li>
-<li>Prevenzione dei replay attack</li>
-</ul>
-<p>Con Jocelyn vengono aggiunti anche altre due</p>
-<ul>
-<li>Access control (quindi chi può accedere a cosa)</li>
-</ul>
-<p>La cosa bella di applicare la sicurezza a questo livello è che diventa <strong>trasparente</strong> rispetto agli utilizzi da utenti non bene addestrati o applicazioni che la ignorano. In ogni caso ho le garanzie di sopra.</p>
-<h3 id="tunnelling-mode-2"><strong>Tunnelling mode (2)</strong><a hidden class="anchor" aria-hidden="true" href="#tunnelling-mode-2">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Sicurezza delle reti/Untitled 22">
-<h4 id="tunneling-mode">Tunneling mode<a hidden class="anchor" aria-hidden="true" href="#tunneling-mode">#</a></h4>
-<ul>
-<li><strong>Routers IPsec aware</strong>, quando sono i routers che mettono su il protocollo
-Questo metodo solitamente viene utilizzato per reti VPN, perché è il router che si occupa di decriptare ed inoltrare a livello rete locale.</li>
-<li><strong>Tunnel Mode SA</strong>: Protects the entire IP packet by encapsulating it within a new IP packet.</li>
-</ul>
-<h4 id="transport-mode">Transport mode<a hidden class="anchor" aria-hidden="true" href="#transport-mode">#</a></h4>
-<ul>
-<li><strong>Host IPsec-aware</strong>, in modo che siano solamente gli host che siano aware, mentre i routers non sanno niente, e si comportano in modo normale in questo modo, secondo una connessione IP.</li>
-<li><strong>Transport Mode SA</strong>: Protects the payload of IP packets, leaving the IP header <em>intact</em>.
-In questo caso viene cryptato solo il payload, viene utilizzato in host-host</li>
-</ul>
-<h3 id="security-headers---service-models">Security Headers - Service Models<a hidden class="anchor" aria-hidden="true" href="#security-headers---service-models">#</a></h3>
-<p>Sembra end-to-end, che dovrebbe essere una garanzia a livello trasporto, dato che alla fine solamente gli utenti finali dovrebbero ricevere il messaggio. Possono essere <strong>Authentication header</strong> (AH) oppure <strong>Encapsulation Security Protocol</strong> (ESP), la prima non fornisce la confidenzialità, mentre la seconda anche la confidenzialità. Questa è praticamente la differenza principale.</p>
-<p>AH ha il vantaggio che utilizzi meno energie perché non devi metterti a cifrare (ESP è sicuro con chi sta parlando, per esempio uno streaming può far uso di AH, dato che non ho bisogno di cifrare il tutto).
-<img src="/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 23.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Sicurezza delle reti/Untitled 23">
-<img src="/images/notes/Sicurezza delle reti-20240528150321633.webp" width="559" class="center" alt="Sicurezza delle reti-20240528150321633"/></p>
-<p>È la versione più comune Tunnel mode con confidenzialità per gli usi in VPN.
-In entrambi i metodi esiste un <strong>sequence number</strong> che viene utilizzato per evitare replay attacks.
-In entrambi c&rsquo;è un <strong>hash</strong> per l&rsquo;integrità.</p>
-<h3 id="security-association4">Security Association(4)<a hidden class="anchor" aria-hidden="true" href="#security-association4">#</a></h3>
-<ul>
-<li><strong>Security Association (SA)</strong>: A set of parameters that define the security services and mechanisms for protecting communication between two network entities.</li>
-<li><strong>Purpose</strong>: Establishes shared security attributes to secure data exchange, ensuring confidentiality, integrity, and authenticity.</li>
-</ul>
-<p>Prima di mettermi a scambiare messaggi, devo essere sicuro con chi sto parlando, quindi vogliamo andare a creare una <strong>security association</strong>, scambio di chiavi e algoritmi di criptazione comune, solo da una direzione verso l&rsquo;altra.
-I due parametri <strong>SPI</strong> e l&rsquo;IP di destinazione identificano una SA in modo univoco.
-Poi ci sono parametri che vanno ad identificare cose come tipologia di cifrario utilizzato, o tipologia di algoritmo utilizzato per l&rsquo;integrità. Tutte le associations dovrebbero usare <em>sequence numbers</em> per evitare replay attacks.</p>
-<img src="/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 24.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Sicurezza delle reti/Untitled 24">
-<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 25.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Sicurezza delle reti/Untitled 25&quot;&gt;
-</code></pre>
-<h4 id="security-association-parameters">Security association parameters<a hidden class="anchor" aria-hidden="true" href="#security-association-parameters">#</a></h4>
-<p>Uses usually three parameters</p>
-<ul>
-<li>Security Parameter Index  (32 bit) è un <strong>identificatore</strong> della SA.</li>
-<li>IP destination e sorgente</li>
-<li>Identifier of the security protocol (ESP or AH).</li>
-<li>Altre chiavi di codifica e decodifica.</li>
-</ul>
-<h4 id="security-association-database">Security Association Database<a hidden class="anchor" aria-hidden="true" href="#security-association-database">#</a></h4>
-<p>Posso anche creare un <strong>database di SA</strong> questo si chiama SAD</p>
-<p>C’è una security associazione fra tunnel e ogni host</p>
-<pre><code>&lt;img src=&quot;/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 26.png&quot; style=&quot;width: 100%&quot; class=&quot;center&quot; alt=&quot;image/universita/ex-notion/Sicurezza delle reti/Untitled 26&quot;&gt;
-</code></pre>
-<p>Cose che vengono memorizzate qui sono:</p>
-<ol>
-<li>Identificatore di SA, SPI</li>
-<li>Chiavi di cifratura e algo di cifratura</li>
-<li>Interfaccia di inizio e arrivo della SA</li>
-<li>MAC e chiave di MAC</li>
-</ol>
-<h4 id="establishing-a-sa">Establishing a SA<a hidden class="anchor" aria-hidden="true" href="#establishing-a-sa">#</a></h4>
-<p>This is somewhat similar to SSL, because they first need to negotiate security parameters.</p>
-<ul>
-<li><strong>Initiation</strong>: A request is made to establish a secure communication channel.</li>
-<li><strong>Negotiation</strong>: Parameters such as encryption methods and keys are negotiated (e.g., via IKE).</li>
-<li><strong>Creation</strong>: An SA is created with the agreed-upon parameters and stored in the SAD.</li>
-<li><strong>Maintenance</strong>: SAs are monitored and periodically re-negotiated before expiration.</li>
-</ul>
-<h3 id="ipsec-datagram">IPsec Datagram<a hidden class="anchor" aria-hidden="true" href="#ipsec-datagram">#</a></h3>
-<p>Si noti che anche il pacchetto di livello trasporto è cifrato, quindi anche l&rsquo;indirizzo di porta e l&rsquo;indirizzo IP finale dovrà essere cifrato</p>
-<img src="/images/notes/image/universita/ex-notion/Sicurezza delle reti/Untitled 27.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Sicurezza delle reti/Untitled 27">
-<p>Il modo con cui queste vengono programmate è attraverso alcune regole del router (che controllano se il datagramma va verso certi host, oppure parte da certi host e simili).</p>
-<h3 id="key-determination-protocol">Key Determination Protocol<a hidden class="anchor" aria-hidden="true" href="#key-determination-protocol">#</a></h3>
-<p>Quello che viene usato in questo caso è chiamato IKEv2.
-Che è una versione di Diffie-Hellman in <a href="/notes/key-exchange-protocols">Key Exchange protocols</a>.
-Ma risolve i problemi di Man in the middle, autenticando le due parti. E risolve anche problemi di denial of service dovuti al costo di computazione di diffie-hellman.
-Per il problema di flooding usano delle specie di cookie autenticati, che sono creati da chi vuole comunicare (firmati da questi diciamo). Poi usano un cifrario a chiave asymmetric come curve ellittiche o RSA</p>
-<h4 id="ikev2">IKEv2<a hidden class="anchor" aria-hidden="true" href="#ikev2">#</a></h4>
-<p>Questo è un protocollo di scambio chiavi, per certi versi simile a Diffie Hellman spiegato in <a href="/notes/key-exchange-protocols">Key Exchange protocols</a>.</p>
-<p>Abbiamo sempre Alice e Bob, rispettivamente chiave privata $a, b$ con gruppo $g$, primo $p$, e modulo messo d&rsquo;accordo.
-Poi si scambiano come da consuetudine $g^{a} \mod p, N_{a}$ da $A \to B$ e uguale e contrario da $B \to A$.
-La chiave segreta sarà $K = f(g^{ab} \mod p,  N_{a}, N_{b}$ e poi altra roba di integrità che non ho capito. Dovrei descriverlo meglio.</p>
-<h4 id="ike-contenders">IKE contenders<a hidden class="anchor" aria-hidden="true" href="#ike-contenders">#</a></h4>
-<ul>
-<li>Photuris</li>
-<li>SKIP</li>
-<li>ISAKMP
-TODO: approfondisci cosa sono queste.</li>
-</ul>
-<h3 id="why-ipsec-is-not-used">Why IPsec is not used<a hidden class="anchor" aria-hidden="true" href="#why-ipsec-is-not-used">#</a></h3>
-<ul>
-<li>Complexity in its setup (una cosa è spesso è molto lento perché richiede molti scambi, ha un overhead grosso).</li>
-<li>Bad compatibility with NAT (needs to know IP-port pair to route the packet)</li>
-<li>Application level security is often easier to implement</li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

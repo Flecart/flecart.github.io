@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Graph Databases | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📓big-data">
-<meta name="description" content="We have first cited the graph data model in the Introduction to Big Data note.
-Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring
-also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases.
-We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles.
-We call index-free adjacency: we use physical memory pointers to store the graph.">
+<meta name="description" content="Graph Databases - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/graph-databases/">
@@ -97,7 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/graph-databases/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Graph Databases">
-  <meta property="og:description" content="We have first cited the graph data model in the Introduction to Big Data note. Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases. We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles. We call index-free adjacency: we use physical memory pointers to store the graph.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -108,11 +104,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Graph Databases">
-<meta name="twitter:description" content="We have first cited the graph data model in the Introduction to Big Data note.
-Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring
-also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases.
-We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles.
-We call index-free adjacency: we use physical memory pointers to store the graph.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -141,12 +133,12 @@ We call index-free adjacency: we use physical memory pointers to store the graph
   "@type": "BlogPosting",
   "headline": "Graph Databases",
   "name": "Graph Databases",
-  "description": "We have first cited the graph data model in the Introduction to Big Data note. Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases. We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles. We call index-free adjacency: we use physical memory pointers to store the graph.\n",
+  "description": "",
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "We have first cited the graph data model in the Introduction to Big Data note. Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases. We have improved over the problem of joining with relational database using Document Stores with three data structure, but these cannot have cycles. We call index-free adjacency: we use physical memory pointers to store the graph.\nGraph Data Models Graph databases are more generic than standard relational databases. One of the main use cases that it attempts to solve is the cost of joins in standard relational databases, the problem that Wide Column Storage was attempting to solve too!\nDesign objectives Graphs are variegate: it is not feasible to think of a single data model that can fit all the possible use cases. For this reason, we list here many choices of possible models and properties of databases that should be considered when designing a database.\nRead or Write intensive: we have discussed in Introduction to Big Data that it is important to consider if the load is read or write intensive (OLAP or OLTP). Local or distributed: it is important to consider if the data is stored in a single machine or in many machines. Native or non-native: if the database is native, it means that it is designed to store graphs, otherwise it is non-native (perhaps the underlying layer has a different data model). Triple Stores This data model is commonly known as RDF (Resource Description Framework), which is W3C standard. It is a simple model that consists of triples, which are made of a subject, a predicate and an object (note: these are all labels, not properties!). The subject is the entity, the predicate is the property and the object is the value of the property. This is a very simple model, but it is not very efficient for querying. We have explored this model in Metadati web e web semantico. This kind of graph data model is usually very easy to implement with relational databases with tables made of three columns.\nIn triple stores, not all labels are compatible to subject object or properties.\nSubject Property Object IRI Literal\nBlank Node Labeled property graph model This is the most natural model for us Computer Scientists. We take the classical notion of Graphs (See Grafi). And extend it with properties and labels. Properties are flat-maps in nodes and edges. Each property is a map from strings to values that represents a certain property of the node or edge. Labels are some strings attached to nodes, they are commonly called types. There is no limit for the number of labels and properties for each.\nEach node and each edge can be associated with a map from strings to values, which represents its properties. So we can have as many properties as we would like for nodes and edges.\nLabels can be seen as table names, nodes as records, and properties as the attribute values for the records.\nComparison between some nodes and relational databases from the Textbook\nLabels can be stores as properties, this is what Triple Store people could argue.\nIn a labeled property graph, nodes can have one or more labels and zero or more properties, edges are directed and have exactly one label(s) and zero or more properties.\nMeaning: Every node and edge is labelled!\nNeo4j The nodes in a query that map to specific real nodes are called anchors/bound nodes as they anchor the query to real nodes.\nGraph databases maintain fast query times even when storing vast amounts of data. Learning to trust our graph database is important when learning to structure our graphs without denormalizing them.\nData Types These are the classical types.\nNeo4j type JSONiq/JSound/XML Schema type STRING\nBOOLEAN\nINTEGER\nFLOAT\nNULL\nDATE\nTIME\nDATETIME\nZONED DATETIME\nZONED TIME\nLOCAL DATETIME\nLOCAL TIME\nDURATION\nLIST string\nboolean\nlong\ndouble\nnull\ndate\ntime\ndateTime\ndateTimeStamp\ntime (time zone mandatory)\ndateTime (no time zone)\ntime (no time zone)\nduration\narray But we have some extensions for graph types too! Point for (GIS) data types Paths Nodes Edges. Operations With Clause This is very similar to the functional let clause in Querying Denormalized Data. Example:\nWITH 1 as x RETURN x + 1 Set Clause This used to add some labels to the nodes:\nMATCH (a {y:1}) WHERE a.x=1 or a.x=8 SET a: yourRook MATCH (a {y:1}) WHERE a.x=2 or a.x=7 SET a: yourKnight MATCH (a {y:1}) WHERE a.x=3 or a.x=6 SET a: yourBishop MATCH (a {a.x:4, y:8}) SET a: theirKing UNWIND Clause This is used to transform a list into a table. It is very similar to the for loop in JSONiq:\nUNWIND [1, 2, 3] as x RETURN x + 1 UNWIND range(1, 8) AS y UNWIND range(1, 8) AS x CREATE (:Field {x: x, y:y}) MATCH Clause This is the most powerful clause in Cypher. It can used to traverse the graph. It is a quite natural way to find for patterns in a graph database\nMATCH (n:Person)-[:KNOWS]-\u003e(m) RETURN n, m CREATE Clause This is used to create nodes and relationships in the graph. It is quite similar to the INSERT statement in SQL.\nCREATE (einstein:Scientist {name: \"Albert Einstein\"}), (tesla:Scientist {name: \"Nikola Tesla\"}), (einstein)-[:KNOWS]-\u003e(tesla) MERGE Clause This is used to create a node if it does not exist, otherwise it returns it. It is similar to the UPSERT statement in SQL.\nMATCH (n:Person {name: \"Albert Einstein\"}) MERGE (n)-[:KNOWS]-\u003e(tesla:Scientist {name: \"Nikola Tesla\"}) MATCH (a: Field), (b: Field) WHERE (a.x=b.x OR a.y=b.y) AND (a\u003c\u003eb) MERGE (a)-[:rook]-\u003e(b) Standards Two main standards:\nSQL/PGQ (we use relational query like, but extend it with graph queries, one simple use case is PostgresSQL with Graph extension) GQL (Graph Query Language) Mainly people have agreed on these two possible query standards. Physical Architecture Neo4j can handle graphs with tens of billions of nodes, relationships, and properties. Apparently it could handle the Facebook graph.\nSharding We would like to be able to store graph data on different machines, but this is difficult when we have links between different data on another place! This was a difficult problem but has been solved in recent years. Very recently so to say.\nGraph in memory We store the nodes, relationships , properties and labels separately on the disk. But when the database is up, everything is stored in the memory (index-free adjacency map). Usually using adjacency lists (doubly linked lists on the edges for each node).\nStores There exists a store for nodes, relationships, properties, and labels. Storing the data for example for nodes and properties separately makes the underlying model slightly different from the view exposed to the user, however this greatly increases traversal performance.\nStores for nodes, for example have a size of exactly 9 bytes.\nFirst byte: usage data next four: ID of the relationship connected for the node next five: ID of the first property for the node Final byte is for future use. Resource Description Framework See Metadati web e web semantico for a comparison on this topic. RDFs stores every possible property or label as a tuple of three. These are directional and are called:\nSubject Predicate Object. All of these are identified by URI or some literals or blank nodes (see the linked resource for cases where we have blank nodes, it has to do with reification, which is an added problem due to the model’s simplicity). URI can be used in each of these three parts, this is very important because it allows to create a tree of data that looks like a taxonomy. Literals can be used for the object part, and they are the values of the properties. Blank nodes are used for the subject or object part, and they are used to represent the absence of it, but not on the relation.\nThree Syntaxes RDF/XML Turtle JSON-LD See Metadati web e web semantico, they are the most common syntaxes to represent semantic web. ",
-  "wordCount" : "1399",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-15T00:00:00Z",
   "dateModified": "2025-01-15T00:00:00Z",
@@ -241,250 +233,12 @@ We call index-free adjacency: we use physical memory pointers to store the graph
     <h1 class="post-title entry-hint-parent">
       Graph Databases
     </h1>
-    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#graph-data-models" aria-label="Graph Data Models">Graph Data Models</a><ul>
-                        
-                <li>
-                    <a href="#design-objectives" aria-label="Design objectives">Design objectives</a></li>
-                <li>
-                    <a href="#triple-stores" aria-label="Triple Stores">Triple Stores</a></li>
-                <li>
-                    <a href="#labeled-property-graph-model" aria-label="Labeled property graph model">Labeled property graph model</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#neo4j" aria-label="Neo4j">Neo4j</a><ul>
-                        
-                <li>
-                    <a href="#data-types" aria-label="Data Types">Data Types</a></li>
-                <li>
-                    <a href="#operations" aria-label="Operations">Operations</a><ul>
-                        
-                <li>
-                    <a href="#with-clause" aria-label="With Clause">With Clause</a></li>
-                <li>
-                    <a href="#set-clause" aria-label="Set Clause">Set Clause</a></li>
-                <li>
-                    <a href="#unwind-clause" aria-label="UNWIND Clause">UNWIND Clause</a></li>
-                <li>
-                    <a href="#match-clause" aria-label="MATCH Clause">MATCH Clause</a></li>
-                <li>
-                    <a href="#create-clause" aria-label="CREATE Clause">CREATE Clause</a></li>
-                <li>
-                    <a href="#merge-clause" aria-label="MERGE Clause">MERGE Clause</a></li></ul>
-                </li>
-                <li>
-                    <a href="#standards" aria-label="Standards">Standards</a></li>
-                <li>
-                    <a href="#physical-architecture" aria-label="Physical Architecture">Physical Architecture</a><ul>
-                        
-                <li>
-                    <a href="#sharding" aria-label="Sharding">Sharding</a></li>
-                <li>
-                    <a href="#graph-in-memory" aria-label="Graph in memory">Graph in memory</a></li>
-                <li>
-                    <a href="#stores" aria-label="Stores">Stores</a></li></ul>
-                </li>
-                <li>
-                    <a href="#resource-description-framework" aria-label="Resource Description Framework">Resource Description Framework</a><ul>
-                        
-                <li>
-                    <a href="#three-syntaxes" aria-label="Three Syntaxes">Three Syntaxes</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>We have first cited the graph data model in the <a href="/notes/introduction-to-big-data">Introduction to Big Data</a> note.
-Until now, we have explored many aspects of relational data bases, but now we are changing the data model completely. The main reason driving this discussion are the limitations of classical relational databases: queries like traversal of a high number of relationships, reverse traversal requiring
-also indexing foreign keys (need double index! Index only work in one direction for relationship traversal, i.e. if you need both direction you should build an index both for the forward key and backward key), looking for patterns in the relationships, are especially expensive when using normal databases.
-We have improved over the problem of joining with relational database using <a href="/notes/document-stores">Document Stores</a> with three data structure, but these <em>cannot</em> have cycles.
-We call <em>index-free adjacency</em>: we use physical memory pointers to store the graph.</p>
-<h3 id="graph-data-models">Graph Data Models<a hidden class="anchor" aria-hidden="true" href="#graph-data-models">#</a></h3>
-<p>Graph databases are more generic than standard relational databases. One of the main use cases that it attempts to solve is the cost of joins in standard relational databases, the problem that <a href="/notes/wide-column-storage">Wide Column Storage</a> was attempting to solve too!</p>
-<h4 id="design-objectives">Design objectives<a hidden class="anchor" aria-hidden="true" href="#design-objectives">#</a></h4>
-<p>Graphs are variegate: it is not feasible to think of a single data model that can fit all the possible use cases. For this reason, we list here many choices of possible models and properties of databases that should be considered when designing a database.</p>
-<ul>
-<li>Read or Write intensive: we have discussed in <a href="/notes/introduction-to-big-data">Introduction to Big Data</a> that it is important to consider if the load is read or write intensive (OLAP or OLTP).</li>
-<li>Local or distributed: it is important to consider if the data is stored in a single machine or in many machines.</li>
-<li>Native or non-native: if the database is native, it means that it is designed to store graphs, otherwise it is non-native (perhaps the underlying layer has a different data model).</li>
-</ul>
-<h4 id="triple-stores">Triple Stores<a hidden class="anchor" aria-hidden="true" href="#triple-stores">#</a></h4>
-<p>This data model is commonly known as RDF (Resource Description Framework), which is W3C standard. It is a <em>simple</em> model that consists of triples, which are made of a subject, a predicate and an object (note: these are all <strong>labels</strong>, not properties!). The subject is the entity, the predicate is the property and the object is the value of the property. This is a very simple model, but it is not very efficient for querying.
-We have explored this model in <a href="/notes/metadati-web-e-web-semantico">Metadati web e web semantico</a>.
-This kind of graph data model is usually very easy to implement with relational databases with tables made of three columns.</p>
-<p>In triple stores, not all labels are compatible to subject object or properties.</p>
-<table>
-  <thead>
-      <tr>
-          <th></th>
-          <th>Subject</th>
-          <th>Property</th>
-          <th>Object</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>IRI</td>
-          <td></td>
-          <td></td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>Literal<br></td>
-          <td></td>
-          <td></td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>Blank Node</td>
-          <td></td>
-          <td></td>
-          <td></td>
-      </tr>
-  </tbody>
-</table>
-<h4 id="labeled-property-graph-model">Labeled property graph model<a hidden class="anchor" aria-hidden="true" href="#labeled-property-graph-model">#</a></h4>
-<p>This is the most natural model for us Computer Scientists. We take the classical notion of Graphs (See <a href="/notes/grafi">Grafi</a>). And extend it with properties and labels. Properties are <strong>flat</strong>-maps in nodes and edges. Each property is a map from strings to values that represents a certain property of the node or edge. Labels are some strings attached to nodes, they are commonly called <em>types</em>. There is no limit for the number of labels and properties for each.</p>
-<blockquote>
-<p><em>Each</em> node and <em>each</em> edge can be associated with a map from strings to values, which represents its properties. So we can have as many properties as we would like for nodes and edges.</p></blockquote>
-<blockquote>
-<p>Labels can be seen as table names, nodes as records, and properties as the attribute values for the records.</p></blockquote>
-<figure class="center">
-<img src="/images/notes/Graph Databases-20241207175432993.webp" style="width: 100%"   alt="Graph Databases-20241207175432993" title="Graph Databases-20241207175432993"/>
-<figcaption><p style="text-align:center;">Comparison between some nodes and relational databases from the Textbook</p></figcaption>
-</figure>
-<p>Labels can be stores as properties, this is what Triple Store people could argue.</p>
-<blockquote>
-<p>In a <strong>labeled property graph</strong>, nodes can have <em>one or more</em> labels and zero or more properties, edges are directed and have exactly one label(s) and zero or more properties.</p></blockquote>
-<p>Meaning: Every node and edge is labelled!</p>
-<h2 id="neo4j">Neo4j<a hidden class="anchor" aria-hidden="true" href="#neo4j">#</a></h2>
-<p>The nodes in a query that map to specific real nodes are called <strong>anchors</strong>/<strong>bound</strong> nodes as they anchor the query to real nodes.</p>
-<blockquote>
-<p>Graph databases maintain fast query times even when storing vast amounts of data. Learning to trust our graph database is important when learning to structure our graphs without denormalizing them.</p></blockquote>
-<h3 id="data-types">Data Types<a hidden class="anchor" aria-hidden="true" href="#data-types">#</a></h3>
-<p>These are the classical types.</p>
-<table>
-  <thead>
-      <tr>
-          <th>Neo4j type</th>
-          <th>JSONiq/JSound/XML Schema type</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>STRING<br>BOOLEAN<br>INTEGER<br>FLOAT<br>NULL<br>DATE<br>TIME<br>DATETIME<br>ZONED DATETIME<br>ZONED TIME<br>LOCAL DATETIME<br>LOCAL TIME<br>DURATION<br>LIST</td>
-          <td>string<br>boolean<br>long<br>double<br>null<br>date<br>time<br>dateTime<br>dateTimeStamp<br>time (time zone mandatory)<br>dateTime (no time zone)<br>time (no time zone)<br>duration<br>array</td>
-      </tr>
-      <tr>
-          <td>But we have some extensions for graph types too!</td>
-          <td></td>
-      </tr>
-  </tbody>
-</table>
-<ul>
-<li>Point for (GIS) data types</li>
-<li>Paths</li>
-<li>Nodes</li>
-<li>Edges.</li>
-</ul>
-<h3 id="operations">Operations<a hidden class="anchor" aria-hidden="true" href="#operations">#</a></h3>
-<h4 id="with-clause">With Clause<a hidden class="anchor" aria-hidden="true" href="#with-clause">#</a></h4>
-<p>This is very similar to the functional let clause in <a href="/notes/querying-denormalized-data">Querying Denormalized Data</a>.
-Example:</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">WITH 1 as x
-RETURN x + 1
-</code></pre><h4 id="set-clause">Set Clause<a hidden class="anchor" aria-hidden="true" href="#set-clause">#</a></h4>
-<p>This used to add some labels to the nodes:</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">MATCH (a {y:1}) WHERE a.x=1 or a.x=8 SET a: yourRook
-MATCH (a {y:1}) WHERE a.x=2 or a.x=7 SET a: yourKnight
-MATCH (a {y:1}) WHERE a.x=3 or a.x=6 SET a: yourBishop
-MATCH (a {a.x:4, y:8}) SET a: theirKing
-</code></pre><h4 id="unwind-clause">UNWIND Clause<a hidden class="anchor" aria-hidden="true" href="#unwind-clause">#</a></h4>
-<p>This is used to transform a list into a table. It is very similar to the for loop in JSONiq:</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">UNWIND [1, 2, 3] as x
-RETURN x + 1
-</code></pre><pre tabindex="0"><code class="language-cypher" data-lang="cypher">UNWIND range(1, 8) AS y
-UNWIND range(1, 8) AS x   
-CREATE (:Field {x: x, y:y})
-</code></pre><h4 id="match-clause">MATCH Clause<a hidden class="anchor" aria-hidden="true" href="#match-clause">#</a></h4>
-<p>This is the most powerful clause in Cypher. It can used to traverse the graph. It is a quite natural way to find for patterns in a graph database</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">MATCH (n:Person)-[:KNOWS]-&gt;(m)
-RETURN n, m
-</code></pre><h4 id="create-clause">CREATE Clause<a hidden class="anchor" aria-hidden="true" href="#create-clause">#</a></h4>
-<p>This is used to create nodes and relationships in the graph. It is quite similar to the INSERT statement in SQL.</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">CREATE (einstein:Scientist {name: &#34;Albert Einstein&#34;}),
-     	 (tesla:Scientist {name: &#34;Nikola Tesla&#34;}),
-        (einstein)-[:KNOWS]-&gt;(tesla)
-</code></pre><h4 id="merge-clause">MERGE Clause<a hidden class="anchor" aria-hidden="true" href="#merge-clause">#</a></h4>
-<p>This is used to create a node if it does not exist, otherwise it returns it. It is similar to the UPSERT statement in SQL.</p>
-<pre tabindex="0"><code class="language-cypher" data-lang="cypher">MATCH (n:Person {name: &#34;Albert Einstein&#34;})
-MERGE (n)-[:KNOWS]-&gt;(tesla:Scientist {name: &#34;Nikola Tesla&#34;})
-</code></pre><pre tabindex="0"><code class="language-cypher" data-lang="cypher">MATCH (a: Field), (b: Field)
-WHERE (a.x=b.x OR a.y=b.y) AND (a&lt;&gt;b)
-MERGE (a)-[:rook]-&gt;(b)
-</code></pre><h3 id="standards">Standards<a hidden class="anchor" aria-hidden="true" href="#standards">#</a></h3>
-<p>Two main standards:</p>
-<ul>
-<li>SQL/PGQ (we use relational query like, but extend it with graph queries, one simple use case is PostgresSQL with Graph extension)</li>
-<li>GQL (Graph Query Language)
-Mainly people have agreed on these two possible query standards.</li>
-</ul>
-<h3 id="physical-architecture">Physical Architecture<a hidden class="anchor" aria-hidden="true" href="#physical-architecture">#</a></h3>
-<blockquote>
-<p>Neo4j can handle graphs with tens of billions of nodes, relationships, and properties. Apparently it could handle the Facebook graph.</p></blockquote>
-<h4 id="sharding">Sharding<a hidden class="anchor" aria-hidden="true" href="#sharding">#</a></h4>
-<p>We would like to be able to store graph data on different machines, but this is difficult when we have links between different data on another place! This was a difficult problem but has been solved in recent years. Very recently so to say.</p>
-<h4 id="graph-in-memory">Graph in memory<a hidden class="anchor" aria-hidden="true" href="#graph-in-memory">#</a></h4>
-<p>We store the nodes, relationships , properties and labels separately on the disk.
-But when the database is up, everything is stored in the memory (<strong>index-free adjacency map</strong>). Usually using adjacency lists (doubly linked lists on the edges for each node).</p>
-<h4 id="stores">Stores<a hidden class="anchor" aria-hidden="true" href="#stores">#</a></h4>
-<p>There exists a store for nodes, relationships, properties, and labels. Storing the data for example for nodes and properties <em>separately</em> makes the underlying model slightly different from the view exposed to the user, however this greatly increases traversal performance.</p>
-<p>Stores for nodes, for example have a size of exactly 9 bytes.</p>
-<ul>
-<li>First byte: usage data</li>
-<li>next four: ID of the relationship connected for the node</li>
-<li>next five: ID of the first property for the node</li>
-<li>Final byte is for future use.</li>
-</ul>
-<h3 id="resource-description-framework">Resource Description Framework<a hidden class="anchor" aria-hidden="true" href="#resource-description-framework">#</a></h3>
-<p>See <a href="/notes/metadati-web-e-web-semantico">Metadati web e web semantico</a> for a comparison on this topic.
-RDFs stores every possible property or label as a tuple of three. These are directional and are called:</p>
-<ul>
-<li>Subject</li>
-<li>Predicate</li>
-<li>Object.
-All of these are identified by URI or some literals or blank nodes (see the linked resource for cases where we have blank nodes, it has to do with reification, which is an added problem due to the model&rsquo;s simplicity).</li>
-</ul>
-<p>URI can be used in each of these three parts, this is very important because it allows to create a tree of data that looks like a taxonomy.
-Literals can be used for the object part, and they are the values of the properties.
-Blank nodes are used for the subject or object part, and they are used to represent the absence of it, but not on the relation.</p>
-<h4 id="three-syntaxes">Three Syntaxes<a hidden class="anchor" aria-hidden="true" href="#three-syntaxes">#</a></h4>
-<ul>
-<li>RDF/XML</li>
-<li>Turtle</li>
-<li>JSON-LD
-See <a href="/notes/metadati-web-e-web-semantico">Metadati web e web semantico</a>, they are the most common syntaxes to represent semantic web.</li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

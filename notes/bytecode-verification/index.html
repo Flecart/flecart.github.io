@@ -7,26 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Bytecode Verification | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Code in modern days is mobile in the sense that it gets downloaded and executed on the fly very often.
-In JVM they are usually shipped with:
-
-Platform independent code
-Organized into class files.
-
-Class Loaders
-The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.
-Security Considerations
-Requirements for Security
-
-Mobile code cannot be trusted
-Code may not be type safe
-Code may destroy or modify data
-Code may expose personal information
-Code may crash the underlying VM
-Code may purposefully degrade performance (denial ofservice)
-
-This is somewhat similar to the trust relations we explored in Notions of Security.
-Anyways, since the code is not trusted, we need a way to prove some of its properties.">
+<meta name="description" content="Bytecode Verification - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bytecode-verification/">
@@ -112,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/bytecode-verification/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Bytecode Verification">
-  <meta property="og:description" content="Code in modern days is mobile in the sense that it gets downloaded and executed on the fly very often. In JVM they are usually shipped with:
-Platform independent code Organized into class files. Class Loaders The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.
-Security Considerations Requirements for Security Mobile code cannot be trusted Code may not be type safe Code may destroy or modify data Code may expose personal information Code may crash the underlying VM Code may purposefully degrade performance (denial ofservice) This is somewhat similar to the trust relations we explored in Notions of Security. Anyways, since the code is not trusted, we need a way to prove some of its properties.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -125,26 +104,7 @@ Security Considerations Requirements for Security Mobile code cannot be trusted 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Bytecode Verification">
-<meta name="twitter:description" content="Code in modern days is mobile in the sense that it gets downloaded and executed on the fly very often.
-In JVM they are usually shipped with:
-
-Platform independent code
-Organized into class files.
-
-Class Loaders
-The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.
-Security Considerations
-Requirements for Security
-
-Mobile code cannot be trusted
-Code may not be type safe
-Code may destroy or modify data
-Code may expose personal information
-Code may crash the underlying VM
-Code may purposefully degrade performance (denial ofservice)
-
-This is somewhat similar to the trust relations we explored in Notions of Security.
-Anyways, since the code is not trusted, we need a way to prove some of its properties.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -173,12 +133,12 @@ Anyways, since the code is not trusted, we need a way to prove some of its prope
   "@type": "BlogPosting",
   "headline": "Bytecode Verification",
   "name": "Bytecode Verification",
-  "description": "Code in modern days is mobile in the sense that it gets downloaded and executed on the fly very often. In JVM they are usually shipped with:\nPlatform independent code Organized into class files. Class Loaders The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.\nSecurity Considerations Requirements for Security Mobile code cannot be trusted Code may not be type safe Code may destroy or modify data Code may expose personal information Code may crash the underlying VM Code may purposefully degrade performance (denial ofservice) This is somewhat similar to the trust relations we explored in Notions of Security. Anyways, since the code is not trusted, we need a way to prove some of its properties.\n",
+  "description": "",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "Code in modern days is mobile in the sense that it gets downloaded and executed on the fly very often. In JVM they are usually shipped with:\nPlatform independent code Organized into class files. Class Loaders The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.\nSecurity Considerations Requirements for Security Mobile code cannot be trusted Code may not be type safe Code may destroy or modify data Code may expose personal information Code may crash the underlying VM Code may purposefully degrade performance (denial ofservice) This is somewhat similar to the trust relations we explored in Notions of Security. Anyways, since the code is not trusted, we need a way to prove some of its properties.\nSome properties that are easy to check are:\nProper execution requires that Each instruction is type correct Only initialized variables are read No stack over- or underflow occurs This can be done by verification of the types and runtime checking.\nSandboxed Execution Environment The program only accesses the underlying OS through some API that have access control implemented. In this way we have a limitation of the damage that the system can have.\nSandbox- Applets get access tosystem resources onlythrough an API- Access control can beimplemented- Security relies on- Type safety- Code does not by-passsandbox Summary of the JVM The Java Virtual Machine is stack-based similar to the original assembly programs you have studied at starting of your bachelor.\nMost operations popoperands from a stack and push a result.\nBut here, we also have Registers that store method parametersand local variables\nInstructions are typed\nLoad and store instructions access registers\nControl is handled by intra-method jumps(goto, conditional branches)\nType Verification We can use type inference or type checking, at the end we still need some runtime checking for covariant or contravariant types.\nWhy Use Type-Inference? We can simulate the execution of the code, just using the types instead of values (for some sort of abstract resolution). Each operation has some transition rules. We can follow these transition rules and check if there will be still a transition at the end or not, in this way if there is no transition, I already know that there is an error.\nTypes of the Engine In the JVM inference engine we have the first layer of primitive types, then composite (Objects and arrays) and null for null reference.\ngraph BT subgraph \"Type Hierarchy\" int --\u003e T Object --\u003e T float --\u003e T intArr[\"int[]\"] --\u003e Object floatArr[\"float[]\"] --\u003e Object C --\u003e Object objArr[\"Object[]\"] --\u003e Object cArr[\"C[]\"] --\u003e objArr null --\u003e intArr null --\u003e floatArr null --\u003e C null --\u003e cArr end Where T is the top type for uninitialized registers and C be used for Class, Collection, or a generic Type\nSome Rules MS stands for maximum stack size. MR is a maximum number of local register variable And dot stands for concatenation.\n$iconst\\ n:( S,R ) \\rightarrow ( int.S,R ), \\text{ if } \\lvert S \\rvert \u003c M_S$\n$iload\\ n:( S,R ) \\rightarrow ( int.S,R ),\\text{ if } 0 \\leq n \u003c M_R \\land R( n ) = int \\land \\lvert S \\rvert \u003c M_S$\n$astore\\ n:( t.S,R ) \\rightarrow ( S,R\\{ n \\leftarrow t \\} ),\\text{ if } 0 \\leq n \u003c M_R \\land t \u003c: Object$, we use object so that we have a reference (ints or floats would fail).\n$invokevirtual\\ C.m.\\sigma:( t'_n...t'_1.t'.S,R ) \\rightarrow ( r.S,R ), \\text{ if }\\sigma = r ( t_1,...,t_n ) \\land t' \u003c: C \\land t'_i \u003c: t_i$. C stands for class name, m for method name and $\\sigma$ the method signature. The stack needs to contain the parameters in reverse order, the end stack needs the result. The parameters of the function need to be subtypes of the signture, while the receiver subtype of the class $C$.\nExample from the Course Slides\nSmallest Common Supertype Jumps in the control flow can lead to joins. When you have a top object in the stack with different types, the smallest common supertype is used now. If we have multiple subtyiping, the result would not be well-defined, for this reason we:\nIgnore interfaces (they are all objects) Then in Java you can only subclass once, and we have resolved this problem. But we need runtime checks for invokeinterface\nType Inference Algorithm $in( 0 ) := ( [ \\ ] , [ P_0,...,P_n,T,...,T ] )$ $worklist := \\{ i \\mid \\text{instr}_i \\text{ is an instruction of the method} \\}$ $\\mathbf{while}\\ worklist \\neq \\emptyset\\ \\mathbf{do}$ $\\quad i := \\min( worklist )$ $\\quad \\text{remove } i \\text{ from } worklist$ $\\quad out( i ) := apply\\_rule( \\text{instr}_i, in( i ) )$ $\\quad \\mathbf{foreach}\\ q \\text{ in } successors( i )\\ \\mathbf{do}$ $\\quad \\quad in( q ) := pointwise\\_scs( in( q ), out( i ) )$ $\\quad \\quad \\mathbf{if}\\ in( q ) \\text{ has changed}\\ \\mathbf{then}\\ worklist := worklist \\cup \\{ q \\}$ $\\quad \\mathbf{end}$ $\\mathbf{end}$\nRemember q is the following instruction (could be more than one).\nThere is very little information that is needed to make this algorithm work, but it may be slow.\nPointwise SCS $pointwise\\_scs\\left( \\left( [ s_1.....s_k ] , [ t_0,...,t_n ] \\right) ,\\left( [ s'_1.....s'_k ] , [ t'_0,...,t'_n ] \\right) \\right) =$ $\\quad\\left( \\left[ scs( s_1,s'_1 ).....scs( s_k,s'_k ) \\right] , \\left[ scs( t_0,t'_0 ),...,scs( t_n,t'_n ) \\right] \\right)$\npointwise_scs is undefined for stacks of different heights Bytecode verification results in an error if called with this.\nType Checking Algorithm We can avoid SCS and fixed point computation by marking what is the expected type at the beginning and at the end of some specific code block. This means we need to extend the class code with more type information.\n$\\mathbf{foreach}\\ \\text{basic block of a method body}\\ \\mathbf{do}$ $\\quad \\mathbf{foreach}\\ \\{ i \\mid \\text{instr}_i \\text{ is an instruction of basic block} \\}\\ \\mathbf{do}$ $\\quad \\quad \\mathbf{if}\\ types( i ) \\text{ is declared}\\ \\mathbf{then}\\ in := types( i )$ $\\quad \\quad in := apply\\_rule( \\text{instr}_i, in )$ $\\quad \\quad \\mathbf{foreach}\\ q \\text{ in } successors( i )\\ \\mathbf{do}$ $\\quad \\quad \\quad \\mathbf{if}\\ types( q ) \\text{ is declared}\\ \\mathbf{then}$ $\\quad \\quad \\quad \\quad \\text{check that } in \\text{ is assignable to } types( q )$ $\\quad \\quad \\quad \\mathbf{end}$ $\\quad \\quad \\mathbf{end}$ $\\quad \\mathbf{end}$ $\\mathbf{end}$\nExample of a type checking run, slide from the Course Slides\nBytecode Verifiers are General There are some codes that are not verifiable in source code but completely fine in bytecode. For example dynamic assignment codes like this:\nx = 5 if (...) { x = \"hello\" print(x) x = 7; } x = x * 2; Since the bytecode knows the type after every step, the SCS after the block is still int, and that operation can be verified. Usually this is usable for the compiler (rediscovered using fixed point? No, type checking is far more efficient if you already have that information). The important thing to remember is that we are computing the types at the start of code blocks!\nType Inference for Source Programs We can also apply type-inference at the start, at the source, not only at the bytecode level. If you have experience in programming, this is the standard version that you probably might know. Type inference can be done at this level to levy some typing burdens to the programmer. You can also use type annotations as in python to help the inference.\nType inference is only for local variables, fields and other kinds need still to be written (if not this would be not modular (e.g. you would need to know all overrides as well, and the types would change)).\nInference of method signatures generally requires knowledge of all implementations Inference of field types generally requires knowledge of all accesses to the field Inference of these types is non-modular Or based on speculation ",
-  "wordCount" : "1310",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-11-15T00:00:00Z",
   "dateModified": "2025-11-15T00:00:00Z",
@@ -273,223 +233,12 @@ Anyways, since the code is not trusted, we need a way to prove some of its prope
     <h1 class="post-title entry-hint-parent">
       Bytecode Verification
     </h1>
-    <div class="post-meta"><span title='2025-11-15 00:00:00 +0000 UTC'>November 15, 2025</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-11-15 00:00:00 +0000 UTC'>November 15, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#class-loaders" aria-label="Class Loaders">Class Loaders</a></li></ul>
-                    
-                <li>
-                    <a href="#security-considerations" aria-label="Security Considerations">Security Considerations</a><ul>
-                        
-                <li>
-                    <a href="#requirements-for-security" aria-label="Requirements for Security">Requirements for Security</a></li>
-                <li>
-                    <a href="#sandboxed-execution-environment" aria-label="Sandboxed Execution Environment">Sandboxed Execution Environment</a></li>
-                <li>
-                    <a href="#summary-of-the-jvm" aria-label="Summary of the JVM">Summary of the JVM</a></li></ul>
-                </li>
-                <li>
-                    <a href="#type-verification" aria-label="Type Verification">Type Verification</a><ul>
-                        
-                <li>
-                    <a href="#why-use-type-inference" aria-label="Why Use Type-Inference?">Why Use Type-Inference?</a></li>
-                <li>
-                    <a href="#types-of-the-engine" aria-label="Types of the Engine">Types of the Engine</a></li>
-                <li>
-                    <a href="#some-rules" aria-label="Some Rules">Some Rules</a></li>
-                <li>
-                    <a href="#smallest-common-supertype" aria-label="Smallest Common Supertype">Smallest Common Supertype</a></li>
-                <li>
-                    <a href="#type-inference-algorithm" aria-label="Type Inference Algorithm">Type Inference Algorithm</a></li>
-                <li>
-                    <a href="#pointwise-scs" aria-label="Pointwise SCS">Pointwise SCS</a></li>
-                <li>
-                    <a href="#type-checking-algorithm" aria-label="Type Checking Algorithm">Type Checking Algorithm</a></li>
-                <li>
-                    <a href="#bytecode-verifiers-are-general" aria-label="Bytecode Verifiers are General">Bytecode Verifiers are General</a></li>
-                <li>
-                    <a href="#type-inference-for-source-programs" aria-label="Type Inference for Source Programs">Type Inference for Source Programs</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>Code in modern days is <strong>mobile</strong> in the sense that it gets downloaded and executed on the fly very often.
-In JVM they are usually shipped with:</p>
-<ul>
-<li>Platform independent code</li>
-<li>Organized into class files.</li>
-</ul>
-<h4 id="class-loaders">Class Loaders<a hidden class="anchor" aria-hidden="true" href="#class-loaders">#</a></h4>
-<p>The class loader is the part of the JVM that takes the bytecode and interprets all the class files to make the program runnable.</p>
-<h3 id="security-considerations">Security Considerations<a hidden class="anchor" aria-hidden="true" href="#security-considerations">#</a></h3>
-<h4 id="requirements-for-security">Requirements for Security<a hidden class="anchor" aria-hidden="true" href="#requirements-for-security">#</a></h4>
-<ul>
-<li>Mobile code cannot be trusted</li>
-<li>Code may not be type safe</li>
-<li>Code may destroy or modify data</li>
-<li>Code may expose personal information</li>
-<li>Code may crash the underlying VM</li>
-<li>Code may purposefully degrade performance (denial ofservice)</li>
-</ul>
-<p>This is somewhat similar to the trust relations we explored in <a href="/notes/notions-of-security">Notions of Security</a>.
-Anyways, since the code is not trusted, we need a way to prove some of its properties.</p>
-<p>Some properties that are easy to check are:</p>
-<ul>
-<li>Proper execution requires that</li>
-<li>Each instruction is type correct</li>
-<li>Only initialized variables are read</li>
-<li>No stack over- or underflow occurs</li>
-</ul>
-<p>This can be done by verification of the types and runtime checking.</p>
-<h4 id="sandboxed-execution-environment">Sandboxed Execution Environment<a hidden class="anchor" aria-hidden="true" href="#sandboxed-execution-environment">#</a></h4>
-<p>The program only accesses the underlying OS through some <strong>API</strong> that have access control implemented.
-In this way we have a limitation of the damage that the system can have.</p>
-<ul>
-<li>Sandbox- Applets get access tosystem resources onlythrough an API- Access control can beimplemented- Security relies on- Type safety- Code does not by-passsandbox</li>
-</ul>
-<h4 id="summary-of-the-jvm">Summary of the JVM<a hidden class="anchor" aria-hidden="true" href="#summary-of-the-jvm">#</a></h4>
-<p>The Java Virtual Machine is <strong>stack-based</strong> similar to the original assembly programs you have studied at starting of your bachelor.</p>
-<ul>
-<li>
-<p>Most operations popoperands from a stack and push a result.</p>
-</li>
-<li>
-<p>But here, we also have Registers that store method parametersand local variables</p>
-</li>
-<li>
-<p>Instructions are <em>typed</em></p>
-</li>
-<li>
-<p>Load and store instructions access registers</p>
-</li>
-<li>
-<p>Control is handled by intra-method jumps(goto, conditional branches)</p>
-</li>
-</ul>
-<h3 id="type-verification">Type Verification<a hidden class="anchor" aria-hidden="true" href="#type-verification">#</a></h3>
-<p>We can use type inference or type checking, at the end we still need some runtime checking for covariant or contravariant types.</p>
-<h4 id="why-use-type-inference">Why Use Type-Inference?<a hidden class="anchor" aria-hidden="true" href="#why-use-type-inference">#</a></h4>
-<p>We can simulate the execution of the code, just using the <strong>types instead of values</strong> (for some sort of abstract resolution).
-Each operation has some <strong>transition rules</strong>. We can follow these transition rules and check if there will be still a transition at the end or not, in this way if there is no transition, I already know that there is an error.</p>
-<h4 id="types-of-the-engine">Types of the Engine<a hidden class="anchor" aria-hidden="true" href="#types-of-the-engine">#</a></h4>
-<p>In the JVM inference engine we have the first layer of primitive types, then composite (Objects and arrays) and null for null reference.</p>
-<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph BT
-  subgraph &#34;Type Hierarchy&#34;
-    int --&gt; T
-    Object --&gt; T
-    float --&gt; T
-    intArr[&#34;int[]&#34;] --&gt; Object
-    floatArr[&#34;float[]&#34;] --&gt; Object
-    C --&gt; Object
-    objArr[&#34;Object[]&#34;] --&gt; Object
-    cArr[&#34;C[]&#34;] --&gt; objArr
-    null --&gt; intArr
-    null --&gt; floatArr
-    null --&gt; C
-    null --&gt; cArr
-  end
-</code></pre><p>Where T is the top type for uninitialized registers and <code>C</code> be used for <strong>Class</strong>, <strong>Collection</strong>, or a generic <strong>Type</strong></p>
-<h4 id="some-rules">Some Rules<a hidden class="anchor" aria-hidden="true" href="#some-rules">#</a></h4>
-<p>MS stands for <em>maximum stack size</em>.
-MR is a <em>maximum number of local register variable</em>
-And dot stands for concatenation.</p>
-<p>$iconst\ n:( S,R ) \rightarrow ( int.S,R ), \text{ if } \lvert S \rvert < M_S$</p>
-<p>$iload\ n:( S,R ) \rightarrow ( int.S,R ),\text{ if } 0 \leq n < M_R \land R( n ) = int \land \lvert S \rvert < M_S$</p>
-<p>$astore\ n:( t.S,R ) \rightarrow ( S,R\{ n \leftarrow t \} ),\text{ if } 0 \leq n < M_R \land t <: Object$, we use object so that we have a reference (ints  or floats would fail).</p>
-<p>$invokevirtual\ C.m.\sigma:( t'_n...t'_1.t'.S,R ) \rightarrow ( r.S,R ), \text{ if }\sigma = r ( t_1,...,t_n ) \land t' <: C \land t'_i <: t_i$. C stands for class name, m for method name and $\sigma$ the method signature. The stack needs to contain the parameters in reverse order, the end stack needs the result. The parameters of the function need to be subtypes of the signture, while the receiver subtype of the class $C$.</p>
-<figure class="center">
-<img src="/images/notes/Bytecode Verification-20251030103644263.webp" style="width: 100%"   alt="Bytecode Verification-20251030103644263" title="Bytecode Verification-20251030103644263"/>
-<figcaption><p style="text-align:center;"> Example from the Course Slides</p></figcaption>
-</figure>
-<h4 id="smallest-common-supertype">Smallest Common Supertype<a hidden class="anchor" aria-hidden="true" href="#smallest-common-supertype">#</a></h4>
-<p>Jumps in the control flow can lead to <strong>joins</strong>.
-When you have a top object in the stack with different types, the <strong>smallest common supertype</strong> is used now.
-If we have multiple subtyiping, the result would not be well-defined, for this reason we:</p>
-<ul>
-<li>Ignore interfaces  (they are all objects)</li>
-<li>Then in Java you can only subclass once, and we have resolved this problem.</li>
-</ul>
-<p>But we need runtime checks for invokeinterface</p>
-<h4 id="type-inference-algorithm">Type Inference Algorithm<a hidden class="anchor" aria-hidden="true" href="#type-inference-algorithm">#</a></h4>
-<p>$in( 0 ) := ( [ \ ] , [ P_0,...,P_n,T,...,T ] )$
-$worklist := \{ i \mid \text{instr}_i \text{ is an instruction of the method} \}$
-$\mathbf{while}\ worklist \neq \emptyset\ \mathbf{do}$
-$\quad i := \min( worklist )$
-$\quad \text{remove } i \text{ from } worklist$
-$\quad out( i ) := apply\_rule( \text{instr}_i, in( i ) )$
-$\quad \mathbf{foreach}\ q \text{ in } successors( i )\ \mathbf{do}$
-$\quad \quad in( q ) := pointwise\_scs( in( q ), out( i ) )$
-$\quad \quad \mathbf{if}\ in( q ) \text{ has changed}\ \mathbf{then}\ worklist := worklist \cup \{ q \}$
-$\quad \mathbf{end}$
-$\mathbf{end}$</p>
-<p>Remember q is the following instruction (could be more than one).</p>
-<p>There is very little information that is needed to make this algorithm work, but it may be <strong>slow</strong>.</p>
-<h4 id="pointwise-scs">Pointwise SCS<a hidden class="anchor" aria-hidden="true" href="#pointwise-scs">#</a></h4>
-<p>$pointwise\_scs\left( \left( [ s_1.....s_k ] , [ t_0,...,t_n ] \right) ,\left( [ s'_1.....s'_k ] , [ t'_0,...,t'_n ] \right) \right) =$
-$\quad\left( \left[ scs( s_1,s'_1 ).....scs( s_k,s'_k ) \right] , \left[ scs( t_0,t'_0 ),...,scs( t_n,t'_n ) \right] \right)$</p>
-<p>pointwise_scs is undefined for stacks of different heights
-Bytecode verification results in an error if called with this.</p>
-<h4 id="type-checking-algorithm">Type Checking Algorithm<a hidden class="anchor" aria-hidden="true" href="#type-checking-algorithm">#</a></h4>
-<p>We can <strong>avoid SCS</strong> and fixed point computation by marking what is the expected type at the beginning and at the end of some specific code block.
-This means we need to extend the class code with more type information.</p>
-<p>$\mathbf{foreach}\ \text{basic block of a method body}\ \mathbf{do}$
-$\quad \mathbf{foreach}\ \{ i \mid \text{instr}_i \text{ is an instruction of basic block} \}\ \mathbf{do}$
-$\quad \quad \mathbf{if}\ types( i ) \text{ is declared}\ \mathbf{then}\ in := types( i )$
-$\quad \quad in := apply\_rule( \text{instr}_i, in )$
-$\quad \quad \mathbf{foreach}\ q \text{ in } successors( i )\ \mathbf{do}$
-$\quad \quad \quad \mathbf{if}\ types( q ) \text{ is declared}\ \mathbf{then}$
-$\quad \quad \quad \quad \text{check that } in \text{ is assignable to } types( q )$
-$\quad \quad \quad \mathbf{end}$
-$\quad \quad \mathbf{end}$
-$\quad \mathbf{end}$
-$\mathbf{end}$</p>
-<figure class="center">
-<img src="/images/notes/Bytecode Verification-20251030111912553.webp" style="width: 100%"   alt="Bytecode Verification-20251030111912553" title="Bytecode Verification-20251030111912553"/>
-<figcaption><p style="text-align:center;"> Example of a type checking run, slide from the Course Slides</p></figcaption>
-</figure>
-<h4 id="bytecode-verifiers-are-general">Bytecode Verifiers are General<a hidden class="anchor" aria-hidden="true" href="#bytecode-verifiers-are-general">#</a></h4>
-<p>There are some codes that are not verifiable in source code but completely fine in bytecode.
-For example dynamic assignment codes like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">5</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nf">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;hello&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">7</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></div><p>Since the bytecode knows the type after every step, the SCS after the block is still int, and that operation can be verified.
-Usually this is usable for the compiler (rediscovered using fixed point? No, type checking is far more efficient if you already have that information).
-The important thing to remember is that we are computing the types at the start of <strong>code blocks</strong>!</p>
-<h4 id="type-inference-for-source-programs">Type Inference for Source Programs<a hidden class="anchor" aria-hidden="true" href="#type-inference-for-source-programs">#</a></h4>
-<p>We can also apply type-inference at the start, at the source, not only at the bytecode level. If you have experience in programming, this is the standard version that you probably might know.
-Type inference can be done at this level to levy some typing burdens to the programmer.
-You can also use <strong>type annotations</strong> as in python to help the inference.</p>
-<p>Type inference is only for <strong>local variables</strong>, fields and other kinds need still to be written (if not this would be not modular (e.g. you would need to know all overrides as well, and the types would change)).</p>
-<ul>
-<li>Inference of <strong>method signatures</strong> generally requires knowledge of <strong>all implementations</strong></li>
-<li>Inference of <strong>field types</strong> generally requires knowledge of <strong>all accesses</strong> to the field</li>
-<li>Inference of these types is <strong>non-modular</strong>
-<ul>
-<li>Or based on <strong>speculation</strong></li>
-</ul>
-</li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

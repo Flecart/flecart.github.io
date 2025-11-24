@@ -7,14 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Consensus protocols | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📒distributed-systems">
-<meta name="description" content="Introduzione
-Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?
-Assunzioni principali (2)
-
-Esiste internet
-Esiste Crittografia
-
-Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.">
+<meta name="description" content="Consensus protocols - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/consensus-protocols/">
@@ -100,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/consensus-protocols/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Consensus protocols">
-  <meta property="og:description" content="Introduzione Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?
-Assunzioni principali (2) Esiste internet Esiste Crittografia Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -112,14 +104,7 @@ Assunzioni principali (2) Esiste internet Esiste Crittografia Queste sono le ass
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Consensus protocols">
-<meta name="twitter:description" content="Introduzione
-Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?
-Assunzioni principali (2)
-
-Esiste internet
-Esiste Crittografia
-
-Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -148,12 +133,12 @@ Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, di
   "@type": "BlogPosting",
   "headline": "Consensus protocols",
   "name": "Consensus protocols",
-  "description": "Introduzione Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?\nAssunzioni principali (2) Esiste internet Esiste Crittografia Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.\n",
+  "description": "",
   "keywords": [
     "📒distributed-systems"
   ],
-  "articleBody": "Introduzione Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?\nAssunzioni principali (2) Esiste internet Esiste Crittografia Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.\nDigital signature scheme Vorremmo avere un sistema per firmare alcuni documenti online, e possiamo dividere questa cosa in tre passi fondamentali\nQuesta roba esiste da molto tempo, dagli anni 80 o prima.\nAlgoritmi per digital signature Una cosa importante è che questi algoritmi di signature sono efficienti.\nGenerazione della chiave Deve essere nella forma $s \\to (pk, sk)$, ossia seed per public e secret key.\nFirma con la chiave Dovrà essere una funzione nella forma $msg + sk \\to msg + sig$. Da notare è che la signature è dipendente dal contenuto. Ma non possiamo utilizzarlo in questi ambienti elettronici perché è troppo facile copiare ed incollare una forma. Deve essere per forza che dipenda\nDall’identità di chi firma Da cosa vuole dire il firmatario. Verifica della chiave $msg + sig + pk \\to bool$, per capire se questa firma è valida o meno, deve solamente dirmi questo valore booleano. In particolare la chiave è pubblica quindi ognuno può venire a verificare un messaggio, ma può firmare solamente chi possiede la chiave privata.\nSicurezza (3 assunzioni) L’assunzione principale della sicurezza delle firme digitali è\nIdeal signatures: Se non conosci la chiave privata ⇒ non posso mai generare la coppia msg + sig corretta\nDelle volte è possibile rompere questa cosa (e.g. con brute force se ci metto abbastanza poco per farlo). Però noi assumeremo che valga questo. E ha bisogno di risorse infinite per poter usare bruteforce tutto se ha solamente quello come unica soluzione. Quindi una altra assunzione è che l’avversario ha risorse finite, polinomiali.\nAssunzione di complessità vogliamo che non ci siano algoritmi efficienti per risolvere qualcosa in modo molto veloce\nThe State Machine Replication (SMR) Problem Intuizione al problema Prendiamo uno state machine, in modo simile a quanto fatto in Grammatiche Regolari, che ad ogni input e output cambia lo stato interno. Uno state machine può essere un database, ma può essere anche tutto l’ambiente delle blockchain (e.g. mandare currency cambia lo stato) o un Automi e Regexp.\nLa replica è necessaria per la performance, in modo che ci siano più macchine uguali che rendano lo stesso servizio. Ma se ho tante macchine che fanno la stessa cosa, devo in qualche modo farci il sync, ed ecco il problema che nasce dai database, il problema dei sync write e read. Per noi la replicazione è lo stato della macchina gigante della blockchain.\nNel contesto di blockchain\nAvremo una lista di transazioni, che sono niente altro che delle richieste a un certo nodo di fare qualcosa, e si registra la storia delle transazioni, è molto importate che l’ordine sia consistente. Il problema del consenso diventa quindi provare a sincronizzare la transazioni, che nota, non devo essere money! Basta richieste.\nConsistency Questa è la proprietà che tutti i nodi sono d’accordo sulla storia, permettendo la possibilità che qualche nodo sia indietro (ma devono essere d’accordo su quella parte comune!)\nLiveness e Safety Queste sono le stesse proprietà descritte in Programmi Concorrenti. Con la liveness vogliamo che non ci siano deadlocks, e blocchi con la stessa logica → alla fine il nodo dovrà essere aggiunto!\n",
-  "wordCount" : "588",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -248,98 +233,12 @@ Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, di
     <h1 class="post-title entry-hint-parent">
       Consensus protocols
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
-                        
-                <li>
-                    <a href="#assunzioni-principali-2" aria-label="Assunzioni principali (2)">Assunzioni principali (2)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#digital-signature-scheme" aria-label="Digital signature scheme">Digital signature scheme</a><ul>
-                        
-                <li>
-                    <a href="#algoritmi-per-digital-signature" aria-label="Algoritmi per digital signature">Algoritmi per digital signature</a><ul>
-                        
-                <li>
-                    <a href="#generazione-della-chiave" aria-label="Generazione della chiave">Generazione della chiave</a></li>
-                <li>
-                    <a href="#firma-con-la-chiave" aria-label="Firma con la chiave">Firma con la chiave</a></li>
-                <li>
-                    <a href="#verifica-della-chiave" aria-label="Verifica della chiave">Verifica della chiave</a></li></ul>
-                </li>
-                <li>
-                    <a href="#sicurezza-3-assunzioni" aria-label="Sicurezza (3 assunzioni)">Sicurezza (3 assunzioni)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-state-machine-replication-smr-problem" aria-label="The State Machine Replication (SMR) Problem">The State Machine Replication (SMR) Problem</a><ul>
-                        
-                <li>
-                    <a href="#intuizione-al-problema" aria-label="Intuizione al problema">Intuizione al problema</a></li>
-                <li>
-                    <a href="#consistency" aria-label="Consistency">Consistency</a></li>
-                <li>
-                    <a href="#liveness-e-safety" aria-label="Liveness e Safety">Liveness e Safety</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
-<p>Vogliamo tenere in modo sincronizzato alcune macchine, questo è il nostro obiettivo. Questo è un problema abbastanza difficile… Come tenere in sync se ci sono alcuni nodi maligni o la rete che non è bona?</p>
-<h3 id="assunzioni-principali-2">Assunzioni principali (2)<a hidden class="anchor" aria-hidden="true" href="#assunzioni-principali-2">#</a></h3>
-<ol>
-<li><strong>Esiste internet</strong></li>
-<li><strong>Esiste Crittografia</strong></li>
-</ol>
-<p>Queste sono le assunzioni che non saranno mai rilassate per l’intero corso, diciamo che sono la nostra base su cui possiamo andare a costruire la base per il nostro studio.</p>
-<h2 id="digital-signature-scheme">Digital signature scheme<a hidden class="anchor" aria-hidden="true" href="#digital-signature-scheme">#</a></h2>
-<p>Vorremmo avere un sistema per firmare alcuni documenti online, e possiamo dividere questa cosa in tre passi fondamentali</p>
-<p>Questa roba esiste da molto tempo, dagli anni 80 o prima.</p>
-<h3 id="algoritmi-per-digital-signature">Algoritmi per digital signature<a hidden class="anchor" aria-hidden="true" href="#algoritmi-per-digital-signature">#</a></h3>
-<p>Una cosa importante è che questi algoritmi di signature sono efficienti.</p>
-<h4 id="generazione-della-chiave">Generazione della chiave<a hidden class="anchor" aria-hidden="true" href="#generazione-della-chiave">#</a></h4>
-<p>Deve essere nella forma $s \to (pk, sk)$, ossia seed per public e secret key.</p>
-<h4 id="firma-con-la-chiave">Firma con la chiave<a hidden class="anchor" aria-hidden="true" href="#firma-con-la-chiave">#</a></h4>
-<p>Dovrà essere una funzione nella forma $msg + sk \to msg + sig$. Da notare è che la signature è dipendente dal contenuto. Ma non possiamo utilizzarlo in questi ambienti elettronici perché è troppo facile copiare ed incollare una forma. Deve essere per forza che dipenda</p>
-<ol>
-<li>Dall&rsquo;identità di chi firma</li>
-<li>Da cosa vuole dire il firmatario.</li>
-</ol>
-<h4 id="verifica-della-chiave">Verifica della chiave<a hidden class="anchor" aria-hidden="true" href="#verifica-della-chiave">#</a></h4>
-<p>$msg + sig + pk \to bool$, per capire se questa firma è valida o meno, deve solamente dirmi questo valore booleano. In particolare <strong>la chiave è pubblica</strong> quindi ognuno può venire a verificare un messaggio, ma può firmare solamente chi possiede la chiave privata.</p>
-<h3 id="sicurezza-3-assunzioni">Sicurezza (3 assunzioni)<a hidden class="anchor" aria-hidden="true" href="#sicurezza-3-assunzioni">#</a></h3>
-<p>L’assunzione principale della sicurezza delle firme digitali è</p>
-<blockquote>
-<p><strong>Ideal signatures:</strong> Se non conosci la chiave privata ⇒ non posso mai generare la coppia <code>msg + sig</code> corretta</p></blockquote>
-<p>Delle volte è possibile rompere questa cosa (e.g. con brute force se ci metto abbastanza poco per farlo). Però noi assumeremo che valga questo. E ha bisogno di risorse infinite per poter usare bruteforce tutto se ha solamente quello come unica soluzione. Quindi una altra assunzione è che <strong>l’avversario ha risorse finite, polinomiali</strong>.</p>
-<p><strong>Assunzione di complessità</strong> vogliamo che non ci siano algoritmi efficienti per risolvere qualcosa in modo molto veloce</p>
-<h2 id="the-state-machine-replication-smr-problem">The State Machine Replication (SMR) Problem<a hidden class="anchor" aria-hidden="true" href="#the-state-machine-replication-smr-problem">#</a></h2>
-<h3 id="intuizione-al-problema">Intuizione al problema<a hidden class="anchor" aria-hidden="true" href="#intuizione-al-problema">#</a></h3>
-<p>Prendiamo uno <strong>state machine</strong>, in modo simile a quanto fatto in <a href="/notes/grammatiche-regolari">Grammatiche Regolari</a>, che ad ogni input e output cambia lo stato interno. Uno state machine può essere un database, ma può essere anche tutto l’ambiente delle blockchain (e.g. mandare currency cambia lo stato) o un <a href="/notes/automi-e-regexp">Automi e Regexp</a>.</p>
-<p>La <strong>replica</strong> è necessaria per la performance, in modo che ci siano più macchine uguali che rendano lo stesso servizio. Ma se ho tante macchine che fanno la stessa cosa, devo in qualche modo farci il sync, ed ecco il problema che nasce dai database, il problema dei sync write e read. Per noi la replicazione è lo stato della macchina gigante della blockchain.</p>
-<p><strong>Nel contesto di blockchain</strong></p>
-<p>Avremo una <strong>lista</strong> di transazioni, che sono niente altro che delle richieste a un certo nodo di fare qualcosa, e si registra la storia delle transazioni, è molto importate che <strong>l’ordine sia consistente</strong>. Il problema del consenso diventa quindi provare a <strong>sincronizzare la transazioni</strong>, che nota, non devo essere money! Basta richieste.</p>
-<h3 id="consistency">Consistency<a hidden class="anchor" aria-hidden="true" href="#consistency">#</a></h3>
-<p>Questa è la proprietà che tutti i nodi sono d’accordo sulla storia, permettendo la possibilità che qualche nodo sia indietro (ma devono essere d’accordo su quella parte comune!)</p>
-<h3 id="liveness-e-safety">Liveness e Safety<a hidden class="anchor" aria-hidden="true" href="#liveness-e-safety">#</a></h3>
-<p>Queste sono le stesse proprietà descritte in <a href="/notes/programmi-concorrenti">Programmi Concorrenti</a>. Con la liveness vogliamo che non ci siano deadlocks, e blocchi con la stessa logica → <strong>alla fine il nodo dovrà essere aggiunto!</strong></p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

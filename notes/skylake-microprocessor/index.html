@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Skylake Microprocessor | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="advanced-systems-lab">
-<meta name="description" content="The Skylake processor is a 2015 Intel processor.
-The Intel Processor
-In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits.
-For backwards compatibility intructions have usually just grown.
-They used geographic locations because these are not suable.
-If we want new code to run for old processors, we should need to put specific flags.">
+<meta name="description" content="Skylake Microprocessor - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/skylake-microprocessor/">
@@ -98,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/skylake-microprocessor/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Skylake Microprocessor">
-  <meta property="og:description" content="The Skylake processor is a 2015 Intel processor.
-The Intel Processor In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits. For backwards compatibility intructions have usually just grown. They used geographic locations because these are not suable. If we want new code to run for old processors, we should need to put specific flags.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,12 +104,7 @@ The Intel Processor In 1978 Intel made the choice to have retrocompatibility for
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Skylake Microprocessor">
-<meta name="twitter:description" content="The Skylake processor is a 2015 Intel processor.
-The Intel Processor
-In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits.
-For backwards compatibility intructions have usually just grown.
-They used geographic locations because these are not suable.
-If we want new code to run for old processors, we should need to put specific flags.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -144,12 +133,12 @@ If we want new code to run for old processors, we should need to put specific fl
   "@type": "BlogPosting",
   "headline": "Skylake Microprocessor",
   "name": "Skylake Microprocessor",
-  "description": "The Skylake processor is a 2015 Intel processor.\nThe Intel Processor In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits. For backwards compatibility intructions have usually just grown. They used geographic locations because these are not suable. If we want new code to run for old processors, we should need to put specific flags.\n",
+  "description": "",
   "keywords": [
     "advanced-systems-lab"
   ],
-  "articleBody": "The Skylake processor is a 2015 Intel processor.\nThe Intel Processor In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits. For backwards compatibility intructions have usually just grown. They used geographic locations because these are not suable. If we want new code to run for old processors, we should need to put specific flags.\nMicroarchitecture is just the implementation of the architecture.\nWe hade details of CPU cache The microarchitecture is the implementation of the architecture, which are the parts of a processor design that one needs to understand to write assembly code.\nCaches, cache structure, CPU frequency, details of the virtual memory system\nTypes of operations Vector instructions Simd (see Central Processing Unit). Graphic processors and similars. MMX, Sandy bridge doubles precision for floating points AVX 512 (most recent on Skylake) 16-way single and 8 way double precision. FMA: Fused Multiply-Add it is done as a single operation, and it is also more precise because we have single rounding instead of two. Out of Order Execution The Skylake microarchitecture has a 224 pool of instructions, meaning it has already loaded those, if it’s possible, they will be executed out of order.\nSuperscalar processors Superscalar processors are a class of CPUs that can execute multiple instructions per clock cycle by leveraging multiple execution units. Unlike scalar processors, which handle one instruction at a time, superscalar architectures use instruction-level parallelism (ILP) to dispatch and execute several independent instructions simultaneously. This is achieved through techniques like out-of-order execution, register renaming, and branch prediction, allowing efficient utilization of CPU resources.\nModern processors, including those based on Intel’s Skylake and AMD’s Zen architectures, are heavily superscalar, often issuing four or more instructions per cycle to maximize performance. Intel processors were superscalar since Pentium Pro. However, achieving high throughput depends on software optimizations that expose parallelism and minimize pipeline stalls. These processors are very expensive.\nEach port can execute instructions in parallel in the same clock cycle. The ideal efficiency takes this into account, as if many instructions start on parallel on the same port (this is clearly impossible in reality). example of a superscalar processor See test\nWhen we have throughput of 1 behind a single port, we have a fully pipelined pipeline. While for division, we don’t have that.\nFloating point registers They are 256 bits registers.\nScalar (non-vector) double precision FP code uses the bottom quarter Explains why throughput and latency is usually the same for vector and scalar operations Using vectors, is just parallel execution over this register.\nIntel Tick-Tock Model Intel’s Tick-Tock model was a processor development strategy introduced in 2007 to maintain Moore’s Law by ensuring continuous performance improvements. It followed a two-phase cadence, alternating between technological advancements in process technology and microarchitecture upgrades:\nTick Phase – Shrinking the fabrication process: The existing microarchitecture was shrunk to a smaller manufacturing node (e.g., from 45nm to 32nm). This led to increased efficiency, lower power consumption, and slight performance gains. Example: The transition from the 65nm Core 2 (Merom) to the 45nm Core 2 (Penryn). This phase did not work anymore, we could not produce smaller chips, more and more difficult to pack transistors! Tock Phase – Introducing a new micro-architecture: A major redesign of the CPU architecture was implemented while maintaining the same manufacturing process. This phase led to significant performance improvements, better instruction sets, and architectural innovations. Example: The move from the 45nm Core (Penryn) to the 45nm Nehalem, which introduced Hyper-Threading and an integrated memory controller. This predictable cycle allowed Intel to continuously improve processor performance while reducing development risks. However, as semiconductor manufacturing faced increasing challenges in scaling, the Tick-Tock model was phased out around 2016, replaced by the Process-Architecture-Optimization (tick, tock, opt three phases development) strategy, which introduced an additional step to extend the lifespan of each process node (with Skylake). We reached 7 nanometers last year (intel 7 has 10nm but claims performance of 7nm chips).\nOperation intensity $$ \\frac{\\text{Operations}}{\\text{Data}} $$ High operation intensity means that we have a lot of operations to do on a small amount of data. Techniques to make it faster are: So you can reduce cache misses Keep floating point units busy Instruction level parallelism Vectorization Low operation intensity means that we have a small number of operations to do on a large amount of data. Compress Data Reduce data movement Reduce cache misses Usually the numerator is in flobs and data is in bytes.\n",
-  "wordCount" : "752",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-23T00:00:00Z",
   "dateModified": "2025-06-23T00:00:00Z",
@@ -244,131 +233,12 @@ If we want new code to run for old processors, we should need to put specific fl
     <h1 class="post-title entry-hint-parent">
       Skylake Microprocessor
     </h1>
-    <div class="post-meta"><span title='2025-06-23 00:00:00 +0000 UTC'>June 23, 2025</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-23 00:00:00 +0000 UTC'>June 23, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#the-intel-processor" aria-label="The Intel Processor">The Intel Processor</a></li>
-                <li>
-                    <a href="#types-of-operations" aria-label="Types of operations">Types of operations</a></li>
-                <li>
-                    <a href="#out-of-order-execution" aria-label="Out of Order Execution">Out of Order Execution</a></li>
-                <li>
-                    <a href="#superscalar-processors" aria-label="Superscalar processors">Superscalar processors</a></li>
-                <li>
-                    <a href="#floating-point-registers" aria-label="Floating point registers">Floating point registers</a></li>
-                <li>
-                    <a href="#intel-tick-tock-model" aria-label="Intel Tick-Tock Model">Intel Tick-Tock Model</a></li>
-                <li>
-                    <a href="#operation-intensity" aria-label="Operation intensity">Operation intensity</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>The Skylake processor is a 2015 Intel processor.</p>
-<h4 id="the-intel-processor">The Intel Processor<a hidden class="anchor" aria-hidden="true" href="#the-intel-processor">#</a></h4>
-<p>In 1978 Intel made the choice to have retrocompatibility for every processor. At that time they had the 8086 processor, with some number of memory bits.
-For backwards compatibility intructions have usually just grown.
-They used geographic locations because these are not suable.
-If we want new code to run for old processors, we should need to put specific flags.</p>
-<p>Microarchitecture is just the implementation of the architecture.</p>
-<ul>
-<li>We hade details of CPU cache</li>
-</ul>
-<p>The microarchitecture is the implementation of the architecture, which are the parts of a
-processor design that one needs to understand to write assembly code.</p>
-<blockquote>
-<p>Caches, cache structure, CPU frequency, details of the virtual
-memory system</p></blockquote>
-<h4 id="types-of-operations">Types of operations<a hidden class="anchor" aria-hidden="true" href="#types-of-operations">#</a></h4>
-<ul>
-<li><strong>Vector instructions</strong> Simd (see <a href="/notes/central-processing-unit">Central Processing Unit</a>).
-<ul>
-<li>Graphic processors and similars.</li>
-<li>MMX, Sandy bridge doubles precision for floating points</li>
-<li>AVX 512 (most recent on Skylake) 16-way single and 8 way double precision.</li>
-</ul>
-</li>
-<li>FMA: Fused Multiply-Add it is done as a single operation, and it is also <strong>more precise</strong> because we have single rounding instead of two.</li>
-</ul>
-<h4 id="out-of-order-execution">Out of Order Execution<a hidden class="anchor" aria-hidden="true" href="#out-of-order-execution">#</a></h4>
-<p>The Skylake microarchitecture has a 224 pool of instructions, meaning it has already loaded those, if it&rsquo;s possible, they will be executed out of order.</p>
-<h4 id="superscalar-processors">Superscalar processors<a hidden class="anchor" aria-hidden="true" href="#superscalar-processors">#</a></h4>
-<p>Superscalar processors are a class of CPUs that can execute multiple instructions per clock cycle by leveraging multiple execution units.
-Unlike scalar processors, which handle one instruction at a time, superscalar architectures use <strong>instruction-level parallelism (ILP)</strong> to dispatch and execute several independent instructions simultaneously.
-This is achieved through techniques like <strong>out-of-order execution, register renaming, and branch prediction</strong>, allowing efficient utilization of CPU resources.</p>
-<p>Modern processors, including those based on Intel’s <strong>Skylake</strong> and AMD’s <strong>Zen</strong> architectures, are heavily superscalar, often issuing <strong>four or more instructions per cycle</strong> to maximize performance. Intel processors were superscalar since Pentium Pro.
-However, achieving high throughput depends on software optimizations that expose parallelism and minimize pipeline stalls.
-These processors are very <strong>expensive</strong>.</p>
-<ul>
-<li>Each port can execute instructions in <strong>parallel</strong> in the same clock cycle.</li>
-<li>The ideal efficiency takes this into account, as if many instructions start on parallel on the same port (this is clearly impossible in reality).</li>
-</ul>
-<figure class="center">
-<img src="/images/notes/Skylake Microprocessor-20250224112713787.webp" style="width: 100%"   alt="Skylake Microprocessor-20250224112713787" title="Skylake Microprocessor-20250224112713787"/>
-<figcaption><p style="text-align:center;">example of a superscalar processor See <a href="https://google.com">test</a></p></figcaption>
-</figure>
-<p>When we have throughput of 1 behind a single port, we have a <strong>fully pipelined</strong> pipeline.
-While for division, we don&rsquo;t have that.</p>
-<h4 id="floating-point-registers">Floating point registers<a hidden class="anchor" aria-hidden="true" href="#floating-point-registers">#</a></h4>
-<p>They are 256 bits registers.</p>
-<p>Scalar (non-vector) double precision FP code uses the bottom quarter Explains why throughput and latency is usually the same for vector and scalar operations
-Using vectors, is just parallel execution over this register.</p>
-<h4 id="intel-tick-tock-model">Intel Tick-Tock Model<a hidden class="anchor" aria-hidden="true" href="#intel-tick-tock-model">#</a></h4>
-<p>Intel&rsquo;s <strong>Tick-Tock</strong> model was a processor development strategy introduced in 2007 to maintain Moore&rsquo;s Law by ensuring continuous performance improvements. It followed a <strong>two-phase cadence</strong>, alternating between technological advancements in process technology and microarchitecture upgrades:</p>
-<ol>
-<li><strong>Tick Phase</strong> – Shrinking the <em>fabrication</em> process:
-<ul>
-<li>The existing microarchitecture was <strong>shrunk to a smaller manufacturing node</strong> (e.g., from 45nm to 32nm).</li>
-<li>This led to <strong>increased efficiency, lower power consumption, and slight performance gains</strong>.</li>
-<li>Example: The transition from the 65nm <strong>Core 2 (Merom)</strong> to the 45nm <strong>Core 2 (Penryn)</strong>.</li>
-<li>This phase did not work anymore, we could not produce smaller chips, more and more difficult to pack transistors!</li>
-</ul>
-</li>
-<li><strong>Tock Phase</strong> – Introducing a new micro-architecture:
-<ul>
-<li>A <strong>major redesign of the CPU architecture</strong> was implemented while maintaining the same manufacturing process.</li>
-<li>This phase led to <strong>significant performance improvements, better instruction sets, and architectural innovations</strong>.</li>
-<li>Example: The move from the 45nm <strong>Core (Penryn)</strong> to the 45nm <strong>Nehalem</strong>, which introduced Hyper-Threading and an integrated memory controller.</li>
-</ul>
-</li>
-</ol>
-<p>This <strong>predictable cycle</strong> allowed Intel to continuously improve processor performance while reducing development risks. However, as semiconductor manufacturing faced increasing challenges in scaling, the Tick-Tock model was <strong>phased out around 2016</strong>, replaced by the <strong>Process-Architecture-Optimization</strong>  (tick, tock, opt three phases development) strategy, which introduced an additional step to extend the lifespan of each process node (with Skylake).
-We reached 7 nanometers last year (intel 7 has 10nm but claims performance of 7nm chips).</p>
-<h4 id="operation-intensity">Operation intensity<a hidden class="anchor" aria-hidden="true" href="#operation-intensity">#</a></h4>
-$$
-\frac{\text{Operations}}{\text{Data}}
-$$<ul>
-<li><strong>High operation intensity</strong> means that we have a lot of operations to do on a small amount of data. Techniques to make it faster are:
-<ul>
-<li>So you can reduce cache misses</li>
-<li>Keep floating point units busy</li>
-<li>Instruction level parallelism</li>
-<li>Vectorization</li>
-</ul>
-</li>
-<li><strong>Low operation intensity</strong> means that we have a small number of operations to do on a large amount of data.
-<ul>
-<li>Compress Data</li>
-<li>Reduce data movement</li>
-<li>Reduce cache misses</li>
-</ul>
-</li>
-</ul>
-<p>Usually the numerator is in flobs and data is in bytes.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

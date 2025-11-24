@@ -7,18 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Livello ISA | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🏛computer-architecture">
-<meta name="description" content="il livello isa è il livello delle istruzioni
-8.1 Struttura
-Potremmo definire l&rsquo;architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.
-
-Istruzioni possibili
-Registri
-
-Solitamente le istruzioni sono divise in due parti:
-8.1.1 Opcode e indirizzamento
-Opcode
-Questo opcode indica la tipologia di istruzione.
-Per esempio per l&rsquo;architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.">
+<meta name="description" content="Livello ISA - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/livello-isa/">
@@ -104,12 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/livello-isa/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Livello ISA">
-  <meta property="og:description" content="il livello isa è il livello delle istruzioni
-8.1 Struttura Potremmo definire l’architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.
-Istruzioni possibili Registri Solitamente le istruzioni sono divise in due parti:
-8.1.1 Opcode e indirizzamento Opcode
-Questo opcode indica la tipologia di istruzione.
-Per esempio per l’architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -120,18 +104,7 @@ Per esempio per l’architettura HACK è il primo bit, che indica se è una istr
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Livello ISA">
-<meta name="twitter:description" content="il livello isa è il livello delle istruzioni
-8.1 Struttura
-Potremmo definire l&rsquo;architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.
-
-Istruzioni possibili
-Registri
-
-Solitamente le istruzioni sono divise in due parti:
-8.1.1 Opcode e indirizzamento
-Opcode
-Questo opcode indica la tipologia di istruzione.
-Per esempio per l&rsquo;architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -160,12 +133,12 @@ Per esempio per l&rsquo;architettura HACK è il primo bit, che indica se è una 
   "@type": "BlogPosting",
   "headline": "Livello ISA",
   "name": "Livello ISA",
-  "description": "il livello isa è il livello delle istruzioni\n8.1 Struttura Potremmo definire l\u0026rsquo;architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.\nIstruzioni possibili Registri Solitamente le istruzioni sono divise in due parti:\n8.1.1 Opcode e indirizzamento Opcode\nQuesto opcode indica la tipologia di istruzione.\nPer esempio per l\u0026rsquo;architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.\n",
+  "description": "",
   "keywords": [
     "🏛computer-architecture"
   ],
-  "articleBody": "il livello isa è il livello delle istruzioni\n8.1 Struttura Potremmo definire l’architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.\nIstruzioni possibili Registri Solitamente le istruzioni sono divise in due parti:\n8.1.1 Opcode e indirizzamento Opcode\nQuesto opcode indica la tipologia di istruzione.\nPer esempio per l’architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.\nQuesto insieme poi alle altre istruzioni che definiscono cosa deve fare costituiscono OPcode.\nIndirizzamento\nPoi c’è una sezione che indirizza, cioè dice all’istruzione cosa deve prendere e dove deve salvare.\n8.2 Indirizzamento 8.2.1 Diretto chiamato un indirizzamento diretto quando l’istruzione deve contenere l’informazione della memoria su come operare:\nun esempio è $inc[5]$ per dire di incrementare il valore all’indirizzo 5\n8.2.2 Immediato Ha già l’operando da usare. Quindi nel caso dell’architettura HACK, per l’istruzione A ho già quello che devo fare\n8.2.3 Registro diretto Questo è l’indizzamento solito, si utilizza il nome simbolico per dire su quale registro operare.\nAd esempio:\ninc dx in cui sto direttamente incrementando il registro\n8.2.4 Registro indiretto un esempio di indirizzamento indiretto è\ninc [dx] in cui sto andando a operare sulla locazione di memoria contenuta in dx.\nQuindi prende la locazione di dx, che può essere 5 10 o quel che i vuole e poi opera su questo.\nÈ molto simile al diretto, ma utilizza i registri\n8.2.5 Indicizzato Per esempio :\ninc [dx + 5] Prendo l’indirizzo di dx e ci prendo un offset\nDi solito può essere utile per activation record, che non so cosa sia, o accedere a certo tipo di strutture.\n8.2.6 con Stack Questa è una indicizzazione molto utilizzata, tanto che ci sono dei registri apposta.\nAlcune operazioni solite sono pop e push, e la presenza di un registro sp che mantiene la locazione attuale dello stack (un pointer!)\nAnche questo per activation record\n8.3 Tipologie di istruzioni 8.3.1 Dati da memoria a registro.\nRegistro a registro e simili\n8.3.2 Aritmetico-logiche binarie Quindi somme, divisioni moltiplicazioni sottrazioni.\n8.3.3 Unarie Per esempio shift. (moltiplicazione o div per due)\nDi solito risparmiamo molte istruzioni a livello assembli utilizzando le operazioni unarie.\n8.3.4 Salti Quindi spostamento del PC che contiene l’istruction register\n8.3.5 Invocazione procedure In hack queste non esistono, ma esistono per la maggior parte delle altre architetture.\nQuesto salta alla procedura poi fa un return sulla procedure vecchia (si dice chiamata di stack)\nQuindi sono due comandi in più che non esistono per il nostro calcolatore\n8.4 Procedure 8.4.1 Activation record Quando viene chiamata una procedura, si crea un nuovo frame, salvando\nVariabili locali delle nuova chiamata Un puntatore alla vecchia istruzione Quando si ritorna alla istruzione precedente tutta questa roba, questo nuovo frame, viene eliminato.\nEsempio di chiamata di procedure\nTrap \u0026 interrupt Questi due gestiscono errori del programma\nCaratteristiche del trap Le trap sono errori del software. Questo errore viene chiamato nel caso in cui ci siano accessi non consentiti come\nOpcode non definito (strano, succede solo se codice corrotto o sistema sballato) Un accesso a memoria non consentita Questo è gestito dal sistema operativo con un gestore di trap. Quindi togliere il controllo (e ucciderlo) al programma con la forza grazie al sistema operativo.\nDifferenze con Interrupt Questa parte è spiegata molto meglio in Note sull’architettura. La differenza principale è che interrupt è chiamato dall’esterno e interpretato grazie al sistema operativo: per esempio il ctrl-c per ucciderei l programma. Questo è gestito da interrupt Service Routine - ISR. Si può dire che sono asincroni mentre le trap sono sincrone. Es. quando la lezione è interrotta da una domanda a cui si vuole rispondere.\nPriorità dell’interrupt La CPU può scegliere di non seguire gli interrupt, si parla di interrupt mascherati nel caso in cui ci sia un lavoro molto importante (per esempio passare da un thread all’altro, qualcosa di strano che non dovrebbe essere interrotto mentre sta operando).\nOppure anche per scegliere delle priorità se tastiera o disco e simili..\nTipo se il prof non risponde subito alla domanda e dice che lo farà dopo.\nBusy waiting È una altra soluzione all’interrupt, cioè ogni 100 millisecondi il sistema operativo va a guardare se esiste un input umano. Ovviamente è molto inefficiente. (in pratica sta aspettando se il disco ha finito per ricominciare a fare le cose normali).\n8.5.5 Polling È molto simile al busi waiting, però invece di non fare nulla e aspettare soltanto quando non va a guardare, fa qualche operazione.\nTipo il prof che chiede se ci sono delle domande. e al busi waiting, però invece di non fare nulla e aspettare soltanto quando non va a guardare, fa qualche operazione.\nTipo il prof che chiede se ci sono delle domande.\n",
-  "wordCount" : "792",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-04-08T00:00:00Z",
   "dateModified": "2024-04-08T00:00:00Z",
@@ -260,180 +233,12 @@ Per esempio per l&rsquo;architettura HACK è il primo bit, che indica se è una 
     <h1 class="post-title entry-hint-parent">
       Livello ISA
     </h1>
-    <div class="post-meta"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#81-struttura" aria-label="8.1 Struttura">8.1 Struttura</a><ul>
-                        
-                <li>
-                    <a href="#811-opcode-e-indirizzamento" aria-label="8.1.1 Opcode e indirizzamento">8.1.1 Opcode e indirizzamento</a></li></ul>
-                </li>
-                <li>
-                    <a href="#82-indirizzamento" aria-label="8.2 Indirizzamento">8.2 Indirizzamento</a><ul>
-                        
-                <li>
-                    <a href="#821-diretto" aria-label="8.2.1 Diretto">8.2.1 Diretto</a></li>
-                <li>
-                    <a href="#822-immediato" aria-label="8.2.2 Immediato">8.2.2 Immediato</a></li>
-                <li>
-                    <a href="#823-registro-diretto" aria-label="8.2.3 Registro diretto">8.2.3 Registro diretto</a></li>
-                <li>
-                    <a href="#824-registro-indiretto" aria-label="8.2.4 Registro indiretto">8.2.4 Registro indiretto</a></li>
-                <li>
-                    <a href="#825-indicizzato" aria-label="8.2.5 Indicizzato">8.2.5 Indicizzato</a></li>
-                <li>
-                    <a href="#826-con-stack" aria-label="8.2.6 con Stack">8.2.6 con Stack</a></li></ul>
-                </li>
-                <li>
-                    <a href="#83-tipologie-di-istruzioni" aria-label="8.3 Tipologie di istruzioni">8.3 Tipologie di istruzioni</a><ul>
-                        
-                <li>
-                    <a href="#831-dati" aria-label="8.3.1 Dati">8.3.1 Dati</a></li>
-                <li>
-                    <a href="#832-aritmetico-logiche-binarie" aria-label="8.3.2 Aritmetico-logiche binarie">8.3.2 Aritmetico-logiche binarie</a></li>
-                <li>
-                    <a href="#833-unarie" aria-label="8.3.3 Unarie">8.3.3 Unarie</a></li>
-                <li>
-                    <a href="#834-salti" aria-label="8.3.4 Salti">8.3.4 Salti</a></li>
-                <li>
-                    <a href="#835-invocazione-procedure" aria-label="8.3.5 Invocazione procedure">8.3.5 Invocazione procedure</a></li></ul>
-                </li>
-                <li>
-                    <a href="#84-procedure" aria-label="8.4 Procedure">8.4 Procedure</a><ul>
-                        
-                <li>
-                    <a href="#841-activation-record" aria-label="8.4.1 Activation record">8.4.1 Activation record</a></li></ul>
-                </li>
-                <li>
-                    <a href="#trap--interrupt" aria-label="Trap &amp; interrupt">Trap &amp; interrupt</a><ul>
-                        
-                <li>
-                    <a href="#caratteristiche-del-trap" aria-label="Caratteristiche del trap">Caratteristiche del trap</a></li>
-                <li>
-                    <a href="#differenze-con-interrupt" aria-label="Differenze con Interrupt">Differenze con Interrupt</a></li>
-                <li>
-                    <a href="#priorit%c3%a0-dellinterrupt" aria-label="Priorità dell&rsquo;interrupt">Priorità dell&rsquo;interrupt</a></li>
-                <li>
-                    <a href="#busy-waiting" aria-label="Busy waiting">Busy waiting</a></li>
-                <li>
-                    <a href="#855-polling" aria-label="8.5.5 Polling">8.5.5 Polling</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>il livello isa è il livello delle istruzioni</p>
-<h2 id="81-struttura">8.1 Struttura<a hidden class="anchor" aria-hidden="true" href="#81-struttura">#</a></h2>
-<p>Potremmo definire l&rsquo;architettura di un elaboratore come tutte le parti del processore che una persona abbia bisogno di sapere per scrivere codice assembly.</p>
-<ul>
-<li>Istruzioni possibili</li>
-<li>Registri</li>
-</ul>
-<p>Solitamente le istruzioni sono divise in due parti:</p>
-<h3 id="811-opcode-e-indirizzamento">8.1.1 Opcode e indirizzamento<a hidden class="anchor" aria-hidden="true" href="#811-opcode-e-indirizzamento">#</a></h3>
-<p><strong>Opcode</strong></p>
-<p>Questo opcode indica la tipologia di istruzione.</p>
-<p>Per esempio per l&rsquo;architettura HACK è il primo bit, che indica se è una istruzione C oppure una istruzione A.</p>
-<p>Questo insieme poi alle altre istruzioni che definiscono cosa deve fare costituiscono OPcode.</p>
-<p><strong>Indirizzamento</strong></p>
-<p>Poi c&rsquo;è una sezione che indirizza, cioè dice all&rsquo;istruzione cosa deve prendere e dove deve salvare.</p>
-<h2 id="82-indirizzamento">8.2 Indirizzamento<a hidden class="anchor" aria-hidden="true" href="#82-indirizzamento">#</a></h2>
-<h3 id="821-diretto">8.2.1 Diretto<a hidden class="anchor" aria-hidden="true" href="#821-diretto">#</a></h3>
-<p>chiamato un indirizzamento diretto quando l&rsquo;istruzione deve contenere l&rsquo;informazione della memoria su come operare:</p>
-<p>un esempio è $inc[5]$ per dire di incrementare il valore all&rsquo;indirizzo 5</p>
-<h3 id="822-immediato">8.2.2 Immediato<a hidden class="anchor" aria-hidden="true" href="#822-immediato">#</a></h3>
-<p>Ha già l&rsquo;operando da usare. Quindi nel caso dell&rsquo;architettura HACK, per l&rsquo;istruzione A ho già quello che devo fare</p>
-<h3 id="823-registro-diretto">8.2.3 Registro diretto<a hidden class="anchor" aria-hidden="true" href="#823-registro-diretto">#</a></h3>
-<p>Questo è l&rsquo;indizzamento solito, si utilizza il nome simbolico per dire su quale registro operare.</p>
-<p>Ad esempio:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-haskell" data-lang="haskell"><span class="line"><span class="cl"><span class="nf">inc</span> <span class="n">dx</span>
-</span></span></code></pre></div><p>in cui sto direttamente incrementando il registro</p>
-<h3 id="824-registro-indiretto">8.2.4 Registro indiretto<a hidden class="anchor" aria-hidden="true" href="#824-registro-indiretto">#</a></h3>
-<p>un esempio di indirizzamento indiretto è</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-haskell" data-lang="haskell"><span class="line"><span class="cl"><span class="nf">inc</span> <span class="p">[</span><span class="n">dx</span><span class="p">]</span>
-</span></span></code></pre></div><p>in cui sto andando a operare sulla locazione di memoria contenuta in dx.</p>
-<p>Quindi prende la locazione di dx, che può essere 5 10 o quel che i vuole e poi opera su questo.</p>
-<p>È molto simile al diretto, ma utilizza i registri</p>
-<h3 id="825-indicizzato">8.2.5 Indicizzato<a hidden class="anchor" aria-hidden="true" href="#825-indicizzato">#</a></h3>
-<p>Per esempio :</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-haskell" data-lang="haskell"><span class="line"><span class="cl"><span class="nf">inc</span> <span class="p">[</span><span class="n">dx</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span>
-</span></span></code></pre></div><p>Prendo l&rsquo;indirizzo di dx e ci prendo un offset</p>
-<p>Di solito può essere utile per activation record, che non so cosa sia, o accedere a certo tipo di strutture.</p>
-<h3 id="826-con-stack">8.2.6 con Stack<a hidden class="anchor" aria-hidden="true" href="#826-con-stack">#</a></h3>
-<p>Questa è una indicizzazione molto utilizzata, tanto che ci sono dei registri apposta.</p>
-<p>Alcune operazioni solite sono pop e push, e la presenza di un registro sp che mantiene la locazione attuale dello stack (un pointer!)</p>
-<p>Anche questo per activation record</p>
-<h2 id="83-tipologie-di-istruzioni">8.3 Tipologie di istruzioni<a hidden class="anchor" aria-hidden="true" href="#83-tipologie-di-istruzioni">#</a></h2>
-<h3 id="831-dati">8.3.1 Dati<a hidden class="anchor" aria-hidden="true" href="#831-dati">#</a></h3>
-<p>da memoria a registro.</p>
-<p>Registro a registro e simili</p>
-<h3 id="832-aritmetico-logiche-binarie">8.3.2 Aritmetico-logiche binarie<a hidden class="anchor" aria-hidden="true" href="#832-aritmetico-logiche-binarie">#</a></h3>
-<p>Quindi somme, divisioni moltiplicazioni sottrazioni.</p>
-<h3 id="833-unarie">8.3.3 Unarie<a hidden class="anchor" aria-hidden="true" href="#833-unarie">#</a></h3>
-<p>Per esempio shift. (moltiplicazione o div per due)</p>
-<p>Di solito risparmiamo molte istruzioni a livello assembli utilizzando le operazioni unarie.</p>
-<h3 id="834-salti">8.3.4 Salti<a hidden class="anchor" aria-hidden="true" href="#834-salti">#</a></h3>
-<p>Quindi spostamento del PC che contiene l&rsquo;istruction register</p>
-<h3 id="835-invocazione-procedure">8.3.5 Invocazione procedure<a hidden class="anchor" aria-hidden="true" href="#835-invocazione-procedure">#</a></h3>
-<p>In hack queste non esistono, ma esistono per la maggior parte delle altre architetture.</p>
-<p>Questo salta alla procedura poi fa un return sulla procedure vecchia (si dice chiamata di stack)</p>
-<p>Quindi sono due comandi in più che non esistono per il nostro calcolatore</p>
-<h2 id="84-procedure">8.4 Procedure<a hidden class="anchor" aria-hidden="true" href="#84-procedure">#</a></h2>
-<h3 id="841-activation-record">8.4.1 Activation record<a hidden class="anchor" aria-hidden="true" href="#841-activation-record">#</a></h3>
-<p>Quando viene chiamata una procedura, si crea un nuovo frame, salvando</p>
-<ol>
-<li>Variabili locali delle nuova chiamata</li>
-<li>Un puntatore alla vecchia istruzione</li>
-</ol>
-<p>Quando si ritorna alla istruzione precedente tutta questa roba, questo nuovo frame, viene eliminato.</p>
-<img src="/images/notes/image/universita/ex-notion/Livello ISA/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello ISA/Untitled">
-<ul>
-<li>
-<p>Esempio di chiamata di procedure</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello ISA/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello ISA/Untitled 1">
-</li>
-</ul>
-<h2 id="trap--interrupt">Trap &amp; interrupt<a hidden class="anchor" aria-hidden="true" href="#trap--interrupt">#</a></h2>
-<p>Questi due gestiscono errori del programma</p>
-<h3 id="caratteristiche-del-trap">Caratteristiche del trap<a hidden class="anchor" aria-hidden="true" href="#caratteristiche-del-trap">#</a></h3>
-<p>Le trap sono <strong>errori</strong> del software.
-Questo errore viene chiamato nel caso in cui ci siano accessi non consentiti come</p>
-<ol>
-<li>Opcode non definito (strano, succede solo se codice corrotto o sistema sballato)</li>
-<li>Un accesso a memoria non consentita</li>
-</ol>
-<p>Questo è gestito dal sistema operativo con un <strong>gestore di trap</strong>. Quindi togliere il controllo (e ucciderlo) al programma con la forza grazie al sistema operativo.</p>
-<h3 id="differenze-con-interrupt">Differenze con Interrupt<a hidden class="anchor" aria-hidden="true" href="#differenze-con-interrupt">#</a></h3>
-<p>Questa parte è spiegata molto meglio in <a href="/notes/note-sull-architettura">Note sull&rsquo;architettura</a>.
-La differenza principale è che interrupt è chiamato dall&rsquo;esterno e interpretato grazie al sistema operativo: per esempio il ctrl-c per ucciderei l programma. Questo è gestito da <strong>interrupt Service Routine - ISR</strong>. Si può dire che sono asincroni mentre le trap sono sincrone.
-Es. quando la lezione è interrotta da una domanda a cui si vuole rispondere.</p>
-<h3 id="priorità-dellinterrupt">Priorità dell&rsquo;interrupt<a hidden class="anchor" aria-hidden="true" href="#priorità-dellinterrupt">#</a></h3>
-<p>La CPU può scegliere di non seguire gli interrupt, si parla di <strong>interrupt mascherati</strong> nel caso in cui ci sia un lavoro molto importante (per esempio passare da un thread all&rsquo;altro, qualcosa di strano che non dovrebbe essere interrotto mentre sta operando).</p>
-<p>Oppure anche per scegliere delle priorità se tastiera o disco e simili..</p>
-<img src="/images/notes/image/universita/ex-notion/Livello ISA/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello ISA/Untitled 2">
-<p>Tipo se il prof non risponde subito alla domanda e dice che lo farà dopo.</p>
-<h3 id="busy-waiting">Busy waiting<a hidden class="anchor" aria-hidden="true" href="#busy-waiting">#</a></h3>
-<p>È una altra soluzione all&rsquo;interrupt, cioè ogni 100 millisecondi il sistema operativo va a guardare se esiste un input umano. Ovviamente è molto inefficiente. (in pratica sta aspettando se il disco ha finito per ricominciare a fare le cose normali).</p>
-<h3 id="855-polling">8.5.5 Polling<a hidden class="anchor" aria-hidden="true" href="#855-polling">#</a></h3>
-<p>È molto simile al busi waiting, però invece di non fare nulla e aspettare soltanto quando non va a guardare, fa qualche operazione.</p>
-<p>Tipo il prof che chiede se ci sono delle domande.
-e al busi waiting, però invece di non fare nulla e aspettare soltanto quando non va a guardare, fa qualche operazione.</p>
-<p>Tipo il prof che chiede se ci sono delle domande.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,20 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Key Exchange protocols | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🛡️cybersecurity">
-<meta name="description" content="Metodi di key exchange
-
-Trusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti)
-Merkle Puzzles
-DH protocol
-
-Trusted Third parties
-Squared Key problem
-Un problema abbastanza ovvio è che per storare le chiavi di tutti c&rsquo;è una necessità $O(n^{2})$ on $O(n)$ users
-Se c&rsquo;è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!
-Protocols
-Toy Exchange protocol
-TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography)
-">
+<meta name="description" content="Key Exchange protocols - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/key-exchange-protocols/">
@@ -106,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/key-exchange-protocols/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Key Exchange protocols">
-  <meta property="og:description" content="Metodi di key exchange
-Trusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti) Merkle Puzzles DH protocol Trusted Third parties Squared Key problem Un problema abbastanza ovvio è che per storare le chiavi di tutti c’è una necessità $O(n^{2})$ on $O(n)$ users Se c’è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!
-Protocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography) ">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -119,20 +104,7 @@ Protocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi s
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Key Exchange protocols">
-<meta name="twitter:description" content="Metodi di key exchange
-
-Trusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti)
-Merkle Puzzles
-DH protocol
-
-Trusted Third parties
-Squared Key problem
-Un problema abbastanza ovvio è che per storare le chiavi di tutti c&rsquo;è una necessità $O(n^{2})$ on $O(n)$ users
-Se c&rsquo;è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!
-Protocols
-Toy Exchange protocol
-TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography)
-">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -161,12 +133,12 @@ TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptograp
   "@type": "BlogPosting",
   "headline": "Key Exchange protocols",
   "name": "Key Exchange protocols",
-  "description": "Metodi di key exchange\nTrusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti) Merkle Puzzles DH protocol Trusted Third parties Squared Key problem Un problema abbastanza ovvio è che per storare le chiavi di tutti c\u0026rsquo;è una necessità $O(n^{2})$ on $O(n)$ users Se c\u0026rsquo;è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!\nProtocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography) ",
+  "description": "",
   "keywords": [
     "🛡️cybersecurity"
   ],
-  "articleBody": "Metodi di key exchange\nTrusted Key parties (sono come Certificate authorities studiati in Sicurezza delle reti) Merkle Puzzles DH protocol Trusted Third parties Squared Key problem Un problema abbastanza ovvio è che per storare le chiavi di tutti c’è una necessità $O(n^{2})$ on $O(n)$ users Se c’è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!\nProtocols Toy Exchange protocol TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptography) Questa è la base del servizio di Kerberos! Il servizio di sopra è sicuro su Choosen plaintext, dato che Eve non capisce niente senza le chiavi!\nQuindi in pratica vengono scambiate due cose, un ticket e la chiave segreta, creati da TTP che sa creare segreti e conosce singole chiavi di tutte.\nAssumendo CPA security l’attaccante non può sapere niente su $k_{AB}$, che sembra roba random. Problema:\nTTP è il single node of failure se viene compromesso tutto viene compromesso, è un obiettivo troppo Juicy. Può essere soggetto a replay attacks senza problemi (ad esempio rimandando quanto mandato da Alice (es. se è stato comprato qualcosa, se si ripete tutto si compra di nuovo, questo è un danno)). La cosa carina è che usa solo chiavi simmetriche, niente di nuovo rispetto Classical Cyphers, OTP and Stream Ciphers, Block Ciphers. Merkle Puzzles vogliamo cercare di risolvere problemi di origliamento (eavesdrop, senza modifiche varie sul messaggio. Avversario passivo. Vogliamo farlo senza avere un #Trusted Third parties, ma vogliamo usare solamente symmetric crypto. La cosa è che questo è possibile, ma molto inefficiente per cui inutili nella pratica.\nThe puzzle protocol Suppose we have $E(k, m)$ with $k \\in \\left\\{ 0, 1 \\right\\}^{128}$. Define $E(P, message)$ and $P = 0^{96} \\mid b_{1}\\dots b_{32}$, and a $x_{i} \\in \\left\\{ 0, 1 \\right\\}^{128}$and we want to find $P$ back by some sort of brute-force.\nAlice:\nCreates $2^{32}$ puzzles by creating $E(0^{96} \\mid P_{i}, \\text{ \"Puzzle \\#}x_{i} \\text{\"} \\mid k_{i})$ Sends every puzzle to Bob Bob: Chooses a puzzle randomly and tries to solve it (try all possible $P_{i}$), when the first part matches, the puzzle is solved Send $x_{j}$ to Alice Alice: Check what puzzle was chosen, then $k_{j}$ is the shared key. Quadratic Gap Alice and Bob to $O(n)$ work to create and solve a single puzzle. An attacker would need to break all the $2^{32}$ keys, so it is $O(n^{2})$ cost, which is $2^{64}$.\nTo increase the security, they should make $n$ bigger, but it would be very very slower. The nice idea is that participant has linear time, while the attacker needs squared time. It is called quadratic gap. We don´t know if quadratic gap is the best gap we can do, but intuition says so.\nDiffie-Hellman Protocol In this case we have a exponential gap between participant and attacker.\nIntroduzione DH Questo è quello che abbiamo studiato anche a Olycyber quindi è più facile. È basato su una costruzione matematica molto simile a RSA.\nIn pratica così\nScelgo $p$ primo largo Scelgo $g$ Alice sceglie $a$, e manda $g^{a}$ a Bob Bob fa lo stesso con $b$ Il segreto è $g^{ab}$ , che è difficile da capire con i moduli, faremo una analisi di sicurezza in seguito. Best algorithm for attacking this is $\\exp (O(\\sqrt[3]{ n})$, it is the Generalize Field Sieve (with a very high constant, like 80), not explained here here.\nDifficulty comparison Simmetric cipher DH Elliptic Curve 80 bits 1024 bits 160 bits 128 bits 3072 bits (in reality about 2048) 256 bits 256 bits 15360 bits 512 bits Attacco a DH DH è insicuro dal punto di vista del Man in the middle. Perché se uno in mezzo intercetta, può usare la sua chiave privata al posto di quella dell’altro interlocutore. Tanto conosce il valore di $g$ e gli basta questo. ",
-  "wordCount" : "635",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-06-02T00:00:00Z",
   "dateModified": "2024-06-02T00:00:00Z",
@@ -261,148 +233,12 @@ TTP = Trusted Third party (simile a quanto poi si avrà in Asymmetric Cryptograp
     <h1 class="post-title entry-hint-parent">
       Key Exchange protocols
     </h1>
-    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-06-02 00:00:00 +0000 UTC'>June 2, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#trusted-third-parties" aria-label="Trusted Third parties">Trusted Third parties</a><ul>
-                        
-                <li>
-                    <a href="#squared-key-problem" aria-label="Squared Key problem">Squared Key problem</a></li>
-                <li>
-                    <a href="#protocols" aria-label="Protocols">Protocols</a><ul>
-                        
-                <li>
-                    <a href="#toy-exchange-protocol" aria-label="Toy Exchange protocol">Toy Exchange protocol</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#merkle-puzzles" aria-label="Merkle Puzzles">Merkle Puzzles</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#the-puzzle-protocol" aria-label="The puzzle protocol">The puzzle protocol</a></li></ul>
-                    
-                <li>
-                    <a href="#quadratic-gap" aria-label="Quadratic Gap">Quadratic Gap</a></li></ul>
-                </li>
-                <li>
-                    <a href="#diffie-hellman-protocol" aria-label="Diffie-Hellman Protocol">Diffie-Hellman Protocol</a><ul>
-                        
-                <li>
-                    <a href="#introduzione-dh" aria-label="Introduzione DH">Introduzione DH</a></li>
-                <li>
-                    <a href="#difficulty-comparison" aria-label="Difficulty comparison">Difficulty comparison</a></li>
-                <li>
-                    <a href="#attacco-a-dh" aria-label="Attacco a DH">Attacco a DH</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>Metodi di key exchange</p>
-<ul>
-<li>Trusted Key parties (sono come Certificate authorities studiati in <a href="/notes/sicurezza-delle-reti">Sicurezza delle reti</a>)</li>
-<li>Merkle Puzzles</li>
-<li>DH protocol</li>
-</ul>
-<h2 id="trusted-third-parties">Trusted Third parties<a hidden class="anchor" aria-hidden="true" href="#trusted-third-parties">#</a></h2>
-<h3 id="squared-key-problem">Squared Key problem<a hidden class="anchor" aria-hidden="true" href="#squared-key-problem">#</a></h3>
-<p>Un problema abbastanza ovvio è che per storare le chiavi di tutti c&rsquo;è una necessità $O(n^{2})$ on $O(n)$ users
-Se c&rsquo;è un trusted key parties il numero delle chiavi si riduce di molto, ritorna ad essere lineare!</p>
-<h3 id="protocols">Protocols<a hidden class="anchor" aria-hidden="true" href="#protocols">#</a></h3>
-<h4 id="toy-exchange-protocol">Toy Exchange protocol<a hidden class="anchor" aria-hidden="true" href="#toy-exchange-protocol">#</a></h4>
-<p>TTP = Trusted Third party (simile a quanto poi si avrà in <a href="/notes/asymmetric-cryptography">Asymmetric Cryptography</a>)
-<img src="/images/notes/Key Exchange protocols-20240312110014411.webp" style="width: 100%" class="center" alt="Key Exchange protocols-20240312110014411"></p>
-<p>Questa è la base del servizio di Kerberos!
-Il servizio di sopra è sicuro su Choosen plaintext, dato che Eve non capisce niente senza le chiavi!</p>
-<p>Quindi in pratica vengono scambiate due cose, un ticket e la chiave segreta, creati da TTP che sa creare segreti e conosce singole chiavi di tutte.</p>
-<p>Assumendo CPA security l&rsquo;attaccante non può sapere niente su $k_{AB}$, che sembra roba random.
-<strong>Problema</strong>:</p>
-<ul>
-<li>TTP è il <em>single node of failure</em> se viene compromesso tutto viene compromesso, è un obiettivo troppo Juicy.</li>
-<li>Può essere soggetto a replay attacks senza problemi (ad esempio rimandando quanto mandato da Alice (es. se è stato comprato qualcosa, se si ripete tutto si compra di nuovo, questo è un danno)).
-La cosa carina è che usa solo chiavi simmetriche, niente di nuovo rispetto <a href="/notes/classical-cyphers">Classical Cyphers</a>, <a href="/notes/otp-and-stream-ciphers">OTP and Stream Ciphers</a>, <a href="/notes/block-ciphers">Block Ciphers</a>.</li>
-</ul>
-<h2 id="merkle-puzzles">Merkle Puzzles<a hidden class="anchor" aria-hidden="true" href="#merkle-puzzles">#</a></h2>
-<p>vogliamo cercare di risolvere problemi di origliamento (eavesdrop, senza modifiche varie sul messaggio. <strong>Avversario passivo</strong>.
-Vogliamo farlo senza avere un <a href="/notes#trusted-third-parties">#Trusted Third parties</a>, ma vogliamo usare solamente <strong>symmetric crypto</strong>.
-La cosa è che questo è possibile, ma <em>molto inefficiente</em> per cui inutili nella pratica.</p>
-<h4 id="the-puzzle-protocol">The puzzle protocol<a hidden class="anchor" aria-hidden="true" href="#the-puzzle-protocol">#</a></h4>
-<p>Suppose we have $E(k, m)$ with $k \in \left\{ 0, 1 \right\}^{128}$.
-Define $E(P, message)$ and $P = 0^{96} \mid b_{1}\dots b_{32}$, and a $x_{i} \in \left\{ 0, 1 \right\}^{128}$and we want to find $P$ back by some sort of brute-force.</p>
-<p>Alice:</p>
-<ul>
-<li>Creates $2^{32}$ puzzles by creating $E(0^{96} \mid P_{i}, \text{ "Puzzle \#}x_{i} \text{"} \mid k_{i})$</li>
-<li>Sends every puzzle to Bob
-Bob:</li>
-<li>Chooses a puzzle randomly and tries to solve it (try all possible $P_{i}$), when the first part matches, the puzzle is solved</li>
-<li>Send $x_{j}$ to Alice
-Alice:</li>
-<li>Check what puzzle was chosen, then $k_{j}$ is the shared key.</li>
-</ul>
-<h3 id="quadratic-gap">Quadratic Gap<a hidden class="anchor" aria-hidden="true" href="#quadratic-gap">#</a></h3>
-<p>Alice and Bob to $O(n)$ work to create and solve a single puzzle.
-An attacker would need to break all the $2^{32}$ keys, so it is $O(n^{2})$ cost, which is $2^{64}$.</p>
-<p>To increase the security, they should make $n$ bigger, but it would be very very slower.
-The nice idea is that participant has linear time, while the attacker needs squared time. It is called <strong>quadratic gap</strong>. We don´t know if quadratic gap is the best gap we can do, but intuition says so.</p>
-<h2 id="diffie-hellman-protocol">Diffie-Hellman Protocol<a hidden class="anchor" aria-hidden="true" href="#diffie-hellman-protocol">#</a></h2>
-<p>In this case we have a <strong>exponential gap</strong> between participant and attacker.</p>
-<h3 id="introduzione-dh">Introduzione DH<a hidden class="anchor" aria-hidden="true" href="#introduzione-dh">#</a></h3>
-<p>Questo è quello che abbiamo studiato anche a Olycyber quindi è più facile. È basato su una costruzione matematica molto simile a RSA.</p>
-<p>In pratica così</p>
-<ol>
-<li>Scelgo $p$ primo largo</li>
-<li>Scelgo $g$</li>
-<li>Alice sceglie $a$, e manda $g^{a}$ a Bob</li>
-<li>Bob fa lo stesso con $b$</li>
-<li>Il segreto è $g^{ab}$ , che è difficile da capire con i moduli, faremo una analisi di sicurezza in seguito.</li>
-</ol>
-<p>Best algorithm for attacking this is $\exp (O(\sqrt[3]{ n})$, it is the Generalize Field Sieve (with a very high constant, like 80), not explained here here.</p>
-<h3 id="difficulty-comparison">Difficulty comparison<a hidden class="anchor" aria-hidden="true" href="#difficulty-comparison">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>Simmetric cipher</th>
-          <th>DH</th>
-          <th>Elliptic Curve</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>80 bits</td>
-          <td>1024 bits</td>
-          <td>160 bits</td>
-      </tr>
-      <tr>
-          <td>128 bits</td>
-          <td>3072 bits (in reality about 2048)</td>
-          <td>256 bits</td>
-      </tr>
-      <tr>
-          <td>256 bits</td>
-          <td>15360 bits</td>
-          <td>512 bits</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="attacco-a-dh">Attacco a DH<a hidden class="anchor" aria-hidden="true" href="#attacco-a-dh">#</a></h3>
-<p>DH è insicuro dal punto di vista del <strong>Man in the middle</strong>. Perché se uno in mezzo intercetta, può usare la sua chiave privata al posto di quella dell&rsquo;altro interlocutore. Tanto conosce il valore di $g$ e gli basta questo.
-<img src="/images/notes/Key Exchange protocols-20240314093203133.webp" style="width: 100%" class="center" alt="Key Exchange protocols-20240314093203133"></p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

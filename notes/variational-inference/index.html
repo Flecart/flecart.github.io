@@ -7,15 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Variational Inference | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence, machinelearning">
-<meta name="description" content="$$
-p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda)
-$$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
-Laplace approximation
-Introduction to the Idea
-$$
-\psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) 
-$$
-We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.">
+<meta name="description" content="Variational Inference - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/variational-inference/">
@@ -101,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/variational-inference/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Variational Inference">
-  <meta property="og:description" content="$$ p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
-Laplace approximation Introduction to the Idea $$ \psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -114,15 +105,7 @@ Laplace approximation Introduction to the Idea $$ \psi(\theta) \approx \hat{\psi
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Variational Inference">
-<meta name="twitter:description" content="$$
-p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda)
-$$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.
-Laplace approximation
-Introduction to the Idea
-$$
-\psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) &#43; (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) &#43; \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) 
-$$
-We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -151,12 +134,12 @@ We simplified the term on the first order because we are considering the mode, s
   "@type": "BlogPosting",
   "headline": "Variational Inference",
   "name": "Variational Inference",
-  "description": "$$ p(\\theta \\mid x_{1:n}, y_{1:n}) = \\frac{1}{z} p(y_{1:n} \\mid \\theta, x_{1:n}) p(\\theta \\mid x_{1:n}) \\approx q(\\theta \\mid \\lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.\nLaplace approximation Introduction to the Idea $$ \\psi(\\theta) \\approx \\hat{\\psi}(\\theta) = \\psi(\\hat{\\theta}) + (\\theta-\\hat{\\theta} ) ^{T} \\nabla \\psi(\\hat{\\theta}) + \\frac{1}{2} (\\theta-\\hat{\\theta} ) ^{T} H_{\\psi}(\\hat{\\theta})(\\theta-\\hat{\\theta} ) = \\psi(\\hat{\\theta}) + \\frac{1}{2} (\\theta-\\hat{\\theta} ) ^{T} H_{\\psi}(\\hat{\\theta})(\\theta-\\hat{\\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.\n",
+  "description": "",
   "keywords": [
     "➕probabilistic-artificial-intelligence", "machinelearning"
   ],
-  "articleBody": "$$ p(\\theta \\mid x_{1:n}, y_{1:n}) = \\frac{1}{z} p(y_{1:n} \\mid \\theta, x_{1:n}) p(\\theta \\mid x_{1:n}) \\approx q(\\theta \\mid \\lambda) $$For Bayesian Linear Regression we had high dimensional Gaussians which made the inference closed form, in general this is not true, so we need some kinds of approximation.\nLaplace approximation Introduction to the Idea $$ \\psi(\\theta) \\approx \\hat{\\psi}(\\theta) = \\psi(\\hat{\\theta}) + (\\theta-\\hat{\\theta} ) ^{T} \\nabla \\psi(\\hat{\\theta}) + \\frac{1}{2} (\\theta-\\hat{\\theta} ) ^{T} H_{\\psi}(\\hat{\\theta})(\\theta-\\hat{\\theta} ) = \\psi(\\hat{\\theta}) + \\frac{1}{2} (\\theta-\\hat{\\theta} ) ^{T} H_{\\psi}(\\hat{\\theta})(\\theta-\\hat{\\theta} ) $$ We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.\n$$ \\hat{\\psi}(\\theta) =\\log \\mathcal{N}(\\theta; \\hat{\\theta}, -H_{\\psi}^{-1}) + const $$ Then we choose $q(\\theta)= \\mathcal{N}(\\theta; \\hat{\\theta}, -H_{\\psi}^{-1}) \\propto \\exp(\\hat{\\psi}(\\theta))$ One can verify that the hessian in the covariance matrix is indeed symmetric semidefinite positive. (the positive definiteveness comes from the minus of a negative semidefinite matrix of the maximum point). Normally, the covariance matrix of the Laplace approximation is indicated as $\\Lambda = - H^{-1}_{\\psi}$.\nLaplace approximation for a Gaussian We can easily see that the Laplace approximation for a Gaussian is the same as the Gaussian itself, because the Hessian is the inverse of the covariance matrix.\n$$ D_{\\theta}D_{\\theta}\\log p(\\theta) = (D_{\\theta}(\\Sigma^{-1}\\mu - \\Sigma^{-1} \\theta))^{T} = -\\Sigma^{-1} $$An analysis of Bayesian Logistic regression Setting $$ p(y_{1:n} \\mid w, x_{1:n}) = \\prod_{i = 1}^{N} \\sigma(y_{i}w^{T}x_{i}) $$ And that $p(w) = \\mathcal{N}(w; 0, \\sigma^{2}_{p}I)$, where $\\sigma$ is the Sigmoid function $\\sigma(x) = \\frac{1}{1 + \\exp(-x)}$.\n$$ p(y_{i} \\mid w, x_{1:n}) = \\begin{cases} \\sigma(w^{T}x) \u0026 \\text{ if } y = 1 \\\\ 1 - \\sigma(w^{T}x) \u0026 \\text{ if } y = 0 \\end{cases} \\implies \\sigma(y_{i}w^{T}x) $$ Thanks to the properties of the Sigmoid function $1 - \\sigma(x) = \\sigma(-x)$\nMAP Weight update We then see that in order to have the proxy distribution for $w$ we need to find the Hessian of that We have that (we omit $x$ for brevity). $$ \\hat{w} = \\arg \\max_{w} p(w \\mid y_{1:n}) = \\arg \\max_{w} \\log p(w) + \\log p(y_{1:n} \\mid w) = \\arg \\max_{w} \\frac{1}{2\\sigma^{2}{p}} w^{T}w + \\sum{i = 1}^{N} \\log \\sigma(y_{i}w^{T}x_{i})\n$$ Continuing:\n$$ = \\arg \\min_{w} - \\frac{1}{2\\sigma^{2}_{p}}w^{T}w + \\sum_{i = 1}^{N} \\underbrace{ \\log(1 + \\exp(- y_{i}w^{T}x_{i})) }_{\\log p(y_{i} \\mid w)} \\implies \\frac{ \\partial \\log p(y_{1:n} \\mid w) }{ \\partial w } = -\\sum_{i = 1}^{N}y_{i}x_{i} \\sigma( - y_{i}w^{T}x_{i}) $$$$ w \\leftarrow w(1 - 2c\\eta) + \\eta yx\\sigma(-y_{i}w^{T}x_{i}) $$Laplace approximation for Bayesian logistic regression $$ \\Lambda = -\\nabla_{w} \\nabla_{w} \\log p(w \\mid y_{1:n} x_{1:n}) = X^{T}\\text{diag}_{i \\in [n]} \\left\\{ \\pi_{i} (1 - \\pi_{i}) \\right\\} X + \\sigma^{-2}_{p} I $$ With $\\pi_{i} = \\sigma(w^{T}x_{i})$. There is a nice interpretation of this covariance matrix, because if the data point is certain then the diagonal value is small, else it is a little bit larger.\nDownsides of Laplace approximation Laplace could be overconfident, in the same way linear regression is for some samples. This is because it greedily approximates basing on the mean of it. So perhaps one direction is ok, other directions can be quite bad.\nFigure from Krause Book\nPrediction with Variational Posterior $$ p(y^{*} \\mid x^{*}, x_{1:n}, y_{1:n}) = \\int p(y^{*} \\mid x^{*}, \\theta) p(\\theta \\mid x_{1:n} y_{1:n}) \\, d\\theta \\approx \\int p(y^{*} \\mid x^{*}, \\theta) q_{\\lambda}(\\theta) \\, d\\theta = \\mathbb{E}_{\\theta \\sim q_{\\lambda}} [p(y^{*} \\mid x^{*}, \\theta)] $$$$ \\mathbb{E}_{\\theta \\sim q} [p(y^{*} \\mid x^{*}, \\theta)] \\approx \\frac{1}{m} \\sum_{j = 1}^{m} p(y^{*} \\mid x^{*}, \\theta) $$$$ \\int p(y^{*} \\mid x^{*}, \\theta) q(\\theta) \\, d\\theta= \\int \\sigma (y^{*} \\cdot \\theta^{T}x)q(\\theta) \\, d\\theta = \\int \\sigma (y^{*} \\cdot f)(x^{*}q(\\theta)) \\, df = \\int \\sigma(y^{*} f) \\mathcal{N}(f; x^{*T}\\mu, x^{*T}\\Sigma x^{*}) \\, df $$ As this is just a single dimensional integral, it could be well approximated with numerical methods like Gauss-Legendre quadrature.\nThe variational approach With this approach we define a family of distributions $Q$ called variational family and the try to find the best member within this family to approximate our $P$.\nFor example we can define the variational family of Gaussians as\n$$ \\mathcal{Q} = \\left\\{ q(\\theta \\mid \\lambda) = \\mathcal{N}(\\theta; \\mu, \\Sigma \\right\\} $$ Where the parameters $\\lambda$ are the mean and the covariance matrix of the Gaussian.\nReverse and Forward KL So we optimize for this: Reverse KL:\n$$ q^{*} \\in \\arg \\min_{q \\in Q} KL(q \\mid \\mid p) $$ $$ q^{*} \\in \\arg \\min_{q \\in Q} KL(p \\mid \\mid q) $$See Kullback-Leibler divergence in Entropy.\nKL of Gaussians Understanding the properties of the KL divergence between Gaussian distributions is crucial for grasping variational inference. I strongly encourage you to review Gaussians#Information Theoretic Properties closely, probably we will use that result in the next observations\nMinimizing Forward KL Divergence We can provide two interpretations of the forward KL divergence. One is a MLE estimation of the dataset in the variational family, the other is a moment matching.\nMLE Estimation We can prove the following: $$ \\begin{align} \\arg\\min_{\\lambda} KL(p \\mid \\mid q) \u0026 = \\arg\\min_{\\lambda} H[p \\mid \\mid q_{\\lambda}] - H[p]\\ \u0026 = \\arg\\min_{\\lambda} \\mathbb{E}{\\theta \\sim p} [-\\log q{\\lambda}(y)] -\\text{ const} \\ \u0026 \\approx \\arg\\min_{\\lambda}- \\frac{1}{m} \\sum_{j = 1}^{m} \\log q_{\\lambda}(y^{(i)})\\ \\end{align}\n$$\nThe problem is that it is often unfeasible.\nThis tells us that any maximum likelihood estimate $q_{\\lambda}$ minimizes the forward KL-divergence to the empirical data distribution.\nThe first interpretation is usually not used as we cannot draw samples using the true distribution.\nMoment Matching We can prove that if we find such $q$ that minimizes the forward KL divergence, then the first two moments of the distribution are the same.\n$$ q(\\theta) = \\exp(\\lambda^{T}T(\\theta) - A(\\lambda)) $$ Where $T(\\theta)$ are the sufficient statistics of the distribution and $A(\\lambda)$ is the log partition function.\n$$ \\begin{align} q^{*} = \\arg\\max_{\\lambda}KL(p \\mid \\mid q) \u0026= \\arg\\max_{\\lambda}\\mathbb{E}_{\\theta \\sim p} \\left[ \\log \\frac{p(\\theta)}{q(\\theta)} \\right] \\\\ \u0026= \\arg\\min_{\\lambda}\\mathbb{E}_{\\theta \\sim p} \\left[\\lambda^{T}T(\\theta) - A(\\lambda) \\right] \\\\ \\end{align} $$ Recall that $A(\\lambda) = \\log \\int \\exp(\\lambda^{T}T(\\theta)) \\, d\\theta$.\n$$ \\begin{align} 0 \u0026= \\nabla_{\\lambda} \\mathbb{E}_{\\theta \\sim p} \\left[\\lambda^{T}T(\\theta) - A(\\lambda) \\right] \\\\ \u0026= \\mathbb{E}_{\\theta \\sim p} \\left[T(\\theta) \\right] - \\nabla_{\\lambda} A(\\lambda) \\\\ \u0026= \\mathbb{E}_{\\theta \\sim p} \\left[T(\\theta) \\right] - \\nabla_{\\lambda} \\log \\int \\exp(\\lambda^{T}T(\\theta)) \\, d\\theta \\\\ \u0026= \\mathbb{E}_{\\theta \\sim p} \\left[T(\\theta) \\right] - \\mathbb{E}_{\\theta \\sim q} \\left[T(\\theta) \\right] \\\\ \u0026\\implies \\mathbb{E}_{\\theta \\sim p} \\left[T(\\theta) \\right] = \\mathbb{E}_{\\theta \\sim q} \\left[T(\\theta) \\right] \\end{align} $$ Which means the expected value of the sufficient statistics of the true distribution are the same as the variational one. For Gaussians, we have that the mean and the covariance matrix are the same as those are the sufficient statistics.\nMinimizing Reverse KL Divergence We need to compute the value\n$$ \\begin{align}\nq^{}{\\lambda} \u0026= \\arg\\min{q \\in Q} KL(q \\mid \\mid p(\\cdot \\mid y)) \\ \u0026= \\arg\\min_{q \\in Q}\\mathbb{E}{\\theta \\sim q} \\left[ \\frac{\\log q(\\theta)}{\\log p(\\theta \\mid y)} \\right] \\ \u0026= \\arg\\min{q \\in Q} - H(q) - \\mathbb{E}{\\theta \\sim q}[\\log p(\\theta \\mid y)] \\ \u0026= \\arg\\max{q \\in Q} H(q) + \\mathbb{E}{\\theta \\sim q}[\\log p(\\theta \\mid y)] \\ \u0026= \\arg\\max{q \\in Q} H(q) + \\mathbb{E}{\\theta \\sim q}[\\log p(\\theta)] + \\mathbb{E}{\\theta \\sim q} [\\log p (y \\mid \\theta)]+const \\ \u0026\\implies q^{}{\\lambda }= \\arg\\max{q \\in Q} \\mathbb{E}_{\\theta \\sim q} [\\log p(y \\mid \\theta)] - KL(q \\mid \\mid p(\\theta)) = ELBO \\end{align} $$ Where we have now the prior what we were trying to optimize. We can interpret the first part as sort of likelihood while the second part is a proximity measure that acts as a regularizer. This cost function is known as the variational free energy principle (highly put forward by Hinton). This optimizer has also some links with the minimum description length principle, cited in Randomness, Model of Analogies, Clustering.\nEvidence Lower Bound $$ L(q, p; D_{n}) = \\log p(y_{1:n} \\mid x_{1:n}) - KL(q \\mid \\mid p(\\cdot \\mid x_{1:n}, y_{1:n})) \\implies \\log p(y_{1:n}) \\geq L(q, p; D_{n}) $$The evidence is defines a $\\log p(y_{1:n})$. This can be played with to have a lower bound on this value with the above knowledge. We can prove the lower bound in another way, noticing that: $$ \\begin{align} \\log p(y_{1:n}) \u0026= \\log \\int p(y_{1:n} \\mid \\theta) p(\\theta) , d\\theta \\ \u0026= \\log \\int p(y_{1:n} \\mid \\theta) p(\\theta) \\frac{q(\\theta)}{q(\\theta)} , d\\theta \\ \\text{using Jensen}\u0026\\geq{E}{\\theta \\sim q} \\left[ \\log p(y{1:n} \\mid \\theta) \\frac{p(\\theta)}{q(\\theta)} \\right] \\ \u0026 ={E}{\\theta \\sim q} \\left[ \\log p(y{1:n} \\mid \\theta) \\right] - KL(q \\mid \\mid p) = ELBO \\\n\\end{align} $$ We observe that this is the same thing that we have seen before while trying to minimize the reverse KL divergence. Thus, finding the best approximation is equivalent to identifying the maximum lower bound on the evidence. Essentially, it involves determining the posterior that is most likely to explain the evidence.\nThis indicates that maximizing the evidence lower bound is an adequate method of model selection which can be used instead of maximizing the evidence (marginal likelihood) directly.\nELBO of logistic regression Suppose we have a classic logistic regression with prior on the weights to be $p(w) = \\mathcal{N}(w; 0, I)$ and the likelihood to be $p(y \\mid w, x) = \\prod_{i = 1}^{N} \\sigma(y_{i}w^{T}x_{i})$. Let’s take the parameters from a Gaussian distribution $\\mathcal{N}(\\mu, \\text{diag}_{i \\in [d]}\\left\\{ \\sigma_{i}^{2} \\right\\})$, our variational family. We want now to find the ELBO for this model.\n$$ KL(q \\mid \\mid p) = \\frac{1}{2} \\sum_{i = 1}^{d} \\left( \\sigma_{i}^{2} + \\mu_{i}^{2} - \\log \\sigma_{i}^{2} - 1 \\right) $$$$ \\mathbb{E}_{w \\sim q} \\left[ \\log p(y \\mid w, x) \\right] = \\sum_{i = 1}^{N} \\mathbb{E}_{w \\sim q} \\left[ \\log \\sigma(y_{i}w^{T}x_{i}) \\right] $$ And we can use everything now.\nGradient of ELBO One possible approach is using the score function trick, explored in RL Function Approximation. Also called score gradients or monte-carlo gradients. Another is using the so called reparametrization trick (also used for VAE in Autoencoders). We can compute the gradient of the ELBO with respect to the variational parameters $\\lambda$. But the first parameter is difficult to compute.\n$$ \\mathbb{E}_{\\theta \\sim q} [f(\\theta)] = \\mathbb{E}_{\\varepsilon \\sim \\phi} [f(g(\\varepsilon, \\lambda))] $$ So now we can use a known distribution to sample from and then compute the gradient of the expectation, this allows to compute stochastic gradients. If you know the ideas of Volume, then the formula of change of variables becomes very clean.\nLet’s work out an example: Let’s suppose $q$ follows a Gaussian distribution $\\mathcal{N}(\\mu, \\Sigma)$ then we can reparametrize it with $\\theta = \\mu + \\Sigma^{1/2} \\varepsilon$ with $\\varepsilon \\sim \\mathcal{N}(0, I)$ that we can sample from.\n$$ \\begin{align} \\\\ \\nabla_{\\lambda} L(\\lambda) = \\nabla_{\\lambda} \\mathbb{E}_{\\theta \\sim q} [ \\log p(y \\mid x, \\theta) ] - KL(q \\mid \\mid p) = \\\\ \\nabla_{\\lambda} \\mathbb{E}_{\\varepsilon \\sim \\phi} [ \\log p(y \\mid x, \\Sigma^{1/2}\\varepsilon + \\mu ) ] - KL(q \\mid \\mid p) = \\\\ \\end{align} $$$$ \\begin{align} \\nabla_{\\lambda} \\mathbb{E}_{\\theta \\sim q} [ \\log p(y_{1:n} \\mid x_{1:n}, \\theta) ] \u0026= \\nabla_{\\lambda} \\mathbb{E}_{\\varepsilon \\sim \\mathcal{N}(0, 1)} [ \\log p(y_{1:n} \\mid x_{1:n}, \\Sigma^{1/2}\\varepsilon + \\mu ) ] \\\\ \u0026 = n \\mathbb{E}_{\\varepsilon \\sim \\mathcal{N}(0, 1)} \\mathbb{E}_{i \\sim \\text{unif}[0, n]}[\\nabla_{\\lambda} \\log p(y_{i} \\mid x_{i}, \\Sigma^{1/2}\\varepsilon + \\mu ) ]\\\\ \u0026 \\approx \\frac{n}{m} \\sum_{j = 1}^{m} \\nabla_{C, \\mu} \\log p(y_{i_{j}} \\mid x_{i_{j}}, C\\varepsilon_{j} + \\mu) \\\\ \\end{align} $$ Which means: We can approximate the derivate of the likelihood with respect of the variational parameters by sampling from a normal and uniformly from the dataset and only then computing an average gradient of the likelihood with respect to the parameters.\nVariational inference enables us to find approximations of distributions using highly optimized stochastic optimization techniques. However, a significant drawback is the difficulty in assessing the quality of these approximations.\n",
-  "wordCount" : "1900",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-15T00:00:00Z",
   "dateModified": "2025-01-15T00:00:00Z",
@@ -251,276 +234,12 @@ We simplified the term on the first order because we are considering the mode, s
     <h1 class="post-title entry-hint-parent">
       Variational Inference
     </h1>
-    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 9 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#laplace-approximation" aria-label="Laplace approximation">Laplace approximation</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#introduction-to-the-idea" aria-label="Introduction to the Idea">Introduction to the Idea</a></li>
-                <li>
-                    <a href="#laplace-approximation-for-a-gaussian" aria-label="Laplace approximation for a Gaussian">Laplace approximation for a Gaussian</a></li></ul>
-                    
-                <li>
-                    <a href="#an-analysis-of-bayesian-logistic-regression" aria-label="An analysis of Bayesian Logistic regression">An analysis of Bayesian Logistic regression</a><ul>
-                        
-                <li>
-                    <a href="#setting" aria-label="Setting">Setting</a></li>
-                <li>
-                    <a href="#map-weight-update" aria-label="MAP Weight update">MAP Weight update</a></li>
-                <li>
-                    <a href="#laplace-approximation-for-bayesian-logistic-regression" aria-label="Laplace approximation for Bayesian logistic regression">Laplace approximation for Bayesian logistic regression</a></li></ul>
-                </li>
-                <li>
-                    <a href="#downsides-of-laplace-approximation" aria-label="Downsides of Laplace approximation">Downsides of Laplace approximation</a></li>
-                <li>
-                    <a href="#prediction-with-variational-posterior" aria-label="Prediction with Variational Posterior">Prediction with Variational Posterior</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-variational-approach" aria-label="The variational approach">The variational approach</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#reverse-and-forward-kl" aria-label="Reverse and Forward KL">Reverse and Forward KL</a></li>
-                <li>
-                    <a href="#kl-of-gaussians" aria-label="KL of Gaussians">KL of Gaussians</a></li>
-                <li>
-                    <a href="#minimizing-forward-kl-divergence" aria-label="Minimizing Forward KL Divergence">Minimizing Forward KL Divergence</a><ul>
-                        
-                <li>
-                    <a href="#mle-estimation" aria-label="MLE Estimation">MLE Estimation</a></li>
-                <li>
-                    <a href="#moment-matching" aria-label="Moment Matching">Moment Matching</a></li></ul>
-                </li>
-                <li>
-                    <a href="#minimizing-reverse-kl-divergence" aria-label="Minimizing Reverse KL Divergence">Minimizing Reverse KL Divergence</a></li>
-                <li>
-                    <a href="#evidence-lower-bound" aria-label="Evidence Lower Bound">Evidence Lower Bound</a></li>
-                <li>
-                    <a href="#elbo-of-logistic-regression" aria-label="ELBO of logistic regression">ELBO of logistic regression</a></li>
-                <li>
-                    <a href="#gradient-of-elbo" aria-label="Gradient of ELBO">Gradient of ELBO</a>
-                </li>
-            </ul>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content">$$
-p(\theta \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(y_{1:n} \mid \theta, x_{1:n}) p(\theta \mid x_{1:n}) \approx q(\theta \mid \lambda)
-$$<p>For <a href="/notes/bayesian-linear-regression">Bayesian Linear Regression</a> we had high dimensional <a href="/notes/gaussians">Gaussians</a> which made the inference <em>closed form</em>, in general this is not true, so we need some kinds of approximation.</p>
-<h2 id="laplace-approximation">Laplace approximation<a hidden class="anchor" aria-hidden="true" href="#laplace-approximation">#</a></h2>
-<h4 id="introduction-to-the-idea">Introduction to the Idea<a hidden class="anchor" aria-hidden="true" href="#introduction-to-the-idea">#</a></h4>
-$$
-\psi(\theta) \approx \hat{\psi}(\theta) = \psi(\hat{\theta}) + (\theta-\hat{\theta} ) ^{T} \nabla \psi(\hat{\theta}) + \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) = \psi(\hat{\theta}) + \frac{1}{2} (\theta-\hat{\theta} ) ^{T} H_{\psi}(\hat{\theta})(\theta-\hat{\theta} ) 
-$$<p>
-We simplified the term on the first order because we are considering the mode, so the gradient should be zero for the stationary point.</p>
-$$
-\hat{\psi}(\theta) =\log \mathcal{N}(\theta; \hat{\theta}, -H_{\psi}^{-1}) + const
-$$<p>
-Then we choose $q(\theta)= \mathcal{N}(\theta; \hat{\theta}, -H_{\psi}^{-1}) \propto \exp(\hat{\psi}(\theta))$
-One can verify that the hessian in the covariance matrix is indeed symmetric semidefinite positive. (the positive definiteveness comes from the minus of a negative semidefinite matrix of the maximum point).
-Normally, the covariance matrix of the Laplace approximation is indicated as $\Lambda = - H^{-1}_{\psi}$.</p>
-<h4 id="laplace-approximation-for-a-gaussian">Laplace approximation for a Gaussian<a hidden class="anchor" aria-hidden="true" href="#laplace-approximation-for-a-gaussian">#</a></h4>
-<p>We can easily see that the Laplace approximation for a Gaussian is the same as the Gaussian itself, because the Hessian is the inverse of the covariance matrix.</p>
-$$
-D_{\theta}D_{\theta}\log p(\theta) = (D_{\theta}(\Sigma^{-1}\mu - \Sigma^{-1} \theta))^{T} = -\Sigma^{-1}
-$$<h3 id="an-analysis-of-bayesian-logistic-regression">An analysis of Bayesian Logistic regression<a hidden class="anchor" aria-hidden="true" href="#an-analysis-of-bayesian-logistic-regression">#</a></h3>
-<h4 id="setting">Setting<a hidden class="anchor" aria-hidden="true" href="#setting">#</a></h4>
-$$
-p(y_{1:n} \mid w, x_{1:n}) = \prod_{i = 1}^{N} \sigma(y_{i}w^{T}x_{i})
-$$<p>
-And that $p(w) = \mathcal{N}(w; 0, \sigma^{2}_{p}I)$, where $\sigma$ is the Sigmoid function $\sigma(x) = \frac{1}{1 + \exp(-x)}$.</p>
-$$
-p(y_{i} \mid w, x_{1:n}) = \begin{cases}
-\sigma(w^{T}x)   & \text{ if } y = 1 \\
-1 - \sigma(w^{T}x) & \text{ if } y = 0
-\end{cases} 
-\implies \sigma(y_{i}w^{T}x)
-$$<p>
-Thanks to the properties of the Sigmoid function $1 - \sigma(x) = \sigma(-x)$</p>
-<h4 id="map-weight-update">MAP Weight update<a hidden class="anchor" aria-hidden="true" href="#map-weight-update">#</a></h4>
-<p>We then see that in order to have the proxy distribution for $w$  we need to find the Hessian of that
-We have that (we omit $x$ for brevity).
-$$
-\hat{w} = \arg \max_{w} p(w \mid y_{1:n}) = \arg \max_{w} \log p(w) + \log p(y_{1:n} \mid w)
-= \arg \max_{w} \frac{1}{2\sigma^{2}<em>{p}} w^{T}w + \sum</em>{i = 1}^{N} \log \sigma(y_{i}w^{T}x_{i})</p>
-<p>$$
-Continuing:</p>
-$$
-= \arg \min_{w} - \frac{1}{2\sigma^{2}_{p}}w^{T}w  + \sum_{i = 1}^{N} \underbrace{ \log(1 + \exp(- y_{i}w^{T}x_{i})) }_{\log p(y_{i} \mid w)} \implies
-\frac{ \partial \log p(y_{1:n} \mid w) }{ \partial w }  = -\sum_{i = 1}^{N}y_{i}x_{i} \sigma( -  y_{i}w^{T}x_{i})
-$$$$
-w \leftarrow w(1 - 2c\eta) + \eta yx\sigma(-y_{i}w^{T}x_{i})
-$$<h4 id="laplace-approximation-for-bayesian-logistic-regression">Laplace approximation for Bayesian logistic regression<a hidden class="anchor" aria-hidden="true" href="#laplace-approximation-for-bayesian-logistic-regression">#</a></h4>
-$$
-\Lambda = -\nabla_{w} \nabla_{w} \log p(w \mid y_{1:n} x_{1:n}) = X^{T}\text{diag}_{i \in [n]} \left\{ \pi_{i} (1 - \pi_{i}) \right\} X + \sigma^{-2}_{p} I
-$$<p>
-With $\pi_{i} = \sigma(w^{T}x_{i})$. There is a nice interpretation of this covariance matrix, because if the data point is certain then the diagonal value is small, else it is a little bit larger.</p>
-<h3 id="downsides-of-laplace-approximation">Downsides of Laplace approximation<a hidden class="anchor" aria-hidden="true" href="#downsides-of-laplace-approximation">#</a></h3>
-<p>Laplace could be <strong>overconfident</strong>, in the same way <a href="/notes/linear-regression-methods">linear regression</a> is for some samples.
-This is because it <em>greedily</em> approximates basing on the mean of it.
-So perhaps one direction is ok, other directions can be quite bad.</p>
-<figure class="center">
-<img src="/images/notes/Variational Inference-20241220105902872.webp" style="width: 100%"   alt="Variational Inference-20241220105902872" title="Variational Inference-20241220105902872"/>
-<figcaption><p style="text-align:center;">Figure from Krause Book</p></figcaption>
-</figure>
-<h3 id="prediction-with-variational-posterior">Prediction with Variational Posterior<a hidden class="anchor" aria-hidden="true" href="#prediction-with-variational-posterior">#</a></h3>
-$$
-p(y^{*} \mid x^{*}, x_{1:n}, y_{1:n})
-= \int p(y^{*} \mid x^{*}, \theta) p(\theta \mid x_{1:n} y_{1:n}) \, d\theta \approx
-\int p(y^{*} \mid x^{*}, \theta) q_{\lambda}(\theta) \, d\theta
-= \mathbb{E}_{\theta \sim q_{\lambda}} [p(y^{*} \mid x^{*}, \theta)]
-$$$$
-\mathbb{E}_{\theta \sim q} [p(y^{*} \mid x^{*}, \theta)]
-\approx \frac{1}{m} \sum_{j = 1}^{m} p(y^{*} \mid x^{*}, \theta)
-$$$$
-\int p(y^{*} \mid x^{*}, \theta) q(\theta) \, d\theta=
-\int \sigma (y^{*} \cdot \theta^{T}x)q(\theta) \, d\theta
-= \int \sigma (y^{*} \cdot f)(x^{*}q(\theta)) \, df
-= \int \sigma(y^{*} f) \mathcal{N}(f; x^{*T}\mu, x^{*T}\Sigma x^{*}) \, df
-$$<p>
-As this is just a single dimensional integral, it could be well approximated with numerical methods like Gauss-Legendre quadrature.</p>
-<h2 id="the-variational-approach">The variational approach<a hidden class="anchor" aria-hidden="true" href="#the-variational-approach">#</a></h2>
-<p>With this approach we define a family of distributions $Q$ called <strong>variational family</strong> and the try to find the best member within this family to approximate our $P$.</p>
-<p>For example we can define the variational family of Gaussians as</p>
-$$
-\mathcal{Q} = \left\{ q(\theta \mid \lambda) = \mathcal{N}(\theta; \mu, \Sigma
-\right\} 
-$$<p>
-Where the parameters $\lambda$ are the mean and the covariance matrix of the Gaussian.</p>
-<h4 id="reverse-and-forward-kl">Reverse and Forward KL<a hidden class="anchor" aria-hidden="true" href="#reverse-and-forward-kl">#</a></h4>
-<p>So we optimize for this:
-<strong>Reverse KL:</strong></p>
-<blockquote>
-$$
-q^{*} \in \arg \min_{q \in Q} KL(q \mid \mid p)
-$$</blockquote>
-$$
-q^{*} \in \arg \min_{q \in Q} KL(p \mid \mid q)
-$$<p>See Kullback-Leibler divergence in <a href="/notes/entropy">Entropy</a>.</p>
-<h4 id="kl-of-gaussians">KL of Gaussians<a hidden class="anchor" aria-hidden="true" href="#kl-of-gaussians">#</a></h4>
-<p>Understanding the properties of the KL divergence between Gaussian distributions is crucial for grasping variational inference. I strongly encourage you to review <a href="/notes/gaussians#information-theoretic-properties">Gaussians#Information Theoretic Properties</a> closely, probably we will use that result in the next observations</p>
-<h4 id="minimizing-forward-kl-divergence">Minimizing Forward KL Divergence<a hidden class="anchor" aria-hidden="true" href="#minimizing-forward-kl-divergence">#</a></h4>
-<p>We can provide two interpretations of the forward KL divergence. One is a MLE estimation of the dataset in the variational family, the other is a moment matching.</p>
-<h5 id="mle-estimation">MLE Estimation<a hidden class="anchor" aria-hidden="true" href="#mle-estimation">#</a></h5>
-<p>We can prove the following:
-$$
-\begin{align}
-\arg\min_{\lambda} KL(p \mid \mid q)  &amp; = \arg\min_{\lambda} H[p \mid \mid q_{\lambda}] - H[p]\
-&amp; = \arg\min_{\lambda} \mathbb{E}<em>{\theta \sim p} [-\log q</em>{\lambda}(y)] -\text{ const} \
-&amp; \approx \arg\min_{\lambda}- \frac{1}{m} \sum_{j = 1}^{m} \log q_{\lambda}(y^{(i)})\
-\end{align}</p>
-<p>$$</p>
-<p>The problem is that it is often unfeasible.</p>
-<blockquote>
-<p>This tells us that any maximum likelihood estimate $q_{\lambda}$ minimizes the
-forward KL-divergence to the empirical data distribution.</p></blockquote>
-<p>The first interpretation is usually not used as we cannot draw samples using the true distribution.</p>
-<h5 id="moment-matching">Moment Matching<a hidden class="anchor" aria-hidden="true" href="#moment-matching">#</a></h5>
-<p>We can prove that if we find such $q$ that minimizes the forward KL divergence, then the first two moments of the distribution are the same.</p>
-$$
-q(\theta) = \exp(\lambda^{T}T(\theta) - A(\lambda))
-$$<p>
-Where $T(\theta)$ are the sufficient statistics of the distribution and $A(\lambda)$ is the log partition function.</p>
-$$
-\begin{align}
-q^{*} = \arg\max_{\lambda}KL(p \mid \mid q) &=  \arg\max_{\lambda}\mathbb{E}_{\theta \sim p} \left[ \log \frac{p(\theta)}{q(\theta)} \right]  \\
-&=  \arg\min_{\lambda}\mathbb{E}_{\theta \sim p} \left[\lambda^{T}T(\theta) - A(\lambda) \right] \\
-\end{align}
-$$<p>
-Recall that $A(\lambda) = \log \int \exp(\lambda^{T}T(\theta)) \, d\theta$.</p>
-$$
-\begin{align}
-0 &= \nabla_{\lambda} \mathbb{E}_{\theta \sim p} \left[\lambda^{T}T(\theta) - A(\lambda) \right]  \\
-&= \mathbb{E}_{\theta \sim p} \left[T(\theta) \right] - \nabla_{\lambda} A(\lambda)  \\
-&= \mathbb{E}_{\theta \sim p} \left[T(\theta) \right] - \nabla_{\lambda} \log \int \exp(\lambda^{T}T(\theta)) \, d\theta  \\
-&= \mathbb{E}_{\theta \sim p} \left[T(\theta) \right] - \mathbb{E}_{\theta \sim q} \left[T(\theta) \right]  \\
-&\implies \mathbb{E}_{\theta \sim p} \left[T(\theta) \right] = \mathbb{E}_{\theta \sim q} \left[T(\theta) \right]
-\end{align}
-$$<p>
-Which means the expected value of the sufficient statistics of the true distribution are the same as the variational one.
-For Gaussians, we have that the mean and the covariance matrix are the same as those are the sufficient statistics.</p>
-<h4 id="minimizing-reverse-kl-divergence">Minimizing Reverse KL Divergence<a hidden class="anchor" aria-hidden="true" href="#minimizing-reverse-kl-divergence">#</a></h4>
-<p>We need to compute the value</p>
-<p>$$
-\begin{align}</p>
-<p>q^{<em>}<em>{\lambda} &amp;= \arg\min</em>{q \in Q} KL(q \mid \mid p(\cdot \mid y)) \
-&amp;= \arg\min_{q \in Q}\mathbb{E}<em>{\theta \sim q} \left[  \frac{\log q(\theta)}{\log p(\theta \mid y)} \right] \
-&amp;= \arg\min</em>{q \in Q} - H(q) - \mathbb{E}<em>{\theta \sim q}[\log p(\theta \mid y)] \
-&amp;= \arg\max</em>{q \in Q} H(q) +  \mathbb{E}<em>{\theta \sim q}[\log p(\theta \mid y)]  \
-&amp;= \arg\max</em>{q \in Q} H(q) +  \mathbb{E}<em>{\theta \sim q}[\log p(\theta)] + \mathbb{E}</em>{\theta \sim q} [\log p (y \mid \theta)]+const \
-&amp;\implies  q^{</em>}<em>{\lambda }= \arg\max</em>{q \in Q} \mathbb{E}_{\theta \sim q} [\log p(y \mid  \theta)] - KL(q \mid \mid p(\theta)) = ELBO
-\end{align}
-$$
-Where we have now the prior what we were trying to optimize.
-We can interpret the first part as sort of <strong>likelihood</strong> while the second part is a <strong>proximity</strong> measure that acts as a regularizer. This cost function is known as the <strong>variational free energy</strong> principle (highly put forward by Hinton).
-This optimizer has also some links with the minimum description length principle, cited in <a href="/notes/randomness">Randomness</a>, <a href="/notes/model-of-analogies">Model of Analogies</a>, <a href="/notes/clustering">Clustering</a>.</p>
-<h4 id="evidence-lower-bound">Evidence Lower Bound<a hidden class="anchor" aria-hidden="true" href="#evidence-lower-bound">#</a></h4>
-$$
-L(q, p; D_{n}) = \log p(y_{1:n} \mid x_{1:n}) - KL(q \mid \mid p(\cdot \mid x_{1:n}, y_{1:n})) \implies \log p(y_{1:n}) \geq L(q, p; D_{n})
-$$<p>The evidence is defines a $\log p(y_{1:n})$. This can be played with to have a lower bound on this value with the above knowledge. We can prove the lower bound in another way, noticing that:
-$$
-\begin{align}
-\log p(y_{1:n}) &amp;=  \log \int p(y_{1:n} \mid \theta) p(\theta) , d\theta \
-&amp;= \log \int p(y_{1:n} \mid \theta) p(\theta) \frac{q(\theta)}{q(\theta)} , d\theta  \
-\text{using Jensen}&amp;\geq{E}<em>{\theta \sim q} \left[ \log p(y</em>{1:n} \mid \theta) \frac{p(\theta)}{q(\theta)} \right] \
-&amp; ={E}<em>{\theta \sim q} \left[ \log p(y</em>{1:n} \mid \theta) \right] - KL(q \mid \mid p) = ELBO \</p>
-<p>\end{align}
-$$
-We observe that this is the same thing that we have seen before while trying to minimize the reverse KL divergence. Thus, finding the best approximation is equivalent to identifying the maximum lower bound on the evidence. Essentially, it involves determining the posterior that is most likely to explain the evidence.</p>
-<blockquote>
-<p>This indicates that maximizing the evidence lower bound is an adequate method of model selection which can be used instead of maximizing the evidence (marginal likelihood) directly.</p></blockquote>
-<h4 id="elbo-of-logistic-regression">ELBO of logistic regression<a hidden class="anchor" aria-hidden="true" href="#elbo-of-logistic-regression">#</a></h4>
-<p>Suppose we have a classic logistic regression with prior on the weights to be $p(w) = \mathcal{N}(w; 0, I)$ and the likelihood to be $p(y \mid w, x) = \prod_{i = 1}^{N} \sigma(y_{i}w^{T}x_{i})$. Let&rsquo;s take the parameters from a Gaussian distribution $\mathcal{N}(\mu, \text{diag}_{i \in [d]}\left\{ \sigma_{i}^{2} \right\})$, our variational family.
-We want now to find the ELBO for this model.</p>
-$$
-KL(q \mid \mid p) = \frac{1}{2} \sum_{i = 1}^{d} \left( \sigma_{i}^{2} + \mu_{i}^{2} - \log \sigma_{i}^{2} - 1 \right)
-$$$$
-\mathbb{E}_{w \sim q} \left[ \log p(y \mid w, x) \right] = \sum_{i = 1}^{N} \mathbb{E}_{w \sim q} \left[ \log \sigma(y_{i}w^{T}x_{i}) \right]
-$$<p>
-And we can use everything now.</p>
-<h4 id="gradient-of-elbo">Gradient of ELBO<a hidden class="anchor" aria-hidden="true" href="#gradient-of-elbo">#</a></h4>
-<p>One possible approach is using the score function trick, explored in <a href="/notes/rl-function-approximation">RL Function Approximation</a>. Also called score gradients or monte-carlo gradients.
-Another is using the so called <strong>reparametrization trick</strong> (also used for VAE in <a href="/notes/autoencoders">Autoencoders</a>).
-We can compute the gradient of the ELBO with respect to the variational parameters $\lambda$. But the first parameter is difficult to compute.</p>
-$$
-\mathbb{E}_{\theta \sim q} [f(\theta)] = \mathbb{E}_{\varepsilon \sim \phi} [f(g(\varepsilon, \lambda))]
-$$<p>
-So now we can use a known distribution to sample from and then compute the gradient of the expectation, this allows to compute <em>stochastic gradients</em>. If you know the ideas of Volume, then the formula of change of variables becomes very clean.</p>
-<p>Let&rsquo;s work out an example:
-Let&rsquo;s suppose $q$ follows a Gaussian distribution $\mathcal{N}(\mu, \Sigma)$ then we can reparametrize it with $\theta = \mu + \Sigma^{1/2} \varepsilon$ with $\varepsilon \sim \mathcal{N}(0, I)$ that we can sample from.</p>
-$$
-\begin{align} \\
-\nabla_{\lambda} L(\lambda) = \nabla_{\lambda} \mathbb{E}_{\theta \sim q} [ \log p(y \mid x, \theta) ] - KL(q \mid \mid p) = \\
-\nabla_{\lambda} \mathbb{E}_{\varepsilon \sim \phi} [ \log p(y \mid x, \Sigma^{1/2}\varepsilon + \mu ) ] - KL(q \mid \mid p) = \\
-\end{align}
-$$$$
-\begin{align} 
-\nabla_{\lambda} \mathbb{E}_{\theta \sim q} [ \log p(y_{1:n} \mid x_{1:n}, \theta) ] &= \nabla_{\lambda} \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [ \log p(y_{1:n} \mid x_{1:n}, \Sigma^{1/2}\varepsilon + \mu ) ]   \\
-& = n \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} \mathbb{E}_{i \sim \text{unif}[0, n]}[\nabla_{\lambda}  \log p(y_{i} \mid x_{i}, \Sigma^{1/2}\varepsilon + \mu ) ]\\ 
-& \approx  \frac{n}{m} \sum_{j = 1}^{m} \nabla_{C, \mu} \log p(y_{i_{j}} \mid x_{i_{j}}, C\varepsilon_{j} + \mu) \\
-\end{align}
-$$<p>
-Which means:
-We can approximate the derivate of the likelihood with respect of the variational parameters by sampling from a normal and uniformly from the dataset and only then computing an average gradient of the likelihood with respect to the parameters.</p>
-<p>Variational inference enables us to find <strong>approximations</strong> of distributions using highly optimized stochastic optimization techniques. However, a significant drawback is the difficulty in assessing the quality of these approximations.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,9 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Reinforcement Learning, a introduction | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence">
-<meta name="description" content="The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.
-
-Reinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward. ~Wikipedia page.">
+<meta name="description" content="Reinforcement Learning, a introduction - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/reinforcement-learning-a-introduction/">
@@ -95,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/reinforcement-learning-a-introduction/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Reinforcement Learning, a introduction">
-  <meta property="og:description" content="The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.
-Reinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward. ~Wikipedia page.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -107,9 +104,7 @@ Reinforcement learning (RL) is an interdisciplinary area of machine learning 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Reinforcement Learning, a introduction">
-<meta name="twitter:description" content="The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.
-
-Reinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward. ~Wikipedia page.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -138,12 +133,12 @@ Reinforcement learning (RL) is an interdisciplinary area of machine learning 
   "@type": "BlogPosting",
   "headline": "Reinforcement Learning, a introduction",
   "name": "Reinforcement Learning, a introduction",
-  "description": "The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.\nReinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward. ~Wikipedia page.\n",
+  "description": "",
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of actions into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.\nReinforcement learning (RL) is an interdisciplinary area of machine learning and optimal control concerned with how an intelligent agent ought to take actions in a dynamic environment in order to maximize the cumulative reward. ~Wikipedia page.\nNote: there is a big gap between theory and practise in this field.\nIntroduzione Una delle idee migliori riguardanti questo campo del reinforcement learning è il focus sul processo decisionale del singolo agente, condizionato al reward che l’ambiente esterno gli dà (feedback). Il setting classico di questo genere di problemi è un caso speciale della caratterizzazione presente in l’intelligenza.\nAbbiamo in questo caso un agente all’interno del suo ambiente. L’agente è in grado di interagire col suo ambiente attraverso alcune azioni ben definite, e l’ambiente restituisce un feedback ad ogni azione. L’agente si regola di conseguenza, nel tentativo di massimizzare il reward che riceve.\nÈ da notare che questa impostazione è molto diversa rispetto al machine learning classico, seppur si può comunque collocare al suo interno. Classifcamente nei modelli di machine learning supervised si cerca di minimizzare un errore con alcuni dataset etichettati, mentre qui non abbiamo nessuna etichetta, mentre nel unsupervised proviamo a trovare alcuni pattern nei dati, mentre qui non cerchiamo nessun pattern. Si potrebbe dire che questo sia un terzo paradigma di machine learning.\nNOTA: questi appunti riassumono concetti dai primi 4 capitoli del Sutton and Barto 2020\nUn problema classico: n-bandit Vedere N-Bandit Problem.\nHistory: Deepmind Deep-Q learning was able to solve many atari games and being better in human performance, that was a very big deal at the time.\nDifference with other paradigms Only reward/penalty signal, which happens after actions (so its active in time, while other paradigms don’t have time) Feedback is delayed in time, could also be sparse We have actions that have an effect in future. Setting classico (Model Policy Reward) Quando andiamo a parlare di Reinforcement learning andiamo a considerare un setting classico di agente che interagisce con un ambiente attraverso delle azioni, e l’ambiente che risponde attraverso i reward. L’agente osserva quindi lo stato (se è full-observable vede lo stato esterno, altrimenti partially observable vede solamente parte delle informazioni dello stato dell’ambiente) e insieme al reward percepito prova a eseguire delle altre azioni.\nSono particolarmente importanti quindi 3 parole chiave utili per descrivere una delle 3 frecce in immagine\nModel Il modello dell’ambiente lo indichiamo anche come dinamica o sistema di transizione dell’ambiente. nel modello sono definite tutte le distribuzioni di probabilità che portano uno stato a un altro: $P(s'|s)$, questo possiamo dire, ossia partendo da uno stato s, quanto è probabile finire in uno stato s’ ??\n$$ \\begin{align} P: S \\times \\mathcal{A} \\to \\Delta(S) \\\\ r: S \\times \\mathcal{A} \\to [0, 1] \\end{align} $$ Dove $\\Delta$ è una distribuzione su $S$.\nPolicy La policy è un indicatore delle azioni del singolo agente, ci dice quanto è probabile che l’agente esegua una certa azione, dato che sia sopra un certo stato s, lo indichiamo solitamente con $\\pi(a | s)$. Nel caso in cui è una policy deterministica, nel senso che a uno stato corrisponde uno e un solo azione, potremmo scrivere qualcosa del tipo $\\pi (s) = a$ Quindi è una funzione $\\pi: S \\to \\Delta(\\mathcal{A})$.\nReward Il reward descrive il feedback che l’ambiente ritorna al giocatore una volta che una azione è stata eseguita, spesso lo indichiamo in questi modi\n$$ r(s, a) \\\\ r(s, a, s') \\\\ r(s) $$A seconda di quanto vogliamo esprimere (quindi il reward atteso dopo aver fatto una azione da unc erto stato, il reward atteso dopo aver fatto una azione da un certo stato ed essere arrivati a un certo stao e così via\nThe Value function $$ v_{i}(S_{j}) = \\mathbf{E} [r_{i} + r_{i + 1} + \\dots | S_{j}] $$$$ v_{i}(S_{j}) = \\mathbf{E} [r_{i} + v_{i+1}(S) | S_{j}] $$ Con $S$ uno stato su cui puoi essere al passo successivo.\nAll components are functions:\nPolicies: $\\pi: S \\rightarrow A$ (or to probabilities over A) Value functions: $v: S \\rightarrow R$ Models: $m: S \\rightarrow S$ and/or $r: S \\rightarrow R$ State update: $u: S \\times O \\rightarrow S$ Categorie di agenti Policy - Value categorization Value Based ha solamente value based, la sua policy è basata sul suo valore (in modo greedy va a cercare quale sia lo stato con valore maggiore) Esempi sono Monte Carlo, SARSA, Q-learning, DQN.\nPolicy based Il contrario, non ha value function, ma solamente la policy, tenta direttamente Policy Gradient, NPG, TRPO, PPO.\nActor Critic Ha entrambi, ha sia policy (l’attore) e il critico che cerca di aiutare. Questi sono anche chiamati model based.\nModels Model free Se hanno policy o value, ma non hanno nessun modello sull’ambiente in cui sono presenti Solitamente sono molto semplici, e permettono di imparare direttamente la policy migliore possibili per questo ambiente. Secondo il professor Buhmann non ha senso parlare di model free perché qualunque modello implicitamente ne ha uno.\nModel based Hanno il modello dell’ambiente, e non necessariamente hanno policy o value function. Questi potremmo anche chiamarli (Ha \u0026 Schmidhuber 2018). Solitamente questi permettono di utilizzare l’esperienza meglio (+ sample efficient).\nOther definitions Prediction and control Prediction è la capacità di sapere come sarà il futuro Control è la capacità di ottimizzare la propria value function. Solitamente sono molto legati fra di loro.\nEpisodic and Non-episodic Episodic -\u003e We have a collection of episodes, each of which gave us new trajectories about it. We can reset the environment as we like Non-episodic -\u003e We learn this online, each one yields a single trajectory, we can’t reset.\nOnline vs Offline RL Per i modelli online possiamo andare direttamente ad agire sull’ambiente per ottenere dei dati. Si parla di exploitation exploration tradeoff. Solo che bisogna stare attenti perché ci può essere un rischio per certe azioni. Per esempio una macchina potrebbe schiantarsi quando esplora, perché lo sta facendo nel mondo reale. Per i modelli offline abbiamo già collezionato un sacco di dati, e possiamo usare questo per cercare di creare un modello ed imparare. Sono anche chiamati batched RL.\nOn-policy vs Off-policy RL Con on-policy è sempre un RL online, in cui andiamo ad imparare utilizzando la policy attuale. Con off-policy stiamo usando una policy diversa per andare ad imparare la nostra policy finale. Magari abbiamo un buffer in questo caso che utilizziamo per memorizzare in modo temporaneo le nostre informazioni.\nModel based and Model free Model-based -\u003e We want to create a world model, and try to estimate the state transitions and the rewards Model-free -\u003e We just try to learn enough to act well: we just estimate the value of a single state.\nMarkov chains Dovrebbe essere approfondito meglio in Markov Chains\nReferences [1] Ha \u0026 Schmidhuber “World Models” 2018 ",
-  "wordCount" : "1173",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-23T00:00:00Z",
   "dateModified": "2024-08-23T00:00:00Z",
@@ -238,185 +233,12 @@ Reinforcement learning (RL) is an interdisciplinary area of machine learning 
     <h1 class="post-title entry-hint-parent">
       Reinforcement Learning, a introduction
     </h1>
-    <div class="post-meta"><span title='2024-08-23 00:00:00 +0000 UTC'>August 23, 2024</span>&nbsp;·&nbsp;Reading Time: 6 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-23 00:00:00 +0000 UTC'>August 23, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#introduzione" aria-label="Introduzione">Introduzione</a><ul>
-                        
-                <li>
-                    <a href="#un-problema-classico-n-bandit" aria-label="Un problema classico: n-bandit">Un problema classico: n-bandit</a><ul>
-                        
-                <li>
-                    <a href="#history-deepmind" aria-label="History: Deepmind">History: Deepmind</a></li>
-                <li>
-                    <a href="#difference-with-other-paradigms" aria-label="Difference with other paradigms">Difference with other paradigms</a></li></ul>
-                </li>
-                <li>
-                    <a href="#setting-classico-model-policy-reward" aria-label="Setting classico (Model Policy Reward)">Setting classico (Model Policy Reward)</a><ul>
-                        
-                <li>
-                    <a href="#model" aria-label="Model">Model</a></li>
-                <li>
-                    <a href="#policy" aria-label="Policy">Policy</a></li>
-                <li>
-                    <a href="#reward" aria-label="Reward">Reward</a></li>
-                <li>
-                    <a href="#the-value-function" aria-label="The Value function">The Value function</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#categorie-di-agenti" aria-label="Categorie di agenti">Categorie di agenti</a><ul>
-                        
-                <li>
-                    <a href="#policy---value-categorization" aria-label="Policy - Value categorization">Policy - Value categorization</a><ul>
-                        
-                <li>
-                    <a href="#value-based" aria-label="Value Based">Value Based</a></li>
-                <li>
-                    <a href="#policy-based" aria-label="Policy based">Policy based</a></li>
-                <li>
-                    <a href="#actor-critic" aria-label="Actor Critic">Actor Critic</a></li></ul>
-                </li>
-                <li>
-                    <a href="#models" aria-label="Models">Models</a><ul>
-                        
-                <li>
-                    <a href="#model-free" aria-label="Model free">Model free</a></li>
-                <li>
-                    <a href="#model-based" aria-label="Model based">Model based</a></li></ul>
-                </li>
-                <li>
-                    <a href="#other-definitions" aria-label="Other definitions">Other definitions</a><ul>
-                        
-                <li>
-                    <a href="#prediction-and-control" aria-label="Prediction and control">Prediction and control</a></li>
-                <li>
-                    <a href="#episodic-and-non-episodic" aria-label="Episodic and Non-episodic">Episodic and Non-episodic</a></li>
-                <li>
-                    <a href="#online-vs-offline-rl" aria-label="Online vs Offline RL">Online vs Offline RL</a></li>
-                <li>
-                    <a href="#on-policy-vs-off-policy-rl" aria-label="On-policy vs Off-policy RL">On-policy vs Off-policy RL</a></li>
-                <li>
-                    <a href="#model-based-and-model-free" aria-label="Model based and Model free">Model based and Model free</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#markov-chains" aria-label="Markov chains">Markov chains</a></li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>The main difference between reinforcement learning and other machine learning, pattern inference methods is that reinforcement learning takes the concept of <strong>actions</strong> into its core: models developed in this field can be actively developed to have an effect in its environment, while other methods are mainly used to summarize interesting data or generating sort of reports.</p>
-<blockquote>
-<p><strong>Reinforcement learning</strong> (<strong>RL</strong>) is an interdisciplinary area of <a href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a> and <a href="https://en.wikipedia.org/wiki/Optimal_control">optimal control</a> concerned with how an <a href="https://en.wikipedia.org/wiki/Intelligent_agent">intelligent agent</a> ought to take <a href="https://en.wikipedia.org/wiki/Action_selection">actions</a> in a dynamic environment in order to maximize the <a href="https://en.wikipedia.org/wiki/Reward-based_selection">cumulative reward</a>. <em>~Wikipedia page</em>.</p></blockquote>
-<p>Note: there is a big gap between theory and practise in this field.</p>
-<h2 id="introduzione">Introduzione<a hidden class="anchor" aria-hidden="true" href="#introduzione">#</a></h2>
-<p>Una delle idee migliori riguardanti questo campo del reinforcement learning è il focus sul processo decisionale del singolo agente, condizionato al reward che l’ambiente esterno gli dà (feedback). Il setting classico di questo genere di problemi è un caso speciale della caratterizzazione presente in l’intelligenza.</p>
-<p>Abbiamo in questo caso un agente all’interno del suo ambiente. L’agente è in grado di interagire col suo ambiente attraverso alcune azioni ben definite, e l’ambiente restituisce un feedback ad ogni azione. L’agente si regola di conseguenza, nel tentativo di massimizzare il reward che riceve.</p>
-<p>È da notare che questa impostazione è molto diversa rispetto al machine learning classico, seppur si può comunque collocare al suo interno. Classifcamente nei modelli di machine learning supervised si cerca di minimizzare un errore con alcuni dataset etichettati, mentre qui non abbiamo nessuna etichetta, mentre nel unsupervised proviamo a trovare alcuni pattern nei dati, mentre qui non cerchiamo nessun pattern. Si potrebbe dire che questo sia un terzo paradigma di machine learning.</p>
-<p>NOTA: questi appunti riassumono concetti dai primi 4 capitoli del Sutton and Barto 2020</p>
-<h3 id="un-problema-classico-n-bandit">Un problema classico: n-bandit<a hidden class="anchor" aria-hidden="true" href="#un-problema-classico-n-bandit">#</a></h3>
-<p>Vedere N-Bandit Problem.</p>
-<h4 id="history-deepmind">History: Deepmind<a hidden class="anchor" aria-hidden="true" href="#history-deepmind">#</a></h4>
-<p>Deep-Q learning was able to solve many atari games and being better in human performance, that was a very big deal at the time.</p>
-<h4 id="difference-with-other-paradigms">Difference with other paradigms<a hidden class="anchor" aria-hidden="true" href="#difference-with-other-paradigms">#</a></h4>
-<ul>
-<li>Only reward/penalty signal, which happens after actions (so its active in time, while other paradigms don&rsquo;t have time)</li>
-<li>Feedback is delayed in time, could also be sparse</li>
-<li>We have actions that have an effect in future.</li>
-</ul>
-<h3 id="setting-classico-model-policy-reward">Setting classico (Model Policy Reward)<a hidden class="anchor" aria-hidden="true" href="#setting-classico-model-policy-reward">#</a></h3>
-<p>Quando andiamo a parlare di Reinforcement learning andiamo a considerare un setting classico di agente che interagisce con un ambiente attraverso delle azioni, e l’ambiente che risponde attraverso i reward. L’agente osserva quindi lo stato (se è full-observable vede lo stato esterno, altrimenti partially observable vede solamente parte delle informazioni dello stato dell’ambiente) e insieme al reward percepito prova a eseguire delle altre azioni.</p>
-<img src="/images/notes/image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Reinforcement Learning, a introduction/Untitled">
-<p>Sono particolarmente importanti quindi 3 parole chiave utili per descrivere una delle 3 frecce in immagine</p>
-<h4 id="model">Model<a hidden class="anchor" aria-hidden="true" href="#model">#</a></h4>
-<p>Il modello dell&rsquo;ambiente lo indichiamo anche come dinamica o sistema di transizione dell’ambiente. nel modello sono definite tutte le distribuzioni di probabilità che portano uno stato a un altro: $P(s'|s)$, questo possiamo dire, ossia partendo da uno stato s, quanto è probabile finire in uno stato s’ ??</p>
-$$
-\begin{align}
-P: S \times \mathcal{A} \to \Delta(S) \\
-r: S \times \mathcal{A} \to [0, 1]
-\end{align}
-$$<p>
-Dove $\Delta$ è una distribuzione su $S$.</p>
-<h4 id="policy">Policy<a hidden class="anchor" aria-hidden="true" href="#policy">#</a></h4>
-<p>La policy è un indicatore delle azioni del singolo agente, ci dice quanto è probabile che l’agente esegua una certa azione, dato che sia sopra un certo stato s, lo indichiamo solitamente con $\pi(a | s)$. Nel caso in cui è una policy deterministica, nel senso che a uno stato corrisponde uno e un solo azione, potremmo scrivere qualcosa del tipo $\pi (s) = a$
-Quindi è una funzione $\pi: S \to \Delta(\mathcal{A})$.</p>
-<h4 id="reward">Reward<a hidden class="anchor" aria-hidden="true" href="#reward">#</a></h4>
-<p>Il reward descrive il feedback che l’ambiente ritorna al giocatore una volta che una azione è stata eseguita, spesso lo indichiamo in questi modi</p>
-$$
-r(s, a) \\ r(s, a, s') \\ r(s)
-$$<p>A seconda di quanto vogliamo esprimere (quindi il reward atteso dopo aver fatto una azione da unc erto stato, il reward atteso dopo aver fatto una azione da un certo stato ed essere arrivati a un certo stao e così via</p>
-<h4 id="the-value-function">The Value function<a hidden class="anchor" aria-hidden="true" href="#the-value-function">#</a></h4>
-$$
-v_{i}(S_{j}) = \mathbf{E} [r_{i} + r_{i + 1} + \dots | S_{j}]
-$$$$
-v_{i}(S_{j}) = \mathbf{E} [r_{i} + v_{i+1}(S) | S_{j}]
-$$<p>
-Con $S$ uno stato su cui puoi essere al passo successivo.</p>
-<p>All components are functions:</p>
-<ul>
-<li>Policies: $\pi: S \rightarrow A$ (or to probabilities over A)</li>
-<li>Value functions: $v: S \rightarrow R$</li>
-<li>Models: $m: S \rightarrow S$ and/or $r: S \rightarrow R$</li>
-<li>State update: $u: S \times O \rightarrow S$</li>
-</ul>
-<h2 id="categorie-di-agenti">Categorie di agenti<a hidden class="anchor" aria-hidden="true" href="#categorie-di-agenti">#</a></h2>
-<h3 id="policy---value-categorization">Policy - Value categorization<a hidden class="anchor" aria-hidden="true" href="#policy---value-categorization">#</a></h3>
-<h4 id="value-based">Value Based<a hidden class="anchor" aria-hidden="true" href="#value-based">#</a></h4>
-<p>ha solamente value based, la sua policy è basata sul suo valore (in modo greedy va a cercare quale sia lo stato con valore maggiore)
-Esempi sono Monte Carlo, SARSA, Q-learning, DQN.</p>
-<h4 id="policy-based">Policy based<a hidden class="anchor" aria-hidden="true" href="#policy-based">#</a></h4>
-<p>Il contrario, non ha value function, ma solamente la policy, tenta direttamente
-Policy Gradient, NPG, TRPO, PPO.</p>
-<h4 id="actor-critic">Actor Critic<a hidden class="anchor" aria-hidden="true" href="#actor-critic">#</a></h4>
-<p>Ha entrambi, ha sia policy (l&rsquo;attore) e il critico che cerca di aiutare. Questi sono anche chiamati <strong>model based</strong>.</p>
-<h3 id="models">Models<a hidden class="anchor" aria-hidden="true" href="#models">#</a></h3>
-<img src="/images/notes/Reinforcement Learning, a introduction-20240908223656566.webp" style="width: 100%" class="center" alt="Reinforcement Learning, a introduction-20240908223656566">
-<h4 id="model-free">Model free<a hidden class="anchor" aria-hidden="true" href="#model-free">#</a></h4>
-<p>Se hanno policy o value, ma non hanno <strong>nessun modello sull&rsquo;ambiente</strong> in cui sono presenti
-Solitamente sono molto semplici, e permettono di imparare direttamente la policy migliore possibili per questo ambiente.
-Secondo il professor Buhmann non ha senso parlare di model free perché qualunque modello implicitamente ne ha uno.</p>
-<h4 id="model-based">Model based<a hidden class="anchor" aria-hidden="true" href="#model-based">#</a></h4>
-<p>Hanno il modello dell&rsquo;ambiente, e non necessariamente hanno policy o value function. Questi potremmo anche chiamarli <a href="http://arxiv.org/abs/1803.10122">(Ha &amp; Schmidhuber 2018)</a>.
-Solitamente questi permettono di utilizzare l&rsquo;esperienza meglio (+ <em>sample efficient</em>).</p>
-<h3 id="other-definitions">Other definitions<a hidden class="anchor" aria-hidden="true" href="#other-definitions">#</a></h3>
-<h4 id="prediction-and-control">Prediction and control<a hidden class="anchor" aria-hidden="true" href="#prediction-and-control">#</a></h4>
-<p><strong>Prediction</strong> è la capacità di sapere come sarà il futuro
-<strong>Control</strong> è la capacità di ottimizzare la propria value function.
-Solitamente sono molto legati fra di loro.</p>
-<h4 id="episodic-and-non-episodic">Episodic and Non-episodic<a hidden class="anchor" aria-hidden="true" href="#episodic-and-non-episodic">#</a></h4>
-<p>Episodic -&gt; We have a collection of episodes, each of which gave us new trajectories about it. We can reset the environment as we like
-Non-episodic -&gt; We learn this online, each one yields a single trajectory, we can&rsquo;t reset.</p>
-<h4 id="online-vs-offline-rl">Online vs Offline RL<a hidden class="anchor" aria-hidden="true" href="#online-vs-offline-rl">#</a></h4>
-<p>Per i modelli <strong>online</strong> possiamo andare direttamente ad agire sull&rsquo;ambiente per ottenere dei dati. Si parla di exploitation exploration tradeoff. Solo che bisogna stare attenti perché ci può essere un rischio per certe azioni. Per esempio una macchina potrebbe schiantarsi quando esplora, perché  lo sta facendo nel mondo reale.
-Per i modelli <strong>offline</strong> abbiamo già collezionato un sacco di dati, e possiamo usare questo per cercare di creare un modello ed imparare. Sono anche chiamati <strong>batched</strong> RL.</p>
-<h4 id="on-policy-vs-off-policy-rl">On-policy vs Off-policy RL<a hidden class="anchor" aria-hidden="true" href="#on-policy-vs-off-policy-rl">#</a></h4>
-<p>Con <strong>on-policy</strong> è sempre un RL online, in cui andiamo ad imparare utilizzando la policy attuale.
-Con <strong>off-policy</strong> stiamo usando una policy diversa per andare ad imparare la nostra policy finale. Magari abbiamo un buffer in questo caso che utilizziamo per memorizzare in modo temporaneo le nostre informazioni.</p>
-<h4 id="model-based-and-model-free">Model based and Model free<a hidden class="anchor" aria-hidden="true" href="#model-based-and-model-free">#</a></h4>
-<p>Model-based -&gt; We want to create a world model, and try to estimate the state transitions and the rewards
-Model-free -&gt; We just try to <em>learn enough to act well</em>: we just estimate the value of a single state.</p>
-<h2 id="markov-chains">Markov chains<a hidden class="anchor" aria-hidden="true" href="#markov-chains">#</a></h2>
-<p>Dovrebbe essere approfondito meglio in <a href="/notes/markov-chains">Markov Chains</a></p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=haWorldModels2018>[1] Ha & Schmidhuber <a href="http://arxiv.org/abs/1803.10122">“World Models”</a>  2018
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

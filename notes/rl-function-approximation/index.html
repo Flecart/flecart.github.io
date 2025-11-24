@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>RL Function Approximation | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence">
-<meta name="description" content="These algorithms are good for scaling state spaces, but not actions spaces.
-The Gradient Idea
-Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
-A simple parametrization
-The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don&rsquo;t need to explicitly explore every single state in the state space.">
+<meta name="description" content="RL Function Approximation - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/rl-function-approximation/">
@@ -97,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/rl-function-approximation/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="RL Function Approximation">
-  <meta property="og:description" content="These algorithms are good for scaling state spaces, but not actions spaces.
-The Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
-A simple parametrization The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don’t need to explicitly explore every single state in the state space.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,11 +104,7 @@ A simple parametrization The idea here is to parametrize the value estimation fu
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="RL Function Approximation">
-<meta name="twitter:description" content="These algorithms are good for scaling state spaces, but not actions spaces.
-The Gradient Idea
-Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.
-A simple parametrization
-The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don&rsquo;t need to explicitly explore every single state in the state space.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -143,12 +133,12 @@ The idea here is to parametrize the value estimation function so that similar in
   "@type": "BlogPosting",
   "headline": "RL Function Approximation",
   "name": "RL Function Approximation",
-  "description": "These algorithms are good for scaling state spaces, but not actions spaces.\nThe Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.\nA simple parametrization The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don\u0026rsquo;t need to explicitly explore every single state in the state space.\n",
+  "description": "",
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "These algorithms are good for scaling state spaces, but not actions spaces.\nThe Gradient Idea Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in Tabular Reinforcement Learning.\nA simple parametrization The idea here is to parametrize the value estimation function so that similar inputs gets similar values akin to Parametric Modeling estimation we have done in the other courses. In this manner, we don’t need to explicitly explore every single state in the state space.\nFor example, a single linear parametrization for the value function gives a quite nice interpretation of why we are introducing loss functions in this case:\n$$ V^{\\pi}(x; \\theta_{\\text{new}}) = r(x, \\pi(x)) + \\gamma \\sum_{x'}p(x'\\mid x, \\pi(x))V^{\\pi}(x^{'}; \\theta_{\\text{old}}) $$$$ \\forall x, \\theta_{new, x} = \\arg\\min_{\\theta_{x} \\in \\mathbb{R}} (\\theta_{x} - (r(x, \\pi(x)) + \\gamma \\sum_{x'}p(x'\\mid x, \\pi(x))V^{\\pi}(x^{'}; \\theta_{\\text{old}}))))^{2} $$$$ \\theta_{new} = \\arg\\min_{\\theta \\in \\mathbb{R}^{n}} \\mathbb{E}_{x}(V^{\\pi}(x; \\theta) - (r(x, \\pi(x)) + \\gamma \\sum_{x'}p(x'\\mid x, \\pi(x))V^{\\pi}(x^{'};\\theta_{\\text{old}})))^{2} $$ Where $x$ is drawn from some distribution that has non zero mass for every state (so that it updates every state indefinitely).\nThis simple motivation example opens the door for gradient descent methods for parameter estimation! The only drawback that we will see using these methods is the enormous number of samples that we need to get a good estimate of the value function.\nTD-Gradient View $$ V^{\\pi}(x) = V_{\\text{old}}^{\\pi}(x) + \\alpha_{t}(r + \\gamma V^{\\pi}_{\\text{old}}(x^{(i)}) - V_{\\text{old}}^{\\pi}(x)) $$$$ l(\\theta; x, x') = -\\frac{1}{2}(r + \\gamma V^{\\pi}_{\\text{old}}(x^{'};\\theta) - V_{\\text{old}}^{\\pi}(x;\\theta))^{2} $$ Where the value is parameterized by theta. It’s derivative, is called the TD error, indicated with $\\delta(x)$. TODO: fix the mistake for the expectation of the estimate, also expand on the fact that the gradient is 1 for the linear case, so classic TD and Q-Learning are just doing gradient descent on the linear feature vector.\nOne nice thing about this view, is that the gradient with respect of this loss is unbiased, due to the law of large numbers, see Central Limit Theorem and Law of Large Numbers. Sometimes gradient descent with a bootstrap estimate is called stochastic semi-gradient descent.\nQ-Learning View $$ Q^{\\pi}(x, a) = Q_{\\text{old}}^{\\pi}(x, a) + \\alpha_{t}(r + \\gamma \\max_{a} Q^{\\pi}_{\\text{old}}(x^{'}, a) - Q_{\\text{old}}^{\\pi}(x, a)) $$$$ l(\\theta; x, a, r, x') = -\\frac{1}{2}(r + \\gamma \\max_{a} Q^{\\pi}_{\\text{old}}(x^{'}, a;\\theta) - Q_{\\text{old}}^{\\pi}(x, a;\\theta))^{2} $$Deep Q-networks DQN updates the neural network used for the approximate bootstrapping estimate infrequently to maintain a constant optimization target across multiple episodes.\nThe problem we are trying to solve is the moving optimization target property of the above q-learning optimization, which leads to instabilities (it’s somewhat similar to changing the array you are iterating in, which gives unpredictable results, sometimes, or more difficult to analyze or debug).\nWe assume to have a dataset $\\mathcal{D}$ called experience buffer. The idea here is use one network for the $old$ values, and the other used for the optimization objective. This idea is quite simple. This technique is known in the literature as Polyak averaging, or experience replay. here $\\theta_{old}$ is not update every step, but only after $D$ iterations, which attempts to give some stability to the optimization.\n$$ \\max_{a} q(x, a) \\approx \\max_{a} Q(x, a; \\theta_{\\text{old}}) $$ The problem with this technique is introducing the q-value estimation, this leads to a maximization bias:\nimage from the book\nDouble Q-learning This leads to Double Q-Learning which leads to more accurate estimation of the real $q$ (Van Hasselt et al., 2016) Which is just taking the maximum with respect of the new network, and not the old. Also during gradient estimation, we are always selecting with the new network, not the old, we just use the old network to get the reward. (Meaning the $a$ inside the $Q(x, a; \\theta_{\\text{old}})$) is now taken from the new policy induced by the network parameterized with $\\theta$ that changes often.\n$$ \\mathcal{L}(\\theta) = \\frac{1}{2}\\mathbb{E}_{s, a, r, s'}\\left[ (r + \\gamma \\max_{a'}Q(s', a'; \\theta_{\\text{old}}) - Q(s, a; \\theta))^{2} \\right] $$$$ \\mathcal{L}(\\theta) = \\frac{1}{2}\\mathbb{E}_{s, a, r, s'}\\left[ (r + \\gamma Q(s', a^{*}; \\theta_{\\text{old}}) - Q(s, a; \\theta))^{2} \\right] $$It works quite well, but the reason why it works is not well explained mathematically. Intuitively, the old network is quite biased toward overly high values of $Q$. With Double Q-learning, we are shifting this bias towards a more accurate version, the current $Q_{\\theta}$, but still evaluating using the bootstrapped old estimate.\nPolicy Approximation $$ \\pi^{*}(x) = \\pi(x; \\varphi) $$ The methods that attempt to estimate this are called policy search or policy gradient methods.\nPolicy Parametrization examples $$ \\pi(a \\mid x, \\theta) \\sim \\mathcal{N}(a ; \\mu(x, \\theta), \\Sigma(x, \\theta)) $$$$ \\pi(a \\mid x, \\theta) = Cat(a; \\sigma(f(x, \\theta))) $$ We can also decompose this using the Markov property if $m$ is large.\nThe important thing we need is:\nBe able to use Backpropagation Easy to sample from, so that we can use Monte Carlo Methods. Function Gradient Methods The Objective $$ J_{T}(\\theta) = \\mathbb{E}_{\\tau \\sim \\Pi_{\\theta}}[G_{0}] \\approx \\frac{1}{N}\\sum_{i=1}^{N}G_{0}^{(i)} $$ Taking trajectories following the current policy.\nScore Trick We have encountered the score function before in Parametric Modeling when estimating the Rao-Cramer Bound. In this context, the score is defined as follows:\n$$ \\nabla_{\\varphi} \\log \\Pi_{\\varphi} = \\frac{\\nabla_{\\varphi}\\Pi_{\\varphi}}{\\Pi\\varphi} $$We will use it here to get an unbiased estimate of the gradient of the policy, so that we can use Backpropagation to estimate the gradient of the policy.\n$$ \\nabla_{\\varphi}\\mathbb{E}_{\\tau \\sim \\prod_{\\varphi}}[G_{0}] = \\mathbb{E}_{\\tau \\sim \\prod_{\\varphi}}\\left[ G_{0}\\nabla_{\\varphi}\\log \\Pi_{\\varphi}(x) \\right] $$$$ \\begin{align} \\nabla_{\\varphi}\\log \\Pi_{\\varphi}(x) \u0026= \\nabla_{\\varphi} \\left[ \\log p(x_{0}) + \\sum_{t = 0}^{T - 1} \\log \\pi(a_{t} \\mid x_{t}) + \\sum_{t = 0}^{T - 1} \\log p(x_{t + 1} \\mid x_{t}, a_{t}) \\right] \\\\ \u0026=\\sum_{t = 0}^{T - 1}\\nabla _{\\varphi}\\log \\pi(a_{t}\\mid x_{t}) \\end{align} $$$$ \\pi_{\\varphi}(a \\mid x) = \\frac{\\exp(h(x, a, \\varphi))}{\\sum_{a' \\in A} \\exp(h(x, a', \\varphi))} $$And $h(x, a, \\varphi) = \\varphi^{T}\\phi(x, a)$ given some feature vector.\n$$ \\nabla_{\\varphi}J_{T}(\\theta) \\approx \\frac{1}{m} \\sum_{i = 1}^{m}g^{(i)}_{0:T} \\sum_{t = 0}^{T - 1}\\nabla _{\\varphi}\\log \\pi(a_{t}\\mid x_{t}) $$But this estimate has usually high variance.\nAdding Baselines $$ \\mathbb{E}_{\\tau \\sim \\prod_{\\varphi}}\\left[ (G_{0} - b)\\nabla_{\\varphi}\\log \\Pi_{\\varphi}(x) \\right] $$ Adding this constant still keeps the expectation unvaried, as the derivative of the score is 0, so it doesn’t affect the estimate, but it affects the variance by reducing it if we choose $b$ correctly, which helps in the stability of the estimate.\n$$ b_{0:t - 1} = \\sum_{i = 0}^{t - 1}\\gamma^{i}r_{i} $$$$ \\nabla_{\\varphi}J(\\theta) \\approx \\mathbb{E}_{\\tau \\sim \\Pi} \\left[ \\sum_{t = 0}^{T - 1} \\gamma^{t}G_{t:T} \\nabla_{\\varphi} \\log \\pi_{\\varphi}(a_{t }\\mid x _{t}) \\right] $$ Which should be better in terms of its variance.\nBaselines reduce variance The condition we need to satisfy is $b^{2} \\leq 2 b \\cdot r(x, a)$ for each state and action. (The proof is along variance and covariance of the two functions).\n$$ \\mathop{\\mathbb{E}}[f(x)]= \\mathop{\\mathbb{E}}[f(x) - b] + \\mathop{\\mathbb{E}}[b] = \\mathop{\\mathbb{E}}[f(x) - b] $$ Furthermore, under certain conditions we have that:\nRecall that $\\text{Var[X + Y]} = \\text{Var[X]} + \\text{Var[Y]} + 2\\text{Cov[X, Y]}$.\n$$ \\text{Var}[f(x) - b] = \\text{Var}[f(x)] + \\text{Var}[b] - 2\\text{Cov}[f(x), b] $$Which means that if $\\text{Var}[b] \\leq 2\\text{Cov}[f(x), b]$ then the variance of the function will be reduced.\nIn the case of the baseline, the variance of $b$ is exactly $\\mathop{\\mathbb{E}}[b^{2}(\\nabla \\log \\pi(a \\mid x)^{2}]$ One can prove that given a sample trajectory, the above state dependent baseline is a valid baseline.\nREINFORCE The Reinforce algorithm allows optimization for the policy in continuous spaces but does not guarantee the convergence to the best policy possible.\nREINFORCE Algorithm from the Textbook\nOne can also add the baseline as before, and it should reduce the variance, under certain cases. (for the classical state dependent baseline is easy to see that it indeed does it).\nA common technique is to further reduce the variance, and only consider step-1 updates. This is somewhat akin to Stochastic Gradient Descent on policy. One can also subtract the baseline from t onwards.\nDrawbacks of REINFORCE These methods are On-policy because we need to simulate many many roll-outs High variance in the gradient estimates The last point implied slow convergence of the method (related to the sample efficiency) Not guaranteed convergence Another drawback is the difficulty of handling the exploration-exploitation trade-off. These algorithms, along with the AC methods in the next section, are fundamentally exploitative. We usually employ random exploration or epsilon-greedy methods to explore, but usually these still might converge without actually having explored the state space enough.\nPolicy Gradient Method $$ \\begin{align} \\nabla_{\\varphi} J_{T}(\\varphi) \u0026= \\sum_{t = 0}^{\\infty}\\mathbb{E}_{t: \\infty \\sim \\Pi_{\\varphi}}\\left[ \\gamma^{t} G_{t} \\nabla_{\\varphi}\\log \\pi(a_{t}\\mid x_{t})\\right] \\\\ \u0026= \\sum_{t = 0}^{\\infty} \\mathbb{E}_{x_{t}, a_{t}} \\left[ \\gamma^{t}Q^{\\pi}(x_{t}, a_{t})\\nabla_{\\varphi}\\log \\pi(a_{t}\\mid x_{t}) \\right] \\end{align} $$ Assuming we are using a baseline that starts from the $t$ time step.\nOften, the above policy gradient we derived for the REINFORCE algorithm is written in terms of discounted rate occupancy measure.\n$$ d_{\\pi}(x) = (1-\\gamma)\\sum_{t = 0}^{\\infty}\\gamma^{t}p(x_{t} = x) $$ The $1 - \\gamma$ factor is a normalization constant.\n$$ \\nabla_{\\varphi}J_{T}(\\varphi) = \\frac{1}{(1 - \\gamma)} \\cdot \\mathbb{E}_{x\\sim d_{\\pi}}\\left[ \\mathbb{E}_{a\\sim \\pi(\\cdot \\mid x)}[Q^{\\pi}(x, a)\\nabla_{\\varphi}\\log \\pi(a\\mid x)] \\right] $$ This form is known as the policy gradient theorem, it will be useful to characterize the actor critic methods.\nWe will see that for offline methods, explored in #Offline Actor Critic, we wont need the $\\log \\pi$ part, as we cannot actively explore the next state from the current state.\nPolicy Gradient and The Exponential Family If the policy is characterized by a distribution in the exponential family, it is easy to derive a closed form solution for the policy gradient as above. In this section we briefly discuss some gradients that are part of this family. See The Exponential Family for a discussion on distributions of this family.\n$$ \\pi(a \\mid x ) = h(a) \\exp(a f_{\\varphi}(x) - A(f_\\varphi(x))) $$And written in this manner the un-baselined policy gradient is:\n$$ \\begin{align} \\nabla_{\\varphi}J_{T}(\\varphi) \u0026= \\mathbb{E}_{x\\sim d_{\\pi}}\\left[ \\mathbb{E}_{a\\sim \\pi(\\cdot \\mid x)}[Q^{\\pi}(x, a)\\nabla_{\\varphi}\\log \\pi(a\\mid x)] \\right] \\\\ \u0026= \\mathbb{E}_{x\\sim d_{\\pi}}\\left[ \\mathbb{E}_{a\\sim \\pi(\\cdot \\mid x)}[Q^{\\pi}(x, a)\\nabla_{\\varphi}(a f_{\\varphi}(x) - A(f_\\varphi(x)))] \\right] \\\\ \u0026= \\mathbb{E}_{x\\sim d_{\\pi}}\\left[ \\mathbb{E}_{a\\sim \\pi(\\cdot \\mid x)}[Q^{\\pi}(x, a)(f_{\\varphi}(x) - \\nabla_{\\varphi}A(f_\\varphi(x))\\nabla_{\\varphi}f_{\\varphi}(x))] \\right] \\\\ \\end{align} $$We just need to plug the correct values of the exponential family in.\nActor Critic Methods Actor critic methods describe a different family of approaches that explicitly attempt to jointly improve an approximator network for the value, called critic, and a network for the policy, called actor. These methods are, as usual, divided into online and offline actor critic methods. We will analyze and present a few different methods and their properties.\nOnline Actor Critic With online methods, we\nA first algorithm Image from the Textbook\nThe main idea here is to use an approximated $Q-$value to get an approximate policy update. The main drawback is that we are doing an approximation of an approximation, so the variance of this method should be quite high. From other point of view, this is somewhat similar to the SARSA update explained in Tabular Reinforcement Learning Usually the updates here are bootstrapped too!\nThe notion of Advantage This will be the base for the so called A2C algorithm, where we use the notion of Advantage to bound the variance, in a manner similar to what we have done with the baselines.\n$$ A^{\\pi}(x, a) = Q^{\\pi}(x, a) - V^{\\pi}(x) $$$$ \\forall \\pi, x \\max_{a} A^{\\pi}(x, a) \\geq 0 $$ This is easy to see for deterministic policies, if we choose an $a$ following the policy, then it is 0, but if it could be improved then it has positive value.\nAdvantage Actor Critic This method is very similar to the original Actor Critic method: instead of using the $Q$ estimate to update the critic we use the advantage This can be view as the standard Policy Gradient method with some special baseline.\n$$ \\varphi = \\varphi + \\alpha_{\\varphi}\\nabla_{\\varphi}\\log \\pi(a_{t}\\mid x_{t})A^{\\pi}(x_{t}, a_{t}) $$ Which is similar to the above actor-critic model, but with lesser variance if we choose the baseline equivalent correctly.\nRecall that $V(x) = \\mathop{\\mathbb{E}}_{a \\sim \\pi(x)} Q(x, a)$, so this is the baseline that has been chosen for this kind of Actor-Critic network. This is probably difficult to compute, and probably not stable to estimate using MonteCarlo Networks.\nOne thing that is usually done, is adding the parametrized value network $V(x ; \\theta)$ and use that one.\nTrusted Region Policy Optimization This method is a variant of the above method, but it introduces a constraint on the policy update, so that we don’t update the policy too much, which can lead to instability in the optimization. For a similar reason, we use a fixed critic for multiple iterations.\n$$ \\varphi_{t + 1} = \\arg\\max_{\\varphi} J(\\varphi) \\text{ s.t. } KL(\\pi_{\\varphi_{t}} \\parallel \\pi_{\\varphi}) \\leq \\delta $$$$ J(\\varphi) = \\mathbb{E}_{x, a\\sim \\pi_{\\varphi_{t}}}\\left[ \\frac{\\pi_{\\varphi}(a\\mid x)}{\\pi_{\\varphi_{t}}(a\\mid x)}A^{\\pi_{\\varphi_{t}}}(x, a) \\right] $$One nice thing about TRPO is that it is possible to use this algorithm in an offline fashion as long as the policy can still be trusted (i.e. it satisfies the delta constraint).\nProximal Policy Optimization This method is a variant of the above method, but instead of using the KL divergence, we use a penalty term in the loss function to keep the policy update close to the old policy. This algorithm has also had great influence during training of language models.\n$$ \\varphi_{t + 1} = \\arg\\max_{\\varphi} J(\\varphi) - \\beta \\cdot KL(\\pi_{\\varphi_{t}} \\parallel \\pi_{\\varphi}) $$ With $\\beta \u003e 0$. Other variants might work on the importance sampling.\nGroup Relative Policy Optimization With this technique, we can use the same actor network for the critic (in this sense the signal is purer from the environment)\nNo separate value network for the Critic, Sample multiple outputs from the old policy for the same question or state, Treat the average reward of these outputs as the baseline, Anything above average yields a “positive advantage,” anything below yields a “negative advantage.” Offline Actor Critic One clear advantage of offline learning algorithms is the possibility of re-using past data.\nThe Main Idea $$ \\mathcal{L}(\\theta) = \\mathbb{E}_{s, a, r, s'}\\left[ (r + \\gamma \\max_{a'}Q(s', a'; \\theta_{\\text{old}}) - Q(s, a; \\theta))^{2} \\right] $$ The main problem with the standard setting is having to maximize over the set of actions, which could be very large, or even continuous.\n$$ \\mathcal{L}(\\theta) = \\mathbb{E}_{s, a, r, s'}\\left[ (r + \\gamma Q(s', \\pi_{\\varphi}(s'); \\theta_{\\text{old}}) - Q(s, a; \\theta))^{2} \\right] $$ Where $\\pi_{\\varphi}$ is the policy network. If the policy is good enough, by Bellman Optimality condition (see Markov Processes), it will naturally converge to the maximum of the $Q$ function, one problem could be the instability of this double optimization, as we are optimizing for $Q$ and $\\pi$ at the same time.\n$$ \\varphi_{t + 1} = \\arg\\max_{\\varphi} \\mathbb{E}_{s, a\\sim \\pi_{\\varphi_{t}}}\\left[ Q(s, a; \\theta_{t}) \\right] = \\arg\\max_{\\varphi} J(\\varphi) $$$$ \\nabla_{\\varphi}J(\\varphi) = \\mathbb{E}_{s \\sim \\mu}\\left[ Q(s, \\pi_{\\varphi}(s); \\theta_{t}) \\right] $$$$ \\nabla_{\\varphi}Q(s, a; \\theta) = D\\varphi \\pi_{\\varphi}(s) \\cdot \\nabla_{a}Q(s, a; \\theta) \\mid_{a = \\pi_{\\varphi}(s)} $$Note that here we are not considering the $\\log \\pi(a \\mid x)$ to compute the gradient for the policy. My personal take is just that we don’t know how to compute this value (we don’t have a forward step to compute it), so we just ignore it. Here we can see a discussion on the use of $\\log \\pi(a \\mid x)$.\nDeep Deterministic Policy Gradient Putting everything together from the section before we get the DDPG algorithm: It is possible to extend this algorithm with TD3, which is a variant of the above algorithm that uses a double critic to estimate the Q-value, which helps in reducing the overestimation bias.\nOn Exploration With the offline methods we have just presented, the usual solution for exploration is what is called Gaussian Noise Dithering: this method just adds some noise to the output of the policy $\\pi_{\\varphi}$ in continuous settings. However, these methods often suffer from not exploring enough. The following section presents a method that attempts to ease this problem. Some methods of exploration as are also cited in Planning.\nMaximum Entropy Reinforcement Learning $$ J(\\varphi) = \\mathbb{E}_{s, a\\sim \\pi_{\\varphi}}\\left[ Q(s, a; \\theta) + \\alpha \\mathcal{H}(\\pi_{\\varphi}(\\cdot \\mid s)) \\right] $$ Where the parameter $\\alpha$ is a hyper-parameter that controls how much the entropy of the policy weights.\nTrust Region Policy Optimization (TRPO) To address the instability of optimizing both $Q$ and $\\pi$ simultaneously, Trust Region Policy Optimization (TRPO) introduces a constrained optimization framework. The primary idea behind TRPO is to update the policy in such a way that it stays within a trust region, ensuring that each update does not deviate excessively from the current policy. This prevents performance degradation due to overly large updates.\nObjective Function: TRPO optimizes the following constrained objective:\n$$ \\max_{\\varphi} \\mathbb{E}_{s \\sim \\mu, a \\sim \\pi_{\\varphi_t}}\\left[ \\frac{\\pi_{\\varphi}(a \\mid s)}{\\pi_{\\varphi_t}(a \\mid s)} A_{\\pi_{\\varphi_t}}(s, a) \\right] $$subject to:\n$$ \\mathbb{E}_{s \\sim \\mu}\\left[ D_{\\text{KL}}(\\pi_{\\varphi_t}(\\cdot \\mid s) \\parallel \\pi_{\\varphi}(\\cdot \\mid s)) \\right] \\leq \\delta, $$where $A_{\\pi_{\\varphi_t}}(s, a)$ is the advantage function, $D_{\\text{KL}}$ is the Kullback-Leibler divergence, and $\\delta$ is a small positive constant controlling the size of the update.\nProximal Policy Optimization (PPO) Proximal Policy Optimization (PPO) simplifies TRPO by avoiding the computational complexity of solving a constrained optimization problem. PPO achieves similar benefits by clipping the policy update directly within the objective function.\nObjective Function PPO modifies the policy update by introducing a clipped surrogate objective:\n$$ \\mathcal{L}^{\\text{PPO}}(\\varphi) = \\mathbb{E}_{s, a}\\left[ \\min\\left( r_t(\\varphi) A_{\\pi_{\\varphi_t}}(s, a), \\text{clip}(r_t(\\varphi), 1 - \\epsilon, 1 + \\epsilon) A_{\\pi_{\\varphi_t}}(s, a) \\right) \\right], $$where:\n$$ r_t(\\varphi) = \\frac{\\pi_{\\varphi}(a \\mid s)}{\\pi_{\\varphi_t}(a \\mid s)}, $$and $\\epsilon$ is a small hyperparameter (e.g., $\\epsilon = 0.2$) controlling the extent of clipping.\nAlgorithm Advantages Challenges TRPO Stable updates, trust region enforcement Computationally expensive, complex PPO Simplicity, robust performance Sensitive to hyperparameters ($\\epsilon$) ",
-  "wordCount" : "2915",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-17T00:00:00Z",
   "dateModified": "2025-01-17T00:00:00Z",
@@ -243,405 +233,12 @@ The idea here is to parametrize the value estimation function so that similar in
     <h1 class="post-title entry-hint-parent">
       RL Function Approximation
     </h1>
-    <div class="post-meta"><span title='2025-01-17 00:00:00 +0000 UTC'>January 17, 2025</span>&nbsp;·&nbsp;Reading Time: 14 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-17 00:00:00 +0000 UTC'>January 17, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#the-gradient-idea" aria-label="The Gradient Idea">The Gradient Idea</a><ul>
-                        
-                <li>
-                    <a href="#a-simple-parametrization" aria-label="A simple parametrization">A simple parametrization</a></li>
-                <li>
-                    <a href="#td-gradient-view" aria-label="TD-Gradient View">TD-Gradient View</a></li>
-                <li>
-                    <a href="#q-learning-view" aria-label="Q-Learning View">Q-Learning View</a></li>
-                <li>
-                    <a href="#deep-q-networks" aria-label="Deep Q-networks">Deep Q-networks</a></li>
-                <li>
-                    <a href="#double-q-learning" aria-label="Double Q-learning">Double Q-learning</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#policy-approximation" aria-label="Policy Approximation">Policy Approximation</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#policy-parametrization-examples" aria-label="Policy Parametrization examples">Policy Parametrization examples</a></li></ul>
-                    
-                <li>
-                    <a href="#function-gradient-methods" aria-label="Function Gradient Methods">Function Gradient Methods</a><ul>
-                        
-                <li>
-                    <a href="#the-objective" aria-label="The Objective">The Objective</a></li>
-                <li>
-                    <a href="#score-trick" aria-label="Score Trick">Score Trick</a></li>
-                <li>
-                    <a href="#adding-baselines" aria-label="Adding Baselines">Adding Baselines</a></li>
-                <li>
-                    <a href="#baselines-reduce-variance" aria-label="Baselines reduce variance">Baselines reduce variance</a></li>
-                <li>
-                    <a href="#reinforce" aria-label="REINFORCE">REINFORCE</a></li>
-                <li>
-                    <a href="#drawbacks-of-reinforce" aria-label="Drawbacks of REINFORCE">Drawbacks of REINFORCE</a></li>
-                <li>
-                    <a href="#policy-gradient-method" aria-label="Policy Gradient Method">Policy Gradient Method</a></li>
-                <li>
-                    <a href="#policy-gradient-and-the-exponential-family" aria-label="Policy Gradient and The Exponential Family">Policy Gradient and The Exponential Family</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#actor-critic-methods" aria-label="Actor Critic Methods">Actor Critic Methods</a><ul>
-                        
-                <li>
-                    <a href="#online-actor-critic" aria-label="Online Actor Critic">Online Actor Critic</a><ul>
-                        
-                <li>
-                    <a href="#a-first-algorithm" aria-label="A first algorithm">A first algorithm</a></li>
-                <li>
-                    <a href="#the-notion-of-advantage" aria-label="The notion of Advantage">The notion of Advantage</a></li>
-                <li>
-                    <a href="#advantage-actor-critic" aria-label="Advantage Actor Critic">Advantage Actor Critic</a></li>
-                <li>
-                    <a href="#trusted-region-policy-optimization" aria-label="Trusted Region Policy Optimization">Trusted Region Policy Optimization</a></li>
-                <li>
-                    <a href="#proximal-policy-optimization" aria-label="Proximal Policy Optimization">Proximal Policy Optimization</a></li>
-                <li>
-                    <a href="#group-relative-policy-optimization" aria-label="Group Relative Policy Optimization">Group Relative Policy Optimization</a></li></ul>
-                </li>
-                <li>
-                    <a href="#offline-actor-critic" aria-label="Offline Actor Critic">Offline Actor Critic</a><ul>
-                        
-                <li>
-                    <a href="#the-main-idea" aria-label="The Main Idea">The Main Idea</a></li>
-                <li>
-                    <a href="#deep-deterministic-policy-gradient" aria-label="Deep Deterministic Policy Gradient">Deep Deterministic Policy Gradient</a></li></ul>
-                </li>
-                <li>
-                    <a href="#on-exploration" aria-label="On Exploration">On Exploration</a><ul>
-                        
-                <li>
-                    <a href="#maximum-entropy-reinforcement-learning" aria-label="Maximum Entropy Reinforcement Learning">Maximum Entropy Reinforcement Learning</a></li>
-                <li>
-                    <a href="#trust-region-policy-optimization-trpo" aria-label="Trust Region Policy Optimization (TRPO)">Trust Region Policy Optimization (TRPO)</a></li>
-                <li>
-                    <a href="#proximal-policy-optimization-ppo" aria-label="Proximal Policy Optimization (PPO)">Proximal Policy Optimization (PPO)</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>These algorithms are good for scaling state spaces, but not actions spaces.</p>
-<h3 id="the-gradient-idea">The Gradient Idea<a hidden class="anchor" aria-hidden="true" href="#the-gradient-idea">#</a></h3>
-<p>Recall Temporal difference learning and Q-Learning, two model free policy evaluation techniques explored in <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>.</p>
-<h4 id="a-simple-parametrization">A simple parametrization<a hidden class="anchor" aria-hidden="true" href="#a-simple-parametrization">#</a></h4>
-<p>The idea here is to parametrize the value estimation function so that <em>similar inputs</em> gets <em>similar values</em> akin to <a href="/notes/parametric-modeling">Parametric Modeling</a> estimation we have done in the other courses. In this manner, we don&rsquo;t need to explicitly explore every single state in the state space.</p>
-<p>For example, a single linear parametrization for the value function gives a quite nice interpretation of why we are introducing loss functions in this case:</p>
-$$
-V^{\pi}(x; \theta_{\text{new}}) = r(x, \pi(x)) + \gamma \sum_{x'}p(x'\mid x, \pi(x))V^{\pi}(x^{'}; \theta_{\text{old}})
-$$$$
-\forall x, \theta_{new, x} = \arg\min_{\theta_{x} \in \mathbb{R}} (\theta_{x} - (r(x, \pi(x)) + \gamma  \sum_{x'}p(x'\mid x, \pi(x))V^{\pi}(x^{'}; \theta_{\text{old}}))))^{2}
-$$$$
-\theta_{new} = \arg\min_{\theta \in \mathbb{R}^{n}} \mathbb{E}_{x}(V^{\pi}(x; \theta) - (r(x, \pi(x)) + \gamma  \sum_{x'}p(x'\mid x, \pi(x))V^{\pi}(x^{'};\theta_{\text{old}})))^{2}
-$$<p>
-Where $x$ is drawn from some distribution that has non zero mass for every state (so that it updates every state indefinitely).</p>
-<p>This simple motivation example opens the door for gradient descent methods for parameter estimation!
-The only drawback that we will see using these methods is the enormous number of samples that we need to get a good estimate of the value function.</p>
-<h4 id="td-gradient-view">TD-Gradient View<a hidden class="anchor" aria-hidden="true" href="#td-gradient-view">#</a></h4>
-$$
-V^{\pi}(x) =  V_{\text{old}}^{\pi}(x) + \alpha_{t}(r + \gamma V^{\pi}_{\text{old}}(x^{(i)}) -  V_{\text{old}}^{\pi}(x))
-$$$$
-l(\theta; x, x') = -\frac{1}{2}(r + \gamma V^{\pi}_{\text{old}}(x^{'};\theta) -  V_{\text{old}}^{\pi}(x;\theta))^{2}
-$$<p>
-Where the value is parameterized by theta.
-It&rsquo;s derivative, is called the TD error, indicated with $\delta(x)$.
-TODO: fix the mistake for the expectation of the estimate, also expand on the fact that the gradient is 1 for the linear case, so classic TD and Q-Learning are just doing gradient descent on the linear feature vector.</p>
-<p>One nice thing about this view, is that the gradient with respect of this loss is <strong>unbiased</strong>, due to the law of large numbers, see <a href="/notes/central-limit-theorem-and-law-of-large-numbers">Central Limit Theorem and Law of Large Numbers</a>.
-Sometimes gradient descent with a bootstrap estimate is called <em>stochastic semi-gradient descent</em>.</p>
-<h4 id="q-learning-view">Q-Learning View<a hidden class="anchor" aria-hidden="true" href="#q-learning-view">#</a></h4>
-$$
-Q^{\pi}(x, a) =  Q_{\text{old}}^{\pi}(x, a) + \alpha_{t}(r + \gamma \max_{a} Q^{\pi}_{\text{old}}(x^{'}, a) -  Q_{\text{old}}^{\pi}(x, a))
-$$$$
-l(\theta; x, a, r, x') = -\frac{1}{2}(r + \gamma \max_{a} Q^{\pi}_{\text{old}}(x^{'}, a;\theta) -  Q_{\text{old}}^{\pi}(x, a;\theta))^{2}
-$$<h4 id="deep-q-networks">Deep Q-networks<a hidden class="anchor" aria-hidden="true" href="#deep-q-networks">#</a></h4>
-<blockquote>
-<p>DQN updates the neural network used for the approximate bootstrapping estimate infrequently to maintain a constant optimization target across multiple episodes.</p></blockquote>
-<p>The problem we are trying to solve is the moving optimization target property of the above q-learning optimization, which leads to instabilities (it&rsquo;s somewhat similar to changing the array you are iterating in, which gives unpredictable results, sometimes, or more difficult to analyze or debug).</p>
-<p>We assume to have a dataset $\mathcal{D}$ called <em>experience buffer</em>.
-The idea here is use one network for the $old$ values, and the other used for the optimization objective. This idea is quite simple.
-This technique is known in the literature as <em>Polyak averaging</em>, or <em>experience replay</em>.
-here $\theta_{old}$ is not update every step, but only after $D$ <strong>iterations</strong>, which attempts to give some stability to the optimization.</p>
-$$
-\max_{a} q(x, a) \approx \max_{a} Q(x, a; \theta_{\text{old}})
-$$<p>
-The problem with this technique is introducing the q-value estimation, this leads to a <strong>maximization bias</strong>:</p>
-<figure class="center">
-<img src="/images/notes/RL Function Approximation-20241129105307115.webp" style="width: 100%"   alt="RL Function Approximation-20241129105307115" title="RL Function Approximation-20241129105307115"/>
-<figcaption><p style="text-align:center;">image from the book</p></figcaption>
-</figure>
-<h4 id="double-q-learning">Double Q-learning<a hidden class="anchor" aria-hidden="true" href="#double-q-learning">#</a></h4>
-<p>This leads to <strong>Double Q-Learning</strong> which leads to more accurate estimation of the real $q$ (Van Hasselt et
-al., 2016)
-Which is just taking the maximum with respect of the new network, and not the old.
-Also during gradient estimation, we are always selecting with the new network, not the old, we just use the old network to get the reward. (Meaning the $a$ inside the $Q(x, a; \theta_{\text{old}})$) is now taken from the new policy induced by the network parameterized with $\theta$ that changes often.</p>
-$$
-\mathcal{L}(\theta) = \frac{1}{2}\mathbb{E}_{s, a, r, s'}\left[ (r + \gamma \max_{a'}Q(s', a'; \theta_{\text{old}}) - Q(s, a; \theta))^{2} \right]
-$$$$
-\mathcal{L}(\theta) = \frac{1}{2}\mathbb{E}_{s, a, r, s'}\left[ (r + \gamma Q(s', a^{*}; \theta_{\text{old}}) - Q(s, a; \theta))^{2} \right]
-$$<p>It works quite well, but the reason why it works is not well explained mathematically. Intuitively, the old network is quite biased toward overly high values of $Q$. With Double Q-learning, we are shifting this bias towards a more accurate version, the current $Q_{\theta}$, but still evaluating using the bootstrapped old estimate.</p>
-<h2 id="policy-approximation">Policy Approximation<a hidden class="anchor" aria-hidden="true" href="#policy-approximation">#</a></h2>
-$$
-\pi^{*}(x) = \pi(x; \varphi)
-$$<p>
-The methods that attempt to estimate this are called <em>policy search</em> or <em>policy gradient</em> methods.</p>
-<h4 id="policy-parametrization-examples">Policy Parametrization examples<a hidden class="anchor" aria-hidden="true" href="#policy-parametrization-examples">#</a></h4>
-$$
-\pi(a \mid x, \theta) \sim \mathcal{N}(a ; \mu(x, \theta), \Sigma(x, \theta))
-$$$$
-\pi(a \mid x, \theta) = Cat(a; \sigma(f(x, \theta)))
-$$<p>
-We can also decompose this using the Markov property if $m$ is large.</p>
-<p>The important thing we need is:</p>
-<ol>
-<li>Be able to use <a href="/notes/backpropagation">Backpropagation</a></li>
-<li>Easy to sample from, so that we can use <a href="/notes/monte-carlo-methods">Monte Carlo Methods</a>.</li>
-</ol>
-<h3 id="function-gradient-methods">Function Gradient Methods<a hidden class="anchor" aria-hidden="true" href="#function-gradient-methods">#</a></h3>
-<h4 id="the-objective">The Objective<a hidden class="anchor" aria-hidden="true" href="#the-objective">#</a></h4>
-$$
-J_{T}(\theta) = \mathbb{E}_{\tau \sim \Pi_{\theta}}[G_{0}] \approx \frac{1}{N}\sum_{i=1}^{N}G_{0}^{(i)}
-$$<p>
-Taking trajectories following the current policy.</p>
-<h4 id="score-trick">Score Trick<a hidden class="anchor" aria-hidden="true" href="#score-trick">#</a></h4>
-<p>We have encountered the score function before in <a href="/notes/parametric-modeling">Parametric Modeling</a> when estimating the Rao-Cramer Bound.
-In this context, the score is defined as follows:</p>
-$$
-\nabla_{\varphi} \log \Pi_{\varphi} =  \frac{\nabla_{\varphi}\Pi_{\varphi}}{\Pi\varphi}
-$$<p>We will use it here to get an unbiased estimate of the gradient of the policy, so that we can use <a href="/notes/backpropagation">Backpropagation</a> to estimate the gradient of the policy.</p>
-$$
-\nabla_{\varphi}\mathbb{E}_{\tau \sim \prod_{\varphi}}[G_{0}] 
-= \mathbb{E}_{\tau \sim \prod_{\varphi}}\left[ G_{0}\nabla_{\varphi}\log \Pi_{\varphi}(x) \right]
-$$$$
-\begin{align}
-\nabla_{\varphi}\log \Pi_{\varphi}(x) &=  \nabla_{\varphi} \left[  \log p(x_{0}) + \sum_{t = 0}^{T - 1} \log \pi(a_{t} \mid x_{t}) + \sum_{t = 0}^{T - 1} \log p(x_{t + 1} \mid x_{t}, a_{t}) \right] \\
-&=\sum_{t = 0}^{T - 1}\nabla _{\varphi}\log \pi(a_{t}\mid x_{t})
-\end{align}
-$$$$
-\pi_{\varphi}(a \mid x)  = \frac{\exp(h(x, a, \varphi))}{\sum_{a' \in A} \exp(h(x, a', \varphi))}
-$$<p>And $h(x, a, \varphi) = \varphi^{T}\phi(x, a)$ given some feature vector.</p>
-$$
-\nabla_{\varphi}J_{T}(\theta) \approx \frac{1}{m} \sum_{i = 1}^{m}g^{(i)}_{0:T}  \sum_{t = 0}^{T - 1}\nabla _{\varphi}\log \pi(a_{t}\mid x_{t})
-$$<p>But this estimate has usually <strong>high variance</strong>.</p>
-<h4 id="adding-baselines">Adding Baselines<a hidden class="anchor" aria-hidden="true" href="#adding-baselines">#</a></h4>
-$$
- \mathbb{E}_{\tau \sim \prod_{\varphi}}\left[ (G_{0} - b)\nabla_{\varphi}\log \Pi_{\varphi}(x) \right]
-$$<p>
-Adding this constant still keeps the expectation unvaried, as the derivative of the score is 0, so it doesn&rsquo;t affect the estimate, but it affects the variance by reducing it if we choose $b$ correctly, which helps in the stability of the estimate.</p>
-$$
-b_{0:t - 1} = \sum_{i = 0}^{t - 1}\gamma^{i}r_{i}
-$$$$
-\nabla_{\varphi}J(\theta) \approx \mathbb{E}_{\tau \sim \Pi} \left[ \sum_{t = 0}^{T - 1} \gamma^{t}G_{t:T} \nabla_{\varphi} \log \pi_{\varphi}(a_{t  }\mid x _{t}) \right] 
-$$<p>
-Which should be better in terms of its variance.</p>
-<h4 id="baselines-reduce-variance">Baselines reduce variance<a hidden class="anchor" aria-hidden="true" href="#baselines-reduce-variance">#</a></h4>
-<p>The condition we need to satisfy is $b^{2} \leq 2 b  \cdot r(x, a)$ for each state and action. (The proof is along variance and covariance of the two functions).</p>
-$$
-\mathop{\mathbb{E}}[f(x)]= \mathop{\mathbb{E}}[f(x) - b] + \mathop{\mathbb{E}}[b]  = \mathop{\mathbb{E}}[f(x) - b] 
-$$<p>
-Furthermore, under certain conditions we have that:</p>
-<p>Recall that $\text{Var[X + Y]} = \text{Var[X]} + \text{Var[Y]} + 2\text{Cov[X, Y]}$.</p>
-$$
-\text{Var}[f(x) - b] = \text{Var}[f(x)] + \text{Var}[b] - 2\text{Cov}[f(x), b]
-$$<p>Which means that if $\text{Var}[b] \leq 2\text{Cov}[f(x), b]$ then the variance of the function will be reduced.</p>
-<p>In the case of the baseline, the variance of $b$ is exactly $\mathop{\mathbb{E}}[b^{2}(\nabla \log \pi(a \mid x)^{2}]$
-One can prove that given a sample trajectory, the above state dependent baseline is a valid baseline.</p>
-<h4 id="reinforce">REINFORCE<a hidden class="anchor" aria-hidden="true" href="#reinforce">#</a></h4>
-<p>The Reinforce algorithm allows optimization for the policy in <em>continuous spaces</em> but does not guarantee the convergence to the best policy possible.</p>
-<figure class="center">
-<img src="/images/notes/RL Function Approximation-20241129132442764.webp" style="width: 100%"   alt="RL Function Approximation-20241129132442764" title="RL Function Approximation-20241129132442764"/>
-<figcaption><p style="text-align:center;">REINFORCE Algorithm from the Textbook</p></figcaption>
-</figure>
-<p>One can also add the baseline as before, and it should reduce the variance, under certain cases. (for the classical state dependent baseline is easy to see that it indeed does it).</p>
-<p>A common technique is to further reduce the variance, and only consider step-1 updates. This is somewhat akin to Stochastic Gradient Descent on policy.
-One can also subtract the baseline from t onwards.</p>
-<h4 id="drawbacks-of-reinforce">Drawbacks of REINFORCE<a hidden class="anchor" aria-hidden="true" href="#drawbacks-of-reinforce">#</a></h4>
-<ul>
-<li>These methods are <strong>On-policy</strong> because we need to simulate many many roll-outs</li>
-<li>High variance in the gradient estimates</li>
-<li>The last point implied <strong>slow convergence</strong> of the method (related to the <em>sample efficiency</em>)</li>
-<li>Not guaranteed convergence</li>
-</ul>
-<p>Another drawback is the difficulty of handling the exploration-exploitation trade-off. These algorithms, along with the AC methods in the next section, are fundamentally exploitative. We usually employ random exploration or epsilon-greedy methods to explore, but usually these still might converge without actually having explored the state space enough.</p>
-<h4 id="policy-gradient-method">Policy Gradient Method<a hidden class="anchor" aria-hidden="true" href="#policy-gradient-method">#</a></h4>
-$$
-\begin{align}
-\nabla_{\varphi} J_{T}(\varphi) &= \sum_{t = 0}^{\infty}\mathbb{E}_{t: \infty \sim \Pi_{\varphi}}\left[ \gamma^{t} G_{t} \nabla_{\varphi}\log \pi(a_{t}\mid x_{t})\right]  \\
-&= \sum_{t = 0}^{\infty} \mathbb{E}_{x_{t}, a_{t}} \left[ \gamma^{t}Q^{\pi}(x_{t}, a_{t})\nabla_{\varphi}\log \pi(a_{t}\mid x_{t}) \right]
-\end{align}
-$$<p>
-Assuming we are using a baseline that starts from the $t$  time step.</p>
-<p>Often, the above policy gradient we derived for the REINFORCE algorithm is written in terms of <em>discounted rate occupancy measure</em>.</p>
-$$
-d_{\pi}(x) = (1-\gamma)\sum_{t = 0}^{\infty}\gamma^{t}p(x_{t} = x)
-$$<p>
-The $1 - \gamma$ factor is a normalization constant.</p>
-$$
-\nabla_{\varphi}J_{T}(\varphi) = \frac{1}{(1 - \gamma)} \cdot \mathbb{E}_{x\sim d_{\pi}}\left[ \mathbb{E}_{a\sim \pi(\cdot \mid x)}[Q^{\pi}(x, a)\nabla_{\varphi}\log \pi(a\mid x)] \right]
-$$<p>
-This form is known as the <strong>policy gradient theorem</strong>, it will be useful to characterize the actor critic methods.</p>
-<p>We will see that for offline methods, explored in <a href="/notes#offline-actor-critic">#Offline Actor Critic</a>, we wont need the $\log \pi$ part, as we cannot actively explore the next state from the current state.</p>
-<h4 id="policy-gradient-and-the-exponential-family">Policy Gradient and The Exponential Family<a hidden class="anchor" aria-hidden="true" href="#policy-gradient-and-the-exponential-family">#</a></h4>
-<p>If the policy is characterized by a distribution in the exponential family, it is easy to derive a closed form solution for the policy gradient as above. In this section we briefly discuss some gradients that are part of this family. See <a href="/notes/the-exponential-family">The Exponential Family</a> for a discussion on distributions of this family.</p>
-$$
-\pi(a \mid x ) = h(a) \exp(a f_{\varphi}(x) - A(f_\varphi(x)))
-$$<p>And written in this manner the un-baselined policy gradient is:</p>
-$$
-\begin{align}
-\nabla_{\varphi}J_{T}(\varphi) &= \mathbb{E}_{x\sim d_{\pi}}\left[ \mathbb{E}_{a\sim \pi(\cdot \mid x)}[Q^{\pi}(x, a)\nabla_{\varphi}\log \pi(a\mid x)] \right] \\
-&= \mathbb{E}_{x\sim d_{\pi}}\left[ \mathbb{E}_{a\sim \pi(\cdot \mid x)}[Q^{\pi}(x, a)\nabla_{\varphi}(a f_{\varphi}(x) - A(f_\varphi(x)))] \right]  \\
-&= \mathbb{E}_{x\sim d_{\pi}}\left[ \mathbb{E}_{a\sim \pi(\cdot \mid x)}[Q^{\pi}(x, a)(f_{\varphi}(x) - \nabla_{\varphi}A(f_\varphi(x))\nabla_{\varphi}f_{\varphi}(x))] \right]  \\
-\end{align}
-$$<p>We just need to plug the correct values of the exponential family in.</p>
-<h2 id="actor-critic-methods">Actor Critic Methods<a hidden class="anchor" aria-hidden="true" href="#actor-critic-methods">#</a></h2>
-<p>Actor critic methods describe a different family of approaches that explicitly attempt to jointly improve an approximator network for the value, called critic, and a network for the policy, called actor.
-These methods are, as usual, divided into online and offline actor critic methods. We will analyze and present a few different methods and their properties.</p>
-<h3 id="online-actor-critic">Online Actor Critic<a hidden class="anchor" aria-hidden="true" href="#online-actor-critic">#</a></h3>
-<p>With online methods, we</p>
-<h4 id="a-first-algorithm">A first algorithm<a hidden class="anchor" aria-hidden="true" href="#a-first-algorithm">#</a></h4>
-<figure class="center">
-<img src="/images/notes/RL Function Approximation-20241129145305087.webp" style="width: 100%"   alt="RL Function Approximation-20241129145305087" title="RL Function Approximation-20241129145305087"/>
-<figcaption><p style="text-align:center;">Image from the Textbook</p></figcaption>
-</figure>
-<p>The main idea here is to use an approximated $Q-$value to get an approximate policy update.
-The main drawback is that we are doing an approximation of an approximation, so the variance of this method should be quite high.
-From other point of view, this is somewhat similar to the SARSA update explained in <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>
-Usually the updates here are bootstrapped too!</p>
-<h4 id="the-notion-of-advantage">The notion of Advantage<a hidden class="anchor" aria-hidden="true" href="#the-notion-of-advantage">#</a></h4>
-<p>This will be the base for the so called A2C algorithm, where we use the notion of Advantage to bound the variance, in a manner similar to what we have done with the baselines.</p>
-$$
-A^{\pi}(x, a) = Q^{\pi}(x, a) - V^{\pi}(x)
-$$$$
-\forall \pi, x \max_{a} A^{\pi}(x, a) \geq 0
-$$<p>
-This is easy to see for deterministic policies, if we choose an $a$ following the policy, then it is 0, but if it could be improved then it has positive value.</p>
-<h4 id="advantage-actor-critic">Advantage Actor Critic<a hidden class="anchor" aria-hidden="true" href="#advantage-actor-critic">#</a></h4>
-<p>This method is very similar to the original Actor Critic method: instead of using the $Q$ estimate to update the critic we use the advantage
-This can be view as the standard Policy Gradient method with some special baseline.</p>
-$$
-\varphi  = \varphi + \alpha_{\varphi}\nabla_{\varphi}\log \pi(a_{t}\mid x_{t})A^{\pi}(x_{t}, a_{t})
-$$<p>
-Which is similar to the above actor-critic model, but with lesser variance if we choose the baseline equivalent correctly.</p>
-<p>Recall that $V(x) = \mathop{\mathbb{E}}_{a \sim \pi(x)} Q(x, a)$, so this is the baseline that has been chosen for this kind of Actor-Critic network. This is probably difficult to compute, and probably not stable to estimate using MonteCarlo Networks.</p>
-<p>One thing that is usually done, is adding the parametrized value network $V(x ; \theta)$ and use that one.</p>
-<h4 id="trusted-region-policy-optimization">Trusted Region Policy Optimization<a hidden class="anchor" aria-hidden="true" href="#trusted-region-policy-optimization">#</a></h4>
-<p>This method is a variant of the above method, but it introduces a constraint on the policy update, so that we don&rsquo;t update the policy too much, which can lead to instability in the optimization. For a similar reason, we use a fixed critic for multiple iterations.</p>
-$$
-\varphi_{t + 1} = \arg\max_{\varphi} J(\varphi) \text{ s.t. } KL(\pi_{\varphi_{t}} \parallel \pi_{\varphi}) \leq \delta
-$$$$
-J(\varphi) = \mathbb{E}_{x, a\sim \pi_{\varphi_{t}}}\left[ \frac{\pi_{\varphi}(a\mid x)}{\pi_{\varphi_{t}}(a\mid x)}A^{\pi_{\varphi_{t}}}(x, a) \right]
-$$<p>One nice thing about TRPO is that it is possible to use this algorithm in an <em>offline</em> fashion as long as the policy can still be trusted (i.e. it satisfies the delta constraint).</p>
-<h4 id="proximal-policy-optimization">Proximal Policy Optimization<a hidden class="anchor" aria-hidden="true" href="#proximal-policy-optimization">#</a></h4>
-<p>This method is a variant of the above method, but instead of using the KL divergence, we use a penalty term in the loss function to keep the policy update close to the old policy. This algorithm has also had great influence during training of language models.</p>
-$$
-\varphi_{t + 1} = \arg\max_{\varphi} J(\varphi) - \beta \cdot KL(\pi_{\varphi_{t}} \parallel \pi_{\varphi})
-$$<p>
-With $\beta > 0$. Other variants might work on the importance sampling.</p>
-<h4 id="group-relative-policy-optimization">Group Relative Policy Optimization<a hidden class="anchor" aria-hidden="true" href="#group-relative-policy-optimization">#</a></h4>
-<p>With this technique, we can use the same actor network for the critic (in this sense the signal is <strong>purer</strong> from the environment)</p>
-<ul>
-<li><strong>No separate value network</strong> for the Critic,</li>
-<li>Sample multiple outputs from the old policy for the same question or state,</li>
-<li><strong>Treat the average reward of these outputs as the baseline</strong>,</li>
-<li>Anything above average yields a “positive advantage,” anything below yields a “negative advantage.”</li>
-</ul>
-<h3 id="offline-actor-critic">Offline Actor Critic<a hidden class="anchor" aria-hidden="true" href="#offline-actor-critic">#</a></h3>
-<p>One clear advantage of offline learning algorithms is the possibility of re-using past data.</p>
-<h4 id="the-main-idea">The Main Idea<a hidden class="anchor" aria-hidden="true" href="#the-main-idea">#</a></h4>
-$$
-\mathcal{L}(\theta) = \mathbb{E}_{s, a, r, s'}\left[ (r + \gamma \max_{a'}Q(s', a'; \theta_{\text{old}}) - Q(s, a; \theta))^{2} \right]
-$$<p>
-The main problem with the standard setting is having to maximize over the set of actions, which could be very large, or even continuous.</p>
-$$
-\mathcal{L}(\theta) = \mathbb{E}_{s, a, r, s'}\left[ (r + \gamma Q(s', \pi_{\varphi}(s'); \theta_{\text{old}}) - Q(s, a; \theta))^{2} \right]
-$$<p>
-Where $\pi_{\varphi}$ is the policy network. If the policy is good enough, by Bellman Optimality condition (see <a href="/notes/markov-processes">Markov Processes</a>), it will naturally converge to the maximum of the $Q$ function, one problem could be the instability of this double optimization, as we are optimizing for $Q$ and $\pi$ at the same time.</p>
-$$
-\varphi_{t + 1} = \arg\max_{\varphi} \mathbb{E}_{s, a\sim \pi_{\varphi_{t}}}\left[ Q(s, a; \theta_{t}) \right] = \arg\max_{\varphi} J(\varphi)
-$$$$
-\nabla_{\varphi}J(\varphi) = \mathbb{E}_{s \sim \mu}\left[ Q(s, \pi_{\varphi}(s); \theta_{t}) \right]
-$$$$
-\nabla_{\varphi}Q(s, a; \theta) = D\varphi \pi_{\varphi}(s) \cdot  \nabla_{a}Q(s, a; \theta) \mid_{a = \pi_{\varphi}(s)}
-$$<p>Note that here we are not considering the $\log \pi(a \mid x)$ to compute the gradient for the policy. My personal take is just that we don&rsquo;t know how to compute this value (we don&rsquo;t have a forward step to compute it), so we just ignore it.
-<a href="https://chatgpt.com/share/6782694b-0f48-8009-aa8b-9942903aa817">Here</a> we can see a discussion on the use of $\log \pi(a \mid x)$.</p>
-<h4 id="deep-deterministic-policy-gradient">Deep Deterministic Policy Gradient<a hidden class="anchor" aria-hidden="true" href="#deep-deterministic-policy-gradient">#</a></h4>
-<p>Putting everything together from the section before we get the DDPG algorithm:
-<img src="/images/notes/RL Function Approximation-20241220171826356.webp" style="width: 100%" class="center" alt="RL Function Approximation-20241220171826356"></p>
-<p>It is possible to extend this algorithm with TD3, which is a variant of the above algorithm that uses a double critic to estimate the Q-value, which helps in reducing the overestimation bias.</p>
-<h3 id="on-exploration">On Exploration<a hidden class="anchor" aria-hidden="true" href="#on-exploration">#</a></h3>
-<p>With the offline methods we have just presented, the usual solution for exploration is what is called <em>Gaussian Noise Dithering</em>: this method just adds some noise to the output of the policy $\pi_{\varphi}$ in continuous settings.
-However, these methods often suffer from not exploring enough. The following section presents a method that attempts to ease this problem.
-Some methods of exploration as are also cited in <a href="/notes/planning">Planning</a>.</p>
-<h4 id="maximum-entropy-reinforcement-learning">Maximum Entropy Reinforcement Learning<a hidden class="anchor" aria-hidden="true" href="#maximum-entropy-reinforcement-learning">#</a></h4>
-$$
-J(\varphi) = \mathbb{E}_{s, a\sim \pi_{\varphi}}\left[ Q(s, a; \theta) + \alpha \mathcal{H}(\pi_{\varphi}(\cdot \mid s)) \right]
-$$<p>
-Where the parameter $\alpha$ is a hyper-parameter that controls how much the entropy of the policy weights.</p>
-<h4 id="trust-region-policy-optimization-trpo">Trust Region Policy Optimization (TRPO)<a hidden class="anchor" aria-hidden="true" href="#trust-region-policy-optimization-trpo">#</a></h4>
-<p>To address the instability of optimizing both $Q$ and $\pi$ simultaneously, Trust Region Policy Optimization (TRPO) introduces a constrained optimization framework. The primary idea behind TRPO is to update the policy in such a way that it stays within a <em>trust region</em>, ensuring that each update does not deviate excessively from the current policy. This prevents performance degradation due to overly large updates.</p>
-<p><strong>Objective Function:</strong>
-TRPO optimizes the following constrained objective:</p>
-$$
-\max_{\varphi} \mathbb{E}_{s \sim \mu, a \sim \pi_{\varphi_t}}\left[ \frac{\pi_{\varphi}(a \mid s)}{\pi_{\varphi_t}(a \mid s)} A_{\pi_{\varphi_t}}(s, a) \right]
-$$<p>subject to:</p>
-$$
-\mathbb{E}_{s \sim \mu}\left[ D_{\text{KL}}(\pi_{\varphi_t}(\cdot \mid s) \parallel \pi_{\varphi}(\cdot \mid s)) \right] \leq \delta,
-$$<p>where $A_{\pi_{\varphi_t}}(s, a)$ is the advantage function, $D_{\text{KL}}$ is the Kullback-Leibler divergence, and $\delta$ is a small positive constant controlling the size of the update.</p>
-<h4 id="proximal-policy-optimization-ppo">Proximal Policy Optimization (PPO)<a hidden class="anchor" aria-hidden="true" href="#proximal-policy-optimization-ppo">#</a></h4>
-<p>Proximal Policy Optimization (PPO) simplifies TRPO by avoiding the computational complexity of solving a constrained optimization problem. PPO achieves similar benefits by clipping the policy update directly within the objective function.</p>
-<p><strong>Objective Function</strong>
-PPO modifies the policy update by introducing a clipped surrogate objective:</p>
-$$
-\mathcal{L}^{\text{PPO}}(\varphi) = \mathbb{E}_{s, a}\left[ \min\left( r_t(\varphi) A_{\pi_{\varphi_t}}(s, a), \text{clip}(r_t(\varphi), 1 - \epsilon, 1 + \epsilon) A_{\pi_{\varphi_t}}(s, a) \right) \right],
-$$<p>where:</p>
-$$
-r_t(\varphi) = \frac{\pi_{\varphi}(a \mid s)}{\pi_{\varphi_t}(a \mid s)},
-$$<p>and $\epsilon$ is a small hyperparameter (e.g., $\epsilon = 0.2$) controlling the extent of clipping.</p>
-<table>
-  <thead>
-      <tr>
-          <th><strong>Algorithm</strong></th>
-          <th><strong>Advantages</strong></th>
-          <th><strong>Challenges</strong></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>TRPO</td>
-          <td>Stable updates, trust region enforcement</td>
-          <td>Computationally expensive, complex</td>
-      </tr>
-      <tr>
-          <td>PPO</td>
-          <td>Simplicity, robust performance</td>
-          <td>Sensitive to hyperparameters ($\epsilon$)</td>
-      </tr>
-  </tbody>
-</table>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

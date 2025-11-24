@@ -7,10 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Part of Speech Tagging | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="💬natural-language-processing">
-<meta name="description" content="What is a part of Speech?
-A part of speech (POS) is a category of words that display similar syntactic behavior, i.e.,
-they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).
-The intuitive take is that knowing a specific part of speech can help understand the meaning of the sentence.">
+<meta name="description" content="Part of Speech Tagging - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/part-of-speech-tagging/">
@@ -96,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/part-of-speech-tagging/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Part of Speech Tagging">
-  <meta property="og:description" content="What is a part of Speech? A part of speech (POS) is a category of words that display similar syntactic behavior, i.e., they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).
-The intuitive take is that knowing a specific part of speech can help understand the meaning of the sentence.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -108,10 +104,7 @@ The intuitive take is that knowing a specific part of speech can help understand
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Part of Speech Tagging">
-<meta name="twitter:description" content="What is a part of Speech?
-A part of speech (POS) is a category of words that display similar syntactic behavior, i.e.,
-they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).
-The intuitive take is that knowing a specific part of speech can help understand the meaning of the sentence.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -140,12 +133,12 @@ The intuitive take is that knowing a specific part of speech can help understand
   "@type": "BlogPosting",
   "headline": "Part of Speech Tagging",
   "name": "Part of Speech Tagging",
-  "description": "What is a part of Speech? A part of speech (POS) is a category of words that display similar syntactic behavior, i.e., they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).\nThe intuitive take is that knowing a specific part of speech can help understand the meaning of the sentence.\n",
+  "description": "",
   "keywords": [
     "💬natural-language-processing"
   ],
-  "articleBody": "What is a part of Speech? A part of speech (POS) is a category of words that display similar syntactic behavior, i.e., they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).\nThe intuitive take is that knowing a specific part of speech can help understand the meaning of the sentence.\nDefinition of the problem We assume there are some given categories (it has some drawbacks, because we can define too many categories sometimes, making the thing more difficult), for example, in a classical analysis, we would have articles, noun verbs.\nIt is possible to see this problem as a path in a graph, even though currently I don’t know what is the exact advantage for this. These kind of graphs are called trellis. There is a relation between statistica models and combinatorial algorithms. We should use this relation to score the path.\nConditional Random Fields These are just Log Linear Models on structured data (e.g. lattices), they were first introduced in 2001, and first they were not seen as log linear models. It’s very similar to Hidden Markov Models, which are similar to the Kalman Filters from some kind of view.\nWe define our conditional probabilistic model for sequence labeling, aka conditional random field:\n$$ p(t \\mid w) = \\frac{\\exp(s(t, w))}{\\sum_{t' \\in \\mathcal{T}^{N}} \\exp(s(t', w))} $$ where $s$ is the scoring function that marks the compatibility of a tag for a sentence. The score could also be negative. If the score is linear the whole random field would be a in The Exponential Family. The only requirement is that it returns a scalar.\nSo higher score is better, lower score is worse. But this algorithm is very slow! Computing the normalizer takes $\\mathcal{O}(\\lvert \\mathcal{T} \\rvert^{N})$ time. Assuming more structure (it is free information from another point of view), allows to have faster algorithms.\nAdditively decomposable assumption We assume additively decomposability into the score function in order to bring down the complexity of computing the normalizer for the exponential space, which actually makes the problem tractable. Now we assume the score function to be: $$ s(\\boldsymbol{t}, w) = \\sum_{n = 1}^{N} s(\\langle t_{n - 1}, t_{n} \\rangle , w) \\implies \\exp(s(\\boldsymbol{t}, w)) = \\exp\\left( \\sum_{n = 1}^{N} s(\\langle t_{n - 1}, t_{n} \\rangle , w) \\right) \\prod_{n = 1}^{N} \\exp(s(\\langle t_{n - 1}, t_{n} \\rangle ,w)) $$ which means: instead of looking at the whole structure we only look adjacent tags. This is a strong assumption, but it’s ok to start doing something that might be useful. NOTE: we use a special symbol when $n = 1$. This makes it easy to compute the score, because we can just take adjacent couples instead of the whole string.\nIf the score is a neural network, then we can train this function without exactly knowing how they are made!\nThis has a clear visual interpretation by putting a score on a Arc, now we have weighted directed acyclic graph. But then we can use Backpropagation algorithms too!\nEmission and transition $$ s(\\langle t_{n - 1}, t_{n} \\rangle, w) = s_{\\text{emission}}(t_{n}, w_{n}) + s_{\\text{transition}}(t_{n - 1}, t_{n}) $$Simplifying the partition function After we have a score, then it is just a shortest path problem, a combinatorial optimization problem, it’s nice to see the derivation of why it’s easy to compute the normalizer:\n$$\n\\begin{align} \\sum_{t \\in \\mathcal{T}^{N}} \\exp \\left{ \\sum_{n = 1}^{N} s(\\langle t_{n - 1}, t_{n} \\rangle , w) \\right} =\\ =\\sum {t{1:N} \\in \\mathcal{T}^{N}} \\prod_{n = 1}^{N} \\exp \\left{ s(\\langle t_{n - 1}, t_{n} \\rangle , w) \\right}\\ = \\sum {t{1:N-1} \\in \\mathcal{T}^{N-1}} \\sum_{t_{N} \\in \\mathcal{T}} \\prod_{n = 1}^{N} \\exp \\left{ s(\\langle t_{n - 1}, t_{n} \\rangle , w) \\right} \\ = \\sum {t{1:N-1} \\in \\mathcal{T}^{N-1}} \\prod_{n - 1}^{N - 1} \\exp \\left{ s(\\langle t_{n- 1}, t_{n} \\rangle , w) \\right} \\times \\sum_{t_{N} \\in \\mathcal{T}} \\exp \\left{ s(\\langle t_{N - 1}, t_{N} \\rangle , w) \\right} \\ = \\sum_{t_{1} \\in \\mathcal{T}} \\exp \\left{ s(\\langle t_{0}, t_{1} \\rangle , w) \\right} \\times \\left( \\dots \\times \\sum_{t_{N} \\in \\mathcal{T}} \\exp \\left{ s(\\langle t_{N - 1}, t_{N} \\rangle , w) \\right} \\right) \\end{align} $$\nWhere we have just applied a distributive property in the 4 line, and reapplied the same line of reasoning over and over again. This is somewhat similar to factorizing polynomials. Now we have a simple and fast way to calculate it, it’s just a linear number of terms. The deep insight is that here we derived an algorithm by just doing some algebra! Is there some deep links between an algebraic view of computation and algorithms with algebra?\nThe backward algorithm We see now all the algorithm for the backward dynamic programming solution to compute the normalizer (remember the visual interpretation that we have). The Viterbi algorithm How to find the highest-scoring tagging for a certain input sequence $w$? We just add a max operator instead of the sum! This makes it quite easy. Viterbi was a code cracker times ago. This is very similar to the backward algorithm used to calculate the partition function: The only thing we need is a semi-ring.\nRelation with Logistic Regression CRF can be seen as a generalization of Logistic Regression for sequences prediction. See Linear Regression methods for something about regression methods. TODO: say why this is true.\nRelation with HNN CRF are also a more flexible generalization of HNN models. TODO: say why this is true.\nSemirings This section has been moved to Semirings.\n",
-  "wordCount" : "922",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-10-30T00:00:00Z",
   "dateModified": "2024-10-30T00:00:00Z",
@@ -240,118 +233,12 @@ The intuitive take is that knowing a specific part of speech can help understand
     <h1 class="post-title entry-hint-parent">
       Part of Speech Tagging
     </h1>
-    <div class="post-meta"><span title='2024-10-30 00:00:00 +0000 UTC'>October 30, 2024</span>&nbsp;·&nbsp;Reading Time: 5 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-10-30 00:00:00 +0000 UTC'>October 30, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#what-is-a-part-of-speech" aria-label="What is a part of Speech?">What is a part of Speech?</a></li>
-                <li>
-                    <a href="#definition-of-the-problem" aria-label="Definition of the problem">Definition of the problem</a></li></ul>
-                    
-                <li>
-                    <a href="#conditional-random-fields" aria-label="Conditional Random Fields">Conditional Random Fields</a><ul>
-                        
-                <li>
-                    <a href="#additively-decomposable-assumption" aria-label="Additively decomposable assumption">Additively decomposable assumption</a></li>
-                <li>
-                    <a href="#emission-and-transition" aria-label="Emission and transition">Emission and transition</a></li>
-                <li>
-                    <a href="#simplifying-the-partition-function" aria-label="Simplifying the partition function">Simplifying the partition function</a></li>
-                <li>
-                    <a href="#the-backward-algorithm" aria-label="The backward algorithm">The backward algorithm</a></li>
-                <li>
-                    <a href="#the-viterbi-algorithm" aria-label="The Viterbi algorithm">The Viterbi algorithm</a></li>
-                <li>
-                    <a href="#relation-with-logistic-regression" aria-label="Relation with Logistic Regression">Relation with Logistic Regression</a></li>
-                <li>
-                    <a href="#relation-with-hnn" aria-label="Relation with HNN">Relation with HNN</a></li></ul>
-                </li>
-                <li>
-                    <a href="#semirings" aria-label="Semirings">Semirings</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h4 id="what-is-a-part-of-speech">What is a part of Speech?<a hidden class="anchor" aria-hidden="true" href="#what-is-a-part-of-speech">#</a></h4>
-<p>A part of speech (POS) is a <strong>category of words that display similar syntactic behavior</strong>, i.e.,
-they play similar roles within the grammatical structure of sentences. It has been known since the Latin era that some categories of words behave similarly (verbs for declination for example).</p>
-<p>The intuitive take is that knowing a specific part of speech can help understand the <strong>meaning</strong> of the sentence.</p>
-<h4 id="definition-of-the-problem">Definition of the problem<a hidden class="anchor" aria-hidden="true" href="#definition-of-the-problem">#</a></h4>
-<p>We assume there are some given categories (it has some drawbacks, because we can define too many categories sometimes, making the thing more difficult), for example, in a classical analysis, we would have articles, noun verbs.</p>
-<p>It is possible to see this problem as a path in a graph, even though currently I don&rsquo;t know what is the exact advantage for this. These kind of graphs are called <strong>trellis</strong>.
-<img src="/images/notes/Part of Speech Tagging-20240908161422467.webp" style="width: 100%" class="center" alt="Part of Speech Tagging-20240908161422467"></p>
-<p>There is a relation between statistica models and combinatorial algorithms. We should use this relation to score the path.</p>
-<h3 id="conditional-random-fields">Conditional Random Fields<a hidden class="anchor" aria-hidden="true" href="#conditional-random-fields">#</a></h3>
-<p>These are just <a href="/notes/log-linear-models">Log Linear Models</a> on structured data (e.g. lattices), they were first introduced in 2001, and first they were not seen as log linear models. It&rsquo;s very similar to Hidden Markov Models, which are similar to the <a href="/notes/kalman-filters">Kalman Filters</a> from some kind of view.</p>
-<p>We define our conditional probabilistic model for sequence labeling, aka <strong>conditional random field</strong>:</p>
-$$
-p(t \mid w) = \frac{\exp(s(t, w))}{\sum_{t' \in \mathcal{T}^{N}} \exp(s(t', w))}
-$$<p>
-where $s$ is the scoring function that marks the compatibility of a tag for a sentence. The score could also be negative. If the score is linear the whole random field would be a in <a href="/notes/the-exponential-family">The Exponential Family</a>. The only requirement is that it returns a <strong>scalar</strong>.</p>
-<img src="/images/notes/Part of Speech Tagging-20240908161749906.webp" style="width: 100%" class="center" alt="Part of Speech Tagging-20240908161749906">
-<p>So higher score is better, lower score is worse.
-But this algorithm is very slow! Computing the normalizer takes $\mathcal{O}(\lvert \mathcal{T} \rvert^{N})$ time.
-Assuming more structure (it is free information from another point of view), allows to have faster algorithms.</p>
-<h4 id="additively-decomposable-assumption">Additively decomposable assumption<a hidden class="anchor" aria-hidden="true" href="#additively-decomposable-assumption">#</a></h4>
-<h1 id="-expleft-sum_n--1n-slangle-t_n---1-t_n-rangle--w-right">We assume <em>additively decomposability</em> into the score function in order to bring down the complexity of computing the normalizer for the exponential space, which actually makes the problem tractable.
-Now we assume the score function to be:
-$$
-s(\boldsymbol{t}, w)
-= \sum_{n = 1}^{N} s(\langle t_{n - 1}, t_{n} \rangle , w)
-\implies \exp(s(\boldsymbol{t}, w))
-= \exp\left( \sum_{n = 1}^{N} s(\langle t_{n - 1}, t_{n} \rangle , w) \right)</h1>
-<p>\prod_{n = 1}^{N} \exp(s(\langle t_{n - 1}, t_{n} \rangle ,w))
-$$
-which means: instead of looking at the whole structure we only look <em>adjacent tags</em>. This is a strong assumption, but it&rsquo;s ok to start doing something that might be useful.
-NOTE: we use a special symbol when $n = 1$.
-This makes it easy to compute the score, because we can just take adjacent couples instead of the whole string.</p>
-<p>If the score is a neural network, then we can train this function without exactly knowing how they are made!</p>
-<p>This has a clear visual interpretation by putting a <strong>score on a Arc</strong>, now we have weighted directed acyclic graph. But then we can use <a href="/notes/backpropagation">Backpropagation</a> algorithms too!</p>
-<h4 id="emission-and-transition">Emission and transition<a hidden class="anchor" aria-hidden="true" href="#emission-and-transition">#</a></h4>
-$$
-s(\langle t_{n - 1}, t_{n} \rangle, w) = s_{\text{emission}}(t_{n}, w_{n}) + s_{\text{transition}}(t_{n - 1}, t_{n})
-$$<h4 id="simplifying-the-partition-function">Simplifying the partition function<a hidden class="anchor" aria-hidden="true" href="#simplifying-the-partition-function">#</a></h4>
-<p>After we have a score, then it is just a shortest path problem, a combinatorial optimization problem, it&rsquo;s nice to see the derivation of why it&rsquo;s easy to compute the normalizer:</p>
-<p>$$</p>
-<p>\begin{align}
-\sum_{t \in \mathcal{T}^{N}} \exp \left{ \sum_{n = 1}^{N} s(\langle t_{n - 1}, t_{n} \rangle , w) \right}  =\
-=\sum <em>{t</em>{1:N} \in \mathcal{T}^{N}} \prod_{n = 1}^{N} \exp \left{ s(\langle t_{n - 1}, t_{n} \rangle , w) \right}\
-= \sum <em>{t</em>{1:N-1} \in \mathcal{T}^{N-1}} \sum_{t_{N} \in \mathcal{T}} \prod_{n = 1}^{N} \exp \left{ s(\langle t_{n - 1}, t_{n} \rangle , w) \right} \
-= \sum <em>{t</em>{1:N-1} \in \mathcal{T}^{N-1}} \prod_{n - 1}^{N - 1} \exp \left{ s(\langle t_{n- 1}, t_{n} \rangle , w) \right} \times \sum_{t_{N} \in \mathcal{T}} \exp \left{ s(\langle t_{N - 1}, t_{N} \rangle , w) \right} \
-= \sum_{t_{1} \in \mathcal{T}} \exp \left{ s(\langle t_{0}, t_{1} \rangle , w) \right} \times \left(  \dots \times \sum_{t_{N} \in \mathcal{T}} \exp \left{ s(\langle t_{N - 1}, t_{N} \rangle , w) \right}  \right)
-\end{align}
-$$</p>
-<p>Where we have just applied a <em>distributive property</em> in the 4 line, and reapplied the same line of reasoning over and over again. This is somewhat similar to factorizing polynomials.
-Now we have a simple and fast way to calculate it, it&rsquo;s just a linear number of terms. The deep insight is that here we derived an algorithm by just doing some algebra! Is there some deep links between an algebraic view of computation and algorithms with algebra?</p>
-<h4 id="the-backward-algorithm">The backward algorithm<a hidden class="anchor" aria-hidden="true" href="#the-backward-algorithm">#</a></h4>
-<p>We see now all the algorithm for the backward dynamic programming solution to compute the normalizer (remember the visual interpretation that we have).
-<img src="/images/notes/Part of Speech Tagging-20241021124424892.webp" style="width: 100%" class="center" alt="Part of Speech Tagging-20241021124424892"></p>
-<h4 id="the-viterbi-algorithm">The Viterbi algorithm<a hidden class="anchor" aria-hidden="true" href="#the-viterbi-algorithm">#</a></h4>
-<p>How to find the <em>highest-scoring tagging</em> for a certain input sequence $w$? We just add a max operator instead of the sum! This makes it quite easy. Viterbi was a code cracker times ago.
-This is very similar to the backward algorithm used to calculate the partition function:
-<img src="/images/notes/Part of Speech Tagging-20240908171749012.webp" style="width: 100%" class="center" alt="Part of Speech Tagging-20240908171749012"></p>
-<p>The only thing we need is a semi-ring.</p>
-<h4 id="relation-with-logistic-regression">Relation with Logistic Regression<a hidden class="anchor" aria-hidden="true" href="#relation-with-logistic-regression">#</a></h4>
-<p>CRF can be seen as a generalization of Logistic Regression for sequences prediction. See <a href="/notes/linear-regression-methods">Linear Regression methods</a> for something about regression methods.
-TODO: say why this is true.</p>
-<h4 id="relation-with-hnn">Relation with HNN<a hidden class="anchor" aria-hidden="true" href="#relation-with-hnn">#</a></h4>
-<p>CRF are also a more flexible generalization of HNN models.
-TODO: say why this is true.</p>
-<h3 id="semirings">Semirings<a hidden class="anchor" aria-hidden="true" href="#semirings">#</a></h3>
-<p>This section has been moved to <a href="/notes/semirings">Semirings</a>.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

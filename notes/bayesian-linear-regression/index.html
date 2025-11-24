@@ -7,13 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Bayesian Linear Regression | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="➕probabilistic-artificial-intelligence">
-<meta name="description" content="We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression
-$$
-y = w^{T}x &#43; \varepsilon
-$$
-Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty.
-One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get">
+<meta name="description" content="Bayesian Linear Regression - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bayesian-linear-regression/">
@@ -99,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/bayesian-linear-regression/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Bayesian Linear Regression">
-  <meta property="og:description" content="We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty. One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it’s the exact same thing as the previous, so if we look for the MLE estimate now we get">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -111,13 +104,7 @@ Classical Linear regression $$ y = w^{T}x &#43; \varepsilon $$ Where $\varepsilo
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Bayesian Linear Regression">
-<meta name="twitter:description" content="We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the evidence.
-Classical Linear regression
-$$
-y = w^{T}x &#43; \varepsilon
-$$
-Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty.
-One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -146,12 +133,12 @@ One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ a
   "@type": "BlogPosting",
   "headline": "Bayesian Linear Regression",
   "name": "Bayesian Linear Regression",
-  "description": "We have a prior $p(\\text{model})$, we have a posterior $p(\\text{model} \\mid \\text{data})$, a likelihood $p(\\text{data} \\mid \\text{model})$ and $p(\\text{data})$ is called the evidence.\nClassical Linear regression $$ y = w^{T}x + \\varepsilon $$ Where $\\varepsilon \\sim \\mathcal{N}(0, \\sigma_{n}^{2}I)$ and it\u0026rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty. One could write this as follows: $y \\sim \\mathcal{N}(w^{T}x, \\sigma^{2}_{n}I)$ and it\u0026rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get\n",
+  "description": "",
   "keywords": [
     "➕probabilistic-artificial-intelligence"
   ],
-  "articleBody": "We have a prior $p(\\text{model})$, we have a posterior $p(\\text{model} \\mid \\text{data})$, a likelihood $p(\\text{data} \\mid \\text{model})$ and $p(\\text{data})$ is called the evidence.\nClassical Linear regression $$ y = w^{T}x + \\varepsilon $$ Where $\\varepsilon \\sim \\mathcal{N}(0, \\sigma_{n}^{2}I)$ and it’s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called aleatoric uncertainty. One could write this as follows: $y \\sim \\mathcal{N}(w^{T}x, \\sigma^{2}_{n}I)$ and it’s the exact same thing as the previous, so if we look for the MLE estimate now we get\n$$ \\hat{w}_{\\text{MLE}} = \\arg \\max_{w \\in \\mathbb{R}^{d}} \\sum_{i = 1}^{N} \\log p (y_{i} \\mid x_{i}, w) = \\arg \\min_{w \\in \\mathbb{R}^{d}} (y - w^{T}x)^{2} $$ And this result is quite nice, because we just discovered that with this assumptions the best model for classical linear regression, the minimizer for the ordinary least squares problem, gives the same result with the maximum likelihood estimator.\n$$ \\mathcal{O}(d^{2}N + d^{3}) $$ Where $d$ is the dimensionality of the input and $n$ the number of samples. Using the closed formula approach. Usually the Gradient Descent method might be a little faster. It costs $\\mathcal{O(nd)}$ per iteration.\nRidge Regression Before diving into this section, you should know Ridge Regression quite well.\nMaximum a posteriori estimate leads to Ridge Regression $$ p(y_{i} \\mid w_{i}x_{i}) = \\mathcal{N}(y_{i}; w^{T}x_{i}, \\sigma^{2}_{n}) $$ Which is the same as saying that $y_{i} = w^{T}x_{i} + \\varepsilon_{i}$ where $\\varepsilon_{i} \\sim \\mathcal{N}(0, \\sigma^{2}_{n})$.\n$$ p(w \\mid x_{1:n}, y_{1:n}) = \\frac{1}{z} p(w \\mid x_{1:n}) p(y_{1:n} \\mid w_{i},x_{1:n}) $$ And $z = \\int p(w) p(y_{1:n} \\mid w_{i}, x_{1:n}) \\, dw$.\nNow let’s expand everything: we will have:\n$$ \\frac{1}{z} \\cdot \\frac{1}{z_{p}} \\exp\\left( -\\frac{1}{2\\sigma^{2}_{p}} \\lVert w \\rVert ^{2}_{2} \\right) \\cdot \\frac{1}{z_{l}} \\prod_{i = 1}^{n} \\exp\\left( -\\frac{1}{2\\sigma_{n}^{2}} (y_{i} - w^{T}x_{i})^{2} \\right) $$$$ = \\frac{1}{z'} \\exp\\left( -\\left[ \\frac{1}{2\\sigma^{2}_{p} }\\lVert w \\rVert^{2}_{2} + \\frac{1}{2\\sigma^{2}_{n}} \\sum_{i = 1}^{n} (y_{i} - w^{T}x_{i})^{2} \\right] \\right) $$ Now we do Max. a posteriori (MAP) estimate for $\\hat{w}$ and we get this: $$\n\\begin{align} \\hat{w} = \\arg\\max_{w} \\log p(w \\mid x_{1:n}y_{1:n}) \\ \\ = \\arg \\max_{w} \\log p(y_{1:n} \\mid x_{1:n}, w) + \\log p(w)\\ = \\arg \\min_{w} \\sum_{i = 1}^{k} (y_{i} - w^{T}x_{i})^{2} + \\frac{\\sigma_{n}^{2}}{\\sigma^{2}{p}} \\lVert w \\rVert ^{2}{2} \\end{align} $$ Which we note is the same as Ridge regression with $\\lambda = \\frac{\\sigma_{n}^{2}}{\\sigma^{2}_{p}}$. So with those Gaussian assumptions we just go back to a standard regression case! Remember that if $\\lambda = 0$ we don’t have basically a regularizer, if $\\lambda$ is high we practically don’t care much about the data (if noise is high we want to regularize, but if the prior variance is small we regularize more)\nThe MAP estimate simply collapses all mass of the posterior around its mode. This can be harmful when we are highly unsure about the best model, e.g., because we have observed insufficient data.\nThis why usually bayesian methods are preferred in other times.\n$$ p(w) = \\prod_{i = 1}^{d} \\frac{\\sigma^{2}_{p}}{4 \\sigma^{2}_{n}} \\exp\\left( -\\frac{\\sigma^{2}_{p}}{2\\sigma^{2}_{n}} \\lvert w_{i} \\rvert \\right) $$ No clue how to derive it though. I took this from slide 12 here (you need eth credentials to access the resource).\nPosterior is Gaussian $$ p(w \\mid x_{1:n}, y_{1:n}) = \\frac{1}{z'} \\exp\\left( -\\left[ \\frac{1}{2\\sigma^{2}_{p} }\\lVert w \\rVert^{2}_{2} + \\frac{1}{2\\sigma^{2}_{n}} \\sum_{i = 1}^{n} (y_{i} - w^{T}x_{i})^{2} \\right] \\right) $$$$ \\begin{array} \\\\ \\bar{\\Sigma} = \\left( \\frac{1}{\\sigma_{n}^{2}} X^{T}X + \\frac{1}{\\sigma_{p}^{2}}I \\right)^{-1} = \\sigma_{n}^{2}\\left( X^{T}X + \\frac{\\sigma^{2}_{n}}{\\sigma_{p}^{2}} I \\right) ^{-1} \\\\ \\bar{\\mu} = \\frac{1}{\\sigma_{n}^{2}} \\bar{\\Sigma} X^{T}y = (X^{T}X + \\lambda I)^{-1} X^{T}y \\end{array} $$ Where $\\lambda$ is as before, and this is the link with linear regression! This form is nice as it allows to have some confidence intervals over the parameters.\nInference Inference in Bayesian Linear Regression $$ p(y^{*} \\mid x^{*} x_{1:n} y_{1:n}) = \\int p(y^{*}, w \\mid x^{*}, x_{1:n} ,y_{1:n}) \\, dw = \\int p(y^{*} \\mid w ,x^{*}) p(w \\mid x_{1:n} y_{1:n}) \\, dw $$$$ p(f^{*} \\mid x^{*}, x_{1:n}, y_{1:n}) = \\mathcal{N}(f^{*}; \\bar{\\mu} ^{T}x^{*} , x^{*T}\\bar{\\Sigma}x^{*}) $$ And assuming $y^{*} = f^{*} + \\varepsilon$ we have sum of Gaussian is Gaussian so we have $$ p(y^{} \\mid x^{}, x_{1:n}, y_{1:n}) =\n\\int p(y^{} \\mid w ,x^{}) p(w \\mid x_{1:n} y_{1:n}) , dw =\\mathcal{N}(y^{}; \\bar{\\mu}^{T} x^{}, x^{T}\\bar{\\Sigma}x^{} + \\sigma^{2}_{n}I) $$ So compared to ridge regression, the Bayesian linear regression has a variance term that is added. Here we are using all possible models, weighted by their probability. Conceptually bayesian is better than MLE.\nIt is possible to see later with the law of total variance, the decomposition of the inference variance into epistemic and aleatoric variance.\nRelation between BLR and Ridge Regression Ridge regression can be viewed as approximating the full posterior by placing all mass on its mode (also other models can be seen similarly, one example is MLE, analyzed in Parametric Modeling).\nSo it’s a nice approximation: $$ \\begin{align}\np(y^{} \\mid x^{}, x_{1:n}, y_{1:n}) =\n$$ Remember that for delta direct distribution we have $$ \\mathbb{E}[f(x)] = \\int f(x) \\delta_{x’}(x) , dx = f(x’) $$\nEpistemic and aleatoric uncertainty We now start a philosophical discussion on epistemic and aleatoric uncertainty.\nEpistemic uncertainty: Uncertainty about the model due to the lack of data Aleatoric uncertainty: Irreducible noise The $x^{*T}\\bar{\\Sigma}x^{*}$ is the epistemic uncertainty about $f^{*}$ while the $\\sigma^{2}_{n}$ factor is the noise/uncertainty about $y^{*}$ given $f^{*}$, meaning we need to change $f^{*}$, or hypothesis class if we want to lower this uncertainty I think (not sure though).\nThe law of total variance can give another intuition about the decomposition between epistemic and aleatoric uncertainty:\n$$ Var(y \\mid x) = \\text{ aleatoric } + \\text{ epistemic } = \\mathbb{E}_{\\theta}\\left[ \\text{Var}_{y}(y \\mid x, \\theta) \\right] + \\text{Var}_{\\theta}(\\mathbb{E}_{y}[y \\mid x, \\theta]) $$Choosing hyper-parameters We would like a manner to compute the values of $\\sigma^{2}_{n}$ and $\\sigma^{2}_{p}$. Covariance of the prior and variance of the noise need to be chosen before we can apply these methods. One way is just finding $\\lambda = \\frac{\\sigma^{2}_{n}}{\\sigma^{2}_{p}}$ with cross-validation, then estimate the variance from data and get the prior variance in this manner.\nThen it’s possible to have graphical models for bayesian linear regression.\nRecursive bayesian updates $$ p^{(j)} (w) := p(w \\mid y_{1: j}), p^{(0)}(w) = p(w) $$$$ p^{(j)}(w) = p( w \\mid y_{1: j}) = \\frac{1}{z} p(w) \\cdot p(y_{1} \\mid w) \\dots p(y_{j} \\mid w) = \\frac{1}{z} \\left( z \\cdot p^{(j - 1)}(w) \\right) p(y_{j} \\mid w) = f(p^{(j - 1)}(w), y_{j}) $$So we would just need to integrate the new information given by $y_{j}$ and then use the previous knowledge. The recursive updates are also the reason why the Dirichlet is a nice prior for multinomials, see Dirichlet Processes.\nExample: Bayesian Update for a Coin toss We can see how the posterior changes with the number of coin flips. We will use a Beta prior for the Bernoulli likelihood, this is a conjugate prior so we can compute the posterior in closed form.\nimport numpy as np import matplotlib.pyplot as plt from scipy.stats import beta # Initialize parameters for the Beta prior alpha_prior = 1 # Prior \"successes\" (e.g., heads) beta_prior = 1 # Prior \"failures\" (e.g., tails) # Simulated coin flips (1 = heads, 0 = tails) np.random.seed(42) # For reproducibility coin_flips = np.random.choice([0, 1], size=100, p=[0.7, 0.3]) # Unfair coin: 70% tails, 30% heads # Function to plot the Beta distribution def plot_beta(alpha, beta_val, flip_num): x = np.linspace(0, 1, 1000) y = beta.pdf(x, alpha, beta_val) plt.plot(x, y, label=f\"After {flip_num} flips (α={alpha}, β={beta_val})\") plt.xlabel(\"Probability of Heads (p)\") plt.ylabel(\"Density\") plt.title(\"Online Bayesian Update of Beta Distribution\") plt.legend() # Create a figure for the updates plt.figure(figsize=(10, 6)) # Perform Bayesian updates after each coin flip for i, flip in enumerate(coin_flips): # Update the Beta prior with the Bernoulli likelihood alpha_prior += flip # Increment alpha if heads (flip=1) beta_prior += 1 - flip # Increment beta if tails (flip=0) # Plot the updated distribution every few flips if i in {0, 4, 9, 19, 99}: # Plot at these specific flips plot_beta(alpha_prior, beta_prior, i + 1) # Show the final plot plt.grid(alpha=0.3) plt.show() Online Bayesian regression This section concerns in building a bayesian regression algorithm whose memory does not grow with the number of samples. It can be conceived as a filtering process, composed of two phased: conditioning (updating over the priors) and prediction.\n$$ p(w \\mid X, y) = \\mathcal{N}(w; (X^{T}X +\\sigma_{n}^{2}I)^{-1}X^{T}y, (\\sigma^{-2}_{n}X^{T}X + I)^{-1}) $$ Assuming $\\sigma_{p}^{2} = 1$.\n$$ X^{(t)} = \\begin{bmatrix} x_{1}^{T} \\\\ \\vdots \\\\ x_{t}^{T} \\end{bmatrix} \\in \\mathbb{R}^{t \\times d} \\,\\,\\, Y^{(t)} = \\begin{bmatrix} y_{1} \\\\ \\vdots \\\\ y_{t} \\end{bmatrix} \\in \\mathbb{R}^{t \\times 1} $$$$ X^{(t + 1)T}Y^{(t+1)} = \\sum_{i = 1}^{t} x_{i}y_{i} + x_{t + 1}y_{t + 1} = X^{(t)}Y^{(t)} + x_{t + 1}y_{t + 1} $$$$ X^{(t + 1)T} X^{(t+ 1)} = \\begin{pmatrix} x_{1} , \\dots x_{t} \\end{pmatrix} \\cdot \\begin{pmatrix} x_{1} \\\\ \\vdots \\\\ x_{t} \\end{pmatrix} = \\sum_{i = 1}^{t} x_{i}x_{i}^{T} + x_{t + 1}x_{t + 1}^{T} = X^{(t)T}X^{(t)} + x_{t+1}x_{t + 1}^{T} $$ This allows to compute the parameters in a way that the memory requirement is constant and does not grow as $\\mathcal{O(t)}$.\n$$ (A + uv^{T})^{-1} = A^{-1} - \\frac{A^{-1}uv^{T}A^{-1}}{1 + v^{T}A^{-1}u} $$And we can interpret the value $X^{(t)T}X^{(t)} + \\sigma_{n}^{2}I$ as our $A$ and the $x_{t+1}x_{t + 1}^{T}$ as our two vectors. In this manner we just need to compute matrix multiplications which bring down the complexity to $\\mathcal{O}(d^{2})$.\nThis is all for analysis in the online bayesian setting.\nLogistic regression case $$ P(y \\mid x, w) = Ber(y; \\sigma(w^{T}x)) $$ Where $\\sigma$ is the Sigmoid function which gives an idea of confidence of a prediction.\nRelation with dimensionality $$ f(x) = \\sum_{i = 1}^{N} w_{i} \\phi_{i}(x) $$$$ \\phi = [1, x_{1}, \\dots, x_{d}, x_{1}^{2}, .. x_{2}^{2}, x_{1}x_{2}, \\dots, x_{1}x_{2}\\dots x_{d}] $$$$ \\lvert \\phi \\rvert = \\begin{pmatrix} d + m \\\\ d \\end{pmatrix}$$The kernel trick We first want to replace the problem using inner products then we want to replace inner products using kernels. If we are able to do this, then we can compute inner products in feature space quite efficiently. For example if $\\phi(x) = [\\text{ all monomials up to } m \\text{ variables} ]$ then we can compute $\\phi(x)^{T}\\phi(x)$ by just computing $(1 + x^{T}x)^{m}$. This is quite important to understand well. See Kernel Methods for more. This leads us in an attempt to kernelize the bayesian linear regression.\nFunction view In the previous sections we have derived the Bayesian Linear Regression based on priors on the weights and likelihoods. It is possible to derive something very similar by just observing inputs and outputs, so having a distribution on the space of the functions. This part builds the fundamental ideas that will be later needed for Gaussian Processes so it is quite important to understand this quite well.\n$$ f \\mid X \\sim \\mathcal{N}(\\Phi \\mathbb{E}[w], \\Phi\\mathbb{E}[w]\\Phi^{T}) = \\mathcal{N}(0, \\sigma^{2}_{p}\\Phi\\Phi^{T}) $$With this formulation the feature map is implicit in the choice of the Kernel.\nPredictions in function view $$ \\bar{\\Phi} = \\begin{bmatrix} \\Phi \\\\ \\phi(x^{*})^{T} \\end{bmatrix}, \\, \\bar{y} =\\begin{bmatrix} y \\\\ y^{*} \\end{bmatrix}, \\bar{f} = \\begin{bmatrix} f \\\\ f^{*} \\end{bmatrix} $$$$ \\hat{y}\\mid X, x^{*} \\sim \\mathcal{N}(0, \\bar{K} + \\sigma^{2}_{n}I) $$",
-  "wordCount" : "1832",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-15T00:00:00Z",
   "dateModified": "2025-01-15T00:00:00Z",
@@ -246,294 +233,12 @@ One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ a
     <h1 class="post-title entry-hint-parent">
       Bayesian Linear Regression
     </h1>
-    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 9 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-15 00:00:00 +0000 UTC'>January 15, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#classical-linear-regression" aria-label="Classical Linear regression">Classical Linear regression</a></li></ul>
-                    
-                <li>
-                    <a href="#ridge-regression" aria-label="Ridge Regression">Ridge Regression</a><ul>
-                        
-                <li>
-                    <a href="#maximum-a-posteriori-estimate-leads-to-ridge-regression" aria-label="Maximum a posteriori estimate leads to Ridge Regression">Maximum a posteriori estimate leads to Ridge Regression</a></li>
-                <li>
-                    <a href="#posterior-is-gaussian" aria-label="Posterior is Gaussian">Posterior is Gaussian</a></li></ul>
-                </li>
-                <li>
-                    <a href="#inference" aria-label="Inference">Inference</a><ul>
-                        
-                <li>
-                    <a href="#inference-in-bayesian-linear-regression" aria-label="Inference in Bayesian Linear Regression">Inference in Bayesian Linear Regression</a></li>
-                <li>
-                    <a href="#relation-between-blr-and-ridge-regression" aria-label="Relation between BLR and Ridge Regression">Relation between BLR and Ridge Regression</a></li>
-                <li>
-                    <a href="#epistemic-and-aleatoric-uncertainty" aria-label="Epistemic and aleatoric uncertainty">Epistemic and aleatoric uncertainty</a></li>
-                <li>
-                    <a href="#choosing-hyper-parameters" aria-label="Choosing hyper-parameters">Choosing hyper-parameters</a></li>
-                <li>
-                    <a href="#recursive-bayesian-updates" aria-label="Recursive bayesian updates">Recursive bayesian updates</a></li>
-                <li>
-                    <a href="#example-bayesian-update-for-a-coin-toss" aria-label="Example: Bayesian Update for a Coin toss">Example: Bayesian Update for a Coin toss</a></li>
-                <li>
-                    <a href="#online-bayesian-regression" aria-label="Online Bayesian regression">Online Bayesian regression</a></li>
-                <li>
-                    <a href="#logistic-regression-case" aria-label="Logistic regression case">Logistic regression case</a></li></ul>
-                </li>
-                <li>
-                    <a href="#relation-with-dimensionality" aria-label="Relation with dimensionality">Relation with dimensionality</a><ul>
-                        
-                <li>
-                    <a href="#the-kernel-trick" aria-label="The kernel trick">The kernel trick</a></li></ul>
-                </li>
-                <li>
-                    <a href="#function-view" aria-label="Function view">Function view</a><ul>
-                        
-                <li>
-                    <a href="#predictions-in-function-view" aria-label="Predictions in function view">Predictions in function view</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>We have a prior $p(\text{model})$, we have a posterior $p(\text{model} \mid \text{data})$, a likelihood $p(\text{data} \mid \text{model})$ and $p(\text{data})$ is called the <em>evidence</em>.</p>
-<h4 id="classical-linear-regression">Classical Linear regression<a hidden class="anchor" aria-hidden="true" href="#classical-linear-regression">#</a></h4>
-$$
-y = w^{T}x + \varepsilon
-$$<p>
-Where $\varepsilon \sim \mathcal{N}(0, \sigma_{n}^{2}I)$ and it&rsquo;s the irreducible noise, an error that cannot be eliminated by any model in the model class, this is also called <strong>aleatoric uncertainty</strong>.
-One could write this as follows: $y \sim \mathcal{N}(w^{T}x, \sigma^{2}_{n}I)$ and it&rsquo;s the exact same thing as the previous, so if we look for the MLE estimate now we get</p>
-$$
-\hat{w}_{\text{MLE}} = \arg \max_{w \in \mathbb{R}^{d}} \sum_{i = 1}^{N} \log p (y_{i} \mid x_{i}, w) = \arg \min_{w \in \mathbb{R}^{d}} (y - w^{T}x)^{2}
-$$<p>
-And this result is quite nice, because we just discovered that with this assumptions the best model for classical linear regression, the minimizer for the ordinary least squares problem, gives the same result with the maximum likelihood estimator.</p>
-$$
-\mathcal{O}(d^{2}N + d^{3})
-$$<p>
-Where $d$ is the dimensionality of the input and $n$ the number of samples. Using the closed formula approach.
-Usually the Gradient Descent method might be a little faster. It costs $\mathcal{O(nd)}$ per iteration.</p>
-<h3 id="ridge-regression">Ridge Regression<a hidden class="anchor" aria-hidden="true" href="#ridge-regression">#</a></h3>
-<p>Before diving into this section, you should know <a href="/notes/linear-regression-methods">Ridge Regression</a> quite well.</p>
-<h4 id="maximum-a-posteriori-estimate-leads-to-ridge-regression">Maximum a posteriori estimate leads to Ridge Regression<a hidden class="anchor" aria-hidden="true" href="#maximum-a-posteriori-estimate-leads-to-ridge-regression">#</a></h4>
-$$
-p(y_{i} \mid w_{i}x_{i}) = \mathcal{N}(y_{i}; w^{T}x_{i}, \sigma^{2}_{n})
-$$<p>
-Which is the same as saying that $y_{i} = w^{T}x_{i} + \varepsilon_{i}$  where $\varepsilon_{i} \sim \mathcal{N}(0, \sigma^{2}_{n})$.</p>
-$$
-p(w \mid x_{1:n}, y_{1:n}) = \frac{1}{z} p(w \mid x_{1:n}) p(y_{1:n} \mid w_{i},x_{1:n})
-$$<p>
-And $z = \int p(w) p(y_{1:n} \mid w_{i}, x_{1:n}) \, dw$.</p>
-<p>Now let&rsquo;s expand everything: we will have:</p>
-$$
-\frac{1}{z} \cdot \frac{1}{z_{p}} \exp\left( -\frac{1}{2\sigma^{2}_{p}} \lVert w \rVert ^{2}_{2} \right) \cdot \frac{1}{z_{l}} \prod_{i = 1}^{n} \exp\left( -\frac{1}{2\sigma_{n}^{2}} (y_{i} - w^{T}x_{i})^{2} \right) 
-$$$$
-= \frac{1}{z'} \exp\left( -\left[  \frac{1}{2\sigma^{2}_{p}  }\lVert w \rVert^{2}_{2} + \frac{1}{2\sigma^{2}_{n}} \sum_{i = 1}^{n} (y_{i} - w^{T}x_{i})^{2} \right] \right)
-$$<p>
-Now we do Max. a posteriori (MAP) estimate for $\hat{w}$ and we get this:
-$$</p>
-<p>\begin{align}
-\hat{w} = \arg\max_{w} \log p(w \mid x_{1:n}y_{1:n})  \ \
-= \arg \max_{w}  \log p(y_{1:n} \mid x_{1:n}, w) + \log p(w)\
-= \arg \min_{w} \sum_{i = 1}^{k} (y_{i} - w^{T}x_{i})^{2} + \frac{\sigma_{n}^{2}}{\sigma^{2}<em>{p}} \lVert w \rVert ^{2}</em>{2}
-\end{align}
-$$
-Which we note is the same as <strong>Ridge regression</strong> with $\lambda = \frac{\sigma_{n}^{2}}{\sigma^{2}_{p}}$. So with those Gaussian assumptions we just go back to a standard regression case!
-Remember that if $\lambda = 0$ we don&rsquo;t have basically a regularizer, if $\lambda$ is high we practically don&rsquo;t care much about the  data (if noise is high we want to regularize, but if the prior variance is small we regularize more)</p>
-<blockquote>
-<p>The MAP estimate simply collapses all mass of the posterior around its mode. This can be
-harmful when we are highly unsure about the best model, e.g., because
-we have observed insufficient data.</p></blockquote>
-<p>This why usually bayesian methods are preferred in other times.</p>
-$$
-p(w) = \prod_{i = 1}^{d} \frac{\sigma^{2}_{p}}{4 \sigma^{2}_{n}} \exp\left( -\frac{\sigma^{2}_{p}}{2\sigma^{2}_{n}} \lvert w_{i} \rvert \right)
-$$<p>
-No clue how to derive it though. I took this from slide 12 <a href="https://moodle-app2.let.ethz.ch/pluginfile.php/2179617/mod_resource/content/1/aml24_lecture_04_RegSumJB.pdf">here</a> (you need eth credentials to access the resource).</p>
-<h4 id="posterior-is-gaussian">Posterior is Gaussian<a hidden class="anchor" aria-hidden="true" href="#posterior-is-gaussian">#</a></h4>
-$$
-p(w \mid x_{1:n}, y_{1:n}) = \frac{1}{z'} \exp\left( -\left[  \frac{1}{2\sigma^{2}_{p}  }\lVert w \rVert^{2}_{2} + \frac{1}{2\sigma^{2}_{n}} \sum_{i = 1}^{n} (y_{i} - w^{T}x_{i})^{2} \right] \right)
-$$$$
-\begin{array}
- \\
-\bar{\Sigma} = \left( \frac{1}{\sigma_{n}^{2}} X^{T}X + \frac{1}{\sigma_{p}^{2}}I \right)^{-1} = \sigma_{n}^{2}\left( X^{T}X + \frac{\sigma^{2}_{n}}{\sigma_{p}^{2}} I \right) ^{-1} \\
-\bar{\mu} = \frac{1}{\sigma_{n}^{2}} \bar{\Sigma} X^{T}y = (X^{T}X + \lambda I)^{-1} X^{T}y
-\end{array}
-$$<p>
-Where $\lambda$ is as before, and this is the link with linear regression!
-This form is nice as it allows to have some confidence intervals over the parameters.</p>
-<h3 id="inference">Inference<a hidden class="anchor" aria-hidden="true" href="#inference">#</a></h3>
-<h4 id="inference-in-bayesian-linear-regression">Inference in Bayesian Linear Regression<a hidden class="anchor" aria-hidden="true" href="#inference-in-bayesian-linear-regression">#</a></h4>
-$$
-p(y^{*} \mid x^{*} x_{1:n} y_{1:n}) = \int p(y^{*}, w \mid x^{*}, x_{1:n} ,y_{1:n}) \, dw = \int p(y^{*} \mid w ,x^{*}) p(w \mid x_{1:n} y_{1:n}) \, dw 
-$$$$
-p(f^{*} \mid x^{*}, x_{1:n}, y_{1:n}) = \mathcal{N}(f^{*}; \bar{\mu} ^{T}x^{*} , x^{*T}\bar{\Sigma}x^{*})
-$$<p>
-And assuming $y^{*} = f^{*} + \varepsilon$ we have sum of Gaussian is Gaussian so we have
-$$
-p(y^{<em>} \mid x^{</em>}, x_{1:n}, y_{1:n}) =</p>
-<p>\int p(y^{<em>} \mid w ,x^{</em>}) p(w \mid x_{1:n} y_{1:n}) , dw
-=\mathcal{N}(y^{<em>}; \bar{\mu}^{T} x^{</em>}, x^{<em>T}\bar{\Sigma}x^{</em>} + \sigma^{2}_{n}I)
-$$
-So compared to ridge regression, the Bayesian linear regression has a variance term that is added.
-Here we are using all possible models, weighted by their probability. Conceptually bayesian is better than MLE.</p>
-<p>It is possible to see later with the law of total variance, the decomposition of the inference variance into epistemic and aleatoric variance.</p>
-<h4 id="relation-between-blr-and-ridge-regression">Relation between BLR and Ridge Regression<a hidden class="anchor" aria-hidden="true" href="#relation-between-blr-and-ridge-regression">#</a></h4>
-<blockquote>
-<p>Ridge regression can be viewed as <em>approximating</em> the full posterior by placing all mass on its <strong>mode</strong> (also other models can be seen similarly, one example is MLE, analyzed in <a href="/notes/parametric-modeling">Parametric Modeling</a>).</p></blockquote>
-<p>So it&rsquo;s a nice approximation:
-$$
-\begin{align}</p>
-<p>p(y^{<em>} \mid x^{</em>}, x_{1:n}, y_{1:n}) =</p>
-$$
-Remember that for delta direct distribution we have
-$$<p>
-\mathbb{E}[f(x)] = \int f(x) \delta_{x&rsquo;}(x) , dx = f(x&rsquo;)
-$$</p>
-<h4 id="epistemic-and-aleatoric-uncertainty">Epistemic and aleatoric uncertainty<a hidden class="anchor" aria-hidden="true" href="#epistemic-and-aleatoric-uncertainty">#</a></h4>
-<p>We now start a philosophical discussion on epistemic and aleatoric uncertainty.</p>
-<ul>
-<li>Epistemic uncertainty: Uncertainty about the model due to the lack of data</li>
-<li>Aleatoric uncertainty: Irreducible noise</li>
-</ul>
-<p>The $x^{*T}\bar{\Sigma}x^{*}$ is the epistemic uncertainty about $f^{*}$ while the $\sigma^{2}_{n}$ factor is the noise/uncertainty about $y^{*}$ given $f^{*}$, meaning we need to change $f^{*}$, or hypothesis class if we want to lower this uncertainty I think (not sure though).</p>
-<p>The law of total variance can give another intuition about the decomposition between epistemic and aleatoric uncertainty:</p>
-$$
-Var(y \mid x) = \text{ aleatoric } + \text{ epistemic } = \mathbb{E}_{\theta}\left[ \text{Var}_{y}(y \mid x, \theta) \right]  + \text{Var}_{\theta}(\mathbb{E}_{y}[y \mid x, \theta])
-$$<h4 id="choosing-hyper-parameters">Choosing hyper-parameters<a hidden class="anchor" aria-hidden="true" href="#choosing-hyper-parameters">#</a></h4>
-<p>We would like a manner to compute the values of $\sigma^{2}_{n}$ and $\sigma^{2}_{p}$.
-Covariance of the prior and variance of the noise need to be chosen  before we can apply these methods.
-One way is just finding $\lambda = \frac{\sigma^{2}_{n}}{\sigma^{2}_{p}}$ with cross-validation, then estimate the variance from data and get the prior variance in this manner.</p>
-<p>Then it&rsquo;s possible to have <strong>graphical models</strong> for bayesian linear regression.</p>
-<h4 id="recursive-bayesian-updates">Recursive bayesian updates<a hidden class="anchor" aria-hidden="true" href="#recursive-bayesian-updates">#</a></h4>
-$$
-p^{(j)} (w) := p(w \mid y_{1: j}), p^{(0)}(w) = p(w)
-$$$$
-p^{(j)}(w) = p( w \mid y_{1: j}) = \frac{1}{z} p(w) \cdot p(y_{1} \mid w) \dots p(y_{j} \mid w)  = \frac{1}{z} \left( z \cdot p^{(j - 1)}(w) \right) p(y_{j} \mid w) = f(p^{(j - 1)}(w), y_{j})
-$$<p>So we would just need to integrate the new information given by $y_{j}$ and then use the previous knowledge.
-The recursive updates are also the reason why the Dirichlet is a nice prior for multinomials, see <a href="/notes/dirichlet-processes">Dirichlet Processes</a>.</p>
-<h4 id="example-bayesian-update-for-a-coin-toss">Example: Bayesian Update for a Coin toss<a hidden class="anchor" aria-hidden="true" href="#example-bayesian-update-for-a-coin-toss">#</a></h4>
-<p>We can see how the posterior changes with the number of coin flips.
-We will use a Beta prior for the Bernoulli likelihood, this is a conjugate prior so we can compute the posterior in closed form.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Initialize parameters for the Beta prior</span>
-</span></span><span class="line"><span class="cl"><span class="n">alpha_prior</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Prior &#34;successes&#34; (e.g., heads)</span>
-</span></span><span class="line"><span class="cl"><span class="n">beta_prior</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># Prior &#34;failures&#34; (e.g., tails)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Simulated coin flips (1 = heads, 0 = tails)</span>
-</span></span><span class="line"><span class="cl"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># For reproducibility</span>
-</span></span><span class="line"><span class="cl"><span class="n">coin_flips</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>  <span class="c1"># Unfair coin: 70% tails, 30% heads</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Function to plot the Beta distribution</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">plot_beta</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta_val</span><span class="p">,</span> <span class="n">flip_num</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">y</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta_val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&#34;After </span><span class="si">{</span><span class="n">flip_num</span><span class="si">}</span><span class="s2"> flips (α=</span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="s2">, β=</span><span class="si">{</span><span class="n">beta_val</span><span class="si">}</span><span class="s2">)&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&#34;Probability of Heads (p)&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&#34;Density&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;Online Bayesian Update of Beta Distribution&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Create a figure for the updates</span>
-</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Perform Bayesian updates after each coin flip</span>
-</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">flip</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coin_flips</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># Update the Beta prior with the Bernoulli likelihood</span>
-</span></span><span class="line"><span class="cl">    <span class="n">alpha_prior</span> <span class="o">+=</span> <span class="n">flip</span>  <span class="c1"># Increment alpha if heads (flip=1)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">beta_prior</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">flip</span>  <span class="c1"># Increment beta if tails (flip=0)</span>
-</span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="c1"># Plot the updated distribution every few flips</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">99</span><span class="p">}:</span>  <span class="c1"># Plot at these specific flips</span>
-</span></span><span class="line"><span class="cl">        <span class="n">plot_beta</span><span class="p">(</span><span class="n">alpha_prior</span><span class="p">,</span> <span class="n">beta_prior</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Show the final plot</span>
-</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</span></span></code></pre></div><h4 id="online-bayesian-regression">Online Bayesian regression<a hidden class="anchor" aria-hidden="true" href="#online-bayesian-regression">#</a></h4>
-<p>This section concerns in building a bayesian regression algorithm whose memory does not grow with the number of samples. It can be conceived as a filtering process, composed of two phased: <em>conditioning</em> (updating over the priors) and <em>prediction</em>.</p>
-$$
-p(w \mid X, y) = \mathcal{N}(w; (X^{T}X +\sigma_{n}^{2}I)^{-1}X^{T}y, (\sigma^{-2}_{n}X^{T}X + I)^{-1})
-$$<p>
-Assuming $\sigma_{p}^{2} = 1$.</p>
-$$
-X^{(t)} = \begin{bmatrix}
-x_{1}^{T}  \\
-\vdots \\
-x_{t}^{T}
-\end{bmatrix} \in \mathbb{R}^{t \times d} \,\,\, Y^{(t)} = \begin{bmatrix}
-y_{1}  \\
-\vdots \\
-y_{t}
-\end{bmatrix} \in \mathbb{R}^{t \times 1}
-$$$$
-X^{(t + 1)T}Y^{(t+1)} = \sum_{i = 1}^{t} x_{i}y_{i} + x_{t + 1}y_{t + 1} = X^{(t)}Y^{(t)} + x_{t + 1}y_{t + 1}
-$$$$
-X^{(t + 1)T} X^{(t+ 1)} = \begin{pmatrix}
-x_{1} , \dots x_{t}
-\end{pmatrix} \cdot \begin{pmatrix}
-x_{1}  \\
-\vdots \\
-x_{t}
-\end{pmatrix} = \sum_{i = 1}^{t} x_{i}x_{i}^{T} + x_{t + 1}x_{t + 1}^{T} = X^{(t)T}X^{(t)} + x_{t+1}x_{t + 1}^{T}
-$$<p>
-This allows to compute the parameters in a way that the memory requirement is constant and does not grow as $\mathcal{O(t)}$.</p>
-$$
-(A + uv^{T})^{-1} = A^{-1} - \frac{A^{-1}uv^{T}A^{-1}}{1 + v^{T}A^{-1}u}
-$$<p>And we can interpret the value $X^{(t)T}X^{(t)}  + \sigma_{n}^{2}I$ as our $A$ and the $x_{t+1}x_{t + 1}^{T}$ as our two vectors. In this manner we just need to compute matrix multiplications which bring down the complexity to $\mathcal{O}(d^{2})$.</p>
-<p>This is all for analysis in the online bayesian setting.</p>
-<h4 id="logistic-regression-case">Logistic regression case<a hidden class="anchor" aria-hidden="true" href="#logistic-regression-case">#</a></h4>
-$$
-P(y \mid x, w) = Ber(y; \sigma(w^{T}x))
-$$<p>
-Where $\sigma$ is the Sigmoid function which gives an idea of confidence of a prediction.</p>
-<h3 id="relation-with-dimensionality">Relation with dimensionality<a hidden class="anchor" aria-hidden="true" href="#relation-with-dimensionality">#</a></h3>
-$$
-f(x) = \sum_{i = 1}^{N} w_{i} \phi_{i}(x)
-$$$$
-\phi = [1, x_{1}, \dots, x_{d}, x_{1}^{2}, .. x_{2}^{2}, x_{1}x_{2}, \dots, x_{1}x_{2}\dots x_{d}]
-$$$$ \lvert \phi \rvert =  \begin{pmatrix}
-d + m \\
-d
-\end{pmatrix}$$<h4 id="the-kernel-trick">The kernel trick<a hidden class="anchor" aria-hidden="true" href="#the-kernel-trick">#</a></h4>
-<p>We first want to replace the problem using inner products then we want to <strong>replace inner products</strong> using <em>kernels</em>. If we are able to do this, then we can compute inner products in feature space quite efficiently.
-For example if $\phi(x) = [\text{ all monomials up to } m \text{ variables} ]$ then we can compute $\phi(x)^{T}\phi(x)$ by just computing $(1 + x^{T}x)^{m}$. This is quite important to understand well. See <a href="/notes/kernel-methods">Kernel Methods</a> for more.
-This leads us in an attempt to kernelize the bayesian linear regression.</p>
-<h3 id="function-view">Function view<a hidden class="anchor" aria-hidden="true" href="#function-view">#</a></h3>
-<p>In the previous sections we have derived the Bayesian Linear Regression based on priors on the weights and likelihoods. It is possible to derive something very similar by just observing inputs and outputs, so having a distribution on the <em>space of the functions</em>.
-This part builds the fundamental ideas that will be later needed for <a href="/notes/gaussian-processes">Gaussian Processes</a> so it is quite important to understand this quite well.</p>
-$$
-f \mid X \sim \mathcal{N}(\Phi \mathbb{E}[w], \Phi\mathbb{E}[w]\Phi^{T}) = \mathcal{N}(0, \sigma^{2}_{p}\Phi\Phi^{T})
-$$<p>With this formulation the feature map is implicit in the choice of the Kernel.</p>
-<h4 id="predictions-in-function-view">Predictions in function view<a hidden class="anchor" aria-hidden="true" href="#predictions-in-function-view">#</a></h4>
-$$
-\bar{\Phi} = \begin{bmatrix}
-\Phi \\
-\phi(x^{*})^{T}
-\end{bmatrix}, \, \bar{y}  =\begin{bmatrix}
-y \\
-y^{*}
-\end{bmatrix}, \bar{f} = \begin{bmatrix}
-f \\
-f^{*}
-\end{bmatrix}
-$$$$
-\hat{y}\mid X, x^{*} \sim \mathcal{N}(0, \bar{K} + \sigma^{2}_{n}I)
-$$
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

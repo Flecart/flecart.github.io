@@ -7,14 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Architettura software del OS | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="sistemi-operativi">
-<meta name="description" content="A seconda dell&rsquo;utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l&rsquo;utente ne può anche essere a non-conoscenza).
-Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
-
-Slide componenti OS alto livello
-
-
-Introduzione sui componenti (salto)
-Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante">
+<meta name="description" content="Architettura software del OS - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/architettura-software-del-os/">
@@ -100,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/architettura-software-del-os/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Architettura software del OS">
-  <meta property="og:description" content="A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).
-Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
-Slide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -113,14 +104,7 @@ Slide componenti OS alto livello Introduzione sui componenti (salto) Questa part
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Architettura software del OS">
-<meta name="twitter:description" content="A seconda dell&rsquo;utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l&rsquo;utente ne può anche essere a non-conoscenza).
-Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS
-
-Slide componenti OS alto livello
-
-
-Introduzione sui componenti (salto)
-Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -149,12 +133,12 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
   "@type": "BlogPosting",
   "headline": "Architettura software del OS",
   "name": "Architettura software del OS",
-  "description": "A seconda dell\u0026rsquo;utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l\u0026rsquo;utente ne può anche essere a non-conoscenza).\nMa se sei un programmatore OS ti interessa capire le componenti principali dell’OS\nSlide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante\n",
+  "description": "",
   "keywords": [
     "sistemi-operativi"
   ],
-  "articleBody": "A seconda dell’utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l’utente ne può anche essere a non-conoscenza).\nMa se sei un programmatore OS ti interessa capire le componenti principali dell’OS\nSlide componenti OS alto livello Introduzione sui componenti (salto) Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante\nGestione dei processi All’interno del SO, il processo è rappresentato come un processo control block, che in linux è in sched, parte dello scheduler dei processi. Questo è importante perché per esempio per fare una fork, non faccio altro che duplicare questa struttura e settare bene i figli e genitori.\nQuesti sono solitamente messi un un process table o forse una lista per tenerne traccia.\nSlide\nnel parliamo in Processi e thread.\nGestione memoria principale e secondaria Memoria Principale È un array temporaneo(nel senso che non è mantenuto quando viene spento il PC.), indicizzato singolarmente a differenza del secondario, che è indicizzato a blocchi,\nUna parte importante di questa parte è la gestione della memoria virtuale. Come allocare pagine di memoria, deallocarle e simili, ne parliamo in Paginazione e segmentazione\nMemoria secondaria La cosa buona è che questa memoria è permanente, efficienza (ordinare le richieste per non andare qui e lì quando si legge! minimizare tempi per seek) e partizionamento e reliability dei dischi sono problemi che interessano questa parte. Abbiamo parlato di raid in Memoria. e di nuovo in Devices OS.\nI/O e filesystem Principalmente per IO servono driver per interagire con specifici hardware, e un sistema di comunicazione che spesso sono buffer e cache.\nEsiste un file system virtuale che mappa a tutto (quindi alcune cose non esistono realmente sul disco, potrebbe essere una astrazione utilizzata per esempio per comunicare con i devices.\nCi sono molti filesystem, che però posso gestire in modo differente la forma che hanno sul disco, Ed è per questo che possiamo dire che esistono dei filesystem diversi.\nAnche i processi sono files, la cosa figa di questa astrazioen è che posso utilizzare gli stessi sistemi di protezione file per processi.\nStruttura dei sistemi Obiettivi di design dei SO (4) Efficienza Modularità Mantenibilità Espansibilità Struttura del kernel Slide riassuntiva\nIl kernel è un unico processo, parte da un main che parte da un initialize in cui raccoglie tutte le risorse del sistema, fa partire tutti i device drivers e crea il PCB del primo processo, anche chiamato init, messo poi nella queue dello scheduler come spiegato in Scheduler. Fatta una volta non è mai più eseguito quel codice di init.\nLo stato kernel è la parte a sinistra dell’immagine, quella parte blu, tutto il giallo, a destra è lo stato user.\nScheduler scegliere il processo da eseguire nello user space Il controllo è passato al processo user, che può fare traps (come fork) o fare I/O, a quel punto è rimesso a codice kernel. Tipologie di struttura OS (2) Solitamente i sistemi sono costruiti in due modi, sistemi semplici senza struttura, che praticamente c’è una prima versione, e poi viene ammassato roba senza struttura generale, fatti quando servono. Solitamente sono insieme di procedure che si chiamano fra di loro, e ben presto sono andate fuori dal loro ambito di interesse diciamo (fuori dal loro scope)\nFreeDos and Unix Un esempio è free-dos che è quanto installato su un computer senza sistema operativo.\nIn modo simile è MS-DOS, che è stato fatto per i primi personal computer, che non avevano un sistema kernel a livello hardware (non era quindi possibile fare queste protezioni).. In generale in questo ambiente un programma aveva accesso all’intera memoria, e poteva mandare in crash tutto.\nStruttura Free-DOS\nUNIX, è diviso diviso in due parti in kernel e programmi di sistemi, molto semplice, un kernel monolitico, un unico eseguibile, anche questo fu all’epoca limitato enormemente dal suo hardware, e una serie di programmi di sistema.\nDato che c’è una separazione, l’utente è separato dall’interfaccia dal codice kernel. Ma comunque il codice kernel resta vulnerabile, e potrebbe essere modificato e quindi attaccato, o cumunque vulnerabile a bug, anche colposi, distruttivi.\nStruttura UNIX\nStratificazione OS La struttura a stati è più affidabile dell’altra e rende più facile la programmazione di tale sistema, utili, la logica è la stessa presentata in Architettura e livelli 1, 2, per la divisione a stack del sistema e dei vantaggi che si hanno con questo tipo di architettura.\nEsemplificazione struttura a strati\nStrutture proposte classiche (non fatte, non importanti)\nQuesti sono rimasti accademici\nMa nella pratica questi strati sono rimasti solamente a livello accademico, perché crea overhead anche se si guadagnerebbe in manutentibilità e estensibilità e gestione, quindi molto meno efficiente, inoltre non erano ben chiare le API fra strati. Oggi c’è una forma intermedia (non c’è esattamente la gestione a strati come abbiamo per Web, ma abbiamo una divisione per componenti e responsabilità delle componenti).\nPolitiche e meccanismi La suddifivisione politiche e meccanismi è un pattern di software engineering che lo rende molto comodo da gestire.\nInvece che una gestione a strati come per le reti, abbiamo una gestione di politiche e meccanismi ossia abbiamo qualcosa che decide cosa andare a fare e qualcosa che gestisce il come farla.\nEG. un certo modo di memoria allocata per fare qualcosa, quindi indirizzare il sistema verso qualcosa, e MMU che attualmente implementa la decisione politica.\nEsempio Microkernel o MINIX:\nIl kernel è visto come il meccanismo quindi le parti di gestione e politica sono fuori dal kernel. Questo rende la struttura del SO molto mantenibile ed estendibile.\nSlide\nEsempio Mac OS ≤ 9 / Windows 9x:\nPolitiche e meccanismi sono messi tutti nel kernel, perché così imponevo un feeling unico al look and feel suo (obbligato tutti ad avere questi elementi grafici). Questo è un problema praticamente di mercato.\nQuesto era brutto perché la grafica può mandare in crash tutto il sistema. Anche se i nuovi sistemi non dovrebbero avere questo problema.\nCategorizzazione dei Kernel Monolitici Il kernel è un unico programma. Si possono creare moduli che poi vengono caricati. Il problema principale di questo tipo di kernel è che se un modulo bugga crolla l’intero sistema. Un vantaggio è che è molto efficiente perché non deve passare ad astrazioni come per lo stack, basta fare una chiamata di funzione, tanto siamo nello stesso programma. Ed è altamente modularizzabile per poter attaccare nuove funzionalità.\nIn breve:\nVantaggi:\nEfficienza Modularità e mantenibilità (non devo ricompilare tutto, basta runtime). Svantaggio:\nUn modulo può mandare in crash tutto, perché è eseguito nello stesso spazio del kernel.\nSlide\nEsempi sono Linux o BSD.\nMicrokernel L’obiettivo del microkernle è isolare solamente le funzionalità essenziali e tenere solo quelli (in un certo senso è quello che fa firecracker (Agache et al. 2020), ne parliamo in Cloud Computing Services), tutto il resto interagisce con esso con system call (un esempio è il filesystem che potrebbe essere fuori dal kernel, e avrebbe syscall leggermente diverse rispetto a quelle di linux, per aprire un file allora si chiederebbe a questo processo in user space, che poi fa altre richeste per kernel space)\nBisogna fare un messaggio, la syscall diventano Send! Che sarebbe unico modo per raggiungere il processo che offre il servizio che mi serve.\nVantaggi:\nAltissima modularità e mantenibilità del sistema e semplice da realizzare Assenza di danni di sistema, perché moduli e kernel sono eseguiti in spazio differente. Sicuro e affidabile per la divisione (non ho propagazione di errori e guasti) Molto portabile, che ho solo il microkernel. Svantaggio:\nFortemente Inefficienza rispetto al monolitico, che devo fare message passing e comunicazione.\nSlide di comparazione\nKernel Ibridi Sono dei microkernel modificati, con qualcosa in più forse (aziende per pubblicizzarsi dicevano di avere microkernel, ma con un ibridone, mettendo le cose inefficienti del microkernel dentro il kernel).\nEsempio windows\nCi sono diversi server, che fanno parte di un sottosistema d’ambiente che è in grado di emulare certe cose (sono nascoste le syscall reali del sistema così).\nIl codice per un certo ambiente funziona anche nel sottosistema, un esempio è un WSL.\nLa parte grafica importante per fare i videogiochi, è dentro il kernel, questo ad esempio per MACOS, perché volevano imporre la grafica simile\nMacchine virtuali Vedi Virtual Machines.\nReferences [1] Agache et al. “Firecracker: Lightweight Virtualization for Serverless Applications” 17th USENIX Symposium on Networked Systems Design and Implementation (NSDI 20) 2020 ",
-  "wordCount" : "1406",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-02-28T00:00:00Z",
   "dateModified": "2025-02-28T00:00:00Z",
@@ -249,233 +233,12 @@ Questa parte la salto perché è una descrizione molto generale di cosa si occup
     <h1 class="post-title entry-hint-parent">
       Architettura software del OS
     </h1>
-    <div class="post-meta"><span title='2025-02-28 00:00:00 +0000 UTC'>February 28, 2025</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-02-28 00:00:00 +0000 UTC'>February 28, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#introduzione-sui-componenti-salto" aria-label="Introduzione sui componenti (salto)">Introduzione sui componenti (salto)</a><ul>
-                        
-                <li>
-                    <a href="#gestione-dei-processi" aria-label="Gestione dei processi">Gestione dei processi</a></li>
-                <li>
-                    <a href="#gestione-memoria-principale-e-secondaria" aria-label="Gestione memoria principale e secondaria">Gestione memoria principale e secondaria</a><ul>
-                        
-                <li>
-                    <a href="#memoria-principale" aria-label="Memoria Principale">Memoria Principale</a></li>
-                <li>
-                    <a href="#memoria-secondaria" aria-label="Memoria secondaria">Memoria secondaria</a></li></ul>
-                </li>
-                <li>
-                    <a href="#io-e-filesystem" aria-label="I/O e filesystem">I/O e filesystem</a></li></ul>
-                </li>
-                <li>
-                    <a href="#struttura-dei-sistemi" aria-label="Struttura dei sistemi">Struttura dei sistemi</a><ul>
-                        
-                <li>
-                    <a href="#obiettivi-di-design-dei-so-4" aria-label="Obiettivi di design dei SO (4)">Obiettivi di design dei SO (4)</a></li>
-                <li>
-                    <a href="#struttura-del-kernel" aria-label="Struttura del kernel">Struttura del kernel</a></li>
-                <li>
-                    <a href="#tipologie-di-struttura-os-2" aria-label="Tipologie di struttura OS (2)">Tipologie di struttura OS (2)</a><ul>
-                        
-                <li>
-                    <a href="#freedos-and-unix" aria-label="FreeDos and Unix">FreeDos and Unix</a></li>
-                <li>
-                    <a href="#stratificazione-os" aria-label="Stratificazione OS">Stratificazione OS</a></li></ul>
-                </li>
-                <li>
-                    <a href="#politiche-e-meccanismi" aria-label="Politiche e meccanismi">Politiche e meccanismi</a></li>
-                <li>
-                    <a href="#categorizzazione-dei-kernel" aria-label="Categorizzazione dei Kernel">Categorizzazione dei Kernel</a><ul>
-                        
-                <li>
-                    <a href="#monolitici" aria-label="Monolitici">Monolitici</a></li>
-                <li>
-                    <a href="#microkernel" aria-label="Microkernel">Microkernel</a></li>
-                <li>
-                    <a href="#kernel-ibridi" aria-label="Kernel Ibridi">Kernel Ibridi</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#macchine-virtuali" aria-label="Macchine virtuali">Macchine virtuali</a></li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>A seconda dell&rsquo;utilizzatore l’OS può essere molte cose, come solamente l’interfaccia se sei un programmatore, servizi (se sei un utente, ma gran parte dei servizi sono astratti e l&rsquo;utente ne può anche essere a non-conoscenza).</p>
-<p>Ma se sei un programmatore OS ti interessa capire le componenti principali dell’OS</p>
-<ul>
-<li>Slide componenti OS alto livello
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled"></li>
-</ul>
-<h2 id="introduzione-sui-componenti-salto">Introduzione sui componenti (salto)<a hidden class="anchor" aria-hidden="true" href="#introduzione-sui-componenti-salto">#</a></h2>
-<p>Questa parte la salto perché è una descrizione molto generale di cosa si occupa L’os verso drivers, processi, filesystem I/O, quindi non è molto importante</p>
-<h3 id="gestione-dei-processi">Gestione dei processi<a hidden class="anchor" aria-hidden="true" href="#gestione-dei-processi">#</a></h3>
-<p>All&rsquo;interno del SO, il processo è rappresentato come un <strong>processo control block</strong>, che in linux è in <strong>sched</strong>, parte dello scheduler dei processi. Questo è importante perché per esempio per fare una fork, non faccio altro che duplicare questa struttura e settare bene i figli e genitori.</p>
-<p>Questi sono solitamente messi un un <strong>process table</strong> o forse una lista per tenerne traccia.</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 1">
-</li>
-</ul>
-<p>nel parliamo in <a href="/notes/processi-e-thread">Processi e thread</a>.</p>
-<h3 id="gestione-memoria-principale-e-secondaria">Gestione memoria principale e secondaria<a hidden class="anchor" aria-hidden="true" href="#gestione-memoria-principale-e-secondaria">#</a></h3>
-<h4 id="memoria-principale">Memoria Principale<a hidden class="anchor" aria-hidden="true" href="#memoria-principale">#</a></h4>
-<p>È un array temporaneo(nel senso che non è mantenuto quando viene spento il PC.), indicizzato singolarmente a differenza del secondario, che è indicizzato a blocchi,</p>
-<p>Una parte importante di questa parte è la gestione della memoria virtuale. Come allocare pagine di memoria, deallocarle e simili, ne parliamo in <a href="/notes/paginazione-e-segmentazione">Paginazione e segmentazione</a></p>
-<h4 id="memoria-secondaria">Memoria secondaria<a hidden class="anchor" aria-hidden="true" href="#memoria-secondaria">#</a></h4>
-<p>La cosa buona è che questa memoria è permanente, efficienza (ordinare le richieste per non andare qui e lì quando si legge! <strong>minimizare tempi per seek</strong>) e partizionamento e reliability dei dischi sono problemi che interessano questa parte. Abbiamo parlato di raid in <a href="/notes/memoria">Memoria</a>. e di nuovo in <a href="/notes/devices-os">Devices OS</a>.</p>
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 2">
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 3">
-<h3 id="io-e-filesystem">I/O e filesystem<a hidden class="anchor" aria-hidden="true" href="#io-e-filesystem">#</a></h3>
-<p>Principalmente per IO servono driver per interagire con specifici hardware, e un sistema di comunicazione che spesso sono buffer e cache.</p>
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 4">
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 5">
-<p>Esiste un <strong>file system virtuale</strong> che mappa a tutto (quindi alcune cose non esistono realmente sul disco, potrebbe essere una astrazione utilizzata per esempio per comunicare con i devices.</p>
-<p>Ci sono molti filesystem, che però posso gestire in modo differente la forma che hanno sul disco, Ed è per questo che possiamo dire che esistono dei filesystem diversi.</p>
-<p>Anche i processi sono files, la cosa figa di questa astrazioen è che posso utilizzare gli stessi sistemi di protezione file per processi.</p>
-<h2 id="struttura-dei-sistemi">Struttura dei sistemi<a hidden class="anchor" aria-hidden="true" href="#struttura-dei-sistemi">#</a></h2>
-<h3 id="obiettivi-di-design-dei-so-4">Obiettivi di design dei SO (4)<a hidden class="anchor" aria-hidden="true" href="#obiettivi-di-design-dei-so-4">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 6">
-<ul>
-<li>Efficienza</li>
-<li>Modularità</li>
-<li>Mantenibilità</li>
-<li>Espansibilità</li>
-</ul>
-<h3 id="struttura-del-kernel">Struttura del kernel<a hidden class="anchor" aria-hidden="true" href="#struttura-del-kernel">#</a></h3>
-<ul>
-<li>
-<p>Slide riassuntiva</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 7">
-</li>
-</ul>
-<p>Il kernel è un unico processo, parte da un main che parte da un initialize in cui raccoglie tutte le risorse del sistema, fa partire tutti i device drivers e crea il PCB del primo processo, anche chiamato <strong>init</strong>, messo poi nella queue dello scheduler come spiegato in <a href="/notes/scheduler">Scheduler</a>. Fatta una volta non è mai più eseguito quel codice di init.</p>
-<p>Lo stato kernel è la parte a sinistra dell’immagine, quella parte blu, tutto il giallo, a destra è lo stato user.</p>
-<ol>
-<li>Scheduler scegliere il processo da eseguire nello user space</li>
-<li>Il controllo è passato al processo user, che può fare traps (come fork) o fare I/O, a quel punto è rimesso a codice kernel.</li>
-</ol>
-<h3 id="tipologie-di-struttura-os-2">Tipologie di struttura OS (2)<a hidden class="anchor" aria-hidden="true" href="#tipologie-di-struttura-os-2">#</a></h3>
-<p>Solitamente i sistemi sono costruiti in due modi, sistemi <strong>semplici senza struttura</strong>, che praticamente c&rsquo;è una prima versione, e poi viene ammassato roba senza struttura generale, fatti quando servono. Solitamente sono insieme di procedure che si chiamano fra di loro, e ben presto sono andate fuori dal loro ambito di interesse diciamo (fuori dal loro scope)</p>
-<h4 id="freedos-and-unix">FreeDos and Unix<a hidden class="anchor" aria-hidden="true" href="#freedos-and-unix">#</a></h4>
-<p>Un esempio è <strong>free-dos</strong> che è quanto installato su un computer senza sistema operativo.</p>
-<p>In modo simile è MS-DOS, che è stato fatto per i primi personal computer, che non avevano un sistema kernel a livello hardware (non era quindi possibile fare queste protezioni).. In generale in questo ambiente un programma aveva accesso all&rsquo;intera memoria, e poteva mandare in crash tutto.</p>
-<ul>
-<li>
-<p>Struttura Free-DOS</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 8">
-</li>
-</ul>
-<p>UNIX, è diviso diviso in due parti in kernel e programmi di sistemi, molto semplice, un kernel monolitico, un unico eseguibile, anche questo fu all’epoca limitato enormemente dal suo hardware, e una serie di programmi di sistema.</p>
-<p>Dato che c&rsquo;è una separazione, l’utente è separato dall’interfaccia dal codice kernel. Ma comunque il codice kernel resta vulnerabile, e potrebbe essere modificato e quindi attaccato, o cumunque vulnerabile a bug, anche colposi, distruttivi.</p>
-<ul>
-<li>
-<p>Struttura UNIX</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 9">
-</li>
-</ul>
-<h4 id="stratificazione-os">Stratificazione OS<a hidden class="anchor" aria-hidden="true" href="#stratificazione-os">#</a></h4>
-<p>La <strong>struttura a stati</strong> è più affidabile dell&rsquo;altra e rende più facile la programmazione di tale sistema, utili, la logica è la stessa presentata in <a href="/notes/architettura-e-livelli-1,-2">Architettura e livelli 1, 2</a>, per la divisione a stack del sistema e dei vantaggi che si hanno con questo tipo di architettura.</p>
-<ul>
-<li>
-<p>Esemplificazione struttura a strati</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 10">
-</li>
-<li>
-<p>Strutture proposte classiche (non fatte, non importanti)</p>
-<p>Questi sono <strong>rimasti accademici</strong></p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 11">
-</li>
-</ul>
-<p>Ma nella pratica questi strati sono rimasti solamente a livello accademico, perché <strong>crea overhead</strong> anche se si guadagnerebbe in manutentibilità e estensibilità e gestione, quindi molto meno efficiente, inoltre non erano ben chiare le API fra strati. Oggi c&rsquo;è una forma intermedia (non c&rsquo;è esattamente la gestione a strati come abbiamo per Web, ma abbiamo una divisione per componenti e responsabilità delle componenti).</p>
-<h3 id="politiche-e-meccanismi">Politiche e meccanismi<a hidden class="anchor" aria-hidden="true" href="#politiche-e-meccanismi">#</a></h3>
-<p>La suddifivisione politiche e meccanismi è un pattern di software engineering che lo rende molto comodo da gestire.</p>
-<p>Invece che una gestione a strati come per le reti, abbiamo una gestione di <strong>politiche e meccanismi</strong> ossia abbiamo qualcosa che decide cosa andare a fare e qualcosa che gestisce il come farla.</p>
-<p>EG. un certo modo di memoria allocata per fare qualcosa, quindi indirizzare il sistema verso qualcosa, e MMU che attualmente implementa la decisione politica.</p>
-<p><strong>Esempio Microkernel o MINIX:</strong></p>
-<p>Il kernel è visto come il meccanismo quindi le parti di gestione e politica sono fuori dal kernel. Questo rende la struttura del SO molto mantenibile ed estendibile.</p>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 12">
-</li>
-</ul>
-<p><strong>Esempio Mac OS ≤ 9 / Windows 9x:</strong></p>
-<p>Politiche e meccanismi sono messi tutti nel kernel, perché così imponevo un feeling unico al look and feel suo (obbligato tutti ad avere questi elementi grafici). Questo è un problema praticamente di mercato.</p>
-<p>Questo era brutto perché la grafica può mandare in crash tutto il sistema. Anche se i nuovi sistemi non dovrebbero avere questo problema.</p>
-<h3 id="categorizzazione-dei-kernel">Categorizzazione dei Kernel<a hidden class="anchor" aria-hidden="true" href="#categorizzazione-dei-kernel">#</a></h3>
-<h4 id="monolitici">Monolitici<a hidden class="anchor" aria-hidden="true" href="#monolitici">#</a></h4>
-<p>Il kernel è un unico programma. Si possono creare moduli che poi vengono caricati. Il problema principale di questo tipo di kernel è che se un modulo bugga crolla l&rsquo;intero sistema. Un vantaggio è che è molto efficiente perché non deve passare ad astrazioni come per lo stack, basta fare una chiamata di funzione, tanto siamo nello stesso programma. Ed è altamente modularizzabile per poter attaccare nuove funzionalità.</p>
-<p>In breve:</p>
-<p>Vantaggi:</p>
-<ul>
-<li>Efficienza</li>
-<li>Modularità e mantenibilità (non devo ricompilare tutto, basta runtime).</li>
-</ul>
-<p>Svantaggio:</p>
-<ul>
-<li>
-<p>Un modulo può mandare in crash tutto, perché è eseguito nello stesso spazio del kernel.</p>
-</li>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 13">
-</li>
-</ul>
-<p>Esempi sono Linux o BSD.</p>
-<h4 id="microkernel">Microkernel<a hidden class="anchor" aria-hidden="true" href="#microkernel">#</a></h4>
-<p>L’obiettivo del microkernle è isolare solamente le <strong>funzionalità essenziali</strong> e tenere solo quelli (in un certo senso è quello che fa firecracker <a href="https://www.usenix.org/conference/nsdi20/presentation/agache">(Agache et al. 2020)</a>, ne parliamo in <a href="/notes/cloud-computing-services">Cloud Computing Services</a>), tutto il resto interagisce con esso con system call (un esempio è il filesystem che potrebbe essere fuori dal kernel, e avrebbe syscall leggermente diverse rispetto a quelle di linux, per aprire un file allora si chiederebbe a questo processo in user space, che poi fa altre richeste per kernel space)</p>
-<p>Bisogna fare un messaggio, la syscall diventano Send! Che sarebbe unico modo per raggiungere il processo che offre il servizio che mi serve.</p>
-<p>Vantaggi:</p>
-<ul>
-<li>Altissima modularità e mantenibilità del sistema e semplice da realizzare</li>
-<li>Assenza di danni di sistema, perché moduli e kernel sono eseguiti in spazio differente.</li>
-<li>Sicuro e affidabile per la divisione (non ho propagazione di errori e guasti)</li>
-<li>Molto portabile, che ho solo il microkernel.</li>
-</ul>
-<p>Svantaggio:</p>
-<ul>
-<li>
-<p>Fortemente Inefficienza rispetto al monolitico, che devo fare message passing e comunicazione.</p>
-</li>
-<li>
-<p>Slide di comparazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 14">
-</li>
-</ul>
-<h4 id="kernel-ibridi">Kernel Ibridi<a hidden class="anchor" aria-hidden="true" href="#kernel-ibridi">#</a></h4>
-<p>Sono dei microkernel modificati, con qualcosa in più forse (aziende per pubblicizzarsi dicevano di avere microkernel, ma con un ibridone, mettendo le cose inefficienti del microkernel dentro il kernel).</p>
-<ul>
-<li>
-<p>Esempio windows</p>
-<p>Ci sono diversi server, che fanno parte di un sottosistema d’ambiente che è in grado di emulare certe cose (sono nascoste le syscall reali del sistema così).</p>
-<p>Il codice per un certo ambiente funziona anche nel sottosistema, un esempio è un WSL.</p>
-  <img src="/images/notes/image/universita/ex-notion/Architettura software del OS/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Architettura software del OS/Untitled 15">
-<p>La parte grafica importante per fare i videogiochi, è dentro il kernel, questo ad esempio per MACOS, perché volevano imporre la grafica simile</p>
-</li>
-</ul>
-<h2 id="macchine-virtuali">Macchine virtuali<a hidden class="anchor" aria-hidden="true" href="#macchine-virtuali">#</a></h2>
-<p>Vedi <a href="/notes/virtual-machines">Virtual Machines</a>.</p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=agacheFirecrackerLightweightVirtualization2020>[1] Agache et al. <a href="https://www.usenix.org/conference/nsdi20/presentation/agache">“Firecracker: Lightweight Virtualization for Serverless Applications”</a> 17th USENIX Symposium on Networked Systems Design and Implementation (NSDI 20)  2020
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

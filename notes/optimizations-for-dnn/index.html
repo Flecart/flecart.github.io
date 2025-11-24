@@ -7,13 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Optimizations for DNN | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="☁cloud-computing">
-<meta name="description" content="Mixture of Experts
-There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
-
-One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.
-LoRA: Low-Rank Adaptation
-We only finetune a part of the network, called lora adapters, not the whole thing.
-There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:">
+<meta name="description" content="Optimizations for DNN - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/optimizations-for-dnn/">
@@ -99,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/optimizations-for-dnn/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Optimizations for DNN">
-  <meta property="og:description" content="Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.
-LoRA: Low-Rank Adaptation We only finetune a part of the network, called lora adapters, not the whole thing. There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -111,13 +104,7 @@ LoRA: Low-Rank Adaptation We only finetune a part of the network, called lora ad
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Optimizations for DNN">
-<meta name="twitter:description" content="Mixture of Experts
-There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
-
-One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.
-LoRA: Low-Rank Adaptation
-We only finetune a part of the network, called lora adapters, not the whole thing.
-There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -146,12 +133,12 @@ There are two matrices here, a matrix A and B, they are some sort of an Autoenco
   "@type": "BlogPosting",
   "headline": "Optimizations for DNN",
   "name": "Optimizations for DNN",
-  "description": "Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.\nLoRA: Low-Rank Adaptation We only finetune a part of the network, called lora adapters, not the whole thing. There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:\n",
+  "description": "",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "Mixture of Experts There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network. One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.\nLoRA: Low-Rank Adaptation We only finetune a part of the network, called lora adapters, not the whole thing. There are two matrices here, a matrix A and B, they are some sort of an Autoencoders, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:\n$$ h = Wx + BAx = (W + BA)x = W'x $$ And it is very easy to switch them.\nLLM Optimizations Quadratic Bottleneck The attention matrix scales quadratically with respect to the sequence length, which makes it difficult to store. For example, if you have a GPT2 context window of 1024 tokens, which is about 340 words, this would make your attention matrix very large with not many words.\nModern LLMs make tokens longer by having large vocabularies, and they have larger context windows (in the order of the millions for Gemini 1.5 Pro (2 Millions)).\nFlashAttention This is a systems paper which is important for computing introduced in (Dao et al. 2022). This enables exact attention computation but longer context lengths. The compute the attention matrix in a careful way to tile it inside the SRAM, this is some sort of optimization that is close to what you do in Fast Linear Algebra, they basically reduce number of memory reads and writes between GPU high bandwidth memory and on-chip SRAM (similar optimizations are done between RAM and cache, same idea basically).\nImage from the paper: FlashAttention uses tiling to prevent materialization of the large $N \\times N$ attention matrix (dotted box) on (relatively) slow GPU HBM.\nKV Caching There is some redundant computation which is done in the attention matrix due to the autoregressive nature of the inference process. This means that instead of recomputing, we can cache some old results and not compute them again. However, this can grow a lot.\nMultiple parallel requests Complex decoding trategies. This was introduced in (Pope et al. 2023). This motivates to cache Key and Values from the computation. At every step we just need to compute a single vector instead of recomputing the old values.\nPagedAttention A lot of memory of the GPU is filled by the KV Cache. PagedAttention introduces virtual pages, inspired by OS memory access in Memoria virtuale. The System assumes the KV cache is continuous, but it is actually managed in some particular manner. This brings fragmentation. Adding this virtual layer makes better use of the actual resources. The authors claim to have near zero wasted memory in the KV cache memory due to fragmentation.\nSpeculative Decoding You have a small model that runs faster and attempts to predict a group of next tokens. Then you feed it to a large model and verify the tokens are correct (probable enough to have produced these tokens). This is basically Accept Reject algorithm for sampling the tokens. The easy example is with greedy decoding: you just accept all the tokens that match the argmax. But LLM decoding is stochastic, so for this reason it is better to have anohter method that keeps the locality. We use Accept Reject with acceptance probability:\n$$ A(y \\mid x) = \\min\\left( 1, \\frac{L(y\\mid x)}{k \\cdot S(y \\mid x)} \\right) $$ Where $y$ is the new token, $x$ is the prompt, $S$ is the draft fast model and $L$ is the slow model, and we assume: $L(y \\mid x) \\leq k \\cdot S(y \\mid x)$.\nBatching behaviours (He et al. 2025) is a good paper that explains most of the common optimizations that are made for LLMs. In this particular example, we have\nClassical LLM serving infrastructure Retrieval-Augmented Generation (RAG) Pretraining costs a lot, and updating weight knowledge using more training rounds and finetuning costs a lot. RAG addresses the problem of adding more knowledge for the model without any training, but just the so called in-context learning.\nSlowly, RAG is becoming industry standard to serve LLM in a reliable manner. Prompting is becoming a normal thing.\nRAG with internet-scale retrieval The pipeline is very easy: just use websearch to get many many documents, add it as a prefix to the LLM and use standard decoding.\nRAG for long-context processing In many occasions, there are very very long documents that are prefixed to the LLM input. In these cases, it can be very costly to process these kinds of documents.\nIn this case, we just want to add relevant passages, not whole documents and use those for LLM inference. Beginning and end parts of the prompt are better processed by the model, this is a phenomenon known as lost in the middle.\nRAG with iterative retrievals In this case the model can generate a question to generate another query to retrieve other documents. This is usually used with CoT, see (Wei et al. 2023), and sequential information retrievals.\nRAG with rewriter and reranker The idea is to break down the user query into more, or rewrite the query into a format more specific for the dataset.\nVector Search One of the classical methods are TF-IDF with document word frequency counts. The general problem is a Clustering, with nearest neighbors search.\nThe mathematical definition is as follows: Sure, here are the contents of the image as clean, copiable Markdown notes:\nProblem statement Given:\nA query vector $q \\in \\mathbb{R}^d$ A collection of database vectors $\\mathcal{D} = \\{ x_1, x_2, \\dots, x_N \\} \\subset \\mathbb{R}^d$ A similarity (or distance) function $\\text{sim} : \\mathbb{R}^d \\times \\mathbb{R}^d \\rightarrow \\mathbb{R}$ Vector search aims to find the top-$k$ nearest neighbors of $q$ in $\\mathcal{D}$, defined as:\n$$ \\arg \\, \\text{top-}k \\, \\text{sim}(q, x) \\quad \\text{for } x \\in \\mathcal{D} $$Common Metrics Choosing the metric is usually dependent on the model and application.\nCosine Similarity $\\cos(x, y) = \\frac{x \\cdot y}{||x|| ||y||}$ Euclidean Distance $d(x, y) = ||x - y||$ Manhattan Distance $d(x, y) = \\sum_i |x_i - y_i|$ One big problem with the metrics in high dimensionality is the classical Curse of Dimensionality, discussed in Kernel Methods. You have far sparse sparse points in high dimensional data. Indeed, for single dimensional data, tree searches are a nice and efficient method to solve this problem.\nIVF-PQ Algorithm This is some sort of an approximate nearest neighbor search.\nThis has two steps the first is: Inverted-file index: used to prune the search space to have a smaller set of candidates. This is done by clustering the data and creating an inverted index for each cluster.\nThis step is basically Clustering the data into $n$ predefined clusters, and use their center as some sort of representative vector. The centroids are called inverted lists/index. The important thing here is to store the residual with respect to that center. Product Quantization: used to lossy-compress the vectors we have. This is done by quantizing the vectors into a smaller set of representative vectors. The original $D$ dimensional vectors are first turned into $m$ subvectors, then each subvector is reclustered and approximated into original cluster centroids, then you just use the cluster id of the centroid. Now we have integers, which are very nice, called pico code which saves lots of representation space. Searching is done in a similar manner, and you also build distance lookup tables with these.\nThe idea is to divide the original part into $m$ subvectors and use their relative centroids to give a sort of representation, that is then integer, which is far more memory efficient.\nWhen you search you only scan a subset of the IVF. During search you build a distance loop-up table based on the centroids and use that to compare to the quantized vectors.\nPseudo code for search To give an idea of the search, this is some pseudocode for the search process\ndef IVF_PQ_SEARCH(query_vector q, index, top_k): # Step 1: Coarse quantization coarse_centroids = index.coarse_centroids probe_centroids = find_nearest_centroids(q, coarse_centroids, n_probe) # n_probe is the default number of centroids to return. candidate_vectors = [] for centroid in probe_centroids: # Step 2: Compute residual vector for query residual_q = q - centroid # Step 3: Prepare distance lookup tables for PQ pq_lookup_table = build_lookup_table(residual_q, index.pq_codebooks) # Step 4: For each encoded vector in the selected inverted list for code in index.inverted_list[centroid]: # Step 5: Compute approximate distance using lookup table distance = compute_adc_distance(code, pq_lookup_table) candidate_vectors.append((distance, code.original_id)) # Step 6: Select top-k closest vectors return top_k_smallest(candidate_vectors, k=top_k) Asymmetric Distance Computation (ADC) This is some metric that is used for the residuals usually. In this case, the database is quantized, but the query is not, we need to handle this kind of asymmetries.\nWe want to estimate the squared Euclidean distance between the real-valued query vector $q \\in \\mathbb{R}^d$ and a PQ-compressed vector $\\hat{x}$.\nSplit query vector $q$ into $m$ subvectors (this is the codebook part): $q = [q^{(1)}, q^{(2)}, \\dots, q^{(m)}]$ Each subvector $q^{(i)} \\in \\mathbb{R}^{d/m}$ For each subspace $i = 1, \\dots, m$, precompute a lookup table: $D_i[j] = \\| q^{(i)} - c^{(i)}_j \\|^2$ where $c^{(i)}_j$ is the $j$-th centroid in the codebook for subspace $i$, and $j = 0, \\dots, 255$. So each $D_i$ is a vector of 256 distances For a compressed database vector $\\hat{x}$, represented by codes: $$ \\text{code} = [c_1, c_2, \\dots, c_m] \\quad \\text{with } c_i \\in \\{0, \\dots, 255\\} $$ The total approximate distance is: $$ \\| q - \\hat{x} \\|^2 \\approx \\sum_{i=1}^m D_i[c_i] $$ → Just m table look-ups and m additions, which is easily parallelizable. KNN Graphs Examples of graph databases where studied in Graph Databases in the big data course the first time.\nThe problem here is to build a similarity graph with this kind of representation. One possibility is to build a KNN graph and doing pruning using some heuristics. With this method we have usually high recall, but:\nit is not very flexible with data updates it is quite memory intensive. Incremental insertion Graphs Option 2: Incremental Insertion (Online Construction)\nFor each new point, perform a search Connect to the top nearest nodes Possibly prune to maintain diversity • Pros: Can be done online (supports dynamic updates) More memory-efficient; no need to compute full KNN graph • Cons: Quality depends on insertion order and search quality You don’t have the possibility of getting the same graph every single time. Graph-based vector search The algorithm goes in the following way:\nWe select an entry point in the graph. We keep two queues High quality candidates to visit Existing nearest neighbors We pop from A and add to B We end if there are not enough high-quality candidates to visit or all nodes in A are too far from queue B. Return the best results so far. One of the modern algorithms that solves some problems in vector search that we have now is Hierarchical Navigable Small World, which does some kind of hierarchical search.\nHierarchical Navigable Small World NSW (Navigable Small World) Builds a small-world graph where nodes are connected to their close and some faraway neighbors. Search is greedy: jump to closer nodes until you can’t get closer. HNSW (Hierarchical NSW) Adds multiple layers: Top layers are sparse (longer-range links). Bottom layers are dense (short-range neighbors). Search starts at the top layer and drills down layer by layer, refining the search. References [1] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc. 2022 [2] He et al. “PAPI: Exploiting Dynamic Parallelism in Large Language Model Decoding with a Processing-In-Memory-Enabled Computing System” ACM 2025 [3] Pope et al. “Efficiently Scaling Transformer Inference” Curan 2023 [4] Wei et al. “Chain-of-Thought Prompting Elicits Reasoning in Large Language Models” arXiv preprint arXiv:2201.11903 2023 ",
-  "wordCount" : "1990",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-03T00:00:00Z",
   "dateModified": "2025-06-03T00:00:00Z",
@@ -246,302 +233,12 @@ There are two matrices here, a matrix A and B, they are some sort of an Autoenco
     <h1 class="post-title entry-hint-parent">
       Optimizations for DNN
     </h1>
-    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 10 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#mixture-of-experts" aria-label="Mixture of Experts">Mixture of Experts</a><ul>
-                        
-                <li>
-                    <a href="#lora-low-rank-adaptation" aria-label="LoRA: Low-Rank Adaptation">LoRA: Low-Rank Adaptation</a></li></ul>
-                </li>
-                <li>
-                    <a href="#llm-optimizations" aria-label="LLM Optimizations">LLM Optimizations</a><ul>
-                        
-                <li>
-                    <a href="#quadratic-bottleneck" aria-label="Quadratic Bottleneck">Quadratic Bottleneck</a></li>
-                <li>
-                    <a href="#flashattention" aria-label="FlashAttention">FlashAttention</a></li>
-                <li>
-                    <a href="#kv-caching" aria-label="KV Caching">KV Caching</a></li>
-                <li>
-                    <a href="#pagedattention" aria-label="PagedAttention">PagedAttention</a></li>
-                <li>
-                    <a href="#speculative-decoding" aria-label="Speculative Decoding">Speculative Decoding</a></li>
-                <li>
-                    <a href="#batching-behaviours" aria-label="Batching behaviours">Batching behaviours</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#classical-llm-serving-infrastructure" aria-label="Classical LLM serving infrastructure">Classical LLM serving infrastructure</a><ul>
-                        
-                <li>
-                    <a href="#retrieval-augmented-generation-rag" aria-label="Retrieval-Augmented Generation (RAG)">Retrieval-Augmented Generation (RAG)</a><ul>
-                        
-                <li>
-                    <a href="#rag-with-internet-scale-retrieval" aria-label="RAG with internet-scale retrieval">RAG with internet-scale retrieval</a></li>
-                <li>
-                    <a href="#rag-for-long-context-processing" aria-label="RAG for long-context processing">RAG for long-context processing</a></li>
-                <li>
-                    <a href="#rag-with-iterative-retrievals" aria-label="RAG with iterative retrievals">RAG with iterative retrievals</a></li>
-                <li>
-                    <a href="#rag-with-rewriter-and-reranker" aria-label="RAG with rewriter and reranker">RAG with rewriter and reranker</a></li></ul>
-                </li>
-                <li>
-                    <a href="#vector-search" aria-label="Vector Search">Vector Search</a><ul>
-                        
-                <li>
-                    <a href="#problem-statement" aria-label="Problem statement">Problem statement</a></li>
-                <li>
-                    <a href="#common-metrics" aria-label="Common Metrics">Common Metrics</a></li>
-                <li>
-                    <a href="#ivf-pq-algorithm" aria-label="IVF-PQ Algorithm">IVF-PQ Algorithm</a></li>
-                <li>
-                    <a href="#pseudo-code-for-search" aria-label="Pseudo code for search">Pseudo code for search</a></li>
-                <li>
-                    <a href="#asymmetric-distance-computation-adc" aria-label="Asymmetric Distance Computation (ADC)">Asymmetric Distance Computation (ADC)</a></li>
-                <li>
-                    <a href="#knn-graphs" aria-label="KNN Graphs">KNN Graphs</a></li>
-                <li>
-                    <a href="#incremental-insertion-graphs" aria-label="Incremental insertion Graphs">Incremental insertion Graphs</a></li>
-                <li>
-                    <a href="#graph-based-vector-search" aria-label="Graph-based vector search">Graph-based vector search</a></li>
-                <li>
-                    <a href="#hierarchical-navigable-small-world" aria-label="Hierarchical Navigable Small World">Hierarchical Navigable Small World</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h3 id="mixture-of-experts">Mixture of Experts<a hidden class="anchor" aria-hidden="true" href="#mixture-of-experts">#</a></h3>
-<p>There is a gate that opens a subset of the experts, and the output is the weighted sum of the outputs of the experts. The weights are computed by a gating network.
-<img src="/images/notes/Optimizations for DNN-20250510123829347.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250510123829347"></p>
-<p>One problem is load balancing, non uniform assignment. And there is a lot of communication overhead when you place them in different devices.</p>
-<h4 id="lora-low-rank-adaptation">LoRA: Low-Rank Adaptation<a hidden class="anchor" aria-hidden="true" href="#lora-low-rank-adaptation">#</a></h4>
-<p>We only finetune a part of the network, called <strong>lora adapters</strong>, not the whole thing.
-There are two matrices here, a matrix A and B, they are some sort of an <a href="/notes/autoencoders">Autoencoders</a>, done for every Q nd V matrices in the LLM attention layer. The nice thing is that there are not many inference costs if adapters are merged post training:</p>
-$$
-h = Wx + BAx = (W + BA)x = W'x
-$$<p>
-And it is very easy to switch them.</p>
-<h3 id="llm-optimizations">LLM Optimizations<a hidden class="anchor" aria-hidden="true" href="#llm-optimizations">#</a></h3>
-<h4 id="quadratic-bottleneck">Quadratic Bottleneck<a hidden class="anchor" aria-hidden="true" href="#quadratic-bottleneck">#</a></h4>
-<p>The attention matrix scales quadratically with respect to the sequence length, which makes it difficult to store. For example, if you have a GPT2 context window of 1024 tokens, which is about 340 words, this would make your attention matrix very large with not many words.</p>
-<p>Modern LLMs make tokens longer by having large vocabularies, and they have larger context windows (in the order of the millions for Gemini 1.5 Pro (2 Millions)).</p>
-<h4 id="flashattention">FlashAttention<a hidden class="anchor" aria-hidden="true" href="#flashattention">#</a></h4>
-<p>This is a systems paper which is important for computing introduced in <a href="/notes/optimizations-for-dnn#daoFLASHATTENTIONFastMemoryefficient2022">(Dao et al. 2022)</a>. This enables <strong>exact</strong> attention computation but longer context lengths. The compute the attention matrix in a careful way to tile it inside the SRAM, this is some sort of optimization that is close to what you do in <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>, they basically reduce number of memory reads and writes between GPU high bandwidth memory and on-chip SRAM (similar optimizations are done between RAM and cache, same idea basically).</p>
-<figure class="center">
-<img src="/images/notes/Optimizations for DNN-20250517184200201.webp" style="width: 100%"   alt="Optimizations for DNN-20250517184200201" title="Optimizations for DNN-20250517184200201"/>
-<figcaption><p style="text-align:center;"> Image from the paper: FlashAttention uses tiling to prevent materialization of the large $N \times N$ attention matrix (dotted box) on (relatively) slow GPU HBM.</p></figcaption>
-</figure>
-<h4 id="kv-caching">KV Caching<a hidden class="anchor" aria-hidden="true" href="#kv-caching">#</a></h4>
-<p>There is some redundant computation which is done in the attention matrix due to the autoregressive nature of the inference process. This means that instead of recomputing, we can <strong>cache</strong> some old results and not compute them again. However, this can grow a lot.</p>
-<ul>
-<li>Multiple parallel requests</li>
-<li>Complex decoding trategies.
-This was introduced in <a href="https://proceedings.mlsys.org/paper_files/paper/2023/file/c4be71ab8d24cdfb45e3d06dbfca2780-Paper-mlsys2023.pdf">(Pope et al. 2023)</a>.</li>
-</ul>
-<p>This motivates to cache Key and Values from the computation. At every step we just need to compute a single vector instead of recomputing the old values.</p>
-<h4 id="pagedattention">PagedAttention<a hidden class="anchor" aria-hidden="true" href="#pagedattention">#</a></h4>
-<p>A lot of memory of the GPU is filled by the KV Cache. PagedAttention introduces virtual pages, inspired by OS memory access in <a href="/notes/memoria-virtuale">Memoria virtuale</a>.
-The System assumes the KV cache is continuous, but it is actually managed in some particular manner.
-This brings fragmentation. Adding this virtual layer makes better use of the actual resources. The authors claim to have near zero wasted memory in the KV cache memory due to fragmentation.</p>
-<h4 id="speculative-decoding">Speculative Decoding<a hidden class="anchor" aria-hidden="true" href="#speculative-decoding">#</a></h4>
-<p>You have a small model that runs faster and attempts to predict a group of next tokens. Then you feed it to a large model and verify the tokens are correct (probable enough to have produced these tokens). This is basically <a href="/notes/accept-reject-algorithm">Accept Reject algorithm</a> for sampling the tokens.
-<img src="/images/notes/Optimizations for DNN-20250517185146160.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250517185146160">
-The easy example is with greedy decoding: you just accept all the tokens that match the argmax.
-But LLM decoding is stochastic, so for this reason it is better to have anohter method that keeps the locality.
-We use Accept Reject with acceptance probability:</p>
-$$
-A(y \mid x) = \min\left( 1, \frac{L(y\mid x)}{k \cdot S(y \mid x)} \right)
-$$<p>
-Where $y$ is the new token, $x$ is the prompt, $S$ is the draft fast model and $L$ is the slow model, and we assume: $L(y \mid x) \leq k \cdot S(y \mid x)$.</p>
-<h4 id="batching-behaviours">Batching behaviours<a hidden class="anchor" aria-hidden="true" href="#batching-behaviours">#</a></h4>
-<p><a href="https://dl.acm.org/doi/10.1145/3676641.3716009">(He et al. 2025)</a> is a good paper that explains most of the common optimizations that are made for LLMs.
-In this particular example, we have</p>
-<h2 id="classical-llm-serving-infrastructure">Classical LLM serving infrastructure<a hidden class="anchor" aria-hidden="true" href="#classical-llm-serving-infrastructure">#</a></h2>
-<h3 id="retrieval-augmented-generation-rag">Retrieval-Augmented Generation (RAG)<a hidden class="anchor" aria-hidden="true" href="#retrieval-augmented-generation-rag">#</a></h3>
-<p>Pretraining costs a lot, and updating <em>weight</em> knowledge using more training rounds and finetuning costs a lot. RAG addresses the problem of adding more knowledge for the model without any training, but just the so called <em>in-context learning</em>.</p>
-<img src="/images/notes/Optimizations for DNN-20250518110750716.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250518110750716">
-<p>Slowly, RAG is becoming <strong>industry standard</strong> to serve LLM in a reliable manner. Prompting is becoming a normal thing.</p>
-<h4 id="rag-with-internet-scale-retrieval">RAG with internet-scale retrieval<a hidden class="anchor" aria-hidden="true" href="#rag-with-internet-scale-retrieval">#</a></h4>
-<p>The pipeline is very easy: just use websearch to get many many documents, add it as a prefix to the LLM and use standard decoding.</p>
-<img src="/images/notes/Optimizations for DNN-20250518111258679.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250518111258679">
-<h4 id="rag-for-long-context-processing">RAG for long-context processing<a hidden class="anchor" aria-hidden="true" href="#rag-for-long-context-processing">#</a></h4>
-<p>In many occasions, there are very very long documents that are prefixed to the LLM input. In these cases, it can be very costly to process these kinds of documents.</p>
-<p>In this case, we just want to add relevant passages, not whole documents and use those for LLM inference.
-Beginning and end parts of the prompt are better processed by the model, this is a phenomenon known as <strong>lost in the middle</strong>.</p>
-<img src="/images/notes/Optimizations for DNN-20250518111608439.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250518111608439">
-<h4 id="rag-with-iterative-retrievals">RAG with iterative retrievals<a hidden class="anchor" aria-hidden="true" href="#rag-with-iterative-retrievals">#</a></h4>
-<p>In this case the model can generate a question to generate another query to retrieve other documents. This is usually used with CoT, see <a href="http://arxiv.org/abs/2201.11903">(Wei et al. 2023)</a>, and sequential information retrievals.</p>
-<h4 id="rag-with-rewriter-and-reranker">RAG with rewriter and reranker<a hidden class="anchor" aria-hidden="true" href="#rag-with-rewriter-and-reranker">#</a></h4>
-<p>The idea is to break down the user query into more, or rewrite the query into a format more specific for the dataset.</p>
-<img src="/images/notes/Optimizations for DNN-20250518111845240.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250518111845240">
-<h3 id="vector-search">Vector Search<a hidden class="anchor" aria-hidden="true" href="#vector-search">#</a></h3>
-<p>One of the classical methods are TF-IDF with document word frequency counts.
-The general problem is a <a href="/notes/clustering">Clustering</a>, with nearest neighbors search.</p>
-<p>The mathematical definition is as follows:
-Sure, here are the contents of the image as clean, copiable Markdown notes:</p>
-<h4 id="problem-statement">Problem statement<a hidden class="anchor" aria-hidden="true" href="#problem-statement">#</a></h4>
-<p>Given:</p>
-<ul>
-<li>A <strong>query vector</strong> $q \in \mathbb{R}^d$</li>
-<li>A <strong>collection of database vectors</strong>
-$\mathcal{D} = \{ x_1, x_2, \dots, x_N \} \subset \mathbb{R}^d$</li>
-<li>A <strong>similarity (or distance) function</strong>
-$\text{sim} : \mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$</li>
-</ul>
-<p><strong>Vector search</strong> aims to find the <strong>top-</strong>$k$ <strong>nearest neighbors</strong> of $q$ in $\mathcal{D}$, defined as:</p>
-$$
-\arg \, \text{top-}k \, \text{sim}(q, x) \quad \text{for } x \in \mathcal{D}
-$$<h4 id="common-metrics">Common Metrics<a hidden class="anchor" aria-hidden="true" href="#common-metrics">#</a></h4>
-<p>Choosing the metric is usually dependent on the model and application.</p>
-<ul>
-<li>Cosine Similarity $\cos(x, y) = \frac{x \cdot y}{||x|| ||y||}$</li>
-<li>Euclidean Distance $d(x, y) = ||x - y||$</li>
-<li>Manhattan Distance $d(x, y) = \sum_i |x_i - y_i|$</li>
-</ul>
-<p>One big problem with the metrics in high dimensionality is the classical Curse of Dimensionality, discussed in <a href="/notes/kernel-methods">Kernel Methods</a>. You have far sparse sparse points in high dimensional data. Indeed, for single dimensional data, tree searches are a nice and efficient method to solve this problem.</p>
-<h4 id="ivf-pq-algorithm">IVF-PQ Algorithm<a hidden class="anchor" aria-hidden="true" href="#ivf-pq-algorithm">#</a></h4>
-<p>This is some sort of an approximate nearest neighbor search.</p>
-<p>This has two steps the first is:
-<strong>Inverted-file index:</strong> used to <em>prune</em> the search space to have a smaller set of candidates. This is done by clustering the data and creating an inverted index for each cluster.</p>
-<ul>
-<li>This step is basically <a href="/notes/clustering">Clustering</a> the data into $n$ predefined clusters, and use their center as some sort of representative vector. The centroids are called <strong>inverted lists/index</strong>.</li>
-<li>The important thing here is to <strong>store the residual</strong> with respect to that center.</li>
-</ul>
-<p><strong>Product Quantization</strong>: used to <em>lossy-compress</em> the vectors we have. This is done by quantizing the vectors into a smaller set of representative vectors. The original $D$ dimensional vectors are first turned into $m$ subvectors, then each subvector is reclustered and approximated into original cluster centroids, then you just use the cluster id of the centroid. Now we have integers, which are very nice, called <strong>pico code</strong> which saves lots of representation space.
-Searching is done in a similar manner, and you also build distance lookup tables with these.</p>
-<figure class="center">
-<img src="/images/notes/Optimizations for DNN-20250519103210621.webp" style="width: 100%"   alt="Optimizations for DNN-20250519103210621" title="Optimizations for DNN-20250519103210621"/>
-<figcaption><p style="text-align:center;">The idea is to divide the original part into $m$ subvectors and use their relative centroids to give a sort of representation, that is then integer, which is far more memory efficient.</p></figcaption>
-</figure>
-<p>When you search you only scan a subset of the IVF.
-During search you build a <strong>distance loop-up table</strong> based on the centroids and use that to compare to the quantized vectors.</p>
-<h4 id="pseudo-code-for-search">Pseudo code for search<a hidden class="anchor" aria-hidden="true" href="#pseudo-code-for-search">#</a></h4>
-<p>To give an idea of the search, this is some pseudocode for the search process</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">IVF_PQ_SEARCH</span><span class="p">(</span><span class="n">query_vector</span> <span class="n">q</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">top_k</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># Step 1: Coarse quantization</span>
-</span></span><span class="line"><span class="cl">    <span class="n">coarse_centroids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">coarse_centroids</span>
-</span></span><span class="line"><span class="cl">    <span class="n">probe_centroids</span> <span class="o">=</span> <span class="n">find_nearest_centroids</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">coarse_centroids</span><span class="p">,</span> <span class="n">n_probe</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="c1"># n_probe is the default number of centroids to return.</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">candidate_vectors</span> <span class="o">=</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">centroid</span> <span class="ow">in</span> <span class="n">probe_centroids</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># Step 2: Compute residual vector for query</span>
-</span></span><span class="line"><span class="cl">        <span class="n">residual_q</span> <span class="o">=</span> <span class="n">q</span> <span class="o">-</span> <span class="n">centroid</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1"># Step 3: Prepare distance lookup tables for PQ</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pq_lookup_table</span> <span class="o">=</span> <span class="n">build_lookup_table</span><span class="p">(</span><span class="n">residual_q</span><span class="p">,</span> <span class="n">index</span><span class="o">.</span><span class="n">pq_codebooks</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1"># Step 4: For each encoded vector in the selected inverted list</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">inverted_list</span><span class="p">[</span><span class="n">centroid</span><span class="p">]:</span>
-</span></span><span class="line"><span class="cl">            <span class="c1"># Step 5: Compute approximate distance using lookup table</span>
-</span></span><span class="line"><span class="cl">            <span class="n">distance</span> <span class="o">=</span> <span class="n">compute_adc_distance</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">pq_lookup_table</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">candidate_vectors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">distance</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">original_id</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1"># Step 6: Select top-k closest vectors</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">top_k_smallest</span><span class="p">(</span><span class="n">candidate_vectors</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">top_k</span><span class="p">)</span>
-</span></span></code></pre></div><h4 id="asymmetric-distance-computation-adc">Asymmetric Distance Computation (ADC)<a hidden class="anchor" aria-hidden="true" href="#asymmetric-distance-computation-adc">#</a></h4>
-<p>This is some metric that is used for the residuals usually. In this case, the database is quantized, but the query is not, we need to handle this kind of asymmetries.</p>
-<p>We want to estimate the squared Euclidean distance between the <strong>real-valued query vector $q \in \mathbb{R}^d$</strong> and a <strong>PQ-compressed vector $\hat{x}$</strong>.</p>
-<ol>
-<li><strong>Split query vector $q$</strong> into $m$ subvectors (this is the codebook part): $q = [q^{(1)}, q^{(2)}, \dots, q^{(m)}]$ Each subvector $q^{(i)} \in \mathbb{R}^{d/m}$</li>
-<li>For each subspace $i = 1, \dots, m$, precompute a <strong>lookup table</strong>: $D_i[j] = \| q^{(i)} - c^{(i)}_j \|^2$
-where $c^{(i)}_j$ is the $j$-th centroid in the codebook for subspace $i$, and $j = 0, \dots, 255$. So each $D_i$ is a vector of 256 distances</li>
-<li>For a compressed database vector $\hat{x}$, represented by codes:
-$$
-   \text{code} = [c_1, c_2, \dots, c_m] \quad \text{with } c_i \in \{0, \dots, 255\}
-   $$</li>
-<li>The total approximate distance is:
-$$
-   \| q - \hat{x} \|^2 \approx \sum_{i=1}^m D_i[c_i]
-   $$
-→ Just m table look-ups and m additions, which is <strong>easily parallelizable</strong>.</li>
-</ol>
-<h4 id="knn-graphs">KNN Graphs<a hidden class="anchor" aria-hidden="true" href="#knn-graphs">#</a></h4>
-<p>Examples of graph databases where studied in <a href="/notes/graph-databases">Graph Databases</a> in the big data course the first time.</p>
-<p>The problem here is to <strong>build a similarity graph</strong> with this kind of representation.
-One possibility is to build a KNN graph and doing pruning using some heuristics. With this method we have usually <strong>high recall</strong>, but:</p>
-<ul>
-<li>it is not very flexible with data updates</li>
-<li>it is quite memory intensive.</li>
-</ul>
-<h4 id="incremental-insertion-graphs">Incremental insertion Graphs<a hidden class="anchor" aria-hidden="true" href="#incremental-insertion-graphs">#</a></h4>
-<p>Option 2: Incremental Insertion (Online Construction)</p>
-<ul>
-<li>For each new point, perform a search</li>
-<li>Connect to the top nearest nodes</li>
-<li>Possibly prune to maintain diversity
-• Pros:</li>
-<li>Can be done online (supports dynamic updates)</li>
-<li>More memory-efficient; no need to compute full KNN graph
-• Cons:</li>
-<li>Quality depends on insertion order and search quality</li>
-<li>You don&rsquo;t have the possibility of getting the same graph every single time.</li>
-</ul>
-<h4 id="graph-based-vector-search">Graph-based vector search<a hidden class="anchor" aria-hidden="true" href="#graph-based-vector-search">#</a></h4>
-<p>The algorithm goes in the following way:</p>
-<ul>
-<li>We select an entry point in the graph.</li>
-<li>We keep two queues
-<ul>
-<li>High quality candidates to visit</li>
-<li>Existing nearest neighbors</li>
-<li>We pop from A and add to B</li>
-</ul>
-</li>
-<li>We end if there are not enough high-quality candidates to visit or all nodes in A are too far from queue B.</li>
-<li>Return the best results so far.</li>
-</ul>
-<p>One of the modern algorithms that solves some problems in vector search that we have now is <strong>Hierarchical Navigable Small World</strong>, which does some kind of hierarchical search.</p>
-<h4 id="hierarchical-navigable-small-world">Hierarchical Navigable Small World<a hidden class="anchor" aria-hidden="true" href="#hierarchical-navigable-small-world">#</a></h4>
-<ol>
-<li><strong>NSW (Navigable Small World)</strong></li>
-</ol>
-<ul>
-<li>Builds a small-world graph where nodes are connected to their close and some faraway neighbors.</li>
-<li>Search is greedy: jump to closer nodes until you can’t get closer.</li>
-</ul>
-<ol start="2">
-<li><strong>HNSW (Hierarchical NSW)</strong></li>
-</ol>
-<ul>
-<li>Adds multiple layers:
-<ul>
-<li>Top layers are sparse (longer-range links).</li>
-<li>Bottom layers are dense (short-range neighbors).</li>
-</ul>
-</li>
-<li>Search starts at the top layer and drills down layer by layer, refining the search.</li>
-</ul>
-<img src="/images/notes/Optimizations for DNN-20250519104742775.webp" style="width: 100%" class="center" alt="Optimizations for DNN-20250519104742775">
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=daoFLASHATTENTIONFastMemoryefficient2022>[1] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc.  2022
- </p>
-<p id=hePAPIExploitingDynamic2025>[2] He et al. <a href="https://dl.acm.org/doi/10.1145/3676641.3716009">“PAPI: Exploiting Dynamic Parallelism in Large Language Model Decoding with a Processing-In-Memory-Enabled Computing System”</a> ACM  2025
- </p>
-<p id=MLSYS2023_c4be71ab>[3] Pope et al. <a href="https://proceedings.mlsys.org/paper_files/paper/2023/file/c4be71ab8d24cdfb45e3d06dbfca2780-Paper-mlsys2023.pdf">“Efficiently Scaling Transformer Inference”</a> Curan  2023
- </p>
-<p id=weiChainofThoughtPromptingElicits2023>[4] Wei et al. <a href="http://arxiv.org/abs/2201.11903">“Chain-of-Thought Prompting Elicits Reasoning in Large Language Models”</a> arXiv preprint arXiv:2201.11903 2023
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

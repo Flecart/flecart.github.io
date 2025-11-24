@@ -7,15 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Autoregressive Modelling | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machine-perception">
-<meta name="description" content="On Autoregressivity
-The main idea of autoregressivity is to use previous prediction to predict the next state.
-The Autoregressive property
-Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:
-$$
-p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1})
-$$
-If we assume independence between the variables, we don&rsquo;t need many variables to model it $2T$, but this assumption is too strong.
-If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).">
+<meta name="description" content="Autoregressive Modelling - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/autoregressive-modelling/">
@@ -101,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/autoregressive-modelling/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Autoregressive Modelling">
-  <meta property="og:description" content="On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.
-The Autoregressive property Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:
-$$ p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don’t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we’ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -114,15 +104,7 @@ $$ p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence betwee
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Autoregressive Modelling">
-<meta name="twitter:description" content="On Autoregressivity
-The main idea of autoregressivity is to use previous prediction to predict the next state.
-The Autoregressive property
-Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:
-$$
-p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1})
-$$
-If we assume independence between the variables, we don&rsquo;t need many variables to model it $2T$, but this assumption is too strong.
-If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -151,12 +133,12 @@ If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: w
   "@type": "BlogPosting",
   "headline": "Autoregressive Modelling",
   "name": "Autoregressive Modelling",
-  "description": "On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.\nThe Autoregressive property Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:\n$$ p(x) = \\prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don\u0026rsquo;t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we\u0026rsquo;ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).\n",
+  "description": "",
   "keywords": [
     "machine-perception"
   ],
-  "articleBody": "On Autoregressivity The main idea of autoregressivity is to use previous prediction to predict the next state.\nThe Autoregressive property Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:\n$$ p(x) = \\prod_{i=1}^{n} p(x_i | x_{1:i-1}) $$ If we assume independence between the variables, we don’t need many variables to model it $2T$, but this assumption is too strong. If we just use a tabular approach, we’ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).\nFully Visible Belief Networks $$ p(x_{t}) = \\text{Bern}(f_{t}(x_{0:t-1};\\theta_{t}))) $$ If the parameters are different, this model just needs around $\\sum_{i= 0}^{T} \\lvert \\theta_{i} \\rvert$ parameters, where $\\theta_{i}$ parameterizes $f_{t}$\nThis is the idea of fully visible belief networks in the image below: One of the main drawbacks of this model is the simplicity, which means probably it cannot encode many different functions. And heavy dependence on ordering (not all problems are text-like autoregressive).\nNeural Autoregressive Density Estimation These are other lecture notes: here, or see paper (Larochelle \u0026 Murray 2011). Here they add a number of hidden states to the model, which makes the model more expressive. This is the idea behind the Neural Autoregressive Density Estimation.\nThey leverage the probability product rule and a weight sharing scheme inspired from restricted Boltzmann machines, to yield an estimator that is both tractable and has good generalization performance.\nThe number of parameters in this model is just $\\mathcal{O}(nd)$ instead of $n^{2}d$ for the previous model. We have that $X \\in \\mathbb{R}^{d \\times n}$ where $n$ is the number of items and $d$ the feature vector length, and $W \\in \\mathbb{R}^{h\\times d}$, and $V \\in \\mathbb{R}^{d \\times h}$ to have a prediction And computing $h_{i + 1}$ starting from the step before is also quite efficient. The $V$ is different for each timestamp. $$ \\frac{1}{T}\\sum_{i = 1}^{T}\\log p(\\boldsymbol{x}^{(i)}) = \\frac{1}{T}\\sum_{i = 1}^{T}\\sum_{j = 1}^{N} \\log p(x_{j}^{(i)} \\mid \\boldsymbol{x}^{(i)}_{",
-  "wordCount" : "340",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-01T00:00:00Z",
   "dateModified": "2025-06-01T00:00:00Z",
@@ -251,137 +233,12 @@ If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: w
     <h1 class="post-title entry-hint-parent">
       Autoregressive Modelling
     </h1>
-    <div class="post-meta"><span title='2025-06-01 00:00:00 +0000 UTC'>June 1, 2025</span>&nbsp;·&nbsp;Reading Time: 2 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-01 00:00:00 +0000 UTC'>June 1, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#on-autoregressivity" aria-label="On Autoregressivity">On Autoregressivity</a><ul>
-                        
-                <li>
-                    <a href="#the-autoregressive-property" aria-label="The Autoregressive property">The Autoregressive property</a></li>
-                <li>
-                    <a href="#fully-visible-belief-networks" aria-label="Fully Visible Belief Networks">Fully Visible Belief Networks</a></li>
-                <li>
-                    <a href="#neural-autoregressive-density-estimation" aria-label="Neural Autoregressive Density Estimation">Neural Autoregressive Density Estimation</a></li>
-                <li>
-                    <a href="#masked-autoencoder-distribution-estimator" aria-label="Masked Autoencoder Distribution Estimator">Masked Autoencoder Distribution Estimator</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#on-image-and-audio" aria-label="On Image and Audio">On Image and Audio</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#pixelrnn" aria-label="PixelRNN">PixelRNN</a></li>
-                <li>
-                    <a href="#pixelcnn" aria-label="PixelCNN">PixelCNN</a></li>
-                <li>
-                    <a href="#wavenet" aria-label="WaveNet">WaveNet</a></li>
-                <li>
-                    <a href="#transformers" aria-label="Transformers">Transformers</a></li></ul>
-                    </ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h3 id="on-autoregressivity">On Autoregressivity<a hidden class="anchor" aria-hidden="true" href="#on-autoregressivity">#</a></h3>
-<p>The main idea of autoregressivity is to use previous prediction to predict the next state.</p>
-<h4 id="the-autoregressive-property">The Autoregressive property<a hidden class="anchor" aria-hidden="true" href="#the-autoregressive-property">#</a></h4>
-<p>Autoregressive models model a joint distribution of aleatoric variables by assuming a chain rule like decomposition:</p>
-$$
-p(x) = \prod_{i=1}^{n} p(x_i | x_{1:i-1})
-$$<p>
-If we assume independence between the variables, we don&rsquo;t need many variables to model it $2T$, but this assumption is too strong.
-If we just use a tabular approach, we&rsquo;ll have a combinatorial explosion: we will have about $2^{T - 1}$ possible states (if we assume the aleatoric variables are binary, and we are creating a table for each intermediate variable).</p>
-<h4 id="fully-visible-belief-networks">Fully Visible Belief Networks<a hidden class="anchor" aria-hidden="true" href="#fully-visible-belief-networks">#</a></h4>
-$$
-p(x_{t}) = \text{Bern}(f_{t}(x_{0:t-1};\theta_{t})))
-$$<p>
-If the parameters are different, this model just needs around $\sum_{i= 0}^{T} \lvert \theta_{i} \rvert$ parameters, where $\theta_{i}$ parameterizes $f_{t}$</p>
-<p>This is the idea of fully visible belief networks in the image below:
-<img src="/images/notes/Autoregressive Modelling-20250330145144678.webp" style="width: 100%" class="center" alt="Autoregressive Modelling-20250330145144678"></p>
-<p>One of the main drawbacks of this model is the simplicity, which means probably it cannot encode many different functions. And heavy dependence on ordering (not all problems are text-like autoregressive).</p>
-<h4 id="neural-autoregressive-density-estimation">Neural Autoregressive Density Estimation<a hidden class="anchor" aria-hidden="true" href="#neural-autoregressive-density-estimation">#</a></h4>
-<p>These are other lecture notes: <a href="https://courses.cs.washington.edu/courses/cse599i/20au/resources/L04_nade.pdf">here</a>, or see paper <a href="https://proceedings.mlr.press/v15/larochelle11a.html">(Larochelle &amp; Murray 2011)</a>.
-Here they add a number of hidden states to the model, which makes the model more expressive. This is the idea behind the <strong>Neural Autoregressive Density Estimation</strong>.</p>
-<blockquote>
-<p>They leverage the probability product rule and a weight sharing scheme inspired from restricted Boltzmann machines, to yield an estimator that is both tractable and has good generalization performance.</p></blockquote>
-<img src="/images/notes/Autoregressive Modelling-20250330145234111.webp" style="width: 100%" class="center" alt="Autoregressive Modelling-20250330145234111">
-The number of parameters in this model is just $\mathcal{O}(nd)$ instead of $n^{2}d$ for the previous model. We have that $X \in \mathbb{R}^{d \times n}$ where $n$ is the number of items and $d$ the feature vector length, and $W \in \mathbb{R}^{h\times d}$, and $V \in \mathbb{R}^{d \times h}$ to have a prediction
-And computing $h_{i + 1}$ starting from the step before is also quite efficient. The $V$ is different for each timestamp.
-$$
-\frac{1}{T}\sum_{i = 1}^{T}\log p(\boldsymbol{x}^{(i)}) = \frac{1}{T}\sum_{i = 1}^{T}\sum_{j = 1}^{N} \log p(x_{j}^{(i)} \mid \boldsymbol{x}^{(i)}_{<j})
-$$<p>
-The computations are efficient, and the model is also resistant to the ordering of the inputs!</p>
-<blockquote>
-<p>An alternative view of NADE is as an autoencoder that has been wired such that its output can be used to assign probabilities to observations in a valid way.</p></blockquote>
-<p>There are many extension works around.</p>
-<h4 id="masked-autoencoder-distribution-estimator">Masked Autoencoder Distribution Estimator<a hidden class="anchor" aria-hidden="true" href="#masked-autoencoder-distribution-estimator">#</a></h4>
-<p>The idea is to <em>Constrain Autoencoder such that output can be used as conditionals</em>, see <a href="https://proceedings.mlr.press/v37/germain15.html">(Germain et al. 2015)</a>.
-What they have done is to <strong>mask out</strong> every computational path between $x_{d}$ and the ones with indexes above them.</p>
-<ul>
-<li>Training has the same complexity as regular autoencoders</li>
-<li>Criterion is Negative Log Likelihood for binary $x$</li>
-<li>Computing $p(x)$ is just a matter of performing a forward pass</li>
-<li>Sampling however requires $D$ forward passes</li>
-<li>In practice, <em>very large hidden layers necessary</em>, it makes it a little bit too large, probably it&rsquo;s because the neurons are quite restrained regarding their possible connections that they can have.</li>
-<li><strong>Note</strong>: the mask for value and weights are different. But I don&rsquo;t know why.</li>
-</ul>
-<blockquote>
-<p>The key is to use masks that are designed in such a way that the output is autoregressive for a given ordering of the inputs, i.e. that each input dimension is reconstructed solely from the dimensions preceding it.</p></blockquote>
-<p>I would say this is the idea preceding BERT <a href="http://arxiv.org/abs/1810.04805">(Devlin et al. 2019)</a>, basically they are able to model autoregressive things, by sampling some kind of ID, and putting connections only to the ones with ID above them.
-The problem perhaps is that with this architecture, the neurons are quite limited? Meaning, they cannot express their full thing. The vertical part of the mas is the output, the input is on the horizontal part.
-<img src="/images/notes/Autoregressive Modelling-20250330170243837.webp" style="width: 100%" class="center" alt="Autoregressive Modelling-20250330170243837"></p>
-<h2 id="on-image-and-audio">On Image and Audio<a hidden class="anchor" aria-hidden="true" href="#on-image-and-audio">#</a></h2>
-<p>We can define a notion of <strong>order</strong> on images and audio, and then use autoregressive models to generate them. It depends on how you define the autoregressive property on images. (e.g. see image patches, and resolution pyramids).</p>
-<h4 id="pixelrnn">PixelRNN<a hidden class="anchor" aria-hidden="true" href="#pixelrnn">#</a></h4>
-<p>Model introduced in <a href="https://proceedings.mlr.press/v48/oord16.html">(Oord et al. 2016)</a>.
-<img src="/images/notes/Autoregressive Modelling-20250330170329911.webp" style="width: 100%" class="center" alt="Autoregressive Modelling-20250330170329911">
-So the idea here is very simple, just a RNN applied on images.</p>
-<h4 id="pixelcnn">PixelCNN<a hidden class="anchor" aria-hidden="true" href="#pixelcnn">#</a></h4>
-<p>This model was introuduced in the same paper as PixelRNNs.</p>
-<p>They start to generate pixels from the top left corner and then continue to generate it using some <em>receptive field</em> of the pixel. This makes:</p>
-<ul>
-<li>Training <strong>efficient</strong></li>
-<li>Parallelizable <strong>training</strong>, but not inference (and they showed the performance in accuracy is quite similar, so you gain in training).</li>
-</ul>
-<p>This has similar quality compared to pixel RNN, but it is faster. But the generation is still sequential, which makes it <strong>slow</strong>.
-A nice thing with these is that they had an explicit negative log likelihood to compare with old models.
-<img src="/images/notes/Autoregressive Modelling-20250327122433427.webp" style="width: 100%" class="center" alt="Autoregressive Modelling-20250327122433427"></p>
-<h4 id="wavenet">WaveNet<a hidden class="anchor" aria-hidden="true" href="#wavenet">#</a></h4>
-<p>It is an auto-regressive model for audio generation. It uses a stack of dilated <em>temporal</em> convolutions to generate audio (problem is much larger dimensionality compared to images). It can generate audio samples at a rate of 16kHz. It is also slow in generation.
-they use <strong>temporal causal networks</strong> to attempt to model long range dependencies.</p>
-<figure class="center">
-<img src="/images/notes/Autoregressive Modelling-20250327123143531.webp" style="width: 100%"   alt="Autoregressive Modelling-20250327123143531" title="Autoregressive Modelling-20250327123143531"/>
-<figcaption><p style="text-align:center;">We can observe here the effect of dilated convolutions on the receptive field of the model.</p></figcaption>
-</figure>
-<h4 id="transformers">Transformers<a hidden class="anchor" aria-hidden="true" href="#transformers">#</a></h4>
-<p>See <a href="/notes/transformers">Transformers</a>.</p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=oordPixelRecurrentNeural2016>[1] Oord et al. <a href="https://proceedings.mlr.press/v48/oord16.html">“Pixel Recurrent Neural Networks”</a> PMLR  2016
- </p>
-<p id=devlinBERTPretrainingDeep2019>[2] Devlin et al. <a href="http://arxiv.org/abs/1810.04805">“BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding”</a> arXiv preprint arXiv:1810.04805 2019
- </p>
-<p id=germainMADEMaskedAutoencoder2015>[3] Germain et al. <a href="https://proceedings.mlr.press/v37/germain15.html">“MADE: Masked Autoencoder for Distribution Estimation”</a> PMLR  2015
- </p>
-<p id=larochelleNeuralAutoregressiveDistribution2011>[4] Larochelle & Murray <a href="https://proceedings.mlr.press/v15/larochelle11a.html">“The Neural Autoregressive Distribution Estimator”</a> JMLR Workshop and Conference Proceedings  2011
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Bayesian Information Criterion | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="This note is one of the few notes that was generated with the help of chatgpt.
-Bayesian Information Criterion (BIC)
-The Bayesian Information Criterion (BIC) is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.
-Mathematically Precise Definition
-For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D} = \{x_1, x_2, \dots, x_n\}$, the BIC is defined as:">
+<meta name="description" content="Bayesian Information Criterion - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/bayesian-information-criterion/">
@@ -97,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/bayesian-information-criterion/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Bayesian Information Criterion">
-  <meta property="og:description" content="This note is one of the few notes that was generated with the help of chatgpt.
-Bayesian Information Criterion (BIC) The Bayesian Information Criterion (BIC) is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.
-Mathematically Precise Definition For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D} = \{x_1, x_2, \dots, x_n\}$, the BIC is defined as:">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,11 +104,7 @@ Mathematically Precise Definition For a statistical model $M$ with $k$ parameter
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Bayesian Information Criterion">
-<meta name="twitter:description" content="This note is one of the few notes that was generated with the help of chatgpt.
-Bayesian Information Criterion (BIC)
-The Bayesian Information Criterion (BIC) is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.
-Mathematically Precise Definition
-For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D} = \{x_1, x_2, \dots, x_n\}$, the BIC is defined as:">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -143,12 +133,12 @@ For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D}
   "@type": "BlogPosting",
   "headline": "Bayesian Information Criterion",
   "name": "Bayesian Information Criterion",
-  "description": "This note is one of the few notes that was generated with the help of chatgpt.\nBayesian Information Criterion (BIC) The Bayesian Information Criterion (BIC) is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.\nMathematically Precise Definition For a statistical model $M$ with $k$ parameters fitted to a dataset $\\mathcal{D} = \\{x_1, x_2, \\dots, x_n\\}$, the BIC is defined as:\n",
+  "description": "",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "This note is one of the few notes that was generated with the help of chatgpt.\nBayesian Information Criterion (BIC) The Bayesian Information Criterion (BIC) is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.\nMathematically Precise Definition For a statistical model $M$ with $k$ parameters fitted to a dataset $\\mathcal{D} = \\{x_1, x_2, \\dots, x_n\\}$, the BIC is defined as:\n$$ \\text{BIC} = -2 \\cdot \\ln \\hat{L} + k \\cdot \\ln(n) $$where:\n$\\hat{L}$ is the maximum likelihood of the model, i.e., $\\hat{L} = P(\\mathcal{D} \\mid \\hat{\\theta}, M)$, where $\\hat{\\theta}$ are the maximum likelihood estimates (MLE) of the parameters. $k$ is the number of free parameters in the model. $n$ is the number of observations in the dataset. Interpretation Likelihood Component (\\(-2 \\ln \\hat{L}\\)):\nMeasures the fit of the model. A higher likelihood (or lower \\(-2 \\ln \\hat{L}\\)) indicates the model explains the data well. Penalty Term (\\(k \\ln n\\)):\nPenalizes model complexity. More parameters (\\(k\\)) increase the penalty, preventing overfitting. The penalty grows with $\\ln(n)$, meaning as the dataset size increases, the cost of adding parameters increases more slowly. Model Selection Criterion:\nLower BIC values indicate a more preferred model. It balances goodness of fit and model simplicity: the best model explains the data well without unnecessary complexity. Derivation of BIC The BIC is derived from approximating the Bayesian model evidence under certain assumptions. Here’s a step-by-step derivation:\nBayesian Model Selection: In Bayesian statistics, model selection is based on the posterior probability of a model $M$ given data $\\mathcal{D}$:\n$$ P(M \\mid \\mathcal{D}) \\propto P(\\mathcal{D} | M) P(M) $$where:\n$P(\\mathcal{D} | M)$ is the marginal likelihood or model evidence: $$ P(\\mathcal{D} | M) = \\int P(\\mathcal{D} | \\theta, M) P(\\theta \\mid M) \\, d\\theta $$ Laplace Approximation of Marginal Likelihood: When $n$ is large, we can approximate the integral using Laplace’s method around the MLE $\\hat{\\theta}$.\nThe likelihood $P(\\mathcal{D} \\mid \\theta, M)$ is sharply peaked around $\\hat{\\theta}$. The approximation gives: $$ P(\\mathcal{D} \\mid M) \\approx P(\\mathcal{D} \\mid \\hat{\\theta}, M) \\cdot \\left( \\frac{(2\\pi)^{k/2}}{ \\lvert I_{n}(\\hat{\\theta}) \\rvert ^{1/2}} \\right) \\cdot P(\\hat{\\theta} \\mid M) $$ where $I(\\hat{\\theta})$ is the Fisher information, see Parametric Modeling for its definition. Log Transformation and Simplification: Taking the logarithm and ignoring constants not dependent on $n$:\n$$ \\ln P(\\mathcal{D} \\mid M) \\approx \\ln P(\\mathcal{D} \\mid \\hat{\\theta}, M) - \\frac{k}{2} \\ln(n) $$ Formulating BIC: Multiplying both sides by \\(-2\\) (for consistency with the likelihood ratio test framework):\n$$ -2 \\ln P(\\mathcal{D} \\mid M) \\approx -2 \\ln P(\\mathcal{D} \\mid \\hat{\\theta}, M) + k \\ln(n) $$The right-hand side is precisely the BIC formula:\n$$ \\text{BIC} = -2 \\ln \\hat{L} + k \\ln(n) $$ Assumptions Behind BIC Large Sample Size ($n \\to \\infty$): The Laplace approximation assumes that the sample size is large enough for the likelihood to be sharply peaked. Regularity Conditions: The likelihood function must be well-behaved (differentiable, unimodal, etc.). Model Correctness: One of the candidate models is assumed to be the true model (though in practice, this is often violated). Comparison to Other Criteria $$ \\text{AIC} = -2 \\ln \\hat{L} + 2k $$ AIC penalizes complexity less harshly than BIC. AIC is more suitable for predictive performance, while BIC is more conservative and often better at identifying the “true” model. BIC vs AIC:\nBIC tends to prefer simpler models as $n$ increases, due to the $\\ln(n)$ term. AIC is asymptotically efficient (minimizes prediction error), while BIC is consistent (selects the true model as $n \\to \\infty$). How to use the BIC In practice: 11. Fit candidate models to the data. 12. Compute the BIC for each model. 13. Select the model with the lowest BIC.\nBIC is widely used in fields like machine learning, econometrics, and statistical modeling, where balancing fit and complexity is critical.\n",
-  "wordCount" : "637",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-02-02T00:00:00Z",
   "dateModified": "2025-02-02T00:00:00Z",
@@ -243,150 +233,12 @@ For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D}
     <h1 class="post-title entry-hint-parent">
       Bayesian Information Criterion
     </h1>
-    <div class="post-meta"><span title='2025-02-02 00:00:00 +0000 UTC'>February 2, 2025</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-02-02 00:00:00 +0000 UTC'>February 2, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#bayesian-information-criterion-bic" aria-label="Bayesian Information Criterion (BIC)">Bayesian Information Criterion (BIC)</a></li>
-                <li>
-                    <a href="#mathematically-precise-definition" aria-label="Mathematically Precise Definition">Mathematically Precise Definition</a></li>
-                <li>
-                    <a href="#interpretation" aria-label="Interpretation">Interpretation</a></li>
-                <li>
-                    <a href="#derivation-of-bic" aria-label="Derivation of BIC">Derivation of BIC</a></li>
-                <li>
-                    <a href="#assumptions-behind-bic" aria-label="Assumptions Behind BIC">Assumptions Behind BIC</a></li>
-                <li>
-                    <a href="#comparison-to-other-criteria" aria-label="Comparison to Other Criteria">Comparison to Other Criteria</a></li>
-                <li>
-                    <a href="#how-to-use-the-bic" aria-label="How to use the BIC">How to use the BIC</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>This note is one of the few notes that was generated with the help of chatgpt.</p>
-<h3 id="bayesian-information-criterion-bic"><strong>Bayesian Information Criterion (BIC)</strong><a hidden class="anchor" aria-hidden="true" href="#bayesian-information-criterion-bic">#</a></h3>
-<p>The <strong>Bayesian Information Criterion (BIC)</strong> is a model selection criterion that helps compare different statistical models while penalizing model complexity. It is rooted in Bayesian probability theory but is commonly used even in frequentist settings.</p>
-<h3 id="mathematically-precise-definition"><strong>Mathematically Precise Definition</strong><a hidden class="anchor" aria-hidden="true" href="#mathematically-precise-definition">#</a></h3>
-<p>For a statistical model $M$ with $k$ parameters fitted to a dataset $\mathcal{D} = \{x_1, x_2, \dots, x_n\}$, the BIC is defined as:</p>
-$$
-\text{BIC} = -2 \cdot \ln \hat{L} + k \cdot \ln(n)
-$$<p>where:</p>
-<ul>
-<li>$\hat{L}$ is the <strong>maximum likelihood</strong> of the model, i.e., $\hat{L} = P(\mathcal{D} \mid \hat{\theta}, M)$, where $\hat{\theta}$ are the maximum likelihood estimates (MLE) of the parameters.</li>
-<li>$k$ is the <strong>number of free parameters</strong> in the model.</li>
-<li>$n$ is the <strong>number of observations</strong> in the dataset.</li>
-</ul>
-<h3 id="interpretation"><strong>Interpretation</strong><a hidden class="anchor" aria-hidden="true" href="#interpretation">#</a></h3>
-<ol>
-<li>
-<p><strong>Likelihood Component (\(-2 \ln \hat{L}\)):</strong></p>
-<ul>
-<li>Measures the <strong>fit</strong> of the model. A higher likelihood (or lower \(-2 \ln \hat{L}\)) indicates the model explains the data well.</li>
-</ul>
-</li>
-<li>
-<p><strong>Penalty Term (\(k \ln n\)):</strong></p>
-<ul>
-<li>Penalizes <strong>model complexity</strong>. More parameters (\(k\)) increase the penalty, preventing overfitting.</li>
-<li>The penalty grows with $\ln(n)$, meaning as the dataset size increases, the cost of adding parameters increases more slowly.</li>
-</ul>
-</li>
-<li>
-<p><strong>Model Selection Criterion:</strong></p>
-<ul>
-<li><strong>Lower BIC values</strong> indicate a more preferred model.</li>
-<li>It balances <strong>goodness of fit</strong> and <strong>model simplicity</strong>: the best model explains the data well without unnecessary complexity.</li>
-</ul>
-</li>
-</ol>
-<h3 id="derivation-of-bic"><strong>Derivation of BIC</strong><a hidden class="anchor" aria-hidden="true" href="#derivation-of-bic">#</a></h3>
-<p>The BIC is derived from approximating the <strong>Bayesian model evidence</strong> under certain assumptions. Here&rsquo;s a step-by-step derivation:</p>
-<ol start="4">
-<li>
-<p><strong>Bayesian Model Selection:</strong>
-In Bayesian statistics, model selection is based on the <strong>posterior probability</strong> of a model $M$ given data $\mathcal{D}$:</p>
-$$
-   P(M \mid \mathcal{D}) \propto P(\mathcal{D} | M) P(M)
-   $$<p>where:</p>
-<ul>
-<li>$P(\mathcal{D} | M)$ is the <strong>marginal likelihood</strong> or <strong>model evidence</strong>:
-$$
-     P(\mathcal{D} | M) = \int P(\mathcal{D} | \theta, M) P(\theta \mid M) \, d\theta
-     $$</li>
-</ul>
-</li>
-<li>
-<p><strong>Laplace Approximation of Marginal Likelihood:</strong>
-When $n$ is large, we can approximate the integral using <strong>Laplace&rsquo;s method</strong> around the MLE $\hat{\theta}$.</p>
-<ul>
-<li>The likelihood $P(\mathcal{D} \mid \theta, M)$ is sharply peaked around $\hat{\theta}$.</li>
-<li>The approximation gives:
-$$
-     P(\mathcal{D} \mid M) \approx P(\mathcal{D} \mid \hat{\theta}, M) \cdot \left( \frac{(2\pi)^{k/2}}{ \lvert I_{n}(\hat{\theta}) \rvert ^{1/2}} \right) \cdot P(\hat{\theta} \mid M)
-     $$
-where $I(\hat{\theta})$ is the <strong>Fisher information</strong>, see <a href="/notes/parametric-modeling">Parametric Modeling</a> for its definition.</li>
-</ul>
-</li>
-<li>
-<p><strong>Log Transformation and Simplification:</strong>
-Taking the logarithm and ignoring constants not dependent on $n$:</p>
-$$
-   \ln P(\mathcal{D} \mid M) \approx \ln P(\mathcal{D} \mid \hat{\theta}, M) - \frac{k}{2} \ln(n)
-   $$</li>
-<li>
-<p><strong>Formulating BIC:</strong>
-Multiplying both sides by \(-2\) (for consistency with the likelihood ratio test framework):</p>
-$$
-   -2 \ln P(\mathcal{D} \mid M) \approx -2 \ln P(\mathcal{D} \mid \hat{\theta}, M) + k \ln(n)
-   $$<p>The right-hand side is precisely the <strong>BIC</strong> formula:</p>
-$$
-   \text{BIC} = -2 \ln \hat{L} + k \ln(n)
-   $$</li>
-</ol>
-<h3 id="assumptions-behind-bic"><strong>Assumptions Behind BIC</strong><a hidden class="anchor" aria-hidden="true" href="#assumptions-behind-bic">#</a></h3>
-<ol start="8">
-<li><strong>Large Sample Size ($n \to \infty$)</strong>: The Laplace approximation assumes that the sample size is large enough for the likelihood to be sharply peaked.</li>
-<li><strong>Regularity Conditions</strong>: The likelihood function must be well-behaved (differentiable, unimodal, etc.).</li>
-<li><strong>Model Correctness</strong>: One of the candidate models is assumed to be the true model (though in practice, this is often violated).</li>
-</ol>
-<h3 id="comparison-to-other-criteria"><strong>Comparison to Other Criteria</strong><a hidden class="anchor" aria-hidden="true" href="#comparison-to-other-criteria">#</a></h3>
-<ul>
-<li>
-$$
-  \text{AIC} = -2 \ln \hat{L} + 2k
-  $$<ul>
-<li>AIC penalizes complexity less harshly than BIC.</li>
-<li>AIC is more suitable for predictive performance, while BIC is more conservative and often better at identifying the &ldquo;true&rdquo; model.</li>
-</ul>
-</li>
-<li>
-<p><strong>BIC vs AIC</strong>:</p>
-<ul>
-<li><strong>BIC</strong> tends to prefer simpler models as $n$ increases, due to the $\ln(n)$ term.</li>
-<li><strong>AIC</strong> is asymptotically efficient (minimizes prediction error), while <strong>BIC</strong> is consistent (selects the true model as $n \to \infty$).</li>
-</ul>
-</li>
-</ul>
-<h3 id="how-to-use-the-bic">How to use the BIC<a hidden class="anchor" aria-hidden="true" href="#how-to-use-the-bic">#</a></h3>
-<p>In practice:
-11. Fit candidate models to the data.
-12. Compute the BIC for each model.
-13. Select the model with the <strong>lowest BIC</strong>.</p>
-<p>BIC is widely used in fields like machine learning, econometrics, and statistical modeling, where balancing fit and complexity is critical.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

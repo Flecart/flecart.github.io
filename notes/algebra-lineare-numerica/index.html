@@ -7,14 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Algebra lineare numerica | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini
-Lab 2 images
-Metodo di gauss
-Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$
-come prodotto di due matrici Lower triangular e Upper triangular.">
+<meta name="description" content="Algebra lineare numerica - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/algebra-lineare-numerica/">
@@ -100,11 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/algebra-lineare-numerica/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Algebra lineare numerica">
-  <meta property="og:description" content="In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini Lab 2 images
-Metodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -113,14 +102,7 @@ Il nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due m
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Algebra lineare numerica">
-<meta name="twitter:description" content="In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.
-Immagini
-Lab 2 images
-Metodo di gauss
-Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:
-$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.
-Il nostro obiettivo sarebbe scomporre la matrice $A = LU$
-come prodotto di due matrici Lower triangular e Upper triangular.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -149,12 +131,12 @@ come prodotto di due matrici Lower triangular e Upper triangular.">
   "@type": "BlogPosting",
   "headline": "Algebra lineare numerica",
   "name": "Algebra lineare numerica",
-  "description": "In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.\nImmagini Lab 2 images\nMetodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:\n$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.\nIl nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular.\n",
+  "description": "",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "In questa sezione andiamo ad indagare metodi di scomposizione, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.\nImmagini Lab 2 images\nMetodo di gauss Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:\n$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.\nIl nostro obiettivo sarebbe scomporre la matrice $A = LU$ come prodotto di due matrici Lower triangular e Upper triangular.\nAlgoritmo per matrici Upper e lower triangular Nel caso io abbia una matrice Lower o Upper triangular, i sistemi nella forma $Lx=b$ sono risolvibili con un algoritmo abbastanza banale che qui non riporto (sostituzioni via via…) Il costo è di $O(n^2)$ e non ti scordare il /2 perché a lei piace (poi ho detto su alla professoressa di Bologna che diceva che $O\\left( \\frac{n^{2}}{2} \\right)$ è diverso da quanto sopra.)\nScomposizione A = LU Questo è un algoritmo che necessita di una osservazione abbastanza difficile:\nNoto che durante l’applicazione dell’algoritmo di gauss, per creare il pivot su una colonna, è esattamente come se moltiplicassi per una (matrice identità + fattori per la colonna di interesse).\nCome in esempio\nSi può notare inoltre che che l’inverso di L1 è in una forma molto bella, esattamente la stessa con numeri invertiti di segno!, inoltre la moltiplicazione fra Ln è anch’essa in una forma molto carina! Facilita molto il prodotto. In questo modo mi creo una matrice L, in cui è molto facile invertire.\ncosto $O(n^3/3)$ per la fattorizzazione LU e poi n2 due volte per risolvere L e U\nUpper triangular matrix inversion Let $\\mathbf{U}$ be an $n \\times n$ upper triangular matrix. We want to find its inverse $\\mathbf{V} = \\mathbf{U}^{-1}$, such that $\\mathbf{U}\\mathbf{V} = \\mathbf{I}$, where $\\mathbf{I}$ is the $n \\times n$ identity matrix. Let $u_{ij}$ be the element in the $i$-th row and $j$-th column of $\\mathbf{U}$, and $v_{ij}$ be the element in the $i$-th row and $j$-th column of $\\mathbf{V}$.\nThe algorithm proceeds as follows:\nInitialize the inverse matrix: Create an $n \\times n$ matrix $\\mathbf{V}$ and initialize it to the identity matrix $\\mathbf{I}$.\nIterate through the rows from bottom to top: For each row $i$ from $n$ down to 1:\nCheck for non-zero diagonal element: If $u_{ii} = 0$, then the matrix $\\mathbf{U}$ is singular and not invertible. Stop the algorithm and indicate this. Normalize the current row: Divide each element in the $i$-th row of $\\mathbf{V}$ by $u_{ii}$. This effectively makes the diagonal element of $\\mathbf{U}$ in the $i$-th row equal to 1 when considering the product $\\mathbf{U}\\mathbf{V}$. Eliminate off-diagonal elements above the current row: For each row $j$ from $i-1$ down to 1:\nCalculate the multiplier $m = u_{ji} / u_{ii}$. Subtract $m$ times the $i$-th row of $\\mathbf{V}$ from the $j$-th row of $\\mathbf{V}$. This will make the element $u_{ji}$ (which is above the diagonal) effectively zero in the context of the inversion process. The resulting matrix $\\mathbf{V}$ is the inverse of $\\mathbf{U}$.\nIn essence, the algorithm performs a form of Gaussian elimination, working from the bottom right of the matrix upwards and towards the left. Because of the upper triangular structure, we only need to eliminate the elements above the diagonal.\nExample:\n$$\\mathbf{U} = \\begin{pmatrix} 2 \u0026 1 \u0026 3 \\\\ 0 \u0026 -1 \u0026 2 \\\\ 0 \u0026 0 \u0026 4 \\end{pmatrix}$$ Initialize $\\mathbf{V} = \\begin{pmatrix} 1 \u0026 0 \u0026 0 \\\\ 0 \u0026 1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1 \\end{pmatrix}$.\nRow 3 ($i=3$):\n$u_{33} = 4 \\neq 0$. Normalize row 3 of $\\mathbf{V}$: $\\begin{pmatrix} 1 \u0026 0 \u0026 0 \\\\ 0 \u0026 1 \u0026 0 \\\\ 0/4 \u0026 0/4 \u0026 1/4 \\end{pmatrix} = \\begin{pmatrix} 1 \u0026 0 \u0026 0 \\\\ 0 \u0026 1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix}$. Row 2 ($i=2$):\n$u_{22} = -1 \\neq 0$. Normalize row 2 of $\\mathbf{V}$: $\\begin{pmatrix} 1 \u0026 0 \u0026 0 \\\\ 0/-1 \u0026 1/-1 \u0026 0/-1 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix} = \\begin{pmatrix} 1 \u0026 0 \u0026 0 \\\\ 0 \u0026 -1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix}$. Eliminate above: $j=1$. $m = u_{12} / u_{22} = 1 / (-1) = -1$. Row 1 of $\\mathbf{V}$ becomes: $\\begin{pmatrix} 1 - (-1) \\times 0 \u0026 0 - (-1) \\times (-1) \u0026 0 - (-1) \\times 0 \\end{pmatrix} = \\begin{pmatrix} 1 \u0026 -1 \u0026 0 \\end{pmatrix}$. $\\mathbf{V} = \\begin{pmatrix} 1 \u0026 -1 \u0026 0 \\\\ 0 \u0026 -1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix}$. Row 1 ($i=1$):\n$u_{11} = 2 \\neq 0$. Normalize row 1 of $\\mathbf{V}$: $\\begin{pmatrix} 1/2 \u0026 -1/2 \u0026 0/2 \\\\ 0 \u0026 -1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix} = \\begin{pmatrix} 1/2 \u0026 -1/2 \u0026 0 \\\\ 0 \u0026 -1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix}$. Eliminate above: (no rows above row 1). $$\\mathbf{U}^{-1} = \\begin{pmatrix} 1/2 \u0026 -1/2 \u0026 0 \\\\ 0 \u0026 -1 \u0026 0 \\\\ 0 \u0026 0 \u0026 1/4 \\end{pmatrix}$$You can verify this by multiplying $\\mathbf{U}$ and $\\mathbf{U}^{-1}$ to see if you get the identity matrix.\nThis algorithm efficiently computes the inverse by taking advantage of the zero entries in the lower triangle, reducing the number of operations required.\nScomposizione con permutazione Ogni tanto potrebbe capitare che ci sia il bisogno di permutare, altrimenti non ho nessuna soluzione, da notare che questo è un passo all’interno dell’algoritmo di gauss.\nInoltre scegliere il maggiore dovrebbe aiutare ad eliminare mini-errorini dovuti all’imprecisione della somma floating point.\nAlgoritmo\nForma finale scomposizioni Se utilizziamo una sorta di pivoting parziale ossia per ridurre gli errori scegliamo il massimo della colonna (come del resto fa l’algoritmo di sopra) allora non abbiamo bisogno di permutare colonne), se vogliamo invece un pivoting totale allora dobbiamo permutare le colonne e la matrice diventa qualcosa del tipo\n$A = QLUP$ con Q le permutazioni su riga, e P quelle su colonna (quelle su colonna non è che ci importa molto, perché basta moltiplicare per $P^T$, ossia la sua inversa per x e si risolvono problemi di questo genere… dato che alla fine $PP^T = I$\nMetodo di Cholesky Se prendo una matrice A simmetrica definita positiva (ricorda analisi per questo), allora con questo metodo riesco a riscriverla nella forma $A = LL^T$, e so che la matrice L triangolare inferiore non è singolare perché ho tutti gli autovalori positivi.\nQuesto metodo costa $O(n^3/6)$ leggermente più veloce della fattorizzazione di Gauss.\nUna volta fatto la scomposizione poi va subito\n$Ly = b, L^Tx = y$ e si risolve, sul come funziona l’algoritmo, per ora ci importa solamente che è più veloce.\nSe non è simmetrico o non è definita positiva il programma crasha.\nMetodo di Schur $$ A = QBQ^{-1} $$ Dove $Q$ è una matrice di cambio di base. Questa cosa non si può fare sempre quando vogliamo che $B$ sia diagonale, però la decomposizione di Schur ci dà qualche nota in più riguardo a questo, usando però matrici upper triangular\nEnunciato di Schur $$ A = BTB^{-1} $$NOTE: se $A$ è una matrice normale, allora $T$ è diagonale. Normale quando vale $AA^{*} = A^{*}A$. Con $A^{*}$ la trasposta coniugata della matrice $A$.\nIdee generali per la dimostrazione di Schur In pratica per un teorema dell’algebra (quello fondamentale) si ha che $T$, dato che è quadrata, ha almeno un autovettore, allora prendi questo autovettore, usi il teorema di estensione per creare una base, e scomponi con questo. Questo ti creerà una matrice a blocchi grossi $2\\times2$ in cui quello in basso a destra è ancora quadrato con suo sottospazio. Continui così finché non finisce tutto e resta una matrice upper triangular. Nella reference ciò è descritto molto bene da un punto di vista intuitivo. La cosa carina con le $T$ è che per esempio è spesso più facile elevarli alla potenza, non quanto le diagonali, ma più semplice.\nMatrici semi-definite o definite positive Se prendo un qualunque vettore e vale\n$$ x^TAx \\geq 0 $$Oppure avendo autovalori sempre positivi sono maggiore di 0, si può vedere che è equivalente. Certi autori richiedono anche che la matrice $A$ sia simmetrica.\nGuarda Massimi minimi multi-variabile nella sezione forme quadratiche per questo.\nMetodi iterativi Sono buoni perché l’errore di questi è molto più alto, ma spesso molto più veloce, mentre per i metodi diretti è esattamente il contrario (errore basso, alta complessità).\nIn modo molto generale, possiamo definire un metodo iterativo come una funzione $G$ applicata all’input stesso: $x_n = G(x_{n - 1})$\nNote introduttive convergenza e iterazione Questa sotto è la definizione di convergenza ad $\\alpha$ con ordine $p \\geq 1$\nSpesso la convergenza è fissata da una condizione di arresto (che può essere dipendente anche dal numero di iterazioni. Possiamo definire C = fattore di convergenza quando $p = 1$, perché più è piccolo più converge in fretta. C’è anche una relazione simile fra i p, più è grande, in questo caso, più velocemente converge.\nMetodi iterativi stazionari Idee Generali Questi sono nella forma $x _{k +1} = Hx_k + d_k$ Poi scriverlo come una differenza di matrici in particolare vorre $A = M - N$ , dove $M$ sia non singolare (e possibilmente facilmente invertibile). Se ciò è possibile allora\n$Ax = b \\implies Mx - Nx = b \\implies x = M^{-1}Nx + M^{-1}b \\implies x = Tx + c$\nUna volta avuto questa matrice $T$ possiamo riutilizzarla per ogni iterazione di successione!\nAvremo che $x_k = Tx_{k - 1} + c$, e si ha che $x* = \\lim x_k$ deve essere che\n$$ x* = Tx* + c $$E vorremmo che questo metodo converga per ogni input quindi potrei mettere un x_0 a casissimo\nUna cosa non espressa durante la lezione è che $N = M - A$ quindi\n$$ M^{-1}N = M^{-1}(M - A) = I - M^{-1}A $$Che ci permette di scrivere la stessa cosa sente fare utilizzo della matrice $N$ e secondo me è più clean. Questa cosa è presente nel libro.\nCondizione necessaria e sufficiente di convergenza Teorema sulla condizione di convergenza:\nQuesto risultato si può connettere col raggio spettrale e si può concludere che converge sse\n$$ \\rho(T) \u003c 1 $$ Metodo di Jacobi Sia $D$ la parte diagonale di $A$, allora l’iterazione in questa forma converge e si chiama metodo di jacobi\n$$ x_{k + 1} = (I -D^{-1}A)x_k + D^{-1}b $$Nota: attento che la prof non ha insegnato in questo modo! Quindi probabilmente se te la chiede diglielo nella forma che le piace,\n$M = D, N = E + F$\nMetodo Gauss-Seidel Si ricorda che $A = D - E - F$ in modo molto strano di scriverlo…\nSi fa uso della matrice Lower con anche la diagonale, per il resto è esattamente uguale a tutto il resto per i metodi iterativi., quindi\n$$ M = D - E, N = F $$Condizioni di convergenza per Jacobi e Gauss-Seidel Per comprendere questa parte è importante il concetto di matrice con diagonale dominante. In parole umane deve essere che ogni elemento sulla matrice deve essere maggiore della somma di tutto quanto non stia sulla diagonale maggiore.\nSlide condizioni\nNota questi sono in pratica da imparare a memoria, ma non me ne ricordo!\nGradiente coniugato Questo è un metodo di arresto molto misterioso, direi di cacharla 🤑.\nMetodi di cui non ha parlato Metodo SOR Metodi di Rilassamento Metodi di Krylov ",
-  "wordCount" : "1887",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -249,264 +231,12 @@ come prodotto di due matrici Lower triangular e Upper triangular.">
     <h1 class="post-title entry-hint-parent">
       Algebra lineare numerica
     </h1>
-    <div class="post-meta">Reading Time: 9 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#immagini" aria-label="Immagini">Immagini</a></li></ul>
-                    </ul>
-                    
-                <li>
-                    <a href="#metodo-di-gauss" aria-label="Metodo di gauss">Metodo di gauss</a><ul>
-                        
-                <li>
-                    <a href="#algoritmo-per-matrici-upper-e-lower-triangular" aria-label="Algoritmo per matrici Upper e lower triangular">Algoritmo per matrici Upper e lower triangular</a></li>
-                <li>
-                    <a href="#scomposizione-a--lu" aria-label="Scomposizione A = LU">Scomposizione A = LU</a><ul>
-                        
-                <li>
-                    <a href="#upper-triangular-matrix-inversion" aria-label="Upper triangular matrix inversion">Upper triangular matrix inversion</a></li></ul>
-                </li>
-                <li>
-                    <a href="#scomposizione-con-permutazione" aria-label="Scomposizione con permutazione">Scomposizione con permutazione</a></li>
-                <li>
-                    <a href="#forma-finale-scomposizioni" aria-label="Forma finale scomposizioni">Forma finale scomposizioni</a></li>
-                <li>
-                    <a href="#metodo-di-cholesky" aria-label="Metodo di Cholesky">Metodo di Cholesky</a></li>
-                <li>
-                    <a href="#metodo-di-schur" aria-label="Metodo di Schur">Metodo di Schur</a><ul>
-                        
-                <li>
-                    <a href="#enunciato-di-schur" aria-label="Enunciato di Schur">Enunciato di Schur</a></li>
-                <li>
-                    <a href="#idee-generali-per-la-dimostrazione-di-schur" aria-label="Idee generali per la dimostrazione di Schur">Idee generali per la dimostrazione di Schur</a></li></ul>
-                </li>
-                <li>
-                    <a href="#matrici-semi-definite-o-definite-positive" aria-label="Matrici semi-definite o definite positive">Matrici semi-definite o definite positive</a></li></ul>
-                </li>
-                <li>
-                    <a href="#metodi-iterativi" aria-label="Metodi iterativi">Metodi iterativi</a><ul>
-                        
-                <li>
-                    <a href="#note-introduttive-convergenza-e-iterazione" aria-label="Note introduttive convergenza e iterazione">Note introduttive convergenza e iterazione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#metodi-iterativi-stazionari" aria-label="Metodi iterativi stazionari">Metodi iterativi stazionari</a><ul>
-                        
-                <li>
-                    <a href="#idee-generali" aria-label="Idee Generali">Idee Generali</a></li>
-                <li>
-                    <a href="#condizione-necessaria-e-sufficiente-di-convergenza" aria-label="Condizione necessaria e sufficiente di convergenza">Condizione necessaria e sufficiente di convergenza</a></li>
-                <li>
-                    <a href="#metodo-di-jacobi" aria-label="Metodo di Jacobi">Metodo di Jacobi</a></li>
-                <li>
-                    <a href="#metodo-gauss-seidel" aria-label="Metodo Gauss-Seidel">Metodo Gauss-Seidel</a></li>
-                <li>
-                    <a href="#condizioni-di-convergenza-per-jacobi-e-gauss-seidel" aria-label="Condizioni di convergenza per Jacobi e Gauss-Seidel">Condizioni di convergenza per Jacobi e Gauss-Seidel</a></li>
-                <li>
-                    <a href="#gradiente-coniugato" aria-label="Gradiente coniugato">Gradiente coniugato</a></li></ul>
-                </li>
-                <li>
-                    <a href="#metodi-di-cui-non-ha-parlato" aria-label="Metodi di cui non ha parlato">Metodi di cui non ha parlato</a><ul>
-                        
-                <li>
-                    <a href="#metodo-sor" aria-label="Metodo SOR">Metodo SOR</a></li>
-                <li>
-                    <a href="#metodi-di-rilassamento" aria-label="Metodi di Rilassamento">Metodi di Rilassamento</a></li>
-                <li>
-                    <a href="#metodi-di-krylov" aria-label="Metodi di Krylov">Metodi di Krylov</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>In questa sezione andiamo ad indagare metodi di <strong>scomposizione</strong>, iterativi e non. Ci sono molte matrici importanti per questa parte che dovremmo prendere confidenza.</p>
-<h4 id="immagini">Immagini<a hidden class="anchor" aria-hidden="true" href="#immagini">#</a></h4>
-<p>Lab 2 images</p>
-<h2 id="metodo-di-gauss">Metodo di gauss<a hidden class="anchor" aria-hidden="true" href="#metodo-di-gauss">#</a></h2>
-<p>Vogliamo cercare un metodo per calcolare soluzioni a sistemi di equazione del genere:</p>
-<p>$Ax = b$, classico. Supponiamo che questo sistema abbia una soluzione.</p>
-<p>Il nostro obiettivo sarebbe scomporre la matrice $A = LU$
-come prodotto di due matrici Lower triangular e Upper triangular.</p>
-<h3 id="algoritmo-per-matrici-upper-e-lower-triangular">Algoritmo per matrici Upper e lower triangular<a hidden class="anchor" aria-hidden="true" href="#algoritmo-per-matrici-upper-e-lower-triangular">#</a></h3>
-<p>Nel caso io abbia una matrice Lower o Upper triangular, i sistemi nella forma $Lx=b$ sono risolvibili con un algoritmo abbastanza banale che qui non riporto (sostituzioni via via…)
-Il costo è di $O(n^2)$ e non ti scordare il /2 perché a lei piace (poi ho detto su alla professoressa di Bologna che diceva che $O\left( \frac{n^{2}}{2} \right)$ è diverso da quanto sopra.)</p>
-<h3 id="scomposizione-a--lu">Scomposizione A = LU<a hidden class="anchor" aria-hidden="true" href="#scomposizione-a--lu">#</a></h3>
-<p>Questo è un algoritmo che necessita di una osservazione abbastanza difficile:</p>
-<p>Noto che durante l&rsquo;applicazione dell’algoritmo di gauss, per creare il pivot su una colonna, è esattamente come se moltiplicassi per una (matrice identità + fattori per la colonna di interesse).</p>
-<p>Come in esempio</p>
-<img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled">
-<p>Si può notare inoltre che che l’inverso di L1 è in una forma molto bella, esattamente la stessa con numeri invertiti di segno!, inoltre la moltiplicazione fra  Ln è anch’essa in una forma molto carina! Facilita molto il prodotto.
-In questo modo mi creo una matrice L, in cui è molto facile invertire.</p>
-<p>costo $O(n^3/3)$  per la fattorizzazione LU e poi n2 due volte per risolvere L e U</p>
-<h4 id="upper-triangular-matrix-inversion">Upper triangular matrix inversion<a hidden class="anchor" aria-hidden="true" href="#upper-triangular-matrix-inversion">#</a></h4>
-<p>Let $\mathbf{U}$ be an $n \times n$ upper triangular matrix. We want to find its inverse $\mathbf{V} = \mathbf{U}^{-1}$, such that $\mathbf{U}\mathbf{V} = \mathbf{I}$, where $\mathbf{I}$ is the $n \times n$ identity matrix. Let $u_{ij}$ be the element in the $i$-th row and $j$-th column of $\mathbf{U}$, and $v_{ij}$ be the element in the $i$-th row and $j$-th column of $\mathbf{V}$.</p>
-<p>The algorithm proceeds as follows:</p>
-<ol>
-<li>
-<p><strong>Initialize the inverse matrix:</strong> Create an $n \times n$ matrix $\mathbf{V}$ and initialize it to the identity matrix $\mathbf{I}$.</p>
-</li>
-<li>
-<p><strong>Iterate through the rows from bottom to top:</strong> For each row $i$ from $n$ down to 1:</p>
-<ul>
-<li><strong>Check for non-zero diagonal element:</strong> If $u_{ii} = 0$, then the matrix $\mathbf{U}$ is singular and not invertible. Stop the algorithm and indicate this.</li>
-<li><strong>Normalize the current row:</strong> Divide each element in the $i$-th row of $\mathbf{V}$ by $u_{ii}$. This effectively makes the diagonal element of $\mathbf{U}$ in the $i$-th row equal to 1 when considering the product $\mathbf{U}\mathbf{V}$.</li>
-</ul>
-</li>
-<li>
-<p><strong>Eliminate off-diagonal elements above the current row:</strong> For each row $j$ from $i-1$ down to 1:</p>
-<ul>
-<li>Calculate the multiplier $m = u_{ji} / u_{ii}$.</li>
-<li>Subtract $m$ times the $i$-th row of $\mathbf{V}$ from the $j$-th row of $\mathbf{V}$. This will make the element $u_{ji}$ (which is above the diagonal) effectively zero in the context of the inversion process.</li>
-</ul>
-</li>
-<li>
-<p><strong>The resulting matrix $\mathbf{V}$ is the inverse of $\mathbf{U}$.</strong></p>
-</li>
-</ol>
-<p><strong>In essence, the algorithm performs a form of Gaussian elimination, working from the bottom right of the matrix upwards and towards the left. Because of the upper triangular structure, we only need to eliminate the elements above the diagonal.</strong></p>
-<p><strong>Example:</strong></p>
-$$\mathbf{U} = \begin{pmatrix} 2 & 1 & 3 \\ 0 & -1 & 2 \\ 0 & 0 & 4 \end{pmatrix}$$<ol>
-<li>
-<p>Initialize $\mathbf{V} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$.</p>
-</li>
-<li>
-<p><strong>Row 3 ($i=3$):</strong></p>
-<ul>
-<li>$u_{33} = 4 \neq 0$.</li>
-<li>Normalize row 3 of $\mathbf{V}$: $\begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0/4 & 0/4 & 1/4 \end{pmatrix} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix}$.</li>
-</ul>
-</li>
-<li>
-<p><strong>Row 2 ($i=2$):</strong></p>
-<ul>
-<li>$u_{22} = -1 \neq 0$.</li>
-<li>Normalize row 2 of $\mathbf{V}$: $\begin{pmatrix} 1 & 0 & 0 \\ 0/-1 & 1/-1 & 0/-1 \\ 0 & 0 & 1/4 \end{pmatrix} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix}$.</li>
-<li>Eliminate above: $j=1$. $m = u_{12} / u_{22} = 1 / (-1) = -1$.
-<ul>
-<li>Row 1 of $\mathbf{V}$ becomes: $\begin{pmatrix} 1 - (-1) \times 0 & 0 - (-1) \times (-1) & 0 - (-1) \times 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 & 0 \end{pmatrix}$.</li>
-<li>$\mathbf{V} = \begin{pmatrix} 1 & -1 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix}$.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Row 1 ($i=1$):</strong></p>
-<ul>
-<li>$u_{11} = 2 \neq 0$.</li>
-<li>Normalize row 1 of $\mathbf{V}$: $\begin{pmatrix} 1/2 & -1/2 & 0/2 \\ 0 & -1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix} = \begin{pmatrix} 1/2 & -1/2 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix}$.</li>
-<li>Eliminate above: (no rows above row 1).</li>
-</ul>
-</li>
-</ol>
-$$\mathbf{U}^{-1} = \begin{pmatrix} 1/2 & -1/2 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1/4 \end{pmatrix}$$<p>You can verify this by multiplying $\mathbf{U}$ and $\mathbf{U}^{-1}$ to see if you get the identity matrix.</p>
-<p>This algorithm efficiently computes the inverse by taking advantage of the zero entries in the lower triangle, reducing the number of operations required.</p>
-<h3 id="scomposizione-con-permutazione">Scomposizione con permutazione<a hidden class="anchor" aria-hidden="true" href="#scomposizione-con-permutazione">#</a></h3>
-<p>Ogni tanto potrebbe capitare che ci sia il bisogno di permutare, altrimenti non ho nessuna soluzione, da notare che questo è un passo all&rsquo;interno dell’algoritmo di gauss.</p>
-<p>Inoltre scegliere il maggiore dovrebbe aiutare ad eliminare mini-errorini dovuti all’imprecisione della somma floating point.</p>
-<ul>
-<li>
-<p>Algoritmo</p>
-  <img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 1">
-</li>
-</ul>
-<h3 id="forma-finale-scomposizioni">Forma finale scomposizioni<a hidden class="anchor" aria-hidden="true" href="#forma-finale-scomposizioni">#</a></h3>
-<p>Se utilizziamo una sorta di <strong>pivoting parziale</strong> ossia per ridurre gli errori scegliamo il massimo della colonna (come del resto fa l’algoritmo di sopra) allora non abbiamo bisogno di permutare colonne), se vogliamo invece un <strong>pivoting totale</strong> allora dobbiamo permutare le colonne e la matrice diventa qualcosa del tipo</p>
-<p>$A = QLUP$ con Q le permutazioni su riga, e P quelle su colonna (quelle su colonna non è che ci importa molto, perché basta moltiplicare per $P^T$, ossia la sua inversa per x e si risolvono problemi di questo genere… dato che alla fine $PP^T = I$</p>
-<h3 id="metodo-di-cholesky">Metodo di Cholesky<a hidden class="anchor" aria-hidden="true" href="#metodo-di-cholesky">#</a></h3>
-<p>Se prendo una matrice A <strong>simmetrica definita positiva</strong> (ricorda analisi per questo), allora con questo metodo riesco a riscriverla nella forma $A = LL^T$, e so che la matrice L triangolare inferiore non è singolare perché ho tutti gli autovalori positivi.</p>
-<p>Questo metodo costa $O(n^3/6)$ leggermente più veloce della fattorizzazione di Gauss.</p>
-<p>Una volta fatto la scomposizione poi va subito</p>
-<p>$Ly = b, L^Tx = y$ e si risolve, sul come funziona l&rsquo;algoritmo, per ora ci importa solamente che è più veloce.</p>
-<p>Se non è simmetrico o non è definita positiva il programma crasha.</p>
-<h3 id="metodo-di-schur">Metodo di Schur<a hidden class="anchor" aria-hidden="true" href="#metodo-di-schur">#</a></h3>
-$$
-A = QBQ^{-1}
-$$<p>
-Dove $Q$ è una matrice di <a href="/notes/cambio-di-base">cambio di base</a>. Questa cosa non si può fare sempre quando vogliamo che $B$ sia diagonale, però la decomposizione di Schur ci dà qualche nota in più riguardo a questo, usando però matrici upper triangular</p>
-<h4 id="enunciato-di-schur">Enunciato di Schur<a hidden class="anchor" aria-hidden="true" href="#enunciato-di-schur">#</a></h4>
-$$
-A = BTB^{-1}
-$$<p>NOTE: se $A$ è una matrice normale, allora $T$ è diagonale.
-Normale quando vale $AA^{*} = A^{*}A$. Con $A^{*}$ la trasposta coniugata della matrice $A$.</p>
-<h4 id="idee-generali-per-la-dimostrazione-di-schur">Idee generali per la dimostrazione di Schur<a hidden class="anchor" aria-hidden="true" href="#idee-generali-per-la-dimostrazione-di-schur">#</a></h4>
-<p>In pratica per un teorema dell&rsquo;algebra (quello fondamentale) si ha che $T$, dato che è quadrata, ha almeno un autovettore, allora prendi questo autovettore, usi il teorema di estensione per creare una base, e scomponi con questo. Questo ti creerà una matrice a blocchi grossi $2\times2$ in cui quello in basso a destra è ancora quadrato con suo sottospazio. Continui così finché non finisce tutto e resta una matrice upper triangular. Nella <a href="https://web.math.ucsb.edu/~padraic/ucsb_2013_14/math108b_w2014/math108b_w2014_lecture5.pdf">reference</a> ciò è descritto molto bene da un punto di vista intuitivo.
-La cosa carina con le $T$ è che per esempio è spesso più facile elevarli alla potenza, non quanto le diagonali, ma più semplice.</p>
-<h3 id="matrici-semi-definite-o-definite-positive">Matrici semi-definite o definite positive<a hidden class="anchor" aria-hidden="true" href="#matrici-semi-definite-o-definite-positive">#</a></h3>
-<p>Se prendo un qualunque vettore e vale</p>
-$$
-x^TAx \geq 0
-$$<p>Oppure avendo autovalori sempre positivi sono maggiore di 0, si può vedere che è equivalente.
-Certi autori richiedono anche che la matrice $A$ sia simmetrica.</p>
-<p>Guarda <a href="/notes/massimi-minimi-multi-variabile">Massimi minimi multi-variabile</a> nella sezione forme quadratiche per questo.</p>
-<h2 id="metodi-iterativi">Metodi iterativi<a hidden class="anchor" aria-hidden="true" href="#metodi-iterativi">#</a></h2>
-<p>Sono buoni perché l&rsquo;errore di questi è molto più alto, ma spesso molto più veloce, mentre per i metodi diretti è esattamente il contrario (errore basso, alta complessità).</p>
-<p>In modo molto generale, possiamo definire un metodo iterativo come una funzione $G$ applicata all&rsquo;input stesso: $x_n = G(x_{n - 1})$</p>
-<h3 id="note-introduttive-convergenza-e-iterazione">Note introduttive convergenza e iterazione<a hidden class="anchor" aria-hidden="true" href="#note-introduttive-convergenza-e-iterazione">#</a></h3>
-<p>Questa sotto è la definizione di <strong>convergenza ad $\alpha$ con ordine $p \geq 1$</strong></p>
-<img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 2">
-<p>Spesso la convergenza è fissata da una condizione di arresto (che può essere dipendente anche dal numero di iterazioni. Possiamo definire <strong>C = fattore di convergenza</strong> quando $p = 1$, perché più è piccolo più converge in fretta. C&rsquo;è anche una relazione simile fra i p, più è grande, in questo caso, più velocemente converge.</p>
-<h2 id="metodi-iterativi-stazionari">Metodi iterativi stazionari<a hidden class="anchor" aria-hidden="true" href="#metodi-iterativi-stazionari">#</a></h2>
-<h3 id="idee-generali">Idee Generali<a hidden class="anchor" aria-hidden="true" href="#idee-generali">#</a></h3>
-<p>Questi sono nella forma  $x _{k +1} = Hx_k + d_k$ Poi scriverlo come una differenza di matrici in particolare vorre $A = M - N$ , dove $M$  sia non singolare (e possibilmente facilmente invertibile). Se ciò è possibile allora</p>
-<p>$Ax = b \implies Mx - Nx = b \implies x = M^{-1}Nx + M^{-1}b \implies x = Tx + c$</p>
-<p>Una volta avuto questa matrice $T$ possiamo riutilizzarla per ogni iterazione di successione!</p>
-<p>Avremo che $x_k = Tx_{k - 1} + c$, e si ha che $x* = \lim x_k$ deve essere che</p>
-$$
-x* = Tx* + c
-$$<p>E vorremmo che questo metodo <strong>converga per ogni input</strong> quindi potrei mettere un x_0 a casissimo</p>
-<p>Una cosa non espressa durante la lezione è che $N = M - A$ quindi</p>
-$$
-M^{-1}N = M^{-1}(M - A) = I - M^{-1}A
-$$<p>Che ci permette di scrivere la stessa cosa sente fare utilizzo della matrice $N$ e secondo me è più clean. Questa cosa è presente nel libro.</p>
-<h3 id="condizione-necessaria-e-sufficiente-di-convergenza">Condizione necessaria e sufficiente di convergenza<a hidden class="anchor" aria-hidden="true" href="#condizione-necessaria-e-sufficiente-di-convergenza">#</a></h3>
-<p><strong>Teorema sulla condizione di convergenza:</strong></p>
-<img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 3">
-<p>Questo risultato si può connettere col raggio spettrale e si può concludere che converge sse</p>
-$$
-\rho(T) < 1
-$$<img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 4">
-<h3 id="metodo-di-jacobi">Metodo di Jacobi<a hidden class="anchor" aria-hidden="true" href="#metodo-di-jacobi">#</a></h3>
-<p>Sia $D$ la parte diagonale di $A$, allora l’iterazione in questa forma converge e si chiama metodo di jacobi</p>
-$$
-x_{k + 1} = (I -D^{-1}A)x_k + D^{-1}b
-$$<p>Nota: attento che la prof non ha insegnato in questo modo! Quindi probabilmente se te la chiede diglielo nella forma che le piace,</p>
-<p>$M = D, N = E + F$</p>
-<h3 id="metodo-gauss-seidel">Metodo Gauss-Seidel<a hidden class="anchor" aria-hidden="true" href="#metodo-gauss-seidel">#</a></h3>
-<p>Si ricorda che $A = D - E - F$ in modo molto strano di scriverlo…</p>
-<p>Si fa uso della matrice Lower con anche la diagonale, per il resto è esattamente uguale a tutto il resto per i metodi iterativi., quindi</p>
-$$
-M = D - E, N = F
-$$<h3 id="condizioni-di-convergenza-per-jacobi-e-gauss-seidel">Condizioni di convergenza per Jacobi e Gauss-Seidel<a hidden class="anchor" aria-hidden="true" href="#condizioni-di-convergenza-per-jacobi-e-gauss-seidel">#</a></h3>
-<p>Per comprendere questa parte è importante il concetto di matrice con diagonale dominante. In parole umane deve essere che ogni elemento sulla matrice deve essere maggiore della somma di tutto quanto non stia sulla diagonale maggiore.</p>
-<ul>
-<li>
-<p>Slide condizioni</p>
-  <img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 5">
-</li>
-</ul>
-<p>Nota questi sono in pratica da imparare a memoria, ma non me ne ricordo!</p>
-<h3 id="gradiente-coniugato">Gradiente coniugato<a hidden class="anchor" aria-hidden="true" href="#gradiente-coniugato">#</a></h3>
-<p>Questo è un metodo di arresto molto misterioso, direi di cacharla 🤑.</p>
-<img src="/images/notes/image/universita/ex-notion/Algebra lineare numerica/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Algebra lineare numerica/Untitled 6">
-<h2 id="metodi-di-cui-non-ha-parlato">Metodi di cui non ha parlato<a hidden class="anchor" aria-hidden="true" href="#metodi-di-cui-non-ha-parlato">#</a></h2>
-<h3 id="metodo-sor">Metodo SOR<a hidden class="anchor" aria-hidden="true" href="#metodo-sor">#</a></h3>
-<h3 id="metodi-di-rilassamento">Metodi di Rilassamento<a hidden class="anchor" aria-hidden="true" href="#metodi-di-rilassamento">#</a></h3>
-<h3 id="metodi-di-krylov">Metodi di Krylov<a hidden class="anchor" aria-hidden="true" href="#metodi-di-krylov">#</a></h3>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

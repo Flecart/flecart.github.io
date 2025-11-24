@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Compiler Limitations | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="advanced-systems-lab">
-<meta name="description" content="On Compiler
-Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It&rsquo;s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
-What are they good at
-Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies">
+<meta name="description" content="Compiler Limitations - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/compiler-limitations/">
@@ -97,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/compiler-limitations/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Compiler Limitations">
-  <meta property="og:description" content="On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
-What are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,11 +104,7 @@ What are they good at Compilers are good at: mapping program to machine ▪ regi
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Compiler Limitations">
-<meta name="twitter:description" content="On Compiler
-Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It&rsquo;s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.
-What are they good at
-Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -142,12 +133,12 @@ Compilers are good at: mapping program to machine ▪ register allocation ▪ in
   "@type": "BlogPosting",
   "headline": "Compiler Limitations",
   "name": "Compiler Limitations",
-  "description": "On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It\u0026rsquo;s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.\nWhat are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies\n",
+  "description": "",
   "keywords": [
     "advanced-systems-lab"
   ],
-  "articleBody": "On Compiler Adding compilation flags to gcc not always makes it faster, it just enables a specific set of optimization methods. It’s also good to turn on platform specific flags to turn on some specific optimization methods to that architecture. Remember that compilers are conservative, meaning they do not apply that optimization if they think it does not always apply.\nWhat are they good at Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies\nCommon limitations Compilers are not good at: algorithmic restructuring ▪ for example to increase ILP, locality, etc. ▪ cannot deal with choices Compilers are not good at: overcoming “optimization blockers” ▪ potential memory aliasing ▪ potential procedure side-effects\nExample: the compiler is not able to optimize this part of code because it should work also for aliasing as this example.\nCommon optimizations Done by the compiler Code motion: Usually compilers are good at this (static function dependency analysis) Strength reduction The idea here is to substitute the same operation with something that is faster, for example $16 \\cdot x = x \\ll 4$. Function inlining: most of the time it is able to do compiler inlining. Not always done. It could be side effects or other things that are not provable that slow it down anyways. Memory accesses: if there are useless memory accesses, that would be very hard to optimize automatically. (they do not handle aliasing). In some cases the compiler can do some aliasing checks. There are some hints (restrict, pragma ivdep, or some other compiler flags that assume there is no alias anywhere) What the compiler cannot do Common subexpression optimization if you need too many arithmetic dependencies, often the compiler is not able to do it. Scalar replacement: usually you have to do it by yourself, because compiler cannot assume memory aliasing. Basically, when an address of memory is used multiple times, it is useful to add it as a variable, because it assumes it will be the same thing in memory, as it can change in the mean time. Vector Instructions Vector instructions just do the same operation to a set of data (usually 2,4,8…). Many operations on images are the same but on different data, this is also why vector instructions are used. Another one is linear algebra since they assume independent operations on a lot of data. So many many operations could benefit from vector instructions. Historically, it was introduced on MMX on integers, then SSE with 128 bits, then AVX family with 256 and now AVX-512, for floating points. There are many many operations in this family, it has also made obsolete common optimization frameworks explored in Fast Linear Algebra.\n",
-  "wordCount" : "455",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-03-03T00:00:00Z",
   "dateModified": "2025-03-03T00:00:00Z",
@@ -242,82 +233,12 @@ Compilers are good at: mapping program to machine ▪ register allocation ▪ in
     <h1 class="post-title entry-hint-parent">
       Compiler Limitations
     </h1>
-    <div class="post-meta"><span title='2025-03-03 00:00:00 +0000 UTC'>March 3, 2025</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-03-03 00:00:00 +0000 UTC'>March 3, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#on-compiler" aria-label="On Compiler">On Compiler</a></li>
-                <li>
-                    <a href="#what-are-they-good-at" aria-label="What are they good at">What are they good at</a></li>
-                <li>
-                    <a href="#common-limitations" aria-label="Common limitations">Common limitations</a></li></ul>
-                    
-                <li>
-                    <a href="#common-optimizations" aria-label="Common optimizations">Common optimizations</a><ul>
-                        
-                <li>
-                    <a href="#done-by-the-compiler" aria-label="Done by the compiler">Done by the compiler</a></li>
-                <li>
-                    <a href="#what-the-compiler-cannot-do" aria-label="What the compiler cannot do">What the compiler cannot do</a></li></ul>
-                </li>
-                <li>
-                    <a href="#vector-instructions" aria-label="Vector Instructions">Vector Instructions</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h4 id="on-compiler">On Compiler<a hidden class="anchor" aria-hidden="true" href="#on-compiler">#</a></h4>
-<p>Adding compilation flags to <code>gcc</code> not always makes it faster, it just enables a specific set of optimization methods. It&rsquo;s also good to turn on <em>platform specific</em> flags to turn on some specific optimization methods to that architecture.
-Remember that compilers are <strong>conservative</strong>, meaning they do not apply that optimization if they think it does not always apply.</p>
-<h4 id="what-are-they-good-at">What are they good at<a hidden class="anchor" aria-hidden="true" href="#what-are-they-good-at">#</a></h4>
-<p>Compilers are good at: mapping program to machine ▪ register allocation ▪ instruction scheduling ▪ dead code elimination ▪ eliminating minor inefficiencies</p>
-<h4 id="common-limitations">Common limitations<a hidden class="anchor" aria-hidden="true" href="#common-limitations">#</a></h4>
-<p>Compilers are not good at: algorithmic restructuring ▪ for example to increase ILP, locality, etc. ▪ cannot deal with choices Compilers are not good at: overcoming “optimization blockers” ▪ potential memory aliasing ▪ potential procedure side-effects</p>
-<figure class="center">
-<img src="/images/notes/Compiler Limitations-20250411105420264.webp" style="width: 100%"   alt="Compiler Limitations-20250411105420264" title="Compiler Limitations-20250411105420264"/>
-<figcaption><p style="text-align:center;">Example: the compiler is not able to optimize this part of code because it should work also for aliasing as this example.</p></figcaption>
-</figure>
-<h3 id="common-optimizations">Common optimizations<a hidden class="anchor" aria-hidden="true" href="#common-optimizations">#</a></h3>
-<h4 id="done-by-the-compiler">Done by the compiler<a hidden class="anchor" aria-hidden="true" href="#done-by-the-compiler">#</a></h4>
-<ul>
-<li><strong>Code motion</strong>: Usually compilers are good at this (static function dependency analysis)</li>
-<li><strong>Strength reduction</strong> The idea here is to substitute the same operation with something that is faster, for example $16 \cdot x = x \ll 4$.</li>
-<li><strong>Function inlining</strong>: most of the time it is able to do compiler inlining.
-<ul>
-<li>Not always done. It could be side effects or other things that are not provable that slow it down anyways.</li>
-</ul>
-</li>
-<li><strong>Memory accesses</strong>: if there are useless memory accesses, that would be very hard to optimize automatically. (they do not handle aliasing).
-<ul>
-<li>In some cases the compiler can do some aliasing checks.</li>
-<li>There are some hints (restrict, pragma ivdep, or some other compiler flags that assume there is no alias anywhere)</li>
-</ul>
-</li>
-</ul>
-<h4 id="what-the-compiler-cannot-do">What the compiler cannot do<a hidden class="anchor" aria-hidden="true" href="#what-the-compiler-cannot-do">#</a></h4>
-<ul>
-<li><strong>Common subexpression optimization</strong> if you need too many arithmetic dependencies, often the compiler is not able to do it.</li>
-<li><strong>Scalar replacement</strong>: usually you have to do it by yourself, because compiler cannot assume memory aliasing. Basically, when an address of memory is used multiple times, it is useful to add it as a variable, because it assumes it will be the same thing in memory, as it can change in the mean time.</li>
-</ul>
-<h3 id="vector-instructions">Vector Instructions<a hidden class="anchor" aria-hidden="true" href="#vector-instructions">#</a></h3>
-<p>Vector instructions just do the same operation to a set of data (usually 2,4,8&hellip;).
-Many operations on images are the same but on different data, this is also why vector instructions are used.
-Another one is linear algebra since they assume independent operations on a lot of data. So many many operations could benefit from vector instructions.
-Historically, it was introduced on MMX on integers, then SSE with 128 bits, then AVX family with 256 and now AVX-512, for floating points.
-There are many many operations in this family, it has also made obsolete common optimization frameworks explored in <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,24 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Semplificazione grammatiche | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Gestione del non determinismo
-Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.
-Semplificazione grammatiche (5)
-
-
-Slide
-  
-
-
-
-No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all&rsquo;infinito!)
-No produzioni unitarie, così evito cicli in cui da A derivo sé stesso.
-No simboli inutili
-No ricorsione sinistra (divergenza per top-down)
-Fattorizzazione della grammatica
-
-Eliminazione delel produzioni nulle
-Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.">
+<meta name="description" content="Semplificazione grammatiche - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/semplificazione-grammatiche/">
@@ -110,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/semplificazione-grammatiche/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Semplificazione grammatiche">
-  <meta property="og:description" content="Gestione del non determinismo Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.
-Semplificazione grammatiche (5) Slide
-No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all’infinito!) No produzioni unitarie, così evito cicli in cui da A derivo sé stesso. No simboli inutili No ricorsione sinistra (divergenza per top-down) Fattorizzazione della grammatica Eliminazione delel produzioni nulle Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -123,24 +104,7 @@ No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all’in
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Semplificazione grammatiche">
-<meta name="twitter:description" content="Gestione del non determinismo
-Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.
-Semplificazione grammatiche (5)
-
-
-Slide
-  
-
-
-
-No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all&rsquo;infinito!)
-No produzioni unitarie, così evito cicli in cui da A derivo sé stesso.
-No simboli inutili
-No ricorsione sinistra (divergenza per top-down)
-Fattorizzazione della grammatica
-
-Eliminazione delel produzioni nulle
-Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -169,12 +133,12 @@ Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piaccio
   "@type": "BlogPosting",
   "headline": "Semplificazione grammatiche",
   "name": "Semplificazione grammatiche",
-  "description": "Gestione del non determinismo Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.\nSemplificazione grammatiche (5) Slide\nNo produzioni del tipo $A \\to \\varepsilon$ per bottom up (altrimenti va all\u0026rsquo;infinito!) No produzioni unitarie, così evito cicli in cui da A derivo sé stesso. No simboli inutili No ricorsione sinistra (divergenza per top-down) Fattorizzazione della grammatica Eliminazione delel produzioni nulle Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.\n",
+  "description": "",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "Gestione del non determinismo Il modo più facile per gestire il non determinsmo è semplificare le grammatiche quindi andiamo a vedere metodi per fare ciò.\nSemplificazione grammatiche (5) Slide\nNo produzioni del tipo $A \\to \\varepsilon$ per bottom up (altrimenti va all’infinito!) No produzioni unitarie, così evito cicli in cui da A derivo sé stesso. No simboli inutili No ricorsione sinistra (divergenza per top-down) Fattorizzazione della grammatica Eliminazione delel produzioni nulle Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.\nFormalizzazione algo obiettivo !\nInsieme dei simboli annullabili Vogliamo con questa parte definire in modo formale l’insieme dei non terminali che portano a produzioni di quel genere\nSlide definizione simboli annullabili !\nOssia una annullabilità in n passi, e andiamo ad indagare tutti i simboli che soddisfano queste cose.\nNOTA: nello step induttivo, un simbolo è annulable solo se l’intera produzione è annullabile (quindi tutte le cose in output.\nUna cosa del tipo $A \\to BC$ è annullabile solo se lo sono entrambi (sia B che C).\nDerivazione grammatica annullabilità Slide\nSlide esempio\nIntuizione\nIn pratica vado ad eliminare i non terminali in tutti i modi possibili, e vado ad eliminare quelle che poi vanno ad eliminare. In pratica mi vado a tenere tutte le configurazioni che posso attenere, annullando quello che si può annullare.\nFaccio questa cosa per tutti!\nNota sul vuoto\nSe vogliamo che il nuovo linguaggio possa accettare il vuoto, allora basta aggiungere al non terminale iniziale la produzione dle tipo $S \\to \\varepsilon$, ma questo è presente solo al primo!.\nProduzioni unitarie Vorremmo evitare le produzioni unitarie che portano a cicli perché altrimenti avrei dei cicli infiniti che non sono molto buoni per il parsing.\nDefinizioni utili\nCoppie unitarie Slide\nIn pratica è come se definissi una operazion per le coppie unitarie, e la chiudo per riflessività e transitività.\nAlgoritmo di eliminazione Algoritmo per eliminare coppie unitarie\nPer la creazione della nuova grammatica, quello che faccio non è altro che filtrare quelle che mi portano a coppie unitarie.\nOltre a questo faccio una copia… Se guardi l’esempio comunque lo vedi un pò meglio\nEsempio\nRimozione di simboli inutili Def generatore e raggiungibilità (2) In questa sezione andiamo a definire alcuni concetti utili a definire l’inutilità di alcuni simboli\nSlide !\nCosì andiamo a definire come simbolo utile simbolo generatore e raggiungibile.\nCosì andiamo a racchiudere il concetto di simbolo che non genera nulla, come inutle\nEsempio in slide !\nCalcolo dei simboli generatori Slide !\nOssia se da un simbolo ricavo qualcosa che è un generatore, allora questo è un generatore!\nE posso creare un algoritmo ricorsivo che genera questi simboli, partendo dai terminali che sono sempre dei generatori\nCalcolo dei simboli raggiungibili Slide\nIn pratica mi calcolo, ancora qui in modo ricorsivo, tutti i strumenti raggiungibili dal nodo di start, con qualcosa di simile a una dfs (aggiungo ai raggiungibili ogni non terminale figlio, e comincio ad esplorare questo non terminale).\nWrap-up (chiede) Enunciato e dimostrazione\nL’algoritmo è molto semplice, è costituito da due passi fondamentali:\nElimino tutti i simboli che non sono generatori Rimuovo tutti i simboli non raggiungibili Nota sull’ordine\nÈ importante eseguire le operazioni in questo ordine, altrimenti capita come in slide\nEsempio importanza di ordine\nEsempio più tosto di applicazione di questo\nEliminazione rico sinistre Rico sinistre immediate Slide\nL’idea è spaccare la ricorsione sinistra in una altra produzione e un nuovo non terminale fittizzio che vado ad utilizzare come non terminale di supporto.\nEsempio di risoluzione\nPosso considerare queste immediate, quando non ho dei cicli chiari nelle ricorsioni sinistre, sotto proviamo a creare un algoritmo per risolvere ricorsioni sinistre con cicli.\nRico sinistre non-immediate Esempio di non-immediato\nAlgoritmo di risoluzione O(n2)\nIn pratica provo a sostituire tutto quanto posso in modo greedy.\nEsempio di applicazione\nEsempio applicazione con tutto finora\nFattorizzazione Slide problema generale\nL’intuizione per sta parte è raccogliere le cose in comune. L’algoritmo non va a far altro che guardare i prefissi, e prendere il più lungo per ogni non terminale.\nAlgoritmo per fattorizzazione\nesempio di applicazione\nForme normali Chomsky Normal Form Slide\nQuesta ci piace, perché le produzioni o sono di\nSIngolo terminale Doppio non terminale. Si può notare che questa forma è sia libera da epsilon sia sia libera da coppie unitarie.\nE si può sempre trovare una grammatica in questa forma, questa cosa ci piace.\nGreibach Normal Form Slide\nAnche questa si può sempre fare, ed è una forma che ci piace perché non abbiamo derivazione ricorsive sinistre brutte che ci distruggono tutto.\n",
-  "wordCount" : "752",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -269,288 +233,12 @@ Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piaccio
     <h1 class="post-title entry-hint-parent">
       Semplificazione grammatiche
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#gestione-del-non-determinismo" aria-label="Gestione del non determinismo">Gestione del non determinismo</a><ul>
-                        
-                <li>
-                    <a href="#semplificazione-grammatiche-5" aria-label="Semplificazione grammatiche (5)">Semplificazione grammatiche (5)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#eliminazione-delel-produzioni-nulle" aria-label="Eliminazione delel produzioni nulle">Eliminazione delel produzioni nulle</a><ul>
-                        
-                <li>
-                    <a href="#insieme-dei-simboli-annullabili" aria-label="Insieme dei simboli annullabili">Insieme dei simboli annullabili</a></li>
-                <li>
-                    <a href="#derivazione-grammatica-annullabilit%c3%a0" aria-label="Derivazione grammatica annullabilità">Derivazione grammatica annullabilità</a></li></ul>
-                </li>
-                <li>
-                    <a href="#produzioni-unitarie" aria-label="Produzioni unitarie">Produzioni unitarie</a><ul>
-                        
-                <li>
-                    <a href="#coppie-unitarie" aria-label="Coppie unitarie">Coppie unitarie</a></li>
-                <li>
-                    <a href="#algoritmo-di-eliminazione" aria-label="Algoritmo di eliminazione">Algoritmo di eliminazione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#rimozione-di-simboli-inutili" aria-label="Rimozione di simboli inutili">Rimozione di simboli inutili</a><ul>
-                        
-                <li>
-                    <a href="#def-generatore-e-raggiungibilit%c3%a0-2" aria-label="Def generatore e raggiungibilità (2)">Def generatore e raggiungibilità (2)</a></li>
-                <li>
-                    <a href="#calcolo-dei-simboli-generatori" aria-label="Calcolo dei simboli generatori">Calcolo dei simboli generatori</a></li>
-                <li>
-                    <a href="#calcolo-dei-simboli-raggiungibili" aria-label="Calcolo dei simboli raggiungibili">Calcolo dei simboli raggiungibili</a></li>
-                <li>
-                    <a href="#wrap-up-chiede" aria-label="Wrap-up (chiede)">Wrap-up (chiede)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#eliminazione-rico-sinistre" aria-label="Eliminazione rico sinistre">Eliminazione rico sinistre</a><ul>
-                        
-                <li>
-                    <a href="#rico-sinistre-immediate" aria-label="Rico sinistre immediate">Rico sinistre immediate</a></li>
-                <li>
-                    <a href="#rico-sinistre-non-immediate" aria-label="Rico sinistre non-immediate">Rico sinistre non-immediate</a></li>
-                <li>
-                    <a href="#fattorizzazione" aria-label="Fattorizzazione">Fattorizzazione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#forme-normali" aria-label="Forme normali">Forme normali</a><ul>
-                        
-                <li>
-                    <a href="#chomsky-normal-form" aria-label="Chomsky Normal Form">Chomsky Normal Form</a></li>
-                <li>
-                    <a href="#greibach-normal-form" aria-label="Greibach Normal Form">Greibach Normal Form</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="gestione-del-non-determinismo">Gestione del non determinismo<a hidden class="anchor" aria-hidden="true" href="#gestione-del-non-determinismo">#</a></h2>
-<p>Il modo più facile per gestire il non determinsmo è <strong>semplificare le grammatiche</strong> quindi andiamo a vedere metodi per fare ciò.</p>
-<h3 id="semplificazione-grammatiche-5">Semplificazione grammatiche (5)<a hidden class="anchor" aria-hidden="true" href="#semplificazione-grammatiche-5">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 1">
-</li>
-</ul>
-<ol>
-<li>No produzioni del tipo $A \to \varepsilon$ per bottom up (altrimenti va all&rsquo;infinito!)</li>
-<li>No produzioni unitarie, così evito cicli in cui da A derivo sé stesso.</li>
-<li>No simboli inutili</li>
-<li>No ricorsione sinistra (divergenza per top-down)</li>
-<li>Fattorizzazione della grammatica</li>
-</ol>
-<h2 id="eliminazione-delel-produzioni-nulle">Eliminazione delel produzioni nulle<a hidden class="anchor" aria-hidden="true" href="#eliminazione-delel-produzioni-nulle">#</a></h2>
-<p>Vogliamo creare un algoritmo utile ad eliminare le produzioni che non ci piacciono.</p>
-<ul>
-<li>Formalizzazione algo obiettivo</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 2"></p>
-<h3 id="insieme-dei-simboli-annullabili"><strong>Insieme dei simboli annullabili</strong><a hidden class="anchor" aria-hidden="true" href="#insieme-dei-simboli-annullabili">#</a></h3>
-<p>Vogliamo con questa parte definire in modo formale l&rsquo;insieme dei non terminali che portano a produzioni di quel genere</p>
-<ul>
-<li>Slide definizione simboli annullabili</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 3"></p>
-<p>Ossia una annullabilità in n passi, e andiamo ad indagare tutti i simboli che soddisfano queste cose.</p>
-<p><strong>NOTA:</strong> nello step induttivo, un simbolo è annulable solo se l&rsquo;intera produzione è annullabile (quindi tutte le cose in output.</p>
-<p>Una cosa del tipo $A \to BC$ è annullabile solo se lo sono <strong>entrambi</strong> (sia B che C).</p>
-<h3 id="derivazione-grammatica-annullabilità">Derivazione grammatica annullabilità<a hidden class="anchor" aria-hidden="true" href="#derivazione-grammatica-annullabilità">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 4">
-</li>
-<li>
-<p>Slide esempio</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 5">
-</li>
-</ul>
-<p><strong>Intuizione</strong></p>
-<p>In pratica vado ad eliminare i non terminali in tutti i modi possibili, e vado ad eliminare quelle che poi vanno ad eliminare. In pratica mi vado a tenere tutte le configurazioni che posso attenere, annullando quello che si può annullare.</p>
-<p>Faccio questa cosa per tutti!</p>
-<p><strong>Nota sul vuoto</strong></p>
-<p>Se vogliamo che il nuovo linguaggio possa accettare il vuoto, allora basta aggiungere al non terminale iniziale la produzione dle tipo $S \to \varepsilon$, ma questo è presente solo al primo!.</p>
-<h2 id="produzioni-unitarie">Produzioni unitarie<a hidden class="anchor" aria-hidden="true" href="#produzioni-unitarie">#</a></h2>
-<p>Vorremmo evitare le produzioni unitarie che portano a cicli perché altrimenti avrei dei cicli infiniti che non sono molto buoni per il parsing.</p>
-<ul>
-<li>
-<p>Definizioni utili</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 6">
-</li>
-</ul>
-<h3 id="coppie-unitarie">Coppie unitarie<a hidden class="anchor" aria-hidden="true" href="#coppie-unitarie">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 7">
-</li>
-</ul>
-<p>In pratica è come se definissi una operazion per le coppie unitarie, e la chiudo per riflessività e transitività.</p>
-<h3 id="algoritmo-di-eliminazione">Algoritmo di eliminazione<a hidden class="anchor" aria-hidden="true" href="#algoritmo-di-eliminazione">#</a></h3>
-<ul>
-<li>
-<p>Algoritmo per eliminare coppie unitarie</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 8">
-</li>
-</ul>
-<p>Per la creazione della nuova grammatica, quello che faccio non è altro che filtrare quelle che mi portano a coppie unitarie.</p>
-<p>Oltre a questo faccio una copia… Se guardi l&rsquo;esempio comunque lo vedi un pò meglio</p>
-<ul>
-<li>
-<p>Esempio</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 9">
-</li>
-</ul>
-<h2 id="rimozione-di-simboli-inutili">Rimozione di simboli inutili<a hidden class="anchor" aria-hidden="true" href="#rimozione-di-simboli-inutili">#</a></h2>
-<h3 id="def-generatore-e-raggiungibilità-2">Def generatore e raggiungibilità (2)<a hidden class="anchor" aria-hidden="true" href="#def-generatore-e-raggiungibilità-2">#</a></h3>
-<p>In questa sezione andiamo a definire alcuni concetti utili a definire l&rsquo;inutilità di alcuni simboli</p>
-<ul>
-<li>Slide</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 10"></p>
-<p>Così andiamo a definire come simbolo utile <strong>simbolo generatore e raggiungibile</strong>.</p>
-<p>Così andiamo a racchiudere il concetto di simbolo che non genera nulla, come inutle</p>
-<ul>
-<li>Esempio in slide</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 11"></p>
-<h3 id="calcolo-dei-simboli-generatori">Calcolo dei simboli generatori<a hidden class="anchor" aria-hidden="true" href="#calcolo-dei-simboli-generatori">#</a></h3>
-<ul>
-<li>Slide</li>
-</ul>
-<p>!<img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 12"></p>
-<p>Ossia se da un simbolo ricavo qualcosa che è un generatore, allora questo è un generatore!</p>
-<p>E posso creare un algoritmo ricorsivo che genera questi simboli, partendo dai terminali che sono sempre dei generatori</p>
-<h3 id="calcolo-dei-simboli-raggiungibili">Calcolo dei simboli raggiungibili<a hidden class="anchor" aria-hidden="true" href="#calcolo-dei-simboli-raggiungibili">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 13">
-</li>
-</ul>
-<p>In pratica mi calcolo, ancora qui in modo ricorsivo, tutti i strumenti raggiungibili dal nodo di start, con qualcosa di simile a una dfs (aggiungo ai raggiungibili ogni non terminale figlio, e comincio ad esplorare questo non terminale).</p>
-<h3 id="wrap-up-chiede">Wrap-up (chiede)<a hidden class="anchor" aria-hidden="true" href="#wrap-up-chiede">#</a></h3>
-<ul>
-<li>
-<p>Enunciato e dimostrazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 14">
-</li>
-</ul>
-<p>L&rsquo;algoritmo è molto semplice, è costituito da due passi fondamentali:</p>
-<ol>
-<li>Elimino tutti i simboli che non sono generatori</li>
-<li>Rimuovo tutti i simboli non raggiungibili</li>
-</ol>
-<p><strong>Nota sull&rsquo;ordine</strong></p>
-<p>È importante eseguire le operazioni in questo ordine, altrimenti capita come in slide</p>
-<ul>
-<li>
-<p>Esempio importanza di ordine</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 15">
-</li>
-<li>
-<p>Esempio più tosto di applicazione di questo</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 16">
-</li>
-</ul>
-<h2 id="eliminazione-rico-sinistre">Eliminazione rico sinistre<a hidden class="anchor" aria-hidden="true" href="#eliminazione-rico-sinistre">#</a></h2>
-<h3 id="rico-sinistre-immediate">Rico sinistre immediate<a hidden class="anchor" aria-hidden="true" href="#rico-sinistre-immediate">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 17">
-</li>
-</ul>
-<p>L&rsquo;idea è spaccare la ricorsione sinistra in una altra produzione e un nuovo non terminale fittizzio che vado ad utilizzare come non terminale di supporto.</p>
-<ul>
-<li>
-<p>Esempio di risoluzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 18">
-</li>
-</ul>
-<p>Posso considerare queste immediate, quando non ho dei cicli chiari nelle ricorsioni sinistre, sotto proviamo a creare un algoritmo per risolvere ricorsioni sinistre con cicli.</p>
-<h3 id="rico-sinistre-non-immediate">Rico sinistre non-immediate<a hidden class="anchor" aria-hidden="true" href="#rico-sinistre-non-immediate">#</a></h3>
-<ul>
-<li>
-<p>Esempio di non-immediato</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 19.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 19">
-</li>
-<li>
-<p>Algoritmo di risoluzione O(n2)</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 20.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 20">
-</li>
-</ul>
-<p>In pratica provo a sostituire tutto quanto posso in modo greedy.</p>
-<ul>
-<li>
-<p>Esempio di applicazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 21.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 21">
-</li>
-<li>
-<p>Esempio applicazione con tutto finora</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 22.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 22">
-</li>
-</ul>
-<h3 id="fattorizzazione">Fattorizzazione<a hidden class="anchor" aria-hidden="true" href="#fattorizzazione">#</a></h3>
-<ul>
-<li>
-<p>Slide problema generale</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 23.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 23">
-</li>
-</ul>
-<p>L&rsquo;intuizione per sta parte è <strong>raccogliere</strong> le cose in comune. L&rsquo;algoritmo non va a far altro che guardare i prefissi, e prendere il più lungo per ogni non terminale.</p>
-<ul>
-<li>
-<p>Algoritmo per fattorizzazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 24.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 24">
-</li>
-<li>
-<p>esempio di applicazione</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 25.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 25">
-</li>
-</ul>
-<h2 id="forme-normali">Forme normali<a hidden class="anchor" aria-hidden="true" href="#forme-normali">#</a></h2>
-<h3 id="chomsky-normal-form">Chomsky Normal Form<a hidden class="anchor" aria-hidden="true" href="#chomsky-normal-form">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 26.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 26">
-</li>
-</ul>
-<p>Questa ci piace, perché le produzioni o sono di</p>
-<ol>
-<li>SIngolo terminale</li>
-<li>Doppio non terminale.</li>
-</ol>
-<p>Si può notare che questa forma è <strong>sia libera da epsilon</strong> sia <strong>sia libera da coppie unitarie</strong>.</p>
-<p>E si può sempre trovare una grammatica in questa forma, questa cosa ci piace.</p>
-<h3 id="greibach-normal-form">Greibach Normal Form<a hidden class="anchor" aria-hidden="true" href="#greibach-normal-form">#</a></h3>
-<ul>
-<li>
-<p>Slide</p>
-  <img src="/images/notes/image/universita/ex-notion/Semplificazione grammatiche/Untitled 27.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Semplificazione grammatiche/Untitled 27">
-</li>
-</ul>
-<p>Anche questa si può sempre fare, ed è una forma che ci piace perché non abbiamo derivazione ricorsive sinistre brutte che ci distruggono tutto.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

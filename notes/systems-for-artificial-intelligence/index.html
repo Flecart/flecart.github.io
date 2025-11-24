@@ -7,10 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Systems for Artificial Intelligence | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="☁cloud-computing">
-<meta name="description" content="At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.
-
-
- Image from here">
+<meta name="description" content="Systems for Artificial Intelligence - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/systems-for-artificial-intelligence/">
@@ -96,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/systems-for-artificial-intelligence/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Systems for Artificial Intelligence">
-  <meta property="og:description" content="At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.
-Image from here">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -108,10 +104,7 @@ Image from here">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Systems for Artificial Intelligence">
-<meta name="twitter:description" content="At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.
-
-
- Image from here">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -140,12 +133,12 @@ Image from here">
   "@type": "BlogPosting",
   "headline": "Systems for Artificial Intelligence",
   "name": "Systems for Artificial Intelligence",
-  "description": "At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.\nImage from here\n",
+  "description": "",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": "At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.\nImage from here\nThis is the general pipeline of model development, training, and inference.\nOne note is that the real ML code in this systems is very small, see (Sculley et al. 2015), there are massive maintenance costs in common ML systems.\nData Curation Collection and Cleaning Garbage in -\u003e Garbage out ~old wisdom\nThe first part of every machine learning system is collect and curate good quality data. Work in this part of building machine learning systems mostly consist in:\nAggregating data Identifying correct sources of the data Remove not good data, labeling it so that it has high quality, and similar. Identify anomalies/outliers, and filtering it. Very difficult to distinguish from noise. Fill empty values Having correct labels (e.g. (Deng et al. 2009) initial big effort, which is very expensive) Analyzing preprocessing costs We need to distinguish from online and offline preprocessing requirements. These functions will use lots of resources on the CPU and often become part of the bottleneck (see here), from personal statistics, it was about 30% just for data preprocessing. Sometimes, it also consumes more data than the training itself! The professor Ana Klimovic shows how scaling the preprocessing and training client can speed up sometimes by 100x in some cases, see here.\nImage from the course slides\nModel Development In this section, we want to build a nice model for our problem, design new architectures, tune hyperparameters, and validate the accuracy. There is not so much from the system side that can be said about model development; this is another area of research.\nAutomated searches This is somewhat similar to what fast performance optimization community has done with LAPACK, BLAS, see Fast Linear Algebra.\nWe have: Model search:\nExplore automatically different architectures to find the best one, obviously very performance intensive. Neural Architecture Search, where you could also use things like RL to find the best one. Hyper-parameter tuning:\nSearch for the best hyperparameters for a model batch size, learning rate, number of layers, activation fucntions, optimizers, and other similar things that could be considered to tune this aspect. Training Pipeline The training pipeline is the output of the model development phase. If you do not track all the dependencies, you wont be able to do things like this:\nRetrain models with new data Track data and code for debugging Capture dependencies for deployment Audit training for compliance (e.g., data privacy policies) Then it would also enable for validation and versioning and usually does not need lot of expertise in machine learning, this is the MLOps side of things.\nUsual Training Stages After (Bommasani et al. 2022), we mostly train big ML models and then:\nPretrain: we train the model on a large dataset, usually unsupervised, to learn general features of the data. Fine-tune: we train the model on a smaller dataset, usually supervised, to learn specific features of the data. Alignment: we train the model to align its behavior with human values and preferences or based on some reliability metrics. Continual Training Usually models need to be retrained to\nInclude new data Adapt do domain shifts or data shifts E.g. hairstyle, fashion shifts. Data deletion E.g. GDPR, or similar laws. This means you need to incorporate new training methods starting from an existing one. It is probably difficult to balance different tradeoff, from accuracy to reliability and compliance. For example some threshold to trigger retraining to check for concept drifts. And this would then enable for data selection policies to take the correct data for retraining. See (B{\"o}ther et al. 2025).\nTraining Parallelization Training is one of the most compute intensive parts of the machine learning pipeline. We need to distinguish the data itself with the parameters data (weights of the model most of the time, or hyperparameters and similar things).\nData parallelism: partition the data and run multiple copies of the model, which synchronize to exchange model weight updates.\nAbout model parallelism:\nTensor Parallelism: we divide layer inference across nodes Pipeline Parallelism: We divide models across nodes. Parameter Server This is a classical way to implement distributed training. Basically, every worker has a copy of the model, and they send the gradients to the parameter server, which then aggregates them and sends them back to all workers. This is a good way to implement distributed training, but it has some drawbacks:\nThe parameter server can become a bottleneck, especially if there are many workers. The parameter server can become a single point of failure, which can be problematic if it goes down. AllReduce Parallelism ",
-  "wordCount" : "2625",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-04T00:00:00Z",
   "dateModified": "2025-06-04T00:00:00Z",
@@ -240,402 +233,12 @@ Image from here">
     <h1 class="post-title entry-hint-parent">
       Systems for Artificial Intelligence
     </h1>
-    <div class="post-meta"><span title='2025-06-04 00:00:00 +0000 UTC'>June 4, 2025</span>&nbsp;·&nbsp;Reading Time: 13 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-04 00:00:00 +0000 UTC'>June 4, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#data-curation" aria-label="Data Curation">Data Curation</a><ul>
-                        
-                <li>
-                    <a href="#collection-and-cleaning" aria-label="Collection and Cleaning">Collection and Cleaning</a></li>
-                <li>
-                    <a href="#analyzing-preprocessing-costs" aria-label="Analyzing preprocessing costs">Analyzing preprocessing costs</a></li></ul>
-                </li>
-                <li>
-                    <a href="#model-development" aria-label="Model Development">Model Development</a><ul>
-                        
-                <li>
-                    <a href="#automated-searches" aria-label="Automated searches">Automated searches</a></li>
-                <li>
-                    <a href="#training-pipeline" aria-label="Training Pipeline">Training Pipeline</a></li>
-                <li>
-                    <a href="#usual-training-stages" aria-label="Usual Training Stages">Usual Training Stages</a></li>
-                <li>
-                    <a href="#continual-training" aria-label="Continual Training">Continual Training</a></li></ul>
-                </li>
-                <li>
-                    <a href="#training-parallelization" aria-label="Training Parallelization">Training Parallelization</a><ul>
-                        
-                <li>
-                    <a href="#parameter-server" aria-label="Parameter Server">Parameter Server</a></li>
-                <li>
-                    <a href="#allreduce-parallelism" aria-label="AllReduce Parallelism">AllReduce Parallelism</a></li>
-                <li>
-                    <a href="#pipeline-parallelism" aria-label="Pipeline Parallelism">Pipeline Parallelism</a></li>
-                <li>
-                    <a href="#memory-efficient-pipeline" aria-label="Memory efficient Pipeline">Memory efficient Pipeline</a></li>
-                <li>
-                    <a href="#data-parallelism" aria-label="Data Parallelism">Data Parallelism</a></li>
-                <li>
-                    <a href="#tensor-parallelism" aria-label="Tensor Parallelism">Tensor Parallelism</a></li>
-                <li>
-                    <a href="#sync-or-async-training" aria-label="Sync or Async Training">Sync or Async Training</a></li>
-                <li>
-                    <a href="#causes-of-faults" aria-label="Causes of Faults">Causes of Faults</a></li>
-                <li>
-                    <a href="#pipelined-checkpoints" aria-label="Pipelined Checkpoints">Pipelined Checkpoints</a></li>
-                <li>
-                    <a href="#3d-parallel" aria-label="3D Parallel">3D Parallel</a></li>
-                <li>
-                    <a href="#fully-sharded-data-parallel" aria-label="Fully Sharded Data Parallel">Fully Sharded Data Parallel</a></li>
-                <li>
-                    <a href="#weight-for-a-single-model-training" aria-label="Weight for a Single Model Training">Weight for a Single Model Training</a></li></ul>
-                </li>
-                <li>
-                    <a href="#model-inference" aria-label="Model Inference">Model Inference</a><ul>
-                        
-                <li>
-                    <a href="#comparison-between-training-and-inference" aria-label="Comparison between training and inference">Comparison between training and inference</a></li>
-                <li>
-                    <a href="#inference-location" aria-label="Inference location">Inference location</a></li>
-                <li>
-                    <a href="#ml-compilers" aria-label="ML Compilers">ML Compilers</a></li>
-                <li>
-                    <a href="#techniques-for-cloud-inference" aria-label="Techniques for Cloud Inference">Techniques for Cloud Inference</a></li>
-                <li>
-                    <a href="#gpu-resources-allocation" aria-label="GPU resources allocation">GPU resources allocation</a></li>
-                <li>
-                    <a href="#gpu-under-utilization" aria-label="GPU under-utilization">GPU under-utilization</a></li>
-                <li>
-                    <a href="#gpu-sharing" aria-label="GPU Sharing">GPU Sharing</a></li>
-                <li>
-                    <a href="#cost-of-inference" aria-label="Cost of Inference">Cost of Inference</a></li>
-                <li>
-                    <a href="#batching" aria-label="Batching">Batching</a></li></ul>
-                </li></ul>
-                    </ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>At the time of writing, the compute requirements for machine learning models and artificial intelligence are growing at a staggering rate of 200% every 3.5 months. Interest in the area is being quantified as 10k papers per month on the topic, while dollar investments on compute (energy, cooling, sustainability of compute in general) have had a hard time keeping up with the continuous new requests.</p>
-<figure class="center">
-<img src="/images/notes/Systems for Artificial Intelligence-20250429113134097.webp" style="width: 100%"   alt="Systems for Artificial Intelligence-20250429113134097" title="Systems for Artificial Intelligence-20250429113134097"/>
-<figcaption><p style="text-align:center;"> Image from <a href="https://ucbrise.github.io/cs294-ai-sys-fa19/assets/lectures/lec03/03_ml-lifecycle.pdf">here</a></p></figcaption>
-</figure>
-<p>This is the general pipeline of model development, training, and inference.</p>
-<p>One note is that the real ML code in this systems is very small, see <a href="https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">(Sculley et al. 2015)</a>, there are massive maintenance costs in common ML systems.</p>
-<h3 id="data-curation">Data Curation<a hidden class="anchor" aria-hidden="true" href="#data-curation">#</a></h3>
-<h4 id="collection-and-cleaning">Collection and Cleaning<a hidden class="anchor" aria-hidden="true" href="#collection-and-cleaning">#</a></h4>
-<blockquote>
-<p>Garbage in -&gt; Garbage out ~<em>old wisdom</em></p></blockquote>
-<p>The first part of every machine learning system is collect and curate good quality data.
-Work in this part of building machine learning systems mostly consist in:</p>
-<ul>
-<li>Aggregating data</li>
-<li>Identifying correct sources of the data</li>
-<li>Remove not good data, labeling it so that it has high quality, and similar.
-<ul>
-<li>Identify anomalies/outliers, and filtering it. Very difficult to distinguish from noise.</li>
-<li>Fill empty values</li>
-<li>Having correct labels (e.g. <a href="https://ieeexplore.ieee.org/document/5206848">(Deng et al. 2009)</a> initial big effort, which is very expensive)</li>
-</ul>
-</li>
-</ul>
-<h4 id="analyzing-preprocessing-costs">Analyzing preprocessing costs<a hidden class="anchor" aria-hidden="true" href="#analyzing-preprocessing-costs">#</a></h4>
-<p>We need to distinguish from <strong>online</strong> and <strong>offline</strong> preprocessing requirements. These functions will use lots of resources on the CPU and often become part of the bottleneck (see <a href="https://arxiv.org/pdf/2111.04131">here</a>), from personal statistics, it was about 30% just for data preprocessing.
-Sometimes, it also consumes more data than the training itself!
-The professor Ana Klimovic shows how scaling the preprocessing and training client can speed up sometimes by 100x in some cases, see <a href="https://anakli.inf.ethz.ch/papers/tfdata_service_SoCC23.pdf">here</a>.</p>
-<figure class="center">
-<img src="/images/notes/Systems for Artificial Intelligence-20250429114519991.webp" style="width: 100%"   alt="Systems for Artificial Intelligence-20250429114519991" title="Systems for Artificial Intelligence-20250429114519991"/>
-<figcaption><p style="text-align:center;">Image from the course slides</p></figcaption>
-</figure>
-<h3 id="model-development">Model Development<a hidden class="anchor" aria-hidden="true" href="#model-development">#</a></h3>
-<p>In this section, we want to build a nice model for our problem, design new architectures, tune hyperparameters, and validate the accuracy.
-There is not so much from the system side that can be said about model development; this is another area of research.</p>
-<h4 id="automated-searches">Automated searches<a hidden class="anchor" aria-hidden="true" href="#automated-searches">#</a></h4>
-<p>This is somewhat similar to what fast performance optimization community has done with LAPACK, BLAS, see <a href="/notes/fast-linear-algebra">Fast Linear Algebra</a>.</p>
-<p>We have:
-<strong>Model search</strong>:</p>
-<ul>
-<li>Explore automatically different architectures to find the best one, obviously very performance intensive.</li>
-<li>Neural Architecture Search, where you could also use things like RL to find the best one.</li>
-</ul>
-<p><strong>Hyper-parameter tuning</strong>:</p>
-<ul>
-<li>Search for the best hyperparameters for a model
-<ul>
-<li>batch size, learning rate,  number of layers, activation fucntions, optimizers, and other similar things that could be considered to tune this aspect.</li>
-</ul>
-</li>
-</ul>
-<h4 id="training-pipeline">Training Pipeline<a hidden class="anchor" aria-hidden="true" href="#training-pipeline">#</a></h4>
-<p>The training pipeline is the output of the model development phase.
-If you do not track all the dependencies, you wont be able to do things like this:</p>
-<ul>
-<li>Retrain models with new data</li>
-<li>Track data and code for debugging</li>
-<li>Capture dependencies for deployment</li>
-<li>Audit training for compliance (e.g., data privacy policies)</li>
-</ul>
-<p>Then it would also enable for validation and versioning and usually does not need lot of expertise in machine learning, this is the MLOps side of things.</p>
-<h4 id="usual-training-stages">Usual Training Stages<a hidden class="anchor" aria-hidden="true" href="#usual-training-stages">#</a></h4>
-<p>After <a href="http://arxiv.org/abs/2108.07258">(Bommasani et al. 2022)</a>, we mostly train big ML models and then:</p>
-<ul>
-<li><strong>Pretrain</strong>: we train the model on a large dataset, usually unsupervised, to learn general features of the data.</li>
-<li><strong>Fine-tune</strong>: we train the model on a smaller dataset, usually supervised, to learn specific features of the data.</li>
-<li><strong>Alignment</strong>: we train the model to align its behavior with human values and preferences or based on some reliability metrics.</li>
-</ul>
-<h4 id="continual-training">Continual Training<a hidden class="anchor" aria-hidden="true" href="#continual-training">#</a></h4>
-<p>Usually models need to be retrained to</p>
-<ul>
-<li>Include new data</li>
-<li>Adapt do domain shifts or data shifts
-<ul>
-<li>E.g. hairstyle, fashion shifts.</li>
-</ul>
-</li>
-<li>Data deletion
-<ul>
-<li>E.g. GDPR, or similar laws.
-This means you need to incorporate new training methods starting from an existing one. It is probably difficult to balance different tradeoff, from accuracy to reliability and compliance.</li>
-</ul>
-</li>
-</ul>
-<p>For example some threshold to trigger retraining to check for concept drifts. And this would then enable for data selection policies to take the correct data for retraining. See <a href="http://arxiv.org/abs/2312.06254">(B{&quot;o}ther et al. 2025)</a>.</p>
-<h3 id="training-parallelization">Training Parallelization<a hidden class="anchor" aria-hidden="true" href="#training-parallelization">#</a></h3>
-<p>Training is one of the most compute intensive parts of the machine learning pipeline.
-We need to distinguish the data itself with the parameters data (weights of the model most of the time, or hyperparameters and similar things).</p>
-<p><strong>Data parallelism</strong>: partition the data and run multiple copies of the model, which synchronize to exchange model weight updates.</p>
-<p>About model parallelism:</p>
-<ul>
-<li><strong>Tensor Parallelism</strong>: we divide layer inference across nodes</li>
-<li><strong>Pipeline Parallelism</strong>: We divide models across nodes.</li>
-</ul>
-<img src="/images/notes/Systems for Artificial Intelligence-20250501112925572.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501112925572">
-<h4 id="parameter-server">Parameter Server<a hidden class="anchor" aria-hidden="true" href="#parameter-server">#</a></h4>
-<p>This is a classical way to implement distributed training.
-<img src="/images/notes/Systems for Artificial Intelligence-20250430162302571.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250430162302571"></p>
-<p>Basically, every worker has a copy of the model, and they send the gradients to the parameter server, which then aggregates them and sends them back to all workers.
-This is a good way to implement distributed training, but it has some drawbacks:</p>
-<ul>
-<li>The parameter server can become a bottleneck, especially if there are many workers.</li>
-<li>The parameter server can become a single point of failure, which can be problematic if it goes down.</li>
-</ul>
-<h4 id="allreduce-parallelism">AllReduce Parallelism<a hidden class="anchor" aria-hidden="true" href="#allreduce-parallelism">#</a></h4>
-<p>&lt;a href=&quot;/<a href="https:/medium.com/">Here</a>@niruthiha2000/allreduce-explained-the-key-to-efficient-distributed-training-2cbbcc871832&quot;&gt;https:/medium.com/</a> is a post explaining the all-reduce parallelism.</p>
-<p>This is a way to implement distributed training, the GPUs share the exchange directly with each other and gradient aggregation is done across workers.</p>
-<p>This is the most common way to implement GPU GPU interconnect thanks to fast networks between GPUs.</p>
-<figure class="center">
-<img src="/images/notes/Systems for Artificial Intelligence-20250501113509714.webp" style="width: 100%"   alt="Systems for Artificial Intelligence-20250501113509714" title="Systems for Artificial Intelligence-20250501113509714"/>
-<figcaption><p style="text-align:center;">Reduce-Scatter phase of an all-reduce parallelism</p></figcaption>
-</figure>
-<p>Next phase is just gathering the weight together so that each worker has the same weights.</p>
-<p>Each node sends $n - 1$ messages to other nodes and receives $n - 1$ messages from other nodes, where $n$ is the number of nodes, in both stages.</p>
-<p>The total amount of data transferred: $2 × (N−1) × (K/N) = 2K × (N−1)/N$.
-In NVIDIA systems, we use NCCL for these kinds of communications.</p>
-<h4 id="pipeline-parallelism">Pipeline Parallelism<a hidden class="anchor" aria-hidden="true" href="#pipeline-parallelism">#</a></h4>
-<p>Due to data dependencies, it is usually difficult to have high hardware utilization with the standard forward and backward version. This form of parallelism is also called <strong>model parallelism</strong>.</p>
-<blockquote>
-<p>pipeline parallelism partitions the layers of a model into multiple stages and distributes them across
-the GPUs. While training, two consecutive pipeline stages exchange intermediate activations or gradients with point-topoint communication. Since the point-to-point communication of pipeline parallelism adds small overheads compared to the synchronization of tensor parallelism, the pipeline parallelism degree can increase along with the model size. From <a href="https://proceedings.mlr.press/v202/kim23l.html">(Kim et al. 2023)</a> paper.</p></blockquote>
-<p>Using <strong>micro-batches</strong>, you can improve the utilization of the hardware, it is like pipelining, see <a href="/notes/central-processing-unit">Central Processing Unit</a>, but on a different level. Introduced in <a href="https://papers.nips.cc/paper_files/paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html">(Huang et al. 2019)</a>. Pipeline parallelism might suffer from stalls (bubbles) due to dependencies and load imbalance
-between the devices (imbalanced partitioning).</p>
-<img src="/images/notes/Systems for Artificial Intelligence-20250501113842247.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501113842247">
-<p>This form of parallelism is useful if you do not have a machine big enough to fit the whole model, but many machines, so you load the weights at each stage of the pipeline to compute the forward pass, pipelining makes the bubble time smaller, thus making the model more efficient.</p>
-<p>Needs to communicate a lot less, only the end of one forward or backward, so it&rsquo;s usually done across different nodes, since it&rsquo;s more sparse.</p>
-<h4 id="memory-efficient-pipeline">Memory efficient Pipeline<a hidden class="anchor" aria-hidden="true" href="#memory-efficient-pipeline">#</a></h4>
-<p>Another example of a pipeline is <a href="https://proceedings.mlr.press/v202/kim23l.html">(Kim et al. 2023)</a>, they introduce the one forward and one backward approach, in figure:</p>
-<figure class="center">
-<img src="/images/notes/Systems for Artificial Intelligence-20250518150939553.webp" style="width: 100%"   alt="Systems for Artificial Intelligence-20250518150939553" title="Systems for Artificial Intelligence-20250518150939553"/>
-<figcaption><p style="text-align:center;">Image from the paper: An illustration of a 4-way 1F1B pipeline schedule with eight micro-batches. The memory pressure of each pipeline stage increases during the warmup phase, stays constant at the steady phase, and decreases within the cooldown phase. After the cooldown phase, parameters are updated with accumulated gradients of each micro-batch. A number in either forward or backward denotes the micro-batch index.</p></figcaption>
-</figure>
-$$
-M(s) = W(s) + A(s)
-$$$$
-M(s) = W_{0} + A_{0} \mu(s)
-$$<p>
-Where $\mu$ is the number of micro batches.</p>
-<h4 id="data-parallelism">Data Parallelism<a hidden class="anchor" aria-hidden="true" href="#data-parallelism">#</a></h4>
-<p>This is the easiest method for parallelism: you replicate the model many times as use that to train on different batches of data at the same times. But you can quickly observe if the model takes a lot of data then this is quite consuming in terms of memory.</p>
-<h4 id="tensor-parallelism">Tensor Parallelism<a hidden class="anchor" aria-hidden="true" href="#tensor-parallelism">#</a></h4>
-<p>Computing different parts of the tensor can be done in parallel, with different parts of the data. Even if a model can fit on a single GPU, it could benefit from tensor parallelism by splitting that part.</p>
-<img src="/images/notes/Systems for Artificial Intelligence-20250501114138612.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501114138612">
-<p>This is used within a node usually, because it needs to communicate a lot.</p>
-<h4 id="sync-or-async-training">Sync or Async Training<a hidden class="anchor" aria-hidden="true" href="#sync-or-async-training">#</a></h4>
-<p>Synchronous training is usually slow, there will be probably <strong>stragglers</strong>, for example see <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">(Dean &amp; Barroso 2013)</a>.
-Synchronous training: workers operate in lockstep to update the model weights at each iteration</p>
-<ul>
-<li>Asynchronous training: each worker independently updates model weights</li>
-<li>Synchronous training achieves better model quality, but lower throughput
-Accuracy vs. throughput trade-off.
-Useful metric: time to train to a target accuracy</li>
-</ul>
-<h4 id="causes-of-faults">Causes of Faults<a hidden class="anchor" aria-hidden="true" href="#causes-of-faults">#</a></h4>
-<p>Single failures can wipe out entire model parameters and waste lots of compute time. Restarting the training process is quite expensive.
-Common problem that make a node fail are:</p>
-<ul>
-<li>Hardware</li>
-<li>Misconfigurations</li>
-<li>Network problems</li>
-</ul>
-<p>A common way to deal with this problem is using <strong>checkpointing</strong>
-If you use spot VMs with some GPUs and TPUs, the amount of failures is higher, difficult to ask a GPU in the cloud currently because everybody is asking for that currently.</p>
-<h4 id="pipelined-checkpoints">Pipelined Checkpoints<a hidden class="anchor" aria-hidden="true" href="#pipelined-checkpoints">#</a></h4>
-<p>Content of this section are introduced in (<a href="/notes/systems-for-artificial-intelligence#mohanCheckFreqFrequentFineGrained2021">(Mohan et al. 2021)</a>).
-We want to checkpoint our current model parameters to some <strong>persistent storage</strong>. The problem is how can we balance the time needed to checkpoint and training? We don&rsquo;t want too much overhead due to this part.
-<img src="/images/notes/Systems for Artificial Intelligence-20250501114945159.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250501114945159"></p>
-<p>The idea is to start to copy to RAM after the first update has finished, but then start the computation for the next iteration immediately, and stall only for the remaining time, then disk I/O can be done in parallel.</p>
-<p>There are two phases:</p>
-<ul>
-<li>Snapshot: copy the model parameters to RAM
-<ul>
-<li>If spare space is available, do it in GPU, which is significantly faster.</li>
-</ul>
-</li>
-<li>Persist: copy the model parameters from RAM to persistent storage
-The idea is that when we are copying to RAM or disk, we can continue to do computation and not stall.
-It uses some algorithm to determine the checkpointing frequency.</li>
-</ul>
-<p>There is <strong>maximum one</strong> checkpointing operations at a time (maximum roll back is one checkpoint).
-The most important idea is that it does it in the middle of the checkpoints. If you checkpoint while the previous one is still running, you <strong>wait until previous checkpoint is finished</strong>.
-It saves two orders of magnitude compared to standard epoch checkpointing.</p>
-<p>Also it saves epoch id and current number of processed items to provided inter-epoch state.</p>
-<blockquote>
-<p>CheckFreq only maintains two checkpoints on disk at any given time; one completed checkpoint
-and the other in-flight.</p></blockquote>
-<h4 id="3d-parallel">3D Parallel<a hidden class="anchor" aria-hidden="true" href="#3d-parallel">#</a></h4>
-<p>!<a href="/notes/systems-for-artificial-intelligence-20251028100341053.webp-"> Slides from Large Scale AI Engineering Course</a>
-This is usually how it&rsquo;s implemented for large scale training of models across clusters of GPUs, for very very big models. So there are lots of infrastructure working with these methods.</p>
-<h4 id="fully-sharded-data-parallel">Fully Sharded Data Parallel<a hidden class="anchor" aria-hidden="true" href="#fully-sharded-data-parallel">#</a></h4>
-<p>This method reduces the memory usage for training by a lot, but makes implementation more difficult, and more communication overheads. So, it mostly depends on your memory availability regarding this part.
-At scale it&rsquo;s not very useful, most of the people would use ZeRO-1 or ZeRO-2 (usually doesn&rsquo;t give a good improvement over the first version).
-Here we are talking about <strong>Zero Redundancy Optimizer</strong>.</p>
-<img src="/images/notes/Systems for Artificial Intelligence-20251028100947782.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20251028100947782">
-<h4 id="weight-for-a-single-model-training">Weight for a Single Model Training<a hidden class="anchor" aria-hidden="true" href="#weight-for-a-single-model-training">#</a></h4>
-<p>Training a model often requires much more memory compared to inference, let&rsquo;s take an example to understand why.</p>
-<ul>
-<li>Training a <strong>70B parameter model in 16-bit precision</strong> requires storage for:
-<ul>
-<li><strong>Model weights (FP16):</strong> 2 bytes per parameter</li>
-<li><strong>Optimizer states (e.g. Adam):</strong>
-<ul>
-<li>Two states (e.g. momentum &amp; variance), each in <strong>32-bit (4 bytes)</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Total memory per parameter:</strong> <code>2 + 4 + 4 = 10 bytes</code></li>
-<li><strong>Total memory requirement:</strong>
-$70 \times 10^9 \times 10 \text{ bytes} ; / ; 1024^3 \approx 652 \text{ GB}$</li>
-</ul>
-<h3 id="model-inference">Model Inference<a hidden class="anchor" aria-hidden="true" href="#model-inference">#</a></h3>
-<p>After we have trained the model, we want to optimize for response time.</p>
-<h4 id="comparison-between-training-and-inference">Comparison between training and inference<a hidden class="anchor" aria-hidden="true" href="#comparison-between-training-and-inference">#</a></h4>
-<p>Training: iterate through dataset, compute forward &amp; backward pass
-on each batch of data to update model parameters.</p>
-<ul>
-<li>Care about high throughput and fast convergence to high accuracy</li>
-<li>Inference: compute forward pass on a (small) batch of data</li>
-<li>Care about low latency, high throughput and high accuracy</li>
-</ul>
-<h4 id="inference-location">Inference location<a hidden class="anchor" aria-hidden="true" href="#inference-location">#</a></h4>
-<p>We can mainly use two types of inference location:</p>
-<ul>
-<li>On the <strong>edge</strong>:
-<ul>
-<li>Meaning it is running on your computer, locally, or on the device.</li>
-<li>It is probably the best option for privacy and latency.</li>
-<li>Yet it raises some challenges for <em>energy consumption</em>, and hardware types.</li>
-</ul>
-</li>
-<li>On the <strong>cloud</strong>:
-- Meaning it is running on a remote server, in the cloud.
-- It is probably the best option for scalability and flexibility.
-- Yet it raises some challenges for privacy and latency.
-- e.g. OpenAI runs its model on Azure Cloud.</li>
-</ul>
-<h4 id="ml-compilers">ML Compilers<a hidden class="anchor" aria-hidden="true" href="#ml-compilers">#</a></h4>
-<p>They apply optimizations to the model, to make it run faster on the hardware on different devices.
-TVM from Tianqi Chen is an example of ML compiler, and it is open source.
-Goal: efficiently serve a trained model on different kinds of devices</p>
-<ul>
-<li>ML compiler applies multiple rounds of optimizations on computation graph, e.g., vectorization, loop tiling, operation fusion (one example is <a href="/notes/systems-for-artificial-intelligence#daoFLASHATTENTIONFastMemoryefficient2022">(Dao et al. 2022)</a>)</li>
-<li>Many ML compilers use ML to to some of the optimizations!</li>
-</ul>
-<p><a href="https://mlc.ai"><a href="https://mlc.ai">https://mlc.ai</a></a> is a free course on ML optimizations for TVM.</p>
-<h4 id="techniques-for-cloud-inference">Techniques for Cloud Inference<a hidden class="anchor" aria-hidden="true" href="#techniques-for-cloud-inference">#</a></h4>
-<p>Clipper and Clockwork are some examples for Cloud inference.</p>
-<ul>
-<li>Batches</li>
-<li>Cache results (for example see KV cache in <a href="/notes/optimizations-for-dnn">Optimizations for DNN</a>)</li>
-<li>Compression and Model quantization</li>
-<li>Model selection based on latency and accuracy
-<ul>
-<li>See an example: <a href="https://www.usenix.org/system/files/atc21-romero.pdf">Model-less </a>.</li>
-</ul>
-</li>
-</ul>
-<h4 id="gpu-resources-allocation">GPU resources allocation<a hidden class="anchor" aria-hidden="true" href="#gpu-resources-allocation">#</a></h4>
-<p>We talked about dominance resource fairness in <a href="/notes/cluster-management-policies">Cluster Management Policies</a>.
-Here the authors of THEMIS propose the idea of <strong>finish time fairness</strong>, and minimize max finish time fairness across ML apps.
-That is the ration of exec time.
-AI jobs are often <strong>gang-scheduled</strong> (they do not advance if all jobs have not been scheduler first), and their performance is sensitive to tasks’ relative placement.</p>
-<h4 id="gpu-under-utilization">GPU under-utilization<a hidden class="anchor" aria-hidden="true" href="#gpu-under-utilization">#</a></h4>
-<p>There are some reasons why the GPUs are underutilized.</p>
-<ul>
-<li>Low batch sizes in ML inference</li>
-<li>Network congestion</li>
-<li>Input data scheduling
-Individual ML jobs do not make good use of GPUs, some are more memory intensive, others are CPU intensive.</li>
-</ul>
-<h4 id="gpu-sharing">GPU Sharing<a hidden class="anchor" aria-hidden="true" href="#gpu-sharing">#</a></h4>
-<ul>
-<li>Temporal Colocation</li>
-<li>Spatial Colocation
-<img src="/images/notes/Systems for Artificial Intelligence-20250430140138928.webp" style="width: 100%" class="center" alt="Systems for Artificial Intelligence-20250430140138928"></li>
-</ul>
-<p>Orion is an example of this kind of <strong>interference aware</strong> scheduling.</p>
-<h4 id="cost-of-inference">Cost of Inference<a hidden class="anchor" aria-hidden="true" href="#cost-of-inference">#</a></h4>
-<p>It has been estimated some time ago that serving ChatGPT for a single day is about 700k dollars. Serving is very costly.</p>
-<h4 id="batching">Batching<a hidden class="anchor" aria-hidden="true" href="#batching">#</a></h4>
-<p>There are many difficulties in choosing the batching system. Should we stop at the longest token and return it in that way? What is the batch size we should start? So we need to have more effective batching systems!</p>
-<p>We can continue to use after the end of the batching time!
-And a lot of memory is wasted in the KV cache part. This is partially solved by paged attention. For this we have three states, waiting, running, swapped.</p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=bommasaniOpportunitiesRisksFoundation2022>[1] Bommasani et al. <a href="http://arxiv.org/abs/2108.07258">“On the Opportunities and Risks of Foundation Models”</a> arXiv preprint arXiv:2108.07258 2022
- </p>
-<p id=daoFLASHATTENTIONFastMemoryefficient2022>[2] Dao et al. “FLASHATTENTION: Fast and Memory-Efficient Exact Attention with IO-awareness” Curran Associates Inc.  2022
- </p>
-<p id=dengImageNetLargescaleHierarchical2009>[3] Deng et al. <a href="https://ieeexplore.ieee.org/document/5206848">“ImageNet: A Large-Scale Hierarchical Image Database”</a> 2009 IEEE Conference on Computer Vision and Pattern Recognition  2009
- </p>
-<p id=botherModynDataCentricMachine2025>[4] B{\"o}ther et al. <a href="http://arxiv.org/abs/2312.06254">“Modyn: Data-Centric Machine Learning Pipeline Orchestration”</a> None 2025
- </p>
-<p id=sculleyHiddenTechnicalDebt2015>[5] Sculley et al. <a href="https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">“Hidden Technical Debt in Machine Learning Systems”</a> Curran Associates, Inc.  2015
- </p>
-<p id=kimBPipeMemoryBalancedPipeline2023>[6] Kim et al. <a href="https://proceedings.mlr.press/v202/kim23l.html">“BPipe: Memory-Balanced Pipeline Parallelism for Training Large Language Models”</a> PMLR  2023
- </p>
-<p id=deanTailScale2013>[7] Dean & Barroso <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">“The Tail at Scale”</a> Commun. ACM Vol. 56(2), pp. 74--80 2013
- </p>
-<p id=huangGPipeEfficientTraining2019>[8] Huang et al. <a href="https://papers.nips.cc/paper_files/paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html">“GPipe: Efficient Training of Giant Neural Networks Using Pipeline Parallelism”</a> Curran Associates, Inc.  2019
- </p>
-<p id=mohanCheckFreqFrequentFineGrained2021>[9] Mohan et al. “CheckFreq: Frequent, Fine-Grained DNN Checkpointing” 19th USENIX Conference on File and Storage Technologies  2021
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

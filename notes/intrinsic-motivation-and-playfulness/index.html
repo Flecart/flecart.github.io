@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Intrinsic Motivation and Playfulness | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="neuroscience">
-<meta name="description" content="We have a classical exploration-exploitation tradeoff, see Reinforcement Learning, a introduction.
-Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems.
-We will attack this from an evolutionary psychology perspective: Playfulness and intrinsic motivation.
-Curiosity
-Here we will talk about why animals are pushed to explore.">
+<meta name="description" content="Intrinsic Motivation and Playfulness - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/intrinsic-motivation-and-playfulness/">
@@ -97,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/intrinsic-motivation-and-playfulness/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Intrinsic Motivation and Playfulness">
-  <meta property="og:description" content="We have a classical exploration-exploitation tradeoff, see Reinforcement Learning, a introduction. Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems. We will attack this from an evolutionary psychology perspective: Playfulness and intrinsic motivation.
-Curiosity Here we will talk about why animals are pushed to explore.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,11 +104,7 @@ Curiosity Here we will talk about why animals are pushed to explore.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Intrinsic Motivation and Playfulness">
-<meta name="twitter:description" content="We have a classical exploration-exploitation tradeoff, see Reinforcement Learning, a introduction.
-Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems.
-We will attack this from an evolutionary psychology perspective: Playfulness and intrinsic motivation.
-Curiosity
-Here we will talk about why animals are pushed to explore.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -142,12 +133,12 @@ Here we will talk about why animals are pushed to explore.">
   "@type": "BlogPosting",
   "headline": "Intrinsic Motivation and Playfulness",
   "name": "Intrinsic Motivation and Playfulness",
-  "description": "We have a classical exploration-exploitation tradeoff, see Reinforcement Learning, a introduction. Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems. We will attack this from an evolutionary psychology perspective: Playfulness and intrinsic motivation.\nCuriosity Here we will talk about why animals are pushed to explore.\n",
+  "description": "",
   "keywords": [
     "neuroscience"
   ],
-  "articleBody": "We have a classical exploration-exploitation tradeoff, see Reinforcement Learning, a introduction. Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems. We will attack this from an evolutionary psychology perspective: Playfulness and intrinsic motivation.\nCuriosity Here we will talk about why animals are pushed to explore.\nIntrinsic motivation One of the classical books about the topic is White, Robert W. “Motivation reconsidered: The concept of competence.” Psychological review 66.5 (1959): 297.\nThree main motives We want to understand why animals explore (why visiting new places or learning new things brings this small bump of joy? Why would you want to know more things, in the moment it is difficult that it has some reward). and activity and manipulation, for example going to jog and swim, which is costly activity but useless. Or running wheel mouse as another example, or playing with music and games (manipulation), and they feel pleasure by doing these activities.\nWe will focus mainly on curiosity (exploration) and playfulness (manipulation and activity)\nFrameworks for Curiosity Q-Learning See Tabular Reinforcement Learning#Q Learning. We have states-action-value function, and have an update rule for a specific action at a specific state. Usually the error is off-policy, which is usually learnt from a database of experiences, so not updated from\nThe optimal policy can always be retrieved, and it will be an indicator function for the correct action at a certain state.\nThe bads:\nWorld knowledge, gathered through experience, is not utilized to guide exploration (more so with 𝜖-greedy SARSA). More explored state-action paths are not less favored for exploration (even under softmax), meaning we are not exploring enough. This leads to idea like exploration bonus to balance the exploration, akin to some Rmax algorithm we studied in Tabular Reinforcement Learning.\nSARSA See Tabular Reinforcement Learning#SARSA. It’s basically the same as q-learning, but it is epsilon-greedy, it has some random exploration with some probability. And it is on-policy since we are using the action based on the policy\nK-armed bandit See Reinforcement Learning, a introduction, where we have a very small explanation of this problem.\nWe have tradeoffs between explorations and exploitation!\nEpsilon greedy exploration Convergence for larger 𝜖 is faster, but leads to smaller average reward in the long run due to continuous exploration after convergence. Greedy action selection increases rapidly but often does not converge\nIdea for improvement: make $\\varepsilon$ adaptable (anneal it to zero), but it is difficult to tune. A better idea is the following section, the softmax exploration\nSoftmax exploration We are using a softmax function to know which state to explore. See Tabular Reinforcement Learning. And we have a parameter $\\beta$ or a temperature parameter $\\tau$ to control the exploration exploitation tradeoff.\nThis is the most used technique now in this subfield. This doesn’t take into account the cues of the environment. It’s bad to do again a bad action just because the temperature is high for example. If the state has been visited often, we would like that to be more stable and less “hot”.\nExploration Bonus with uncertainty The idea is to add a bias for exploration, based on the variance of the function! The problem is that we are attracted by randomness. We don’t want to be attracted by randomness, if it’s just noise, its not so interesting.\nCounters for exploration bonus Counters can solve this problem, to bias towards rare state action pairs. But in high dimensional spaces, this is very inefficient. Another drawback is that we are using only the immediate value but not the future values, so it is very much shortsighted measure.\nExploration Values One idea is to introduce exploration values, like Q values in SARSA but without rewards. We assume new states have a very good reward, like 1, and update each state with the new real reward. This can act as a counter. See Tabular Reinforcement Learning, this is very close to RMAX.\nThe more times we visit, the less the reward will be, in this way it acts as a counter. This is some sort of generalized counter. The problem is that some problems are not yet solved by these algorithm because their reward is very sparse, or a lot of noise.\nForward-Inverse Models “Define the intrinsic reward in proportion to the error made by the agent in predicting the consequence of its own actions in a visual feature space learned by a self-supervised inverse dynamics model.”\nWe want to predict the parts of the environment that are caused by our agent. We want to work with the transformation of the sensory states. The intrinsic reward is the difference of the predicted features and the actual features. Bigger difference means bigger surprise. The idea is to try to build features that are only relevant to your action. So for the first time it was able to play games with lots of noise.\nOne drawback is that it leads the agent to be interested in the noisy TV problem.\nPlayfulness Difference with Curiosity How can we distinguish manipulation seeking and knowledge seeking behaviours? Manipulation can be used as the discriminator for usefulness against the noisy TV problem.\nOne fundamental difference is that curiosity is consumed, playfulness is not.\nFor example consider sensory substitution.\nSensory substitution Image to sound for the blind. But people hate this sensory substitution:\nA lot of training to learn this They use a lot of auditory information to orient themselves, and this adds a lot of noise. A better device is a vibratory device on the skin, but it takes still a lot of effort. One interesting thing happens for the birds see Birdsong and Song System. Singing towards a female makes them more stereotyped (female is exploiting, else they would explore more). Same thing for humans, when they get older they explore a lot less.\nLight substitution in Zebra finches Hearing birds can learn when the light is off. Deaf birds follow the light, they but I did not understand this part… They can learn by light. They adapt very fast to light stimuli. These birds don’t know what they are producing, but they can get light feedback into them. This experiment is about whether if Zebra finches can learn just by feedback of light, when they are deaf.\nTime of adaptation in Zebra finches They can learn to change the pitch very precisely. They learn faster when they are deaf. But their feedback must be reliable! They prefer reliable feedback but low signal against noisy feedback. No reinforcement learning can cleanly explain this.\nA model for sensorimotor behaviour of birds The model must be reliable, we studied something very similar in Conditioning Theory. If not, the association is not so strong.\n$$ R_{j}^{t} = E_{j}^{T} + M_{j}^{T} + r_{j} $$ Where $r_{J}$ is some intrinsic punishment. They maximize by choosing some light off things.\nPitch Contingent Singing Birds like to sing if it is correlated to their pitch, if its random they don’t like to sing (leading to the empowerment theory). Meaning empowerment is linked to sensory substitution. They actually need to be able to act and modify on that.\nEmpowerment $$ E = C(p(s_{t + 1} \\mid a_{t})) = \\max_{p(a_{t})} I(A_{t} ; S_{t + 1}) $$ This is what the agent wants to do, its related to playfulness and complementary to curiosity so to say.\n$$ I(A; S) = H(S) - H(S \\mid A) $$ Meaning high entropy environments (complex environment) and complete determinism of my own actions, define the largest empowerment signal, which is deep reward.\nSea squirt is some animal that behaves like this.\n",
-  "wordCount" : "1283",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-08-26T00:00:00Z",
   "dateModified": "2025-08-26T00:00:00Z",
@@ -242,194 +233,12 @@ Here we will talk about why animals are pushed to explore.">
     <h1 class="post-title entry-hint-parent">
       Intrinsic Motivation and Playfulness
     </h1>
-    <div class="post-meta"><span title='2025-08-26 00:00:00 +0000 UTC'>August 26, 2025</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-08-26 00:00:00 +0000 UTC'>August 26, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#curiosity" aria-label="Curiosity">Curiosity</a><ul>
-                        
-                <li>
-                    <a href="#intrinsic-motivation" aria-label="Intrinsic motivation">Intrinsic motivation</a><ul>
-                        
-                <li>
-                    <a href="#three-main-motives" aria-label="Three main motives">Three main motives</a></li></ul>
-                </li>
-                <li>
-                    <a href="#frameworks-for-curiosity" aria-label="Frameworks for Curiosity">Frameworks for Curiosity</a><ul>
-                        
-                <li>
-                    <a href="#q-learning" aria-label="Q-Learning">Q-Learning</a></li>
-                <li>
-                    <a href="#sarsa" aria-label="SARSA">SARSA</a></li>
-                <li>
-                    <a href="#k-armed-bandit" aria-label="K-armed bandit">K-armed bandit</a></li>
-                <li>
-                    <a href="#epsilon-greedy-exploration" aria-label="Epsilon greedy exploration">Epsilon greedy exploration</a></li>
-                <li>
-                    <a href="#softmax-exploration" aria-label="Softmax exploration">Softmax exploration</a></li>
-                <li>
-                    <a href="#exploration-bonus-with-uncertainty" aria-label="Exploration Bonus with uncertainty">Exploration Bonus with uncertainty</a></li>
-                <li>
-                    <a href="#counters-for-exploration-bonus" aria-label="Counters for exploration bonus">Counters for exploration bonus</a></li>
-                <li>
-                    <a href="#exploration-values" aria-label="Exploration Values">Exploration Values</a></li>
-                <li>
-                    <a href="#forward-inverse-models" aria-label="Forward-Inverse Models">Forward-Inverse Models</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#playfulness" aria-label="Playfulness">Playfulness</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#difference-with-curiosity" aria-label="Difference with Curiosity">Difference with Curiosity</a></li></ul>
-                    
-                <li>
-                    <a href="#sensory-substitution" aria-label="Sensory substitution">Sensory substitution</a><ul>
-                        
-                <li>
-                    <a href="#light-substitution-in-zebra-finches" aria-label="Light substitution in Zebra finches">Light substitution in Zebra finches</a></li>
-                <li>
-                    <a href="#time-of-adaptation-in-zebra-finches" aria-label="Time of adaptation in Zebra finches">Time of adaptation in Zebra finches</a></li>
-                <li>
-                    <a href="#a-model-for-sensorimotor-behaviour-of-birds" aria-label="A model for sensorimotor behaviour of birds">A model for sensorimotor behaviour of birds</a></li>
-                <li>
-                    <a href="#pitch-contingent-singing" aria-label="Pitch Contingent Singing">Pitch Contingent Singing</a></li>
-                <li>
-                    <a href="#empowerment" aria-label="Empowerment">Empowerment</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>We have a classical exploration-exploitation tradeoff, see <a href="/notes/reinforcement-learning,-a-introduction">Reinforcement Learning, a introduction</a>.
-Why would animals explore, even if there is no immediate reward based on it? Animals are able to adapt and explore nonetheless. It would be thus nice to understand and implement these features in artificial systems.
-We will attack this from an evolutionary psychology perspective: <strong>Playfulness and intrinsic motivation</strong>.</p>
-<h2 id="curiosity">Curiosity<a hidden class="anchor" aria-hidden="true" href="#curiosity">#</a></h2>
-<p>Here we will talk about why animals are pushed to explore.</p>
-<h3 id="intrinsic-motivation">Intrinsic motivation<a hidden class="anchor" aria-hidden="true" href="#intrinsic-motivation">#</a></h3>
-<p>One of the classical books about the topic is White, Robert W. &ldquo;Motivation reconsidered: The concept of
-competence.&rdquo; Psychological review 66.5 (1959): 297.</p>
-<h4 id="three-main-motives">Three main motives<a hidden class="anchor" aria-hidden="true" href="#three-main-motives">#</a></h4>
-<p>We want to understand <strong>why animals explore</strong> (why visiting new places or learning new things brings this small bump of joy? Why would you want to know more things, in the moment it is difficult that it has some reward). and <strong>activity and manipulation</strong>, for example going to jog and swim, which is costly activity but useless. Or running wheel mouse as another example, or playing with music and games (manipulation), and they feel pleasure by doing these activities.</p>
-<p>We will focus mainly on curiosity (exploration) and playfulness (manipulation and activity)</p>
-<h3 id="frameworks-for-curiosity">Frameworks for Curiosity<a hidden class="anchor" aria-hidden="true" href="#frameworks-for-curiosity">#</a></h3>
-<h4 id="q-learning">Q-Learning<a hidden class="anchor" aria-hidden="true" href="#q-learning">#</a></h4>
-<p>See <a href="/notes/tabular-reinforcement-learning#q-learning">Tabular Reinforcement Learning#Q Learning</a>.
-We have states-action-value function, and have an update rule for a specific action at a specific state.
-Usually the error is <em>off-policy</em>, which is usually learnt from a database of experiences, so not updated from</p>
-<p>The <strong>optimal policy can always be retrieved</strong>, and it will be an indicator function for the correct action at a certain state.</p>
-<p><strong>The bads:</strong></p>
-<ul>
-<li>World knowledge, gathered through experience, is not utilized to guide exploration (more so with 𝜖-greedy SARSA).</li>
-<li>More explored state-action paths are not less favored for exploration (even under softmax), meaning <strong>we are not exploring enough</strong>.</li>
-</ul>
-<p>This leads to idea like exploration bonus to balance the exploration, akin to some Rmax algorithm we studied in <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>.</p>
-<h4 id="sarsa">SARSA<a hidden class="anchor" aria-hidden="true" href="#sarsa">#</a></h4>
-<p>See <a href="/notes/tabular-reinforcement-learning#sarsa">Tabular Reinforcement Learning#SARSA</a>.
-It&rsquo;s basically the same as q-learning, but it is <strong>epsilon-greedy</strong>, it has some random exploration with some probability.
-And it is <strong>on-policy</strong> since we are using the action based on the policy</p>
-<h4 id="k-armed-bandit">K-armed bandit<a hidden class="anchor" aria-hidden="true" href="#k-armed-bandit">#</a></h4>
-<p>See <a href="/notes/reinforcement-learning,-a-introduction">Reinforcement Learning, a introduction</a>, where we have a very small explanation of this problem.</p>
-<img src="/images/notes/Intrinsic Motivation-20250721211914633.webp" style="width: 100%" class="center" alt="Intrinsic Motivation-20250721211914633">
-<p>We have tradeoffs between explorations and exploitation!</p>
-<h4 id="epsilon-greedy-exploration">Epsilon greedy exploration<a hidden class="anchor" aria-hidden="true" href="#epsilon-greedy-exploration">#</a></h4>
-<p>Convergence for larger 𝜖 is faster, but leads to smaller average reward in the long run due to continuous exploration after convergence. Greedy action selection increases rapidly but often does not converge</p>
-<p>Idea for improvement: make $\varepsilon$ adaptable (anneal it to zero), but it is <em>difficult to tune</em>.
-A better idea is the following section, the softmax exploration</p>
-<h4 id="softmax-exploration">Softmax exploration<a hidden class="anchor" aria-hidden="true" href="#softmax-exploration">#</a></h4>
-<p>We are using a softmax function to know which state to explore. See <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>.
-And we have a parameter $\beta$ or a temperature parameter $\tau$ to control the exploration exploitation tradeoff.</p>
-<img src="/images/notes/Intrinsic Motivation-20250721212343218.webp" style="width: 100%" class="center" alt="Intrinsic Motivation-20250721212343218">
-<p>This is the <strong>most used</strong> technique now in this subfield.
-This doesn&rsquo;t take into account the <em>cues</em> of the environment. It&rsquo;s bad to do again a bad action just because the temperature is high for example. If the state has been visited often, we would like that to be more stable and less &ldquo;hot&rdquo;.</p>
-<h4 id="exploration-bonus-with-uncertainty">Exploration Bonus with uncertainty<a hidden class="anchor" aria-hidden="true" href="#exploration-bonus-with-uncertainty">#</a></h4>
-<p>The idea is to add a bias for exploration, based on the variance of the function!
-<img src="/images/notes/Intrinsic Motivation-20250721212800645.webp" style="width: 100%" class="center" alt="Intrinsic Motivation-20250721212800645"></p>
-<p>The problem is that we are attracted by randomness. We <strong>don&rsquo;t want to be attracted by randomness</strong>, if it&rsquo;s just noise, its not so interesting.</p>
-<h4 id="counters-for-exploration-bonus">Counters for exploration bonus<a hidden class="anchor" aria-hidden="true" href="#counters-for-exploration-bonus">#</a></h4>
-<p>Counters can solve this problem, to bias towards rare state action pairs. But in high dimensional spaces, this is very inefficient.
-Another drawback is that we are using only the <strong>immediate value</strong> but not the future values, so it is very much shortsighted measure.</p>
-<h4 id="exploration-values">Exploration Values<a hidden class="anchor" aria-hidden="true" href="#exploration-values">#</a></h4>
-<p>One idea is to introduce <strong>exploration values</strong>, like Q values in SARSA but without rewards. We assume new states have a very good reward, like 1, and update each state with the new real reward. This can act as a counter.
-See <a href="/notes/tabular-reinforcement-learning">Tabular Reinforcement Learning</a>, this is very close to RMAX.</p>
-<img src="/images/notes/Intrinsic Motivation-20250721215000851.webp" style="width: 100%" class="center" alt="Intrinsic Motivation-20250721215000851">
-The more times we visit, the less the reward will be, in this way it acts as a counter.
-This is some sort of generalized counter.
-<p>The problem is that some problems are not yet solved by these algorithm because their reward is <strong>very sparse</strong>, or a lot of <strong>noise</strong>.</p>
-<h4 id="forward-inverse-models">Forward-Inverse Models<a hidden class="anchor" aria-hidden="true" href="#forward-inverse-models">#</a></h4>
-<blockquote>
-<p>“Define the intrinsic reward in proportion to the error made by the agent in predicting the consequence of its own actions in a visual feature space learned by a self-supervised inverse dynamics model.”</p></blockquote>
-<p>We want to predict the parts of the environment that are caused by <strong>our agent</strong>. We want to work with the transformation of the sensory states.
-<img src="/images/notes/Intrinsic Motivation-20250721215400567.webp" style="width: 100%" class="center" alt="Intrinsic Motivation-20250721215400567"></p>
-<p>The intrinsic reward is the difference of the predicted features and the actual features. Bigger difference means bigger surprise. The idea is to try to build features that are only relevant to your action.
-So for the first time it was able to play games with lots of noise.</p>
-<p>One drawback is that it leads the agent to be interested in the noisy TV problem.</p>
-<h2 id="playfulness">Playfulness<a hidden class="anchor" aria-hidden="true" href="#playfulness">#</a></h2>
-<h4 id="difference-with-curiosity">Difference with Curiosity<a hidden class="anchor" aria-hidden="true" href="#difference-with-curiosity">#</a></h4>
-<p>How can we distinguish manipulation seeking and knowledge seeking behaviours?
-Manipulation can be used as the discriminator for usefulness against the noisy TV problem.</p>
-<p>One fundamental difference is that curiosity is <strong>consumed</strong>, playfulness is not.</p>
-<p>For example consider sensory substitution.</p>
-<h3 id="sensory-substitution">Sensory substitution<a hidden class="anchor" aria-hidden="true" href="#sensory-substitution">#</a></h3>
-<p>Image to sound for the blind. But people hate this sensory substitution:</p>
-<ul>
-<li>A lot of training to learn this</li>
-<li>They use a lot of auditory information to orient themselves, and this adds a lot of noise.</li>
-</ul>
-<p>A better device is a vibratory device on the skin, but it takes still a lot of effort.
-One interesting thing happens for the birds see <a href="/notes/birdsong-and-song-system">Birdsong and Song System</a>.
-Singing towards a female makes them more stereotyped (female is exploiting, else they would explore more).
-Same thing for humans, when they get older they explore a lot less.</p>
-<h4 id="light-substitution-in-zebra-finches">Light substitution in Zebra finches<a hidden class="anchor" aria-hidden="true" href="#light-substitution-in-zebra-finches">#</a></h4>
-<p>Hearing birds can learn when the light is off.
-Deaf birds follow the light, they but I did not understand this part&hellip; They can learn by light.
-They adapt very fast to light stimuli.
-These birds don&rsquo;t know what they are producing, but they can get light feedback into them.
-This experiment is about whether if Zebra finches can learn just by feedback of light, when they are deaf.</p>
-<h4 id="time-of-adaptation-in-zebra-finches">Time of adaptation in Zebra finches<a hidden class="anchor" aria-hidden="true" href="#time-of-adaptation-in-zebra-finches">#</a></h4>
-<p>They can learn to change the pitch very precisely.
-They learn faster when they are deaf.
-But their feedback must be <strong>reliable</strong>! They prefer reliable feedback but low signal against noisy feedback.
-No reinforcement learning can cleanly explain this.</p>
-<h4 id="a-model-for-sensorimotor-behaviour-of-birds">A model for sensorimotor behaviour of birds<a hidden class="anchor" aria-hidden="true" href="#a-model-for-sensorimotor-behaviour-of-birds">#</a></h4>
-<p>The model must be reliable, we studied something very similar in <a href="/notes/conditioning-theory">Conditioning Theory</a>.
-If not, the association is not so strong.</p>
-<img src="/images/notes/Intrinsic Motivation and Playfulness-20250722223656113.webp" style="width: 100%" class="center" alt="Intrinsic Motivation and Playfulness-20250722223656113">
-$$
-R_{j}^{t} = E_{j}^{T} + M_{j}^{T} + r_{j}
-$$<p>
-Where $r_{J}$ is some intrinsic punishment.
-They maximize by choosing some light off things.</p>
-<h4 id="pitch-contingent-singing">Pitch Contingent Singing<a hidden class="anchor" aria-hidden="true" href="#pitch-contingent-singing">#</a></h4>
-<p>Birds like to sing if it is correlated to their pitch, if its random they don&rsquo;t like to sing (leading to the empowerment theory). Meaning empowerment is linked to sensory substitution.
-They actually need to be able to act and modify on that.</p>
-<h4 id="empowerment">Empowerment<a hidden class="anchor" aria-hidden="true" href="#empowerment">#</a></h4>
-$$
-E = C(p(s_{t + 1} \mid a_{t})) = \max_{p(a_{t})} I(A_{t} ; S_{t + 1})
-$$<p>
-This is what the agent wants to do, its related to playfulness and complementary to curiosity so to say.</p>
-$$
-I(A; S) = H(S) - H(S \mid A)
-$$<p>
-Meaning high entropy environments (complex environment) and complete determinism of my own actions, define the largest empowerment signal, which is deep reward.</p>
-<p>Sea squirt is some animal that behaves like this.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

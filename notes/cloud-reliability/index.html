@@ -7,13 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Cloud Reliability | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="☁cloud-computing">
-<meta name="description" content="
-Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
-Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary
-Reliability and Factors of Influence
-Reliability is the probability that a system will perform its intended function without failure over a specified period of time.
-There are many factors that influence this value:">
+<meta name="description" content="Cloud Reliability - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/cloud-reliability/">
@@ -99,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/cloud-reliability/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Cloud Reliability">
-  <meta property="og:description" content=" Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
-Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary Reliability and Factors of Influence Reliability is the probability that a system will perform its intended function without failure over a specified period of time. There are many factors that influence this value:">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -112,13 +104,7 @@ Defining the vocabulary Reliability and Factors of Influence Reliability is the 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Cloud Reliability">
-<meta name="twitter:description" content="
-Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.
-Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.
-Defining the vocabulary
-Reliability and Factors of Influence
-Reliability is the probability that a system will perform its intended function without failure over a specified period of time.
-There are many factors that influence this value:">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -147,12 +133,12 @@ There are many factors that influence this value:">
   "@type": "BlogPosting",
   "headline": "Cloud Reliability",
   "name": "Cloud Reliability",
-  "description": " Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.\nCloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary Reliability and Factors of Influence Reliability is the probability that a system will perform its intended function without failure over a specified period of time. There are many factors that influence this value:\n",
+  "description": "",
   "keywords": [
     "☁cloud-computing"
   ],
-  "articleBody": " Reliability is the ability of a system to remain operational over time, i.e., to offer the service it was designed for.\nCloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.\nDefining the vocabulary Reliability and Factors of Influence Reliability is the probability that a system will perform its intended function without failure over a specified period of time. There are many factors that influence this value:\nErrors: system is operational, but it produces wrong results, inducing unexpected results.. Faults: some part of the system is not working, and as a result some of its functionality might be compromised. Failures: system is not working, it needs to be repaired. Performance issues: system is operational, but it is not performing as expected, e.g. too slow. Detecting and predicting failures In usual Cloud system we monitor the system to gather information about its health:\nData collection: activity, errors, configuration about each node. Storage: We store the data plus some metadata (usually as time series). Prediction use some Machine Learning tools to predict these kinds of failures, so that we can proactively solve them (instead of just reactively). Then in order to hide the failures, every part of the stack should provide high availability and redundancy: not just software but also:\nPower and cooling Network infrastructure Scheduling, see Cluster Resource Management. Storage. Availability $$ \\text{Availability} = \\frac{\\text{Uptime}}{\\text{Uptime} + \\text{Downtime}} $$MTTF: Mean Time To Failure $$ \\text{MTTF} = \\frac{1}{r} $$ This definition does not include repair time, and assumes the failures are independent with each other.\n$$ \\text{MTTF} = \\frac{\\text{TIME}}{\\text{FAILURES}} $$MTBF: Mean Time Between Failures $$ \\text{MTBF} = \\text{MTTF} + x $$Yet, the availability is a little bit different, since we have a downtime of $x$:\n$$ \\text{Availability} = \\frac{\\text{MTTF}}{x + \\text{MTTF}} = \\frac{\\text{MTTF}}{\\text{MTBF}} $$Basic Failure Analysis In this section, we model the most common ways a system can fail, and what is their availability given some assumptions.\nEvery component is Necessary If we assume to have $N$ components each with mean time to failure of $\\frac{1}{r}$, then the system has a failure rate of $N \\cdot r$, meaning the failure rate is multiplied by the number of components. This suggests that we can:\nEnsure that each component is resistant (components have lower failure rate $r$) We provide redundancy (higher $N$) $$ \\text{Availability}_{\\text{system}} = 1 - \\frac{N \\cdot r \\cdot x}{365 \\cdot 24} $$Only one is Necessary We can model the number of working versions using Markov Chains, in a manner akin to what we have done in Queueing Theory for performance analysis.\n$$ \\text{MTTF}_{\\text{system}} = \\sum_{i=0}^{N -1} \\frac{1}{(N - i)r_i} $$ The idea is that the first component fails at a rate of $Nr_{i}$, second one at $(N - 1)r_{i}$, and so on. This means before all components are down, you need that amount of time on average.\n$$ \\text{Availability}_{\\text{system}} = 1 - (1 - \\text{Availability}_{\\text{component}})^N $$$$ \\text{Availability}_{\\text{component}} = 1 - \\frac{r \\cdot x}{365 \\cdot 24} $$Parallelization and Reliability If we had a single component that processes at a rate $X$, then the time to process it in parallel is $M / X$ where $M$ is the data.\n$$ \\text{Speedup} = \\frac{1}{(1 - P) + \\frac{P}{N}} $$Best Effort In some applications, we do not want the service to be down, but it would be ok to be inconsistent (remember Cloud Storage#CAP Theorem). For example, the google search could be a best effort application, here we do not offer service guarantees, but do the best to do it.\nProviding Fault Tolerance We need some form of replication for better reliability and error correction. Sometimes sharding is done (remember Distributed file systems).\nData Striping The idea is to distribute data among several disks so that it can be accessed in parallel, this is usually implemented at RAID level, see Devices OS#RAID, level 0. This is a easier way to decrease latency and increase throughput.\nFine and Coarse Grained Striping Fine-grain and coarse-grain data striping are techniques used in parallel computing and storage systems to distribute data across multiple devices to improve performance and fault tolerance.\nFine-grained:\nDefinition: Data is divided into very small chunks and distributed across multiple disks or processing units. Advantages: Improves load balancing, as all disks contribute to every I/O request. Provides high parallelism, making it well-suited for applications with many small, frequent data accesses. Disadvantages: High overhead due to increased coordination among disks. May not be optimal for large sequential reads and writes. Example: RAID 3, where data is split at the byte or bit level across disks, requiring all disks to participate in every operation. Coarse-grained:\nDefinition: Data is divided into larger blocks before being distributed across multiple disks or processing units. Advantages: Reduces overhead by allowing each disk to handle independent requests. Better suited for workloads with large sequential data accesses. Disadvantages: Less effective load balancing for small requests since fewer disks participate per operation. May result in uneven disk utilization. Example: RAID 5, where data is striped at the block level, allowing parallel access without requiring all disks to be involved in every operation. Feature Fine-Grain Striping Coarse-Grain Striping Chunk Size Very small (bytes or bits) Large (blocks or files) Parallelism High Moderate Suitability Frequent small requests Large sequential reads/writes Overhead High Lower Load Balancing Good Can be uneven RAID levels See Devices OS#RAID: you should be able to explain what every RAID level does.\nSharding We can choose to have big or small shards.\nBig shards: they are easier to manage, but if they fail, we lose a lot of data, or lots of data could be on the same disk creating a bottleneck, also called hotspot (if you have a lot of clients that attempt to read from this shard). Small shards: they are harder to manage, since they are more, but they are more fault tolerant and have a better load balancing. Image from course Slides CCA ETHz 2025\nPlacing the blocks This section mainly explores ideas presented in (Cidon et al. 2013).\nRandom Placing Random block placement is a good idea, if we assume failures of blocks is uncorrelated with each other. But in reality it seems that failures are correlated (see paper (Cidon et al. 2013)), for example you could have some rack failures or network failures.\nFrameworks like Distributed file systems HDFS do it one in the node that receives, one in the same rake, and other one in another node in the same cluster, which means they choose a deterministic distribution.\nThe paper shows that the probability of losing data becomes very high if you use random placing and you have many nodes (around 1000 nodes, you have almost 100%).\nCopyset Replication A copyset (see paper (Cidon et al. 2013)) is a set of nodes that contain all the blocks of the data. Then you do random replication. But this is a single point of failure, so you do random replication. But losing three servers makes you lose some data.\nCopysets says: if I place a datablock to one node, then it must be placed in the same copyset as the other copies of the same block.\nPlace first block randomly Then place following the copysets. This leads to better reliability against losing data when we have correlated failures. The problem here is that when we lose data, we lose more data (all data), another problem is that this method is slower in recovering data (since we need to read from the same servers). They made the argument that:\nBetter to lose 1TB in 625 years than Losing 1GB every year, using MTTF analysis as above. Other Reliability Factors Load Balancing Look at Content Delivery Networks for more. Load balancing goes well with sharding Ability to balance load depends on the nature of jobs and data distribution\nMicro-service \u0026 micro-shard tendencies go together the smaller the components, the more we can balance and distribute the load REST makes load balancing easier: • Requests are independent, neither the client nor the server keep state (to some extent) • Each request can be processed by a different machine: • Higher throughput by adding more machines • Higher resilience by adding more machines\nRedundant Execution This is a nice way to trim down tail latency. Basically you send the same request twice, so that if one machine finishes first, then you have the answer faster. It reduces the problem of stragglers, explored in (Dean \u0026 Barroso 2013).\nMonitoring Tools Many other techniques involved in maintaining availability:\nCanaries: a large scale parallel job that has a bug can trigger a massive failure; run the job in a “canary” and only run at scale if it has no problems. Comes from canary in coal mines, you first send synthetic requests to check if it works. -\u003e gradual rollout of big systems. Watchdog timers: regularly check the responsiveness of a machine to identify the ones that may cause trouble Integrity checks: regular integrity checks that complement standard techniques in hardware to make sure that data is not lost or corrupted; run by background jobs Need good logging and analysis tools:\nML is often applied today to better understand problems and help predict them References [1] Cidon et al. “Copysets: Reducing the Frequency of Data Loss in Cloud Storage” 2013 USENIX Annual Technical Conference (USENIX ATC 13) 2013 [2] Dean \u0026 Barroso “The Tail at Scale” Commun. ACM Vol. 56(2), pp. 74--80 2013 ",
-  "wordCount" : "1573",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-03T00:00:00Z",
   "dateModified": "2025-06-03T00:00:00Z",
@@ -247,301 +233,12 @@ There are many factors that influence this value:">
     <h1 class="post-title entry-hint-parent">
       Cloud Reliability
     </h1>
-    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 8 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#defining-the-vocabulary" aria-label="Defining the vocabulary">Defining the vocabulary</a><ul>
-                        
-                <li>
-                    <a href="#reliability-and-factors-of-influence" aria-label="Reliability and Factors of Influence">Reliability and Factors of Influence</a></li>
-                <li>
-                    <a href="#detecting-and-predicting-failures" aria-label="Detecting and predicting failures">Detecting and predicting failures</a></li>
-                <li>
-                    <a href="#availability" aria-label="Availability">Availability</a></li>
-                <li>
-                    <a href="#mttf-mean-time-to-failure" aria-label="MTTF: Mean Time To Failure">MTTF: Mean Time To Failure</a></li>
-                <li>
-                    <a href="#mtbf-mean-time-between-failures" aria-label="MTBF: Mean Time Between Failures">MTBF: Mean Time Between Failures</a></li></ul>
-                </li>
-                <li>
-                    <a href="#basic-failure-analysis" aria-label="Basic Failure Analysis">Basic Failure Analysis</a><ul>
-                        
-                <li>
-                    <a href="#every-component-is-necessary" aria-label="Every component is Necessary">Every component is Necessary</a></li>
-                <li>
-                    <a href="#only-one-is-necessary" aria-label="Only one is Necessary">Only one is Necessary</a></li>
-                <li>
-                    <a href="#parallelization-and-reliability" aria-label="Parallelization and Reliability">Parallelization and Reliability</a></li>
-                <li>
-                    <a href="#best-effort" aria-label="Best Effort">Best Effort</a></li></ul>
-                </li>
-                <li>
-                    <a href="#providing-fault-tolerance" aria-label="Providing Fault Tolerance">Providing Fault Tolerance</a><ul>
-                        
-                <li>
-                    <a href="#data-striping" aria-label="Data Striping">Data Striping</a></li>
-                <li>
-                    <a href="#fine-and-coarse-grained-striping" aria-label="Fine and Coarse Grained Striping">Fine and Coarse Grained Striping</a></li>
-                <li>
-                    <a href="#raid-levels" aria-label="RAID levels">RAID levels</a></li>
-                <li>
-                    <a href="#sharding" aria-label="Sharding">Sharding</a></li></ul>
-                </li>
-                <li>
-                    <a href="#placing-the-blocks" aria-label="Placing the blocks">Placing the blocks</a><ul>
-                        
-                <li>
-                    <a href="#random-placing" aria-label="Random Placing">Random Placing</a></li>
-                <li>
-                    <a href="#copyset-replication" aria-label="Copyset Replication">Copyset Replication</a></li></ul>
-                </li>
-                <li>
-                    <a href="#other-reliability-factors" aria-label="Other Reliability Factors">Other Reliability Factors</a><ul>
-                        
-                <li>
-                    <a href="#load-balancing" aria-label="Load Balancing">Load Balancing</a></li>
-                <li>
-                    <a href="#redundant-execution" aria-label="Redundant Execution">Redundant Execution</a></li>
-                <li>
-                    <a href="#monitoring-tools" aria-label="Monitoring Tools">Monitoring Tools</a></li></ul>
-                </li></ul>
-                    </ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><blockquote>
-<p>Reliability is the ability of a system to remain <strong>operational</strong> over time, i.e., to offer the service it was designed for.</p></blockquote>
-<p>Cloud Hardware and software fails. In this note, we will try to find methods to analyze and predict when components fail, and how we can prevent this problem.</p>
-<h3 id="defining-the-vocabulary">Defining the vocabulary<a hidden class="anchor" aria-hidden="true" href="#defining-the-vocabulary">#</a></h3>
-<h4 id="reliability-and-factors-of-influence">Reliability and Factors of Influence<a hidden class="anchor" aria-hidden="true" href="#reliability-and-factors-of-influence">#</a></h4>
-<p>Reliability is the probability that a system will perform its intended function without failure over a specified period of time.
-There are many factors that influence this value:</p>
-<ul>
-<li>Errors: system is operational, but it produces wrong results, inducing unexpected results..</li>
-<li>Faults: some part of the system is not working, and as a result some of its functionality might be compromised.</li>
-<li>Failures: system is not working, it needs to be repaired.</li>
-<li>Performance issues: system is operational, but it is not performing as expected, e.g. too slow.</li>
-</ul>
-<h4 id="detecting-and-predicting-failures">Detecting and predicting failures<a hidden class="anchor" aria-hidden="true" href="#detecting-and-predicting-failures">#</a></h4>
-<p>In usual Cloud system we <strong>monitor</strong> the system to gather information about its health:</p>
-<ul>
-<li><strong>Data collection</strong>: activity, errors, configuration about each node.</li>
-<li><strong>Storage:</strong> We store the data plus some metadata (usually as time series).</li>
-<li><strong>Prediction</strong> use some Machine Learning tools to predict these kinds of failures, so that we can proactively solve them (instead of just reactively).</li>
-</ul>
-<p>Then in order to hide the failures, every part of the stack should provide high availability and redundancy: not just software but also:</p>
-<ul>
-<li>Power and cooling</li>
-<li>Network infrastructure</li>
-<li>Scheduling, see <a href="/notes/cluster-resource-management">Cluster Resource Management</a>.</li>
-<li>Storage.</li>
-</ul>
-<h4 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h4>
-$$
-\text{Availability} = \frac{\text{Uptime}}{\text{Uptime} + \text{Downtime}}
-$$<h4 id="mttf-mean-time-to-failure">MTTF: Mean Time To Failure<a hidden class="anchor" aria-hidden="true" href="#mttf-mean-time-to-failure">#</a></h4>
-$$
-\text{MTTF} = \frac{1}{r}
-$$<p>
-This definition does not include repair time, and assumes the failures are independent with each other.</p>
-$$
-\text{MTTF} = \frac{\text{TIME}}{\text{FAILURES}}
-$$<h4 id="mtbf-mean-time-between-failures">MTBF: Mean Time Between Failures<a hidden class="anchor" aria-hidden="true" href="#mtbf-mean-time-between-failures">#</a></h4>
-$$
-\text{MTBF} = \text{MTTF} + x
-$$<p>Yet, the availability is a little bit different, since we have a downtime of $x$:</p>
-$$
-\text{Availability} = \frac{\text{MTTF}}{x + \text{MTTF}} = \frac{\text{MTTF}}{\text{MTBF}}
-$$<h3 id="basic-failure-analysis">Basic Failure Analysis<a hidden class="anchor" aria-hidden="true" href="#basic-failure-analysis">#</a></h3>
-<p>In this section, we model the most common ways a system can fail, and what is their availability given some assumptions.</p>
-<h4 id="every-component-is-necessary">Every component is Necessary<a hidden class="anchor" aria-hidden="true" href="#every-component-is-necessary">#</a></h4>
-<p>If we assume to have $N$ components each with mean time to failure of $\frac{1}{r}$, then the system has a failure rate of $N \cdot r$, meaning the failure rate is multiplied by the number of components.
-This suggests that we can:</p>
-<ul>
-<li>Ensure that each component is resistant (components have lower failure rate $r$)</li>
-<li>We provide redundancy (higher $N$)</li>
-</ul>
-$$
-\text{Availability}_{\text{system}} = 1 - \frac{N \cdot r \cdot x}{365 \cdot 24}
-$$<h4 id="only-one-is-necessary">Only one is Necessary<a hidden class="anchor" aria-hidden="true" href="#only-one-is-necessary">#</a></h4>
-<p>We can model the number of working versions using <a href="/notes/markov-chains">Markov Chains</a>, in a manner akin to what we have done in <a href="/notes/queueing-theory">Queueing Theory</a> for performance analysis.</p>
-$$
-\text{MTTF}_{\text{system}} = \sum_{i=0}^{N -1} \frac{1}{(N - i)r_i}
-$$<p>
-The idea is that the first component fails at a rate of $Nr_{i}$, second one at $(N - 1)r_{i}$, and so on. This means before all components are down, you need that amount of time on average.</p>
-$$
-\text{Availability}_{\text{system}} = 1 - (1 - \text{Availability}_{\text{component}})^N
-$$$$
-\text{Availability}_{\text{component}} = 1 - \frac{r \cdot x}{365 \cdot 24}
-$$<h4 id="parallelization-and-reliability">Parallelization and Reliability<a hidden class="anchor" aria-hidden="true" href="#parallelization-and-reliability">#</a></h4>
-<p>If we had a single component that processes at a rate $X$, then the time to process it in parallel is $M / X$ where $M$ is the data.</p>
-$$
-\text{Speedup} = \frac{1}{(1 - P) + \frac{P}{N}}
-$$<h4 id="best-effort">Best Effort<a hidden class="anchor" aria-hidden="true" href="#best-effort">#</a></h4>
-<p>In some applications, we do not want the service to be down, but it would be ok to be inconsistent (remember  <a href="/notes/cloud-storage#cap-theorem">Cloud Storage#CAP Theorem</a>).
-For example, the google search could be a best effort application, here we do not offer service guarantees, but do the best to do it.</p>
-<h3 id="providing-fault-tolerance">Providing Fault Tolerance<a hidden class="anchor" aria-hidden="true" href="#providing-fault-tolerance">#</a></h3>
-<p>We need some form of replication for better reliability and error correction. Sometimes <strong>sharding</strong> is done (remember <a href="/notes/distributed-file-systems">Distributed file systems</a>).</p>
-<h4 id="data-striping">Data Striping<a hidden class="anchor" aria-hidden="true" href="#data-striping">#</a></h4>
-<p>The idea is to distribute data among several disks so that it can be <strong>accessed in parallel</strong>, this is usually implemented at RAID level, see <a href="/notes/devices-os#raid">Devices OS#RAID</a>, level 0.
-This is a easier way to decrease latency and increase throughput.</p>
-<h4 id="fine-and-coarse-grained-striping">Fine and Coarse Grained Striping<a hidden class="anchor" aria-hidden="true" href="#fine-and-coarse-grained-striping">#</a></h4>
-<p>Fine-grain and coarse-grain data striping are techniques used in parallel computing and storage systems to distribute data across multiple devices to improve performance and fault tolerance.</p>
-<p>Fine-grained:</p>
-<ul>
-<li><strong>Definition</strong>: Data is divided into very small chunks and distributed across multiple disks or processing units.</li>
-<li><strong>Advantages</strong>:
-<ul>
-<li>Improves load balancing, as all disks contribute to every I/O request.</li>
-<li>Provides high parallelism, making it well-suited for applications with many small, frequent data accesses.</li>
-</ul>
-</li>
-<li><strong>Disadvantages</strong>:
-<ul>
-<li>High overhead due to increased coordination among disks.</li>
-<li>May not be optimal for large sequential reads and writes.</li>
-</ul>
-</li>
-<li><strong>Example</strong>: RAID 3, where data is split at the byte or bit level across disks, requiring all disks to participate in every operation.</li>
-</ul>
-<p>Coarse-grained:</p>
-<ul>
-<li><strong>Definition</strong>: Data is divided into larger blocks before being distributed across multiple disks or processing units.</li>
-<li><strong>Advantages</strong>:
-<ul>
-<li>Reduces overhead by allowing each disk to handle independent requests.</li>
-<li>Better suited for workloads with large sequential data accesses.</li>
-</ul>
-</li>
-<li><strong>Disadvantages</strong>:
-<ul>
-<li>Less effective load balancing for small requests since fewer disks participate per operation.</li>
-<li>May result in uneven disk utilization.</li>
-</ul>
-</li>
-<li><strong>Example</strong>: RAID 5, where data is striped at the block level, allowing parallel access without requiring all disks to be involved in every operation.</li>
-</ul>
-<table>
-  <thead>
-      <tr>
-          <th>Feature</th>
-          <th>Fine-Grain Striping</th>
-          <th>Coarse-Grain Striping</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Chunk Size</td>
-          <td>Very small (bytes or bits)</td>
-          <td>Large (blocks or files)</td>
-      </tr>
-      <tr>
-          <td>Parallelism</td>
-          <td>High</td>
-          <td>Moderate</td>
-      </tr>
-      <tr>
-          <td>Suitability</td>
-          <td>Frequent small requests</td>
-          <td>Large sequential reads/writes</td>
-      </tr>
-      <tr>
-          <td>Overhead</td>
-          <td>High</td>
-          <td>Lower</td>
-      </tr>
-      <tr>
-          <td>Load Balancing</td>
-          <td>Good</td>
-          <td>Can be uneven</td>
-      </tr>
-  </tbody>
-</table>
-<h4 id="raid-levels">RAID levels<a hidden class="anchor" aria-hidden="true" href="#raid-levels">#</a></h4>
-<p>See <a href="/notes/devices-os#raid">Devices OS#RAID</a>: you should be able to explain what every RAID level does.</p>
-<h4 id="sharding">Sharding<a hidden class="anchor" aria-hidden="true" href="#sharding">#</a></h4>
-<p>We can choose to have big or small shards.</p>
-<ul>
-<li><strong>Big shards</strong>: they are easier to manage, but if they fail, we lose a lot of data, or lots of data could be on the same disk creating a <strong>bottleneck</strong>, also called <strong>hotspot</strong> (if you have a lot of clients that attempt to read from this shard).</li>
-<li><strong>Small shards</strong>: they are harder to manage, since they are more, but they are more fault tolerant and have a better load balancing.</li>
-</ul>
-<figure class="center">
-<img src="/images/notes/Cloud Reliability-20250526200345867.webp" style="width: 100%"   alt="Cloud Reliability-20250526200345867" title="Cloud Reliability-20250526200345867"/>
-<figcaption><p style="text-align:center;">Image from course Slides CCA ETHz 2025</p></figcaption>
-</figure>
-<h3 id="placing-the-blocks">Placing the blocks<a hidden class="anchor" aria-hidden="true" href="#placing-the-blocks">#</a></h3>
-<p>This section mainly explores ideas presented in <a href="https://www.usenix.org/conference/atc13/technical-sessions/presentation/cidon">(Cidon et al. 2013)</a>.</p>
-<h4 id="random-placing">Random Placing<a hidden class="anchor" aria-hidden="true" href="#random-placing">#</a></h4>
-<p>Random block placement is a good idea, if we assume failures of blocks is <strong>uncorrelated</strong> with each other.
-But in reality it seems that failures are correlated (see paper <a href="https://www.usenix.org/conference/atc13/technical-sessions/presentation/cidon">(Cidon et al. 2013)</a>), for example you could have some rack failures or network failures.</p>
-<p>Frameworks like <a href="/notes/distributed-file-systems">Distributed file systems</a> HDFS do it one in the node that receives, one in the same rake, and other one in another node in the same cluster, which means they choose a <strong>deterministic distribution</strong>.</p>
-<p>The paper shows that the probability of losing data becomes very high if you use random placing and you have many nodes (around 1000 nodes, you have almost 100%).</p>
-<h4 id="copyset-replication">Copyset Replication<a hidden class="anchor" aria-hidden="true" href="#copyset-replication">#</a></h4>
-<p>A copyset (see paper <a href="https://www.usenix.org/conference/atc13/technical-sessions/presentation/cidon">(Cidon et al. 2013)</a>) is a set of nodes that contain all the blocks of the data. Then you do random replication. But this is a single point of failure, so you do random replication. But losing three servers makes you lose some data.</p>
-<p>Copysets says: if I place a datablock to one node, then it <strong>must</strong> be placed in the same copyset as the other copies of the same block.</p>
-<ul>
-<li>Place first block randomly</li>
-<li>Then place following the copysets.
-This leads to better reliability against losing data when we have correlated failures.
-The problem here is that</li>
-<li>when we lose data, we lose more data (all data),</li>
-<li>another problem is that this method is slower in recovering data (since we need to read from the same servers).</li>
-</ul>
-<p>They made the argument that:</p>
-<ul>
-<li>Better to lose 1TB in 625 years than</li>
-<li>Losing 1GB every year, using MTTF analysis as above.</li>
-</ul>
-<h3 id="other-reliability-factors">Other Reliability Factors<a hidden class="anchor" aria-hidden="true" href="#other-reliability-factors">#</a></h3>
-<h4 id="load-balancing">Load Balancing<a hidden class="anchor" aria-hidden="true" href="#load-balancing">#</a></h4>
-<p>Look at <a href="/notes/content-delivery-networks">Content Delivery Networks</a> for more.
-Load balancing goes well with sharding
-Ability to balance load depends on the nature of jobs and data distribution</p>
-<ul>
-<li>Micro-service &amp; micro-shard tendencies go together</li>
-<li>the smaller the components, the more we can balance and distribute the load</li>
-</ul>
-<p>REST makes load balancing easier:
-• Requests are independent, neither the client nor the server keep state (to some extent)
-• Each request can be processed by a different machine:
-• Higher throughput by adding more machines
-• Higher resilience by adding more machines</p>
-<h4 id="redundant-execution">Redundant Execution<a hidden class="anchor" aria-hidden="true" href="#redundant-execution">#</a></h4>
-<p>This is a nice way to trim down tail latency.
-Basically you send the same request twice, so that if one machine finishes first, then you have the answer faster. It reduces the problem of stragglers, explored in <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">(Dean &amp; Barroso 2013)</a>.</p>
-<h4 id="monitoring-tools">Monitoring Tools<a hidden class="anchor" aria-hidden="true" href="#monitoring-tools">#</a></h4>
-<p>Many other techniques involved in maintaining availability:</p>
-<ul>
-<li><strong>Canaries</strong>: a large scale parallel job that has a bug can trigger a massive failure; run the job in a “canary” and only run at scale if it has no problems. Comes from canary in coal mines, you first send synthetic requests to check if it works. -&gt; <em>gradual rollout</em> of big systems.</li>
-<li><strong>Watchdog timers</strong>: regularly check the responsiveness of a machine to identify the ones that may cause trouble</li>
-<li><strong>Integrity checks</strong>: regular integrity checks that complement standard techniques in hardware to make sure that data is not lost or corrupted; run by background jobs</li>
-</ul>
-<p>Need good logging and analysis tools:</p>
-<ul>
-<li>ML is often applied today to better understand problems and help predict them</li>
-</ul>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=cidonCopysetsReducingFrequency2013>[1] Cidon et al. <a href="https://www.usenix.org/conference/atc13/technical-sessions/presentation/cidon">“Copysets: Reducing the Frequency of Data Loss in Cloud Storage”</a> 2013 USENIX Annual Technical Conference (USENIX ATC 13)  2013
- </p>
-<p id=deanTailScale2013>[2] Dean & Barroso <a href="https://dl.acm.org/doi/10.1145/2408776.2408794">“The Tail at Scale”</a> Commun. ACM Vol. 56(2), pp. 74--80 2013
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

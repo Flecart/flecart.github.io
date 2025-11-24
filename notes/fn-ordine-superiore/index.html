@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Fn Ordine superiore | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="no-tags">
-<meta name="description" content="Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.
-Si parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.
-
-un linguaggio di programmazione è di ordine superiore qualora
-ammetta funzioni sia come parametro che come risultato di altre funzioni.
-La parte molto simile alla precedente è il fatto di valutare la funzione nell&rsquo;ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.">
+<meta name="description" content="Fn Ordine superiore - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/fn-ordine-superiore/">
@@ -98,10 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/fn-ordine-superiore/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Fn Ordine superiore">
-  <meta property="og:description" content="Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.
-Si parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.
-un linguaggio di programmazione è di ordine superiore qualora ammetta funzioni sia come parametro che come risultato di altre funzioni.
-La parte molto simile alla precedente è il fatto di valutare la funzione nell’ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,12 +102,7 @@ La parte molto simile alla precedente è il fatto di valutare la funzione nell�
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Fn Ordine superiore">
-<meta name="twitter:description" content="Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.
-Si parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.
-
-un linguaggio di programmazione è di ordine superiore qualora
-ammetta funzioni sia come parametro che come risultato di altre funzioni.
-La parte molto simile alla precedente è il fatto di valutare la funzione nell&rsquo;ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -144,12 +131,12 @@ La parte molto simile alla precedente è il fatto di valutare la funzione nell&r
   "@type": "BlogPosting",
   "headline": "Fn Ordine superiore",
   "name": "Fn Ordine superiore",
-  "description": "Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.\nSi parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.\nun linguaggio di programmazione è di ordine superiore qualora ammetta funzioni sia come parametro che come risultato di altre funzioni.\nLa parte molto simile alla precedente è il fatto di valutare la funzione nell\u0026rsquo;ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.\n",
+  "description": "",
   "keywords": [
     "no-tags"
   ],
-  "articleBody": "Questa parte è strettamente collegata conl a parte di Astrazione sul controllo.\nSi parla di passare le funzioni come dati. e quindi possono essere passati come se fossero dei parametri.\nun linguaggio di programmazione è di ordine superiore qualora ammetta funzioni sia come parametro che come risultato di altre funzioni.\nLa parte molto simile alla precedente è il fatto di valutare la funzione nell’ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.\nDeep and shallow binding Esempio di passaggio di funzione\nSi noti che questa distinzione fra scope statico e dinamico è indipendente da queste regole di shallow e deep binding, queste regole qui ci dicono quale ambiente scegliere per la valutazione, mentre le altre ci dicono in che modo percorrere le catene, se andare per catena dinamica o statica.\nDeep Binding In questo caso viene associato alla funzione la x presente al momento di creazione del binding. Nell’esempio di sopra la x in riga 11. se ho scope dinamico, invece quello a riga 2 se ho scope statico\nShallow Binding In questo caso l’ultimo binding possibile, quando sono proprio dentro la funzione (quindi la x attiva in quell’ambiente). Nell’esempio di sopra la x in riga 5. Quindi si valuta la funzione al momento della chiamata.\nImplementazione del shallow binding Questa è l’implementazione semplice, praticamente uguale allo scope dinamico in Nomi e Scope. Quindi cerco l’ultima istanza presente fra tutte quelle presenti (se voglio scope statico, risalgo catena statica, altrimenti risalgo catena dinamica). Esattamente come si faceva per lo scope dinamico, infatti si potrebbe dire che è più naturale utilizzare scope dinamico con questo, anche se si potrebbe senza problemi utilizzare scope statico!.\nQuesto perché l’ultima presente era quella ancora presente nell’ambiente di chiamata!\nImplementazione del deep binding Abbiamo detto che vogliamo valutare il deep binding seguendo la sua struttura (in questo caso statico, oppure nello scope di chiamata, in quel caso dinamico).\nQuesto è easy, si segue direttamente lo stesso sistema fatto per il nome e per la catena statica, passando una coppia (funzione, ambiente) chiamata chiusura della funzione, la funzione sarà il puntatore al codice, mentre l’ambiente è determinato così:\nStatico In questo caso devo mettere nel puntatore d’ambiente in cui la nostra funzione è dichiarata, questo si può avere a tempo di compilazione, perché conosco il livello di annidamento della funzione, e anche al momento della creazione del binding, quindi utilizzo un sistema simile in Nomi e Scope. (quindi scorrere la catena statica con la differenza che conosco, oppure display).\nDinamico In questo caso basta mettere l’ambiente in cui metto creo il binding fra parametro formale e attuale.\nIl caso del C In C non abbiamo cose come i lambda, non abbiamo quindi problemi di risoluzione di ambienti, perché tanto non posso dichiarare funzioni in ambienti non locali.\nSemplicemente in C tutte le funzioni passate come parametro vengono risolte nell’ambiente globale. Non c’è proprio la necessità di utilizzare la catena statica! Tutto risolto a compile-time.\nFunzioni come ritorno di funzione Quello che viene ritornato è una chiusura, ma come valutare una chiusura in un ambiente che è già scomparso 😵 ?? Scomparso nel senso che non l’avremmo più sulla stack sto ambiente! Non possiamo fare altro che utilizzare un ambinete illimitato di vita. E dare la responsabilità al garbace collector l’onere di liberare questo ambiente.\n",
-  "wordCount" : "553",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -244,81 +231,12 @@ La parte molto simile alla precedente è il fatto di valutare la funzione nell&r
     <h1 class="post-title entry-hint-parent">
       Fn Ordine superiore
     </h1>
-    <div class="post-meta">Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#deep-and-shallow-binding" aria-label="Deep and shallow binding">Deep and shallow binding</a><ul>
-                        
-                <li>
-                    <a href="#deep-binding" aria-label="Deep Binding">Deep Binding</a></li>
-                <li>
-                    <a href="#shallow-binding" aria-label="Shallow Binding">Shallow Binding</a></li></ul>
-                </li>
-                <li>
-                    <a href="#implementazione-del-shallow-binding" aria-label="Implementazione del shallow binding">Implementazione del shallow binding</a></li>
-                <li>
-                    <a href="#implementazione-del-deep-binding" aria-label="Implementazione del deep binding">Implementazione del deep binding</a><ul>
-                        
-                <li>
-                    <a href="#statico" aria-label="Statico">Statico</a></li>
-                <li>
-                    <a href="#dinamico" aria-label="Dinamico">Dinamico</a></li></ul>
-                </li>
-                <li>
-                    <a href="#il-caso-del-c" aria-label="Il caso del C">Il caso del C</a></li>
-                <li>
-                    <a href="#funzioni-come-ritorno-di-funzione" aria-label="Funzioni come ritorno di funzione">Funzioni come ritorno di funzione</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>Questa parte è strettamente collegata conl a parte di <a href="/notes/astrazione-sul-controllo">Astrazione sul controllo</a>.</p>
-<p>Si parla di <strong>passare le funzioni come dati</strong>. e quindi possono essere passati come se fossero dei parametri.</p>
-<blockquote>
-<p>un linguaggio di programmazione è di ordine superiore qualora
-ammetta funzioni sia come parametro che come risultato di altre funzioni.</p></blockquote>
-<p>La parte molto simile alla precedente è il fatto di <strong>valutare</strong> la funzione nell&rsquo;ambiente iniziale, quindi bisogna utilizzare un sistema simile a quello del passaggio per nome.</p>
-<h3 id="deep-and-shallow-binding">Deep and shallow binding<a hidden class="anchor" aria-hidden="true" href="#deep-and-shallow-binding">#</a></h3>
-<ul>
-<li>
-<p>Esempio di passaggio di funzione</p>
-  <img src="/images/notes/image/universita/ex-notion/Fn Ordine superiore/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Fn Ordine superiore/Untitled">
-</li>
-</ul>
-<p>Si noti che questa distinzione fra scope statico e dinamico è indipendente da queste regole di shallow e deep binding, queste regole qui ci dicono quale ambiente scegliere per la valutazione, mentre le altre ci dicono in che modo percorrere le catene, se andare per catena dinamica o statica.</p>
-<h4 id="deep-binding">Deep Binding<a hidden class="anchor" aria-hidden="true" href="#deep-binding">#</a></h4>
-<p>In questo caso viene associato alla funzione la x presente al <strong>momento di creazione del binding.</strong> Nell’esempio di sopra la x in riga 11. se ho <strong>scope dinamico</strong>, invece quello a riga 2 se ho <strong>scope statico</strong></p>
-<h4 id="shallow-binding">Shallow Binding<a hidden class="anchor" aria-hidden="true" href="#shallow-binding">#</a></h4>
-<p>In questo caso l’ultimo binding possibile, quando sono proprio dentro la funzione (quindi la x attiva in quell’ambiente). Nell’esempio di sopra la x in riga 5. Quindi si valuta la funzione <strong>al momento della chiamata</strong>.</p>
-<h3 id="implementazione-del-shallow-binding">Implementazione del shallow binding<a hidden class="anchor" aria-hidden="true" href="#implementazione-del-shallow-binding">#</a></h3>
-<p>Questa è l&rsquo;implementazione semplice, praticamente uguale allo scope dinamico in <a href="/notes/nomi-e-scope">Nomi e Scope</a>. Quindi <strong>cerco l’ultima istanza presente</strong> fra tutte quelle presenti (se voglio scope statico, risalgo catena statica, altrimenti risalgo catena dinamica). Esattamente come si faceva per lo scope dinamico, infatti si potrebbe dire che è più naturale utilizzare scope dinamico con questo, anche se si potrebbe senza problemi utilizzare scope statico!.</p>
-<p>Questo perché l’ultima presente era quella ancora presente nell&rsquo;ambiente di chiamata!</p>
-<h3 id="implementazione-del-deep-binding">Implementazione del deep binding<a hidden class="anchor" aria-hidden="true" href="#implementazione-del-deep-binding">#</a></h3>
-<p>Abbiamo detto che vogliamo valutare il deep binding seguendo la sua struttura (in questo caso <strong>statico</strong>, oppure nello scope di chiamata, in quel caso dinamico).</p>
-<p>Questo è easy, si segue direttamente lo stesso sistema fatto per il nome e per la catena statica, passando una coppia <strong>(funzione, ambiente</strong>) chiamata <strong>chiusura</strong> della funzione, la funzione sarà il puntatore al codice, mentre l&rsquo;ambiente è determinato così:</p>
-<h4 id="statico">Statico<a hidden class="anchor" aria-hidden="true" href="#statico">#</a></h4>
-<p>In questo caso devo mettere nel puntatore d’ambiente in cui la nostra funzione è dichiarata, questo si può avere a tempo di compilazione, perché conosco il livello di annidamento della funzione, e anche al momento della creazione del binding, quindi utilizzo un sistema simile in <a href="/notes/nomi-e-scope">Nomi e Scope</a>. (quindi scorrere la catena statica con la differenza che conosco, oppure display).</p>
-<h4 id="dinamico">Dinamico<a hidden class="anchor" aria-hidden="true" href="#dinamico">#</a></h4>
-<p>In questo caso basta mettere l&rsquo;ambiente in cui metto creo il binding fra parametro formale e attuale.</p>
-<h3 id="il-caso-del-c">Il caso del C<a hidden class="anchor" aria-hidden="true" href="#il-caso-del-c">#</a></h3>
-<p>In C non abbiamo cose come i lambda, non abbiamo quindi problemi di risoluzione di ambienti, perché tanto non posso dichiarare funzioni in ambienti non locali.</p>
-<p>Semplicemente in C tutte le funzioni passate come parametro vengono risolte nell&rsquo;ambiente globale. Non c&rsquo;è proprio la necessità di utilizzare la catena statica! Tutto risolto a compile-time.</p>
-<h3 id="funzioni-come-ritorno-di-funzione">Funzioni come ritorno di funzione<a hidden class="anchor" aria-hidden="true" href="#funzioni-come-ritorno-di-funzione">#</a></h3>
-<p>Quello che viene ritornato è una <strong>chiusura</strong>, ma come valutare una chiusura in un ambiente che è già scomparso 😵  ?? Scomparso nel senso che non l’avremmo più sulla stack sto ambiente! Non possiamo fare altro che utilizzare un ambinete illimitato di vita. E dare la responsabilità al garbace collector l&rsquo;onere di liberare questo ambiente.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

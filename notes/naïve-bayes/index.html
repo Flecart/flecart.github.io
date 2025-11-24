@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Naïve Bayes | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="machinelearning">
-<meta name="description" content="Introduzione a Naïve Bayes
-NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.
-Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.
-Bayes ad alto livello
-Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio
-">
+<meta name="description" content="Naïve Bayes - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/na%C3%AFve-bayes/">
@@ -98,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/na%C3%AFve-bayes/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Naïve Bayes">
-  <meta property="og:description" content="Introduzione a Naïve Bayes NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.
-Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.
-Bayes ad alto livello Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio ">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,12 +102,7 @@ Bayes ad alto livello Da un punto di vista intuitivo non è altro che predire la
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Naïve Bayes">
-<meta name="twitter:description" content="Introduzione a Naïve Bayes
-NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.
-Bisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.
-Bayes ad alto livello
-Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio
-">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -143,12 +131,12 @@ Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo vist
   "@type": "BlogPosting",
   "headline": "Naïve Bayes",
   "name": "Naïve Bayes",
-  "description": "Introduzione a Naïve Bayes NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.\nBisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.\nBayes ad alto livello Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio ",
+  "description": "",
   "keywords": [
     "machinelearning"
   ],
-  "articleBody": "Introduzione a Naïve Bayes NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.\nBisognerebbe in primo momento avere benissimo in mente il significato di probabilità condizionata e la regola di naive Bayes in seguito.\nBayes ad alto livello Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo visto più spesso in quello spazio Assunzioni principali per naïve Bayes I sample di input sono condizionalmente indipendenti uno con l’altro. Questo permette di utilizzare questa ipotesi $$ P(X_{1}\\dots X_{n} | Y = y_{i}) = \\prod_{i}^{n} P(X_{i} | Y) $$ E permette di rendere la parte di inferenza anche molto semplice perché per classificare un caso basta prendere label con la probabilità maggiore. che è dato solamente dal numeratore durante la regola di Bayes. Tecnica generativa La distinzione fra generativa e discriminativa è fatta in Introduction to machine learning. Ossia cerchiamo di capire come si distribuiscono i dati? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire $Y$ assumendo i dati esistenti di training.\nProva a capire $P(X|Y)$ diciamo e poi da questo si può ricalcolare $P(Y | X)$ grazie alla formula di Bayes una volta capito $P(X)$ e l’altro.\n$$ P(Y | X) = \\frac{P(X|Y)P(Y)}{P(X)} $$Classificazione lineare Bayes Si viene a scoprire che Naïve bayes alla fine fa classificazione lineare, che ci dice che è un modello molto molto semplice.\n$$ \\frac{P(Y = 1, X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0, X_{1}\\dots X_{n} = \\vec{x})} = \\frac{P(Y = 1 | X_{1}\\dots X_{n} = \\vec{x})}{P(Y = 0 | X_{1}\\dots X_{n} = \\vec{x})}\\geq 1 $$ La prima uguaglianza di sopra è ottenuta osservando che $P(Y=1, X_{1}, \\dots, X_{n} = \\vec{x}) = P(Y=1 | X_{1}, \\dots, X_{n} = \\vec{x}) \\cdot P(X_{1}, \\dots, X_{n} = \\vec{x})$ E poi semplificando entrambi.\n$$ \\log \\frac{P(Y=1)}{P(Y=0)} + \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} \\geq 0 $$ E usando un trucco lo facciamo diventare lineare (vedi slide 126)\nNotiamo che una funzione da booleani a booleani si può approssimare come\n$$ f(x) = x f(1) + (1 - x) f(0) $$$$ \\theta_{ik} = P(X_{i} = 1 | Y = y_{k}) $$Non so in che modo possa essere estesa ad altri casi, ma nel caso booleano funziona Quindi unendo le due cose abbiamo:\n$$ \\sum_{i} \\log \\frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} = \\sum_{i}x_{i} \\log \\frac{\\theta_{i1}}{\\theta_{i0}} + \\sum_{i} (1 - x_{i}) \\log \\frac{1 - \\theta_{i1}}{1- \\theta_{i0}} $$ Assumendo che $f(x) = \\log \\frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$ Vediamo da sopra che è lineare.\nCaso continuo Introduzione modellazione nel caso continuo Per ora abbiamo sempre assunto che le classi da predire fossero discreti, però si può utilizzare anche in un caso continuo, e in questo caso si usa una gaussiana.\nScegliamo una legge gaussiana perché naturalmente se sommiamo un sacco di distribuzioni, verrà che sarà una gaussiana. Legge dei grandi numeri, quindi è una fra le distribuzioni più naturali. È la distribuzione con entropia maggiore fra tutte le distribuzioni con data media e varianza. Se si hanno altre informazioni, sarebbe molto più sensato utilizzare una altra distribuzione, ma introdurrebbe un bias di un certo tipo. Metriche TP FP TN FN Questa parte è molto importante per sapere quali metriche siano importanti, riguardo\nTrue positives False positives True Negatives False positives E con queste possiamo definire concetti come accuratezza, recall e precisione Inferenza nel caso continuo Sembra molto simile a una Gaussian Mixture Model, perché alla fine è una interpolazione in un certo senso, solo che è motivato in modo diverso. Training nel caso continuo E probabilmente si può dimostrare, facendo un ragionamento come Maximum Likelihood extimate anche in questo caso. Algoritmo di fitting Si tratta quindi di creare tutti i parametri $\\theta_{ijk}$, anche se in questo momento non sto capendo in che modo Al fine di stimare questo usiamo maximum likelihood extimate. Guardare #Sul MLE sotto per capire in che modo sono stimati.\nStima P(Y) Poniamo la cosa più banale, la stima di $P(Y = y_{i})$ è solamente la percentuale delle labels che abbiamo, ossia\n$$ \\pi_{i} = P(Y = y_{i}) = \\frac{\\#D(Y = y_{i})}{\\lvert D \\rvert} $$Utilizziamo $\\pi$ per scrivere in modo più veloce la probabilità del singolo label.\nStima parametri P(X|Y) $$ \\theta_{ijk} = P(X = x_{ij} | Y = y_{k}) = \\frac{\\#D(X_{i} = x_{i,j} \\cap Y = y_{k})}{\\#D(Y=y_{k})} $$Edge cases (2) Probabilità id zero: Non vogliamo avere che $P(X_{i}|Y) = 0$ perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una stima, una cosa che fanno è aggiungere sempre almeno un esempio perché così non ho una probabilità nulla per tutto in questo caso.\nCasi non indipendenti Questo è molto difficile da gestire, dipende da come abbiamo generato i dati, quindi è esterna a questa fase di scelta del modello diciamo. Bayes è probabilmente non molto utile in questi casi, perché questo caso viola l’assunzione iniziale, si dovrebbe probabilmente fare preprocessing per cercare di limitare la dipendenza.\nMaximum Likelihood estimation Di questo parleremo molto meglio in Parametric Modeling.\nIntroduzione al problema C’è una parte teorica molto più interessante per quanto si tratta di maximum likelihood estimation. Andiamo a giustificare il motivo per cui stime molto semplici ed intuitive come quelli presenti in #Stima P(Y)) e #Stima parametri P(X Y)) possono funzionare. Ci chiediamo in questa istanza quale sia il caso più probabile ossia quello con maximum likelihood\nMLE su bernoulli Supponiamo di avere $n$ lanci con una moneta unfair, ossia $p(X) \\neq 0.5$ di avere testa. Date certe osservazioni, quale è il valore più probabile di $P(X)$?\nConsideriamo $X^{n}$ la variabile aleatoria che misura il numero di 0 all’interno del nostro problema, allora questo segue la legge di Bernoulli.\n$$ P(X^{n} = \\alpha_{0} | \\theta) = \\binom{n}{\\alpha_{0}} \\theta^{\\alpha_{0}} (1 - \\theta)^{n-\\alpha_{0}} $$ Seguendo l’idea del più probabile quello che noi stiamo cercando è\n$$ \\hat{\\theta} = \\arg\\max_{\\theta} P(X^{n} = \\alpha_{0} | \\theta) $$Soluzione problema analitico Prendiamo il logaritmo, che non cambia il nostro massimo, dato che è monotona, ma ci semplifica un sacco l’analisi\n$$ \\ln(\\theta^{\\alpha} (1- \\theta)^{n - \\alpha }) = \\alpha \\ln \\theta + (n- \\alpha) \\ln(1 - \\theta) $$ Derivando rispetto a $\\theta$ abbiamo che\n$$ \\frac{\\alpha}{\\theta} - \\frac{n - \\alpha}{1- \\theta} = \\frac{\\alpha - \\alpha \\theta - (n - \\alpha) \\theta}{\\theta (1 - \\theta)} $$$$ \\alpha - \\alpha \\theta - (n - \\alpha) \\theta = 0 \\implies \\theta = \\frac{\\alpha}{n} $$E se ben ricordiamo, $\\alpha$ non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.\n",
-  "wordCount" : "1128",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -243,187 +231,12 @@ Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo vist
     <h1 class="post-title entry-hint-parent">
       Naïve Bayes
     </h1>
-    <div class="post-meta">Reading Time: 6 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduzione-a-na%c3%afve-bayes" aria-label="Introduzione a Naïve Bayes">Introduzione a Naïve Bayes</a><ul>
-                        
-                <li>
-                    <a href="#bayes-ad-alto-livello" aria-label="Bayes ad alto livello">Bayes ad alto livello</a></li>
-                <li>
-                    <a href="#assunzioni-principali-per-na%c3%afve-bayes" aria-label="Assunzioni principali per naïve Bayes">Assunzioni principali per naïve Bayes</a></li>
-                <li>
-                    <a href="#tecnica-generativa" aria-label="Tecnica generativa">Tecnica generativa</a></li>
-                <li>
-                    <a href="#classificazione-lineare-bayes" aria-label="Classificazione lineare Bayes">Classificazione lineare Bayes</a></li></ul>
-                </li>
-                <li>
-                    <a href="#caso-continuo" aria-label="Caso continuo">Caso continuo</a><ul>
-                        
-                <li>
-                    <a href="#introduzione-modellazione-nel-caso-continuo" aria-label="Introduzione modellazione nel caso continuo">Introduzione modellazione nel caso continuo</a></li>
-                <li>
-                    <a href="#metriche-tp-fp-tn-fn" aria-label="Metriche TP FP TN FN">Metriche TP FP TN FN</a></li>
-                <li>
-                    <a href="#inferenza-nel-caso-continuo" aria-label="Inferenza nel caso continuo">Inferenza nel caso continuo</a></li>
-                <li>
-                    <a href="#training-nel-caso-continuo" aria-label="Training nel caso continuo">Training nel caso continuo</a></li></ul>
-                </li>
-                <li>
-                    <a href="#algoritmo-di-fitting" aria-label="Algoritmo di fitting">Algoritmo di fitting</a><ul>
-                        
-                <li>
-                    <a href="#stima-py" aria-label="Stima P(Y)">Stima P(Y)</a></li>
-                <li>
-                    <a href="#stima-parametri-pxy" aria-label="Stima parametri P(X|Y)">Stima parametri P(X|Y)</a></li>
-                <li>
-                    <a href="#edge-cases-2" aria-label="Edge cases (2)">Edge cases (2)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#maximum-likelihood-estimation" aria-label="Maximum Likelihood estimation">Maximum Likelihood estimation</a><ul>
-                        
-                <li>
-                    <a href="#introduzione-al-problema" aria-label="Introduzione al problema">Introduzione al problema</a></li>
-                <li>
-                    <a href="#mle-su-bernoulli" aria-label="MLE su bernoulli">MLE su bernoulli</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h3 id="introduzione-a-naïve-bayes">Introduzione a Naïve Bayes<a hidden class="anchor" aria-hidden="true" href="#introduzione-a-naïve-bayes">#</a></h3>
-<p>NOTE: this note should be reviewed after the course I took in NLP. This is a very old note, not even well written.</p>
-<p>Bisognerebbe in primo momento avere benissimo in mente il significato di <strong>probabilità condizionata</strong> e la regola di naive Bayes in seguito.</p>
-<h4 id="bayes-ad-alto-livello">Bayes ad alto livello<a hidden class="anchor" aria-hidden="true" href="#bayes-ad-alto-livello">#</a></h4>
-<p>Da un punto di vista intuitivo non è altro che predire la cosa che abbiamo <strong>visto più spesso in quello spazio</strong>
-<img src="/images/notes/Naïve Bayes-1696854772448.jpeg" width="500" class="center" alt="Naïve Bayes-1696854772448"/></p>
-<h4 id="assunzioni-principali-per-naïve-bayes">Assunzioni principali per naïve Bayes<a hidden class="anchor" aria-hidden="true" href="#assunzioni-principali-per-naïve-bayes">#</a></h4>
-<ul>
-<li>I sample di input sono <strong>condizionalmente indipendenti</strong> uno con l&rsquo;altro.
-Questo permette di utilizzare questa ipotesi
-$$
-P(X_{1}\dots X_{n} | Y = y_{i}) = \prod_{i}^{n} P(X_{i} | Y)
-$$
-E permette di rendere la parte di inferenza anche molto semplice perché per classificare un caso basta prendere <strong>label con la probabilità maggiore</strong>. che è dato solamente dal numeratore durante la regola di Bayes.</li>
-</ul>
-<h4 id="tecnica-generativa">Tecnica generativa<a hidden class="anchor" aria-hidden="true" href="#tecnica-generativa">#</a></h4>
-<p>La distinzione fra generativa e discriminativa è fatta in Introduction to machine learning.
-Ossia cerchiamo di capire <strong>come si distribuiscono i dati</strong>? (ossia prova a capire le probabilità che abbiano generato questi dati). Mentre in modelli supervisionati classici si potrebbe dire che provano a capire $Y$ assumendo i dati esistenti di training.</p>
-<p>Prova a capire $P(X|Y)$ diciamo e poi da questo si può ricalcolare $P(Y | X)$ grazie alla formula di Bayes una volta capito $P(X)$ e l&rsquo;altro.</p>
-$$
-P(Y | X) = \frac{P(X|Y)P(Y)}{P(X)}
-$$<h4 id="classificazione-lineare-bayes">Classificazione lineare Bayes<a hidden class="anchor" aria-hidden="true" href="#classificazione-lineare-bayes">#</a></h4>
-<p>Si viene a scoprire che Naïve bayes alla fine fa classificazione lineare, che ci dice che è un modello molto molto semplice.</p>
-$$
-\frac{P(Y = 1, X_{1}\dots X_{n} = \vec{x})}{P(Y = 0, X_{1}\dots X_{n} = \vec{x})} = \frac{P(Y = 1 | X_{1}\dots X_{n} = \vec{x})}{P(Y = 0 | X_{1}\dots X_{n} = \vec{x})}\geq 1
-$$<p>
-La prima uguaglianza di sopra è ottenuta osservando che $P(Y=1, X_{1}, \dots, X_{n} = \vec{x}) = P(Y=1 | X_{1}, \dots, X_{n} = \vec{x}) \cdot P(X_{1}, \dots, X_{n} = \vec{x})$
-E poi semplificando entrambi.</p>
-$$
-\log \frac{P(Y=1)}{P(Y=0)} + \sum_{i} \log \frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} \geq 0
-$$<p>
-E usando un trucco lo facciamo diventare lineare (vedi slide 126)</p>
-<p>Notiamo che una funzione da booleani a booleani si può approssimare come</p>
-$$
-f(x) = x f(1) + (1 - x) f(0)
-$$$$
-\theta_{ik} = P(X_{i} = 1 | Y = y_{k})
-$$<p>Non so in che modo possa essere estesa ad altri casi, ma nel caso booleano funziona
-Quindi unendo le due cose abbiamo:</p>
-$$
-\sum_{i} \log \frac{P(X_{i} = x_{i} | Y=1)}{P(X_{i} = x_{i} | Y=0)} = \sum_{i}x_{i} \log \frac{\theta_{i1}}{\theta_{i0}} + \sum_{i} (1 - x_{i}) \log \frac{1 - \theta_{i1}}{1- \theta_{i0}}
-$$<p>
-Assumendo che $f(x) =  \log \frac{P(X_{i} = x | Y=1)}{P(X_{i} = x | Y=0)}$
-Vediamo da sopra che è <strong>lineare</strong>.</p>
-<h3 id="caso-continuo">Caso continuo<a hidden class="anchor" aria-hidden="true" href="#caso-continuo">#</a></h3>
-<h4 id="introduzione-modellazione-nel-caso-continuo">Introduzione modellazione nel caso continuo<a hidden class="anchor" aria-hidden="true" href="#introduzione-modellazione-nel-caso-continuo">#</a></h4>
-<p>Per ora abbiamo sempre assunto che le classi da predire fossero discreti, però si può utilizzare anche in un caso continuo, e in questo caso si usa una <strong>gaussiana</strong>.</p>
-<ul>
-<li>Scegliamo una legge gaussiana perché naturalmente se sommiamo un sacco di distribuzioni, verrà che sarà una gaussiana.</li>
-<li><strong>Legge dei grandi numeri</strong>, quindi è una fra le distribuzioni più naturali.</li>
-<li>È la distribuzione con <em>entropia maggiore</em> fra tutte le distribuzioni con data media e varianza.
-<ul>
-<li>Se si hanno altre informazioni, sarebbe molto più sensato utilizzare una altra distribuzione, ma introdurrebbe un <em>bias</em> di un certo tipo.</li>
-</ul>
-</li>
-</ul>
-<h4 id="metriche-tp-fp-tn-fn">Metriche TP FP TN FN<a hidden class="anchor" aria-hidden="true" href="#metriche-tp-fp-tn-fn">#</a></h4>
-<p>Questa parte è molto importante per sapere <strong>quali metriche siano importanti</strong>, riguardo</p>
-<ul>
-<li>True positives</li>
-<li>False positives</li>
-<li>True Negatives</li>
-<li>False positives</li>
-</ul>
-<p>E con queste possiamo definire concetti come <strong>accuratezza, recall e precisione</strong>
-<img src="/images/notes/Naïve Bayes-1697460382306.jpeg" style="width: 100%" class="center" alt="Naïve Bayes-1697460382306"></p>
-<h4 id="inferenza-nel-caso-continuo">Inferenza nel caso continuo<a hidden class="anchor" aria-hidden="true" href="#inferenza-nel-caso-continuo">#</a></h4>
-<p>Sembra molto simile a una <a href="/notes/clustering">Gaussian Mixture Model</a>, perché alla fine è una interpolazione in un certo senso, solo che è motivato in modo diverso.
-<img src="/images/notes/Naïve Bayes-1697461135694.jpeg" width="500" class="center" alt="Naïve Bayes-1697461135694"/></p>
-<h4 id="training-nel-caso-continuo">Training nel caso continuo<a hidden class="anchor" aria-hidden="true" href="#training-nel-caso-continuo">#</a></h4>
-<img src="/images/notes/Naïve Bayes-1697461152973.jpeg" width="500" class="center" alt="Naïve Bayes-1697461152973"/>
-E probabilmente si può dimostrare, facendo un ragionamento come Maximum Likelihood extimate anche in questo caso.
-<h3 id="algoritmo-di-fitting">Algoritmo di fitting<a hidden class="anchor" aria-hidden="true" href="#algoritmo-di-fitting">#</a></h3>
-<img src="/images/notes/Naïve Bayes-1696854865537.jpeg" width="500" class="center" alt="Naïve Bayes-1696854865537"/>
-Si tratta quindi di creare tutti i parametri $\theta_{ijk}$, anche se in questo momento non sto capendo in che modo
-<p>Al fine di stimare questo usiamo <strong>maximum likelihood extimate</strong>.
-Guardare <a href="/notes#sul-mle">#Sul MLE</a> sotto per capire in che modo sono stimati.</p>
-<h4 id="stima-py">Stima P(Y)<a hidden class="anchor" aria-hidden="true" href="#stima-py">#</a></h4>
-<p>Poniamo la cosa più banale, la stima di $P(Y = y_{i})$ è solamente la percentuale delle labels che abbiamo, ossia</p>
-$$
-\pi_{i} = P(Y = y_{i}) = \frac{\#D(Y = y_{i})}{\lvert D \rvert}
-$$<p>Utilizziamo $\pi$ per scrivere in modo più veloce la probabilità del singolo label.</p>
-<h4 id="stima-parametri-pxy">Stima parametri P(X|Y)<a hidden class="anchor" aria-hidden="true" href="#stima-parametri-pxy">#</a></h4>
-$$
-\theta_{ijk} = P(X = x_{ij} | Y = y_{k}) = \frac{\#D(X_{i} = x_{i,j} \cap Y = y_{k})}{\#D(Y=y_{k})}
-$$<h4 id="edge-cases-2">Edge cases (2)<a hidden class="anchor" aria-hidden="true" href="#edge-cases-2">#</a></h4>
-<p><strong>Probabilità id zero:</strong>
-Non vogliamo avere che $P(X_{i}|Y) = 0$ perché produrrebbe sempre nullo (questo succede per esempio per i modelli di testo mi pareva), è improbabile che sia 0 perché noi per ora ci stiamo concentrando su una <em>stima</em>, una cosa che fanno è aggiungere sempre <strong>almeno un esempio</strong> perché così non ho una probabilità nulla per tutto in questo caso.</p>
-<p><strong>Casi non indipendenti</strong>
-Questo è molto difficile da gestire, dipende da come abbiamo generato i dati, quindi è esterna a questa fase di scelta del modello diciamo.
-Bayes è probabilmente non molto utile in questi casi, perché questo caso viola l&rsquo;assunzione iniziale, si dovrebbe probabilmente fare <strong>preprocessing</strong> per cercare di limitare la dipendenza.</p>
-<h3 id="maximum-likelihood-estimation">Maximum Likelihood estimation<a hidden class="anchor" aria-hidden="true" href="#maximum-likelihood-estimation">#</a></h3>
-<p>Di questo parleremo molto meglio in <a href="/notes/parametric-modeling">Parametric Modeling</a>.</p>
-<h4 id="introduzione-al-problema">Introduzione al problema<a hidden class="anchor" aria-hidden="true" href="#introduzione-al-problema">#</a></h4>
-<p>C&rsquo;è una parte teorica molto più interessante per quanto si tratta di <strong>maximum likelihood estimation</strong>.
-Andiamo a giustificare il motivo per cui stime molto semplici ed intuitive come quelli presenti in <a href="/notes#stima-p(y">#Stima P(Y)</a>) e <a href="/notes#stima-parametri-p(x-y">#Stima parametri P(X Y)</a>) possono funzionare.
-Ci chiediamo in questa istanza <strong>quale sia il caso più probabile</strong> ossia quello con maximum likelihood</p>
-<h4 id="mle-su-bernoulli">MLE su bernoulli<a hidden class="anchor" aria-hidden="true" href="#mle-su-bernoulli">#</a></h4>
-<p>Supponiamo di avere $n$ lanci con una moneta unfair, ossia $p(X) \neq 0.5$ di avere testa.
-Date certe osservazioni, quale è il valore più probabile di $P(X)$?</p>
-<p>Consideriamo $X^{n}$ la variabile aleatoria che misura il numero di 0 all&rsquo;interno del nostro problema, allora questo <strong>segue la legge di Bernoulli</strong>.</p>
-$$
-P(X^{n} = \alpha_{0} | \theta) = \binom{n}{\alpha_{0}} \theta^{\alpha_{0}} (1 - \theta)^{n-\alpha_{0}}
-$$<p>
-Seguendo l&rsquo;idea del più probabile quello che noi stiamo cercando è</p>
-$$
-\hat{\theta} = \arg\max_{\theta} P(X^{n} = \alpha_{0} | \theta)
-$$<p><strong>Soluzione problema analitico</strong>
-Prendiamo il logaritmo, che non cambia il nostro massimo, dato che è monotona, ma ci semplifica un sacco l&rsquo;analisi</p>
-$$
-\ln(\theta^{\alpha} (1- \theta)^{n - \alpha }) = \alpha \ln \theta + (n- \alpha) \ln(1 - \theta)
-$$<p>
-Derivando rispetto a $\theta$ abbiamo che</p>
-$$
-\frac{\alpha}{\theta}  - \frac{n - \alpha}{1-  \theta} = \frac{\alpha - \alpha \theta - (n - \alpha) \theta}{\theta (1 - \theta)}
-$$$$
-\alpha - \alpha \theta - (n - \alpha) \theta = 0 \implies \theta = \frac{\alpha}{n}
-$$<p>E se ben ricordiamo, $\alpha$ non era altro che il numero di samples negativi, quindi questo è un esempio locale in cui MLE è la soluzione ottimale per stimare.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Complexity Hierarchies | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="theoretical-computer-science">
-<meta name="description" content="Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time.
-We would like to define a clear hierarchy of these set of problems.
-Space Hierarchies
-Def: Space constructible
-We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\log n)$ is space constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ space complexity.">
+<meta name="description" content="Complexity Hierarchies - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/complexity-hierarchies/">
@@ -97,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/complexity-hierarchies/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Complexity Hierarchies">
-  <meta property="og:description" content="Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time. We would like to define a clear hierarchy of these set of problems.
-Space Hierarchies Def: Space constructible We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\log n)$ is space constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ space complexity.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,11 +104,7 @@ Space Hierarchies Def: Space constructible We say that a function $f: \mathbb{N}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Complexity Hierarchies">
-<meta name="twitter:description" content="Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time.
-We would like to define a clear hierarchy of these set of problems.
-Space Hierarchies
-Def: Space constructible
-We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\log n)$ is space constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ space complexity.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -142,12 +133,12 @@ We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\lo
   "@type": "BlogPosting",
   "headline": "Complexity Hierarchies",
   "name": "Complexity Hierarchies",
-  "description": "Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time. We would like to define a clear hierarchy of these set of problems.\nSpace Hierarchies Def: Space constructible We say that a function $f: \\mathbb{N} \\to \\mathbb{N}$ such that $f(n) \\geq O(\\log n)$ is space constructible if there exists a function from $1^{n} \\to \\langle f(n) \\rangle$ is $O(f(n))$ space complexity.\n",
+  "description": "",
   "keywords": [
     "theoretical-computer-science"
   ],
-  "articleBody": "Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time. We would like to define a clear hierarchy of these set of problems.\nSpace Hierarchies Def: Space constructible We say that a function $f: \\mathbb{N} \\to \\mathbb{N}$ such that $f(n) \\geq O(\\log n)$ is space constructible if there exists a function from $1^{n} \\to \\langle f(n) \\rangle$ is $O(f(n))$ space complexity.\nIntuitively, it is just a function that is computable in a specifically limited space. But at the moment I don’t know why is this important.\nSpace hierarchy theorem For any space constructible function $f: \\mathbb{N} \\to \\mathbb{N}$ there exists a language $A$ decidable in $O(f(n))$ but not in $o(f(n))$ space.\nProof of the theorem The proof is quite convoluted, and has some technical details that are quite ad-hoc to make things work. I personally think this is quite useless, and the hypothesis is quite intuitive with standard understanding. Nonetheless, we should need to understand the argument.\nDefine this algorithm: D = “On input $w$:\nLet n be the length of $w$. Compute $f(n)$ using space constructibility and mark off this much tape. If later stages ever attempt to use more, reject . If w is not of the form $\\langle M \\rangle 10 ^{*}$ for some TM M , reject . Simulate M on w while counting the number of steps used in the simulation. If the count ever exceeds $2^{f(n)}$, reject . If M accepts, reject . If M rejects, accept .” Then the language defined as $\\left\\{ \\omega : D \\text{ accepts } \\omega \\right\\}$ is the language we want in the statement.\nMain consequence of Hierarchy theorem For all $k, j$ such that $k \u003c j$ we have that\n$$ SPACE(n^{k}) \\subset SPACE(n^{j}) $$ NOTE: contained, and not equal!\n$$ SPACE(f(x)) \\subset SPACE(g(x)) $$ Other: PSPACE is in EXPSPACE\nWhy is this concept useful? This allows us to categorize problems is different and not equal complexity classes. In my own opinion this is probably caused by human need to make order in this meaningless caos. I don’t know effective practical applications of this theory. But we need to be grounded on real problems, those are the ones driving innovation.\nTime Hierarchies Def: Time constructible This is the same as #Def Space constructible.\nWe say that a function $f: \\mathbb{N} \\to \\mathbb{N}$ such that $f(n) \\geq O(n\\log n)$ is time constructible if there exists a function from $1^{n} \\to \\langle f(n) \\rangle$ is $O(f(n))$ Time complexity.\nTime hierarchy theorem This theorem is analogous to the space complexity counter-part, with a small formality of simulating the given Turing machine.\nFor any time constructible function $f: \\mathbb{N} \\to \\mathbb{N}$ there exists a language $A$ decidable in $O(f(n))$ but not in $o\\left( \\frac{f(n)}{\\log f(n)} \\right)$ time.\n",
-  "wordCount" : "474",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-04-18T00:00:00Z",
   "dateModified": "2024-04-18T00:00:00Z",
@@ -242,91 +233,12 @@ We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\lo
     <h1 class="post-title entry-hint-parent">
       Complexity Hierarchies
     </h1>
-    <div class="post-meta"><span title='2024-04-18 00:00:00 +0000 UTC'>April 18, 2024</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-04-18 00:00:00 +0000 UTC'>April 18, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#space-hierarchies" aria-label="Space Hierarchies">Space Hierarchies</a><ul>
-                        
-                <li>
-                    <a href="#def-space-constructible" aria-label="Def: Space constructible">Def: Space constructible</a></li>
-                <li>
-                    <a href="#space-hierarchy-theorem" aria-label="Space hierarchy theorem">Space hierarchy theorem</a><ul>
-                        
-                <li>
-                    <a href="#proof-of-the-theorem" aria-label="Proof of the theorem">Proof of the theorem</a></li>
-                <li>
-                    <a href="#main-consequence-of-hierarchy-theorem" aria-label="Main consequence of Hierarchy theorem">Main consequence of Hierarchy theorem</a></li>
-                <li>
-                    <a href="#why-is-this-concept-useful" aria-label="Why is this concept useful?">Why is this concept useful?</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#time-hierarchies" aria-label="Time Hierarchies">Time Hierarchies</a><ul>
-                        
-                <li>
-                    <a href="#def-time-constructible" aria-label="Def: Time constructible">Def: Time constructible</a></li>
-                <li>
-                    <a href="#time-hierarchy-theorem" aria-label="Time hierarchy theorem">Time hierarchy theorem</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>Intractable problems are solvable in principle, but in reality they require so much time or space that there no physical computers that can solve them in reasonable time.
-We would like to define a clear hierarchy of these set of problems.</p>
-<h2 id="space-hierarchies">Space Hierarchies<a hidden class="anchor" aria-hidden="true" href="#space-hierarchies">#</a></h2>
-<h3 id="def-space-constructible">Def: Space constructible<a hidden class="anchor" aria-hidden="true" href="#def-space-constructible">#</a></h3>
-<p>We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(\log n)$ is space constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ <a href="/notes/time-and-space-complexity">space complexity</a>.</p>
-<p>Intuitively, it is just a function that is computable in a specifically limited space. But at the moment I don&rsquo;t know why is this important.</p>
-<h3 id="space-hierarchy-theorem">Space hierarchy theorem<a hidden class="anchor" aria-hidden="true" href="#space-hierarchy-theorem">#</a></h3>
-<p>For any space constructible function $f: \mathbb{N} \to \mathbb{N}$ there exists a language $A$ decidable in $O(f(n))$ but not in $o(f(n))$ space.</p>
-<h4 id="proof-of-the-theorem">Proof of the theorem<a hidden class="anchor" aria-hidden="true" href="#proof-of-the-theorem">#</a></h4>
-<p>The proof is quite convoluted, and has some technical details that are quite ad-hoc to make things work. I personally think this is quite useless, and the hypothesis is quite intuitive with standard understanding. Nonetheless, we should need to understand the argument.</p>
-<p>Define this algorithm:
-D = “On input $w$:</p>
-<ol>
-<li>Let n be the length of $w$.</li>
-<li>Compute $f(n)$ using space constructibility and mark off this much tape. If later stages ever attempt to use more, reject .</li>
-<li>If w is not of the form $\langle M \rangle 10 ^{*}$ for some TM M , reject .</li>
-<li>Simulate M on w while counting the number of steps used in the simulation. If the count ever exceeds $2^{f(n)}$, reject .</li>
-<li>If M accepts, reject . If M rejects, accept .”</li>
-</ol>
-<p>Then the language defined as $\left\{ \omega : D \text{ accepts } \omega \right\}$ is the language we want in the statement.</p>
-<h4 id="main-consequence-of-hierarchy-theorem">Main consequence of Hierarchy theorem<a hidden class="anchor" aria-hidden="true" href="#main-consequence-of-hierarchy-theorem">#</a></h4>
-<p>For all $k, j$ such that $k < j$ we have that</p>
-$$
-SPACE(n^{k}) \subset SPACE(n^{j})
-$$<p>
-NOTE: contained, and <strong>not equal</strong>!</p>
-$$
-SPACE(f(x)) \subset SPACE(g(x))
-$$<p>
-Other:
-PSPACE is in EXPSPACE</p>
-<h4 id="why-is-this-concept-useful">Why is this concept useful?<a hidden class="anchor" aria-hidden="true" href="#why-is-this-concept-useful">#</a></h4>
-<p>This allows us to categorize problems is different and <em>not equal</em> complexity classes. In my own opinion this is probably caused by human need to make order in this meaningless caos. I don&rsquo;t know effective practical applications of this theory. But we need to be grounded on real problems, those are the ones driving innovation.</p>
-<h2 id="time-hierarchies">Time Hierarchies<a hidden class="anchor" aria-hidden="true" href="#time-hierarchies">#</a></h2>
-<h3 id="def-time-constructible">Def: Time constructible<a hidden class="anchor" aria-hidden="true" href="#def-time-constructible">#</a></h3>
-<p>This is the same as <a href="/notes#def-space-constructible">#Def Space constructible</a>.</p>
-<p>We say that a function $f: \mathbb{N} \to \mathbb{N}$ such that $f(n) \geq O(n\log n)$ is time constructible if there exists a function from $1^{n} \to \langle f(n) \rangle$ is $O(f(n))$ <a href="/notes/time-and-space-complexity#the-time-complexity-class">Time complexity</a>.</p>
-<h3 id="time-hierarchy-theorem">Time hierarchy theorem<a hidden class="anchor" aria-hidden="true" href="#time-hierarchy-theorem">#</a></h3>
-<p>This theorem is analogous to the space complexity counter-part, with a small formality of simulating the given Turing machine.</p>
-<p>For any time constructible function $f: \mathbb{N} \to \mathbb{N}$ there exists a language $A$ decidable in $O(f(n))$ but not in $o\left( \frac{f(n)}{\log f(n)} \right)$ time.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

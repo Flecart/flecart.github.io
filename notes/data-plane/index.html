@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Data Plane | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🕸computer-networks">
-<meta name="description" content="Introduzione Data or Control plane
-Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto.
-Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
-Funzioni principali
-Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a domande come &ldquo;come faccio a mandare in modo efficiente questo pacchetto lì?&rdquo; mentre il control plane si occupa di fare il routing, ossia risponde a domande &ldquo;Dove mando il pacchetto che ho?&rdquo;.">
+<meta name="description" content="Data Plane - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/data-plane/">
@@ -97,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/data-plane/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Data Plane">
-  <meta property="og:description" content="Introduzione Data or Control plane Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
-Funzioni principali Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a domande come “come faccio a mandare in modo efficiente questo pacchetto lì?” mentre il control plane si occupa di fare il routing, ossia risponde a domande “Dove mando il pacchetto che ho?”.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,11 +104,7 @@ Funzioni principali Il data plane è la parte che si occupa di fare il forwardin
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Data Plane">
-<meta name="twitter:description" content="Introduzione Data or Control plane
-Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto.
-Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).
-Funzioni principali
-Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a domande come &ldquo;come faccio a mandare in modo efficiente questo pacchetto lì?&rdquo; mentre il control plane si occupa di fare il routing, ossia risponde a domande &ldquo;Dove mando il pacchetto che ho?&rdquo;.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -142,12 +133,12 @@ Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a 
   "@type": "BlogPosting",
   "headline": "Data Plane",
   "name": "Data Plane",
-  "description": "Introduzione Data or Control plane Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).\nFunzioni principali Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a domande come \u0026ldquo;come faccio a mandare in modo efficiente questo pacchetto lì?\u0026rdquo; mentre il control plane si occupa di fare il routing, ossia risponde a domande \u0026ldquo;Dove mando il pacchetto che ho?\u0026rdquo;.\n",
+  "description": "",
   "keywords": [
     "🕸computer-networks"
   ],
-  "articleBody": "Introduzione Data or Control plane Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto. Si può dire di end-to-end perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).\nFunzioni principali Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a domande come “come faccio a mandare in modo efficiente questo pacchetto lì?” mentre il control plane si occupa di fare il routing, ossia risponde a domande “Dove mando il pacchetto che ho?”.\nForwarding Forwarding che in pratica è passare il pacchetto al successivo, è parte del data plane. Questa è una cosa molto semplice, in pratica bisogna capire da una porta di ingresso quale sarà la porta d’uscita del router. Guardando l’intestazione del pacchetto. Se non fa match nessuna riga della tabella allora manda nel router di default che avrà un reach maggiore, più probabile che sappia dove mandare.\nRouting Routing invece va a scrivere mappe nel grafico della rete, cioè capisce quale sia il percorso più breve all’interno della rete, è parte del control plane.\nTutta la rete in modo coordinato prova a creare questo piano (me se stesse segnalando se una segnaletica funziona ancora, se la strada va ancora dove dovrebbe andare (e.g. se è crollato un ponte dovresti sapere se quella strada non funziona più)).\nSolitamente questo è fatto con un software chiamato SDN (ma anche un umano potrebbe farle, anche se sarebbe troppo lento).\nRouting control planes La differenza fra i due è sostanzialmente architetturale, se ne parla in [Architetture a livello applicazione\nPer Router Control Plane Possiamo dire che sia un modo semplice del control plane per stabilire la tabella di instradamento, in pratica listo tutti i collegamenti che ho nella tabella con i loro IP di interesse, quindi se un prefisso matcha quello allora mando lì. È strano che i router siano anche in grado di fare prefisso più lungo per matchare. In questo modo utilizzando un algoirtmo locale, distribuito, posso avere una tabella di istradamento. gli algoritmi locali possono fare scelte non coordinate, dato che può cambiare nel tempo la situazione, l’informazione locale potrebbe non essere del tutto corretta.\nLogically Centralized Control Plane Quando c’è una struttura centrale che contiene tutte le informazioni dei singoli router (o almeno quanto trasmesso), e da lì aggiorna le tabelle di instradamento dei singoli router. (Control Agent è il singolo router, che trasmette a un controllo remoto). La cosa importante è che il cos Remote Contorller è conoscente di tutti i dati principali della rete. Questo rende più efficiente, perché ha tutte le informazioni per fare le decisioni migliori.\nPerò ha bisogno di comunicare fra CA e RC, e se non funziona la comunicazione non avrei comunque le informazioni perfette.\nInoltre deve essere un processo bono, e si dovrebbe capire chi avrebbe la responsabiltià di pagare il remote controller, i provider? gli utenti finali?\nImmagine semplificazione Data e Control Plane\nService Model I modelli di servizio definiscono le caratteristiche che dovrebbe avere il servizio di trasporto end-to-end dei pacchetti. Alcune caratteristiche potrebbero esser come consegna garantita, o garantita consegna entro certo tempo, oppure il flow dei datagrammi in ordine, minima bandwidth, servizi di sicurezza sul trasporto. Ma queste caratteristiche alla fine non sono comunque mai garantite. Quindi possiamo indire un sistema best-effort, ma non è che sia comunque garantito qualcosa, potrei dire che una rete che non è in grado di trasportare niente sta facendo il massimo di quanto riesce a fare. Non ci aiuta molto.\nATM (asynchronous transfer model) è un servizio che prova a fare questo, cercare di misurare il modello di servizio del trasporto che in una specifico spazio temporale posso darti tutte le risorse, e allora avresti le garanzie dette sopra. E se non riesco a riempire tutto il canale in quel tempo, do lo spazio in più ad altri che non hanno bisogno di quella garanzia.\nC’è un Overhead per la quantità di dati e la lunghezza di header (se header molto lungo, alla fine trasmetto meno percentuale di dati), però se faccio troppo lungo ci metto di più a mandare, quindi altri pacchetti potrebbero metterci molto di più ad arrivare, e perdere la garanzia sul tempo minimo di arrivare. era 32 o 64, quindi si è fatta una scelta politica che è 48 byte, e fa schifo perché non è una potenza di 2 e devi fare check leggermente più complicate.\nA noi di solito non serve questa garanzia, noi utenti dico, ma al backbone di internet è importante e si sono messi così. Ci sono molti tipologie di ATM come\nconstant bit rate ( voice over Ip, abbiamo biosgno di flusso costante per la voce, vogliamo real time, oppure coso di un reattore nucleare, senza nessuna congestione e con forti garanzie su loss, ordering e timing).\nVariable bit rate, come il video, perché ha bisongo di un sacchissimo di informazioni, un byte per un pixel bianco e nero, non si può trasmettere tanta roba..\nAltro che non listo\nSlide garanzie Service Models\nThe Router Router architecture ci sono credo molti modi per implementare la funzione di router, in generale in un singolo ciclo di clock ti riescono a far entrare e far uscire il pacchetto, questo sarebbe il router buono\nQuindi possiamo individuare\nPorte di input Un processore di routing che ti indirizza nell uscita giusta Un sistema di switching fabric per poter mandare l’informazione nella porta giusta Porte di uscita Slide sistema di routing\nla parte del processore è molto più utilizzato nella parte di [[Control Plane](/notes/architetture-a-livello-applicazione-\n####-per-router-control-plane possiamo-dire-che-sia-un-modo-semplice-del-control-plane-per-stabilire-la-tabella-di-instradamento,-in-pratica-listo-tutti-i-collegamenti-che-ho-nella-tabella-con-i-loro-ip-di-interesse,-quindi-se-un-prefisso-matcha-quello-allora-mando-lì.-è-strano-che-i-router-siano-anche-in-grado-di-fare-prefisso-più-lungo-per-matchare.-in-questo-modo-utilizzando-un-algoirtmo-locale,-distribuito,-posso-avere-una-tabella-di-istradamento.-gli-algoritmi-locali-possono-fare-scelte-non-coordinate,-dato-che-può-cambiare-nel-tempo-la-situazione,-l-informazione-locale-potrebbe-non-essere-del-tutto-corretta.\n####-logically-centralized-control-plane quando-c-è-una-struttura-centrale-che-contiene-tutte-le-informazioni-dei-singoli-router-(o-almeno-quanto-trasmesso),-e-da-lì-aggiorna-le-tabelle-di-instradamento-dei-singoli-router.-(control-agent-è-il-singolo-router,-che-trasmette-a-un-controllo-remoto).-la-cosa-importante-è-che-il-cos-remote-contorller-è-conoscente-di-tutti-i-dati-principali-della-rete.-questo-rende-più-efficiente,-perché-ha-tutte-le-informazioni-per-fare-le-decisioni-migliori.\nperò-ha-bisogno-di-comunicare-fra-ca-e-rc,-e-se-non-funziona-la-comunicazione-non-avrei-comunque-le-informazioni-perfette.\ninoltre-deve-essere-un-processo-bono,-e-si-dovrebbe-capire-chi-avrebbe-la-responsabiltià-di-pagare-il-remote-controller,-i-provider?-gli-utenti-finali?\n–immagine-semplificazione-data-e-control-plane\n—-",
-  "wordCount" : "1659",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -242,248 +233,12 @@ Il data plane è la parte che si occupa di fare il forwarding, ossia risponde a 
     <h1 class="post-title entry-hint-parent">
       Data Plane
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 8 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#introduzione-data-or-control-plane" aria-label="Introduzione Data or Control plane">Introduzione Data or Control plane</a><ul>
-                        
-                <li>
-                    <a href="#funzioni-principali" aria-label="Funzioni principali">Funzioni principali</a><ul>
-                        
-                <li>
-                    <a href="#forwarding" aria-label="Forwarding">Forwarding</a></li>
-                <li>
-                    <a href="#routing" aria-label="Routing">Routing</a></li></ul>
-                </li>
-                <li>
-                    <a href="#routing-control-planes" aria-label="Routing control planes">Routing control planes</a><ul>
-                        
-                <li>
-                    <a href="#per-router-control-plane" aria-label="Per Router Control Plane">Per Router Control Plane</a></li>
-                <li>
-                    <a href="#logically-centralized-control-plane" aria-label="Logically Centralized Control Plane">Logically Centralized Control Plane</a></li></ul>
-                </li>
-                <li>
-                    <a href="#service-model" aria-label="Service Model">Service Model</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-router" aria-label="The Router">The Router</a><ul>
-                        
-                <li>
-                    <a href="#router-architecture" aria-label="Router architecture">Router architecture</a></li>
-                <li>
-                    <a href="#forwarding-1" aria-label="Forwarding">Forwarding</a><ul>
-                        
-                <li>
-                    <a href="#destination-based-forwarding" aria-label="Destination based forwarding">Destination based forwarding</a></li>
-                <li>
-                    <a href="#generalized-forwarding" aria-label="Generalized forwarding">Generalized forwarding</a></li></ul>
-                </li>
-                <li>
-                    <a href="#open-flow" aria-label="Open Flow">Open Flow</a></li>
-                <li>
-                    <a href="#switching-fabrics" aria-label="Switching fabrics">Switching fabrics</a></li>
-                <li>
-                    <a href="#ritardi-possibili" aria-label="Ritardi possibili">Ritardi possibili</a><ul>
-                        
-                <li>
-                    <a href="#input-queuing" aria-label="Input Queuing">Input Queuing</a></li>
-                <li>
-                    <a href="#output-queuing" aria-label="Output queuing">Output queuing</a></li></ul>
-                </li>
-                <li>
-                    <a href="#scheduling-dei-routers" aria-label="Scheduling dei routers">Scheduling dei routers</a><ul>
-                        
-                <li>
-                    <a href="#priority-scheduling" aria-label="Priority scheduling">Priority scheduling</a></li>
-                <li>
-                    <a href="#round-robin-scheduling" aria-label="Round robin scheduling">Round robin scheduling</a></li>
-                <li>
-                    <a href="#weighted-fair-queuing" aria-label="Weighted fair queuing">Weighted fair queuing</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="introduzione-data-or-control-plane">Introduzione Data or Control plane<a hidden class="anchor" aria-hidden="true" href="#introduzione-data-or-control-plane">#</a></h2>
-<p>Come fanno i router a fare forwarding dei pacchetti? Come fanno a decidere come e dove mandare? Sono le tabelle di instradamento che decidono il prossimo hop del pacchetto.
-Si può dire di <strong>end-to-end</strong> perché solamente il sender e receiver andranno a livello applicazione, e leggeranno le cose (se criptato veramente solo loro riescono a fare questo).</p>
-<h3 id="funzioni-principali">Funzioni principali<a hidden class="anchor" aria-hidden="true" href="#funzioni-principali">#</a></h3>
-<p>Il <strong>data plane</strong> è la parte che si occupa di fare il forwarding, ossia risponde a domande come &ldquo;come faccio a mandare in modo efficiente questo pacchetto lì?&rdquo; mentre il <strong>control plane</strong> si occupa di fare il routing, ossia risponde a domande &ldquo;Dove mando il pacchetto che ho?&rdquo;.</p>
-<h4 id="forwarding">Forwarding<a hidden class="anchor" aria-hidden="true" href="#forwarding">#</a></h4>
-<p><strong>Forwarding</strong> che in pratica è passare il pacchetto al successivo, è parte del data plane.
-Questa è una cosa molto semplice, in pratica bisogna capire da una porta di ingresso quale sarà la porta d’uscita del router. Guardando l&rsquo;intestazione del pacchetto. Se non fa match nessuna riga della tabella allora manda nel router di default che avrà un reach maggiore, più probabile che sappia dove mandare.</p>
-<h4 id="routing">Routing<a hidden class="anchor" aria-hidden="true" href="#routing">#</a></h4>
-<p><strong>Routing</strong> invece va a scrivere mappe nel grafico della rete, cioè capisce quale sia il percorso più breve all&rsquo;interno della rete, è parte del control plane.</p>
-<p>Tutta la rete in modo coordinato prova a creare questo piano (me se stesse segnalando se una segnaletica funziona ancora, se la strada va ancora dove dovrebbe andare (e.g. se è crollato un ponte dovresti sapere se quella strada non funziona più)).</p>
-<p>Solitamente questo è fatto con un software chiamato SDN (ma anche un umano potrebbe farle, anche se sarebbe troppo lento).</p>
-<h3 id="routing-control-planes">Routing control planes<a hidden class="anchor" aria-hidden="true" href="#routing-control-planes">#</a></h3>
-<p>La differenza fra i due è sostanzialmente architetturale, se ne parla in [Architetture a livello applicazione</p>
-<h4 id="per-router-control-plane">Per Router Control Plane<a hidden class="anchor" aria-hidden="true" href="#per-router-control-plane">#</a></h4>
-<p>Possiamo dire che sia un modo semplice del control plane per stabilire la tabella di instradamento, in pratica listo tutti i collegamenti che ho nella tabella con i loro IP di interesse, quindi se un prefisso matcha quello allora mando lì. È strano che i router siano anche in grado di fare prefisso più lungo per matchare. In questo modo utilizzando un algoirtmo locale, distribuito, posso avere una tabella di istradamento. gli algoritmi locali possono fare scelte non coordinate, dato che può cambiare nel tempo la situazione, l&rsquo;informazione locale potrebbe non essere del tutto corretta.</p>
-<h4 id="logically-centralized-control-plane">Logically Centralized Control Plane<a hidden class="anchor" aria-hidden="true" href="#logically-centralized-control-plane">#</a></h4>
-<p>Quando c&rsquo;è una struttura centrale che contiene tutte le informazioni dei singoli router (o almeno quanto trasmesso), e da lì aggiorna le tabelle di instradamento dei singoli router. (Control Agent è il singolo router, che trasmette a un controllo remoto). La cosa importante è che il cos Remote Contorller è conoscente di tutti i dati principali della rete. Questo rende più efficiente, perché ha tutte le informazioni per fare le decisioni migliori.</p>
-<p>Però ha bisogno di comunicare fra CA e RC, e se non funziona la comunicazione non avrei comunque le informazioni perfette.</p>
-<p>Inoltre deve essere un processo bono, e si dovrebbe capire chi avrebbe la responsabiltià di pagare il remote controller, i provider? gli utenti finali?</p>
-<ul>
-<li>
-<p>Immagine semplificazione Data e Control Plane</p>
-  <img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled">
-</li>
-</ul>
-<h3 id="service-model">Service Model<a hidden class="anchor" aria-hidden="true" href="#service-model">#</a></h3>
-<p>I modelli di servizio definiscono le caratteristiche che dovrebbe avere il servizio di trasporto end-to-end dei pacchetti. Alcune caratteristiche potrebbero esser come consegna garantita, o garantita consegna entro certo tempo, oppure il flow dei datagrammi in ordine, minima bandwidth, servizi di sicurezza sul trasporto. Ma queste caratteristiche alla fine non sono comunque mai garantite. Quindi possiamo indire un sistema <strong>best-effort</strong>, ma non è che sia comunque garantito qualcosa, potrei dire che una rete che non è in grado di trasportare niente sta facendo il massimo di quanto riesce a fare. Non ci aiuta molto.</p>
-<p><strong>ATM (asynchronous transfer model)</strong> è un servizio che prova a fare questo, cercare di misurare il modello di servizio del trasporto che in una specifico spazio temporale posso darti tutte le risorse, e allora avresti le garanzie dette sopra. E se non riesco a riempire tutto il canale in quel tempo, do lo spazio in più ad altri che non hanno bisogno di quella garanzia.</p>
-<p>C’è un Overhead per la quantità di dati e la lunghezza di header (se header molto lungo, alla fine trasmetto meno percentuale di dati), però se faccio troppo lungo ci metto di più a mandare, quindi altri pacchetti potrebbero metterci molto di più ad arrivare, e perdere la garanzia sul tempo minimo di arrivare. era 32 o 64, quindi si è fatta una scelta politica che è 48 byte, e fa schifo perché non è una potenza di 2 e devi fare check leggermente più complicate.</p>
-<p>A noi di solito non serve questa garanzia, noi utenti dico, ma al backbone di internet è importante e si sono messi così. Ci sono molti tipologie di ATM come</p>
-<ul>
-<li>
-<p>constant bit rate ( voice over Ip, abbiamo biosgno di flusso costante per la voce, vogliamo real time, oppure coso di un reattore nucleare, senza nessuna congestione e con forti garanzie su loss, ordering e timing).</p>
-</li>
-<li>
-<p>Variable bit rate, come il video, perché ha bisongo di un sacchissimo di informazioni, un byte per un pixel bianco e nero, non si può trasmettere tanta roba..</p>
-</li>
-<li>
-<p>Altro che non listo</p>
-</li>
-<li>
-<p>Slide garanzie Service Models</p>
-  <img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 1">
-</li>
-</ul>
-<h2 id="the-router">The Router<a hidden class="anchor" aria-hidden="true" href="#the-router">#</a></h2>
-<h3 id="router-architecture">Router architecture<a hidden class="anchor" aria-hidden="true" href="#router-architecture">#</a></h3>
-<p>ci sono credo molti modi per implementare la funzione di router, in generale in un singolo ciclo di clock ti riescono a far entrare e far uscire il pacchetto, questo sarebbe il router buono</p>
-<p>Quindi possiamo individuare</p>
-<ol>
-<li>Porte di input</li>
-<li>Un processore di routing che ti indirizza nell uscita giusta</li>
-<li>Un sistema di switching fabric per poter mandare l&rsquo;informazione nella porta giusta</li>
-<li>Porte di uscita</li>
-</ol>
-<ul>
-<li>
-<p>Slide sistema di routing</p>
-  <img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 2">
-</li>
-</ul>
-<p>la parte del processore è molto più utilizzato nella parte di [[Control Plane](/notes/architetture-a-livello-applicazione-</p>
-<p>####-per-router-control-plane
-possiamo-dire-che-sia-un-modo-semplice-del-control-plane-per-stabilire-la-tabella-di-instradamento,-in-pratica-listo-tutti-i-collegamenti-che-ho-nella-tabella-con-i-loro-ip-di-interesse,-quindi-se-un-prefisso-matcha-quello-allora-mando-lì.-è-strano-che-i-router-siano-anche-in-grado-di-fare-prefisso-più-lungo-per-matchare.-in-questo-modo-utilizzando-un-algoirtmo-locale,-distribuito,-posso-avere-una-tabella-di-istradamento.-gli-algoritmi-locali-possono-fare-scelte-non-coordinate,-dato-che-può-cambiare-nel-tempo-la-situazione,-l-informazione-locale-potrebbe-non-essere-del-tutto-corretta.</p>
-<p>####-logically-centralized-control-plane
-quando-c-è-una-struttura-centrale-che-contiene-tutte-le-informazioni-dei-singoli-router-(o-almeno-quanto-trasmesso),-e-da-lì-aggiorna-le-tabelle-di-instradamento-dei-singoli-router.-(control-agent-è-il-singolo-router,-che-trasmette-a-un-controllo-remoto).-la-cosa-importante-è-che-il-cos-remote-contorller-è-conoscente-di-tutti-i-dati-principali-della-rete.-questo-rende-più-efficiente,-perché-ha-tutte-le-informazioni-per-fare-le-decisioni-migliori.</p>
-<p>però-ha-bisogno-di-comunicare-fra-ca-e-rc,-e-se-non-funziona-la-comunicazione-non-avrei-comunque-le-informazioni-perfette.</p>
-<p>inoltre-deve-essere-un-processo-bono,-e-si-dovrebbe-capire-chi-avrebbe-la-responsabiltià-di-pagare-il-remote-controller,-i-provider?-gli-utenti-finali?</p>
-<p>&ndash;immagine-semplificazione-data-e-control-plane</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/data-plane/untitled.png&quot;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/data-plane/untitled&rdquo;&gt;</p>
-<p>###-service-model
-i-modelli-di-servizio-definiscono-le-caratteristiche-che-dovrebbe-avere-il-servizio-di-trasporto-end-to-end-dei-pacchetti.-alcune-caratteristiche-potrebbero-esser-come-consegna-garantita,-o-garantita-consegna-entro-certo-tempo,-oppure-il-flow-dei-datagrammi-in-ordine,-minima-bandwidth,-servizi-di-sicurezza-sul-trasporto.-ma-queste-caratteristiche-alla-fine-non-sono-comunque-mai-garantite.-quindi-possiamo-indire-un-sistema-<strong>best-effort</strong>,-ma-non-è-che-sia-comunque-garantito-qualcosa,-potrei-dire-che-una-rete-che-non-è-in-grado-di-trasportare-niente-sta-facendo-il-massimo-di-quanto-riesce-a-fare.-non-ci-aiuta-molto.</p>
-<p><strong>atm-(asynchronous-transfer-model)</strong>-è-un-servizio-che-prova-a-fare-questo,-cercare-di-misurare-il-modello-di-servizio-del-trasporto-che-in-una-specifico-spazio-temporale-posso-darti-tutte-le-risorse,-e-allora-avresti-le-garanzie-dette-sopra.-e-se-non-riesco-a-riempire-tutto-il-canale-in-quel-tempo,-do-lo-spazio-in-più-ad-altri-che-non-hanno-bisogno-di-quella-garanzia.</p>
-<p>c’è-un-overhead-per-la-quantità-di-dati-e-la-lunghezza-di-header-(se-header-molto-lungo,-alla-fine-trasmetto-meno-percentuale-di-dati),-però-se-faccio-troppo-lungo-ci-metto-di-più-a-mandare,-quindi-altri-pacchetti-potrebbero-metterci-molto-di-più-ad-arrivare,-e-perdere-la-garanzia-sul-tempo-minimo-di-arrivare.-era-32-o-64,-quindi-si-è-fatta-una-scelta-politica-che-è-48-byte,-e-fa-schifo-perché-non-è-una-potenza-di-2-e-devi-fare-check-leggermente-più-complicate.</p>
-<p>a-noi-di-solito-non-serve-questa-garanzia,-noi-utenti-dico,-ma-al-backbone-di-internet-è-importante-e-si-sono-messi-così.-ci-sono-molti-tipologie-di-atm-come</p>
-<p>&ndash;constant-bit-rate-(-voice-over-ip,-abbiamo-biosgno-di-flusso-costante-per-la-voce,-vogliamo-real-time,-oppure-coso-di-un-reattore-nucleare,-senza-nessuna-congestione-e-con-forti-garanzie-su-loss,-ordering-e-timing).
-&ndash;variable-bit-rate,-come-il-video,-perché-ha-bisongo-di-un-sacchissimo-di-informazioni,-un-byte-per-un-pixel-bianco-e-nero,-non-si-può-trasmettere-tanta-roba..
-&ndash;altro-che-non-listo
-&ndash;slide-garanzie-service-models</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/data-plane/untitled-1.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/data-plane/untitled-1&rdquo;&gt;</p>
-<p>##-the-router</p>
-<p>###-router-architecture</p>
-<p>ci-sono-credo-molti-modi-per-implementare-la-funzione-di-router,-in-generale-in-un-singolo-ciclo-di-clock-ti-riescono-a-far-entrare-e-far-uscire-il-pacchetto,-questo-sarebbe-il-router-buono</p>
-<p>quindi-possiamo-individuare</p>
-<p>1.-porte-di-input
-2.-un-processore-di-routing-che-ti-indirizza-nell-uscita-giusta
-3.-un-sistema-di-switching-fabric-per-poter-mandare-l-informazione-nella-porta-giusta
-4.-porte-di-uscita
-&ndash;slide-sistema-di-routing</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/data-plane/untitled-2.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/data-plane/untitled-2&rdquo;&gt;</p>
-<p>la-parte-del-processore-è-molto-più-utilizzato-nella-parte-di-[[control-plane).</p>
-<h3 id="forwarding-1">Forwarding<a hidden class="anchor" aria-hidden="true" href="#forwarding-1">#</a></h3>
-<p>Il forwarding tratta delle politiche che il processore di routing dovrebbe utilizzare per capire in quale porta di output ti potrebbe mandare.</p>
-<h4 id="destination-based-forwarding">Destination based forwarding<a hidden class="anchor" aria-hidden="true" href="#destination-based-forwarding">#</a></h4>
-<p>in cui si va a guardare l&rsquo;indirizzo di arrivo e si decide in questo modo come mandarti.</p>
-<p>Vediamo un esempio di questa tipologia di forwarding.</p>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 3">
-<p>Da notare che sono degli intervalli in questo caso di esempio, ed è esattamente come avevamo diviso le subnets in un esercizio passato, in <a href="/notes/livello-di-rete">Livello di Rete</a>.</p>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 4">
-<p>Questo è il più usato, è il <strong>longest prefix match</strong>. Questo è bello perché si possono indirizzare nelle (TCAMs Ternary content addressable memories, CISCO ha inventato sta tecnologia ed è la più forte sul mercato attualmente) che praticamente ti trova in singolo ciclo di clock quello corretto.</p>
-<p>L’algoritmo normale per trovare l&rsquo;indirizzo corretto, sarebbe comunque fatto in $O(n)$, ma se l’hardware riesce a fare in parallelo con tutte le tabelle in un singolo ciclo di clock allora ho un $O(1)$, quindi ez.</p>
-<h4 id="generalized-forwarding">Generalized forwarding<a hidden class="anchor" aria-hidden="true" href="#generalized-forwarding">#</a></h4>
-<p>Software defined networking</p>
-<p>Generalizzato perché è <strong>indipendente dal router che facciamo</strong> perché è tutto gestito da un controller centralizzato.</p>
-<p>Ogni router ha una <strong>flow table</strong>, la stessa cosa di cui si parla nei IPv6 in <a href="/notes/livello-di-rete#datagramma-ipv6">Livello di Rete#Datagramma IPv6</a> . Questa tabella è <strong>costruita col routing plane centralizzato,</strong> descritta dal software. Importante che tutta la rete sia SDN, sennò non funziona questo.</p>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 5">
-<h3 id="open-flow">Open Flow<a hidden class="anchor" aria-hidden="true" href="#open-flow">#</a></h3>
-<ul>
-<li>
-<p>Slide flow table</p>
-  <img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 6">
-</li>
-</ul>
-<p>Abbiamo certe <strong>regole di gestione del pacchetto</strong> che si basa tu match-action. Se c’è un match sugli header del pacchetto, allora faccio una azione su quel pacchetto. (come drop, forward, modify) e ci permette di fare molta roba, come le IP tables, o il NAT. Il router ora può assumere molt funzioni diverse.</p>
-<p>Abbiamo anche una priority, mentre nella destination based è solamente longest prefix.</p>
-<h3 id="switching-fabrics">Switching fabrics<a hidden class="anchor" aria-hidden="true" href="#switching-fabrics">#</a></h3>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 7">
-Questi switching fabrics lo fanno andare molto molto in fretta.
-<ol>
-<li>La prima è una memoria, ma è molto lento perché <strong>ha bisogno di due copie di memoria</strong>.</li>
-<li>Ognuno può avere un bus condiviso, si sceglie a livello del sender il bus di arrivo, ma <strong>posso far passare solamente un bus alla volta</strong>, quindi posso avere un singolo alla volta che passa.</li>
-<li>La cosa migliore è la <strong>TRANSFER SWITCH</strong>. Così posso far passare in parallelo dei pacchetti, però è la cosa più complessa, però è anche la cosa più efficiente, perché non devo né copiare, né avere collisioni sul bus</li>
-</ol>
-<h3 id="ritardi-possibili">Ritardi possibili<a hidden class="anchor" aria-hidden="true" href="#ritardi-possibili">#</a></h3>
-<h4 id="input-queuing">Input Queuing<a hidden class="anchor" aria-hidden="true" href="#input-queuing">#</a></h4>
-<ol>
-<li>Quando due pacchetti di entrata devono andare sulla stessa uscita.</li>
-<li><strong>Head of the line blocking</strong>, quando ci sono più pacchetti che stanno aspettando, quello avanti è bloccato, ma quello dietro potrebbe andare.</li>
-</ol>
-<ul>
-<li>
-<p>Slide input queuing</p>
-  <img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 8">
-</li>
-</ul>
-<h4 id="output-queuing">Output queuing<a hidden class="anchor" aria-hidden="true" href="#output-queuing">#</a></h4>
-<p>Ho due cose <strong>buffering</strong> ossia quanto velocemente la switching fabric copia sui bus di uscita e <strong>scheduling</strong> che determina l&rsquo;ordine di invio credo.</p>
-<p>Per decidere la quantità di buffering voluta per avere un certo bandwitdth è in slide (una formula precisa): buffering delle uscite meno radice quadrata di quelle di ientrate.</p>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 9">
-<p>Se il buffer di uscita diventa pieno, allora comincio a perdere i pacchetti! Posso perderlo secondo certe politiche:</p>
-<ol>
-<li>L&rsquo;ultimo che arriva</li>
-<li>Cade uno a caso</li>
-<li>Cado quello con meno priorità (per fare questo devi fare <strong>hardware diverso</strong> perché non basta un semplice hardware).</li>
-</ol>
-<h3 id="scheduling-dei-routers">Scheduling dei routers<a hidden class="anchor" aria-hidden="true" href="#scheduling-dei-routers">#</a></h3>
-<p>Ci sono certi algoritmi di scheduling banali, come il First Come First served, e poi droppo tutti quelli che stanno fuori, oppure farli droppare a caso.</p>
-<h4 id="priority-scheduling">Priority scheduling<a hidden class="anchor" aria-hidden="true" href="#priority-scheduling">#</a></h4>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 10">
-<p>in pratica ho un classificatore, che dice se è di priorità o meno.
-Poi per mandare guardo se c&rsquo;è qualcosa di priorità maggiore, se è vuoto provo a mandare quelli minori.
-Ma questo può <strong>generare starvation</strong>.</p>
-<h4 id="round-robin-scheduling">Round robin scheduling<a hidden class="anchor" aria-hidden="true" href="#round-robin-scheduling">#</a></h4>
-<p>Questo non fa starvation.</p>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 11">
-<p>In pratica provo uno per classe ad ogni ciclo.</p>
-<h4 id="weighted-fair-queuing">Weighted fair queuing<a hidden class="anchor" aria-hidden="true" href="#weighted-fair-queuing">#</a></h4>
-<img src="/images/notes/image/universita/ex-notion/Data Plane/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Data Plane/Untitled 12">
-<p>Tipo se ho massima priority, ne mando 4, se sono nella seconda ne mano 2, se sono nella terza ne mando 1, quindi <strong>esiste ancora la priority</strong> e non ho starvation perché anche nella coda brutta riesco sempre ad andare avanti.</p>
-<p>Questo genere di code si può formalizzare usando <a href="/notes/queueing-theory">Queueing Theory</a>, utilizzato molto per quanto riguarda i sistemi cloud.</p>
-<p>Sul pacchetto IP <a href="/notes/livello-di-rete#indirizzo-ip">Livello di Rete#Indirizzo IP</a></p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

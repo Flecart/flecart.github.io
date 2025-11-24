@@ -7,21 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Gestione della memoria | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Memoria statica
-Elementi in memoria statica (4)
-
-Variabili globali
-Istruzioni macchina
-Costanti
-(Variabili locali, paramentri e ritorno di funzione?)
-
-Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).
-Quindi se vogliamo
-
-Avere funzioni ricorsive
-Potere allocare e deallocare variabili in modo dinamico
-
-Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.">
+<meta name="description" content="Gestione della memoria - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/gestione-della-memoria/">
@@ -107,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/gestione-della-memoria/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Gestione della memoria">
-  <meta property="og:description" content="Memoria statica Elementi in memoria statica (4) Variabili globali Istruzioni macchina Costanti (Variabili locali, paramentri e ritorno di funzione?) Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).
-Quindi se vogliamo
-Avere funzioni ricorsive Potere allocare e deallocare variabili in modo dinamico Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -119,21 +103,7 @@ Avere funzioni ricorsive Potere allocare e deallocare variabili in modo dinamico
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Gestione della memoria">
-<meta name="twitter:description" content="Memoria statica
-Elementi in memoria statica (4)
-
-Variabili globali
-Istruzioni macchina
-Costanti
-(Variabili locali, paramentri e ritorno di funzione?)
-
-Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).
-Quindi se vogliamo
-
-Avere funzioni ricorsive
-Potere allocare e deallocare variabili in modo dinamico
-
-Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -162,12 +132,12 @@ Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi
   "@type": "BlogPosting",
   "headline": "Gestione della memoria",
   "name": "Gestione della memoria",
-  "description": "Memoria statica Elementi in memoria statica (4) Variabili globali Istruzioni macchina Costanti (Variabili locali, paramentri e ritorno di funzione?) Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).\nQuindi se vogliamo\nAvere funzioni ricorsive Potere allocare e deallocare variabili in modo dinamico Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.\n",
+  "description": "",
   "keywords": [
     
   ],
-  "articleBody": "Memoria statica Elementi in memoria statica (4) Variabili globali Istruzioni macchina Costanti (Variabili locali, paramentri e ritorno di funzione?) Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).\nQuindi se vogliamo\nAvere funzioni ricorsive Potere allocare e deallocare variabili in modo dinamico Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.\nImplementazione di funzioni statiche Si potrebbe anche utilizzare la memoria statica per implementare le funzioni, ma questo ha il fortissimo drawback che non permette la ricorsione in quanto stiamo assumento che in ogni momento di esecuzione la funzione è chiamata una singola volta. (ho un unico indirizzo di memoria per l’indirizzo di ritorno.\nInfatti se chiamassimo in modo ricorsivo questa funzione, perderemmo alcuni valori, come l’indirizzo di ritorno, il valore di ritorno precedente, e porterebbe in uno stato invalido.\nOltre a questo avremmo un elevato uso della memoria nel caso in cui il numero di chiamate di funzioni sia in media minore del numero di dichiarazioni di funzione (avremmo un sacco di funzioni inutilizzate).\nSlide di quanto memorizzato per la funzione statica\nFigura 7.1 Gestione della memoria statica. per le funzioni\nSull’efficienza\nSolitamente se utilizziamo questo metodo il compilatore solitamente è in grado di accedere a delle variabili utilizzando un OFFSET senza dover stare a fare risoluzione di nomi simbolici (una volta che abbiamo un frame o RdA, possiamo calcolare la posizione della variabile locale, o parametro attraverso l’offset sul base pointer, che qui è anche chiamato puntatore di RdA). Qualcosina in più forse c’è da fare sulle variabili non locali\nUn altra ottimizzazione è memorizzare i risultati intermedi su REGISTRI invece che utilizzare la stack. In generale ci sono moltissimi modi di ottimizzare, quindi non andiamo a parlare di questo.\nGestione della pila La pila è la struttura più comoda per la gestione dei blocchi di codice, che come abbiamo descritto in Nomi e Scope, devono essere LIFO, ossia il blocco più annidato deve finire prima di uscire. Questo è il motivo per cui possiamo giustificare la gestione della pila. Ecco che si giustifica l’idea di creazione della pila di sistema.* Che è in grado di stabilire le posizioni delle variabili locale, dei parametri attraverso un Offset rispetto al base pointer del frame.\nRecord di attivazione di blocchi (3) Ne abbiamo accennato in 8.4.1 Activation record, parlando anche lì dei record di attivazione, in questo momento andremo a parlarne in modo più approfondito.\nOra parliamo brevemente di record attivazione di blocchi, per questi quando entriamo in un nuovo blocco vogliamo creare spazio per queste cose:\nVariabili intermedie (per storare calcolo intermedio) Variabili locali nuove Catena dinamica che mi dice in quale blocco sono, ed è utilizzato per eliminare tutto il nuovo spazio allocato in questo blocco. Esempio:\nFigura 7 .3 Allocazione del record di attivazione per I blocchi A e B nell’Esempio 7.2.\nRecord di attivazione per funzioni (7) Questi record di attivazione, anche chiamate RdA in modo abbreviato hanno lo stesso concetto per i record di attivazione per i blocchi, ma devono avere qualche informazione in più per indirizzo di ritorno e modo di ritornare la variabile di output.\nTutti i 3 punti per i RdA dei blocchi Catena statica per gli scope (che attualmente non so in che modo venga utilizzata) Indirizzo di ritorno, per il program counter Indirizzo per il Valore di ritorno I parametri di chiamata della funzione. Figura 7.7 Struttura del record di attivazione per una procedura.\nGestione della pila a runtime (!!!) In questa parte andiamo a parlare di alcune istruzioni che sono utili per implementare questo sistema di RdA in un linguaggio classico.\nAndiamo a parlare di sequenza di chiamata per l’insieme di procedure che deve eseguire il chiamante prima di entrare nel blocco della funzioen chiamata, e una sequenza di ritorno per uscire dal blocco, poi di prologo e epilogo per l’uscita. ora nel pezzo sequente andiamo a descrivere alcune istruzioni da eseguire per entrare ed uscire da un blocco di RdA di una funzione.\nQuesta divisione è necessaria perché alcune cose possono essere fatte solo dal chiamante, e altre solo dal chiamato!\nChiamata di funzione\nQuesta parte interessa la parte di sequenza di chiamata e il prologo della funzione.\nAllocazione dello spazio necessario nella stack (per parametri, variabili locali, e risultati intermedi, e catene statiche e dinamiche). Passare i parametri (di solito copiati nella nuova RdA) Aggiornare il puntatore di RdA al nuovo, in C di solito è il base pointer, anche chiamato frame pointer. Salvare quanto necessario dai registri (e.g. il chiamante deve settare l’indirizzo di ritorno della funzione). Salvare il PC precedente, e settare il nuovo PC. Eseguire codice di inizializzazione specifico del linguaggio, se c’è (anche in C mi pare ci fossero alcune istruzioni, di solito erano nel prologo, come dei push rbp). Ritorno del controllo al programma chiamante\nRipristinare i valori dei registri precedenti. Risettare il PC precedente Copiare il valore di ritorno nell’indirizzo giusto ripristinare il puntatore di RdA Deallocare la parte della stack che non utilizziamo più. Esecuzione di codice di uscita. Gestione della heap Per la heap non è possibile utilizzare stack perché in questo caso l’utilizzo non soddisfa la proprietà LIFO tipida della stack, posso freeare una cosa anche prima di una cosa allocata dopo diciamo. Bisogna quindi creare un metodo di gestione dinamica della memoria differente.\nQuesto è solamente una zona contigua di memoria diversa dalla stack, in cui possiamo allocare e deallocare dinamicamente cose, non c’entra niente con la struttura di dati!\nDimensione fissa Questa è l’implementazione della heap più semplice, in pratica divido tutto il mio array disponibile in blocchi liberi disponibili.\nQuando vado ad allocare un blocco, vado a togliere questo blocco e metterlo a disposizione al chiamante, a chi ha allocato il blocco, e tolgo questo blocco dai liberi, ora la lista dei liberi punterà al prossimo blocco libero.\nQuando vado a deallocare il blocco non faccio altro che marcare come libero il blocco, reinserendolo nella lista dei liberi.\nDimensione variabile Questa è una soluzione molto più bella per quanto riguarda la soluzione della frammentazione interna, ossia quanta parte di memoria ho ancora inutilizzato, se ho richiesto un blocco (e.g. prima se avevo blocchi da 256, anche se volevo un singolo byte, mi dava un blocco da 256 e gran parte della memoria sarebbe stata sprecata per allocazione dinamica.)\nOra vorrei dividere tutta la memoria che ho secondo una certa logica, solitamente si può dividere in due modi di gestire questa cosa:\nHeap dimensione variabile a liste multiple\nQuesta è una gestione della lista in cui ho più liste di una certa grandezza, i sistemi principali sono a buddy system o fibonacci heap. Discuteremo solamente il primo sistema, il secondo sistema è molto simile, con una leggera efficienza in più perché utilizzando i numeri di fibonacci si ha minore frammentazione interna**.**\nAllora se richiedo un blocco di grandezza n, vado a cercare il blocco libero nella lista di k, con grandezza più grande di n (in buddy system le liste sono tutte di grandezze di potenze di due).\nSe trovo una lista allora alloco e restituisco. Se invece non c’è, allora vado a cercare nelle liste più grosse se c’è. Se lo trovo, allora lo spezzo a metà, creando i buddies, uno lo aggiungo alla lista dei liberi della lista precedente, l’altra la restituisco come blocco allocato.\nin fase di deallocazione vado a controllare se ho dei buddies spezzati, se esistono e sono liberi allora li ricompongo e li metto nella lista grossa originale, altrimenti rimane nella lista libera più piccola!\nHeap a singola lista Anche in questo caso possiamo avere dei problemi di frammentazione quando allochiamo e deallochiamo gli elementi della lista libera che possediamo, ne abbiamo parlato sempre in architettura quando abbiamo accennato alla paginazione: 9.3.2 In memoria: frammentazione esterna. Infatti anche qui possiamo andare a parlare di politiche di first and best FIT. Questi sono entrambi metodi di inserimento lineare, il primo favorisce il tempo, il secondo l’efficienza in memoria.\nCon questo sistema ho un blocco di spazio UNICO disponibile. Quindi se chiedo n, posso effettivamente allocarti un blocco grosso n, senza nessuna frammentazione. Questo posso continuare finché non finisco la memoria. Quando la finisco potrei gestirla in due modi praticamente.\nLista dei liberi\nIn questo caso quando faccio free faccio append di tutti i blocchi deallocati alla lista dei liberi. Posso inserire controlli che quando ho due blocchi contigui nei liberi li compatto assieme. Questo è la compattazione parziale.\nPoi quando finisco la memoria utilizzo direttamente la lista dei liberi per allocare nuovi blocchi, questo può portare al problema di frammentazione interna o esterna. Ci metto in tempo lineare ad allocare. (oppure posso tenere i blocchi ordinati, se utilizzo alberi ordinati allora log(n) per tirare via ed inserire.) Ma in generale ci sono molti modi per gestire questa struttura di dati.\nCompattazione della memoria libera\nQuando finisco la memoria, risolvo la frammentazione esterna rimettendo assieme tutti i blocchi allocati, e poi posso continuare l’algoritmo di sopra, allocando esattamente quando mi richiede.\nIl problema di questo metodo è che difficilmente posso spostare le cose, che è una precondizione per poter utilizzare questo metodo.\nImplementazione delle regole di scope Abbiamo parlato per la prima volta di scope in Nomi e Scope.\nScope statico Per implementare lo scope statico vogliamo utilizzare la catena statica presente all’interno del record di attivazione per poter risalire al blocco giusto.\nIn particolare dividiamo in due casi, il caso in cui il nome chiamato sia presente nell’ambiente locale del chiamante, e il caso in cui non lo sia. Questo è importante perché nella fase di sequenza di chiamata dovrebbe essere il lavoro del chiamante per impostare il puntatore di catena statica del chiamato. Notare che in questa sezione utilizziamo nomi come chiamante chiamato, ma il chiamato potrebbe anche essere riferimento al nome di una variabile, il concetto di risalita è comune.\nCaso presente nell’ambiente locale\nQuesto è il caso semplice, so che la catena statica deve puntare al chiamante, quindi basta inserirla nel record di attivazione del chiamato!\nCaso non presente\nQuesto è una cosa leggermente più complessa, se io so che il chiamato è a livello di annidamento statico n (per tenersi queste informazioni probabilmente si utilizzano informazioni di annidamento e di ambienti locale, che sono comunque presenti nella struttura (statica), e quindi le posso calcolare al momento di compilazione)), e il chiamante a livello di m, devo percorrere k = m - n, livelli per trovare il puntatore di catena statica del chiamato e settarlo puntatore di catena statica del nuovo RdA che mi ritrovo dopo aver risalito di k sulla catena statica.\nQuesto lo so perché dato che il chiamato è esterno, so che è presente nell’ambiente non locale, quindi non può che essere a livello di annidamento inferiore, quindi risalire la catena statica è corretto.\nChiaramente è una cosa molto inefficiente fare k dereferenziazioni di pointer per arrivare fino al punto che mi interessa, vedremo subito dopo un metodo per velocizzare questo sistema di scope statico.\nEsempio funzionamento\n!\nFigura 7.14 Catena statica per la struttura precedente e la sequenza di chiamate A, B, C, D, E, C.\nstatico: Il display Vogliamo trovare un metodo più veloce per settare il RdA nel campo della catena statica, tanto che possiamo ridurre a k dereferenziazioni a solamente un numero costante piccolo (2, ma poi il problema precedente non è brutto dato che il numero di annidamenti per linguaggi reali sta molto piccolo in generale, di solito 3).\nAllora un modo per fare questo è tenersi un altro array, che contenga un puntatore a seconda del livello di annidamento!\nIdea: tenersi una struttura ausiliaria che viene aggiornato ad ogni cambio di ambiente che contenga il puntatore alla struttura statica di riferimento a ogni livello. (chiaramente il livello massimo si annidamento, va a determinare la lunghezza del display).\nDue accessi, uno nel display per trovare il RdA corretto, l’altro accesso per trovare l’index della variabile locale corretta.\nFunzionamento generale\nSia m il livello di annidamento del chiamato, allora salvo il valore che c’era prima, perché il display sarà comune a tutti i livelli diversi da m.\nQuando ritorno ripristino il vecchio valore, in questo senso il display contiene tutte le RdA statiche a seconda del livello di annidamento, e posso utilizzare questo per capire il puntatore di catena statica.\nEsempio display\n!\nFigura 7.15 Display per la struttura di Figura 7.13 e la sequenza di chiamate A,' B, C, D, E, C.\nScope dinamico: La ricerca per nome Questa è la soluzione più lenta che potrebbe esistere, che è quella della ricerca per nome negli RdA, in pratica risalgo i record fin quando non lo trovo o lo trovo.\nUn problema diventa andare ad attivare o disattivare le variabili a seconda del fatto di averlo già visto o meno, e dello scope.\nSlide descrive questo metodo\nScope dinamico lista associazioni Una cosa banale è tenersi una lista di associazioni globale, chiamata A-list (che viene usato in lisp) che si tiene conto di tutte le associazioni attive. Un entrare e uscire da un certo ambiente non si tratta altro che andare a manipolare questa lista globale di associazioni.\nCercare un valore dell’associazione a runtime non sarebbe altro che andare a scorrersi la lista fino a trovare il simbolo di mio interesse, alla prima occorrenza, perché quella è la più recente.\nEntro in nuovo ambiente non faccio altro che aggiungere nella A-list i valori locali\nEsco dall’ambiente non faccio altro che poppare i valori locali\nRicerca simboli non faccio che scorrere tutta la A-list per trovare il valore corretto.\nChiaramente questo runtime non è che sia molto invitante (nella pratica però è sufficiente, anche se non avrei comunque una efficienza di C), quindi vorremmo trovare anche metodi migliori per implementare lo scope dinamico.\nUn altro metodo comparabile per inefficienza è scorrersi le RdA finché non troviamo il simbolo di nostro interesse..\nSvantaggi\nDevo memorizzare i nomi in momento di esecuzione, per poter ritrovare l’istanza. Lentezza ad accedere valori globali, che sono in cima alla lista. Entrambi questi svantaggi sono risolti con la CRT esposta nella squenza successiva.\nCentral Referencing environment Table Durante l’esecuzione e durante le entrate in ogni ambiente locale, posso tenermi un array di tutti i simboli che posso avere (oppure una hastable). Questo mi permette di accedere al simbolo in tempo costante, e se a tempo di compilazione conosco tutte le variabili a mia disposizione, poi mi basta accedere con offset, e non mi serve sapere il nome originario! (se invece non è nota bisogna utilizzare la hastable).\nIn questo modo ho un leggere overhead in più per uscire ed entrare in un blocco. Perché devo aggiornare l’array globale di liste, però mi implementa in modo semplice questo scope dinamico.\nPer tenere conto dei valori vecchi abbiamo principalmente due metodi:\nTenersi la stack degli elementi nascosti che viene ripristinata quando usciamo dal blocco (quindi è temporaneo per tenere i vecchi valori) Lista dei vecchi valori, ossia ogni elemento si tiene una lista, che possiamo interpretarla come stack per ogni valore, che contiene i vecchi valori, in testa solamente il valore più recente. Esempio stack elementi nascosti\nEsempio lista vecchi valori\n",
-  "wordCount" : "2546",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-04-08T00:00:00Z",
   "dateModified": "2024-04-08T00:00:00Z",
@@ -262,246 +232,12 @@ Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi
     <h1 class="post-title entry-hint-parent">
       Gestione della memoria
     </h1>
-    <div class="post-meta"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 12 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-04-08 00:00:00 +0000 UTC'>April 8, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#memoria-statica" aria-label="Memoria statica">Memoria statica</a><ul>
-                        
-                <li>
-                    <a href="#elementi-in-memoria-statica-4" aria-label="Elementi in memoria statica (4)">Elementi in memoria statica (4)</a></li>
-                <li>
-                    <a href="#implementazione-di-funzioni-statiche" aria-label="Implementazione di funzioni statiche">Implementazione di funzioni statiche</a></li></ul>
-                </li>
-                <li>
-                    <a href="#gestione-della-pila" aria-label="Gestione della pila">Gestione della pila</a><ul>
-                        
-                <li>
-                    <a href="#record-di-attivazione-di-blocchi-3" aria-label="Record di attivazione di blocchi (3)">Record di attivazione di blocchi (3)</a></li>
-                <li>
-                    <a href="#record-di-attivazione-per-funzioni-7" aria-label="Record di attivazione per funzioni (7)">Record di attivazione per funzioni (7)</a></li>
-                <li>
-                    <a href="#gestione-della-pila-a-runtime-" aria-label="Gestione della pila a runtime (!!!)">Gestione della pila a runtime (!!!)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#gestione-della-heap" aria-label="Gestione della heap">Gestione della heap</a><ul>
-                        
-                <li>
-                    <a href="#dimensione-fissa" aria-label="Dimensione fissa">Dimensione fissa</a></li>
-                <li>
-                    <a href="#dimensione-variabile" aria-label="Dimensione variabile">Dimensione variabile</a></li>
-                <li>
-                    <a href="#heap-a-singola-lista" aria-label="Heap a singola lista">Heap a singola lista</a></li></ul>
-                </li>
-                <li>
-                    <a href="#implementazione-delle-regole-di-scope" aria-label="Implementazione delle regole di scope">Implementazione delle regole di scope</a><ul>
-                        
-                <li>
-                    <a href="#scope-statico" aria-label="Scope statico">Scope statico</a></li>
-                <li>
-                    <a href="#statico-il-display" aria-label="statico: Il display">statico: Il display</a></li>
-                <li>
-                    <a href="#scope-dinamico-la-ricerca-per-nome" aria-label="Scope dinamico: La ricerca per nome">Scope dinamico: La ricerca per nome</a></li>
-                <li>
-                    <a href="#scope-dinamico-lista-associazioni" aria-label="Scope dinamico lista associazioni">Scope dinamico lista associazioni</a></li>
-                <li>
-                    <a href="#central-referencing-environment-table" aria-label="Central Referencing environment Table">Central Referencing environment Table</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="memoria-statica">Memoria statica<a hidden class="anchor" aria-hidden="true" href="#memoria-statica">#</a></h2>
-<h3 id="elementi-in-memoria-statica-4">Elementi in memoria statica (4)<a hidden class="anchor" aria-hidden="true" href="#elementi-in-memoria-statica-4">#</a></h3>
-<ul>
-<li>Variabili globali</li>
-<li>Istruzioni macchina</li>
-<li>Costanti</li>
-<li>(Variabili locali, paramentri e ritorno di funzione?)</li>
-</ul>
-<p>Le primi tre elementi descritti di sopra sono sicuramente presenti dopo la fase di compilazione, infatti sono allocati dal compilatore in una zona presente nell’eseguibile (un esempio è il READONLY per le stringhe in C).</p>
-<p>Quindi se vogliamo</p>
-<ul>
-<li>Avere funzioni ricorsive</li>
-<li>Potere allocare e deallocare variabili in modo dinamico</li>
-</ul>
-<p>Abbiamo bisogno di far uso di Pila o Heap, che riescano a cresere e restringersi in modo dinamico.</p>
-<h3 id="implementazione-di-funzioni-statiche">Implementazione di funzioni statiche<a hidden class="anchor" aria-hidden="true" href="#implementazione-di-funzioni-statiche">#</a></h3>
-<p>Si potrebbe anche utilizzare la memoria statica per implementare le funzioni, ma questo ha il fortissimo drawback che <strong>non permette la ricorsione</strong> in quanto stiamo assumento che in ogni momento di esecuzione la funzione è chiamata una singola volta. (ho un unico indirizzo di memoria per l&rsquo;indirizzo di ritorno.</p>
-<p>Infatti se chiamassimo in modo ricorsivo questa funzione, perderemmo alcuni valori, come l&rsquo;indirizzo di ritorno, il valore di ritorno precedente, e porterebbe in uno stato invalido.</p>
-<p>Oltre a questo avremmo un <strong>elevato uso della memoria</strong> nel caso in cui il numero di chiamate di funzioni sia in media minore del numero di dichiarazioni di funzione (avremmo un sacco di funzioni inutilizzate).</p>
-<ul>
-<li>
-<p>Slide di quanto memorizzato per la funzione statica</p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled">
-<p>Figura 7.1 Gestione della memoria statica. per le <strong>funzioni</strong></p>
-</li>
-</ul>
-<p><strong>Sull&rsquo;efficienza</strong></p>
-<p>Solitamente se utilizziamo questo metodo il compilatore solitamente è in grado di accedere a delle variabili utilizzando un OFFSET senza dover stare a fare risoluzione di nomi simbolici (una volta che abbiamo un frame o RdA, possiamo calcolare la posizione della variabile locale, o parametro attraverso l’offset sul base pointer, che qui è anche chiamato puntatore di RdA). Qualcosina in più forse c&rsquo;è da fare sulle variabili non locali</p>
-<p>Un altra ottimizzazione è memorizzare i risultati intermedi su REGISTRI invece che utilizzare la stack. In generale ci sono moltissimi modi di ottimizzare, quindi non andiamo a parlare di questo.</p>
-<h2 id="gestione-della-pila">Gestione della pila<a hidden class="anchor" aria-hidden="true" href="#gestione-della-pila">#</a></h2>
-<p>La pila è la struttura più comoda per la gestione dei blocchi di codice, che come abbiamo descritto in <a href="/notes/nomi-e-scope">Nomi e Scope</a>, devono essere LIFO, ossia il blocco più annidato deve finire prima di uscire. Questo è il motivo per cui possiamo giustificare la gestione della pila. Ecco che si giustifica l&rsquo;idea di creazione della <strong>pila di sistema</strong>.* Che è in grado di stabilire le posizioni delle variabili locale, dei parametri attraverso un Offset rispetto al base pointer del frame.</p>
-<h3 id="record-di-attivazione-di-blocchi-3">Record di attivazione di blocchi (3)<a hidden class="anchor" aria-hidden="true" href="#record-di-attivazione-di-blocchi-3">#</a></h3>
-<p>Ne abbiamo accennato in 8.4.1 Activation record, parlando anche lì dei record di attivazione, in questo momento andremo a parlarne in modo più approfondito.</p>
-<p>Ora parliamo brevemente di record attivazione di blocchi, per questi quando entriamo in un nuovo blocco vogliamo creare spazio per queste cose:</p>
-<ol>
-<li>Variabili intermedie (per storare calcolo intermedio)</li>
-<li>Variabili locali nuove</li>
-<li><strong>Catena dinamica</strong> che mi dice in quale blocco sono, ed è utilizzato per eliminare tutto il nuovo spazio allocato in questo blocco.</li>
-</ol>
-<p>Esempio:</p>
-<img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 1">
-<p>Figura 7 .3 Allocazione del record di attivazione per I blocchi A e B nell&rsquo;Esempio 7.2.</p>
-<h3 id="record-di-attivazione-per-funzioni-7">Record di attivazione per funzioni (7)<a hidden class="anchor" aria-hidden="true" href="#record-di-attivazione-per-funzioni-7">#</a></h3>
-<p>Questi record di attivazione, anche chiamate RdA in modo abbreviato hanno lo stesso concetto per i record di attivazione per i blocchi, ma devono avere qualche informazione in più per indirizzo di ritorno e modo di ritornare la variabile di output.</p>
-<ol>
-<li>Tutti i 3 punti per i RdA dei blocchi</li>
-<li><strong>Catena statica</strong> per gli scope (che attualmente non so in che modo venga utilizzata)</li>
-<li>Indirizzo di ritorno, per il program counter</li>
-<li>Indirizzo per il Valore di ritorno</li>
-<li>I parametri di chiamata della funzione.</li>
-</ol>
-<img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 2">
-<p>Figura 7.7 Struttura del record di attivazione per una procedura.</p>
-<h3 id="gestione-della-pila-a-runtime-">Gestione della pila a runtime (!!!)<a hidden class="anchor" aria-hidden="true" href="#gestione-della-pila-a-runtime-">#</a></h3>
-<p>In questa parte andiamo a parlare di alcune istruzioni che sono utili per implementare questo sistema di RdA in un linguaggio classico.</p>
-<p>Andiamo a parlare di <strong>sequenza di chiamata</strong> per l&rsquo;insieme di procedure che deve eseguire il chiamante prima di entrare nel blocco della funzioen chiamata, e una <strong>sequenza di ritorno</strong> per uscire dal blocco, poi di <strong>prologo e epilogo</strong> per l’uscita. ora nel pezzo sequente andiamo a descrivere alcune istruzioni da eseguire per entrare ed uscire da un blocco di RdA di una funzione.</p>
-<p>Questa divisione è necessaria perché alcune cose possono essere fatte solo dal chiamante, e altre solo dal chiamato!</p>
-<p><strong>Chiamata di funzione</strong></p>
-<p>Questa parte interessa la parte di sequenza di chiamata e il prologo della funzione.</p>
-<ul>
-<li>Allocazione dello spazio necessario nella stack (per parametri, variabili locali, e risultati intermedi, e catene statiche e dinamiche).</li>
-<li>Passare i parametri (di solito copiati nella nuova RdA)</li>
-<li>Aggiornare il puntatore di RdA al nuovo, in C di solito è il base pointer, anche chiamato <strong>frame pointer</strong>.</li>
-<li>Salvare quanto necessario dai registri (e.g. il chiamante deve settare l’indirizzo di ritorno della funzione).</li>
-<li>Salvare il PC precedente, e settare il nuovo PC.</li>
-<li>Eseguire codice di inizializzazione specifico del linguaggio, se c&rsquo;è (anche in C  mi pare ci fossero alcune istruzioni, di solito erano nel prologo, come dei push rbp).</li>
-</ul>
-<p><strong>Ritorno del controllo al programma chiamante</strong></p>
-<ul>
-<li>Ripristinare i valori dei registri precedenti.</li>
-<li>Risettare il PC precedente</li>
-<li>Copiare il valore di ritorno nell&rsquo;indirizzo giusto</li>
-<li>ripristinare il puntatore di RdA</li>
-<li>Deallocare la parte della stack che non utilizziamo più.</li>
-<li>Esecuzione di codice di uscita.</li>
-</ul>
-<h2 id="gestione-della-heap">Gestione della heap<a hidden class="anchor" aria-hidden="true" href="#gestione-della-heap">#</a></h2>
-<p>Per la heap non è possibile utilizzare stack perché in questo caso l&rsquo;utilizzo non soddisfa la proprietà LIFO tipida della stack, posso freeare una cosa anche prima di una cosa allocata dopo diciamo. Bisogna quindi creare un metodo di gestione dinamica della memoria differente.</p>
-<p>Questo è solamente una <strong>zona contigua di memoria</strong> diversa dalla stack, in cui possiamo allocare e deallocare dinamicamente cose, non c’entra niente con la struttura di dati!</p>
-<h3 id="dimensione-fissa">Dimensione fissa<a hidden class="anchor" aria-hidden="true" href="#dimensione-fissa">#</a></h3>
-<p>Questa è l&rsquo;implementazione della heap più semplice, in pratica divido tutto il mio array disponibile in blocchi liberi disponibili.</p>
-<p>Quando vado ad allocare un blocco, vado a togliere questo blocco e metterlo a disposizione al chiamante, a chi ha allocato il blocco, e <strong>tolgo questo blocco dai liberi</strong>, ora la lista dei liberi punterà al prossimo blocco libero.</p>
-<p>Quando vado a deallocare il blocco non faccio altro che <strong>marcare come libero</strong> il blocco, reinserendolo nella lista dei liberi.</p>
-<h3 id="dimensione-variabile">Dimensione variabile<a hidden class="anchor" aria-hidden="true" href="#dimensione-variabile">#</a></h3>
-<p>Questa è una soluzione molto più bella per quanto riguarda la soluzione della <strong>frammentazione interna</strong>, ossia quanta parte di memoria ho ancora inutilizzato, se ho richiesto un blocco (e.g. prima se avevo blocchi da 256, anche se volevo un singolo byte, mi dava un blocco da 256 e gran parte della memoria sarebbe stata sprecata per allocazione dinamica.)</p>
-<p>Ora vorrei dividere tutta la memoria che ho secondo una certa logica, solitamente si può dividere in due modi di gestire questa cosa:</p>
-<p><strong>Heap dimensione variabile a liste multiple</strong></p>
-<p>Questa è una gestione della lista in cui ho più liste di una certa grandezza, i sistemi principali sono a <strong>buddy system o fibonacci heap</strong>. Discuteremo solamente il primo sistema, il secondo sistema è molto simile, con una leggera efficienza in più perché utilizzando i numeri di fibonacci si ha minore frammentazione interna**.**</p>
-<p>Allora se richiedo un blocco di grandezza n, vado a cercare il blocco libero nella lista di k, con grandezza più grande di n (in buddy system le liste sono tutte di grandezze di potenze di due).</p>
-<p>Se trovo una lista allora alloco e restituisco. Se invece non c&rsquo;è, allora vado a cercare nelle liste più grosse se c&rsquo;è. Se lo trovo, allora <strong>lo spezzo a metà</strong>, creando i buddies, uno lo aggiungo alla lista dei liberi della lista precedente, l&rsquo;altra la restituisco come blocco allocato.</p>
-<p>in fase di deallocazione vado a controllare se ho dei buddies spezzati, se esistono e sono liberi allora li ricompongo e li metto nella lista grossa originale, altrimenti rimane nella lista libera più piccola!</p>
-<h3 id="heap-a-singola-lista">Heap a singola lista<a hidden class="anchor" aria-hidden="true" href="#heap-a-singola-lista">#</a></h3>
-<p>Anche in questo caso possiamo avere dei problemi di <strong>frammentazione</strong> quando allochiamo e deallochiamo gli elementi della lista libera che possediamo, ne abbiamo parlato sempre in architettura quando abbiamo accennato alla paginazione: 9.3.2 In memoria: frammentazione esterna. Infatti anche qui possiamo andare a parlare di politiche di <strong>first and best FIT</strong>. Questi sono entrambi metodi di inserimento lineare, il primo favorisce il tempo, il secondo l’efficienza in memoria.</p>
-<p>Con questo sistema ho un blocco di spazio UNICO disponibile. Quindi se chiedo n, posso effettivamente allocarti un blocco grosso n, senza nessuna frammentazione. Questo posso continuare finché non finisco la memoria. Quando la finisco potrei gestirla in due modi praticamente.</p>
-<p><strong>Lista dei liberi</strong></p>
-<p>In questo caso quando faccio free faccio append di tutti i blocchi deallocati alla lista dei liberi. Posso inserire controlli che quando ho due blocchi contigui nei liberi li compatto assieme. Questo è la <strong>compattazione parziale</strong>.</p>
-<p>Poi quando finisco la memoria utilizzo direttamente la lista dei liberi per allocare nuovi blocchi, questo può portare al problema di frammentazione interna o esterna. Ci metto in tempo lineare ad allocare. (oppure posso tenere i blocchi ordinati, se utilizzo alberi ordinati allora log(n) per tirare via ed inserire.) Ma in generale ci sono molti modi per gestire questa struttura di dati.</p>
-<p><strong>Compattazione della memoria libera</strong></p>
-<p>Quando finisco la memoria, risolvo la frammentazione esterna rimettendo assieme tutti i blocchi allocati, e poi posso continuare l&rsquo;algoritmo di sopra, allocando esattamente quando mi richiede.</p>
-<p>Il problema di questo metodo è che difficilmente posso spostare le cose, che è una precondizione per poter utilizzare questo metodo.</p>
-<h2 id="implementazione-delle-regole-di-scope">Implementazione delle regole di scope<a hidden class="anchor" aria-hidden="true" href="#implementazione-delle-regole-di-scope">#</a></h2>
-<p>Abbiamo parlato per la prima volta di scope in <a href="/notes/nomi-e-scope">Nomi e Scope</a>.</p>
-<h3 id="scope-statico">Scope statico<a hidden class="anchor" aria-hidden="true" href="#scope-statico">#</a></h3>
-<p>Per implementare lo scope statico vogliamo utilizzare <strong>la catena statica</strong> presente all&rsquo;interno del record di attivazione per poter risalire al blocco giusto.</p>
-<p>In particolare dividiamo in due casi, il caso in cui il nome chiamato sia presente nell&rsquo;ambiente locale del chiamante, e il caso in cui non lo sia. Questo è importante perché nella fase di sequenza di chiamata dovrebbe essere il lavoro del chiamante per impostare il puntatore di catena statica del chiamato. Notare che in questa sezione utilizziamo nomi come chiamante chiamato, ma il chiamato potrebbe anche essere riferimento al nome di una variabile, il concetto di risalita è comune.</p>
-<p><strong>Caso presente nell’ambiente locale</strong></p>
-<p>Questo è il caso semplice, so che la catena statica deve puntare al chiamante, quindi basta inserirla nel record di attivazione del chiamato!</p>
-<p><strong>Caso non presente</strong></p>
-<p>Questo è una cosa leggermente più complessa, se io so che il chiamato è a livello di annidamento statico n (per tenersi queste informazioni probabilmente si utilizzano informazioni di annidamento e di ambienti locale, che sono comunque presenti nella struttura (statica), e quindi le posso calcolare al momento di compilazione)), e il chiamante a livello di m, devo percorrere k = m - n, livelli per trovare il puntatore di catena statica del chiamato e settarlo puntatore di catena statica del nuovo RdA che mi ritrovo dopo aver risalito di k sulla catena statica.</p>
-<p>Questo lo so perché dato che il chiamato è esterno, so che è presente nell’ambiente non locale, quindi non può che essere a livello di annidamento inferiore, quindi risalire la catena statica è corretto.</p>
-<p>Chiaramente è una cosa molto inefficiente fare k dereferenziazioni di pointer per arrivare fino al punto che mi interessa, vedremo subito dopo un metodo per velocizzare questo sistema di scope statico.</p>
-<ul>
-<li>
-<p>Esempio funzionamento</p>
-<p>!<img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 3"></p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 4">
-<p>Figura 7.14 Catena statica per la struttura precedente e la sequenza di chiamate
-A, B, C, D, E, C.</p>
-</li>
-</ul>
-<h3 id="statico-il-display">statico: Il display<a hidden class="anchor" aria-hidden="true" href="#statico-il-display">#</a></h3>
-<p>Vogliamo trovare un metodo più veloce per settare il RdA nel campo della catena statica, tanto che possiamo ridurre a k dereferenziazioni a solamente un numero costante piccolo (2, ma poi il problema precedente non è brutto dato che il numero di annidamenti per linguaggi reali sta molto piccolo in generale, di solito 3).</p>
-<p>Allora un modo per fare questo è tenersi un altro array, che contenga un puntatore a seconda del livello di annidamento!</p>
-<p><strong>Idea</strong>: tenersi una struttura ausiliaria che viene aggiornato ad ogni cambio di ambiente che contenga il puntatore alla struttura statica di riferimento a ogni livello. (chiaramente il livello massimo si annidamento, va a determinare la lunghezza del display).</p>
-<p><strong>Due accessi</strong>, uno nel display per trovare il RdA corretto, l&rsquo;altro accesso per trovare l’index della variabile locale corretta.</p>
-<p><strong>Funzionamento generale</strong></p>
-<p>Sia m il livello di annidamento del chiamato, allora salvo il valore che c&rsquo;era prima, perché il display sarà comune a tutti i livelli diversi da m.</p>
-<p>Quando ritorno ripristino il vecchio valore, in questo senso il display contiene tutte le RdA statiche a seconda del livello di annidamento, e posso utilizzare questo per capire il puntatore di catena statica.</p>
-<ul>
-<li>
-<p>Esempio display</p>
-<p>!<img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 3"></p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 5">
-</li>
-</ul>
-<p>Figura 7.15 Display per la struttura di Figura 7.13 e la sequenza di chiamate A,'
-B, C, D, E, C.</p>
-<h3 id="scope-dinamico-la-ricerca-per-nome">Scope dinamico: La ricerca per nome<a hidden class="anchor" aria-hidden="true" href="#scope-dinamico-la-ricerca-per-nome">#</a></h3>
-<p>Questa è la soluzione più lenta che potrebbe esistere, che è quella della ricerca per nome negli RdA, in pratica risalgo i record fin quando non lo trovo o lo trovo.</p>
-<p>Un problema diventa andare ad attivare o disattivare le variabili a seconda del fatto di averlo già visto o meno, e dello scope.</p>
-<ul>
-<li>
-<p>Slide descrive questo metodo</p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 6">
-</li>
-</ul>
-<h3 id="scope-dinamico-lista-associazioni">Scope dinamico lista associazioni<a hidden class="anchor" aria-hidden="true" href="#scope-dinamico-lista-associazioni">#</a></h3>
-<p>Una cosa banale è tenersi una lista di associazioni globale, chiamata <strong>A-list (che viene usato in lisp)</strong> che si tiene conto di tutte le associazioni attive. Un entrare e uscire da un certo ambiente non si tratta altro che andare a manipolare questa lista globale di associazioni.</p>
-<p>Cercare un valore dell’associazione a runtime non sarebbe altro che andare a scorrersi la lista fino a trovare il simbolo di mio interesse, alla prima occorrenza, perché quella è la più recente.</p>
-<p><strong>Entro in nuovo ambiente</strong> non faccio altro che aggiungere nella A-list i valori locali</p>
-<p><strong>Esco dall’ambiente</strong> non faccio altro che poppare i valori locali</p>
-<p><strong>Ricerca simboli</strong> non faccio che scorrere tutta la A-list per trovare il valore corretto.</p>
-<p>Chiaramente questo runtime non è che sia molto invitante (nella pratica però è sufficiente, anche se non avrei comunque una efficienza di C), quindi vorremmo trovare anche metodi migliori per implementare lo scope dinamico.</p>
-<p>Un  altro metodo comparabile per inefficienza è scorrersi le RdA finché non troviamo il simbolo di nostro interesse..</p>
-<p><strong>Svantaggi</strong></p>
-<ul>
-<li>Devo memorizzare i nomi in momento di esecuzione, per poter ritrovare l&rsquo;istanza.</li>
-<li>Lentezza ad accedere valori globali, che sono in cima alla lista.</li>
-</ul>
-<p>Entrambi questi svantaggi sono risolti con la CRT esposta nella squenza successiva.</p>
-<h3 id="central-referencing-environment-table">Central Referencing environment Table<a hidden class="anchor" aria-hidden="true" href="#central-referencing-environment-table">#</a></h3>
-<p>Durante l&rsquo;esecuzione e durante le entrate in ogni ambiente locale, posso tenermi un array di tutti i simboli che posso avere (oppure una hastable). Questo mi permette di accedere al simbolo in tempo costante, e se a tempo di compilazione conosco tutte le variabili a mia disposizione, poi mi basta accedere con offset, e non mi serve sapere il nome originario! (se invece non è nota bisogna utilizzare la hastable).</p>
-<p>In questo modo ho un leggere overhead in più per uscire ed entrare in un blocco. Perché devo aggiornare l&rsquo;array globale di liste, però mi implementa in modo semplice questo scope dinamico.</p>
-<p>Per tenere conto dei valori vecchi abbiamo principalmente due metodi:</p>
-<ol>
-<li>Tenersi la <strong>stack degli elementi nascosti</strong> che viene ripristinata quando usciamo dal blocco (quindi è temporaneo per tenere i vecchi valori)</li>
-<li><strong>Lista dei vecchi valori</strong>, ossia ogni elemento si tiene una lista, che possiamo interpretarla come stack per ogni valore, che contiene i vecchi valori, in testa solamente il valore più recente.</li>
-</ol>
-<ul>
-<li>
-<p>Esempio stack elementi nascosti</p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 7">
-</li>
-<li>
-<p>Esempio lista vecchi valori</p>
-  <img src="/images/notes/image/universita/ex-notion/Gestione della memoria/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Gestione della memoria/Untitled 8"></li>
-</ul>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

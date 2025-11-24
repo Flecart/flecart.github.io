@@ -7,10 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Notions of Security | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🛡️cybersecurity, ☁cloud-computing">
-<meta name="description" content="CIAA principles of security
-We have already  outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.
-Confidentiality
-This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.">
+<meta name="description" content="Notions of Security - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/notions-of-security/">
@@ -96,8 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/notions-of-security/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Notions of Security">
-  <meta property="og:description" content="CIAA principles of security We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.
-Confidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -109,10 +105,7 @@ Confidentiality This is one concerns about the secrecy of the sent message. We d
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Notions of Security">
-<meta name="twitter:description" content="CIAA principles of security
-We have already  outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.
-Confidentiality
-This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -141,12 +134,12 @@ This is one concerns about the secrecy of the sent message. We do not want other
   "@type": "BlogPosting",
   "headline": "Notions of Security",
   "name": "Notions of Security",
-  "description": "CIAA principles of security We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.\nConfidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.\n",
+  "description": "",
   "keywords": [
     "🛡️cybersecurity", "☁cloud-computing"
   ],
-  "articleBody": "CIAA principles of security We have already outlined these principles in Sicurezza delle reti and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.\nConfidentiality This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.\nEavesdropping This is an example of attack of confidentiality. The setting is usually like this: Eve that intercepts the message sent by each other. For example in network security, it is quite easy to eavesdrop with Wireshark or similars.\nIntegrity Integrity concerns with message tampering. The received message should be the same as the sent one (man in the middle are common attacks).\nAuthentication Authentication is important when we need to know to whom we are talking to. We should need to be sure that that is exactly the person (or the machine) we are trying to connect (or talk to). In this framework it is about integrity. For more in depth analysis see User authentication.\nSpoofing attacks When an attacker authenticates as another user.\nManipulation attacks This is tampering.\nAvailability The system should be available, that is accessible by its users. Attacks that prevent this cornerstone are attacks that make system less performant or inaccessible to the user.\nDenial of service attacks For example if you have limited number of ports, a common example of denial of service attack is the Syn flooding where multiple services ask to open a TCP connection, but it doesn’t continue with the communication, leaving the port occupied but useless.\nAnonymity On the internet we are not anonymous we are always tracked by ISP, cookies and many other strategies that I am not even aware of. This is a problem we we want to be anonymous, so how can we reach this target??\nAnonymity by proxy We just use another computer to repeat my information, this computer doesn’t have access to the underlying information, but it substitutes his IP to ours, so the end receiver doesn’t exactly know where the initial message comes from.\nAAA principles of security See Sicurezza OS, we describe these notions more in detail, but in the context of computer operating systems.\nAuthentication Answers: who are you?\nAuthorization Answers: what can you do?\nAccounting Answers: what have you done?\nOther Notions Basic Notions In this section, we introduce some of the most common definitions in security.\nTrusted Computing Base A trusted computing base (TCB) defines the parts of the system that are trusted by the host or guest (could be hardware or also software). It is important to keep in mind whose perspective are we taking.\nIn cloud computing systems hypervisor hardware and host software are trusted by the host, but not guest software.\nAttack Surface The attack surface is the sum of the different points (attack vectors) in a computing device or network that are accessible to an unauthorized user (attacker). In cloud VMs examples are:\nCPU instruction set for the VM Hypercall API (virtual I/O, memory management, etc.) Network interfaces Defense in Depth This is the idea where you need to be able to exploit multiple layers in order to actually gain control of the machine. One example is hypervisor models, for example with firecracker or QEMU, you should need to exploit also the hypervisor to gain control on the machine.\nThreat Model A threat model is a structured representation of all the information that affects the security of an application. Usually it is more used in academic contexts to analyze security principles of the system. It includes:\nthe assets to be protected the potential threats to those assets What the attacker can and cannot do (e.g. the infinite computational power assumptions, we explored in Asymmetric Cryptography proofs). This helps also to define out-of-scope threats. There is a real example of 2018 attacks on side channels (see Spectre and Meltdown. They proved that the Intel CPU micro-architecture is vulnerable to side-channel attacks. They exploited the speculative execution feature of modern processors to leak sensitive data (kernel memory) from the CPU cache, in user mode, there was no isolation anymore. This was a huge problem for cloud computing, as it affected the security of virtual machines running on shared hardware. The whole industry had to pivot to care about side-channel attacks.\nMemory Safety There are mainly two notions of memory safety:\nTemporal safety:\nNo use-after-free errors Meaning, every pointer should point to a valid memory address. Spatial safety:\nNo out-of-bounds errors Meaning, every pointer should point to a valid memory address within the allocated memory region. It should not be able to read or write where you should not. Most of the bugs are memory safety errors. Programs like rust solve this problem, but it is often infeasible to rewrite large codebases in memory safe languages like Rust. Other fixes are:\nSoftware fault isolation Example: out of bound checks on each memory access, WebAssembly does it. Hardware support for memory safety: Memory capabilities or protection keys see Sicurezza OS. Idea -\u003e fat pointer, that also has information about read-write range permissions. One example is CHERI (university of Cambridge 2010 with ARM), now we have the first chips that have this feature. Trust Relations Trust relationships define our threat model, so it is important to know some of the most common treat models in the cloud and in enterprise systems.\nTrust in the cloud Trust relationships\nEveryone trusts the hardware\nUsers do not trust each other\nUsers trust the cloud provider (and its software)\nCloud provider does not trust users Who has access to what?\nUsers do not have physical access to hardware\nCloud provider has physical access\nVM isolation is the de-facto standard\nEven when the user doesn’t see/manage the VM (functions, containers) Some notable exceptions:\nBare metal servers gVisor (Google “application kernel” for Linux) Drawbridge (Microsoft process-level isolation for Windows applications with a library OS) Cloudflare workers (language sandbox for serverless functions, based on V8 JIT) Why VMs?\nPerception of greater security Lowest common denominator when mitigating security vulnerabilities Overhead has come down (e.g., AWS firecracker (Cloud Computing Services)) Trust in Enterprise systems Trust relationships\nEveryone trusts the hardware Users do not trust each other Users trust the enterprise (administrators etc.) Enterprise does not trust users Who has access to what? Users have physical access to hardware Enterprise has physical access Side Channel and Covert Channel Definitions A side channel is a source of unintended communication between isolated components Usually done with instruction that leak timing information, or hardware performance features, like spectre. Here the leak is unintentional while with covert channels, it is intentional (see (Dennett 1988) for intentionality). Covert channel: hidden channel used to get information out Two parties want to communicate without others knowing the communication is happening Other Types of attacks with side channels Spectre Attack This type of attack is enabled by speculation mechanisms (branch prediction) in the CPU hardware. It is very hard to fix without degrading the performance, and changing hardware is quite costly. They basically show that with VM colocation, they are able to read kernle memory of the other VM.\nStructure of the Attack Set some microarchitectural state, for example:\nClear 256 (these are the characters in ASCII code) cache blocks at a certain address Prime a branch to taken state and read some violated memory. The idea is very simple. Then you can try to extract the cache values, if there is a hit, then it is faster (slightly faster) and you know that that was the byte read. Fixes to spectre Never share at the same time the same CPU (so L1 or L2 cache) to different VMs using multithreading for example. Sequential sharing is ok, you just do context switch. Last level cache can be shared, the attack to this cache level is much more difficult. References [1] Dennett “The Intentional Stance in Theory and Practice” 1988 ",
-  "wordCount" : "1343",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-06-03T00:00:00Z",
   "dateModified": "2025-06-03T00:00:00Z",
@@ -241,298 +234,12 @@ This is one concerns about the secrecy of the sent message. We do not want other
     <h1 class="post-title entry-hint-parent">
       Notions of Security
     </h1>
-    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-06-03 00:00:00 +0000 UTC'>June 3, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#ciaa-principles-of-security" aria-label="CIAA principles of security">CIAA principles of security</a><ul>
-                        
-                <li>
-                    <a href="#confidentiality" aria-label="Confidentiality">Confidentiality</a><ul>
-                        
-                <li>
-                    <a href="#eavesdropping" aria-label="Eavesdropping">Eavesdropping</a></li></ul>
-                </li>
-                <li>
-                    <a href="#integrity" aria-label="Integrity">Integrity</a><ul>
-                        
-                <li>
-                    <a href="#authentication" aria-label="Authentication">Authentication</a></li>
-                <li>
-                    <a href="#spoofing-attacks" aria-label="Spoofing attacks">Spoofing attacks</a></li>
-                <li>
-                    <a href="#manipulation-attacks" aria-label="Manipulation attacks">Manipulation attacks</a></li></ul>
-                </li>
-                <li>
-                    <a href="#availability" aria-label="Availability">Availability</a><ul>
-                        
-                <li>
-                    <a href="#denial-of-service-attacks" aria-label="Denial of service attacks">Denial of service attacks</a></li></ul>
-                </li>
-                <li>
-                    <a href="#anonymity" aria-label="Anonymity">Anonymity</a><ul>
-                        
-                <li>
-                    <a href="#anonymity-by-proxy" aria-label="Anonymity by proxy">Anonymity by proxy</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#aaa-principles-of-security" aria-label="AAA principles of security">AAA principles of security</a><ul>
-                        
-                <li>
-                    <a href="#authentication-1" aria-label="Authentication">Authentication</a></li>
-                <li>
-                    <a href="#authorization" aria-label="Authorization">Authorization</a></li>
-                <li>
-                    <a href="#accounting" aria-label="Accounting">Accounting</a></li></ul>
-                </li>
-                <li>
-                    <a href="#other-notions" aria-label="Other Notions">Other Notions</a><ul>
-                        
-                <li>
-                    <a href="#basic-notions" aria-label="Basic Notions">Basic Notions</a><ul>
-                        
-                <li>
-                    <a href="#trusted-computing-base" aria-label="Trusted Computing Base">Trusted Computing Base</a></li>
-                <li>
-                    <a href="#attack-surface" aria-label="Attack Surface">Attack Surface</a></li>
-                <li>
-                    <a href="#defense-in-depth" aria-label="Defense in Depth">Defense in Depth</a></li>
-                <li>
-                    <a href="#threat-model" aria-label="Threat Model">Threat Model</a></li>
-                <li>
-                    <a href="#memory-safety" aria-label="Memory Safety">Memory Safety</a></li></ul>
-                </li>
-                <li>
-                    <a href="#trust-relations" aria-label="Trust Relations">Trust Relations</a><ul>
-                        
-                <li>
-                    <a href="#trust-in-the-cloud" aria-label="Trust in the cloud">Trust in the cloud</a></li>
-                <li>
-                    <a href="#trust-in-enterprise-systems" aria-label="Trust in Enterprise systems">Trust in Enterprise systems</a></li></ul>
-                </li>
-                <li>
-                    <a href="#side-channel-and-covert-channel" aria-label="Side Channel and Covert Channel">Side Channel and Covert Channel</a><ul>
-                        
-                <li>
-                    <a href="#definitions" aria-label="Definitions">Definitions</a></li>
-                <li>
-                    <a href="#other-types-of-attacks-with-side-channels" aria-label="Other Types of attacks with side channels">Other Types of attacks with side channels</a></li>
-                <li>
-                    <a href="#spectre-attack" aria-label="Spectre Attack">Spectre Attack</a></li>
-                <li>
-                    <a href="#fixes-to-spectre" aria-label="Fixes to spectre">Fixes to spectre</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h2 id="ciaa-principles-of-security">CIAA principles of security<a hidden class="anchor" aria-hidden="true" href="#ciaa-principles-of-security">#</a></h2>
-<p>We have already  outlined these principles in <a href="/notes/sicurezza-delle-reti">Sicurezza delle reti</a> and talked about the concepts of authentication and integrity. Here we try to deepen these concepts and delve a little bit more on the attack vectors. This note mainly focuses on the principles summarized by the acronyms CIA and AAA.</p>
-<h3 id="confidentiality">Confidentiality<a hidden class="anchor" aria-hidden="true" href="#confidentiality">#</a></h3>
-<p>This is one concerns about the secrecy of the sent message. We do not want others to be able to access and read what we are doing.</p>
-<h4 id="eavesdropping">Eavesdropping<a hidden class="anchor" aria-hidden="true" href="#eavesdropping">#</a></h4>
-<p>This is an example of attack of confidentiality. The setting is usually like this: Eve that intercepts the message sent by each other.
-For example in network security, it is quite easy to eavesdrop with Wireshark or similars.</p>
-<h3 id="integrity">Integrity<a hidden class="anchor" aria-hidden="true" href="#integrity">#</a></h3>
-<p>Integrity concerns with message tampering. The received message should be the same as the sent one (man in the middle are common attacks).</p>
-<h4 id="authentication">Authentication<a hidden class="anchor" aria-hidden="true" href="#authentication">#</a></h4>
-<p>Authentication is important when we <strong>need to know</strong> to whom we are talking to. We should need to be sure that that is exactly the person (or the machine) we are trying to connect (or talk to). In this framework it is about integrity.
-For more in depth analysis see <a href="/notes/user-authentication">User authentication</a>.</p>
-<h4 id="spoofing-attacks">Spoofing attacks<a hidden class="anchor" aria-hidden="true" href="#spoofing-attacks">#</a></h4>
-<p>When an attacker authenticates as another user.</p>
-<h4 id="manipulation-attacks">Manipulation attacks<a hidden class="anchor" aria-hidden="true" href="#manipulation-attacks">#</a></h4>
-<p>This is tampering.</p>
-<h3 id="availability">Availability<a hidden class="anchor" aria-hidden="true" href="#availability">#</a></h3>
-<p>The system should be available, that is accessible by its users. Attacks that prevent this cornerstone are attacks that make system less performant or inaccessible to the user.</p>
-<h4 id="denial-of-service-attacks">Denial of service attacks<a hidden class="anchor" aria-hidden="true" href="#denial-of-service-attacks">#</a></h4>
-<p>For example if you have limited number of ports, a common example of denial of service attack is the <strong>Syn flooding</strong> where multiple services ask to open a TCP connection, but it doesn&rsquo;t continue with the communication, leaving the port occupied but useless.</p>
-<h3 id="anonymity">Anonymity<a hidden class="anchor" aria-hidden="true" href="#anonymity">#</a></h3>
-<p>On the internet we <strong>are not anonymous</strong> we are always tracked by ISP, cookies and many other strategies that I am not even aware of.
-This is a problem we we want to be anonymous, so how can we reach this target??</p>
-<h4 id="anonymity-by-proxy">Anonymity by proxy<a hidden class="anchor" aria-hidden="true" href="#anonymity-by-proxy">#</a></h4>
-<p>We just use another computer to repeat my information, this computer doesn&rsquo;t have access to the underlying information, but it substitutes his IP to ours, so the end receiver doesn&rsquo;t exactly know where the initial message comes from.</p>
-<h2 id="aaa-principles-of-security">AAA principles of security<a hidden class="anchor" aria-hidden="true" href="#aaa-principles-of-security">#</a></h2>
-<p>See <a href="/notes/sicurezza-os">Sicurezza OS</a>, we describe these notions more in detail, but in the context of computer operating systems.</p>
-<h3 id="authentication-1">Authentication<a hidden class="anchor" aria-hidden="true" href="#authentication-1">#</a></h3>
-<p>Answers: who are you?</p>
-<h3 id="authorization">Authorization<a hidden class="anchor" aria-hidden="true" href="#authorization">#</a></h3>
-<p>Answers: what can you do?</p>
-<h3 id="accounting">Accounting<a hidden class="anchor" aria-hidden="true" href="#accounting">#</a></h3>
-<p>Answers: what have you done?</p>
-<h2 id="other-notions">Other Notions<a hidden class="anchor" aria-hidden="true" href="#other-notions">#</a></h2>
-<h3 id="basic-notions">Basic Notions<a hidden class="anchor" aria-hidden="true" href="#basic-notions">#</a></h3>
-<p>In this section, we introduce some of the most common definitions in security.</p>
-<h4 id="trusted-computing-base">Trusted Computing Base<a hidden class="anchor" aria-hidden="true" href="#trusted-computing-base">#</a></h4>
-<p>A trusted computing base (TCB) defines the parts of the system that are <strong>trusted</strong> by the host or guest (could be hardware or also software).
-It is important to keep in mind whose perspective are we taking.</p>
-<p>In cloud computing systems hypervisor hardware and host software are trusted by the host, but not guest software.</p>
-<img src="/images/notes/Theoretical Notions of Security-20250520112631542.webp" style="width: 100%" class="center" alt="Theoretical Notions of Security-20250520112631542">
-<h4 id="attack-surface">Attack Surface<a hidden class="anchor" aria-hidden="true" href="#attack-surface">#</a></h4>
-<p>The attack surface is the sum of the different points (attack vectors) in a computing device or network that are accessible to an unauthorized user (attacker).
-In cloud VMs examples are:</p>
-<ul>
-<li>CPU instruction set for the VM</li>
-<li>Hypercall API (virtual I/O, memory management, etc.)</li>
-<li>Network interfaces</li>
-</ul>
-<h4 id="defense-in-depth">Defense in Depth<a hidden class="anchor" aria-hidden="true" href="#defense-in-depth">#</a></h4>
-<p>This is the idea where you need to be able to exploit <strong>multiple layers</strong> in order to actually gain control of the machine. One example is hypervisor models, for example with firecracker or QEMU, you should need to exploit also the hypervisor to gain control on the machine.</p>
-<h4 id="threat-model">Threat Model<a hidden class="anchor" aria-hidden="true" href="#threat-model">#</a></h4>
-<p>A threat model is a structured representation of all the information that affects the security of an application. Usually it is more used in academic contexts to analyze security principles of the system.
-It includes:</p>
-<ul>
-<li>the assets to be protected</li>
-<li>the potential threats to those assets</li>
-<li>What the attacker <strong>can and cannot</strong> do (e.g. the infinite computational power assumptions, we explored in <a href="/notes/asymmetric-cryptography">Asymmetric Cryptography</a> proofs).</li>
-<li>This helps also to define <em>out-of-scope</em> threats.</li>
-</ul>
-<p>There is a real example of 2018 attacks on side channels (see <a href="https://meltdownattack.com/">Spectre and Meltdown</a>. They proved that the Intel CPU micro-architecture is vulnerable to side-channel attacks. They exploited the speculative execution feature of modern processors to leak sensitive data (kernel memory) from the CPU cache, in user mode, there was <strong>no isolation anymore</strong>. This was a huge problem for cloud computing, as it affected the security of virtual machines running on shared hardware.
-The whole industry had to pivot to care about side-channel attacks.</p>
-<h4 id="memory-safety">Memory Safety<a hidden class="anchor" aria-hidden="true" href="#memory-safety">#</a></h4>
-<p>There are mainly two notions of memory safety:</p>
-<p><strong>Temporal safety</strong>:</p>
-<ul>
-<li>No use-after-free errors</li>
-<li>Meaning, every pointer should point to a valid memory address.</li>
-</ul>
-<p><strong>Spatial safety</strong>:</p>
-<ul>
-<li>No out-of-bounds errors</li>
-<li>Meaning, every pointer should point to a valid memory address within the allocated memory region.
-<ul>
-<li>It should not be able to read or write where you should not.</li>
-</ul>
-</li>
-</ul>
-<p>Most of the bugs are memory safety errors. Programs like rust solve this problem, but it is often infeasible to rewrite large codebases in memory safe languages like Rust.
-Other fixes are:</p>
-<ul>
-<li><strong>Software fault isolation</strong>
-<ul>
-<li>Example: out of bound checks  on each memory access, WebAssembly does it.</li>
-</ul>
-</li>
-<li><strong>Hardware support for memory safety</strong>:
-<ul>
-<li>Memory capabilities or protection keys see <a href="/notes/sicurezza-os">Sicurezza OS</a>.</li>
-<li>Idea -&gt; <em>fat pointer</em>, that also has information about read-write range permissions.</li>
-<li>One example is CHERI (university of Cambridge 2010 with ARM), now we have the first chips that have this feature.</li>
-</ul>
-</li>
-</ul>
-<h3 id="trust-relations">Trust Relations<a hidden class="anchor" aria-hidden="true" href="#trust-relations">#</a></h3>
-<p>Trust relationships define our threat model, so it is important to know some of the most common treat models in the cloud and in enterprise systems.</p>
-<h4 id="trust-in-the-cloud">Trust in the cloud<a hidden class="anchor" aria-hidden="true" href="#trust-in-the-cloud">#</a></h4>
-<p>Trust relationships</p>
-<ul>
-<li>
-<p>Everyone trusts the hardware</p>
-</li>
-<li>
-<p>Users do not trust each other</p>
-</li>
-<li>
-<p>Users trust the cloud provider (and its software)</p>
-</li>
-<li>
-<p>Cloud provider does not trust users
-Who has access to what?</p>
-</li>
-<li>
-<p>Users do not have physical access to hardware</p>
-</li>
-<li>
-<p>Cloud provider has physical access</p>
-</li>
-<li>
-<p>VM isolation is the de-facto standard</p>
-<ul>
-<li>Even when the user doesn’t see/manage the VM (functions, containers)</li>
-</ul>
-</li>
-<li>
-<p>Some notable exceptions:</p>
-<ul>
-<li>Bare metal servers</li>
-<li>gVisor (Google “application kernel” for Linux)</li>
-<li>Drawbridge (Microsoft process-level isolation for Windows applications with a library OS)</li>
-<li>Cloudflare workers (language sandbox for serverless functions, based on V8 JIT)</li>
-</ul>
-</li>
-<li>
-<p>Why VMs?</p>
-<ul>
-<li>Perception of greater security</li>
-<li>Lowest common denominator when mitigating security vulnerabilities</li>
-<li>Overhead has come down (e.g., AWS firecracker (<a href="/notes/cloud-computing-services">Cloud Computing Services</a>))</li>
-</ul>
-</li>
-</ul>
-<h4 id="trust-in-enterprise-systems">Trust in Enterprise systems<a hidden class="anchor" aria-hidden="true" href="#trust-in-enterprise-systems">#</a></h4>
-<p>Trust relationships</p>
-<ul>
-<li>Everyone trusts the hardware</li>
-<li>Users do not trust each other</li>
-<li>Users trust the enterprise (administrators etc.)</li>
-<li>Enterprise does not trust users
-Who has access to what?</li>
-<li>Users have physical access to hardware</li>
-<li>Enterprise has physical access</li>
-</ul>
-<h3 id="side-channel-and-covert-channel">Side Channel and Covert Channel<a hidden class="anchor" aria-hidden="true" href="#side-channel-and-covert-channel">#</a></h3>
-<h4 id="definitions">Definitions<a hidden class="anchor" aria-hidden="true" href="#definitions">#</a></h4>
-<ul>
-<li>A side channel is a source of unintended communication between <strong>isolated</strong> components
-<ul>
-<li>Usually done with instruction that leak timing information, or hardware performance features, like spectre.</li>
-<li>Here the leak is <strong>unintentional</strong> while with covert channels, it is intentional (see <a href="/notes/notions-of-security#dennettIntentionalStanceTheory1988">(Dennett 1988)</a> for intentionality).</li>
-</ul>
-</li>
-<li>Covert channel: hidden channel used to get information out
-<ul>
-<li>Two parties want to communicate without others knowing the communication is happening</li>
-</ul>
-</li>
-</ul>
-<h4 id="other-types-of-attacks-with-side-channels">Other Types of attacks with side channels<a hidden class="anchor" aria-hidden="true" href="#other-types-of-attacks-with-side-channels">#</a></h4>
-<img src="/images/notes/Notions of Security-20250527223226223.webp" style="width: 100%" class="center" alt="Notions of Security-20250527223226223">
-<h4 id="spectre-attack">Spectre Attack<a hidden class="anchor" aria-hidden="true" href="#spectre-attack">#</a></h4>
-<p>This type of attack is enabled by speculation mechanisms (branch prediction) in the CPU hardware.
-It is very hard to fix without degrading the performance, and changing hardware is quite costly.
-They basically show that with VM colocation, they are able to read kernle memory of the other VM.</p>
-<p><strong>Structure of the Attack</strong>
-Set some microarchitectural state, for example:</p>
-<ul>
-<li>Clear 256 (these are the characters in ASCII code) cache blocks at a certain address</li>
-<li>Prime a branch to taken state and read some violated memory. The idea is very simple.</li>
-<li>Then you can try to extract the cache values, if there is a hit, then it is faster (slightly faster) and you know that that was the byte read.</li>
-</ul>
-<h4 id="fixes-to-spectre">Fixes to spectre<a hidden class="anchor" aria-hidden="true" href="#fixes-to-spectre">#</a></h4>
-<ul>
-<li>Never share at the same time the same CPU (so L1 or L2 cache) to different VMs using multithreading for example.</li>
-<li>Sequential sharing is ok, you just do context switch.</li>
-<li>Last level cache can be shared, the attack to this cache level is much more difficult.</li>
-</ul>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=dennettIntentionalStanceTheory1988>[1] Dennett “The Intentional Stance in Theory and Practice”  1988
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

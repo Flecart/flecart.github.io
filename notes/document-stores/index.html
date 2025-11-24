@@ -7,11 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Document Stores | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="📓big-data">
-<meta name="description" content="p&gt; Document stores provide a native database management system for semi-structured data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).
-Introduction to Document Stores
-
-A document store, unlike a data lake, manages the data directly and the users do not see the physical layout.
-Unlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for semi-structured data that we need to throw and read quickly.">
+<meta name="description" content="Document Stores - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/document-stores/">
@@ -97,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/document-stores/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Document Stores">
-  <meta property="og:description" content="p&gt; Document stores provide a native database management system for semi-structured data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).
-Introduction to Document Stores A document store, unlike a data lake, manages the data directly and the users do not see the physical layout.
-Unlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for semi-structured data that we need to throw and read quickly.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -110,11 +104,7 @@ Unlike data lakes, using document stores prevent us from breaking data independe
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Document Stores">
-<meta name="twitter:description" content="p&gt; Document stores provide a native database management system for semi-structured data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).
-Introduction to Document Stores
-
-A document store, unlike a data lake, manages the data directly and the users do not see the physical layout.
-Unlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for semi-structured data that we need to throw and read quickly.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -143,12 +133,12 @@ Unlike data lakes, using document stores prevent us from breaking data independe
   "@type": "BlogPosting",
   "headline": "Document Stores",
   "name": "Document Stores",
-  "description": "p\u0026gt; Document stores provide a native database management system for semi-structured data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).\nIntroduction to Document Stores A document store, unlike a data lake, manages the data directly and the users do not see the physical layout.\nUnlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for semi-structured data that we need to throw and read quickly.\n",
+  "description": "",
   "keywords": [
     "📓big-data"
   ],
-  "articleBody": "p\u003e Document stores provide a native database management system for semi-structured data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).\nIntroduction to Document Stores A document store, unlike a data lake, manages the data directly and the users do not see the physical layout.\nUnlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for semi-structured data that we need to throw and read quickly.\nIn this case, we would like an efficient manner to store documents, as original relational databases did, while offering a relaxed version of the integrity properties.\nThe documents in a document store are organized into collections. Each collection can have millions or billions of documents, while each single document weighs no more than 16 MB. Collections need not to have a schema, but could.\nOn the need of an unstructured document manager In some cases, it is quite easy to convert a tree given in XML or JSON format into a structured format. The problems comes when we have nestedness. For these kind of documents, sometimes is possible to insert them using different tables. Sometimes is possible to insert into relational databases heterogeneous data too. But we need to insert a lot of NULL to make up for the heterogeneity. This creates the kind of impendance mismatch, the difference between the format of data we would like to have, between what we actually store, that adds up a load. In this context, document stores like MongoDB comes naturally into play.\nSize of the documents a collection can have millions or billions of documents, while each single document weighs no more than 16 MB\nThis is why document stores can scale up to Gigabytes or terabytes of data. Somewhat similar to HDFS, where each block size had maximum of 128 megabytes. The size limit, is quite close to the limit set by Wide Column Storage of 10 MB.\nEnforcing Schemas Document stores leverage the so called schema on read pattern: the schema is enforced when the data is read, not when it is written. This is a relaxed, more flexible, version of the schema on write pattern, that is used in relational databases. In document stores, the schema is often discovered.\noffer query functionality to find out which keys appear in the data, what kind of value is associated with each key, etc; or even functionality that directly infers a schema\nMongoDB MongoDB is one of the most famous document storage engines. This database management system is more comparable to standard database management systems where ETL is the standard, instead of read from file paradigms like Hadoop or Spark.\nThe Architecture Replication If we store petabytes of data, replication is a necessary feature. In MongoDB the collections are partitioned into shards, and each partition has a Replica Set. Each replica set has a primary server and a set of secondary servers. The primary server is the one that accepts write operations, while the secondary servers replicate the data from the primary server. Usually a MongoDBcluster has not many machines.\nWhen writing to the primary servery, a simple optimization is the following: clients may wait only for a certain number of acknowledgements by the second server. Then the other replicas can continue asynchronously. This is for making it faster for the user. This is somewhat similar to the $R$ parameter in Dynamo Cloud Storage#Key-value stores.\nThe main difference with systems like HDFS is that here we have a series of nodes with exactly the same data, while in HDFS, it is quite improbable, as the blocks are replicated independently.\nPhysical Storage Documents in MongoDB are usually stored in BSON format, an equivalent method to JSON (see Markup) but in binary format as it is usually more efficient.\nIndices While Spark would look at all the data in parallel to find a single point data for a certain query, the main advantage with ETL (so MongoDBs) is by having the possibility of creating indexes. With indexes we can look data quite faster. We have studied something similar for relational database in Index, B-trees and hashes\nTypes of indices There are mainly two types of indices, hash and B-trees. , both have been extensively studied in this node Index, B-trees and hashes, and it’s exactly the same.\nDrawbacks of hash indices\nCannot answer for range queries. Space requirement for collisions. The upside is that this indices are quite fast. If no collisions then it is $\\mathcal{O}(1)$ While B-trees are slower, they can answer range queries. The complexity is $\\mathcal{O}(\\log_{n}(N))$ where $n$ is the branching factor.\nDefault indices MongoDB creates by default a hash indice for the primary key _id.\nBenefiting queries Certain queries can benefit quite more by having indices:\nPoint queries (hash makes this quite fast, while trees make this logarithmic). Range queries Creating an Index If we want a tree index\ndb.collection.createIndex({\"field\": 1}) Else:\ndb.collection.createIndex({\"field\": \"hash\"}) Post-filtering If we have a query with some keys that have an index, others that do not have an index MongoDB will first look for the indexed keys, and then post-filter the rest of the keys, making the query faster anyways. Under the hood, it creates many plans, estimates the cost of every plan and then executes one.\nThis is particularly needed for indexes that have more than one index. It is important to remember how the indexes are made!\nOperations Similarly to HTML APIs, MongoDB offers CRUD operations. It is important to know the syntax of these operations.\nRead operations For example:\ndb.collection.find({ \"field\": \"value\", $or: [ {\"field2\": \"value2\"}, {\"field3\": \"value3\"} ], \"field4\": {$gte: 10}, \"field5.subfield\": \"value4\" }).project({field: 1}).sort({\"field\": 1}).skip(10).limit(10) We filter the collection by the field value, and we project only the field we are interested in. Having AND conjunctions is easy, just put in the object. Fields that start with “$” are treated by MongoDB differently. And can encode different operations. Other dollar operations are\n$or, $in, $nin $gte $lt And similar.\nThe Above proejction operator just works for cursors, in our case, the projection is often found inside the find function, as a second argument.\nWe can index into arrays and objects using dot notation inside the find query.\nTo query nested structures we need to use the dot syntax. If we don’t do it that way and add a dictionary in the place of value4 instead, it will match exactly the dictionary.\nAggregate queries Aggregation query\ndb.collection.aggregate([ {$match: {\"field\": \"value\"}}, {$group: {_id: \"$field\", \"count\": {$sum: 1}}}, {$sort: {\"count\": -1}}, {$limit: 10} ]) Which is very similar to a Spark RDD pipeline.\nInsertion, Update and Delete Insertion is quite straighforward: insertOne:\ndb.collection.insertOne({\"field\": \"value\"}) insertMany:\ndb.collection.insertMany([{\"field\": \"value\"}, {\"field\": \"value2\"}]) There are the same equivalent for update and delete operations.\nThen we attempt to create indices for the most common query searches. It often depends on the query code and the website traffic (if it’s a database for a website). But you don’t have advantage if you can’t fit the indices in the random access memory. Another disadvantage is a slower update: we need to update the index for every update on the table. Just 2ms for a single lookup! Which is much faster than HDFS and Spark.\n",
-  "wordCount" : "1222",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-02T00:00:00Z",
   "dateModified": "2025-01-02T00:00:00Z",
@@ -243,183 +233,12 @@ Unlike data lakes, using document stores prevent us from breaking data independe
     <h1 class="post-title entry-hint-parent">
       Document Stores
     </h1>
-    <div class="post-meta"><span title='2025-01-02 00:00:00 +0000 UTC'>January 2, 2025</span>&nbsp;·&nbsp;Reading Time: 6 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-01-02 00:00:00 +0000 UTC'>January 2, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#introduction-to-document-stores" aria-label="Introduction to Document Stores">Introduction to Document Stores</a><ul>
-                        
-                <li>
-                    <a href="#on-the-need-of-an-unstructured-document-manager" aria-label="On the need of an unstructured document manager">On the need of an unstructured document manager</a></li>
-                <li>
-                    <a href="#size-of-the-documents" aria-label="Size of the documents">Size of the documents</a></li>
-                <li>
-                    <a href="#enforcing-schemas" aria-label="Enforcing Schemas">Enforcing Schemas</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#mongodb" aria-label="MongoDB">MongoDB</a><ul>
-                        
-                <li>
-                    <a href="#the-architecture" aria-label="The Architecture">The Architecture</a><ul>
-                        
-                <li>
-                    <a href="#replication" aria-label="Replication">Replication</a></li>
-                <li>
-                    <a href="#physical-storage" aria-label="Physical Storage">Physical Storage</a></li></ul>
-                </li>
-                <li>
-                    <a href="#indices" aria-label="Indices">Indices</a><ul>
-                        
-                <li>
-                    <a href="#types-of-indices" aria-label="Types of indices">Types of indices</a></li>
-                <li>
-                    <a href="#default-indices" aria-label="Default indices">Default indices</a></li>
-                <li>
-                    <a href="#benefiting-queries" aria-label="Benefiting queries">Benefiting queries</a></li>
-                <li>
-                    <a href="#creating-an-index" aria-label="Creating an Index">Creating an Index</a></li>
-                <li>
-                    <a href="#post-filtering" aria-label="Post-filtering">Post-filtering</a></li></ul>
-                </li>
-                <li>
-                    <a href="#operations" aria-label="Operations">Operations</a><ul>
-                        
-                <li>
-                    <a href="#read-operations" aria-label="Read operations">Read operations</a></li>
-                <li>
-                    <a href="#aggregate-queries" aria-label="Aggregate queries">Aggregate queries</a></li>
-                <li>
-                    <a href="#insertion-update-and-delete" aria-label="Insertion, Update and Delete">Insertion, Update and Delete</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>p&gt; Document stores provide a native database management system for <strong>semi-structured</strong> data. Document stores also scale to Gigabytes or Terabytes of data, and typically millions or billions of records (a record being a JSON object or an XML document).</p>
-<h3 id="introduction-to-document-stores">Introduction to Document Stores<a hidden class="anchor" aria-hidden="true" href="#introduction-to-document-stores">#</a></h3>
-<blockquote>
-<p>A document store, unlike a data lake, manages the data <em>directly</em> and the users do not see the physical layout.</p></blockquote>
-<p>Unlike data lakes, using document stores prevent us from breaking data independence and reading the data file directly: it offers an automatic manager service for <strong>semi-structured</strong> data that we need to throw and read quickly.</p>
-<p>In this case, we would like an <em>efficient</em> manner to store documents, as original relational databases did, while offering a relaxed version of the <em>integrity</em> properties.</p>
-<p>The documents in a document store are organized into <strong>collections</strong>. Each collection can have millions or billions of documents, while each single document weighs no more than 16 MB.
-Collections need not to have a schema, but could.</p>
-<h4 id="on-the-need-of-an-unstructured-document-manager">On the need of an unstructured document manager<a hidden class="anchor" aria-hidden="true" href="#on-the-need-of-an-unstructured-document-manager">#</a></h4>
-<p>In some cases, it is quite easy to convert a tree given in XML or JSON format into a structured format. The problems comes when we have <em>nestedness</em>. For these kind of documents, sometimes is possible to insert them using different tables.
-Sometimes is possible to insert into relational databases heterogeneous data too. But we need to insert a lot of NULL to make up for the heterogeneity.
-This creates the kind of <strong>impendance mismatch</strong>, the difference between the format of data we would like to have, between what we actually store, that adds up a load.
-In this context, document stores like MongoDB comes naturally into play.</p>
-<h4 id="size-of-the-documents">Size of the documents<a hidden class="anchor" aria-hidden="true" href="#size-of-the-documents">#</a></h4>
-<blockquote>
-<p>a collection can have millions or billions of documents, while each single document weighs no more than 16 MB</p></blockquote>
-<p>This is why document stores can scale up to Gigabytes or terabytes of data.
-Somewhat similar to HDFS, where each block size had maximum of 128 megabytes.
-The size limit, is quite close to the limit set by <a href="/notes/wide-column-storage">Wide Column Storage</a> of 10 MB.</p>
-<h4 id="enforcing-schemas">Enforcing Schemas<a hidden class="anchor" aria-hidden="true" href="#enforcing-schemas">#</a></h4>
-<p>Document stores leverage the so called <strong>schema on read pattern</strong>: the schema is enforced when the data is read, not when it is written. This is a relaxed, more flexible, version of the schema on write pattern, that is used in relational databases.
-In document stores, the schema is often <strong>discovered</strong>.</p>
-<blockquote>
-<p>offer query functionality to find out which keys appear in the data, what kind of value is associated with each key, etc; or even functionality that directly infers a schema</p></blockquote>
-<h2 id="mongodb">MongoDB<a hidden class="anchor" aria-hidden="true" href="#mongodb">#</a></h2>
-<p>MongoDB is one of the most famous document storage engines. This database management system is more comparable to standard database management systems where ETL is the standard, instead of read from file paradigms like Hadoop or Spark.</p>
-<h3 id="the-architecture">The Architecture<a hidden class="anchor" aria-hidden="true" href="#the-architecture">#</a></h3>
-<h4 id="replication">Replication<a hidden class="anchor" aria-hidden="true" href="#replication">#</a></h4>
-<p>If we store petabytes of data, replication is a necessary feature.
-In MongoDB the collections are partitioned into <strong>shards</strong>, and each partition has a <strong>Replica Set</strong>.
-Each replica set has a primary server and a set of secondary servers. The primary server is the one that accepts write operations, while the secondary servers replicate the data from the primary server. Usually a MongoDBcluster has not many machines.</p>
-<p>When writing to the primary servery, a simple optimization is the following: clients may wait only for a <em>certain</em> number of acknowledgements by the second server. Then the other replicas can continue asynchronously. This is for making it faster for the user. This is somewhat similar to the $R$ parameter in Dynamo <a href="/notes/cloud-storage#key-value-stores">Cloud Storage#Key-value stores</a>.</p>
-<p>The main difference with systems like <a href="/notes/distributed-file-systems">HDFS</a> is that here we have a series of nodes with exactly the same data, while in HDFS, it is quite improbable, as the blocks are replicated independently.</p>
-<h4 id="physical-storage">Physical Storage<a hidden class="anchor" aria-hidden="true" href="#physical-storage">#</a></h4>
-<p>Documents in MongoDB are usually stored in BSON format, an equivalent method to JSON (see <a href="/notes/markup">Markup</a>) but in <strong>binary</strong> format as it is usually more <em>efficient</em>.</p>
-<h3 id="indices">Indices<a hidden class="anchor" aria-hidden="true" href="#indices">#</a></h3>
-<p>While <a href="/notes/massive-parallel-processing">Spark</a> would look at all the data in parallel to find a single point data for a certain query, the main advantage with ETL (so MongoDBs) is by having the possibility of creating <strong>indexes</strong>. With indexes we can look data quite faster. We have studied something similar for relational database in <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a></p>
-<h4 id="types-of-indices">Types of indices<a hidden class="anchor" aria-hidden="true" href="#types-of-indices">#</a></h4>
-<p>There are mainly two types of indices, hash and B-trees. , both have been extensively studied in this node <a href="/notes/index,-b-trees-and-hashes">Index, B-trees and hashes</a>, and it&rsquo;s exactly the same.</p>
-<p>Drawbacks of hash indices</p>
-<ol>
-<li>Cannot answer for range queries.</li>
-<li>Space requirement for collisions.
-The upside is that this indices are quite fast. If no collisions then it is $\mathcal{O}(1)$</li>
-</ol>
-<p>While B-trees are slower, they can answer range queries. The complexity is $\mathcal{O}(\log_{n}(N))$ where $n$ is the branching factor.</p>
-<h4 id="default-indices">Default indices<a hidden class="anchor" aria-hidden="true" href="#default-indices">#</a></h4>
-<p>MongoDB creates by default a hash indice for the primary key <code>_id</code>.</p>
-<h4 id="benefiting-queries">Benefiting queries<a hidden class="anchor" aria-hidden="true" href="#benefiting-queries">#</a></h4>
-<p>Certain queries can benefit quite more by having indices:</p>
-<ol>
-<li>Point queries (hash makes this quite fast, while trees make this logarithmic).</li>
-<li>Range queries</li>
-</ol>
-<h4 id="creating-an-index">Creating an Index<a hidden class="anchor" aria-hidden="true" href="#creating-an-index">#</a></h4>
-<p>If we want a tree index</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.createIndex(</span><span class="p">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span><span class="err">)</span>
-</span></span></code></pre></div><p>Else:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.createIndex(</span><span class="p">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;hash&#34;</span><span class="p">}</span><span class="err">)</span>
-</span></span></code></pre></div><h4 id="post-filtering">Post-filtering<a hidden class="anchor" aria-hidden="true" href="#post-filtering">#</a></h4>
-<p>If we have a query with some keys that have an index, others that do not have an index MongoDB will first look for the indexed keys, and then post-filter the rest of the keys, making the query faster anyways.
-Under the hood, it creates many plans, estimates the cost of every plan and then executes one.</p>
-<p>This is particularly needed for indexes that have more than one index. It is important to remember how the indexes are made!</p>
-<h3 id="operations">Operations<a hidden class="anchor" aria-hidden="true" href="#operations">#</a></h3>
-<p>Similarly to HTML APIs, MongoDB offers CRUD operations.
-It is important to know the syntax of these operations.</p>
-<h4 id="read-operations">Read operations<a hidden class="anchor" aria-hidden="true" href="#read-operations">#</a></h4>
-<p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.find(</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;value&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="err">$or:</span> <span class="err">[</span>
-</span></span><span class="line"><span class="cl">	    <span class="err">{</span><span class="nt">&#34;field2&#34;</span><span class="p">:</span> <span class="s2">&#34;value2&#34;</span><span class="p">}</span><span class="err">,</span>
-</span></span><span class="line"><span class="cl">	    <span class="p">{</span><span class="nt">&#34;field3&#34;</span><span class="p">:</span> <span class="s2">&#34;value3&#34;</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="err">],</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;field4&#34;</span><span class="err">:</span> <span class="p">{</span><span class="err">$gte:</span> <span class="err">10</span><span class="p">}</span><span class="err">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;field5.subfield&#34;</span><span class="err">:</span> <span class="s2">&#34;value4&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="err">}).project(</span><span class="p">{</span><span class="err">field:</span> <span class="err">1</span><span class="p">}</span><span class="err">).sort(</span><span class="p">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span><span class="err">).skip(</span><span class="mi">10</span><span class="err">).limit(</span><span class="mi">10</span><span class="err">)</span>
-</span></span></code></pre></div><p>We filter the collection by the field value, and we project only the field we are interested in.
-Having <em>AND</em> conjunctions is easy, just put in the object. Fields that start with &ldquo;$&rdquo; are treated by MongoDB differently. And can encode different operations. Other dollar operations are</p>
-<ul>
-<li>$or, $in, $nin</li>
-<li>$gte</li>
-<li>$lt</li>
-<li></li>
-</ul>
-<p>And similar.</p>
-<p>The Above proejction operator just works for cursors, in our case, the projection is often found inside the find function, as a second argument.</p>
-<p>We can index into arrays and objects using dot notation inside the find query.</p>
-<p>To query nested structures we need to use the dot syntax. If we don&rsquo;t do it that way and add a dictionary in the place of value4 instead, it will match exactly the dictionary.</p>
-<h4 id="aggregate-queries">Aggregate queries<a hidden class="anchor" aria-hidden="true" href="#aggregate-queries">#</a></h4>
-<p>Aggregation query</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.aggregate(</span><span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="err">$match:</span> <span class="err">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;value&#34;</span><span class="p">}</span><span class="err">}</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="err">$group:</span> <span class="err">{_id:</span> <span class="nt">&#34;$field&#34;</span><span class="p">,</span> <span class="nt">&#34;count&#34;</span><span class="p">:</span> <span class="p">{</span><span class="err">$sum:</span> <span class="err">1</span><span class="p">}}</span><span class="err">}</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="err">$sort:</span> <span class="err">{</span><span class="nt">&#34;count&#34;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">}</span><span class="err">}</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="err">$limit:</span> <span class="err">10</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span><span class="err">)</span>
-</span></span></code></pre></div><p>Which is very similar to a Spark RDD pipeline.</p>
-<h4 id="insertion-update-and-delete">Insertion, Update and Delete<a hidden class="anchor" aria-hidden="true" href="#insertion-update-and-delete">#</a></h4>
-<p>Insertion is quite straighforward:
-insertOne:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.insertOne(</span><span class="p">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;value&#34;</span><span class="p">}</span><span class="err">)</span>
-</span></span></code></pre></div><p>insertMany:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">db.collection.insertMany(</span><span class="p">[{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;value&#34;</span><span class="p">},</span> <span class="p">{</span><span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;value2&#34;</span><span class="p">}]</span><span class="err">)</span>
-</span></span></code></pre></div><p>There are the same equivalent for update and delete operations.</p>
-<p>Then we attempt to create indices for the most common query searches. It often depends on the query code and the website traffic (if it&rsquo;s a database for a website).
-But you don&rsquo;t have advantage if you can&rsquo;t fit the indices in the random access memory. Another disadvantage is a slower update: we need to update the index for every update on the table.
-Just 2ms for a single lookup! Which is much faster than HDFS and Spark.</p>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

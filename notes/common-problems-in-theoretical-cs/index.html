@@ -7,12 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Common problems in Theoretical CS | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="theoretical-computer-science">
-<meta name="description" content="This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.
-The Clique problem
-Description of the problem
-This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).
-We can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it.
-See Time and Space Complexity#Clique problem for details of this proof.">
+<meta name="description" content="Common problems in Theoretical CS - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/common-problems-in-theoretical-cs/">
@@ -98,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/common-problems-in-theoretical-cs/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Common problems in Theoretical CS">
-  <meta property="og:description" content="This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.
-The Clique problem Description of the problem This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).
-We can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it. See Time and Space Complexity#Clique problem for details of this proof.">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -111,12 +104,7 @@ We can prove that the problem is in NP because there is an easy non-deterministi
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Common problems in Theoretical CS">
-<meta name="twitter:description" content="This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.
-The Clique problem
-Description of the problem
-This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).
-We can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it.
-See Time and Space Complexity#Clique problem for details of this proof.">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -145,12 +133,12 @@ See Time and Space Complexity#Clique problem for details of this proof.">
   "@type": "BlogPosting",
   "headline": "Common problems in Theoretical CS",
   "name": "Common problems in Theoretical CS",
-  "description": "This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.\nThe Clique problem Description of the problem This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).\nWe can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it. See Time and Space Complexity#Clique problem for details of this proof.\n",
+  "description": "",
   "keywords": [
     "theoretical-computer-science"
   ],
-  "articleBody": "This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.\nThe Clique problem Description of the problem This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).\nWe can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it. See Time and Space Complexity#Clique problem for details of this proof.\nA little more formally: Given a graph $\\langle G, E \\rangle$ we say that the solver for the clique problem returns a list of nodes $N \\subseteq G$ such that that is a complete graph. A subset of this problem is when we need cliques of $k$ nodes. So the problem is to return these $k$ nodes if they exist (or just say they don’t ).\nThe SAT problem SAT stands for SATisfiability.\nBackground notions Boolean formulas We define a language with variables and their negations. Logical and and or operations. Then we assign all possible values to the variables and see their end values after passing to the polynomial problem. But this explodes exponentially. Sometimes the boolean formula is in Logica Proposizionale, another time using Logica del Primo ordine.\nThird conjunct normal form If we have only OR operations, that is a clause. Then we say it is in conjunct normal form if these clauses are linked with AND operations. It’s third when the clauses have exactly tree variables.\nWhy is this problem important Many historical approaches used this problem to think about satisfiability. This problem is also important in constraint programming. TODO: add links in the future when it happens.\nDefinition of 3-SAT problem Given a third conjunct normal form, find assignments such that it satisfies the boolean formula.\n3-SAT $\\leq_{P}$ CLIQUE We prove using the notion of Cook-Levin and Savitch#Poly-reduction that 3-sat is reducible polynomially to clique.\nIn order to do this we need to transform the problem into graph format, and graph format to assignments.\nConversion strategy For every clause we defines 3 nodes. Then we link every node in this way:\nIf in same clause, don’t link If in other link, link only if it’s not your negation. Example:\nWe can prove that this conversion is polynomial (clear, you can write the algo and prove it 💠).\nWhy does the conversion work? Now, if the 3-SAT formula is satisfiable, then at least one node for each clause is true. We select a single true node for each clause, and this brings us the clique. By construction, this is a complete sub-graph. So this reduction works. Why does it work? Because as we have $k$ clauses, we have selected a node from each clause, and we know that each node is connected to each other node, because if not that wouldn’t be satisfied (by construction there is a link with other node $\\iff$ the node is in other triplet $\\land$ it’s not himself negated).\nWe now have a graph, let’s suppose we have a clique, then the 3-SAT is satisfiable because of similar arguments above (just assign true to those variables).\nTrue quantified Boolean formula Also called TQBF, it is defines as follows:\n$$ TQBF = \\left\\{ \\langle F \\rangle \\mid F \\text{ is a true boolean statement } \\right\\} $$ Where statement is a boolean formula were the values are all bounded. This problem is important for Time and Space Complexity analysis.\nTQBF is PSPACE-complete Remember that a problem is PSPACE complete if it is in PSPACE and every other PSPACE languages can be poly-reduced to this language.\nTQBF is in PSPACE This technique is something similar to Sintassi e RI strutturali technique.\nIf there are no quantifiers, evaluate the statements, and if it is true accept, else reject. If we have a format like $F = \\exists x.G$ Then enumerate all: evaluate the truthfulness given $x = 1$, and then with $x = 0$ if one of them is true then return true. If we have a format like $F = \\forall x. G$ then evaluate both $x= 1$ and $x = 0$ and if both true return true. This is a recursive algorithm, and it is $O(m)$ where $m$ are the terms (max $m$ recursive passes, every recursive pass has at most a single term memorized). $\\square$. TQBF is PSPACE-hard This is difficult to grasp. Go to see (Sipser 2012) Chapter 8.3 pp. 340.\nThe idea is to convert the computation of the TM that decides the given language $L$ using some formulas like $\\phi_{c_{1}, c_{2}, t}$ which means that this is true if it’s possible to go from $c_{1}$ to $c_{2}$ in at most $t$ steps. In this setting $c_{1}$ and $c_{2}$ are different configurations of the Turing Machine.\nThe proof is by induction:\nIf $t=1$ then $c_{1}=c_{2}$ or it’s possible to go into $c_{2}$ using a single step. This is verifiable using the windows argument in the Cook-Levin theorem. Else it’s a little bit more difficult. It’s easy to verify it 🤠. $$ F_{c, c', t} = \\exists m_{1} \\forall(c_{3}, c_{4}) \\in \\left\\{ (c, m_{1}), (m_{1}, c') \\right\\} F_{c_{3}, c_{4}, \\frac{t}{2}} $$ Given this inductive formulation, we can observe that we add only $O(n^{k})$ quantifiers in the recursive proof. So the formula has $\\log (2^{dn^{k}})$ induction steps which is $O(n^{k})$. So this problem is PSPACE-hard. Two player games It is possible to prove that every two player zero-sum game like chess or Go, that uses a minimax tree search strategy can be expressed into a TQBF problem like this (informally): For every move of the opponent, exists one of my moves such that for every move of the opponent …. -\u003e I win. This is a TQBF statement.\nThe Tiling Problem Formalizzazione del problema Definizione formale del tiling Consideriamo una tupla $\\langle \\mathcal{T}, t_{0}, H, V \\rangle$\n$\\mathcal{T}$ è un insieme di piastrelle. $t_{0} \\in \\mathcal{T}$ è la piastrella d’origine. $H \\subseteq \\mathcal{T} \\times \\mathcal{T}$ le regole di adiacenza orizzontali. $V \\subseteq \\mathcal{T} \\times \\mathcal{T}$ le regole di adiacenza verticali. L’obiettivo è vedere se è possibile riempire tutto il piano con queste piastrelle, all’infinito. Sappiamo già che non è sempre possibile farlo. Ci chiediamo se è automatizzabile. Questo problema è stato risolto nel 1966, e sembra non essere riconoscibile nemmeno.\nOssia in matematichese definire la funzione $f : \\mathbb{N} \\times \\mathbb{N} \\to \\mathcal{T}$ Con\n$f(1, 1) = t_{0}$ $\\forall n,m \\in \\mathbb{N}, (f(n, m), f(n + 1, m)) \\in V$ $\\forall n,m \\in \\mathbb{N}, (f(n, m), f(n, m+1)) \\in H$ Strategia di dimostrazione Vogliamo ridurlo da $ETH^{-}$ che abbiamo spiegato in Halting Theorem and Reducibility. Questo è un linguaggio non riconoscibile, perché il suo complemento è riconoscibile in modo banale.\nQuesta dimostrazione avrà un sacco di punti molto tecnici per dire che una macchina di turing deve essere tradotta in un problema di tiling…\nDimostrazione irriconoscibilità del tiling L’idea principale è che con un tiling posso simulare l’esecuzione di una macchina di Turing. E in questo modo riduco il problema a un Halt. Perché sapere tassellare significa sapere dire quando una macchina di Turing finisce.\nCodifica delle regole dei tiling Posso codificare sia i tile disponibili, sia le regole di adiacenza in questo modo.\nPoi vogliamo codificare ogni casella verticale un singolo step di computazione.\nCella di identità Questa cella non fa niente. Celle di transizione Possiamo codificare le funzioni di transizione della macchina di Turing. Poi ho ancora le cose che mantengono il simbolo nella cella di arrivo.\nConclusione sse non si ferma la macchina, allora esiste un tiling (che è una cosa banale perché significa che continua all’infinito, e quindi posso mappare tutto).\nReferences [1] Sipser “Introduction to the Theory of Computation” Cengage Learning 2012 ",
-  "wordCount" : "1290",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-05-15T00:00:00Z",
   "dateModified": "2024-05-15T00:00:00Z",
@@ -245,217 +233,12 @@ See Time and Space Complexity#Clique problem for details of this proof.">
     <h1 class="post-title entry-hint-parent">
       Common problems in Theoretical CS
     </h1>
-    <div class="post-meta"><span title='2024-05-15 00:00:00 +0000 UTC'>May 15, 2024</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-05-15 00:00:00 +0000 UTC'>May 15, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul><ul>
-                <li>
-                    <a href="#the-clique-problem" aria-label="The Clique problem">The Clique problem</a><ul>
-                        
-                <li>
-                    <a href="#description-of-the-problem" aria-label="Description of the problem">Description of the problem</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-sat-problem" aria-label="The SAT problem">The SAT problem</a><ul>
-                        
-                <li>
-                    <a href="#background-notions" aria-label="Background notions">Background notions</a><ul>
-                        
-                <li>
-                    <a href="#boolean-formulas" aria-label="Boolean formulas">Boolean formulas</a></li>
-                <li>
-                    <a href="#third-conjunct-normal-form" aria-label="Third conjunct normal form">Third conjunct normal form</a></li>
-                <li>
-                    <a href="#why-is-this-problem-important" aria-label="Why is this problem important">Why is this problem important</a></li></ul>
-                </li>
-                <li>
-                    <a href="#definition-of-3-sat-problem" aria-label="Definition of 3-SAT problem">Definition of 3-SAT problem</a></li>
-                <li>
-                    <a href="#3-sat-leq_p--clique" aria-label="3-SAT $\leq_{P}$  CLIQUE">3-SAT $\leq_{P}$  CLIQUE</a><ul>
-                        
-                <li>
-                    <a href="#conversion-strategy" aria-label="Conversion strategy">Conversion strategy</a></li>
-                <li>
-                    <a href="#why-does-the-conversion-work" aria-label="Why does the conversion work?">Why does the conversion work?</a></li></ul>
-                </li></ul>
-                </li>
-                <li>
-                    <a href="#true-quantified-boolean-formula" aria-label="True quantified Boolean formula">True quantified Boolean formula</a><ul>
-                        
-                <li>
-                    <a href="#tqbf-is-pspace-complete" aria-label="TQBF is PSPACE-complete">TQBF is PSPACE-complete</a><ul>
-                        
-                <li>
-                    <a href="#tqbf-is-in-pspace" aria-label="TQBF is in PSPACE">TQBF is in PSPACE</a></li>
-                <li>
-                    <a href="#tqbf-is-pspace-hard" aria-label="TQBF is PSPACE-hard">TQBF is PSPACE-hard</a></li></ul>
-                </li>
-                <li>
-                    <a href="#two-player-games" aria-label="Two player games">Two player games</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-tiling-problem" aria-label="The Tiling Problem">The Tiling Problem</a><ul>
-                        
-                <li>
-                    <a href="#formalizzazione-del-problema" aria-label="Formalizzazione del problema">Formalizzazione del problema</a><ul>
-                        
-                <li>
-                    <a href="#definizione-formale-del-tiling" aria-label="Definizione formale del tiling">Definizione formale del tiling</a></li>
-                <li>
-                    <a href="#strategia-di-dimostrazione" aria-label="Strategia di dimostrazione">Strategia di dimostrazione</a></li></ul>
-                </li>
-                <li>
-                    <a href="#dimostrazione-irriconoscibilit%c3%a0-del-tiling" aria-label="Dimostrazione irriconoscibilità del tiling">Dimostrazione irriconoscibilità del tiling</a><ul>
-                        
-                <li>
-                    <a href="#codifica-delle-regole-dei-tiling" aria-label="Codifica delle regole dei tiling">Codifica delle regole dei tiling</a></li>
-                <li>
-                    <a href="#cella-di-identit%c3%a0" aria-label="Cella di identità">Cella di identità</a></li>
-                <li>
-                    <a href="#celle-di-transizione" aria-label="Celle di transizione">Celle di transizione</a></li>
-                <li>
-                    <a href="#conclusione" aria-label="Conclusione">Conclusione</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>This note is useful to gather in a single place the description of some common problems in CS and their theoretical implications explained in other notes.</p>
-<h2 id="the-clique-problem">The Clique problem<a hidden class="anchor" aria-hidden="true" href="#the-clique-problem">#</a></h2>
-<h3 id="description-of-the-problem">Description of the problem<a hidden class="anchor" aria-hidden="true" href="#description-of-the-problem">#</a></h3>
-<p>This problem is in NP, find all sub-graphs where all nodes are connected (this set of nodes forms a complete graph).</p>
-<p>We can prove that the problem is in NP because there is an easy non-deterministic algorithm that computes it.
-See <a href="/notes/time-and-space-complexity#clique-problem">Time and Space Complexity#Clique problem</a> for details of this proof.</p>
-<p>A little more formally:
-Given a graph $\langle G, E \rangle$ we say that the solver for the clique problem returns a list of nodes $N \subseteq G$ such that that is a complete graph.
-A subset of this problem is when we need cliques of $k$ nodes. So the problem is to return these $k$ nodes if they exist (or just say they don&rsquo;t ).</p>
-<h2 id="the-sat-problem">The SAT problem<a hidden class="anchor" aria-hidden="true" href="#the-sat-problem">#</a></h2>
-<p>SAT stands for SATisfiability.</p>
-<h3 id="background-notions">Background notions<a hidden class="anchor" aria-hidden="true" href="#background-notions">#</a></h3>
-<h4 id="boolean-formulas">Boolean formulas<a hidden class="anchor" aria-hidden="true" href="#boolean-formulas">#</a></h4>
-<p>We define a language with variables and their negations. Logical and and or operations.
-Then we assign all possible values to the variables and see their end values after passing to the polynomial problem.
-But this <strong>explodes</strong> exponentially.
-Sometimes the boolean formula is in <a href="/notes/logica-proposizionale">Logica Proposizionale</a>, another time using <a href="/notes/logica-del-primo-ordine">Logica del Primo ordine</a>.</p>
-<h4 id="third-conjunct-normal-form">Third conjunct normal form<a hidden class="anchor" aria-hidden="true" href="#third-conjunct-normal-form">#</a></h4>
-<p>If we have only OR operations, that is a <em>clause</em>.
-Then we say it is in conjunct normal form if these clauses are linked with AND operations.
-It&rsquo;s <em>third</em> when the clauses have exactly tree variables.</p>
-<h4 id="why-is-this-problem-important">Why is this problem important<a hidden class="anchor" aria-hidden="true" href="#why-is-this-problem-important">#</a></h4>
-<p>Many historical approaches used this problem to think about satisfiability. This problem is also important in constraint programming.
-TODO: add links in the future when it happens.</p>
-<h3 id="definition-of-3-sat-problem">Definition of 3-SAT problem<a hidden class="anchor" aria-hidden="true" href="#definition-of-3-sat-problem">#</a></h3>
-<p>Given a third conjunct normal form, find assignments such that it satisfies the boolean formula.</p>
-<h3 id="3-sat-leq_p--clique">3-SAT $\leq_{P}$  CLIQUE<a hidden class="anchor" aria-hidden="true" href="#3-sat-leq_p--clique">#</a></h3>
-<p>We prove using the notion of <a href="/notes/cook-levin-and-savitch#poly-reduction">Cook-Levin and Savitch#Poly-reduction</a> that 3-sat is reducible polynomially to clique.</p>
-<p>In order to do this we need to transform the problem into graph format, and graph format to assignments.</p>
-<h4 id="conversion-strategy">Conversion strategy<a hidden class="anchor" aria-hidden="true" href="#conversion-strategy">#</a></h4>
-<p>For every clause we defines 3 nodes.
-Then we link every node in this way:</p>
-<ol>
-<li>If in same clause, don&rsquo;t link</li>
-<li>If in other link, link only if it&rsquo;s not your negation.</li>
-</ol>
-<p>Example:</p>
-<img src="/images/notes/Common problems in Theoretical CS-20240410121141341.webp" style="width: 100%" class="center" alt="Common problems in Theoretical CS-20240410121141341">
-<p>We can prove that this conversion is polynomial (clear, you can write the algo and prove it 💠).</p>
-<h4 id="why-does-the-conversion-work">Why does the conversion work?<a hidden class="anchor" aria-hidden="true" href="#why-does-the-conversion-work">#</a></h4>
-<p>Now, if the 3-SAT formula is satisfiable, then at least one node for each clause is true. We select a single true node for each clause, and this brings us the clique.
-By construction, this is a complete sub-graph. So this reduction works. Why does it work? Because as we have $k$ clauses, we have selected a node from each clause, and we know that each node is connected to each other node, because if not that wouldn&rsquo;t be satisfied (by construction there is a link with other node $\iff$ the node is in other triplet $\land$ it&rsquo;s not himself negated).</p>
-<p>We now have a graph, let&rsquo;s suppose we have a clique, then the 3-SAT is satisfiable because of similar arguments above (just assign true to those variables).</p>
-<h2 id="true-quantified-boolean-formula">True quantified Boolean formula<a hidden class="anchor" aria-hidden="true" href="#true-quantified-boolean-formula">#</a></h2>
-<p>Also called TQBF, it is defines as follows:</p>
-$$
-TQBF = \left\{ \langle F \rangle \mid F \text{ is a true boolean statement } \right\} 
-$$<p>
-Where statement is a boolean formula were the values are all bounded.
-This problem is important for <a href="/notes/time-and-space-complexity">Time and Space Complexity</a> analysis.</p>
-<h3 id="tqbf-is-pspace-complete">TQBF is PSPACE-complete<a hidden class="anchor" aria-hidden="true" href="#tqbf-is-pspace-complete">#</a></h3>
-<p>Remember that a problem is PSPACE complete if it is in PSPACE and every other PSPACE languages can be poly-reduced to this language.</p>
-<h4 id="tqbf-is-in-pspace">TQBF is in PSPACE<a hidden class="anchor" aria-hidden="true" href="#tqbf-is-in-pspace">#</a></h4>
-<p>This technique is something similar to <a href="/notes/sintassi-e-ri-strutturali">Sintassi e RI strutturali</a> technique.</p>
-<ol>
-<li>If there are no quantifiers, evaluate the statements, and if it is true accept, else reject.</li>
-<li>If we have a format like $F = \exists x.G$ Then enumerate all: evaluate the truthfulness given $x = 1$, and then with $x = 0$ if one of them is true then return true.</li>
-<li>If we have a format like $F = \forall x. G$ then evaluate both $x= 1$ and $x = 0$ and if both true return true.
-This is a recursive algorithm, and it is $O(m)$ where $m$ are the terms (max $m$ recursive passes, every recursive pass has at most a single term memorized). $\square$.</li>
-</ol>
-<h4 id="tqbf-is-pspace-hard">TQBF is PSPACE-hard<a hidden class="anchor" aria-hidden="true" href="#tqbf-is-pspace-hard">#</a></h4>
-<p>This is difficult to grasp. Go to see <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">(Sipser 2012)</a> Chapter 8.3 pp. 340.</p>
-<p>The idea is to convert the computation of the TM that decides the given language $L$ using some formulas like $\phi_{c_{1}, c_{2}, t}$ which means that this is true if it&rsquo;s possible to go from $c_{1}$ to $c_{2}$ in at most $t$ steps.
-In this setting $c_{1}$ and $c_{2}$ are different configurations of the Turing Machine.</p>
-<p>The proof is by induction:</p>
-<ol>
-<li>If $t=1$ then $c_{1}=c_{2}$ or it&rsquo;s possible to go into $c_{2}$ using a single step. This is verifiable using the windows argument in the <a href="/notes/cook-levin-and-savitch#cook-levin-theorem">Cook-Levin theorem</a>.
-Else it&rsquo;s a little bit more difficult.
-It&rsquo;s easy to verify it 🤠.
-$$
-F_{c, c', t} = \exists m_{1} \forall(c_{3}, c_{4}) \in \left\{ (c, m_{1}), (m_{1}, c') \right\} F_{c_{3}, c_{4}, \frac{t}{2}}
-$$
-Given this inductive formulation, we can observe that we add only $O(n^{k})$ quantifiers in the recursive proof. So the formula has $\log (2^{dn^{k}})$ induction steps which is $O(n^{k})$. So this problem is PSPACE-hard.</li>
-</ol>
-<h3 id="two-player-games">Two player games<a hidden class="anchor" aria-hidden="true" href="#two-player-games">#</a></h3>
-<p>It is possible to prove that every two player zero-sum game like chess or Go, that uses a minimax tree search strategy can be expressed into a TQBF problem like this (informally):
-For every move of the opponent, exists one of my moves such that for every move of the opponent &hellip;. -&gt; I win.
-This is a TQBF statement.</p>
-<h2 id="the-tiling-problem">The Tiling Problem<a hidden class="anchor" aria-hidden="true" href="#the-tiling-problem">#</a></h2>
-<h3 id="formalizzazione-del-problema">Formalizzazione del problema<a hidden class="anchor" aria-hidden="true" href="#formalizzazione-del-problema">#</a></h3>
-<h4 id="definizione-formale-del-tiling">Definizione formale del tiling<a hidden class="anchor" aria-hidden="true" href="#definizione-formale-del-tiling">#</a></h4>
-<p>Consideriamo una tupla $\langle \mathcal{T}, t_{0}, H, V \rangle$</p>
-<ol>
-<li>$\mathcal{T}$ è un insieme di piastrelle.</li>
-<li>$t_{0} \in \mathcal{T}$ è la piastrella d&rsquo;origine.</li>
-<li>$H \subseteq \mathcal{T} \times \mathcal{T}$ le regole di adiacenza orizzontali.</li>
-<li>$V \subseteq \mathcal{T} \times \mathcal{T}$ le regole di adiacenza verticali.</li>
-</ol>
-<p>L&rsquo;obiettivo è vedere se è possibile riempire tutto il piano con queste piastrelle, all&rsquo;infinito. Sappiamo già che non è sempre possibile farlo. Ci chiediamo se è automatizzabile. Questo problema è stato risolto nel 1966, e sembra non essere riconoscibile nemmeno.</p>
-<p>Ossia in matematichese definire la funzione
-$f : \mathbb{N} \times \mathbb{N} \to \mathcal{T}$
-Con</p>
-<ol>
-<li>$f(1, 1) = t_{0}$</li>
-<li>$\forall n,m \in \mathbb{N}, (f(n, m), f(n + 1, m)) \in V$</li>
-<li>$\forall n,m \in \mathbb{N}, (f(n, m), f(n, m+1)) \in H$</li>
-</ol>
-<h4 id="strategia-di-dimostrazione">Strategia di dimostrazione<a hidden class="anchor" aria-hidden="true" href="#strategia-di-dimostrazione">#</a></h4>
-<p>Vogliamo ridurlo da $ETH^{-}$ che abbiamo spiegato in <a href="/notes/halting-theorem-and-reducibility">Halting Theorem and Reducibility</a>.
-Questo è un linguaggio non riconoscibile, perché il suo complemento è riconoscibile in modo banale.</p>
-<p>Questa dimostrazione avrà un sacco di punti molto tecnici per dire che una macchina di turing deve essere tradotta in un problema di tiling&hellip;</p>
-<h3 id="dimostrazione-irriconoscibilità-del-tiling">Dimostrazione irriconoscibilità del tiling<a hidden class="anchor" aria-hidden="true" href="#dimostrazione-irriconoscibilità-del-tiling">#</a></h3>
-<p>L&rsquo;idea principale è che con un tiling posso <strong>simulare l&rsquo;esecuzione</strong> di una macchina di Turing.
-E in questo modo riduco il problema a un Halt. Perché sapere tassellare significa sapere dire quando una macchina di Turing finisce.</p>
-<h4 id="codifica-delle-regole-dei-tiling">Codifica delle regole dei tiling<a hidden class="anchor" aria-hidden="true" href="#codifica-delle-regole-dei-tiling">#</a></h4>
-<p>Posso codificare sia i tile disponibili, sia le regole di adiacenza in questo modo.</p>
-<img src="/images/notes/Tiling problem-20240307134015081.webp" style="width: 100%" class="center" alt="Tiling problem-20240307134015081">
-<p>Poi vogliamo codificare ogni casella verticale <strong>un singolo step di computazione</strong>.</p>
-<h4 id="cella-di-identità">Cella di identità<a hidden class="anchor" aria-hidden="true" href="#cella-di-identità">#</a></h4>
-<p>Questa cella non fa niente.
-<img src="/images/notes/Tiling problem-20240307134139688.webp" style="width: 100%" class="center" alt="Tiling problem-20240307134139688"></p>
-<h4 id="celle-di-transizione">Celle di transizione<a hidden class="anchor" aria-hidden="true" href="#celle-di-transizione">#</a></h4>
-<p>Possiamo codificare le funzioni di transizione della macchina di Turing.
-Poi ho ancora le cose che mantengono il simbolo nella cella di arrivo.</p>
-<img src="/images/notes/Tiling problem-20240307134228290.webp" style="width: 100%" class="center" alt="Tiling problem-20240307134228290">
-<h4 id="conclusione">Conclusione<a hidden class="anchor" aria-hidden="true" href="#conclusione">#</a></h4>
-<p>sse non si ferma la macchina, allora esiste un tiling (che è una cosa banale perché significa che continua all&rsquo;infinito, e quindi posso mappare tutto).</p>
-<img src="/images/notes/Tiling problem-20240307134959316.webp" style="width: 100%" class="center" alt="Tiling problem-20240307134959316">
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=sipserIntroductionTheoryComputation2012>[1] Sipser <a href="https://books.google.it/books/about/Introduction_to_the_Theory_of_Computatio.html?id=P3f6CAAAQBAJ">“Introduction to the Theory of Computation”</a> Cengage Learning 2012
- </p>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

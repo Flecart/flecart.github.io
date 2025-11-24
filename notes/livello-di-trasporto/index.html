@@ -7,25 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Livello di trasporto | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="🕸computer-networks">
-<meta name="description" content="Livello di trasporto
-Si parla di livello logico di trasporto, ma gran parte ne abbiamo già parlato in Livello applicazione e socket di UDP, TCP e Socket. trasporto end-to-end, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.
-UDP (3)
-
-
-Slide UDP
-  
-
-
-
-Classico inizio e fine porta del socket.
-Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene.
-8 byte di header, quindi molto efficiente!
-
-
-Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS)
-Oppure casi in cui perdere pacchetti non è molto importante.
-
-CARATTERISTICHE UDP">
+<meta name="description" content="Livello di trasporto - X. Angelo Huang&#39;s Blog">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/livello-di-trasporto/">
@@ -111,9 +93,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/livello-di-trasporto/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Livello di trasporto">
-  <meta property="og:description" content="Livello di trasporto Si parla di livello logico di trasporto, ma gran parte ne abbiamo già parlato in Livello applicazione e socket di UDP, TCP e Socket. trasporto end-to-end, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.
-UDP (3) Slide UDP
-Classico inizio e fine porta del socket. Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene. 8 byte di header, quindi molto efficiente! Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS) Oppure casi in cui perdere pacchetti non è molto importante. CARATTERISTICHE UDP">
+  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -124,25 +104,7 @@ Classico inizio e fine porta del socket. Lunghezza, si può vedere che massimo �
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Livello di trasporto">
-<meta name="twitter:description" content="Livello di trasporto
-Si parla di livello logico di trasporto, ma gran parte ne abbiamo già parlato in Livello applicazione e socket di UDP, TCP e Socket. trasporto end-to-end, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.
-UDP (3)
-
-
-Slide UDP
-  
-
-
-
-Classico inizio e fine porta del socket.
-Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene.
-8 byte di header, quindi molto efficiente!
-
-
-Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS)
-Oppure casi in cui perdere pacchetti non è molto importante.
-
-CARATTERISTICHE UDP">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -171,12 +133,12 @@ CARATTERISTICHE UDP">
   "@type": "BlogPosting",
   "headline": "Livello di trasporto",
   "name": "Livello di trasporto",
-  "description": "Livello di trasporto Si parla di livello logico di trasporto, ma gran parte ne abbiamo già parlato in Livello applicazione e socket di UDP, TCP e Socket. trasporto end-to-end, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.\nUDP (3) Slide UDP\nClassico inizio e fine porta del socket. Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene. 8 byte di header, quindi molto efficiente! Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS) Oppure casi in cui perdere pacchetti non è molto importante. CARATTERISTICHE UDP\n",
+  "description": "",
   "keywords": [
     "🕸computer-networks"
   ],
-  "articleBody": "Livello di trasporto Si parla di livello logico di trasporto, ma gran parte ne abbiamo già parlato in Livello applicazione e socket di UDP, TCP e Socket. trasporto end-to-end, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.\nUDP (3) Slide UDP\nClassico inizio e fine porta del socket. Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene. 8 byte di header, quindi molto efficiente! Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS) Oppure casi in cui perdere pacchetti non è molto importante. CARATTERISTICHE UDP\nNessun controllo del flow, senza handshake, e per questo motivo possiamo dire che non sia connection oriented (l’affidabilità della connessione può essere spostata al livello superiore) Stateless Velocità di invio, 8 byte di overhead contro i 20 di TCP Per maggiori informazioni e confronto con TCP (il fatto di connectionless etc) guardare [Intro TCP (3) e UPD\nTCP struttura pacchetto In cui c’è molto di più.\nTCP segment structure\nLa nota importante oltre le flag, e altre cose è\nAcknoledgement del pacchetto precedente è messo nell’header! Internet checksum Slide internet checksum\nStile dell’algoritmo:\nIncolonnati a 16 bit, faccio la somma di tutit i bit. Somma del riporto wraparound. Complemento a uno del risultato precedente Si ricordi che questo è un metodo utile per capire se ci sono errori di trasmissione, ma non è molto buono per difendersi da attacchi umani.\nCostruzione protocollo di trasporto reliable Vogliamo cercare di costruire un protocollo ground up, cioè assumento piano piano, errore per errore e fixare ogni errore.\nAlla fine il protocollo così creato sarà\nAffidabilità del trasferimento di dati Vorremo creare l’equivalente di un canale di strasferimento affidabile, cosa che non è internet, quindi vogliamo aggiungere altre cose per rendere questa interfaccia:\nSlide RDT (Reliable data transfer)\nPermetto di creare interfaccie come\nrdt_send() udt_send() unreliable data transfer, che è quello offerto dalla rete. Stessa cosa per il lato di ricezione, ricevo da cosa unreliable, processo e li passo sopra.\nEsempi sono numerazione di pacchetti e resend di pacchetti chei non sono stati ricevuti, questi sono modi per rendere affidabili.\nPasso passo, 3 problemi Resistente alla corruzione dei pacchetti Corruzione dei pacchetti ACK Resistente alla perdita di pacchetti RETE RELIABLE\nSlide rete reliable\nÈ la cosa più stupida, si assume subito che sia reliable\nRETE CORRUTTIBILE\nSi utilizza un sistema ACK, NACK per vedere se arriva o meno il pacchetto\nSlide rete corruttibile\nSe dal lato ricevente, viene inviato il messaggio che è arrivato sbagliato.\nCORRUZIONE DEI NAK e ACK\nChe succede con l’esempio sopra se si possono corrompere anche ACK e NACK? Facciamo ack e nack sui numeri pacchetto!\nSlide ack e nak\nSENZA NAK\nSlide senza nak\nBasta mandare l’ack al pacchetto corretto! Non abbiamo più bisogno che si mandi nak quando arriva il pacchetto brutto.\nPERDITA DI PACCHETTI\nIn questo caso includiamoil timeout.\nSlide timing\nEsempio di rdt3 in azione\nANALISI DELLE PERFORMANCE\nSlide performance rdt3.0\nSi può notare che l’utilizzo della rete è pochissimo! 0.027 % di utilizzo in questa analisi.\nDovremo cercare di parallellizzare il processo utilizzato per mandare e riceve\nPipelining (2) È un metodo per mandare più pacchetti contemporaneamente.\nCi sono due metodologie principalemente, go back N, selective repeat.\nPipelined protocols\nGO BACK N\nSignifica che con gli ultimi n ack sono stati ricdevuti correttamente, quindi col singolo ack, mi dice da dove posso cominciare a ripartire a mandare. Ma manda un sacco di pacchetti, quindi può congestionare la rete, con il vantaggio che non mi devo memorizzare.\nAutoma Go back N (NON FARE)\nEsempio di GBN\nil destinatario non deve memorizzare nel buffer i pacchetti che giungono fuori sequenza. (risparmio in memoria)\nMaggiore onere alla rete, che deve ritrasmettere alcuni pacchetti anche se vengono ricevuti correttamente.\nSELECTIVE REPEAT\nPerché ti faccio ripetere in modo selettivo.\nMeno lavoro dei router Overhead maggiore per i RTT per gli ACK, cosa che alla fine rallenta la prestazione della rete. Più memoria per mantenere tempi per tutti i pacchetti. Approfondimento TCP TCP trip time Slides\nSi utilizza una tecnica di media esponenziale presente anche in [Scheduler-e-upd-\n###-tcp-struttura-pacchetto-\nin-cui-c-è-molto-di-più.\n–tcp-segment-structure\n—-",
-  "wordCount" : "1451",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -271,350 +233,12 @@ CARATTERISTICHE UDP">
     <h1 class="post-title entry-hint-parent">
       Livello di trasporto
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 7 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+  </header> 
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#livello-di-trasporto" aria-label="Livello di trasporto">Livello di trasporto</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#udp-3" aria-label="UDP (3)">UDP (3)</a></li>
-                <li>
-                    <a href="#tcp-struttura-pacchetto" aria-label="TCP struttura pacchetto">TCP struttura pacchetto</a></li>
-                <li>
-                    <a href="#internet-checksum" aria-label="Internet checksum">Internet checksum</a></li></ul>
-                    
-                <li>
-                    <a href="#costruzione-protocollo-di-trasporto-reliable" aria-label="Costruzione protocollo di trasporto reliable">Costruzione protocollo di trasporto reliable</a><ul>
-                        
-                <li>
-                    <a href="#affidabilit%c3%a0-del-trasferimento-di-dati" aria-label="Affidabilità del trasferimento di dati">Affidabilità del trasferimento di dati</a></li>
-                <li>
-                    <a href="#passo-passo-3-problemi" aria-label="Passo passo, 3 problemi">Passo passo, 3 problemi</a></li>
-                <li>
-                    <a href="#pipelining-2" aria-label="Pipelining (2)">Pipelining (2)</a></li></ul>
-                </li>
-                <li>
-                    <a href="#approfondimento-tcp" aria-label="Approfondimento TCP">Approfondimento TCP</a><ul>
-                        
-                <li>
-                    <a href="#tcp-trip-time" aria-label="TCP trip time">TCP trip time</a></li>
-                <li>
-                    <a href="#ack-e-numeri-di-sequenza-no" aria-label="Ack e numeri di sequenza (no)">Ack e numeri di sequenza (no)</a></li>
-                <li>
-                    <a href="#il-resend-2" aria-label="Il resend (2)">Il resend (2)</a></li>
-                <li>
-                    <a href="#controllo-del-flusso-no" aria-label="Controllo del flusso (no)">Controllo del flusso (no)</a></li>
-                <li>
-                    <a href="#controllo-della-congestione-" aria-label="Controllo della Congestione (!)">Controllo della Congestione (!)</a>
-                </li>
-            </ul>
-            </li>
-            </ul>
-            </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><h1 id="livello-di-trasporto">Livello di trasporto<a hidden class="anchor" aria-hidden="true" href="#livello-di-trasporto">#</a></h1>
-<p>Si parla di <strong>livello logico</strong> di trasporto, ma gran parte ne abbiamo già parlato in <a href="/notes/livello-applicazione-e-socket">Livello applicazione e socket</a> di UDP, TCP e Socket. <strong>trasporto end-to-end</strong>, nel senso che livello traporto viene visto solamente ad inizio e alla fine, in tutti i nodi intermedi non è visto sto pacchetto.</p>
-<h3 id="udp-3">UDP (3)<a hidden class="anchor" aria-hidden="true" href="#udp-3">#</a></h3>
-<ul>
-<li>
-<p>Slide UDP</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled">
-</li>
-</ul>
-<ol>
-<li>Classico inizio e fine porta del socket.</li>
-<li>Lunghezza, si può vedere che massimo è 2 alla 16, e poi il checksum per vedere se è comunicato bene.</li>
-<li>8 byte di header, quindi molto efficiente!</li>
-</ol>
-<ul>
-<li>Sposto a livello applicazione il check al mancato pacchetto. (esempio DNS)</li>
-<li>Oppure casi in cui perdere pacchetti non è molto importante.</li>
-</ul>
-<p>CARATTERISTICHE UDP</p>
-<ol>
-<li>Nessun controllo del flow, senza handshake, e per questo motivo possiamo dire che non sia connection oriented (l&rsquo;affidabilità della connessione può essere spostata al livello superiore)</li>
-<li><strong>Stateless</strong></li>
-<li>Velocità di invio, 8 byte di overhead contro i 20 di TCP</li>
-</ol>
-<p>Per maggiori informazioni e confronto con TCP (il fatto di connectionless etc) guardare [Intro TCP (3) e UPD</p>
-<h3 id="tcp-struttura-pacchetto">TCP struttura pacchetto<a hidden class="anchor" aria-hidden="true" href="#tcp-struttura-pacchetto">#</a></h3>
-<p>In cui c&rsquo;è molto di più.</p>
-<ul>
-<li>
-<p>TCP segment structure</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 1">
-</li>
-</ul>
-<p>La nota importante oltre le flag, e altre cose è</p>
-<ul>
-<li>Acknoledgement del pacchetto precedente è messo nell’header!</li>
-</ul>
-<h3 id="internet-checksum">Internet checksum<a hidden class="anchor" aria-hidden="true" href="#internet-checksum">#</a></h3>
-<ul>
-<li>
-<p>Slide internet checksum</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 2">
-</li>
-</ul>
-<p>Stile dell’algoritmo:</p>
-<ol>
-<li>Incolonnati a 16 bit,</li>
-<li>faccio la somma di tutit i bit.</li>
-<li>Somma del riporto <strong>wraparound</strong>.</li>
-<li>Complemento a uno del risultato precedente</li>
-</ol>
-<p>Si ricordi che questo è un metodo utile per capire se ci sono errori di trasmissione, ma non è molto buono per difendersi da attacchi umani.</p>
-<h2 id="costruzione-protocollo-di-trasporto-reliable">Costruzione protocollo di trasporto reliable<a hidden class="anchor" aria-hidden="true" href="#costruzione-protocollo-di-trasporto-reliable">#</a></h2>
-<p>Vogliamo cercare di costruire un protocollo ground up, cioè assumento piano piano, errore per errore e fixare ogni errore.</p>
-<p>Alla fine il protocollo così creato sarà</p>
-<h3 id="affidabilità-del-trasferimento-di-dati">Affidabilità del trasferimento di dati<a hidden class="anchor" aria-hidden="true" href="#affidabilità-del-trasferimento-di-dati">#</a></h3>
-<p>Vorremo creare <strong>l’equivalente di un canale di strasferimento affidabile</strong>, cosa che non è internet, quindi vogliamo aggiungere altre cose per rendere questa interfaccia:</p>
-<ul>
-<li>
-<p>Slide RDT (Reliable data transfer)</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 3">
-</li>
-</ul>
-<p>Permetto di creare interfaccie come</p>
-<ol>
-<li><code>rdt_send()</code></li>
-<li><code>udt_send()</code> unreliable data transfer, che è quello offerto dalla rete.</li>
-</ol>
-<p>Stessa cosa per il lato di ricezione, ricevo da cosa unreliable, processo e li passo sopra.</p>
-<p>Esempi sono numerazione di pacchetti e resend di pacchetti chei non sono stati ricevuti, questi sono modi per rendere affidabili.</p>
-<h3 id="passo-passo-3-problemi">Passo passo, 3 problemi<a hidden class="anchor" aria-hidden="true" href="#passo-passo-3-problemi">#</a></h3>
-<ol>
-<li>Resistente alla corruzione dei pacchetti</li>
-<li>Corruzione dei pacchetti ACK</li>
-<li>Resistente alla perdita di pacchetti</li>
-</ol>
-<p><strong>RETE RELIABLE</strong></p>
-<ul>
-<li>
-<p>Slide rete reliable</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 4">
-</li>
-</ul>
-<p>È la cosa più stupida, si assume subito che sia reliable</p>
-<p><strong>RETE CORRUTTIBILE</strong></p>
-<p>Si utilizza un sistema ACK, NACK per vedere se arriva o meno il pacchetto</p>
-<ul>
-<li>
-<p>Slide rete corruttibile</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 5">
-</li>
-</ul>
-<p>Se dal lato ricevente, viene inviato il messaggio che è arrivato sbagliato.</p>
-<p><strong>CORRUZIONE DEI NAK e ACK</strong></p>
-<p>Che succede con l’esempio sopra se si possono corrompere anche ACK e NACK? Facciamo ack e nack sui numeri pacchetto!</p>
-<ul>
-<li>
-<p>Slide ack e nak</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 6.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 6">
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 7.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 7">
-</li>
-</ul>
-<p><strong>SENZA NAK</strong></p>
-<ul>
-<li>
-<p>Slide senza nak</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 8.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 8">
-</li>
-</ul>
-<p>Basta mandare l&rsquo;ack al pacchetto corretto! Non abbiamo più bisogno che si mandi nak quando arriva il pacchetto brutto.</p>
-<p><strong>PERDITA DI PACCHETTI</strong></p>
-<p>In questo caso includiamoil timeout.</p>
-<ul>
-<li>
-<p>Slide timing</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 9.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 9">
-</li>
-<li>
-<p>Esempio di rdt3 in azione</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 10.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 10">
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 11.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 11">
-</li>
-</ul>
-<p><strong>ANALISI DELLE PERFORMANCE</strong></p>
-<ul>
-<li>
-<p>Slide performance rdt3.0</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 12.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 12">
-</li>
-</ul>
-<p>Si può notare che l&rsquo;utilizzo della rete è pochissimo! 0.027 % di utilizzo in questa analisi.</p>
-<p>Dovremo cercare di parallellizzare il processo utilizzato per mandare e riceve</p>
-<h3 id="pipelining-2">Pipelining (2)<a hidden class="anchor" aria-hidden="true" href="#pipelining-2">#</a></h3>
-<p>È un metodo per mandare più pacchetti contemporaneamente.</p>
-<p>Ci sono due metodologie principalemente, <strong>go back N,  selective repeat</strong>.</p>
-<ul>
-<li>
-<p>Pipelined protocols</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 13.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 13">
-</li>
-</ul>
-<p><strong>GO BACK N</strong></p>
-<p>Significa che con gli ultimi n ack sono stati ricdevuti correttamente, quindi col singolo ack, mi dice da dove posso cominciare a ripartire a mandare. Ma manda un sacco di pacchetti, quindi può congestionare la rete, con il vantaggio che non mi devo memorizzare.</p>
-<ul>
-<li>
-<p>Automa Go back N (NON FARE)</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 14.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 14">
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 15.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 15">
-</li>
-<li>
-<p>Esempio di GBN</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 16.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 16">
-</li>
-<li>
-<p>il destinatario non deve memorizzare nel buffer i pacchetti che giungono fuori sequenza. (risparmio in memoria)</p>
-</li>
-<li>
-<p>Maggiore onere alla rete, che deve ritrasmettere alcuni pacchetti anche se vengono ricevuti correttamente.</p>
-</li>
-</ul>
-<p><strong>SELECTIVE REPEAT</strong></p>
-<p>Perché ti faccio ripetere in modo selettivo.</p>
-<ul>
-<li>Meno lavoro dei router</li>
-<li>Overhead maggiore per i RTT per gli ACK, cosa che alla fine rallenta la prestazione della rete.</li>
-<li>Più memoria per mantenere tempi per tutti i pacchetti.</li>
-</ul>
-<h2 id="approfondimento-tcp">Approfondimento TCP<a hidden class="anchor" aria-hidden="true" href="#approfondimento-tcp">#</a></h2>
-<h3 id="tcp-trip-time">TCP trip time<a hidden class="anchor" aria-hidden="true" href="#tcp-trip-time">#</a></h3>
-<ul>
-<li>
-<p>Slides</p>
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 17.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 17">
-  <img src="/images/notes/image/universita/ex-notion/Livello di trasporto/Untitled 18.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Livello di trasporto/Untitled 18">
-</li>
-</ul>
-<p>Si utilizza una tecnica di media esponenziale presente anche in [<a href="/notes/intro-tcp-(3">Scheduler</a>-e-upd-</p>
-<p>###-tcp-struttura-pacchetto-</p>
-<p>in-cui-c-è-molto-di-più.</p>
-<p>&ndash;tcp-segment-structure</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-1.png&quot;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-1&rdquo;&gt;</p>
-<p>la-nota-importante-oltre-le-flag,-e-altre-cose-è</p>
-<p>&ndash;acknoledgement-del-pacchetto-precedente-è-messo-nell’header!</p>
-<p>###-internet-checksum-</p>
-<p>&ndash;slide-internet-checksum</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-2.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-2&rdquo;&gt;</p>
-<p>stile-dell’algoritmo:</p>
-<p>1.-incolonnati-a-16-bit,
-2.-faccio-la-somma-di-tutit-i-bit.
-3.-somma-del-riporto-<strong>wraparound</strong>.
-4.-complemento-a-uno-del-risultato-precedente</p>
-<p>si-ricordi-che-questo-è-un-metodo-utile-per-capire-se-ci-sono-errori-di-trasmissione,-ma-non-è-molto-buono-per-difendersi-da-attacchi-umani.</p>
-<p>##-costruzione-protocollo-di-trasporto-reliable</p>
-<p>vogliamo-cercare-di-costruire-un-protocollo-ground-up,-cioè-assumento-piano-piano,-errore-per-errore-e-fixare-ogni-errore.</p>
-<p>alla-fine-il-protocollo-così-creato-sarà</p>
-<p>###-affidabilità-del-trasferimento-di-dati</p>
-<p>vorremo-creare-<strong>l’equivalente-di-un-canale-di-strasferimento-affidabile</strong>,-cosa-che-non-è-internet,-quindi-vogliamo-aggiungere-altre-cose-per-rendere-questa-interfaccia:</p>
-<p>&ndash;slide-rdt-(reliable-data-transfer)</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-3.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-3&rdquo;&gt;</p>
-<p>permetto-di-creare-interfaccie-come</p>
-<p>1.-<code>rdt_send()</code>
-2.-<code>udt_send()</code>-unreliable-data-transfer,-che-è-quello-offerto-dalla-rete.</p>
-<p>stessa-cosa-per-il-lato-di-ricezione,-ricevo-da-cosa-unreliable,-processo-e-li-passo-sopra.</p>
-<p>esempi-sono-numerazione-di-pacchetti-e-resend-di-pacchetti-chei-non-sono-stati-ricevuti,-questi-sono-modi-per-rendere-affidabili.</p>
-<p>###-passo-passo,-3-problemi</p>
-<p>1.-resistente-alla-corruzione-dei-pacchetti
-2.-corruzione-dei-pacchetti-ack
-3.-resistente-alla-perdita-di-pacchetti</p>
-<p><strong>rete-reliable</strong></p>
-<p>&ndash;slide-rete-reliable</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-4.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-4&rdquo;&gt;</p>
-<p>è-la-cosa-più-stupida,-si-assume-subito-che-sia-reliable</p>
-<p><strong>rete-corruttibile</strong></p>
-<p>si-utilizza-un-sistema-ack,-nack-per-vedere-se-arriva-o-meno-il-pacchetto</p>
-<p>&ndash;slide-rete-corruttibile</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-5.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-5&rdquo;&gt;</p>
-<p>se-dal-lato-ricevente,-viene-inviato-il-messaggio-che-è-arrivato-sbagliato.</p>
-<p><strong>corruzione-dei-nak-e-ack</strong></p>
-<p>che-succede-con-l’esempio-sopra-se-si-possono-corrompere-anche-ack-e-nack?-facciamo-ack-e-nack-sui-numeri-pacchetto!</p>
-<p>&ndash;slide-ack-e-nak</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-6.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-6&rdquo;&gt;</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-7.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-7&rdquo;&gt;</p>
-<p><strong>senza-nak</strong></p>
-<p>&ndash;slide-senza-nak</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-8.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-8&rdquo;&gt;</p>
-<p>basta-mandare-l-ack-al-pacchetto-corretto!-non-abbiamo-più-bisogno-che-si-mandi-nak-quando-arriva-il-pacchetto-brutto.</p>
-<p><strong>perdita-di-pacchetti</strong></p>
-<p>in-questo-caso-includiamoil-timeout.</p>
-<p>&ndash;slide-timing</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-9.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-9&rdquo;&gt;</p>
-<p>&ndash;esempio-di-rdt3-in-azione</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-10.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-10&rdquo;&gt;</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-11.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-11&rdquo;&gt;</p>
-<p><strong>analisi-delle-performance</strong></p>
-<p>&ndash;slide-performance-rdt3.0</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-12.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-12&rdquo;&gt;</p>
-<p>si-può-notare-che-l-utilizzo-della-rete-è-pochissimo!-0.027-%-di-utilizzo-in-questa-analisi.</p>
-<p>dovremo-cercare-di-parallellizzare-il-processo-utilizzato-per-mandare-e-riceve</p>
-<p>###-pipelining-(2)-</p>
-<p>è-un-metodo-per-mandare-più-pacchetti-contemporaneamente.</p>
-<p>ci-sono-due-metodologie-principalemente,-<strong>go-back-n,&ndash;selective-repeat</strong>.</p>
-<p>&ndash;pipelined-protocols</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-13.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-13&rdquo;&gt;</p>
-<p><strong>go-back-n</strong></p>
-<p>significa-che-con-gli-ultimi-n-ack-sono-stati-ricdevuti-correttamente,-quindi-col-singolo-ack,-mi-dice-da-dove-posso-cominciare-a-ripartire-a-mandare.-ma-manda-un-sacco-di-pacchetti,-quindi-può-congestionare-la-rete,-con-il-vantaggio-che-non-mi-devo-memorizzare.</p>
-<p>&ndash;automa-go-back-n-(non-fare)</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-14.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-14&rdquo;&gt;</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-15.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-15&rdquo;&gt;</p>
-<p>&ndash;esempio-di-gbn</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-16.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-16&rdquo;&gt;</p>
-<p>&ndash;il-destinatario-non-deve-memorizzare-nel-buffer-i-pacchetti-che-giungono-fuori-sequenza.-(risparmio-in-memoria)
-&ndash;maggiore-onere-alla-rete,-che-deve-ritrasmettere-alcuni-pacchetti-anche-se-vengono-ricevuti-correttamente.</p>
-<p><strong>selective-repeat</strong></p>
-<p>perché-ti-faccio-ripetere-in-modo-selettivo.</p>
-<p>&ndash;meno-lavoro-dei-router
-&ndash;overhead-maggiore-per-i-rtt-per-gli-ack,-cosa-che-alla-fine-rallenta-la-prestazione-della-rete.
-&ndash;più-memoria-per-mantenere-tempi-per-tutti-i-pacchetti.</p>
-<p>##-approfondimento-tcp</p>
-<p>###-tcp-trip-time</p>
-<p>&ndash;slides</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-17.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-17&rdquo;&gt;</p>
-<p>&mdash;-&lt;img-src=&quot;/images/notes/image/universita/ex-notion/livello-di-trasporto/untitled-18.png&rdquo;-style=&ldquo;width:-100%&quot;-class=&ldquo;center&rdquo;-alt=&ldquo;image/universita/ex-notion/livello-di-trasporto/untitled-18&rdquo;&gt;</p>
-<p>si-utilizza-una-tecnica-di-media-esponenziale-presente-anche-in-[[scheduler) ma qui facciamo anche un <strong>safety margin</strong> per essere sicuri e molto conservativi parti a 4 deviazioni (quindi molto! affinché scada deve succedere veramente qualcosa di brutto).</p>
-<h3 id="ack-e-numeri-di-sequenza-no">Ack e numeri di sequenza (no)<a hidden class="anchor" aria-hidden="true" href="#ack-e-numeri-di-sequenza-no">#</a></h3>
-<p>Il libro dice che in fase di handshaking vengono stabiliti numeri di sequenza random, questo per evitare il fatto che lo 0 rappresenti una nuova sequenza, se in precedenza si è già connessi.</p>
-<p>Poi cosa, TCP utilizza un ack cumulativo, sul numero di byte, e il numero di sequenza è sempre fatto sul numero di byte inviati e ricevuti.</p>
-<p><strong>NOTA:</strong> grandezza della finestra pipelining e il numero di sequenza, si osservi che se abbiamo troppi pochi numeri di sequenza, allora potremmo conseguire nell’ambiguità del fatto che un pacchetto non si può distinguere se sia un pacchetto nuovo oppure una ripetizione di un vecchio pacchetto.</p>
-<blockquote>
-<p>la finestra deve avere ampiezza inferiore o uguale alla metà dello spazio dei numeri di sequenza dei protocolli SR. per non incorrere ai problemi di ambiguità. ~libro</p></blockquote>
-<h3 id="il-resend-2">Il resend (2)<a hidden class="anchor" aria-hidden="true" href="#il-resend-2">#</a></h3>
-<p><strong>TIMEOUT</strong>: è molto speciale per il TCP, invece di calcolare il timeout con la formula con l’estimated time, con la media esponenziale e con 4 volte la deviazione standard, viene semplicemente <em>raddoppiato</em> il tempo, ogni volta che scade. Probabilmente si pensa che la rete sia congestionata, quindi si aspetta un pò.</p>
-<p>Importante notare che questo ack cumulativo non è presente in selective repeat, quindi è più simile a GBN, però allo stesso tempo se scade il timeout, che è messo solamente sul base (quindi il pacchetto più vecchio che è stato mandato, non su tutti a differenza di SR) non vado a rimandare</p>
-<p><strong>FAST RESEND</strong>: Quando ricevo 3 acks con lo stesso numero di sequenza, assumo che è stato perché il paccketto con il numero di base è stato perso. Con questa assunzione provo a rimandare il pacchetto di base.</p>
-<h3 id="controllo-del-flusso-no">Controllo del flusso (no)<a hidden class="anchor" aria-hidden="true" href="#controllo-del-flusso-no">#</a></h3>
-<p>il mittente non vuole mandare così tanti bytes da saturare il buffer del ricevente, per questo motivo il ricevente manda in un certo campo dell’header anche l’ampiezza del buffer che può ancora ricevere, e solitamente il mittente cerca di stare all&rsquo;interno di quel buffer, in modo che la richiesta possa sempre essre elaborata.</p>
-<p>Se il l&rsquo;ampiezza è 0 non voglio stopparmi! voglio sempre mandare almeno un singolo byte di dati, altrimenti rischierei una starvation, anche se il ricevente può ricevere cose.</p>
-<h3 id="controllo-della-congestione-">Controllo della Congestione (!)<a hidden class="anchor" aria-hidden="true" href="#controllo-della-congestione-">#</a></h3>
-<p>Vengono define tre fasi per il controllo della congestione, le prime due più importanti mentre l’ultima è facoltativa diciamo.</p>
-<ol>
-<li><strong>Slow start</strong> Questa è la fase che abbiamo già studiato in precedenza, in pratica si parte con un MSS (maximum segment size) e si raddoppia fin quando continuano ad arrivare gli ACK (in pratica aggiungi 1MSS per ack).
-Quando perdo un pacchetto, o per il timeout o per il triplo ack, allora torno a 1 MSS, e mi setto un massimo numero di pacchetti (la metà di quando è successo la perdita)</li>
-<li><strong>Congestion avoidance</strong> Sono in questa fase quando ho raggiunto il numero massimo di pacchetti inviati. Quando sono in questa fase allora aumento di 1/[pacchetti trasmessi] ad ogni ACK, in pratica cresco in modo lineare, molto più lento, fino a quando non perdo di nuovo un pacchetto.
-Se lo perdo per timeout torno a 1 e sono a slow start, altrimenti alcuni pacchetti sono comunque giunti al destinatario, quindi reiverto in modo molto più soft, in pratica dimezzo la mia window e vado in fast recovery.</li>
-<li><strong>Fast recovery</strong> nella fast recovery aumento di 1 se l’ack è per il pacchetto che ho perso, quando arriva l’ack per il segmento perso stesso rientro in quella fase, questo mi fa crescere linearmente e mi permette di partire molto più in fretta.
-Esempio: se ero a 32 pacchetti, vi vengono 3 ack per pacchetto 1, dimezzo e assumo che il pacchetto 2 sia perso, e aumento di 3 (perché sono venuti 3 acks), sono a 19, mi arrivano altri ack di 1, aumento di 1, quando arriva il 2 entro in Congestion avoidance.</li>
-</ol>
-
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
