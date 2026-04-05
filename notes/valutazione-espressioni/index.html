@@ -7,7 +7,14 @@
 <meta name="robots" content="index, follow">
 <title>Valutazione Espressioni | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Valutazione Espressioni - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Espressioni, Comandi, Ricorsione
+Espressioni
+
+Con espressione intendiamo una entità sintattica, che una volta valutata ritornerà un valore, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.
+Questa è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.
+Notazioni (sintassi possibili) (3)
+Notazione infissa
+Questa è la notazione classica matematica, per cose tipo $a -b$, in cui l&rsquo;operando sta nel mezzo degli operatori.">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/valutazione-espressioni/">
@@ -93,7 +100,10 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/valutazione-espressioni/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Valutazione Espressioni">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Espressioni, Comandi, Ricorsione Espressioni Con espressione intendiamo una entità sintattica, che una volta valutata ritornerà un valore, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.
+Questa è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.
+Notazioni (sintassi possibili) (3) Notazione infissa
+Questa è la notazione classica matematica, per cose tipo $a -b$, in cui l’operando sta nel mezzo degli operatori.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -104,7 +114,14 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Valutazione Espressioni">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Espressioni, Comandi, Ricorsione
+Espressioni
+
+Con espressione intendiamo una entità sintattica, che una volta valutata ritornerà un valore, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.
+Questa è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.
+Notazioni (sintassi possibili) (3)
+Notazione infissa
+Questa è la notazione classica matematica, per cose tipo $a -b$, in cui l&rsquo;operando sta nel mezzo degli operatori.">
 
 
 <script type="application/ld+json">
@@ -133,12 +150,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Valutazione Espressioni",
   "name": "Valutazione Espressioni",
-  "description": "",
+  "description": "Espressioni, Comandi, Ricorsione Espressioni Con espressione intendiamo una entità sintattica, che una volta valutata ritornerà un valore, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.\nQuesta è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.\nNotazioni (sintassi possibili) (3) Notazione infissa\nQuesta è la notazione classica matematica, per cose tipo $a -b$, in cui l\u0026rsquo;operando sta nel mezzo degli operatori.\n",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Espressioni, Comandi, Ricorsione Espressioni Con espressione intendiamo una entità sintattica, che una volta valutata ritornerà un valore, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.\nQuesta è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.\nNotazioni (sintassi possibili) (3) Notazione infissa\nQuesta è la notazione classica matematica, per cose tipo $a -b$, in cui l’operando sta nel mezzo degli operatori.\nAbbiamo il vantaggio di famigliarità e semplicità della istruzione, ma perdiamo con ambiguità di precendenza degli operatori e associatività degli operatori, cioè non sempre sappiamo se una espressione ha precedenza con l’altra, per esempio una espressione del tipo x == y and y == 1d in un certo linguaggio and ha una precedenza, e quindi farebbe perdere di senso all’espressione.\nProblemi di precedenza abbiamo per cose come $1 - 1 -1$, che a seconda se facciamo prima il primo - o il secondo meno possiamo avere dei risultati differenti.\nQuindi se utilizziamo una notazione infissa, guadagniamo di semplicità e famigliarità, e perdiamo in complessità della valutazione, che per essere eseguita vorremmo creare un albero di valutazione, che spesso si deriva dall’albero di derivazione dopo il parser.\nNotazione prefissa (polacca)\nSono scritture come questo: $+ \\, a\\,b$, in qui scriviamo prima il + e poi gli operandi.\nÈ una cosa molto comoda perché non abbiamo la necessità di specificare precedenze né parentesi, ma basta sapere l’arietà del nostro operatore per poter valutare l’espressione.\nNotazione postfissa (polacca inversa)\nQuesta è uguale alla precedente, ma al contrario, quindi abbiamo cose come $a\\, b\\,+$, è anche più semplice da valutare, ma in generale molto semplice.\nPrefissa matematica e di cambridge\ncome f(a, b), oppure (f a b) per cambridge\nInterpretazione dell’albero\nSi potrebbe interpretare la notazione infissa, prefissa o postfissa come una visita dell’albero di valutazione.\nsimmetrica = visita infissa prefissa = visita prefissa (anticipata) (provo a valutare l’operatore e poi vado giù) Postfissa = visita postfissa (valuta dopo aver eseguito sinistra e destra) Semantica Con la semantica andiamo ad indicare il processo di valutazione di una espressione. Abbiamo detto prima che per la notazione infissa è più complicata, infatti dovremmo andare a creare un albero di valutazione, creato dall’albero di derivazione (che quando compiliamo col parser è facile da creare dalle foglie).\nInvece se proviamo a valutare con la notazione prefissa, questa è una cosa molto più semplice, perché basta una singola scansione che va con questo algoritmo:\nSe è un operatore inizializzo un counter e torno a leggere Se vedo un operando pusho in pila e decremento il counter. Se counter è 0 faccio l’operazione e metto in stack, se è diverso da 0 torno a leggere Se è postfissa allora è ancora più semplice, se ho un operando pusho in pila, se ho un operatore prelevo quanto mi serve ed eseguo e pusho in pila il risultato.\nOrdine di valutazione delle sottoespressioni (4) Matematicamente parlando non sarebbe molto importante andare a considerare l’ordine di valutazione, però in questo caso diventa molto importante perché l’ordine stesso potrebbe incidere sul risultato dell’espressione, un esempio è quando una espressione implica un side effect.\nSide effect (come potrebbe essere la chiamata di una funzione con side effect mentre valutiamo l’espressione!)\nPossibilità di overfow per aritmetica finita eg. (INT_MAX - 10 + 5) vs (INT_MAX + 5 - 10)\nCorto circuito e operatori non definiti.\nPer esempio una scrittura del tipo (p ≠ NULL) \u0026\u0026 (p.next == 1)sarebbe un errore in pascal, perché fa una esecuzione eager, cioè valuta tutto prima di valutare qualcosa, mentre in C se è null torno subito, questo si dice corto circuito perché non vado a valutare tutto. Efficienza, l’ordine di valutazione può anche cambiare l’efficienza dell’esecuzione, ad esempio inizializzando un accesso in memoria, e poi andare a fare altre operazioni che non avevano bisogno di accesso. Perché nell’esempio di sotto è probabile che aa non sia ancora disponibile, quindi conveniva fare cd prima di andare sull’altro, che deve attendere.\nEsempio a= vettore[i]; b = a*a + c*d In questa sede quindi è importante fare differenza fra\nComandi Definizione di comandi Per comando intendiamo una entità sintattica che quando valutata non necessariamente ritorna un valore, inoltre potrebbe fare un effetto collaterale. (NOTA: anche le espressioni possono avere effetto collaterale)\nDa questa definizione non sembra ci sia una differenza chiara con l’espressione. però concettualmente dovremmo tenerci in mente che un comando è qualcosa di utile per cambiare lo stato del programma, ossia alla fine del comando ho uno stato differente, quindi ho avuto un side effect, mentre una espressione è qualcosa che idealmente non dovrebbe avere side-effect, ma alla fine ritorna sempre un valore.\nUn esempio di side-effect del comando può essere la stampa a schermo, che avrò cambiato la zona memory mapped come descritto in Note sull’architettura.\nStato computazione = valore di tutte le variabili nel programma in un certo momento (oppure memoria, boh), va a modificare questo l´effetto collaterale.\nVariabili (2) È importante tenere a mente che le variabili sono diverse rispetto a quelle definite in matematica, lì sono incognite che possono assumere valori in un certo insieme che non sono modificabili.\nInvece in informatica per le variabili abbiamo due modi principale di interpretazione, una reference model e l’altra come variabili modificabili\nIl primo modo intende la variabile come una reference a una zona di memoria in cui veramente è presente il dato che ho, quindi come se fosse un puntatore (senza possibilità di modifica) (solitamente messo nella heap). Quindi la variabile denota il riferimento, alla variabile, non il contenitore al valore.\nIl secondo modo intende le variabili proprio per il valore che possiedono, quindi come contenitore o locazione di memoria che contiene qualcosa che può cambiare nel tempo. Sembra molto simile, ma nel secondo modo vado a riferirmi al valore, che è proprio in quella zona, mentre nel primo caso è un puntatore ad una altra zona.\nAltri modelli\nSlide altri modelli di variabile\nNei linguaggi funzionali, come le variabili matematiche, che una volta assegnata non è più modificabile un valore. O modificabili in un certo senso nei linguaggi logici.\nAssegnamento Solitamente l’assegnamento ha una forma exp1 assignmentOp exp2a ed è importante andare a distinguere l-value e r-value.\nl-value è l’indirizzo di memoria (quindi denota una locazione) in cui si dovrà andare a scrivere la r-value, che solitamente può essere la locazione se utilizzo la reference model (e quindi in pratica sposto il pointer in questo modello), o proprio una copia del valore se utilizzo l’altra interpretazione, quella delle variabili modificabili, in questo caso indica (un valore che può essere contenuto)\nSolitamente questa istruzione produce un side effect (quindi si può notare che il side effect sia un necessario), dato che il valore della variabile è stato modificato, e solitamente non ritiorna nessun valore (tranne in C che ritorna sempre una variabile, perché credo che l’assegnamento è visto come se fosse una espressione).\nIMPLICAZIONI IMPORTANTI PER SIDE EFFECT.\nÈ importante tenere a mente la possibilità di side effect, perché se provo a fare una cosa come a[f(x)] = a[f(x)] + 1 Questo potrebbe dare risultati differenti a seconda del fatto che io abbia side effect o meno. Sarebbe meglio fare cose come j = f(x); a[j] = a[j] + 1\nGli operatori come += e quelli della stessa famiglia sono utili a ovviare a questo side effect dovuto all’esempio di prima, ecco una loro utilità 😀, non è solo un modo compatto lel.\nControllo della sequenza Ambiente e memoria (3) (ni) Slide ambiente e memoria\nSolitamente una associazione del tipo f: nome -\u003e Valore Non è sufficiente perché non posso esprimere che un assegnamento per reference cambi i valori per entrambi (secondo questo modello dovrebbe cambiarlo solo per il singolo nome!).\nSolitamente andiamo a definire 3 modelli di valore:\nValori denotabili da variabili Valori memorizzabili in locazioni di memoria Valori esprimibili come risultati di espressione. All’interno del nostro linguaggio imperativo imperativo abbiamo bisogno delle prime due, mentre in un linugaggio funzionale solamente il primo che associa valori a variabili.\nInfatti per utilizzare l-value vogliamo andare a modificare il valore associato alla variabile. mentre per accedere al r-value dobbiamo andare a prendere il contenitore, quindi dovremmo prima accedere alla locazione, e poi dalla locazione andare a riprenderci il valore.\nPoi il fatto che la l-value cambi anche il valore in memoria è una altra cosa credo… Non lo ho capito dovrei chiederlo. Questa parte non ha molto senso, e non è importante posso saltare però tenere a mente che esistono quelle 3 cose.\nComandi sequenziali Sono comandi come\n; Ossia il singolo comando sequenziali begin ... end Che sono i comandi a blocchi anche indicati con {} in C goto Che è ora in disuso ma in passato era molto importante. Il goto ha avuto una fortissima discussione negli anni 1970 con Dijkstra. Si basava sull’idea di assembly e labels che permettevano di fare salti a piacere.\nIl goto ha la stessa espressività di un programma senza di esso (th di Böhn Jacopini) Il goto rende il codice difficilmente leggibile, quindi non permette la facile manutenzione. (si pensi a un goto per uscire da un loop 100 righe dopo, non è più strutturata la lettura diciamo). Come posso interpretare il fatto di goto che salta all’interno di un blocco? Come gestire RdA?? Sarebbe buono utilizzarlo come break e continue, ma ci sono già quei comandi… Produce spaghetti code (che crea proprio un grafo a forma di spaghetti se seguiamo il flusso di controllo del programma) Viola il concetto della programmazione strutturata, di cui tratteremo in software engineering l’anno prossimo. Slides programmazione strutturata\nCondizionali (2) if Bexp then Cl e1se C2 Semmai potremmo dire che ci siano qualche ambiguità quando ho qualche if annidato senza delimitatori. Per la valutazione di questi if è importante tenere a mente che esiste il short-circuit per rendere più efficiente la cosa.\nCase la cosa bella è che ho un jumping table, quindi rende tutte le operazioni di controllo e salto leggermente più efficienti.\nVelocità per la jumping table (faccio solo 2 salti, invece in if-then else è lineare nel numero di if annidati). Chiarezza del costrutto. Slide case\nEsempio di Jumping table\nIterativi (2) I comandi iterativi sono necessari per la turing completezza del linguaggio\nIterazione indeterminata\nSono comandi come while o repeat ... until oppure il do while. Ed è indeterminata perché prima dell’esecuzione non so esattamente quante iterazioni andrò a fare. dal punto della macchina fisica è molto facile implementarlo, dato che basta un salto con un check, più facile da implementare di un for.\nCon, if, ass, while ho già un linguaggio turning completo! Esattamente come è descritto in Fondamenti teorica.\nIterazione determinata\nQueste sono tutte le iterazioni in cui conosciamo a priori il numero di iterazioni da compiere (a runtime, prima di cominciare l’esecuzione del comando), per esempio for e foreach . Di solito credo che nell’implementazione si può calcolare il numero di iterazioni\nSi può osservare che la iterazione determinata sia meno espressiva dell’iterazione indeterminata, però da un punto di vista pragmatico è molto utile perché mi compatta tutta la struttura che esisteva per l’iterazione indeterminata.\nMeno espressiva perché non posso computare programmi come\n$$ f(x) = \\begin{cases} x \\text{ se è pari} \\\\ \\uparrow \\text{ altrimenti }\\end{cases} $$Se ho iterazione determinata non riesco a divergere.\nfor {exp1; expz; exp3) comando è la sintassi di C, ma nota che qui non è determinata! perché posso modificare il valore dell’indice e anche del controllo, quindi in pratica è equivalente all’iterazione determinata (posso renderlo indeterminato modificando l’indice all’interno).\nNOTE DI IMPLEMENTAZIONE\nÈ importante capire che in questo caso esiste il vincolo di semantica statica, che il fine e il valore del passo non dovrebbero essere modificati (cosa che non vale in C, per questo non è il for settato bene).\nCome fare ad implementare il passo? Se è negativo? Proco a costruire il concetto di iteration counter definito come segue:\n$$ ic = \\lfloor \\dfrac{fine - inizio + passo}{passo}\\rfloor $$+passo perché il fine è incluso nella iterazione, per questo aggiungo 1.\nRicorsione Definizioni induttive Una cosa cosa molto interessante è che se possediamo una funzione da $g: \\N \\times A \\to A$, e abbiamo una funzione $f: \\N \\to A$, e un qualunque valore $a \\in A$, allora posto\n$$ f(0) = a \\\\ f(n + 1) = g(n, f(n)) $$f è univocamente determinata per tutti i valori del dominio. Basta che g sia una funzione totale.\nCredo che questa definizione della funzione f, sfrutti la struttura dei numeri naturali (la stessa struttura su cui si basa il principio di induzione). Studieremo queste definizioni in maggior dettaglio in informatica teorica.\nIn modo simile una funzione ricorsiva è simile a questa, è definita in termini di funzioni precedenti già definite. Nonostante ciò ci possono essere dei casi in cui è calcolabile, ma si discosta un pò dalle definizioni matematiche.\nCasi in cui ciò si discosta\nSi può dimostrare, cosa che non facciamo in questa sede che ricorsione è equivalente alla iterazione. Nonostante ciò in alcune implementazioni, in particolare l’implementazione standard della ricorsione, questo porti a forti inefficienze. Analizzeremo solamente la tail recursion come ottimizzazione possibile.\nTail recursion Una chiamata di g in f di si dice “chiamata in coda” (o tail call) se f restituisce il valore restituito da g senza ulteriore computazione.\nQuando faccio una chiamata ricorsiva alla fine, prima di ritornare dalla funzione, allora posso ottimizzare tutto il discorso che abbiamo fatto sugli RdA in Nomi e Scope, perché non avrei bisogno di allocare un nuovo RdA, mi basta lo spazio attuale!\nÈ una cosa molto particolare perché con questo riesco a implementare la ricorsione con memoria statica! Un singolo RdA.\nTail recursion si ha quando l’ultima istruzione di ritorno non possiede computazioni aggiuntive, avendo questa proprietà, la chiamata della funzione può essere posta in modo che sovrascriva tutti i parametri, le variabili locali, con l’indirizzo di ritorno e il valore di ritorno le stesse della funzione chaiamante.\nIn pratica invece di far crescere continuamente la stack, posso fare in modo di utilizzare lo stesso record scrivendoci i nuovi parametri, un risparmio di memoria non da niente!\n",
+  "wordCount" : "2358",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2024-08-28T00:00:00Z",
   "dateModified": "2024-08-28T00:00:00Z",
@@ -233,12 +250,261 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Valutazione Espressioni
     </h1>
-    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2024-08-28 00:00:00 +0000 UTC'>August 28, 2024</span>&nbsp;·&nbsp;Reading Time: 12 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#espressioni-comandi-ricorsione" aria-label="Espressioni, Comandi, Ricorsione">Espressioni, Comandi, Ricorsione</a><ul>
+                        
+                <li>
+                    <a href="#espressioni" aria-label="Espressioni">Espressioni</a><ul>
+                        
+                <li>
+                    <a href="#notazioni-sintassi-possibili-3" aria-label="Notazioni (sintassi possibili) (3)">Notazioni (sintassi possibili) (3)</a></li>
+                <li>
+                    <a href="#semantica" aria-label="Semantica">Semantica</a></li>
+                <li>
+                    <a href="#ordine-di-valutazione-delle-sottoespressioni-4" aria-label="Ordine di valutazione delle sottoespressioni (4)">Ordine di valutazione delle sottoespressioni (4)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#comandi" aria-label="Comandi">Comandi</a><ul>
+                        
+                <li>
+                    <a href="#definizione-di-comandi" aria-label="Definizione di comandi">Definizione di comandi</a></li>
+                <li>
+                    <a href="#variabili-2" aria-label="Variabili (2)">Variabili (2)</a></li>
+                <li>
+                    <a href="#assegnamento" aria-label="Assegnamento">Assegnamento</a></li></ul>
+                </li>
+                <li>
+                    <a href="#controllo-della-sequenza" aria-label="Controllo della sequenza">Controllo della sequenza</a><ul>
+                        
+                <li>
+                    <a href="#ambiente-e-memoria-3-ni" aria-label="Ambiente e memoria (3) (ni)">Ambiente e memoria (3) (ni)</a></li>
+                <li>
+                    <a href="#comandi-sequenziali" aria-label="Comandi sequenziali">Comandi sequenziali</a></li>
+                <li>
+                    <a href="#condizionali-2" aria-label="Condizionali (2)">Condizionali (2)</a></li>
+                <li>
+                    <a href="#iterativi-2" aria-label="Iterativi (2)">Iterativi (2)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#ricorsione" aria-label="Ricorsione">Ricorsione</a><ul>
+                        
+                <li>
+                    <a href="#definizioni-induttive" aria-label="Definizioni induttive">Definizioni induttive</a></li>
+                <li>
+                    <a href="#tail-recursion" aria-label="Tail recursion">Tail recursion</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="espressioni-comandi-ricorsione">Espressioni, Comandi, Ricorsione<a hidden class="anchor" aria-hidden="true" href="#espressioni-comandi-ricorsione">#</a></h1>
+<h2 id="espressioni">Espressioni<a hidden class="anchor" aria-hidden="true" href="#espressioni">#</a></h2>
+<blockquote>
+<p>Con espressione intendiamo una entità sintattica, che una volta valutata <strong>ritornerà un valore</strong>, oppure non termina, in questo caso si dice che la espressione è INDEFINITA.</p></blockquote>
+<p>Questa è una definizione è leggermente ambigua dato che non abbiamo una definizione precisa di valutazoine, che è fortemente dipendente dalla macchina astratta in cui viene eseguito.</p>
+<h3 id="notazioni-sintassi-possibili-3">Notazioni (sintassi possibili) (3)<a hidden class="anchor" aria-hidden="true" href="#notazioni-sintassi-possibili-3">#</a></h3>
+<p><strong>Notazione infissa</strong></p>
+<p>Questa è la notazione classica matematica, per cose tipo $a -b$, in cui l&rsquo;operando sta nel mezzo degli operatori.</p>
+<p>Abbiamo il vantaggio di famigliarità e semplicità della istruzione, ma perdiamo con ambiguità di precendenza degli operatori e associatività degli operatori, cioè non sempre sappiamo se una espressione ha precedenza con l&rsquo;altra, per esempio una espressione del tipo <code>x == y and y == 1</code>d in un certo linguaggio and ha una precedenza, e quindi farebbe perdere di senso all&rsquo;espressione.</p>
+<p>Problemi di precedenza abbiamo per cose come $1 - 1 -1$, che a seconda se facciamo prima il primo - o il secondo meno possiamo avere dei risultati differenti.</p>
+<p>Quindi se utilizziamo una notazione infissa, guadagniamo di semplicità e famigliarità, e perdiamo in complessità della valutazione, che per essere eseguita vorremmo creare un albero di valutazione, che spesso si deriva dall&rsquo;albero di derivazione dopo il parser.</p>
+<p><strong>Notazione prefissa (polacca)</strong></p>
+<p>Sono scritture come questo: $+ \, a\,b$, in qui scriviamo prima il + e poi gli operandi.</p>
+<p>È una cosa molto comoda perché non abbiamo la necessità di specificare precedenze né parentesi, ma basta sapere l&rsquo;arietà del nostro operatore per poter valutare l&rsquo;espressione.</p>
+<p><strong>Notazione postfissa (polacca inversa)</strong></p>
+<p>Questa è uguale alla precedente, ma al contrario, quindi abbiamo cose come $a\, b\,+$, è anche più semplice da valutare, ma in generale molto semplice.</p>
+<p><strong>Prefissa matematica e di cambridge</strong></p>
+<p>come f(a, b), oppure (f a b) per cambridge</p>
+<p><strong>Interpretazione dell&rsquo;albero</strong></p>
+<p>Si potrebbe interpretare la notazione infissa, prefissa o postfissa come una visita dell&rsquo;albero di valutazione.</p>
+<ol>
+<li>simmetrica = visita infissa</li>
+<li>prefissa = visita prefissa (anticipata) (provo a valutare l&rsquo;operatore e poi vado giù)</li>
+<li>Postfissa = visita postfissa (valuta dopo aver eseguito sinistra e destra)</li>
+</ol>
+<h3 id="semantica">Semantica<a hidden class="anchor" aria-hidden="true" href="#semantica">#</a></h3>
+<p>Con la semantica andiamo ad indicare il processo di valutazione di una espressione. Abbiamo detto prima che per la notazione infissa è più complicata, infatti dovremmo andare a creare un <strong>albero di valutazione</strong>, creato dall&rsquo;albero di derivazione (che quando compiliamo col parser è facile da creare dalle foglie).</p>
+<p>Invece se proviamo a valutare con la notazione prefissa, questa è una cosa molto più semplice, perché basta una singola scansione che va con questo algoritmo:</p>
+<ol>
+<li>Se è un operatore inizializzo un counter e torno a leggere</li>
+<li>Se vedo un operando pusho in pila  e decremento il counter.</li>
+<li>Se counter è 0 faccio l&rsquo;operazione e metto in stack, se è diverso da 0 torno a leggere</li>
+</ol>
+<p>Se è postfissa allora è ancora più semplice, se ho un operando pusho in pila, se ho un operatore prelevo quanto mi serve ed eseguo e pusho in pila il risultato.</p>
+<h3 id="ordine-di-valutazione-delle-sottoespressioni-4">Ordine di valutazione delle sottoespressioni (4)<a hidden class="anchor" aria-hidden="true" href="#ordine-di-valutazione-delle-sottoespressioni-4">#</a></h3>
+<p>Matematicamente parlando non sarebbe molto importante andare a considerare l&rsquo;ordine di valutazione, però in questo caso diventa molto importante perché l&rsquo;ordine stesso potrebbe incidere sul risultato dell&rsquo;espressione, un esempio è quando <strong>una espressione implica un side effect.</strong></p>
+<ol>
+<li>
+<p>Side effect (come potrebbe essere la chiamata di una funzione con side effect mentre valutiamo l&rsquo;espressione!)</p>
+</li>
+<li>
+<p>Possibilità di overfow per aritmetica finita eg. <code>(INT_MAX - 10 + 5)</code> vs <code>(INT_MAX + 5 - 10)</code></p>
+</li>
+<li>
+<p>Corto circuito e operatori non definiti.</p>
+<ol>
+<li>Per esempio una scrittura del tipo <code>(p ≠ NULL) &amp;&amp; (p.next == 1)</code>sarebbe un errore in pascal, perché fa una esecuzione <strong>eager</strong>, cioè valuta tutto prima di valutare qualcosa, mentre in C se è null torno subito, questo si dice <strong>corto circuito</strong> perché non vado a valutare tutto.</li>
+</ol>
+</li>
+<li>
+<p>Efficienza, l&rsquo;ordine di valutazione può anche cambiare l&rsquo;efficienza dell&rsquo;esecuzione, ad esempio inizializzando un accesso in memoria, e poi andare a fare altre operazioni che non avevano bisogno di accesso. Perché nell&rsquo;esempio di sotto è probabile che a<em>a non sia ancora disponibile, quindi conveniva fare  c</em>d prima di andare sull&rsquo;altro, che deve attendere.</p>
+<ol>
+<li>Esempio</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">a= vettore[i];
+</span></span><span class="line"><span class="cl">b = a*a + c*d
+</span></span></code></pre></div></li>
+</ol>
+<p>In questa sede quindi è importante fare differenza fra</p>
+<h2 id="comandi">Comandi<a hidden class="anchor" aria-hidden="true" href="#comandi">#</a></h2>
+<h3 id="definizione-di-comandi">Definizione di comandi<a hidden class="anchor" aria-hidden="true" href="#definizione-di-comandi">#</a></h3>
+<p>Per comando intendiamo una entità sintattica che quando valutata non necessariamente ritorna un valore, inoltre potrebbe fare un effetto collaterale. (NOTA: anche le espressioni possono avere effetto collaterale)</p>
+<p>Da questa definizione non sembra ci sia una differenza chiara con l&rsquo;espressione. però concettualmente dovremmo tenerci in mente che un comando è qualcosa di utile per cambiare lo stato del programma, ossia alla fine del comando ho uno stato differente, quindi ho avuto un side effect, mentre una espressione è qualcosa che idealmente non dovrebbe avere side-effect, ma alla fine ritorna sempre un valore.</p>
+<p>Un esempio di side-effect del comando può essere la stampa a schermo, che avrò cambiato la zona memory mapped come descritto in <a href="/notes/note-sull-architettura">Note sull&rsquo;architettura</a>.</p>
+<p><strong>Stato computazione</strong> = valore di tutte le variabili nel programma in un certo momento (oppure memoria, boh), va a modificare questo l´effetto collaterale.</p>
+<h3 id="variabili-2">Variabili (2)<a hidden class="anchor" aria-hidden="true" href="#variabili-2">#</a></h3>
+<p>È importante tenere a mente che le variabili sono diverse rispetto a quelle definite in matematica, lì sono incognite che possono assumere valori in un certo insieme che <strong>non sono modificabili</strong>.</p>
+<p>Invece in informatica per le variabili abbiamo due modi principale di interpretazione, una <strong>reference model</strong> e l&rsquo;altra come <strong>variabili modificabili</strong></p>
+<p>Il primo modo intende la variabile come una <strong>reference</strong> a una zona di memoria in cui veramente è presente il dato che ho, quindi come se fosse un puntatore (senza possibilità di modifica) (solitamente messo nella heap). Quindi la variabile denota il riferimento, alla variabile, non il contenitore al valore.</p>
+<p>Il secondo modo intende le variabili proprio per il valore che possiedono, quindi come contenitore o locazione di memoria che contiene qualcosa che può cambiare nel tempo. Sembra molto simile, ma nel secondo modo vado a riferirmi al valore, che è proprio in quella zona, mentre nel primo caso è un puntatore ad una altra zona.</p>
+<p><strong>Altri modelli</strong></p>
+<ul>
+<li>
+<p>Slide altri modelli di variabile</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled">
+</li>
+</ul>
+<p>Nei linguaggi funzionali, come le variabili matematiche, che una volta assegnata non è più modificabile un valore. O modificabili in un certo senso nei linguaggi logici.</p>
+<h3 id="assegnamento">Assegnamento<a hidden class="anchor" aria-hidden="true" href="#assegnamento">#</a></h3>
+<p>Solitamente l&rsquo;assegnamento ha una forma <code>exp1 assignmentOp exp2</code>a ed è importante andare a distinguere <strong>l-value</strong> e <strong>r-value</strong>.</p>
+<p>l-value è l&rsquo;indirizzo di memoria (quindi <strong>denota una locazione</strong>) in cui si dovrà andare a scrivere la r-value, che solitamente può essere la locazione se utilizzo la reference model (e quindi in pratica sposto il pointer in questo modello), o proprio una copia del valore se utilizzo l&rsquo;altra interpretazione, quella delle <strong>variabili modificabili</strong>, in questo caso indica (<strong>un valore che può essere contenuto</strong>)</p>
+<p>Solitamente questa istruzione <strong>produce un side effect</strong> (quindi si può notare che il side effect sia un necessario), dato che il valore della variabile è stato modificato, e solitamente non ritiorna nessun valore (tranne in C che ritorna sempre una variabile, perché credo che l&rsquo;assegnamento è visto come se fosse una espressione).</p>
+<p><strong>IMPLICAZIONI IMPORTANTI PER SIDE EFFECT</strong>.</p>
+<p>È importante tenere a mente la possibilità di side effect, perché se provo a fare una cosa come <code>a[f(x)] = a[f(x)] + 1</code> Questo potrebbe dare risultati differenti a seconda del fatto che io abbia side effect o meno. Sarebbe meglio fare cose come <code>j = f(x); a[j] = a[j] + 1</code></p>
+<p>Gli operatori come <code>+=</code> e quelli della stessa famiglia sono utili a ovviare a questo side effect dovuto all&rsquo;esempio di prima, ecco una loro utilità 😀, non è solo un modo compatto lel.</p>
+<h2 id="controllo-della-sequenza">Controllo della sequenza<a hidden class="anchor" aria-hidden="true" href="#controllo-della-sequenza">#</a></h2>
+<h3 id="ambiente-e-memoria-3-ni">Ambiente e memoria (3) (ni)<a hidden class="anchor" aria-hidden="true" href="#ambiente-e-memoria-3-ni">#</a></h3>
+<ul>
+<li>
+<p>Slide ambiente e memoria</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled 1.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled 1">
+</li>
+</ul>
+<p>Solitamente una associazione del tipo <code>f: nome -&gt; Valore</code> Non è sufficiente perché non posso esprimere che un assegnamento per reference cambi i valori per entrambi (secondo questo modello dovrebbe cambiarlo solo per il singolo nome!).</p>
+<p>Solitamente andiamo a definire 3 modelli di valore:</p>
+<ol>
+<li>Valori denotabili da variabili</li>
+<li>Valori memorizzabili in locazioni di memoria</li>
+<li>Valori esprimibili come risultati di espressione.</li>
+</ol>
+<p>All&rsquo;interno del nostro linguaggio imperativo imperativo abbiamo bisogno delle prime due, mentre in un linugaggio funzionale solamente il primo che associa valori a variabili.</p>
+<p>Infatti per utilizzare l-value vogliamo andare a modificare il valore associato alla variabile. mentre per accedere al r-value dobbiamo andare a prendere il contenitore, quindi dovremmo prima accedere alla locazione, e poi dalla locazione andare a riprenderci il valore.</p>
+<p>Poi il fatto che la l-value cambi anche il valore in memoria è una altra cosa credo… Non lo ho capito dovrei chiederlo. Questa parte non ha molto senso, e non è importante posso saltare però tenere a mente che esistono quelle 3 cose.</p>
+<h3 id="comandi-sequenziali">Comandi sequenziali<a hidden class="anchor" aria-hidden="true" href="#comandi-sequenziali">#</a></h3>
+<p>Sono comandi come</p>
+<ol>
+<li><code>;</code> Ossia il singolo comando sequenziali</li>
+<li><code>begin ... end</code>  Che sono i comandi a blocchi anche indicati con <code>{}</code> in C</li>
+<li><code>goto</code> Che è ora in disuso ma in passato era molto importante.</li>
+</ol>
+<p>Il goto ha avuto una fortissima discussione negli anni 1970 con Dijkstra. Si basava sull&rsquo;idea di assembly e labels che permettevano di fare salti a piacere.</p>
+<ol>
+<li>Il goto ha la stessa espressività di un programma senza di esso (th di Böhn Jacopini)</li>
+<li>Il goto rende il codice difficilmente leggibile, quindi non permette la facile manutenzione. (si pensi a un goto per uscire da un loop 100 righe dopo, non è più strutturata la lettura diciamo).</li>
+<li>Come posso interpretare il fatto di goto che salta all&rsquo;interno di un blocco? Come gestire RdA??</li>
+<li>Sarebbe buono utilizzarlo come break e continue, ma ci sono già quei comandi…</li>
+<li>Produce spaghetti code (che crea proprio un grafo a forma di spaghetti se seguiamo il flusso di controllo del programma)
+<ol>
+<li>Viola il concetto della <strong>programmazione strutturata</strong>, di cui tratteremo in software engineering l&rsquo;anno prossimo.</li>
+</ol>
+<ul>
+<li>
+<p>Slides programmazione strutturata</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled 2.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled 2">
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="condizionali-2">Condizionali (2)<a hidden class="anchor" aria-hidden="true" href="#condizionali-2">#</a></h3>
+<p><code>if Bexp then Cl e1se C2</code> Semmai potremmo dire che ci siano qualche ambiguità quando ho qualche if annidato senza delimitatori. Per la valutazione di questi if è importante tenere a mente che esiste il short-circuit per rendere più efficiente la cosa.</p>
+<p><strong>Case</strong> la cosa bella è che ho un jumping table, quindi rende tutte le operazioni di controllo e salto leggermente più efficienti.</p>
+<ol>
+<li>Velocità per la jumping table (faccio solo 2 salti, invece in if-then else è lineare nel numero di if annidati).</li>
+<li>Chiarezza del costrutto.</li>
+</ol>
+<ul>
+<li>
+<p>Slide case</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled 3.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled 3">
+</li>
+<li>
+<p>Esempio di Jumping table</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled 4.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled 4">
+</li>
+</ul>
+<h3 id="iterativi-2">Iterativi (2)<a hidden class="anchor" aria-hidden="true" href="#iterativi-2">#</a></h3>
+<p>I comandi iterativi sono necessari per la turing completezza del linguaggio</p>
+<p><strong>Iterazione indeterminata</strong></p>
+<p>Sono comandi come <code>while</code> o <code>repeat ... until</code>  oppure il do while. Ed è indeterminata perché prima dell&rsquo;esecuzione non so esattamente quante iterazioni andrò a fare. dal punto della macchina fisica è molto facile implementarlo, dato che basta un salto con un check, più facile da implementare di un for.</p>
+<p>Con, <code>if, ass, while</code> ho già un linguaggio turning completo! Esattamente come è descritto in <a href="/notes/fondamenti-teorica">Fondamenti teorica</a>.</p>
+<p><strong>Iterazione determinata</strong></p>
+<p>Queste sono tutte le iterazioni in cui conosciamo a priori il numero di iterazioni da compiere (a runtime, prima di cominciare l&rsquo;esecuzione del comando), per esempio <code>for</code> e <code>foreach</code> . Di solito credo che nell&rsquo;implementazione si può calcolare il numero di iterazioni</p>
+<p>Si può osservare che la iterazione determinata sia meno espressiva dell&rsquo;iterazione indeterminata, però da un punto di vista pragmatico è molto utile perché mi compatta tutta la struttura che esisteva per l&rsquo;iterazione indeterminata.</p>
+<p>Meno espressiva perché non posso computare programmi come</p>
+$$
+f(x) = \begin{cases} x \text{   se è pari} \\
+\uparrow \text{ altrimenti }\end{cases}
+$$<p>Se ho iterazione determinata non riesco a divergere.</p>
+<p><code>for {exp1; expz; exp3) comando</code>  è la sintassi di C, ma nota che qui non è determinata! perché posso modificare il valore dell&rsquo;indice e anche del controllo, quindi in pratica è equivalente all&rsquo;iterazione determinata (posso renderlo indeterminato modificando l&rsquo;indice all&rsquo;interno).</p>
+<p><strong>NOTE DI IMPLEMENTAZIONE</strong></p>
+<p>È importante capire che in questo caso esiste il vincolo di semantica statica, che il fine e il valore del passo non dovrebbero essere modificati (cosa che non vale in C, per questo non è il for settato bene).</p>
+<p>Come fare ad implementare il passo? Se è negativo? Proco a costruire il concetto di <strong>iteration counter</strong> definito come segue:</p>
+$$
+ic = \lfloor \dfrac{fine - inizio + passo}{passo}\rfloor
+$$<p>+passo perché il fine è incluso nella iterazione, per questo aggiungo 1.</p>
+<h2 id="ricorsione">Ricorsione<a hidden class="anchor" aria-hidden="true" href="#ricorsione">#</a></h2>
+<h3 id="definizioni-induttive">Definizioni induttive<a hidden class="anchor" aria-hidden="true" href="#definizioni-induttive">#</a></h3>
+<p>Una cosa cosa molto interessante è che se possediamo una funzione da $g: \N \times A \to A$, e abbiamo una funzione $f: \N \to A$, e un qualunque valore $a \in A$, allora posto</p>
+$$
+f(0) = a \\
+f(n + 1) = g(n, f(n))
+$$<p>f è univocamente determinata per tutti i valori del dominio. Basta che g sia una funzione totale.</p>
+<p>Credo che questa definizione della funzione f, sfrutti la struttura dei numeri naturali (la stessa struttura su cui si basa il principio di induzione). Studieremo queste definizioni in maggior dettaglio in informatica teorica.</p>
+<p>In modo simile una funzione ricorsiva è simile a questa, è definita in termini di funzioni precedenti già definite. Nonostante ciò ci possono essere dei casi in cui è calcolabile, ma si discosta un pò dalle definizioni matematiche.</p>
+<ul>
+<li>
+<p>Casi in cui ciò si discosta</p>
+  <img src="/images/notes/image/universita/ex-notion/Valutazione Espressioni/Untitled 5.png" style="width: 100%" class="center" alt="image/universita/ex-notion/Valutazione Espressioni/Untitled 5">
+</li>
+</ul>
+<p>Si può dimostrare, cosa che non facciamo in questa sede che <strong>ricorsione è equivalente alla iterazione</strong>. Nonostante ciò in alcune implementazioni, in particolare l&rsquo;implementazione standard della ricorsione, questo porti a forti inefficienze. Analizzeremo solamente la tail recursion come ottimizzazione possibile.</p>
+<h3 id="tail-recursion">Tail recursion<a hidden class="anchor" aria-hidden="true" href="#tail-recursion">#</a></h3>
+<blockquote>
+<p>Una chiamata di g in f di si dice &ldquo;chiamata in coda&rdquo; (o tail call) se
+f restituisce il valore restituito da g senza ulteriore computazione.</p></blockquote>
+<p>Quando faccio una chiamata ricorsiva alla fine, prima di ritornare dalla funzione, allora posso ottimizzare tutto il discorso che abbiamo fatto sugli RdA in <a href="/notes/nomi-e-scope">Nomi e Scope</a>, perché non avrei bisogno di allocare un nuovo RdA, mi basta lo spazio attuale!</p>
+<p>È una cosa molto particolare perché con questo riesco a implementare la ricorsione con memoria statica! Un singolo RdA.</p>
+<p>Tail recursion si ha quando l&rsquo;ultima istruzione di ritorno <strong>non possiede computazioni aggiuntive</strong>, avendo questa proprietà, la chiamata della funzione può essere posta in modo che sovrascriva tutti i parametri, le variabili locali, con l&rsquo;indirizzo di ritorno e il valore di ritorno le stesse della funzione chaiamante.</p>
+<p>In pratica invece di far crescere continuamente la stack, posso fare in modo di utilizzare lo stesso record scrivendoci i nuovi parametri, un risparmio di memoria non da niente!</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

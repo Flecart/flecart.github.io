@@ -7,7 +7,20 @@
 <meta name="robots" content="index, follow">
 <title>Zero-Knowledge Proofs | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Zero-Knowledge Proofs - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Zero Knowledge Proofs
+Motivation &amp; Foundational Context
+ZKPs sit at the intersection of Complexity Theory, Cryptography, and Interactive Proof Systems. The core question: can you convince someone you know something without revealing what you know? This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.
+
+Interactive Proof Systems
+Interactive Theorem Provers
+The Classical Model
+An interactive proof system involves two parties exchanging messages:
+
+Prover (P): Computationally unbounded; claims a statement is true.
+Verifier (V): Probabilistic polynomial-time (PPT); decides accept/reject.
+
+
+&ldquo;An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.&rdquo; ~ Goldwasser, Micali, Rackoff (1985)">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/zero-knowledge-proofs/">
@@ -93,7 +106,10 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/zero-knowledge-proofs/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Zero-Knowledge Proofs">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Zero Knowledge Proofs Motivation &amp; Foundational Context ZKPs sit at the intersection of Complexity Theory, Cryptography, and Interactive Proof Systems. The core question: can you convince someone you know something without revealing what you know? This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.
+Interactive Proof Systems Interactive Theorem Provers
+The Classical Model An interactive proof system involves two parties exchanging messages:
+Prover (P): Computationally unbounded; claims a statement is true. Verifier (V): Probabilistic polynomial-time (PPT); decides accept/reject. “An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.” ~ Goldwasser, Micali, Rackoff (1985)">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -101,7 +117,20 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Zero-Knowledge Proofs">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Zero Knowledge Proofs
+Motivation &amp; Foundational Context
+ZKPs sit at the intersection of Complexity Theory, Cryptography, and Interactive Proof Systems. The core question: can you convince someone you know something without revealing what you know? This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.
+
+Interactive Proof Systems
+Interactive Theorem Provers
+The Classical Model
+An interactive proof system involves two parties exchanging messages:
+
+Prover (P): Computationally unbounded; claims a statement is true.
+Verifier (V): Probabilistic polynomial-time (PPT); decides accept/reject.
+
+
+&ldquo;An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.&rdquo; ~ Goldwasser, Micali, Rackoff (1985)">
 
 
 <script type="application/ld+json">
@@ -130,12 +159,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Zero-Knowledge Proofs",
   "name": "Zero-Knowledge Proofs",
-  "description": "",
+  "description": "Zero Knowledge Proofs Motivation \u0026amp; Foundational Context ZKPs sit at the intersection of Complexity Theory, Cryptography, and Interactive Proof Systems. The core question: can you convince someone you know something without revealing what you know? This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.\nInteractive Proof Systems Interactive Theorem Provers\nThe Classical Model An interactive proof system involves two parties exchanging messages:\nProver (P): Computationally unbounded; claims a statement is true. Verifier (V): Probabilistic polynomial-time (PPT); decides accept/reject. \u0026ldquo;An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.\u0026rdquo; ~ Goldwasser, Micali, Rackoff (1985)\n",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Zero Knowledge Proofs Motivation \u0026 Foundational Context ZKPs sit at the intersection of Complexity Theory, Cryptography, and Interactive Proof Systems. The core question: can you convince someone you know something without revealing what you know? This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.\nInteractive Proof Systems Interactive Theorem Provers\nThe Classical Model An interactive proof system involves two parties exchanging messages:\nProver (P): Computationally unbounded; claims a statement is true. Verifier (V): Probabilistic polynomial-time (PPT); decides accept/reject. “An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.” ~ Goldwasser, Micali, Rackoff (1985)\nThe class of languages with interactive proofs is IP, and famously $\\text{IP} = \\text{PSPACE}$.\nCompleteness and Soundness These are the two non-negotiable properties of any proof system:\n$$\\Pr[\\langle P, V \\rangle(x) = 1] \\geq 1 - \\text{negl}(\\lambda)$$ $$\\forall P^_, \\quad \\Pr[\\langle P^*, V \\rangle(x) = 1] \\leq \\text{negl}(\\lambda)$$ The soundness error $\\epsilon$ is the maximum cheating probability; for practical systems, we require $\\epsilon \\leq 2^{-\\lambda}$.\nZero Knowledge: The Core Definition Intuition The verifier learns nothing beyond the truth of the statement. Formally, whatever the verifier sees during the interaction could have been produced without the prover — using only knowledge that the statement is true.\nThe canonical example: proving knowledge of a 3-coloring of a graph without revealing the coloring.\nThe Simulator Paradigm Zero knowledge is defined via simulation: a protocol is ZK if there exists a PPT simulator $\\mathcal{S}$ such that the simulated transcript is computationally indistinguishable from the real transcript.\n$${\\text{View}_{V^_}[\\langle P(w), V^*(z) \\rangle(x)]}_{x \\in L, w, z} \\approx_c {\\mathcal{S}(x, z)}_{x \\in L, z}$$ where $w$ is the witness, $z$ is $V^*$’s auxiliary input, and $\\approx_c$ denotes computational indistinguishability.\nThree Flavors of Zero Knowledge Variant Indistinguishability Strength Perfect ZK Identical distributions Strongest; information-theoretic Statistical ZK (SZK) Statistically close ($\\leq \\text{negl}$) Very strong; holds vs. unbounded adversary Computational ZK (CZK) Computationally indistinguishable Standard; relies on hardness assumptions For most practical constructions (SNARKs, STARKs), computational ZK suffices.\nSigma Protocols (Σ-Protocols) Structure Sigma protocols are 3-move public-coin interactive proofs:\nCommit ($a$): Prover sends commitment $a$. Challenge ($e$): Verifier sends random challenge $e \\xleftarrow{$} {0,1}^\\lambda$. Response ($z$): Prover sends response $z$. Verifier accepts/rejects based on $(a, e, z)$.\nSpecial Soundness A Sigma protocol has special soundness if from any two accepting transcripts $(a, e_1, z_1)$ and $(a, e_2, z_2)$ with $e_1 \\neq e_2$, one can efficiently extract the witness $w$.\nThis is the key property used in the extractor argument for proof of knowledge.\nSchnorr Protocol (Example) Proving knowledge of discrete log: given $y = g^x \\bmod p$, prove knowledge of $x$.\n$$ \\begin{align*} \u0026\\text{Commit: } P \\text{ samples } r \\xleftarrow{$} \\mathbb{Z}_q, \\text{ sends } a = g^r \\ \u0026\\text{Challenge: } V \\text{ sends } e \\xleftarrow{$} \\mathbb{Z}_q \\ \u0026\\text{Response: } P \\text{ sends } z = r + ex \\bmod q \\ \u0026\\text{Verify: } g^z \\stackrel{?}{=} a \\cdot y^e \\end{align*} $$ Completeness: $g^z = g^{r+ex} = g^r \\cdot (g^x)^e = a \\cdot y^e$ ✓ Special soundness: Two transcripts $(a, e_1, z_1), (a, e_2, z_2)$ yield $x = \\frac{z_1 - z_2}{e_1 - e_2}$. HVZK: Simulator picks $z, e$ at random, sets $a = g^z y^{-e}$ — transcript is perfectly indistinguishable. Concrete Numerical Example With small parameters $p = 23$, $g = 5$, $x = 7$:\nPublic key: $Y = g^x \\bmod p = 5^7 \\bmod 23 = 17$. Computed via repeated squaring: $5^1 = 5$, $5^2 = 2$, $5^4 = 4$, then $5^7 = 5^4 \\cdot 5^2 \\cdot 5^1 = 4 \\cdot 2 \\cdot 5 = 40 \\bmod 23 = 17$. Commit: Sample $r = 3$, compute $R = 5^3 \\bmod 23 = 125 \\bmod 23 = 10$. Challenge: Verifier sends $c = 4$. Response: $s = r + c \\cdot x \\bmod (p-1) = 3 + 4 \\cdot 7 \\bmod 22 = 31 \\bmod 22 = 9$. Verify: Check $g^s \\stackrel{?}{=} R \\cdot Y^c \\pmod{p}$: LHS: $5^9 \\bmod 23 = 11$ RHS: $10 \\cdot 17^4 \\bmod 23 = 10 \\cdot 1 \\bmod 23 = 10$… The algebraic identity closes because $g^s = g^{r + cx} = g^r \\cdot (g^x)^c = R \\cdot Y^c$ — the verifier never sees $x$.\nWhy zero knowledge: the transcript $(R, c, s)$ can be simulated: pick $s, c$ first, compute $R = g^s \\cdot Y^{-c}$. The distribution is identical — the verifier learns nothing beyond “the prover knows $x$”.\nFiat-Shamir Transform Converts an interactive Sigma protocol into a non-interactive ZK (NIZK) proof in the Random Oracle Model:\nReplace the verifier’s random challenge with a hash: $e = H(x | a)$.\nThe resulting proof $\\pi = (a, z)$ is a signature of knowledge. Security relies on modeling $H$ as a random oracle — in the standard model this is much harder to achieve (see Canetti-Goldreich-Halevi impossibility).\nThis single trick is what converts the interactive Schnorr protocol into a non-interactive proof (and the Schnorr signature scheme), and is the basis for making all modern SNARK/STARK systems non-interactive.\nNon-Interactive Zero Knowledge (NIZK) Definition A NIZK proof system has:\nCommon Reference String (CRS): A trusted public string $\\sigma$ generated at setup. No interaction: Prover outputs $\\pi$; verifier checks $\\pi$ against $\\sigma$. Formally: $\\text{Setup}(1^\\lambda) \\to \\sigma$, $\\text{Prove}(\\sigma, x, w) \\to \\pi$, $\\text{Verify}(\\sigma, x, \\pi) \\to {0,1}$.\nThe ZK simulator gets a simulated CRS $\\tilde{\\sigma}$ with a trapdoor $\\tau$, allowing simulation without the witness.\nCRS vs. Random Oracle Setup Trust Assumption Standard Model? CRS Trusted setup (or MPC ceremony) Yes Random Oracle Heuristic (Fiat-Shamir) No Transparent setup None (STARKs) Yes (no trapdoor) SNARKs Definition Succinct Non-interactive ARgument of Knowledge (SNARK):\nSuccinct: Proof size $|\\pi| = O(\\text{poly}(\\lambda))$, independent of witness size; verification in $O(\\text{poly}(\\lambda) \\cdot |x|)$. Non-interactive: Single message from prover to verifier. Argument: Soundness holds only against computationally bounded provers (not information-theoretic). of Knowledge: Extractability — a prover producing a valid proof must “know” a witness (formalized via a knowledge extractor). $$\\Pr\\left[\\text{Verify}(\\sigma, x, \\pi) = 1 \\wedge (x, w) \\notin R ;\\Big|; (\\pi, x) \\leftarrow P^_(\\sigma); w \\leftarrow \\mathcal{E}^{P^*}(\\sigma)\\right] \\leq \\text{negl}(\\lambda)$$ zk-SNARKs in Practice The dominant paradigm: arithmetic circuit satisfiability. Given a circuit $C$ over field $\\mathbb{F}$, prove $\\exists w$ s.t. $C(x, w) = 0$.\nKey pipeline:\nComputation $\\to$ Arithmetic Circuit $\\to$ R1CS (Rank-1 Constraint System) $\\to$ QAP (Quadratic Arithmetic Program) QAP encodes R1CS constraints as polynomial identities over $\\mathbb{F}$. KZG Polynomial Commitments or IPA used to prove polynomial identities succinctly. R1CS and QAP $$\\forall i: \\langle \\mathbf{a}_i, \\mathbf{z} \\rangle \\cdot \\langle \\mathbf{b}_i, \\mathbf{z} \\rangle = \\langle \\mathbf{c}_i, \\mathbf{z} \\rangle$$ where $\\mathbf{z} = (1, x_1, \\ldots, x_n, w_1, \\ldots, w_m)$ is the assignment vector.\nA QAP over field $\\mathbb{F}$ with $n$ constraints:\nEncode each $\\mathbf{a}_i, \\mathbf{b}_i, \\mathbf{c}_i$ as evaluations of polynomials $A(X), B(X), C(X)$. Satisfiability $\\iff$ $A(X) \\cdot B(X) - C(X) = H(X) \\cdot Z(X)$ where $Z(X) = \\prod_{i=1}^n (X - r_i)$ is the vanishing polynomial. The prover commits to $A, B, C, H$ and the verifier checks the identity at a random point (Schwartz-Zippel).\nConcrete Example: SNARK Circuit for $x^2 + x + 5 = 11$ To see R1CS and QAP concretely, consider proving knowledge of secret $x$ such that $x^2 + x + 5 = 11$ (the witness is $x = 2$, but the verifier only sees the public output $11$).\nStep 1 — Flatten into gates. A SNARK handles one multiplication per gate, so we decompose:\nGate Operation Constraint Gate 1 Multiply $x \\times x = w_1$ Gate 2 Add $w_1 + x = w_2$ Gate 3 Add $w_2 + 5 = w_3$ Final assertion: $w_3 = 11$.\n$$\\mathbf{z} = (1, x, w_1, w_2, w_3) = (1, 2, 4, 6, 11)$$Step 3 — R1CS encoding. Each gate becomes $(\\mathbf{a}_i \\cdot \\mathbf{z}) \\times (\\mathbf{b}_i \\cdot \\mathbf{z}) = (\\mathbf{c}_i \\cdot \\mathbf{z})$:\n$1$ $x$ $w_1$ $w_2$ $w_3$ $\\mathbf{a}_1$ 0 1 0 0 0 $\\mathbf{b}_1$ 0 1 0 0 0 $\\mathbf{c}_1$ 0 0 1 0 0 Check: $(0 + 1 \\cdot 2 + 0 + 0 + 0) \\times (0 + 1 \\cdot 2 + 0 + 0 + 0) = 4 = \\mathbf{c}_1 \\cdot \\mathbf{z}$ ✓\nAddition is encoded as multiplication by $1$: the constraint $w_1 + x = w_2$ becomes $(w_1 + x) \\times 1 = w_2$.\n$1$ $x$ $w_1$ $w_2$ $w_3$ $\\mathbf{a}_2$ 0 1 1 0 0 $\\mathbf{b}_2$ 1 0 0 0 0 $\\mathbf{c}_2$ 0 0 0 1 0 Check: $(0 + 2 + 4 + 0 + 0) \\times (1) = 6 = w_2$ ✓\nSimilarly for Gate 3, the constant $5$ appears via the constant wire: $\\mathbf{a}_3 = (5, 0, 0, 1, 0)$.\n$$A(\\tau) \\cdot B(\\tau) - C(\\tau) = H(\\tau) \\cdot Z(\\tau)$$ where $Z(\\tau) = (\\tau - \\tau_1)(\\tau - \\tau_2)(\\tau - \\tau_3)$ is the vanishing polynomial. Divisibility by $Z$ implies all constraints hold simultaneously. The prover commits to the quotient polynomial $H$, and the proof is essentially a commitment that the division works out.\nStep 5 — Proof generation and verification. The verifier’s check reduces to a single pairing equation (in Groth16) or polynomial identity check (in PLONK), regardless of circuit size. This is the “succinct” property: the proof is constant-size and verification is $O(1)$.\nGroth16 The most efficient known SNARK (constant-size proofs: 3 group elements):\nSetup: Structured Reference String (SRS) computed from toxic waste $(\\alpha, \\beta, \\gamma, \\delta, \\tau)$. If the toxic waste leaks, soundness breaks — motivates Powers of Tau MPC Ceremony. Proof: $\\pi = ([A]_1, [B]_2, [C]_1)$ where $[\\cdot]_i$ denotes group element in $\\mathbb{G}_i$. Verification: Two pairing checks: $$e([A]_1, [B]_2) = e([\\alpha]_1, [\\beta]_2) \\cdot e!\\left(\\frac{\\sum_i a_i u_i(\\tau)}{\\gamma}, [\\gamma]_2\\right) \\cdot e([C]_1, [\\delta]_2)$$ Drawback: Circuit-specific SRS — new trusted setup per circuit. See PLONK for universal SRS. STARKs Design Principles Scalable Transparent ARguments of Knowledge:\nTransparent: No trusted setup; public randomness only (eliminates toxic waste problem). Scalable: Prover time $O(n \\log n)$, but proof size $O(\\log^2 n)$ — larger than SNARKs but no CRS. Post-quantum: Security based on collision-resistant hash functions, not elliptic curves. Key building blocks:\nFRI Protocol (Fast Reed-Solomon IOP of Proximity): Proves a committed function is close to a low-degree polynomial. See Reed-Solomon Codes. Algebraic Intermediate Representation (AIR): Constraint system using execution trace + transition constraints. SNARK vs. STARK Tradeoff Property SNARKs (e.g., Groth16) STARKs Proof size Constant (e.g., 288 bytes) $O(\\log^2 n)$ (KBs–MBs) Verification time Constant (pairings) $O(\\log^2 n)$ Prover time $O(n \\log n)$ $O(n \\log n)$ Trusted setup Required (per-circuit or universal) None Assumptions Elliptic curve pairings, KoE Collision-resistant hashes Post-quantum No Yes Polynomial Commitments KZG Commitments Kate-Zaverucha-Goldberg: Commit to polynomial $f(X) \\in \\mathbb{F}[X]$ of degree $\\leq d$.\nSetup: $\\text{SRS} = ([1]_1, [\\tau]_1, [\\tau^2]_1, \\ldots, [\\tau^d]_1, [\\tau]_2)$ for secret $\\tau$. Commit: $C = [f(\\tau)]_1 = \\sum_i a_i [\\tau^i]_1$. Open at point $z$: Prover computes quotient $q(X) = \\frac{f(X) - f(z)}{X - z}$, sends $\\pi = [q(\\tau)]_1$. Verify: $e(C - [f(z)]_1, [1]_2) \\stackrel{?}{=} e(\\pi, [\\tau - z]_2)$ using bilinear pairing. Binding: Follows from the $d$-Strong Diffie-Hellman assumption.\nDrawback: Requires trusted setup for SRS; pairing-based (not post-quantum).\nIPA (Inner Product Arguments) Alternative commitment without trusted setup; used in Bulletproofs:\nLogarithmic proof size via recursive halving. No pairings; verification is $O(n)$ — slower than KZG but transparent. Proof of Knowledge \u0026 Extractability Knowledge Extractor The formal mechanism ensuring “argument of knowledge” is meaningful:\n$\\forall$ PPT $P^_$ that outputs valid $\\pi$ for $x$ with non-negligible probability, $\\exists$ PPT extractor $\\mathcal{E}$ (with rewinding/oracle access to $P^_$) that outputs witness $w$ s.t. $(x, w) \\in R$.\nRewinding: Classical extraction rewinds $P^*$ to the same random coins, sends different challenges — works for interactive proofs but is problematic in UC Security / Concurrent Composition.\nProof of Knowledge vs. Proof of Membership Type What is Proven Extractability Proof of membership $x \\in L$ No witness extraction Proof of knowledge Prover knows $w$ s.t. $(x,w) \\in R$ Witness extractable This distinction is critical in cryptographic protocols (e.g., you want to prove you know a secret key, not just that one exists).\nZKP Protocol Design Space Five Axes of Differentiation Every ZK protocol makes tradeoffs along these axes:\nAxis Spectrum Interactive ↔ Non-interactive Schnorr/Sigma (3 rounds) vs. SNARKs/STARKs (Fiat-Shamir) Trusted setup ↔ Transparent Groth16 (per-circuit) → PLONK (universal) → STARKs (none) Proof size Groth16 (~192 B) → PLONK (~700 B) → STARKs (~50–200 KB) Expressiveness Special-purpose (Schnorr: discrete log only) → General-purpose (SNARKs: any circuit) Cryptographic assumptions Elliptic curves + pairings (not quantum-safe) → Hash functions only (STARKs, plausibly post-quantum) No free lunch: every system trades off proof size, verification time, prover time, setup trust, and cryptographic assumptions. The “right” system depends on deployment context.\nArithmetisation Schemes Different protocols use different representations for the computation being proved:\nScheme Used by Structure R1CS Groth16, Spartan $\\langle \\mathbf{a}_i, \\mathbf{z} \\rangle \\cdot \\langle \\mathbf{b}_i, \\mathbf{z} \\rangle = \\langle \\mathbf{c}_i, \\mathbf{z} \\rangle$ per gate PLONKish PLONK, Halo2 Custom gates + copy constraints; more flexible AIR STARKs Execution trace + transition polynomials The “compilation” step from high-level program to constraints is called arithmetisation — this is where most engineering complexity lives. Languages like Circom, Noir (Aztec), and Leo (Aleo) abstract this step for developers.\nApplications ZKPs in Blockchain \u0026 Privacy Zcash: Uses Groth16 SNARKs to prove validity of shielded transactions without revealing sender, receiver, or amount. zkEVM: Proves correct execution of EVM bytecode via ZK circuit; enables zkRollups (Layer 2 scaling). PLONK / Halo2: Universal SNARKs enabling a single trusted setup for all circuits. ZK Authentication Replace password transmission with ZK proof of knowledge of password/secret. No password ever leaves client. Combines with Sigma Protocols + Fiat-Shamir.\nRecursive SNARKs $$\\pi_{n+1} = \\text{Prove}(\\text{Verify}(\\pi_n, x_n) \\wedge f(x_n) = x_{n+1})$$ See Nova, Halo2, Pickles (Mina Protocol). Key challenge: cycle of elliptic curves to avoid field mismatch (e.g., Pasta curves: Pallas + Vesta).\nBlockchain Applications (Detailed) ZK-Rollups (L2 Scaling) zkRollups, Layer 2 Scaling\nZK-rollups are the dominant blockchain application of ZKPs. They execute transactions off-chain, generate a validity proof (SNARK or STARK), and post the proof + compressed state diff to L1 (typically Ethereum). The L1 contract verifies the proof — if it passes, the entire batch is final.\nThe key value proposition: batch thousands of transactions into one proof, reducing per-transaction gas cost by ~90%. As of 2025, ZK-based rollups hold \u003e$28B in Total Value Locked.\nHow it works concretely:\nUsers submit transactions to L2 sequencer (same UX as Ethereum). Sequencer executes transactions, computes new state root. Prover generates a ZK proof that the state transition is valid. Proof + compressed state diff posted to L1 Ethereum contract. L1 verifier contract checks the proof → if valid, state is finalized. Major projects: zkSync Era (SNARK-based, zkEVM), StarkNet (STARK-based, Cairo language), Polygon zkEVM, Scroll, Linea (ConsenSys).\nZK-Rollups vs. Optimistic Rollups Optimistic Rollups, Arbitrum, Optimism\nOptimistic rollups are the alternative L2 scaling approach. They use fraud proofs instead of validity proofs — the fundamental difference is the proof model:\nProperty ZK-Rollups Optimistic Rollups Proof model Validity proof (math: prove batch is correct before posting) Fraud proof (assume valid, challenge within 7-day window) Finality Minutes (once proof verified on L1) ~7 days (challenge window must close) Withdrawal to L1 Fast (proof settles immediately) 7-day delay (or use liquidity bridges at a fee) Security assumption Cryptographic (math) Game-theoretic (at least 1 honest watcher must exist) EVM compatibility Improving (zkEVMs are maturing) Near-native (deploy existing Solidity with zero changes) Data posted to L1 Proof + compressed state diff Full transaction data (calldata/blobs) Prover cost High (proof generation needs specialized hardware) Low (just re-execute and post) TVL (2025) ~$28B across ZK L2s Higher overall (Arbitrum, Optimism, Base) Optimistic rollup fraud proof mechanism: A sequencer posts batches to L1 asserting validity. Anyone can re-execute the batch and, if they find a discrepancy, submit a fraud proof. Two designs exist: single-round (Optimism — re-execute entire batch on L1) and interactive bisection (Arbitrum — narrow dispute to a single instruction via a binary search game, much more gas-efficient). If fraud is confirmed, the sequencer is slashed (loses staked collateral) and the batch is reverted.\nThe fraud proof mechanism on Arbitrum and Optimism has never been successfully exploited in production, but the security model is weaker than ZK: it relies on incentive-compatible game theory rather than mathematical proof. A successful DoS attack on challengers during the dispute window could, in theory, allow invalid state to be finalized.\nVitalik Buterin’s view: ZK-rollups are likely to outperform long-term once zkEVM technology matures, but optimistic rollups dominate today due to easier developer migration and EVM compatibility.\nPrivate Transactions Zcash, Aztec Network, Tornado Cash\nThe original blockchain ZKP use case: prove a transaction is valid without revealing sender, receiver, or amount.\nZcash: Each shielded transaction includes a Groth16 zk-SNARK proving that inputs equal outputs (conservation of value), the sender owns the input notes (knowledge of spending key), and no double-spend occurred (nullifier not in the spent set) — all without exposing any on-chain details.\nAztec Network: Extends private transactions to full private smart contracts on Ethereum. Uses a dual-layer architecture: one layer encrypts transactions for privacy, a second layer compresses them for scalability (PLONK-based). Aztec developed Noir, a domain-specific language for writing ZK circuits, significantly lowering the barrier for developers.\nTradeoffs: proof generation is slow on consumer devices (seconds for Zcash, improving); regulatory friction in some jurisdictions; anonymity set size limits effective privacy (small anonymity sets leak information via traffic analysis).\nDecentralized Identity and ZK-KYC Verifiable Credentials, Polygon ID, Humanity Protocol, World ID\nZK-based identity enables proving attributes (age, citizenship, accreditation, KYC status) without revealing raw PII:\nProve you’re over 18 without revealing your birthdate. Prove you’re KYC-verified without sharing identity documents. Prove you’re a unique human (Sybil resistance) without biometric exposure. The credential model: a trusted issuer signs an attribute; the user holds the credential; a verifier checks a ZK proof derived from the credential. The proof reveals only the predicate (e.g., “age ≥ 18”), not the underlying data.\nMajor projects: Humanity Protocol (palm biometrics → ZK proofs for proof-of-personhood), World ID / Worldcoin (iris scan → ZK proof of uniqueness), Polygon ID (verifiable credentials on Polygon), Privado ID (Deutsche Bank PoC).\nThis is GDPR-aligned by design: the data never leaves the user’s device. The ZK-KYC market is projected to grow at ~40% CAGR.\nProof of Reserves Proof of Solvency, Merkle Trees\nPost-FTX, proof of reserves became critical infrastructure. A ZK proof can show that an exchange’s total assets $\\geq$ total liabilities (sum of all customer balances) without revealing any individual customer’s position.\nThe construction typically uses a Merkle sum tree of customer balances, where the exchange proves:\nEach leaf (customer balance) is non-negative. The root sum equals the claimed total liability. The exchange controls on-chain addresses with assets $\\geq$ the root sum. All via ZK proofs — no individual balance is ever revealed. OKX publishes monthly ZK-based PoR attestations.\nLimitation: Proves assets $\\geq$ known liabilities at a snapshot in time. Cannot prove absence of hidden off-balance-sheet liabilities without additional auditing.\nVerifiable Computation and zkVMs RISC Zero, SP1, zkVM\nA zkVM (zero-knowledge virtual machine) generalises the SNARK circuit approach: instead of compiling each program into a bespoke circuit, you prove correct execution of a general-purpose instruction set (e.g., RISC-V).\nWrite normal code (Rust, C) → execute off-chain → produce ZK proof that execution was correct → any on-chain verifier checks the proof without re-executing.\nThis is the “any program is provable” endpoint of ZKP technology. The SNARK circuit example above ($x^2 + x + 5 = 11$) required manually flattening into gates; a zkVM does this automatically for arbitrary programs.\nMajor projects: RISC Zero (RISC-V + STARKs), SP1 (Succinct), Valida.\nTradeoffs: proof generation is 100–1000× slower than native execution; memory-intensive programs are hard to prove (the circuit size for the VM itself is large); tooling is improving rapidly.\nZK Bridges and Light Clients Cross-Chain Bridges, ZeroSync\nTraditional cross-chain bridges rely on multisig committees — if the committee is compromised, funds are stolen (e.g., Ronin bridge: $625M, Wormhole: $320M). ZK bridges replace the multisig with a cryptographic proof: a SNARK proves that $N$ validators signed the source chain’s block header, allowing the destination chain to verify trustlessly.\nZK light clients: Instead of downloading and validating every block header, a light client verifies a single ZK proof that the entire chain history (or a segment) is valid. ZeroSync is building this for Bitcoin — proving the Bitcoin state transition function via STARKs.\nTradeoffs: proving consensus (e.g., BLS signature verification) inside a ZK circuit is computationally expensive; latency from proof generation; still largely in research/prototype stage.\nZK + Machine Learning (Emerging) Verifiable AI, EZKL, Modulus Labs\nAn emerging frontier: using ZK proofs to verify ML model inference or training correctness without revealing the model weights or training data. This enables verifiable AI — critical if AI agents are making financial decisions on-chain.\nThe construction: encode a neural network’s forward pass as an arithmetic circuit, prove that given input $x$, the model produces output $y$. The proof attests to correct execution of the specific model without revealing its parameters.\nResearch projects: EZKL (proves ML inference), Modulus Labs, zkFDL (federated learning).\nTradeoffs: proving even a small neural network is extremely expensive — the circuit size for a single inference of a modest model can be enormous. This is the primary bottleneck. Current approaches use quantisation and circuit-friendly architectures to reduce overhead, but it remains very early stage.\nConnection to multi-agent AI safety: if AI agents operate autonomously on-chain (e.g., managing DeFi positions, participating in governance), ZK proofs could serve as the verification layer ensuring agents are running the claimed model faithfully. This creates a mechanism design problem: how to structure verification incentives so that agent behavior is auditable without revealing proprietary model details. See Mechanism Design, Multi-Agent Systems.\nCritical Pitfalls \u0026 Warnings Trusted Setup Failures If the toxic waste $\\tau$ from a SNARK CRS ceremony is not destroyed, an adversary can forge arbitrary proofs.\nMitigations:\nMPC ceremonies (Powers of Tau): $n$-of-$n$ threshold — safe if $\\geq 1$ participant is honest. Universal setups (PLONK): Reuse same SRS across circuits. Transparent setups (STARKs): Eliminate the problem entirely. Soundness vs. Knowledge Soundness Soundness: No PPT prover can convince verifier of false statement. Knowledge soundness: Stronger — any convincing prover must know a witness. Many protocols achieve soundness but NOT knowledge soundness. For authentication and credential systems, you need the latter. Non-Black-Box vs. Black-Box Simulation Standard ZK definitions use black-box simulation (simulator can rewind $V^*$). Non-black-box simulation (Barak 2001) achieves round-efficient ZK for NP but at high computational cost. Practical systems almost always use black-box.\nCompleteness–Soundness–ZK: The Tension You cannot simultaneously achieve perfect completeness, perfect soundness, and perfect ZK (unless $\\text{BPP} = \\text{IP}$).\nPerfect ZK + negligible soundness error: feasible. Statistical ZK (SZK) is a rich class but collapses to AM ∩ coAM under plausible assumptions. Summary: The ZKP Design Space Transparency (No trusted setup) | STARKs ---- + (large π) | | Bulletproofs --------+-------- SNARKs (Groth16, PLONK) (no pairing, | (small π, fast verify, slow verify) | trusted setup) | Post-quantum security Key takeaway: No free lunch — every ZK system trades off proof size, verification time, prover time, setup trust, and cryptographic assumptions. The “right” system depends on the deployment context (on-chain verification cost vs. prover infrastructure vs. quantum threat model).\nSee Interactive Proof Systems, Complexity Theory (IP=PSPACE)), Elliptic Curve Cryptography, Merkle Trees, Reed-Solomon Codes, MPC Ceremonies, Layer 2 Scaling, Optimistic Rollups, zkRollups, Verifiable Credentials, Cross-Chain Bridges.\n",
+  "wordCount" : "3843",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,12 +259,804 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Zero-Knowledge Proofs
     </h1>
-    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 19 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#zero-knowledge-proofs" aria-label="Zero Knowledge Proofs">Zero Knowledge Proofs</a><ul>
+                        
+                <li>
+                    <a href="#motivation--foundational-context" aria-label="Motivation &amp; Foundational Context">Motivation &amp; Foundational Context</a></li>
+                <li>
+                    <a href="#interactive-proof-systems" aria-label="Interactive Proof Systems">Interactive Proof Systems</a><ul>
+                        
+                <li>
+                    <a href="#the-classical-model" aria-label="The Classical Model">The Classical Model</a></li>
+                <li>
+                    <a href="#completeness-and-soundness" aria-label="Completeness and Soundness">Completeness and Soundness</a></li></ul>
+                </li>
+                <li>
+                    <a href="#zero-knowledge-the-core-definition" aria-label="Zero Knowledge: The Core Definition">Zero Knowledge: The Core Definition</a><ul>
+                        
+                <li>
+                    <a href="#intuition" aria-label="Intuition">Intuition</a></li>
+                <li>
+                    <a href="#the-simulator-paradigm" aria-label="The Simulator Paradigm">The Simulator Paradigm</a></li>
+                <li>
+                    <a href="#three-flavors-of-zero-knowledge" aria-label="Three Flavors of Zero Knowledge">Three Flavors of Zero Knowledge</a></li></ul>
+                </li>
+                <li>
+                    <a href="#sigma-protocols-%cf%83-protocols" aria-label="Sigma Protocols (Σ-Protocols)">Sigma Protocols (Σ-Protocols)</a><ul>
+                        
+                <li>
+                    <a href="#structure" aria-label="Structure">Structure</a></li>
+                <li>
+                    <a href="#special-soundness" aria-label="Special Soundness">Special Soundness</a></li>
+                <li>
+                    <a href="#schnorr-protocol-example" aria-label="Schnorr Protocol (Example)">Schnorr Protocol (Example)</a><ul>
+                        
+                <li>
+                    <a href="#concrete-numerical-example" aria-label="Concrete Numerical Example">Concrete Numerical Example</a></li></ul>
+                </li>
+                <li>
+                    <a href="#fiat-shamir-transform" aria-label="Fiat-Shamir Transform">Fiat-Shamir Transform</a></li></ul>
+                </li>
+                <li>
+                    <a href="#non-interactive-zero-knowledge-nizk" aria-label="Non-Interactive Zero Knowledge (NIZK)">Non-Interactive Zero Knowledge (NIZK)</a><ul>
+                        
+                <li>
+                    <a href="#definition" aria-label="Definition">Definition</a></li>
+                <li>
+                    <a href="#crs-vs-random-oracle" aria-label="CRS vs. Random Oracle">CRS vs. Random Oracle</a></li></ul>
+                </li>
+                <li>
+                    <a href="#snarks" aria-label="SNARKs">SNARKs</a><ul>
+                        
+                <li>
+                    <a href="#definition-1" aria-label="Definition">Definition</a></li>
+                <li>
+                    <a href="#zk-snarks-in-practice" aria-label="zk-SNARKs in Practice">zk-SNARKs in Practice</a></li>
+                <li>
+                    <a href="#r1cs-and-qap" aria-label="R1CS and QAP">R1CS and QAP</a><ul>
+                        
+                <li>
+                    <a href="#concrete-example-snark-circuit-for-x2--x--5--11" aria-label="Concrete Example: SNARK Circuit for $x^2 &#43; x &#43; 5 = 11$">Concrete Example: SNARK Circuit for $x^2 + x + 5 = 11$</a></li></ul>
+                </li>
+                <li>
+                    <a href="#groth16" aria-label="Groth16">Groth16</a></li></ul>
+                </li>
+                <li>
+                    <a href="#starks" aria-label="STARKs">STARKs</a><ul>
+                        
+                <li>
+                    <a href="#design-principles" aria-label="Design Principles">Design Principles</a></li>
+                <li>
+                    <a href="#snark-vs-stark-tradeoff" aria-label="SNARK vs. STARK Tradeoff">SNARK vs. STARK Tradeoff</a></li></ul>
+                </li>
+                <li>
+                    <a href="#polynomial-commitments" aria-label="Polynomial Commitments">Polynomial Commitments</a><ul>
+                        
+                <li>
+                    <a href="#kzg-commitments" aria-label="KZG Commitments">KZG Commitments</a></li>
+                <li>
+                    <a href="#ipa-inner-product-arguments" aria-label="IPA (Inner Product Arguments)">IPA (Inner Product Arguments)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#proof-of-knowledge--extractability" aria-label="Proof of Knowledge &amp; Extractability">Proof of Knowledge &amp; Extractability</a><ul>
+                        
+                <li>
+                    <a href="#knowledge-extractor" aria-label="Knowledge Extractor">Knowledge Extractor</a></li>
+                <li>
+                    <a href="#proof-of-knowledge-vs-proof-of-membership" aria-label="Proof of Knowledge vs. Proof of Membership">Proof of Knowledge vs. Proof of Membership</a></li></ul>
+                </li>
+                <li>
+                    <a href="#zkp-protocol-design-space" aria-label="ZKP Protocol Design Space">ZKP Protocol Design Space</a><ul>
+                        
+                <li>
+                    <a href="#five-axes-of-differentiation" aria-label="Five Axes of Differentiation">Five Axes of Differentiation</a></li>
+                <li>
+                    <a href="#arithmetisation-schemes" aria-label="Arithmetisation Schemes">Arithmetisation Schemes</a></li></ul>
+                </li>
+                <li>
+                    <a href="#applications" aria-label="Applications">Applications</a><ul>
+                        
+                <li>
+                    <a href="#zkps-in-blockchain--privacy" aria-label="ZKPs in Blockchain &amp; Privacy">ZKPs in Blockchain &amp; Privacy</a></li>
+                <li>
+                    <a href="#zk-authentication" aria-label="ZK Authentication">ZK Authentication</a></li>
+                <li>
+                    <a href="#recursive-snarks" aria-label="Recursive SNARKs">Recursive SNARKs</a></li></ul>
+                </li>
+                <li>
+                    <a href="#blockchain-applications-detailed" aria-label="Blockchain Applications (Detailed)">Blockchain Applications (Detailed)</a><ul>
+                        
+                <li>
+                    <a href="#zk-rollups-l2-scaling" aria-label="ZK-Rollups (L2 Scaling)">ZK-Rollups (L2 Scaling)</a></li>
+                <li>
+                    <a href="#zk-rollups-vs-optimistic-rollups" aria-label="ZK-Rollups vs. Optimistic Rollups">ZK-Rollups vs. Optimistic Rollups</a></li>
+                <li>
+                    <a href="#private-transactions" aria-label="Private Transactions">Private Transactions</a></li>
+                <li>
+                    <a href="#decentralized-identity-and-zk-kyc" aria-label="Decentralized Identity and ZK-KYC">Decentralized Identity and ZK-KYC</a></li>
+                <li>
+                    <a href="#proof-of-reserves" aria-label="Proof of Reserves">Proof of Reserves</a></li>
+                <li>
+                    <a href="#verifiable-computation-and-zkvms" aria-label="Verifiable Computation and zkVMs">Verifiable Computation and zkVMs</a></li>
+                <li>
+                    <a href="#zk-bridges-and-light-clients" aria-label="ZK Bridges and Light Clients">ZK Bridges and Light Clients</a></li>
+                <li>
+                    <a href="#zk--machine-learning-emerging" aria-label="ZK &#43; Machine Learning (Emerging)">ZK + Machine Learning (Emerging)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#critical-pitfalls--warnings" aria-label="Critical Pitfalls &amp; Warnings">Critical Pitfalls &amp; Warnings</a><ul>
+                        
+                <li>
+                    <a href="#trusted-setup-failures" aria-label="Trusted Setup Failures">Trusted Setup Failures</a></li>
+                <li>
+                    <a href="#soundness-vs-knowledge-soundness" aria-label="Soundness vs. Knowledge Soundness">Soundness vs. Knowledge Soundness</a></li>
+                <li>
+                    <a href="#non-black-box-vs-black-box-simulation" aria-label="Non-Black-Box vs. Black-Box Simulation">Non-Black-Box vs. Black-Box Simulation</a></li>
+                <li>
+                    <a href="#completenesssoundnesszk-the-tension" aria-label="Completeness–Soundness–ZK: The Tension">Completeness–Soundness–ZK: The Tension</a></li></ul>
+                </li>
+                <li>
+                    <a href="#summary-the-zkp-design-space" aria-label="Summary: The ZKP Design Space">Summary: The ZKP Design Space</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="zero-knowledge-proofs">Zero Knowledge Proofs<a hidden class="anchor" aria-hidden="true" href="#zero-knowledge-proofs">#</a></h2>
+<h3 id="motivation--foundational-context">Motivation &amp; Foundational Context<a hidden class="anchor" aria-hidden="true" href="#motivation--foundational-context">#</a></h3>
+<p>ZKPs sit at the intersection of Complexity Theory, <a href="/notes/cryptography">Cryptography</a>, and Interactive Proof Systems. The core question: <em>can you convince someone you know something without revealing what you know?</em> This has profound implications for privacy-preserving authentication, blockchain protocols, and verifiable computation.</p>
+<hr>
+<h3 id="interactive-proof-systems">Interactive Proof Systems<a hidden class="anchor" aria-hidden="true" href="#interactive-proof-systems">#</a></h3>
+<p><a href="/notes/interactive-theorem-provers">Interactive Theorem Provers</a></p>
+<h4 id="the-classical-model">The Classical Model<a hidden class="anchor" aria-hidden="true" href="#the-classical-model">#</a></h4>
+<p>An <strong>interactive proof system</strong> involves two parties exchanging messages:</p>
+<ul>
+<li><strong>Prover (P)</strong>: Computationally unbounded; claims a statement is true.</li>
+<li><strong>Verifier (V)</strong>: Probabilistic polynomial-time (PPT); decides accept/reject.</li>
+</ul>
+<blockquote>
+<p>&ldquo;An interactive proof system for a language $L$ is a protocol $(P, V)$ such that completeness and soundness hold.&rdquo; ~ <em>Goldwasser, Micali, Rackoff (1985)</em></p></blockquote>
+<p>The class of languages with interactive proofs is <strong>IP</strong>, and famously $\text{IP} = \text{PSPACE}$.</p>
+<h4 id="completeness-and-soundness">Completeness and Soundness<a hidden class="anchor" aria-hidden="true" href="#completeness-and-soundness">#</a></h4>
+<p>These are the two non-negotiable properties of any proof system:</p>
+<blockquote>
+$$\Pr[\langle P, V \rangle(x) = 1] \geq 1 - \text{negl}(\lambda)$$</blockquote>
+<blockquote>
+$$\forall P^_, \quad \Pr[\langle P^*, V \rangle(x) = 1] \leq \text{negl}(\lambda)$$</blockquote>
+<p>The <strong>soundness error</strong> $\epsilon$ is the maximum cheating probability; for practical systems, we require $\epsilon \leq 2^{-\lambda}$.</p>
+<hr>
+<h3 id="zero-knowledge-the-core-definition">Zero Knowledge: The Core Definition<a hidden class="anchor" aria-hidden="true" href="#zero-knowledge-the-core-definition">#</a></h3>
+<h4 id="intuition">Intuition<a hidden class="anchor" aria-hidden="true" href="#intuition">#</a></h4>
+<p>The verifier learns <strong>nothing</strong> beyond the truth of the statement. Formally, whatever the verifier sees during the interaction could have been produced <em>without the prover</em> — using only knowledge that the statement is true.</p>
+<p>The canonical example: proving knowledge of a 3-coloring of a graph without revealing the coloring.</p>
+<h4 id="the-simulator-paradigm">The Simulator Paradigm<a hidden class="anchor" aria-hidden="true" href="#the-simulator-paradigm">#</a></h4>
+<p>Zero knowledge is defined via <strong>simulation</strong>: a protocol is ZK if there exists a PPT simulator $\mathcal{S}$ such that the simulated transcript is computationally indistinguishable from the real transcript.</p>
+<blockquote>
+$${\text{View}_{V^_}[\langle P(w), V^*(z) \rangle(x)]}_{x \in L, w, z} \approx_c {\mathcal{S}(x, z)}_{x \in L, z}$$</blockquote>
+<p>where $w$ is the witness, $z$ is $V^*$&rsquo;s auxiliary input, and $\approx_c$ denotes computational indistinguishability.</p>
+<h4 id="three-flavors-of-zero-knowledge">Three Flavors of Zero Knowledge<a hidden class="anchor" aria-hidden="true" href="#three-flavors-of-zero-knowledge">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Variant</th>
+          <th style="text-align: left">Indistinguishability</th>
+          <th style="text-align: left">Strength</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Perfect ZK</strong></td>
+          <td style="text-align: left">Identical distributions</td>
+          <td style="text-align: left">Strongest; information-theoretic</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Statistical ZK (SZK)</strong></td>
+          <td style="text-align: left">Statistically close ($\leq \text{negl}$)</td>
+          <td style="text-align: left">Very strong; holds vs. unbounded adversary</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Computational ZK (CZK)</strong></td>
+          <td style="text-align: left">Computationally indistinguishable</td>
+          <td style="text-align: left">Standard; relies on hardness assumptions</td>
+      </tr>
+  </tbody>
+</table>
+<p>For most practical constructions (SNARKs, STARKs), <strong>computational ZK</strong> suffices.</p>
+<hr>
+<h3 id="sigma-protocols-σ-protocols">Sigma Protocols (Σ-Protocols)<a hidden class="anchor" aria-hidden="true" href="#sigma-protocols-σ-protocols">#</a></h3>
+<h4 id="structure">Structure<a hidden class="anchor" aria-hidden="true" href="#structure">#</a></h4>
+<p>Sigma protocols are <strong>3-move</strong> public-coin interactive proofs:</p>
+<ol>
+<li><strong>Commit</strong> ($a$): Prover sends commitment $a$.</li>
+<li><strong>Challenge</strong> ($e$): Verifier sends random challenge $e \xleftarrow{$} {0,1}^\lambda$.</li>
+<li><strong>Response</strong> ($z$): Prover sends response $z$.</li>
+</ol>
+<p>Verifier accepts/rejects based on $(a, e, z)$.</p>
+<h4 id="special-soundness">Special Soundness<a hidden class="anchor" aria-hidden="true" href="#special-soundness">#</a></h4>
+<p>A Sigma protocol has <strong>special soundness</strong> if from any two accepting transcripts $(a, e_1, z_1)$ and $(a, e_2, z_2)$ with $e_1 \neq e_2$, one can efficiently extract the witness $w$.</p>
+<p>This is the key property used in the extractor argument for proof of knowledge.</p>
+<h4 id="schnorr-protocol-example">Schnorr Protocol (Example)<a hidden class="anchor" aria-hidden="true" href="#schnorr-protocol-example">#</a></h4>
+<p>Proving knowledge of discrete log: given $y = g^x \bmod p$, prove knowledge of $x$.</p>
+$$ \begin{align*} &\text{Commit: } P \text{ samples } r \xleftarrow{$} \mathbb{Z}_q, \text{ sends } a = g^r \ &\text{Challenge: } V \text{ sends } e \xleftarrow{$} \mathbb{Z}_q \ &\text{Response: } P \text{ sends } z = r + ex \bmod q \ &\text{Verify: } g^z \stackrel{?}{=} a \cdot y^e \end{align*} $$<ul>
+<li><strong>Completeness</strong>: $g^z = g^{r+ex} = g^r \cdot (g^x)^e = a \cdot y^e$ ✓</li>
+<li><strong>Special soundness</strong>: Two transcripts $(a, e_1, z_1), (a, e_2, z_2)$ yield $x = \frac{z_1 - z_2}{e_1 - e_2}$.</li>
+<li><strong>HVZK</strong>: Simulator picks $z, e$ at random, sets $a = g^z y^{-e}$ — transcript is perfectly indistinguishable.</li>
+</ul>
+<h5 id="concrete-numerical-example">Concrete Numerical Example<a hidden class="anchor" aria-hidden="true" href="#concrete-numerical-example">#</a></h5>
+<p>With small parameters $p = 23$, $g = 5$, $x = 7$:</p>
+<ol>
+<li><strong>Public key</strong>: $Y = g^x \bmod p = 5^7 \bmod 23 = 17$. Computed via repeated squaring: $5^1 = 5$, $5^2 = 2$, $5^4 = 4$, then $5^7 = 5^4 \cdot 5^2 \cdot 5^1 = 4 \cdot 2 \cdot 5 = 40 \bmod 23 = 17$.</li>
+<li><strong>Commit</strong>: Sample $r = 3$, compute $R = 5^3 \bmod 23 = 125 \bmod 23 = 10$.</li>
+<li><strong>Challenge</strong>: Verifier sends $c = 4$.</li>
+<li><strong>Response</strong>: $s = r + c \cdot x \bmod (p-1) = 3 + 4 \cdot 7 \bmod 22 = 31 \bmod 22 = 9$.</li>
+<li><strong>Verify</strong>: Check $g^s \stackrel{?}{=} R \cdot Y^c \pmod{p}$:
+<ul>
+<li>LHS: $5^9 \bmod 23 = 11$</li>
+<li>RHS: $10 \cdot 17^4 \bmod 23 = 10 \cdot 1 \bmod 23 = 10$&hellip;</li>
+</ul>
+</li>
+</ol>
+<p>The algebraic identity closes because $g^s = g^{r + cx} = g^r \cdot (g^x)^c = R \cdot Y^c$ — the verifier never sees $x$.</p>
+<blockquote>
+<p><strong>Why zero knowledge</strong>: the transcript $(R, c, s)$ can be simulated: pick $s, c$ first, compute $R = g^s \cdot Y^{-c}$. The distribution is identical — the verifier learns nothing beyond &ldquo;the prover knows $x$&rdquo;.</p></blockquote>
+<h4 id="fiat-shamir-transform">Fiat-Shamir Transform<a hidden class="anchor" aria-hidden="true" href="#fiat-shamir-transform">#</a></h4>
+<p>Converts an interactive Sigma protocol into a <strong>non-interactive ZK (NIZK)</strong> proof in the Random Oracle Model:</p>
+<blockquote>
+<p>Replace the verifier&rsquo;s random challenge with a hash: $e = H(x | a)$.</p></blockquote>
+<p>The resulting proof $\pi = (a, z)$ is a <strong>signature of knowledge</strong>. Security relies on modeling $H$ as a random oracle — in the standard model this is much harder to achieve (see Canetti-Goldreich-Halevi impossibility).</p>
+<p>This single trick is what converts the interactive Schnorr protocol into a non-interactive proof (and the Schnorr signature scheme), and is the basis for making all modern SNARK/STARK systems non-interactive.</p>
+<hr>
+<h3 id="non-interactive-zero-knowledge-nizk">Non-Interactive Zero Knowledge (NIZK)<a hidden class="anchor" aria-hidden="true" href="#non-interactive-zero-knowledge-nizk">#</a></h3>
+<h4 id="definition">Definition<a hidden class="anchor" aria-hidden="true" href="#definition">#</a></h4>
+<p>A NIZK proof system has:</p>
+<ul>
+<li><strong>Common Reference String (CRS)</strong>: A trusted public string $\sigma$ generated at setup.</li>
+<li>No interaction: Prover outputs $\pi$; verifier checks $\pi$ against $\sigma$.</li>
+</ul>
+<blockquote>
+<p>Formally: $\text{Setup}(1^\lambda) \to \sigma$, $\text{Prove}(\sigma, x, w) \to \pi$, $\text{Verify}(\sigma, x, \pi) \to {0,1}$.</p></blockquote>
+<p>The ZK simulator gets a <strong>simulated CRS</strong> $\tilde{\sigma}$ with a trapdoor $\tau$, allowing simulation without the witness.</p>
+<h4 id="crs-vs-random-oracle">CRS vs. Random Oracle<a hidden class="anchor" aria-hidden="true" href="#crs-vs-random-oracle">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Setup</th>
+          <th style="text-align: left">Trust Assumption</th>
+          <th style="text-align: left">Standard Model?</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>CRS</strong></td>
+          <td style="text-align: left">Trusted setup (or MPC ceremony)</td>
+          <td style="text-align: left">Yes</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Random Oracle</strong></td>
+          <td style="text-align: left">Heuristic (Fiat-Shamir)</td>
+          <td style="text-align: left">No</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Transparent setup</strong></td>
+          <td style="text-align: left">None (STARKs)</td>
+          <td style="text-align: left">Yes (no trapdoor)</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="snarks">SNARKs<a hidden class="anchor" aria-hidden="true" href="#snarks">#</a></h3>
+<h4 id="definition-1">Definition<a hidden class="anchor" aria-hidden="true" href="#definition-1">#</a></h4>
+<p><strong>Succinct Non-interactive ARgument of Knowledge (SNARK)</strong>:</p>
+<ul>
+<li><strong>Succinct</strong>: Proof size $|\pi| = O(\text{poly}(\lambda))$, independent of witness size; verification in $O(\text{poly}(\lambda) \cdot |x|)$.</li>
+<li><strong>Non-interactive</strong>: Single message from prover to verifier.</li>
+<li><strong>Argument</strong>: Soundness holds only against computationally bounded provers (not information-theoretic).</li>
+<li><strong>of Knowledge</strong>: Extractability — a prover producing a valid proof must &ldquo;know&rdquo; a witness (formalized via a knowledge extractor).</li>
+</ul>
+<blockquote>
+$$\Pr\left[\text{Verify}(\sigma, x, \pi) = 1 \wedge (x, w) \notin R ;\Big|; (\pi, x) \leftarrow P^_(\sigma); w \leftarrow \mathcal{E}^{P^*}(\sigma)\right] \leq \text{negl}(\lambda)$$</blockquote>
+<h4 id="zk-snarks-in-practice">zk-SNARKs in Practice<a hidden class="anchor" aria-hidden="true" href="#zk-snarks-in-practice">#</a></h4>
+<p>The dominant paradigm: <strong>arithmetic circuit satisfiability</strong>. Given a circuit $C$ over field $\mathbb{F}$, prove $\exists w$ s.t. $C(x, w) = 0$.</p>
+<p>Key pipeline:</p>
+<ol>
+<li><strong>Computation</strong> $\to$ <strong>Arithmetic Circuit</strong> $\to$ <strong>R1CS</strong> (Rank-1 Constraint System) $\to$ <strong>QAP</strong> (Quadratic Arithmetic Program)</li>
+<li><strong>QAP</strong> encodes R1CS constraints as polynomial identities over $\mathbb{F}$.</li>
+<li><strong>KZG Polynomial Commitments</strong> or <strong>IPA</strong> used to prove polynomial identities succinctly.</li>
+</ol>
+<h4 id="r1cs-and-qap">R1CS and QAP<a hidden class="anchor" aria-hidden="true" href="#r1cs-and-qap">#</a></h4>
+$$\forall i: \langle \mathbf{a}_i, \mathbf{z} \rangle \cdot \langle \mathbf{b}_i, \mathbf{z} \rangle = \langle \mathbf{c}_i, \mathbf{z} \rangle$$<p> where $\mathbf{z} = (1, x_1, \ldots, x_n, w_1, \ldots, w_m)$ is the assignment vector.</p>
+<p>A <strong>QAP</strong> over field $\mathbb{F}$ with $n$ constraints:</p>
+<ul>
+<li>Encode each $\mathbf{a}_i, \mathbf{b}_i, \mathbf{c}_i$ as evaluations of polynomials $A(X), B(X), C(X)$.</li>
+<li>Satisfiability $\iff$ $A(X) \cdot B(X) - C(X) = H(X) \cdot Z(X)$ where $Z(X) = \prod_{i=1}^n (X - r_i)$ is the vanishing polynomial.</li>
+</ul>
+<p>The prover commits to $A, B, C, H$ and the verifier checks the identity at a random point (Schwartz-Zippel).</p>
+<h5 id="concrete-example-snark-circuit-for-x2--x--5--11">Concrete Example: SNARK Circuit for $x^2 + x + 5 = 11$<a hidden class="anchor" aria-hidden="true" href="#concrete-example-snark-circuit-for-x2--x--5--11">#</a></h5>
+<p>To see R1CS and QAP concretely, consider proving knowledge of secret $x$ such that $x^2 + x + 5 = 11$ (the witness is $x = 2$, but the verifier only sees the public output $11$).</p>
+<p><strong>Step 1 — Flatten into gates.</strong> A SNARK handles one multiplication per gate, so we decompose:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Gate</th>
+          <th style="text-align: left">Operation</th>
+          <th style="text-align: left">Constraint</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Gate 1</td>
+          <td style="text-align: left">Multiply</td>
+          <td style="text-align: left">$x \times x = w_1$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Gate 2</td>
+          <td style="text-align: left">Add</td>
+          <td style="text-align: left">$w_1 + x = w_2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Gate 3</td>
+          <td style="text-align: left">Add</td>
+          <td style="text-align: left">$w_2 + 5 = w_3$</td>
+      </tr>
+  </tbody>
+</table>
+<p>Final assertion: $w_3 = 11$.</p>
+$$\mathbf{z} = (1, x, w_1, w_2, w_3) = (1, 2, 4, 6, 11)$$<p><strong>Step 3 — R1CS encoding.</strong> Each gate becomes $(\mathbf{a}_i \cdot \mathbf{z}) \times (\mathbf{b}_i \cdot \mathbf{z}) = (\mathbf{c}_i \cdot \mathbf{z})$:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left"></th>
+          <th style="text-align: left">$1$</th>
+          <th style="text-align: left">$x$</th>
+          <th style="text-align: left">$w_1$</th>
+          <th style="text-align: left">$w_2$</th>
+          <th style="text-align: left">$w_3$</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$\mathbf{a}_1$</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$\mathbf{b}_1$</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$\mathbf{c}_1$</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+      </tr>
+  </tbody>
+</table>
+<p>Check: $(0 + 1 \cdot 2 + 0 + 0 + 0) \times (0 + 1 \cdot 2 + 0 + 0 + 0) = 4 = \mathbf{c}_1 \cdot \mathbf{z}$ ✓</p>
+<p>Addition is encoded as multiplication by $1$: the constraint $w_1 + x = w_2$ becomes $(w_1 + x) \times 1 = w_2$.</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left"></th>
+          <th style="text-align: left">$1$</th>
+          <th style="text-align: left">$x$</th>
+          <th style="text-align: left">$w_1$</th>
+          <th style="text-align: left">$w_2$</th>
+          <th style="text-align: left">$w_3$</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$\mathbf{a}_2$</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$\mathbf{b}_2$</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$\mathbf{c}_2$</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">0</td>
+      </tr>
+  </tbody>
+</table>
+<p>Check: $(0 + 2 + 4 + 0 + 0) \times (1) = 6 = w_2$ ✓</p>
+<p>Similarly for Gate 3, the constant $5$ appears via the constant wire: $\mathbf{a}_3 = (5, 0, 0, 1, 0)$.</p>
+$$A(\tau) \cdot B(\tau) - C(\tau) = H(\tau) \cdot Z(\tau)$$<p> where $Z(\tau) = (\tau - \tau_1)(\tau - \tau_2)(\tau - \tau_3)$ is the vanishing polynomial. Divisibility by $Z$ implies all constraints hold simultaneously. The prover commits to the quotient polynomial $H$, and the proof is essentially a commitment that the division works out.</p>
+<p><strong>Step 5 — Proof generation and verification.</strong> The verifier&rsquo;s check reduces to a single pairing equation (in Groth16) or polynomial identity check (in PLONK), regardless of circuit size. This is the &ldquo;succinct&rdquo; property: the proof is constant-size and verification is $O(1)$.</p>
+<h4 id="groth16">Groth16<a hidden class="anchor" aria-hidden="true" href="#groth16">#</a></h4>
+<p>The most efficient known SNARK (constant-size proofs: 3 group elements):</p>
+<ul>
+<li><strong>Setup</strong>: Structured Reference String (SRS) computed from toxic waste $(\alpha, \beta, \gamma, \delta, \tau)$. <strong>If the toxic waste leaks, soundness breaks</strong> — motivates Powers of Tau MPC Ceremony.</li>
+<li><strong>Proof</strong>: $\pi = ([A]_1, [B]_2, [C]_1)$ where $[\cdot]_i$ denotes group element in $\mathbb{G}_i$.</li>
+<li><strong>Verification</strong>: Two pairing checks: $$e([A]_1, [B]_2) = e([\alpha]_1, [\beta]_2) \cdot e!\left(\frac{\sum_i a_i u_i(\tau)}{\gamma}, [\gamma]_2\right) \cdot e([C]_1, [\delta]_2)$$</li>
+<li><strong>Drawback</strong>: Circuit-specific SRS — new trusted setup per circuit. See PLONK for universal SRS.</li>
+</ul>
+<hr>
+<h3 id="starks">STARKs<a hidden class="anchor" aria-hidden="true" href="#starks">#</a></h3>
+<h4 id="design-principles">Design Principles<a hidden class="anchor" aria-hidden="true" href="#design-principles">#</a></h4>
+<p><strong>Scalable Transparent ARguments of Knowledge</strong>:</p>
+<ul>
+<li><strong>Transparent</strong>: No trusted setup; public randomness only (eliminates toxic waste problem).</li>
+<li><strong>Scalable</strong>: Prover time $O(n \log n)$, but proof size $O(\log^2 n)$ — larger than SNARKs but no CRS.</li>
+<li><strong>Post-quantum</strong>: Security based on collision-resistant hash functions, not elliptic curves.</li>
+</ul>
+<p>Key building blocks:</p>
+<ul>
+<li><strong>FRI Protocol</strong> (Fast Reed-Solomon IOP of Proximity): Proves a committed function is close to a low-degree polynomial. See Reed-Solomon Codes.</li>
+<li><strong>Algebraic Intermediate Representation (AIR)</strong>: Constraint system using execution trace + transition constraints.</li>
+</ul>
+<h4 id="snark-vs-stark-tradeoff">SNARK vs. STARK Tradeoff<a hidden class="anchor" aria-hidden="true" href="#snark-vs-stark-tradeoff">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Property</th>
+          <th style="text-align: left">SNARKs (e.g., Groth16)</th>
+          <th style="text-align: left">STARKs</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Proof size</strong></td>
+          <td style="text-align: left">Constant (e.g., 288 bytes)</td>
+          <td style="text-align: left">$O(\log^2 n)$ (KBs–MBs)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Verification time</strong></td>
+          <td style="text-align: left">Constant (pairings)</td>
+          <td style="text-align: left">$O(\log^2 n)$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Prover time</strong></td>
+          <td style="text-align: left">$O(n \log n)$</td>
+          <td style="text-align: left">$O(n \log n)$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Trusted setup</strong></td>
+          <td style="text-align: left">Required (per-circuit or universal)</td>
+          <td style="text-align: left">None</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Assumptions</strong></td>
+          <td style="text-align: left">Elliptic curve pairings, KoE</td>
+          <td style="text-align: left">Collision-resistant hashes</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Post-quantum</strong></td>
+          <td style="text-align: left">No</td>
+          <td style="text-align: left">Yes</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="polynomial-commitments">Polynomial Commitments<a hidden class="anchor" aria-hidden="true" href="#polynomial-commitments">#</a></h3>
+<h4 id="kzg-commitments">KZG Commitments<a hidden class="anchor" aria-hidden="true" href="#kzg-commitments">#</a></h4>
+<p><strong>Kate-Zaverucha-Goldberg</strong>: Commit to polynomial $f(X) \in \mathbb{F}[X]$ of degree $\leq d$.</p>
+<ul>
+<li><strong>Setup</strong>: $\text{SRS} = ([1]_1, [\tau]_1, [\tau^2]_1, \ldots, [\tau^d]_1, [\tau]_2)$ for secret $\tau$.</li>
+<li><strong>Commit</strong>: $C = [f(\tau)]_1 = \sum_i a_i [\tau^i]_1$.</li>
+<li><strong>Open at point $z$</strong>: Prover computes quotient $q(X) = \frac{f(X) - f(z)}{X - z}$, sends $\pi = [q(\tau)]_1$.</li>
+<li><strong>Verify</strong>: $e(C - [f(z)]_1, [1]_2) \stackrel{?}{=} e(\pi, [\tau - z]_2)$ using bilinear pairing.</li>
+</ul>
+<blockquote>
+<p><strong>Binding</strong>: Follows from the $d$-Strong Diffie-Hellman assumption.</p></blockquote>
+<p><strong>Drawback</strong>: Requires trusted setup for SRS; pairing-based (not post-quantum).</p>
+<h4 id="ipa-inner-product-arguments">IPA (Inner Product Arguments)<a hidden class="anchor" aria-hidden="true" href="#ipa-inner-product-arguments">#</a></h4>
+<p>Alternative commitment without trusted setup; used in Bulletproofs:</p>
+<ul>
+<li>Logarithmic proof size via recursive halving.</li>
+<li>No pairings; verification is $O(n)$ — slower than KZG but transparent.</li>
+</ul>
+<hr>
+<h3 id="proof-of-knowledge--extractability">Proof of Knowledge &amp; Extractability<a hidden class="anchor" aria-hidden="true" href="#proof-of-knowledge--extractability">#</a></h3>
+<h4 id="knowledge-extractor">Knowledge Extractor<a hidden class="anchor" aria-hidden="true" href="#knowledge-extractor">#</a></h4>
+<p>The formal mechanism ensuring &ldquo;argument of knowledge&rdquo; is meaningful:</p>
+<blockquote>
+<p>$\forall$ PPT $P^_$ that outputs valid $\pi$ for $x$ with non-negligible probability, $\exists$ PPT extractor $\mathcal{E}$ (with rewinding/oracle access to $P^_$) that outputs witness $w$ s.t. $(x, w) \in R$.</p></blockquote>
+<p><strong>Rewinding</strong>: Classical extraction rewinds $P^*$ to the same random coins, sends different challenges — works for interactive proofs but is problematic in UC Security / Concurrent Composition.</p>
+<h4 id="proof-of-knowledge-vs-proof-of-membership">Proof of Knowledge vs. Proof of Membership<a hidden class="anchor" aria-hidden="true" href="#proof-of-knowledge-vs-proof-of-membership">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Type</th>
+          <th style="text-align: left">What is Proven</th>
+          <th style="text-align: left">Extractability</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Proof of membership</strong></td>
+          <td style="text-align: left">$x \in L$</td>
+          <td style="text-align: left">No witness extraction</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Proof of knowledge</strong></td>
+          <td style="text-align: left">Prover knows $w$ s.t. $(x,w) \in R$</td>
+          <td style="text-align: left">Witness extractable</td>
+      </tr>
+  </tbody>
+</table>
+<p>This distinction is critical in cryptographic protocols (e.g., you want to prove you <em>know</em> a secret key, not just that one <em>exists</em>).</p>
+<hr>
+<h3 id="zkp-protocol-design-space">ZKP Protocol Design Space<a hidden class="anchor" aria-hidden="true" href="#zkp-protocol-design-space">#</a></h3>
+<h4 id="five-axes-of-differentiation">Five Axes of Differentiation<a hidden class="anchor" aria-hidden="true" href="#five-axes-of-differentiation">#</a></h4>
+<p>Every ZK protocol makes tradeoffs along these axes:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Axis</th>
+          <th style="text-align: left">Spectrum</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Interactive ↔ Non-interactive</strong></td>
+          <td style="text-align: left">Schnorr/Sigma (3 rounds) vs. SNARKs/STARKs (Fiat-Shamir)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Trusted setup ↔ Transparent</strong></td>
+          <td style="text-align: left">Groth16 (per-circuit) → PLONK (universal) → STARKs (none)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Proof size</strong></td>
+          <td style="text-align: left">Groth16 (~192 B) → PLONK (~700 B) → STARKs (~50–200 KB)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Expressiveness</strong></td>
+          <td style="text-align: left">Special-purpose (Schnorr: discrete log only) → General-purpose (SNARKs: any circuit)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Cryptographic assumptions</strong></td>
+          <td style="text-align: left">Elliptic curves + pairings (not quantum-safe) → Hash functions only (STARKs, plausibly post-quantum)</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>No free lunch</strong>: every system trades off proof size, verification time, prover time, setup trust, and cryptographic assumptions. The &ldquo;right&rdquo; system depends on deployment context.</p></blockquote>
+<h4 id="arithmetisation-schemes">Arithmetisation Schemes<a hidden class="anchor" aria-hidden="true" href="#arithmetisation-schemes">#</a></h4>
+<p>Different protocols use different representations for the computation being proved:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: left">Used by</th>
+          <th style="text-align: left">Structure</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>R1CS</strong></td>
+          <td style="text-align: left">Groth16, Spartan</td>
+          <td style="text-align: left">$\langle \mathbf{a}_i, \mathbf{z} \rangle \cdot \langle \mathbf{b}_i, \mathbf{z} \rangle = \langle \mathbf{c}_i, \mathbf{z} \rangle$ per gate</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>PLONKish</strong></td>
+          <td style="text-align: left">PLONK, Halo2</td>
+          <td style="text-align: left">Custom gates + copy constraints; more flexible</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>AIR</strong></td>
+          <td style="text-align: left">STARKs</td>
+          <td style="text-align: left">Execution trace + transition polynomials</td>
+      </tr>
+  </tbody>
+</table>
+<p>The &ldquo;compilation&rdquo; step from high-level program to constraints is called <strong>arithmetisation</strong> — this is where most engineering complexity lives. Languages like Circom, Noir (Aztec), and Leo (Aleo) abstract this step for developers.</p>
+<hr>
+<h3 id="applications">Applications<a hidden class="anchor" aria-hidden="true" href="#applications">#</a></h3>
+<h4 id="zkps-in-blockchain--privacy">ZKPs in Blockchain &amp; Privacy<a hidden class="anchor" aria-hidden="true" href="#zkps-in-blockchain--privacy">#</a></h4>
+<ul>
+<li><strong>Zcash</strong>: Uses Groth16 SNARKs to prove validity of shielded transactions without revealing sender, receiver, or amount.</li>
+<li><strong>zkEVM</strong>: Proves correct execution of EVM bytecode via ZK circuit; enables zkRollups (Layer 2 scaling).</li>
+<li><strong>PLONK / Halo2</strong>: Universal SNARKs enabling a single trusted setup for all circuits.</li>
+</ul>
+<h4 id="zk-authentication">ZK Authentication<a hidden class="anchor" aria-hidden="true" href="#zk-authentication">#</a></h4>
+<p>Replace password transmission with ZK proof of knowledge of password/secret. No password ever leaves client. Combines with Sigma Protocols + Fiat-Shamir.</p>
+<h4 id="recursive-snarks">Recursive SNARKs<a hidden class="anchor" aria-hidden="true" href="#recursive-snarks">#</a></h4>
+$$\pi_{n+1} = \text{Prove}(\text{Verify}(\pi_n, x_n) \wedge f(x_n) = x_{n+1})$$<p> See Nova, Halo2, Pickles (Mina Protocol). Key challenge: cycle of elliptic curves to avoid field mismatch (e.g., Pasta curves: Pallas + Vesta).</p>
+<hr>
+<h3 id="blockchain-applications-detailed">Blockchain Applications (Detailed)<a hidden class="anchor" aria-hidden="true" href="#blockchain-applications-detailed">#</a></h3>
+<h4 id="zk-rollups-l2-scaling">ZK-Rollups (L2 Scaling)<a hidden class="anchor" aria-hidden="true" href="#zk-rollups-l2-scaling">#</a></h4>
+<p>zkRollups, Layer 2 Scaling</p>
+<p>ZK-rollups are the dominant blockchain application of ZKPs. They execute transactions off-chain, generate a validity proof (SNARK or STARK), and post the proof + compressed state diff to L1 (typically Ethereum). The L1 contract verifies the proof — if it passes, the entire batch is final.</p>
+<p>The key value proposition: <strong>batch thousands of transactions into one proof</strong>, reducing per-transaction gas cost by ~90%. As of 2025, ZK-based rollups hold &gt;$28B in Total Value Locked.</p>
+<p><strong>How it works concretely</strong>:</p>
+<ol>
+<li>Users submit transactions to L2 sequencer (same UX as Ethereum).</li>
+<li>Sequencer executes transactions, computes new state root.</li>
+<li>Prover generates a ZK proof that the state transition is valid.</li>
+<li>Proof + compressed state diff posted to L1 Ethereum contract.</li>
+<li>L1 verifier contract checks the proof → if valid, state is finalized.</li>
+</ol>
+<p><strong>Major projects</strong>: zkSync Era (SNARK-based, zkEVM), StarkNet (STARK-based, Cairo language), Polygon zkEVM, Scroll, <a href="/notes/linea">Linea</a> (ConsenSys).</p>
+<h4 id="zk-rollups-vs-optimistic-rollups">ZK-Rollups vs. Optimistic Rollups<a hidden class="anchor" aria-hidden="true" href="#zk-rollups-vs-optimistic-rollups">#</a></h4>
+<p>Optimistic Rollups, Arbitrum, Optimism</p>
+<p>Optimistic rollups are the alternative L2 scaling approach. They use <strong>fraud proofs</strong> instead of validity proofs — the fundamental difference is the proof model:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Property</th>
+          <th style="text-align: left">ZK-Rollups</th>
+          <th style="text-align: left">Optimistic Rollups</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Proof model</strong></td>
+          <td style="text-align: left">Validity proof (math: prove batch is correct <em>before</em> posting)</td>
+          <td style="text-align: left">Fraud proof (assume valid, challenge within 7-day window)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Finality</strong></td>
+          <td style="text-align: left">Minutes (once proof verified on L1)</td>
+          <td style="text-align: left">~7 days (challenge window must close)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Withdrawal to L1</strong></td>
+          <td style="text-align: left">Fast (proof settles immediately)</td>
+          <td style="text-align: left">7-day delay (or use liquidity bridges at a fee)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Security assumption</strong></td>
+          <td style="text-align: left">Cryptographic (math)</td>
+          <td style="text-align: left">Game-theoretic (at least 1 honest watcher must exist)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>EVM compatibility</strong></td>
+          <td style="text-align: left">Improving (zkEVMs are maturing)</td>
+          <td style="text-align: left">Near-native (deploy existing Solidity with zero changes)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Data posted to L1</strong></td>
+          <td style="text-align: left">Proof + compressed state diff</td>
+          <td style="text-align: left">Full transaction data (calldata/blobs)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Prover cost</strong></td>
+          <td style="text-align: left">High (proof generation needs specialized hardware)</td>
+          <td style="text-align: left">Low (just re-execute and post)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TVL (2025)</strong></td>
+          <td style="text-align: left">~$28B across ZK L2s</td>
+          <td style="text-align: left">Higher overall (Arbitrum, Optimism, Base)</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>Optimistic rollup fraud proof mechanism</strong>: A sequencer posts batches to L1 asserting validity. Anyone can re-execute the batch and, if they find a discrepancy, submit a fraud proof. Two designs exist: <strong>single-round</strong> (Optimism — re-execute entire batch on L1) and <strong>interactive bisection</strong> (Arbitrum — narrow dispute to a single instruction via a binary search game, much more gas-efficient). If fraud is confirmed, the sequencer is slashed (loses staked collateral) and the batch is reverted.</p></blockquote>
+<blockquote>
+<p>The fraud proof mechanism on Arbitrum and Optimism has never been successfully exploited in production, but the security model is weaker than ZK: it relies on incentive-compatible game theory rather than mathematical proof. A successful DoS attack on challengers during the dispute window could, in theory, allow invalid state to be finalized.</p></blockquote>
+<p><strong>Vitalik Buterin&rsquo;s view</strong>: ZK-rollups are likely to outperform long-term once zkEVM technology matures, but optimistic rollups dominate today due to easier developer migration and EVM compatibility.</p>
+<h4 id="private-transactions">Private Transactions<a hidden class="anchor" aria-hidden="true" href="#private-transactions">#</a></h4>
+<p>Zcash, Aztec Network, Tornado Cash</p>
+<p>The original blockchain ZKP use case: prove a transaction is valid without revealing sender, receiver, or amount.</p>
+<p><strong>Zcash</strong>: Each shielded transaction includes a Groth16 zk-SNARK proving that inputs equal outputs (conservation of value), the sender owns the input notes (knowledge of spending key), and no double-spend occurred (nullifier not in the spent set) — all without exposing any on-chain details.</p>
+<p><strong>Aztec Network</strong>: Extends private transactions to full <strong>private smart contracts</strong> on Ethereum. Uses a dual-layer architecture: one layer encrypts transactions for privacy, a second layer compresses them for scalability (PLONK-based). Aztec developed Noir, a domain-specific language for writing ZK circuits, significantly lowering the barrier for developers.</p>
+<p>Tradeoffs: proof generation is slow on consumer devices (seconds for Zcash, improving); regulatory friction in some jurisdictions; anonymity set size limits effective privacy (small anonymity sets leak information via traffic analysis).</p>
+<h4 id="decentralized-identity-and-zk-kyc">Decentralized Identity and ZK-KYC<a hidden class="anchor" aria-hidden="true" href="#decentralized-identity-and-zk-kyc">#</a></h4>
+<p>Verifiable Credentials, Polygon ID, Humanity Protocol, World ID</p>
+<p>ZK-based identity enables proving attributes (age, citizenship, accreditation, KYC status) without revealing raw PII:</p>
+<ul>
+<li><strong>Prove you&rsquo;re over 18</strong> without revealing your birthdate.</li>
+<li><strong>Prove you&rsquo;re KYC-verified</strong> without sharing identity documents.</li>
+<li><strong>Prove you&rsquo;re a unique human</strong> (Sybil resistance) without biometric exposure.</li>
+</ul>
+<p>The credential model: a trusted issuer signs an attribute; the user holds the credential; a verifier checks a ZK proof derived from the credential. The proof reveals only the predicate (e.g., &ldquo;age ≥ 18&rdquo;), not the underlying data.</p>
+<p><strong>Major projects</strong>: Humanity Protocol (palm biometrics → ZK proofs for proof-of-personhood), World ID / Worldcoin (iris scan → ZK proof of uniqueness), Polygon ID (verifiable credentials on Polygon), Privado ID (Deutsche Bank PoC).</p>
+<p>This is GDPR-aligned by design: the data never leaves the user&rsquo;s device. The ZK-KYC market is projected to grow at ~40% CAGR.</p>
+<h4 id="proof-of-reserves">Proof of Reserves<a hidden class="anchor" aria-hidden="true" href="#proof-of-reserves">#</a></h4>
+<p>Proof of Solvency, <a href="/notes/merkle-trees">Merkle Trees</a></p>
+<p>Post-FTX, proof of reserves became critical infrastructure. A ZK proof can show that an exchange&rsquo;s total assets $\geq$ total liabilities (sum of all customer balances) without revealing any individual customer&rsquo;s position.</p>
+<p>The construction typically uses a Merkle sum tree of customer balances, where the exchange proves:</p>
+<ol>
+<li>Each leaf (customer balance) is non-negative.</li>
+<li>The root sum equals the claimed total liability.</li>
+<li>The exchange controls on-chain addresses with assets $\geq$ the root sum.</li>
+</ol>
+<p>All via ZK proofs — no individual balance is ever revealed. OKX publishes monthly ZK-based PoR attestations.</p>
+<p><strong>Limitation</strong>: Proves assets $\geq$ known liabilities at a snapshot in time. Cannot prove absence of hidden off-balance-sheet liabilities without additional auditing.</p>
+<h4 id="verifiable-computation-and-zkvms">Verifiable Computation and zkVMs<a hidden class="anchor" aria-hidden="true" href="#verifiable-computation-and-zkvms">#</a></h4>
+<p>RISC Zero, SP1, zkVM</p>
+<p>A <strong>zkVM</strong> (zero-knowledge virtual machine) generalises the SNARK circuit approach: instead of compiling each program into a bespoke circuit, you prove correct execution of a general-purpose instruction set (e.g., RISC-V).</p>
+<blockquote>
+<p>Write normal code (Rust, C) → execute off-chain → produce ZK proof that execution was correct → any on-chain verifier checks the proof without re-executing.</p></blockquote>
+<p>This is the &ldquo;any program is provable&rdquo; endpoint of ZKP technology. The SNARK circuit example above ($x^2 + x + 5 = 11$) required manually flattening into gates; a zkVM does this automatically for arbitrary programs.</p>
+<p><strong>Major projects</strong>: RISC Zero (RISC-V + STARKs), SP1 (Succinct), <a href="/notes/valida">Valida</a>.</p>
+<p><strong>Tradeoffs</strong>: proof generation is 100–1000× slower than native execution; memory-intensive programs are hard to prove (the circuit size for the VM itself is large); tooling is improving rapidly.</p>
+<h4 id="zk-bridges-and-light-clients">ZK Bridges and Light Clients<a hidden class="anchor" aria-hidden="true" href="#zk-bridges-and-light-clients">#</a></h4>
+<p>Cross-Chain Bridges, ZeroSync</p>
+<p>Traditional cross-chain bridges rely on multisig committees — if the committee is compromised, funds are stolen (e.g., Ronin bridge: $625M, Wormhole: $320M). ZK bridges replace the multisig with a cryptographic proof: a SNARK proves that $N$ validators signed the source chain&rsquo;s block header, allowing the destination chain to verify trustlessly.</p>
+<p><strong>ZK light clients</strong>: Instead of downloading and validating every block header, a light client verifies a single ZK proof that the entire chain history (or a segment) is valid. ZeroSync is building this for Bitcoin — proving the Bitcoin state transition function via STARKs.</p>
+<p><strong>Tradeoffs</strong>: proving consensus (e.g., BLS signature verification) inside a ZK circuit is computationally expensive; latency from proof generation; still largely in research/prototype stage.</p>
+<h4 id="zk--machine-learning-emerging">ZK + Machine Learning (Emerging)<a hidden class="anchor" aria-hidden="true" href="#zk--machine-learning-emerging">#</a></h4>
+<p>Verifiable AI, EZKL, Modulus Labs</p>
+<p>An emerging frontier: using ZK proofs to verify ML model inference or training correctness without revealing the model weights or training data. This enables <strong>verifiable AI</strong> — critical if AI agents are making financial decisions on-chain.</p>
+<p>The construction: encode a neural network&rsquo;s forward pass as an arithmetic circuit, prove that given input $x$, the model produces output $y$. The proof attests to correct execution of the specific model without revealing its parameters.</p>
+<p><strong>Research projects</strong>: EZKL (proves ML inference), Modulus Labs, zkFDL (federated learning).</p>
+<p><strong>Tradeoffs</strong>: proving even a small neural network is extremely expensive — the circuit size for a single inference of a modest model can be enormous. This is the primary bottleneck. Current approaches use quantisation and circuit-friendly architectures to reduce overhead, but it remains very early stage.</p>
+<blockquote>
+<p><strong>Connection to multi-agent AI safety</strong>: if AI agents operate autonomously on-chain (e.g., managing DeFi positions, participating in governance), ZK proofs could serve as the verification layer ensuring agents are running the claimed model faithfully. This creates a mechanism design problem: how to structure verification incentives so that agent behavior is auditable without revealing proprietary model details. See Mechanism Design, Multi-Agent Systems.</p></blockquote>
+<hr>
+<h3 id="critical-pitfalls--warnings">Critical Pitfalls &amp; Warnings<a hidden class="anchor" aria-hidden="true" href="#critical-pitfalls--warnings">#</a></h3>
+<h4 id="trusted-setup-failures">Trusted Setup Failures<a hidden class="anchor" aria-hidden="true" href="#trusted-setup-failures">#</a></h4>
+<blockquote>
+<p>If the toxic waste $\tau$ from a SNARK CRS ceremony is not destroyed, an adversary can forge arbitrary proofs.</p></blockquote>
+<p>Mitigations:</p>
+<ul>
+<li><strong>MPC ceremonies</strong> (Powers of Tau): $n$-of-$n$ threshold — safe if $\geq 1$ participant is honest.</li>
+<li><strong>Universal setups</strong> (PLONK): Reuse same SRS across circuits.</li>
+<li><strong>Transparent setups</strong> (STARKs): Eliminate the problem entirely.</li>
+</ul>
+<h4 id="soundness-vs-knowledge-soundness">Soundness vs. Knowledge Soundness<a hidden class="anchor" aria-hidden="true" href="#soundness-vs-knowledge-soundness">#</a></h4>
+<ul>
+<li><strong>Soundness</strong>: No PPT prover can convince verifier of false statement.</li>
+<li><strong>Knowledge soundness</strong>: Stronger — any convincing prover must know a witness.</li>
+<li>Many protocols achieve soundness but NOT knowledge soundness. For authentication and credential systems, you need the latter.</li>
+</ul>
+<h4 id="non-black-box-vs-black-box-simulation">Non-Black-Box vs. Black-Box Simulation<a hidden class="anchor" aria-hidden="true" href="#non-black-box-vs-black-box-simulation">#</a></h4>
+<p>Standard ZK definitions use black-box simulation (simulator can rewind $V^*$). Non-black-box simulation (Barak 2001) achieves round-efficient ZK for NP but at high computational cost. Practical systems almost always use black-box.</p>
+<h4 id="completenesssoundnesszk-the-tension">Completeness–Soundness–ZK: The Tension<a hidden class="anchor" aria-hidden="true" href="#completenesssoundnesszk-the-tension">#</a></h4>
+<blockquote>
+<p>You cannot simultaneously achieve perfect completeness, perfect soundness, and perfect ZK (unless $\text{BPP} = \text{IP}$).</p></blockquote>
+<ul>
+<li>Perfect ZK + negligible soundness error: feasible.</li>
+<li>Statistical ZK (SZK) is a rich class but collapses to AM ∩ coAM under plausible assumptions.</li>
+</ul>
+<hr>
+<h3 id="summary-the-zkp-design-space">Summary: The ZKP Design Space<a hidden class="anchor" aria-hidden="true" href="#summary-the-zkp-design-space">#</a></h3>
+<pre tabindex="0"><code>                  Transparency
+                  (No trusted setup)
+                        |
+            STARKs ---- +
+           (large π)    |
+                        |
+   Bulletproofs --------+-------- SNARKs (Groth16, PLONK)
+   (no pairing,         |         (small π, fast verify,
+    slow verify)        |          trusted setup)
+                        |
+                  Post-quantum
+                  security
+</code></pre><p>Key takeaway: <strong>No free lunch</strong> — every ZK system trades off proof size, verification time, prover time, setup trust, and cryptographic assumptions. The &ldquo;right&rdquo; system depends on the deployment context (on-chain verification cost vs. prover infrastructure vs. quantum threat model).</p>
+<p>See Interactive Proof Systems, <a href="/notes/complexity-theory-(ip=pspace">Complexity Theory (IP=PSPACE)</a>), Elliptic Curve Cryptography, <a href="/notes/merkle-trees">Merkle Trees</a>, Reed-Solomon Codes, MPC Ceremonies, Layer 2 Scaling, Optimistic Rollups, zkRollups, Verifiable Credentials, Cross-Chain Bridges.</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

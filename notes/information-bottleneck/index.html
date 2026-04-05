@@ -7,7 +7,13 @@
 <meta name="robots" content="index, follow">
 <title>Information Bottleneck | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Information Bottleneck - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience.
+We start by defining the fundamental tension in learning and representation.
+Learning Design Goals
+Compression: The representation should be as simple as possible (Occam&rsquo;s Razor).
+Relevance: The representation must retain enough information to predict the target variable accurately.
+Generalization: The system should perform well on unseen data, which is often a function of finding the right balance between the first two.
+Invariance: The representation should ignore &ldquo;nuisance variables&rdquo; (noise) present in the input that do not correlate with the output.">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/information-bottleneck/">
@@ -93,7 +99,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/information-bottleneck/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Information Bottleneck">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience. We start by defining the fundamental tension in learning and representation.
+Learning Design Goals Compression: The representation should be as simple as possible (Occam’s Razor). Relevance: The representation must retain enough information to predict the target variable accurately. Generalization: The system should perform well on unseen data, which is often a function of finding the right balance between the first two. Invariance: The representation should ignore “nuisance variables” (noise) present in the input that do not correlate with the output.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -101,7 +108,13 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Information Bottleneck">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience.
+We start by defining the fundamental tension in learning and representation.
+Learning Design Goals
+Compression: The representation should be as simple as possible (Occam&rsquo;s Razor).
+Relevance: The representation must retain enough information to predict the target variable accurately.
+Generalization: The system should perform well on unseen data, which is often a function of finding the right balance between the first two.
+Invariance: The representation should ignore &ldquo;nuisance variables&rdquo; (noise) present in the input that do not correlate with the output.">
 
 
 <script type="application/ld+json">
@@ -130,12 +143,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Information Bottleneck",
   "name": "Information Bottleneck",
-  "description": "",
+  "description": "These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience. We start by defining the fundamental tension in learning and representation.\nLearning Design Goals Compression: The representation should be as simple as possible (Occam\u0026rsquo;s Razor). Relevance: The representation must retain enough information to predict the target variable accurately. Generalization: The system should perform well on unseen data, which is often a function of finding the right balance between the first two. Invariance: The representation should ignore \u0026ldquo;nuisance variables\u0026rdquo; (noise) present in the input that do not correlate with the output.\n",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience. We start by defining the fundamental tension in learning and representation.\nLearning Design Goals Compression: The representation should be as simple as possible (Occam’s Razor). Relevance: The representation must retain enough information to predict the target variable accurately. Generalization: The system should perform well on unseen data, which is often a function of finding the right balance between the first two. Invariance: The representation should ignore “nuisance variables” (noise) present in the input that do not correlate with the output.\n“The goal of deep learning is to find a representation of the input that is maximally informative about the output, while being maximally compressed regarding the input.” ~Naftali Tishby\nThis node is strictly related to Rate-Distorsion Theory, but we apply it here specifically for supervised learning tasks where $Y$ is a specific target, not just a reconstruction of $X$.\nThe Core Mechanism The Markov Chain Setup See Markov Chains. We assume a standard supervised learning setting. We have an input variable $X$ (e.g., an image) and a target variable $Y$ (e.g., a label). We want to learn an intermediate representation $T$ (e.g., a hidden layer in a neural network). The fundamental structural assumption is the Markov Chain:\n$$Y \\to X \\to T$$This implies that $T$ depends only on $X$. $T$ cannot see $Y$ directly; it can only learn about $Y$ through $X$.\nMutual Information Recall To understand the bottleneck, we use Mutual Information ($I$). $I(X; T)$ measures how much information $T$ contains about $X$. $I(T; Y)$ measures how much information $T$ preserves about $Y$. If $I(X; T)$ is high, we are “memorizing” the input (high complexity). If $I(T; Y)$ is high, we are “predicting” the output (high accuracy).\nThe Optimization Problem The Lagrangian Formulation The Information Bottleneck method seeks a representation $T$ that minimizes the information about the input $X$ while maximizing the information about the output $Y$.\nWe formulate this as a minimization problem of a Lagrangian function $\\mathcal{L}$:\n$$\\min_{p(t|x)} \\mathcal{L} = I(X; T) - \\beta I(T; Y)$$ Where $\\beta$ is a Lagrange multiplier that controls the trade-off.\nMinimizing $I(X; T)$: This pushes the representation to “forget” the input details (Compression). Maximizing $I(T; Y)$: This forces the representation to keep what matters for the target (Prediction). As we vary $\\beta$, we trace out an optimal curve known as the IB Curve.\nThe Role of Beta $\\beta$ acts as a “focus” parameter.\nLow $\\beta$: We prioritize compression. $T$ becomes very simple, effectively a coarse clustering of $X$. We lose details about $Y$. High $\\beta$: We prioritize prediction. $T$ becomes complex and retains more details from $X$ to ensure $Y$ is captured perfectly. $\\beta \\to \\infty$: This approaches the “Sufficient Statistics” limit, where we keep everything relevant to $Y$, regardless of cost. Application to Deep Learning Tishby’s Theory of DNNs This is the controversial but fascinating part. Tishby proposed that Deep Neural Networks (DNNs) naturally optimize the IB bound layer-by-layer. We can visualize the training process of a network in the Information Plane (x-axis: $I(X;T)$, y-axis: $I(T;Y)$).\nPhase Description What happens to I(X;T)? What happens to I(T;Y)? Fitting Phase Early training. The network learns to label the data. Increases rapidly. The network absorbs information from input. Increases. The network learns to predict the label. Compression Phase Later training. SGD diffusion noise kicks in. Decreases. The network “forgets” irrelevant input noise. Stays high/Plateaus. Prediction accuracy is maintained. The claim is that Generalization (doing well on test data) is a direct result of this compression phase. By forgetting the specifics of the training set (lowering $I(X;T)$), the network avoids overfitting.\nGeometric Interpretation Think of the input space as a manifold.\nThe Fitting phase is like stretching the manifold to separate the classes. The Compression phase is like collapsing the dimensions of the manifold that don’t help with separation. Criticisms and nuance While the theory is elegant, it has faced criticism (e.g., Saxe et al.).\nReLU Networks: Some argue that networks with ReLU activation don’t strictly compress mutual information in the same way (due to binning issues/infinite values). Invariance vs Compression: Is the network actually “forgetting” data, or just becoming invariant to transformations? Comparison with other Principles Relation to Minimal Description Length (MDL) Aspect Information Bottleneck (IB) Minimal Description Length (MDL) Goal Extract relevant info regarding a target $Y$. Find the shortest description of the data $X$. Supervision Supervised: Requires a target $Y$. Unsupervised: Usually focuses on $X$ alone. Complexity Measured by Mutual Information $I(X;T)$. Measured by code length (bits). Noise Explicitly tries to filter out $X$’s noise. Treats noise as “expensive to encode” outliers. Variational Information Bottleneck (VIB) Since calculating Mutual Information is computationally hard in high dimensions (like pixel space), we often use a variational approximation. This is very similar to how Autoencoders#Variational Autoencoders (VAEs) work, but with a specific loss function designed to satisfy the IB principle.\n# Pseudo-code for a VIB Loss function # beta is the tradeoff parameter def vib_loss(y_true, y_pred, z_mean, z_log_var, beta): # 1. Prediction Loss (Cross Entropy) -\u003e Maximize I(T;Y) prediction_loss = cross_entropy(y_true, y_pred) # 2. Compression Loss (KL Divergence) -\u003e Minimize I(X;T) # We want T (z) to be close to a standard prior (forgetting X) kl_loss = -0.5 * sum(1 + z_log_var - square(z_mean) - exp(z_log_var)) return prediction_loss + beta * kl_loss Summary The Information Bottleneck is a principled framework for understanding what a model learns. It suggests that “learning is forgetting”: to generalize well, you must filter out the noise (irrelevant bits of $X$) and keep only the signal (bits relevant to $Y$).\n“You cannot learn what is relevant without learning what to ignore.”\n",
+  "wordCount" : "940",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,12 +243,200 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Information Bottleneck
     </h1>
-    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 5 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#learning-design-goals" aria-label="Learning Design Goals">Learning Design Goals</a></li></ul>
+                    
+                <li>
+                    <a href="#the-core-mechanism" aria-label="The Core Mechanism">The Core Mechanism</a><ul>
+                        
+                <li>
+                    <a href="#the-markov-chain-setup" aria-label="The Markov Chain Setup">The Markov Chain Setup</a></li>
+                <li>
+                    <a href="#mutual-information-recall" aria-label="Mutual Information Recall">Mutual Information Recall</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-optimization-problem" aria-label="The Optimization Problem">The Optimization Problem</a><ul>
+                        
+                <li>
+                    <a href="#the-lagrangian-formulation" aria-label="The Lagrangian Formulation">The Lagrangian Formulation</a></li>
+                <li>
+                    <a href="#the-role-of-beta" aria-label="The Role of Beta">The Role of Beta</a></li></ul>
+                </li>
+                <li>
+                    <a href="#application-to-deep-learning" aria-label="Application to Deep Learning">Application to Deep Learning</a><ul>
+                        
+                <li>
+                    <a href="#tishbys-theory-of-dnns" aria-label="Tishby’s Theory of DNNs">Tishby’s Theory of DNNs</a></li>
+                <li>
+                    <a href="#geometric-interpretation" aria-label="Geometric Interpretation">Geometric Interpretation</a></li>
+                <li>
+                    <a href="#criticisms-and-nuance" aria-label="Criticisms and nuance">Criticisms and nuance</a></li></ul>
+                </li>
+                <li>
+                    <a href="#comparison-with-other-principles" aria-label="Comparison with other Principles">Comparison with other Principles</a><ul>
+                        
+                <li>
+                    <a href="#relation-to-minimal-description-length-mdl" aria-label="Relation to Minimal Description Length (MDL)">Relation to Minimal Description Length (MDL)</a></li>
+                <li>
+                    <a href="#variational-information-bottleneck-vib" aria-label="Variational Information Bottleneck (VIB)">Variational Information Bottleneck (VIB)</a></li>
+                <li>
+                    <a href="#summary" aria-label="Summary">Summary</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>These notes cover the core concepts of the Information Bottleneck method, widely used in machine learning and theoretical neuroscience.
+We start by defining the fundamental tension in learning and representation.</p>
+<h4 id="learning-design-goals">Learning Design Goals<a hidden class="anchor" aria-hidden="true" href="#learning-design-goals">#</a></h4>
+<p><strong>Compression</strong>: The representation should be as simple as possible (Occam&rsquo;s Razor).
+<strong>Relevance</strong>: The representation must retain enough information to predict the target variable accurately.
+<strong>Generalization</strong>: The system should perform well on unseen data, which is often a function of finding the right balance between the first two.
+<strong>Invariance</strong>: The representation should ignore &ldquo;nuisance variables&rdquo; (noise) present in the input that do not correlate with the output.</p>
+<blockquote>
+<p>“The goal of deep learning is to find a representation of the input that is maximally informative about the output, while being maximally compressed regarding the input.” ~<em>Naftali Tishby</em></p></blockquote>
+<p>This node is strictly related to Rate-Distorsion Theory, but we apply it here specifically for supervised learning tasks where $Y$ is a specific target, not just a reconstruction of $X$.</p>
+<h3 id="the-core-mechanism">The Core Mechanism<a hidden class="anchor" aria-hidden="true" href="#the-core-mechanism">#</a></h3>
+<h4 id="the-markov-chain-setup">The Markov Chain Setup<a hidden class="anchor" aria-hidden="true" href="#the-markov-chain-setup">#</a></h4>
+<p>See <a href="/notes/markov-chains">Markov Chains</a>.
+We assume a standard supervised learning setting. We have an input variable $X$ (e.g., an image) and a target variable $Y$ (e.g., a label). We want to learn an intermediate representation $T$ (e.g., a hidden layer in a neural network).
+The fundamental structural assumption is the Markov Chain:</p>
+$$Y \to X \to T$$<p>This implies that $T$ depends <em>only</em> on $X$. $T$ cannot see $Y$ directly; it can only learn about $Y$ through $X$.</p>
+<h4 id="mutual-information-recall">Mutual Information Recall<a hidden class="anchor" aria-hidden="true" href="#mutual-information-recall">#</a></h4>
+<p>To understand the bottleneck, we use <strong>Mutual Information</strong> ($I$).
+$I(X; T)$ measures how much information $T$ contains about $X$.
+$I(T; Y)$ measures how much information $T$ preserves about $Y$.
+If $I(X; T)$ is high, we are &ldquo;memorizing&rdquo; the input (high complexity).
+If $I(T; Y)$ is high, we are &ldquo;predicting&rdquo; the output (high accuracy).</p>
+<h3 id="the-optimization-problem">The Optimization Problem<a hidden class="anchor" aria-hidden="true" href="#the-optimization-problem">#</a></h3>
+<h4 id="the-lagrangian-formulation">The Lagrangian Formulation<a hidden class="anchor" aria-hidden="true" href="#the-lagrangian-formulation">#</a></h4>
+<blockquote>
+<p>The Information Bottleneck method seeks a representation $T$ that minimizes the information about the input $X$ while maximizing the information about the output $Y$.</p></blockquote>
+<p>We formulate this as a minimization problem of a Lagrangian function $\mathcal{L}$:</p>
+$$\min_{p(t|x)} \mathcal{L} = I(X; T) - \beta I(T; Y)$$<p>
+Where $\beta$ is a Lagrange multiplier that controls the trade-off.</p>
+<ul>
+<li><strong>Minimizing $I(X; T)$</strong>: This pushes the representation to &ldquo;forget&rdquo; the input details (Compression).</li>
+<li><strong>Maximizing $I(T; Y)$</strong>: This forces the representation to keep what matters for the target (Prediction).</li>
+</ul>
+<p>As we vary $\beta$, we trace out an optimal curve known as the <strong>IB Curve</strong>.</p>
+<h4 id="the-role-of-beta">The Role of Beta<a hidden class="anchor" aria-hidden="true" href="#the-role-of-beta">#</a></h4>
+<p>$\beta$ acts as a &ldquo;focus&rdquo; parameter.</p>
+<ul>
+<li><strong>Low $\beta$</strong>: We prioritize compression. $T$ becomes very simple, effectively a coarse clustering of $X$. We lose details about $Y$.</li>
+<li><strong>High $\beta$</strong>: We prioritize prediction. $T$ becomes complex and retains more details from $X$ to ensure $Y$ is captured perfectly.</li>
+<li><strong>$\beta \to \infty$</strong>: This approaches the &ldquo;Sufficient Statistics&rdquo; limit, where we keep <em>everything</em> relevant to $Y$, regardless of cost.</li>
+</ul>
+<h3 id="application-to-deep-learning">Application to Deep Learning<a hidden class="anchor" aria-hidden="true" href="#application-to-deep-learning">#</a></h3>
+<h4 id="tishbys-theory-of-dnns">Tishby’s Theory of DNNs<a hidden class="anchor" aria-hidden="true" href="#tishbys-theory-of-dnns">#</a></h4>
+<p>This is the controversial but fascinating part. Tishby proposed that Deep Neural Networks (DNNs) naturally optimize the IB bound layer-by-layer.
+We can visualize the training process of a network in the <strong>Information Plane</strong> (x-axis: $I(X;T)$, y-axis: $I(T;Y)$).</p>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Phase</strong></th>
+          <th><strong>Description</strong></th>
+          <th><strong>What happens to I(X;T)?</strong></th>
+          <th><strong>What happens to I(T;Y)?</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Fitting Phase</strong></td>
+          <td>Early training. The network learns to label the data.</td>
+          <td><strong>Increases rapidly</strong>. The network absorbs information from input.</td>
+          <td><strong>Increases</strong>. The network learns to predict the label.</td>
+      </tr>
+      <tr>
+          <td><strong>Compression Phase</strong></td>
+          <td>Later training. SGD diffusion noise kicks in.</td>
+          <td><strong>Decreases</strong>. The network &ldquo;forgets&rdquo; irrelevant input noise.</td>
+          <td><strong>Stays high/Plateaus</strong>. Prediction accuracy is maintained.</td>
+      </tr>
+  </tbody>
+</table>
+<p>The claim is that <strong>Generalization</strong> (doing well on test data) is a direct result of this compression phase. By forgetting the specifics of the training set (lowering $I(X;T)$), the network avoids overfitting.</p>
+<h4 id="geometric-interpretation">Geometric Interpretation<a hidden class="anchor" aria-hidden="true" href="#geometric-interpretation">#</a></h4>
+<p>Think of the input space as a manifold.</p>
+<ul>
+<li>The <strong>Fitting</strong> phase is like stretching the manifold to separate the classes.</li>
+<li>The <strong>Compression</strong> phase is like collapsing the dimensions of the manifold that don&rsquo;t help with separation.</li>
+</ul>
+<h4 id="criticisms-and-nuance">Criticisms and nuance<a hidden class="anchor" aria-hidden="true" href="#criticisms-and-nuance">#</a></h4>
+<p>While the theory is elegant, it has faced criticism (e.g., Saxe et al.).</p>
+<ol>
+<li><strong>ReLU Networks</strong>: Some argue that networks with ReLU activation don&rsquo;t strictly compress mutual information in the same way (due to binning issues/infinite values).</li>
+<li><strong>Invariance vs Compression</strong>: Is the network actually &ldquo;forgetting&rdquo; data, or just becoming invariant to transformations?</li>
+</ol>
+<h3 id="comparison-with-other-principles">Comparison with other Principles<a hidden class="anchor" aria-hidden="true" href="#comparison-with-other-principles">#</a></h3>
+<h4 id="relation-to-minimal-description-length-mdl">Relation to Minimal Description Length (MDL)<a hidden class="anchor" aria-hidden="true" href="#relation-to-minimal-description-length-mdl">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Aspect</strong></th>
+          <th><strong>Information Bottleneck (IB)</strong></th>
+          <th><strong>Minimal Description Length (MDL)</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Goal</strong></td>
+          <td>Extract <em>relevant</em> info regarding a target $Y$.</td>
+          <td>Find the shortest description of the data $X$.</td>
+      </tr>
+      <tr>
+          <td><strong>Supervision</strong></td>
+          <td><strong>Supervised</strong>: Requires a target $Y$.</td>
+          <td><strong>Unsupervised</strong>: Usually focuses on $X$ alone.</td>
+      </tr>
+      <tr>
+          <td><strong>Complexity</strong></td>
+          <td>Measured by Mutual Information $I(X;T)$.</td>
+          <td>Measured by code length (bits).</td>
+      </tr>
+      <tr>
+          <td><strong>Noise</strong></td>
+          <td>Explicitly tries to filter out $X$&rsquo;s noise.</td>
+          <td>Treats noise as &ldquo;expensive to encode&rdquo; outliers.</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="variational-information-bottleneck-vib">Variational Information Bottleneck (VIB)<a hidden class="anchor" aria-hidden="true" href="#variational-information-bottleneck-vib">#</a></h4>
+<p>Since calculating Mutual Information is computationally hard in high dimensions (like pixel space), we often use a <strong>variational approximation</strong>.
+This is very similar to how <a href="/notes/autoencoders#variational-autoencoders">Autoencoders#Variational Autoencoders</a> (VAEs) work, but with a specific loss function designed to satisfy the IB principle.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Pseudo-code for a VIB Loss function</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># beta is the tradeoff parameter</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">vib_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">z_mean</span><span class="p">,</span> <span class="n">z_log_var</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 1. Prediction Loss (Cross Entropy) -&gt; Maximize I(T;Y)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">prediction_loss</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># 2. Compression Loss (KL Divergence) -&gt; Minimize I(X;T)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># We want T (z) to be close to a standard prior (forgetting X)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kl_loss</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z_log_var</span> <span class="o">-</span> <span class="n">square</span><span class="p">(</span><span class="n">z_mean</span><span class="p">)</span> <span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="n">z_log_var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">prediction_loss</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">kl_loss</span>
+</span></span></code></pre></div><h4 id="summary">Summary<a hidden class="anchor" aria-hidden="true" href="#summary">#</a></h4>
+<p>The Information Bottleneck is a principled framework for understanding <strong>what</strong> a model learns.
+It suggests that &ldquo;learning is forgetting&rdquo;: to generalize well, you must filter out the noise (irrelevant bits of $X$) and keep only the signal (bits relevant to $Y$).</p>
+<blockquote>
+<p>&ldquo;You cannot learn what is relevant without learning what to ignore.&rdquo;</p></blockquote>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

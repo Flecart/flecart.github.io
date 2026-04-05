@@ -7,7 +7,12 @@
 <meta name="robots" content="index, follow">
 <title>Hopfield Networks | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Hopfield Networks - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.
+The Hopfield Network Model
+$$
+\Theta = \sum_{i = 1}^{s} \left[ x_{t}x_{t}^{T} - \boldsymbol{I}_{n} \right] 
+$$
+One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\forall j: \Theta_{jj} = 0$).">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/hopfield-networks/">
@@ -93,7 +98,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/hopfield-networks/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Hopfield Networks">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.
+The Hopfield Network Model $$ \Theta = \sum_{i = 1}^{s} \left[ x_{t}x_{t}^{T} - \boldsymbol{I}_{n} \right] $$ One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\forall j: \Theta_{jj} = 0$).">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -103,7 +109,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Hopfield Networks">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.
+The Hopfield Network Model
+$$
+\Theta = \sum_{i = 1}^{s} \left[ x_{t}x_{t}^{T} - \boldsymbol{I}_{n} \right] 
+$$
+One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\forall j: \Theta_{jj} = 0$).">
 
 
 <script type="application/ld+json">
@@ -132,12 +143,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Hopfield Networks",
   "name": "Hopfield Networks",
-  "description": "",
+  "description": "Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.\nThe Hopfield Network Model $$ \\Theta = \\sum_{i = 1}^{s} \\left[ x_{t}x_{t}^{T} - \\boldsymbol{I}_{n} \\right] $$ One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\\forall j: \\Theta_{jj} = 0$).\n",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.\nThe Hopfield Network Model $$ \\Theta = \\sum_{i = 1}^{s} \\left[ x_{t}x_{t}^{T} - \\boldsymbol{I}_{n} \\right] $$ One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\\forall j: \\Theta_{jj} = 0$).\nThe update Rule The state of each neuron can be either 0 or 1, and the network evolves over time according to the following update rule:\n$$ x_{t + 1} = \\begin{cases} \\text{sign}(\\Theta x_{t}) \u0026 \\text{ if } \\Theta x_{t} \\neq 0 \\\\ x_{t} \u0026 \\text{ if } \\Theta x_{t} = 0 \\end{cases} $$3.1 The Modern Hopfield Network: A Grand Unification See also Transformers For decades, the Hopfield Network (introduced by John Hopfield in 1982) was a curiosity in neural network history—a form of recurrent network that could store patterns as “energy minima.” However, classical Hopfield Networks had a severe limitation: their storage capacity was linear and small. A network of $N$ neurons could store only approximately $0.14N$ patterns before “crosstalk” caused the memories to merge into spurious states.16\nIn a landmark theoretical development (circa 2020-2024), researchers demonstrated a mathematical isomorphism (equivalence) between the Transformer’s Self-Attention mechanism and Modern Hopfield Networks (MHNs).5\nThe Theory:\nClassical Hopfield networks use a quadratic energy function. Modern Hopfield Networks (also called Dense Associative Memories) use a steeper, exponential energy function (specifically, the log-sum-exp function).\nThe update rule for a Modern Hopfield Network is:\n$$\\xi^{new} = \\text{softmax}(\\beta X^T \\xi) X$$where $X$ is the matrix of stored patterns and $\\xi$ is the state vector.\nThis equation is mathematically identical to the attention operation in Transformers:\n$$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right) V$$where $Q$ is the state (query), and $K$ (keys) and $V$ (values) represent the stored memory patterns. The Implications:\nExponential Capacity: This proof implies that the storage capacity of the Transformer’s attention mechanism is not linear, but exponential with respect to the dimension of the embedding space ($d_{model}$). A single attention head can theoretically distinguish between $C \\approx 2^{d/2}$ patterns.16 This explains why Transformers are so effective at “in-context learning”—they are essentially massive associative memory machines capable of retrieving extremely precise patterns from their context window. Energy Landscapes: Every forward pass of a Transformer can be viewed as one step of energy minimization in a high-dimensional landscape. The model “settles” into the attention pattern that minimizes the conflict between the query and the context. Metastable States: The softmax function acts as a sharpening filter, creating “metastable states” that allow the model to focus intensely on a specific memory (token) while suppressing the noise of thousands of others. This is the mathematical basis of “attention”.\n",
+  "wordCount" : "460",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-12-22T00:00:00Z",
   "dateModified": "2025-12-22T00:00:00Z",
@@ -232,12 +243,63 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Hopfield Networks
     </h1>
-    <div class="post-meta"><span title='2025-12-22 00:00:00 +0000 UTC'>December 22, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-12-22 00:00:00 +0000 UTC'>December 22, 2025</span>&nbsp;·&nbsp;Reading Time: 3 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#the-hopfield-network-model" aria-label="The Hopfield Network Model">The Hopfield Network Model</a></li>
+                <li>
+                    <a href="#the-update-rule" aria-label="The update Rule">The update Rule</a></li></ul>
+                    
+                <li>
+                    <a href="#31-the-modern-hopfield-network-a-grand-unification" aria-label="3.1 The Modern Hopfield Network: A Grand Unification">3.1 The Modern Hopfield Network: A Grand Unification</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Hopfield networks are a type of recurrent neural network that can store and retrieve patterns. They are particularly useful for associative memory tasks, where the network can recall a stored pattern given a noisy or partial input.</p>
+<h4 id="the-hopfield-network-model">The Hopfield Network Model<a hidden class="anchor" aria-hidden="true" href="#the-hopfield-network-model">#</a></h4>
+$$
+\Theta = \sum_{i = 1}^{s} \left[ x_{t}x_{t}^{T} - \boldsymbol{I}_{n} \right] 
+$$<p>
+One can prove that this matrix is symmetric, and that it is irreflexive (meaning $\forall j: \Theta_{jj} = 0$).</p>
+<h4 id="the-update-rule">The update Rule<a hidden class="anchor" aria-hidden="true" href="#the-update-rule">#</a></h4>
+<p>The state of each neuron can be either 0 or 1, and the network evolves over time according to the following update rule:</p>
+$$
+x_{t + 1} = 
+\begin{cases}
+\text{sign}(\Theta x_{t}) & \text{ if } \Theta x_{t} \neq 0 \\ 
+x_{t} & \text{ if } \Theta x_{t} = 0
+\end{cases}
+$$<h3 id="31-the-modern-hopfield-network-a-grand-unification">3.1 The Modern Hopfield Network: A Grand Unification<a hidden class="anchor" aria-hidden="true" href="#31-the-modern-hopfield-network-a-grand-unification">#</a></h3>
+<p>See also <a href="/notes/transformers">Transformers</a>
+For decades, the Hopfield Network (introduced by John Hopfield in 1982) was a curiosity in neural network history—a form of recurrent network that could store patterns as &ldquo;energy minima.&rdquo; However, classical Hopfield Networks had a severe limitation: their storage capacity was linear and small. A network of $N$ neurons could store only approximately $0.14N$ patterns before &ldquo;crosstalk&rdquo; caused the memories to merge into spurious states.16</p>
+<p>In a landmark theoretical development (circa 2020-2024), researchers demonstrated a mathematical isomorphism (equivalence) between the Transformer&rsquo;s Self-Attention mechanism and Modern Hopfield Networks (MHNs).5</p>
+<p>The Theory:</p>
+<p>Classical Hopfield networks use a quadratic energy function. Modern Hopfield Networks (also called Dense Associative Memories) use a steeper, exponential energy function (specifically, the log-sum-exp function).</p>
+<p>The update rule for a Modern Hopfield Network is:</p>
+$$\xi^{new} = \text{softmax}(\beta X^T \xi) X$$<p>where $X$ is the matrix of stored patterns and $\xi$ is the state vector.</p>
+<p>This equation is mathematically identical to the attention operation in Transformers:</p>
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V$$<p>where $Q$ is the state (query), and $K$ (keys) and $V$ (values) represent the stored memory patterns.
+The Implications:</p>
+<ol>
+<li>Exponential Capacity: This proof implies that the storage capacity of the Transformer&rsquo;s attention mechanism is not linear, but exponential with respect to the dimension of the embedding space ($d_{model}$). A single attention head can theoretically distinguish between $C \approx 2^{d/2}$ patterns.16 This explains why Transformers are so effective at &ldquo;in-context learning&rdquo;—they are essentially massive associative memory machines capable of retrieving extremely precise patterns from their context window.</li>
+<li>Energy Landscapes: Every forward pass of a Transformer can be viewed as one step of energy minimization in a high-dimensional landscape. The model &ldquo;settles&rdquo; into the attention pattern that minimizes the conflict between the query and the context.</li>
+</ol>
+<p>Metastable States: The softmax function acts as a sharpening filter, creating &ldquo;metastable states&rdquo; that allow the model to focus intensely on a specific memory (token) while suppressing the noise of thousands of others. This is the mathematical basis of &ldquo;attention&rdquo;.</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

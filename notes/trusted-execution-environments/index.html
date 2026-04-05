@@ -7,7 +7,9 @@
 <meta name="robots" content="index, follow">
 <title>Trusted Execution Environments | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Trusted Execution Environments - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Trusted Execution Environments and the Secure Computation Trust Spectrum
+Motivation &amp; Foundational Context
+How do you verify that a computation was performed correctly — and privately — when you don&rsquo;t control the machine? This question sits at the intersection of Cryptography, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a trust spectrum that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/trusted-execution-environments/">
@@ -93,7 +95,7 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/trusted-execution-environments/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Trusted Execution Environments">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Trusted Execution Environments and the Secure Computation Trust Spectrum Motivation &amp; Foundational Context How do you verify that a computation was performed correctly — and privately — when you don’t control the machine? This question sits at the intersection of Cryptography, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a trust spectrum that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -101,7 +103,9 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Trusted Execution Environments">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Trusted Execution Environments and the Secure Computation Trust Spectrum
+Motivation &amp; Foundational Context
+How do you verify that a computation was performed correctly — and privately — when you don&rsquo;t control the machine? This question sits at the intersection of Cryptography, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a trust spectrum that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.">
 
 
 <script type="application/ld+json">
@@ -130,12 +134,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Trusted Execution Environments",
   "name": "Trusted Execution Environments",
-  "description": "",
+  "description": "Trusted Execution Environments and the Secure Computation Trust Spectrum Motivation \u0026amp; Foundational Context How do you verify that a computation was performed correctly — and privately — when you don\u0026rsquo;t control the machine? This question sits at the intersection of Cryptography, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a trust spectrum that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.\n",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Trusted Execution Environments and the Secure Computation Trust Spectrum Motivation \u0026 Foundational Context How do you verify that a computation was performed correctly — and privately — when you don’t control the machine? This question sits at the intersection of Cryptography, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a trust spectrum that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.\nThe key insight: trust in computation is not binary. It ranges from “trust only mathematics” (ZK proofs) to “trust the hardware manufacturer” (TEEs) to “trust a set of humans” (multisigs). Each point on this spectrum corresponds to a different failure mode, a different cost profile, and a different set of mechanism design constraints.\nThe Secure Computation Trust Spectrum Overview Every system that claims to perform private or verifiable computation must answer: who or what do you trust, and what happens when that trust is violated?\nThe five major approaches, ordered from strongest to weakest trust assumptions:\nTechnology Trust Basis What You Trust Failure Mode Performance Overhead Zero Knowledge Proofs Mathematics Hardness assumptions (DL, hashes) Implementation bugs only 100–1000× (proof generation) Fully Homomorphic Encryption (FHE) Mathematics Lattice-based hardness Implementation bugs; key management $10^4$–$10^5$× (compute on ciphertext) Secure Multi-Party Computation (MPC) Distributed trust Honest majority threshold ($\u003c t$ of $n$ corrupted) Collusion above threshold 10–1000× (communication rounds) Trusted Execution Environments (TEE) Hardware manufacturer Intel, AMD, ARM silicon integrity Hardware bugs, side-channels, backdoors ~1.05–1.2× (near-native) Multisig / Committee Social trust $M$-of-$N$ humans acting honestly Bribery, coercion, key compromise ~1× (no overhead) Key principle: as you move down the table, performance improves dramatically but the trust surface expands. The “right” choice depends on the threat model — and crucially, on how much the failure cost justifies the performance penalty.\nThe Trust–Performance Tradeoff This is the fundamental tension in secure computation:\n$$\\text{Trustlessness} \\propto \\frac{1}{\\text{Performance}}$$More precisely: the less you trust external entities (hardware, people, committees), the more computational work is required to achieve the same guarantees. ZK proofs trust nothing but math, but pay for it with orders-of-magnitude slowdown in proof generation. TEEs trust a chip manufacturer, but run at near-native speed.\nThis tradeoff is not merely engineering — it has deep implications for Mechanism Design:\nSystems with weaker trust assumptions (ZK, FHE) need fewer incentive mechanisms because the guarantees are mathematical, not behavioural. Systems with stronger trust assumptions (TEE, multisig) require carefully designed incentive structures (staking, slashing, reputation) to make defection unprofitable. See Incentive Compatibility, Implementation Theory. Formal Trust Model Define a trust model as a tuple $(\\mathcal{T}, \\mathcal{A}, \\mathcal{F})$:\n$\\mathcal{T}$: Trusted Computing Base (TCB) — the set of components that must be correct for security to hold. $\\mathcal{A}$: Adversary model — what the attacker can do (corrupt software, corrupt hardware, corrupt $t$ of $n$ parties, etc.). $\\mathcal{F}$: Failure consequence — what breaks when $\\mathcal{T}$ is compromised (confidentiality, integrity, or both). Technology TCB Adversary Failure ZK Proofs Proof system implementation Computationally bounded Soundness break (forged proofs) FHE Encryption library + key holder Computationally bounded Decryption of all data MPC Honest majority of $n$ parties $\u003c t$ corruptions Full data exposure if threshold exceeded TEE CPU silicon + firmware + manufacturer Physical + software side-channels Enclave data extraction Multisig $M$ of $N$ keyholders Bribery, coercion, social engineering Unauthorized signatures Trusted Execution Environments (TEEs) Core Concept Intel SGX, ARM TrustZone, AMD SEV\nA TEE is an isolated area within a device’s processor that keeps code and data tamper-proof and confidential during execution. The isolation is enforced by hardware — the CPU itself encrypts the enclave’s memory and refuses to let any external process (including the operating system, hypervisor, or someone with root access) read or modify it.\nDefinition: A TEE provides an isolated execution environment with three properties:\nConfidentiality: Data inside the enclave is encrypted in memory; inaccessible to the host OS. Integrity: Code and data cannot be tampered with by external processes. Attestation: The enclave can produce a cryptographic proof that it is genuine hardware running a specific, untampered program. The term “enclave” (used by Intel SGX) and “secure world” (used by ARM TrustZone) refer to the same concept: a hardware-isolated execution context.\nArchitecture Hardware Isolation Mechanisms The major TEE implementations use different isolation strategies:\nPlatform Isolation Unit Memory Encryption Granularity Intel SGX Application-level enclave Encrypted via MEE (Memory Encryption Engine) Per-application Intel TDX Virtual machine (Trust Domain) AES-XTS per-TD Per-VM AMD SEV / SEV-SNP Virtual machine AES-128 per-VM Per-VM ARM TrustZone Secure world / normal world partition Bus-level partitioning via TZASC System-wide ARM CCA Realms (dynamic secure contexts) Granule Protection Tables Per-realm NVIDIA Hopper/Blackwell GPU enclave (Confidential Computing) On-die encryption Per-GPU-context The emergence of GPU enclaves (NVIDIA Hopper H100) is significant for AI: it enables confidential ML inference at GPU-speed — something impossible with purely cryptographic approaches (ZK, FHE) at current performance levels.\nThe Attestation Protocol Attestation is the mechanism by which a TEE proves its identity and integrity to a remote verifier:\nMeasurement: At enclave launch, the CPU measures the Trusted Computing Base (boot firmware + OS kernel + application binaries) and stores the hash in secure hardware registers. Signing: The CPU signs this measurement using a private attestation key embedded in the silicon during manufacturing. Verification: A remote verifier checks the signature against the manufacturer’s public key database, confirming: (a) the enclave runs on genuine hardware, and (b) the loaded code matches a known hash. Formally, attestation produces a report $\\sigma = \\text{Sign}_{sk_{\\text{TEE}}}(H(\\text{TCB}), H(\\text{code}), \\text{nonce})$ where $sk_{\\text{TEE}}$ is the hardware-embedded key. The verifier checks $\\text{Verify}(pk_{\\text{mfg}}, \\sigma) = 1$.\nThis is analogous to a ZK proof of correct execution — but the guarantee is rooted in hardware trust, not mathematical proof. If the attestation key is extracted (as in the SGAxe attack), arbitrary attestation reports can be forged.\nExecution Flow for Private Smart Contracts In the blockchain context (e.g., Secret Network, Oasis Network):\nSmart contract code is loaded into the enclave. Enclave generates a keypair $(pk, sk)$ and publishes $pk$ on-chain. The CPU produces an attestation report, verifiable by anyone. Users encrypt transaction inputs with $pk$ before submitting. Inside the enclave: decrypt inputs → execute contract → encrypt state updates. Encrypted state posted on-chain. Only the enclave (and authorised viewers) can decrypt. The node operator sees only ciphertext at every stage — confidentiality holds even against the infrastructure provider.\nAttack Surface and Known Vulnerabilities TEEs have been broken multiple times. The trust in hardware is conditional, not absolute.\nSide-Channel Attacks The fundamental problem: TEEs share physical CPU resources (power rails, caches, execution units, branch predictors) with untrusted code. Information leaks through these shared channels.\nAttack Year Mechanism Impact Spectre / Meltdown 2018 Speculative execution leaks data across isolation boundaries Data extraction from enclaves Foreshadow (L1TF) 2018 L1 cache timing attack specific to SGX Full enclave secret extraction Plundervolt 2019 CPU voltage manipulation induces faults inside SGX, bypassing integrity checks Key extraction from encrypted memory SGAxe / CrossTalk 2020 Extracted SGX attestation keys via shared CPU buffers Undermines entire attestation model ÆPIC Leak 2022 Architectural bug in APIC leaks enclave data Unpatched data extraction WireTap 2025 DRAM bus interposition (physical) No software fix possible Critical observation: side-channel attacks exploit the fact that a TEE is a partition of a general-purpose processor, not a separate chip. A Secure Element (SE) — like the chip on a smart card or Ledger hardware wallet — is physically separate and does not share resources, making side-channel attacks much harder. But SEs are too limited to run general programs.\nManufacturer Trust The attestation key is embedded by the manufacturer. This creates irreducible trust dependencies:\nBackdoor risk: Intel, AMD, ARM could be compelled by governments to introduce backdoors (see Intel Management Engine vulnerabilities). Supply chain attacks: Compromised manufacturing could embed rogue keys. Firmware vulnerabilities: Updates to microcode or firmware can introduce new attack vectors — and users must trust the manufacturer’s update pipeline. This is a fundamental difference from ZK proofs: a ZK proof is correct regardless of what hardware produced it. A TEE attestation is only trustworthy if the entire hardware supply chain is uncompromised.\nFully Homomorphic Encryption (FHE) Core Concept Lattice-Based Cryptography, TFHE, BGV Scheme\nFHE allows computation on encrypted data without decryption. Given ciphertexts $\\text{Enc}(a)$ and $\\text{Enc}(b)$, one can compute $\\text{Enc}(a + b)$ and $\\text{Enc}(a \\cdot b)$ without ever seeing $a$ or $b$.\n$$Dec(sk, Eval(pk, f, Enc(pk, x))) = f(x) \\quad \\forall f \\in \\mathcal{F}, \\forall x$$ where $\\mathcal{F}$ is the class of all polynomial-time computable functions.\nSince addition and multiplication are universal (they generate all arithmetic circuits), FHE can evaluate any computation on encrypted data — hence “fully” homomorphic.\nPerformance Reality FHE is often called the “holy grail” of encryption, but the performance overhead is severe:\nFHE is approximately $10^4$ to $10^5$ times slower than computing on unencrypted data (Feldmann et al., 2021; Microsoft SEAL benchmarks).\nThis makes FHE impractical for most real-time applications. Current research focuses on:\nHardware acceleration: Dedicated FHE accelerators (DARPA DPRIVE program, Intel HEXL). Levelled FHE: Evaluate circuits of bounded multiplicative depth without bootstrapping. Noise management: Bootstrapping refreshes noise but is extremely expensive ($\u003e 10$ms per gate). FHE in Blockchain fhEVM, Zama, Fhenix\nZama developed the fhEVM — a framework for encrypted smart contracts where contract state is FHE-encrypted. Operations (addition, comparison, transfer) happen homomorphically. The decryption key is split via threshold MPC across multiple parties.\nThe key management problem is fundamental: someone must hold the decryption key. FHE alone doesn’t solve this — it pushes the trust to the key holder. This is why practical FHE systems combine FHE with MPC for distributed key management.\nPost-Quantum Security FHE schemes are based on Lattice-Based Cryptography (LWE, RLWE), which is believed to be resistant to quantum attacks (Shor’s algorithm does not help). This is a significant advantage over pairing-based SNARKs and TEEs whose cryptographic components rely on classical assumptions.\nSecure Multi-Party Computation (MPC) Core Concept Secret Sharing, Garbled Circuits, Beaver Triples\nMPC allows $n$ parties to jointly compute a function $f(x_1, \\ldots, x_n)$ where each party $i$ holds private input $x_i$, such that:\nCorrectness: All parties learn $f(x_1, \\ldots, x_n)$. Privacy: No party learns anything beyond the output and what can be inferred from their own input. $$\\text{REAL}_{\\Pi, \\mathcal{A}} \\approx_c \\text{IDEAL}_{f, \\mathcal{S}}$$ This is the simulation paradigm — the same definitional framework used for Zero Knowledge Proofs, applied here to multiparty settings. See UC Security for composable definitions.\nTrust Model: Threshold Assumptions MPC security depends critically on the corruption threshold:\nModel Assumption Security Honest majority ($t \u003c n/2$) Majority of parties are honest Information-theoretic security possible (BGW) Dishonest majority ($t \u003c n$) At least 1 honest party Computational security only; requires OT or FHE Full corruption ($t = n$) None honest Impossible without additional assumptions Connection to Mechanism Design: the threshold assumption is a trust assumption about agent behaviour. In game-theoretic terms, it assumes that fewer than $t$ agents have a payoff-dominant strategy to collude. Designing MPC protocols is therefore a mechanism design problem: how do you structure the protocol so that collusion is either technically impossible (honest majority) or economically irrational (via staking/slashing)?\nMPC Techniques Technique Based On Best For Shamir Secret Sharing Polynomial interpolation over $\\mathbb{F}_p$ Arithmetic circuits, honest majority Garbled Circuits (Yao) Symmetric encryption of gate truth tables Boolean circuits, 2-party SPDZ / MASCOT SHE-based preprocessing + Beaver triples Dishonest majority, arithmetic GMW Oblivious Transfer Boolean circuits, multi-party MPC in Blockchain Threshold Signatures, MPC Wallets, Nillion\nPrimary blockchain applications:\nThreshold signatures: Split a signing key across $n$ parties; $t$-of-$n$ must collaborate to sign. No single party ever holds the full key. Used by institutional custodians (Fireblocks, Coinbase). MPC-based key management: Distribute wallet keys without a single point of failure. More flexible than multisig (no on-chain footprint). MPC + FHE hybrid: Nillion orchestrates MPC, FHE, and ZK proofs depending on computation requirements. Zama’s fhEVM uses threshold MPC for FHE decryption key management. Comparative Analysis Trust Basis: Math vs. Hardware vs. People The fundamental taxonomy of verifiable computation:\nTrust basis Math-only ──────────────── Hardware ──── Social │ │ │ ZK proofs TEEs Multisig FHE (attestation) (M-of-N) MPC (threshold) │ │ │ Failure mode: Failure mode: Failure mode: Implementation bug Side-channel, Bribery, (≈ rare, fixable) backdoor coercion (≈ hardware (≈ social lifecycle) engineering) For mechanism designers: the choice of trust basis determines the residual trust that must be covered by incentive mechanisms. A system built on ZK proofs needs minimal incentive design for correctness (the math handles it), but may need incentives for liveness (someone must generate the proofs). A system built on TEEs needs incentive mechanisms for both correctness (TEEs can lie if compromised) and liveness — plus an additional social layer of trust in the hardware supply chain. See Implementation Theory, Hurwicz Framework.\nPerformance–Trust–Expressiveness Tradeoff No single technology dominates all three dimensions:\nLow Trust (good) High Performance (good) High Expressiveness (good) ZK Proofs ✓ (math only) ✗ (slow proving) ~ (circuit compilation needed) FHE ✓ (math only) ✗✗ ($10^4$–$10^5$× overhead) ✓ (any computation) MPC ~ (threshold trust) ~ (communication overhead) ✓ (any function) TEE ✗ (hardware trust) ✓✓ (near-native) ✓✓ (run anything, out of the box) This is why hybrid architectures are emerging as the dominant pattern.\nHybrid Architectures The most sophisticated production systems in 2025–2026 combine multiple technologies:\nCombination How It Works What It Solves TEE + ZK Run computation in TEE for speed; periodically generate ZK proof of TEE output as a backstop TEE speed for real-time, ZK for long-term trustless verification MPC + FHE Use MPC to distribute the FHE decryption key across $n$ parties (threshold decryption) FHE’s “who holds the key” problem ZK + MPC Each party holds a share of the witness; collaborative ZK proof generation Multi-institutional compliance checks where no single entity sees all data TEE + MPC TEE provides fast enclave execution; MPC distributes trust across multiple TEE operators Reduces single-manufacturer dependency The Nillion model: orchestrates MPC, FHE, and ZK proofs dynamically depending on computation requirements — selecting the optimal point on the trust–performance spectrum for each sub-task.\nConnection to Mechanism Design and Agent Coordination Computational Trust as a Mechanism Design Problem Mechanism Design, Implementation Theory, Hurwicz Framework\nThe trust spectrum maps directly onto Mechanism Design concepts. Consider a multi-agent system where agents must jointly compute a function (e.g., aggregate preferences, execute a trade, verify a claim):\nThe mechanism design question: given that agents may be self-interested (or adversarial), how do you design the computation infrastructure so that the outcome is correct, private, and incentive-compatible?\nThe answer depends on what you trust:\nTrust Basis IC Requirement Mechanism Implications ZK proofs Minimal — math guarantees correctness Incentives needed only for liveness (who runs the prover?) MPC Moderate — threshold honesty assumed Requires either honest majority or economic incentives (staking, slashing) to keep collusion below threshold TEE High — hardware integrity assumed Requires reputation systems, hardware audits, attestation verification infrastructure Multisig Maximal — social trust required Requires governance, legal frameworks, social accountability In the language of Hurwicz Framework: ZK proofs achieve a form of “strategy-proofness” for the verification step — the verifier has no profitable deviation from honest checking, because the proof is self-certifying. TEE-based systems require additional incentive layers to approximate this property.\nAgent Trust and Coordination Multi-Agent Systems, Game Theory, Cooperation Theory, Team Theory\nIn multi-agent systems, the secure computation trust spectrum maps onto the question: how much can agents trust each other’s reported computations?\nConsider a setting with $n$ autonomous AI agents that must coordinate (e.g., distributed DeFi protocol, multi-agent supply chain optimisation, federated learning):\nScenario 1 — ZK-verified agents: Each agent produces a ZK proof alongside its output, attesting to correct computation. Other agents verify the proof before acting on the output. Trust is minimal — agents need not trust each other, only the proof system. This is analogous to the verifiable mechanism concept in Implementation Theory: the mechanism is self-enforcing because deviation is detectable.\nScenario 2 — TEE-attested agents: Each agent runs inside a TEE and provides an attestation report. Other agents trust the attestation if they trust the hardware manufacturer. This is analogous to reputation-based trust in Repeated Games: the hardware manufacturer’s reputation is the enforcement mechanism. But unlike reputation in iterated games, hardware vulnerabilities are discovered discretely and affect all instances simultaneously (correlated failure).\nScenario 3 — MPC-coordinated agents: Agents engage in an MPC protocol, each contributing private inputs. Trust is distributed across the threshold. This maps to team theory (Marschak-Radner) with private information: agents jointly compute a function under incentive constraints, and the MPC protocol is the communication structure.\nThe correlated failure problem: TEEs introduce a unique risk absent in cryptographic approaches — all enclaves from the same manufacturer share the same vulnerability. A single side-channel discovery (e.g., Spectre) compromises every enclave simultaneously. In game-theoretic terms, this is a common shock — an exogenous event that correlates agent failures. Mechanism designers must account for this correlated structure when designing fallback systems. See Correlated Equilibrium, Common Knowledge.\nVerification Layers for Autonomous Agents Verifiable AI, AI Safety, Multi-Agent Safety\nFor autonomous AI agents operating on-chain, the trust spectrum becomes a verification architecture question:\nLayer Technology What It Verifies Latency Real-time TEE attestation “Agent is running claimed model on genuine hardware” Milliseconds Periodic ZK proof of execution “Agent’s outputs are consistent with claimed model and inputs” Minutes–hours Post-hoc Fraud proof (optimistic) “No validator has contested the agent’s outputs within the challenge window” Days Audit Full re-execution + MPC “Independent parties jointly verified the computation with private inputs” Offline Design principle: layer faster-but-weaker guarantees (TEE) with slower-but-stronger guarantees (ZK), creating a defense-in-depth for agent trust. This is the mechanism design analogue of combining screening and monitoring in Principal-Agent Problems — the principal uses cheap, noisy monitoring (TEE attestation) for real-time oversight and expensive, precise auditing (ZK proofs) for periodic verification.\nTrust Spectrum and Cooperation Theory Cooperation Theory, Evolutionary Game Theory, Signaling Theory\nThe trust technologies we’ve examined can be understood through the lens of Cooperation Theory — specifically, as different solutions to the cooperation problem in multi-agent systems:\nHow do you sustain cooperation when agents have private information, conflicting incentives, and the ability to defect?\nEach technology corresponds to a different cooperation-enforcement mechanism:\nTrust Technology Cooperation Mechanism Game-Theoretic Analogue ZK Proofs Verifiable commitment Costly signaling (Spence Signaling): the proof is a hard-to-forge signal of honest behavior. Producing a valid ZK proof is computationally expensive, creating a natural separation between honest and dishonest agents. TEE Delegated enforcement Third-party arbitrator: Intel/AMD acts as an external enforcement mechanism, similar to a court in contract theory. The failure mode is that the “court” itself may be compromised. MPC Distributed trust / mutual verification Conditional cooperation in Repeated Games: agents cooperate because they each hold a piece of the puzzle, and unilateral defection is detectable. Multisig Social enforcement Ostrom’s commons governance (Elinor Ostrom): cooperation sustained by social norms, reputation, and graduated sanctions among a known group. The deep connection: ZK proofs are the cryptographic analogue of credible commitment in game theory. Just as Schelling’s commitment devices make defection physically impossible (burning bridges), a ZK proof makes false claims mathematically impossible. TEEs are a weaker commitment device — they make false claims hardware-costly rather than impossible. MPC distributes the commitment across agents, making defection require collusion. Each maps to a different equilibrium concept: ZK → dominant strategy; TEE → Nash equilibrium (with hardware assumptions); MPC → correlated equilibrium with threshold constraints.\nBlockchain Applications of TEEs Private Smart Contracts Secret Network, Oasis Network, Phala Network\nSecret Network was the first blockchain to implement private smart contracts via TEEs. Using Intel SGX, it enables “Secret Contracts” where contract logic, inputs, outputs, and state are hidden from node operators. Only addresses are visible on-chain.\nArchitecture: Each validator runs an SGX enclave. Contract state is encrypted with keys managed by a distributed Key Management Committee (KMC). If a KMC node is compromised, its access can be revoked through governance. Short-term keys are rotated frequently to limit breach impact.\nTradeoff vs. ZK private contracts (e.g., Aztec Network): TEE-based privacy runs at near-native speed and supports arbitrary contract logic today. ZK-based privacy is slower and requires circuit compilation, but doesn’t depend on hardware trust. Long-term, ZK is likely to prevail as zkEVMs mature.\nCross-Chain Bridges Traditional bridges use multisig committees — a social trust model with known failure modes (Ronin: $625M, Wormhole: $320M). TEE-secured bridges place signing keys and validation logic inside enclaves, reducing the trust assumption from “M-of-N humans are honest” to “the enclave hardware is uncompromised.” This is a strict improvement on the trust spectrum, though not as strong as ZK-verified bridges (which are still largely in development).\nOracle Networks Chainlink, Town Crier\nOracles deliver off-chain data to smart contracts. TEEs (specifically Town Crier, which influenced Chainlink’s design) ensure that the data feed is fetched and delivered inside an enclave — the oracle operator cannot tamper with the data between source and chain. Attestation proves the data came from the claimed HTTPS endpoint.\nConfidential AI Inference NVIDIA Confidential Computing, Verifiable AI\nNVIDIA’s Hopper and Blackwell GPUs include confidential computing enclaves, enabling private ML inference: the model weights stay encrypted in GPU memory, inputs are encrypted in transit, and the inference runs inside the enclave. This is orders of magnitude faster than proving the same inference in a ZK circuit (which is currently infeasible for large models).\nTEE + ZK hybrid for AI: Run inference in a GPU enclave for speed; generate a ZK proof that the TEE’s output is consistent with the attested model for trustless verification. This is the emerging architecture for verifiable AI agents.\nCritical Pitfalls \u0026 Warnings TEEs Are Necessary But Not Sufficient TEEs provide conditional security — they work if the hardware is uncompromised. ZK proofs provide unconditional computational security — they work regardless of the hardware.\nA system that relies solely on TEEs inherits every past and future vulnerability of the underlying silicon. This is an irreducible risk that cannot be mitigated by software — the WireTap attack (CCS 2025) demonstrated a physical DRAM bus interposition that no firmware patch can fix.\nAttestation ≠ Trust Attestation proves the enclave is running specific code on genuine hardware. It does not prove:\nThe code itself is bug-free or correct. The hardware has no undiscovered vulnerabilities. The manufacturer has not been coerced into providing backdoor access. The attestation key has not been extracted (as in SGAxe). Analogy to Signaling Theory: attestation is a signal, not a proof. Its credibility depends on the signaler’s (manufacturer’s) incentives and the cost of forgery. When the cost of forgery decreases (via discovered vulnerabilities), the signal’s informativeness degrades — a standard result from Spence Signaling models.\nThe Correlated Failure Risk All Intel SGX enclaves share the same silicon design. A single vulnerability discovery affects every deployed enclave simultaneously. This is unlike MPC (where failure requires independent corruption of $t$ parties) or ZK (where failure requires breaking a mathematical assumption).\nIn mechanism design terms: TEE failures are correlated shocks, not independent failures. Systems built on TEEs must have fallback mechanisms (ZK proof generation, optimistic challenge windows, MPC-based key recovery) that activate when the hardware trust assumption is violated.\nSummary: Choosing the Right Trust Model The choice of secure computation technology is ultimately a mechanism design decision:\nWhat is the cost of failure? High-stakes systems (bridges, custody, AI agent verification) should layer multiple trust bases. What is the latency budget? Real-time systems (DeFi, gaming) may need TEE for speed, with ZK as a periodic backstop. What is the threat model? Nation-state adversaries can compromise hardware supply chains; pure-crypto approaches (ZK, FHE) are more robust here. What is the coordination structure? Multi-party settings naturally suit MPC; single-prover settings suit ZK or TEE. What is the quantum timeline? Long-lived systems should prefer hash-based (STARKs) or lattice-based (FHE) constructions. The emerging consensus: no single technology suffices. The future of secure computation is compositional — hybrid architectures that select the optimal trust–performance point for each sub-computation. The mechanism designer’s job is to structure these compositions so that the overall system is incentive-compatible, resilient to correlated failures, and auditable across trust boundaries.\nSee Zero Knowledge Proofs, Mechanism Design, Implementation Theory, Multi-Agent Systems, Cooperation Theory, Signaling Theory, Hurwicz Framework, Team Theory, Elliptic Curve Cryptography, Lattice-Based Cryptography, Intel SGX, ARM TrustZone, Secret Network, Oasis Network.\n",
+  "wordCount" : "4012",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,12 +234,781 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Trusted Execution Environments
     </h1>
-    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 19 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#trusted-execution-environments-and-the-secure-computation-trust-spectrum" aria-label="Trusted Execution Environments and the Secure Computation Trust Spectrum">Trusted Execution Environments and the Secure Computation Trust Spectrum</a><ul>
+                        
+                <li>
+                    <a href="#motivation--foundational-context" aria-label="Motivation &amp; Foundational Context">Motivation &amp; Foundational Context</a></li>
+                <li>
+                    <a href="#the-secure-computation-trust-spectrum" aria-label="The Secure Computation Trust Spectrum">The Secure Computation Trust Spectrum</a><ul>
+                        
+                <li>
+                    <a href="#overview" aria-label="Overview">Overview</a></li>
+                <li>
+                    <a href="#the-trustperformance-tradeoff" aria-label="The Trust–Performance Tradeoff">The Trust–Performance Tradeoff</a></li>
+                <li>
+                    <a href="#formal-trust-model" aria-label="Formal Trust Model">Formal Trust Model</a></li></ul>
+                </li>
+                <li>
+                    <a href="#trusted-execution-environments-tees" aria-label="Trusted Execution Environments (TEEs)">Trusted Execution Environments (TEEs)</a><ul>
+                        
+                <li>
+                    <a href="#core-concept" aria-label="Core Concept">Core Concept</a></li>
+                <li>
+                    <a href="#architecture" aria-label="Architecture">Architecture</a><ul>
+                        
+                <li>
+                    <a href="#hardware-isolation-mechanisms" aria-label="Hardware Isolation Mechanisms">Hardware Isolation Mechanisms</a></li>
+                <li>
+                    <a href="#the-attestation-protocol" aria-label="The Attestation Protocol">The Attestation Protocol</a></li>
+                <li>
+                    <a href="#execution-flow-for-private-smart-contracts" aria-label="Execution Flow for Private Smart Contracts">Execution Flow for Private Smart Contracts</a></li></ul>
+                </li>
+                <li>
+                    <a href="#attack-surface-and-known-vulnerabilities" aria-label="Attack Surface and Known Vulnerabilities">Attack Surface and Known Vulnerabilities</a><ul>
+                        
+                <li>
+                    <a href="#side-channel-attacks" aria-label="Side-Channel Attacks">Side-Channel Attacks</a></li>
+                <li>
+                    <a href="#manufacturer-trust" aria-label="Manufacturer Trust">Manufacturer Trust</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#fully-homomorphic-encryption-fhe" aria-label="Fully Homomorphic Encryption (FHE)">Fully Homomorphic Encryption (FHE)</a><ul>
+                        
+                <li>
+                    <a href="#core-concept-1" aria-label="Core Concept">Core Concept</a></li>
+                <li>
+                    <a href="#performance-reality" aria-label="Performance Reality">Performance Reality</a></li>
+                <li>
+                    <a href="#fhe-in-blockchain" aria-label="FHE in Blockchain">FHE in Blockchain</a></li>
+                <li>
+                    <a href="#post-quantum-security" aria-label="Post-Quantum Security">Post-Quantum Security</a></li></ul>
+                </li>
+                <li>
+                    <a href="#secure-multi-party-computation-mpc" aria-label="Secure Multi-Party Computation (MPC)">Secure Multi-Party Computation (MPC)</a><ul>
+                        
+                <li>
+                    <a href="#core-concept-2" aria-label="Core Concept">Core Concept</a></li>
+                <li>
+                    <a href="#trust-model-threshold-assumptions" aria-label="Trust Model: Threshold Assumptions">Trust Model: Threshold Assumptions</a></li>
+                <li>
+                    <a href="#mpc-techniques" aria-label="MPC Techniques">MPC Techniques</a></li>
+                <li>
+                    <a href="#mpc-in-blockchain" aria-label="MPC in Blockchain">MPC in Blockchain</a></li></ul>
+                </li>
+                <li>
+                    <a href="#comparative-analysis" aria-label="Comparative Analysis">Comparative Analysis</a><ul>
+                        
+                <li>
+                    <a href="#trust-basis-math-vs-hardware-vs-people" aria-label="Trust Basis: Math vs. Hardware vs. People">Trust Basis: Math vs. Hardware vs. People</a></li>
+                <li>
+                    <a href="#performancetrustexpressiveness-tradeoff" aria-label="Performance–Trust–Expressiveness Tradeoff">Performance–Trust–Expressiveness Tradeoff</a></li>
+                <li>
+                    <a href="#hybrid-architectures" aria-label="Hybrid Architectures">Hybrid Architectures</a></li></ul>
+                </li>
+                <li>
+                    <a href="#connection-to-mechanism-design-and-agent-coordination" aria-label="Connection to Mechanism Design and Agent Coordination">Connection to Mechanism Design and Agent Coordination</a><ul>
+                        
+                <li>
+                    <a href="#computational-trust-as-a-mechanism-design-problem" aria-label="Computational Trust as a Mechanism Design Problem">Computational Trust as a Mechanism Design Problem</a></li>
+                <li>
+                    <a href="#agent-trust-and-coordination" aria-label="Agent Trust and Coordination">Agent Trust and Coordination</a></li>
+                <li>
+                    <a href="#verification-layers-for-autonomous-agents" aria-label="Verification Layers for Autonomous Agents">Verification Layers for Autonomous Agents</a></li>
+                <li>
+                    <a href="#trust-spectrum-and-cooperation-theory" aria-label="Trust Spectrum and Cooperation Theory">Trust Spectrum and Cooperation Theory</a></li></ul>
+                </li>
+                <li>
+                    <a href="#blockchain-applications-of-tees" aria-label="Blockchain Applications of TEEs">Blockchain Applications of TEEs</a><ul>
+                        
+                <li>
+                    <a href="#private-smart-contracts" aria-label="Private Smart Contracts">Private Smart Contracts</a></li>
+                <li>
+                    <a href="#cross-chain-bridges" aria-label="Cross-Chain Bridges">Cross-Chain Bridges</a></li>
+                <li>
+                    <a href="#oracle-networks" aria-label="Oracle Networks">Oracle Networks</a></li>
+                <li>
+                    <a href="#confidential-ai-inference" aria-label="Confidential AI Inference">Confidential AI Inference</a></li></ul>
+                </li>
+                <li>
+                    <a href="#critical-pitfalls--warnings" aria-label="Critical Pitfalls &amp; Warnings">Critical Pitfalls &amp; Warnings</a><ul>
+                        
+                <li>
+                    <a href="#tees-are-necessary-but-not-sufficient" aria-label="TEEs Are Necessary But Not Sufficient">TEEs Are Necessary But Not Sufficient</a></li>
+                <li>
+                    <a href="#attestation--trust" aria-label="Attestation ≠ Trust">Attestation ≠ Trust</a></li>
+                <li>
+                    <a href="#the-correlated-failure-risk" aria-label="The Correlated Failure Risk">The Correlated Failure Risk</a></li></ul>
+                </li>
+                <li>
+                    <a href="#summary-choosing-the-right-trust-model" aria-label="Summary: Choosing the Right Trust Model">Summary: Choosing the Right Trust Model</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="trusted-execution-environments-and-the-secure-computation-trust-spectrum">Trusted Execution Environments and the Secure Computation Trust Spectrum<a hidden class="anchor" aria-hidden="true" href="#trusted-execution-environments-and-the-secure-computation-trust-spectrum">#</a></h2>
+<h3 id="motivation--foundational-context">Motivation &amp; Foundational Context<a hidden class="anchor" aria-hidden="true" href="#motivation--foundational-context">#</a></h3>
+<p>How do you verify that a computation was performed correctly — and privately — when you don&rsquo;t control the machine? This question sits at the intersection of <a href="/notes/cryptography">Cryptography</a>, Hardware Security, Mechanism Design, and Multi-Agent Systems. Different answers trade off trust assumptions, performance, and expressiveness, forming a <strong>trust spectrum</strong> that has deep consequences for agent coordination, blockchain protocols, and verifiable AI.</p>
+<p>The key insight: trust in computation is not binary. It ranges from &ldquo;trust only mathematics&rdquo; (ZK proofs) to &ldquo;trust the hardware manufacturer&rdquo; (TEEs) to &ldquo;trust a set of humans&rdquo; (multisigs). Each point on this spectrum corresponds to a different failure mode, a different cost profile, and a different set of mechanism design constraints.</p>
+<hr>
+<h3 id="the-secure-computation-trust-spectrum">The Secure Computation Trust Spectrum<a hidden class="anchor" aria-hidden="true" href="#the-secure-computation-trust-spectrum">#</a></h3>
+<h4 id="overview">Overview<a hidden class="anchor" aria-hidden="true" href="#overview">#</a></h4>
+<p>Every system that claims to perform private or verifiable computation must answer: <em>who or what do you trust, and what happens when that trust is violated?</em></p>
+<p>The five major approaches, ordered from strongest to weakest trust assumptions:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Technology</th>
+          <th style="text-align: left">Trust Basis</th>
+          <th style="text-align: left">What You Trust</th>
+          <th style="text-align: left">Failure Mode</th>
+          <th style="text-align: left">Performance Overhead</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Zero Knowledge Proofs</strong></td>
+          <td style="text-align: left">Mathematics</td>
+          <td style="text-align: left">Hardness assumptions (DL, hashes)</td>
+          <td style="text-align: left">Implementation bugs only</td>
+          <td style="text-align: left">100–1000× (proof generation)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Fully Homomorphic Encryption</strong> (FHE)</td>
+          <td style="text-align: left">Mathematics</td>
+          <td style="text-align: left">Lattice-based hardness</td>
+          <td style="text-align: left">Implementation bugs; key management</td>
+          <td style="text-align: left">$10^4$–$10^5$× (compute on ciphertext)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Secure Multi-Party Computation</strong> (MPC)</td>
+          <td style="text-align: left">Distributed trust</td>
+          <td style="text-align: left">Honest majority threshold ($< t$ of $n$ corrupted)</td>
+          <td style="text-align: left">Collusion above threshold</td>
+          <td style="text-align: left">10–1000× (communication rounds)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong><a href="/notes/trusted-execution-environments">Trusted Execution Environments</a></strong> (TEE)</td>
+          <td style="text-align: left">Hardware manufacturer</td>
+          <td style="text-align: left">Intel, AMD, ARM silicon integrity</td>
+          <td style="text-align: left">Hardware bugs, side-channels, backdoors</td>
+          <td style="text-align: left">~1.05–1.2× (near-native)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Multisig / Committee</strong></td>
+          <td style="text-align: left">Social trust</td>
+          <td style="text-align: left">$M$-of-$N$ humans acting honestly</td>
+          <td style="text-align: left">Bribery, coercion, key compromise</td>
+          <td style="text-align: left">~1× (no overhead)</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>Key principle</strong>: as you move down the table, performance improves dramatically but the trust surface expands. The &ldquo;right&rdquo; choice depends on the threat model — and crucially, on how much the failure cost justifies the performance penalty.</p></blockquote>
+<h4 id="the-trustperformance-tradeoff">The Trust–Performance Tradeoff<a hidden class="anchor" aria-hidden="true" href="#the-trustperformance-tradeoff">#</a></h4>
+<p>This is the fundamental tension in secure computation:</p>
+$$\text{Trustlessness} \propto \frac{1}{\text{Performance}}$$<p>More precisely: the less you trust external entities (hardware, people, committees), the more computational work is required to achieve the same guarantees. ZK proofs trust nothing but math, but pay for it with orders-of-magnitude slowdown in proof generation. TEEs trust a chip manufacturer, but run at near-native speed.</p>
+<p>This tradeoff is not merely engineering — it has deep implications for Mechanism Design:</p>
+<ul>
+<li>Systems with weaker trust assumptions (ZK, FHE) need fewer incentive mechanisms because the guarantees are mathematical, not behavioural.</li>
+<li>Systems with stronger trust assumptions (TEE, multisig) require carefully designed incentive structures (staking, slashing, reputation) to make defection unprofitable. See Incentive Compatibility, Implementation Theory.</li>
+</ul>
+<h4 id="formal-trust-model">Formal Trust Model<a hidden class="anchor" aria-hidden="true" href="#formal-trust-model">#</a></h4>
+<p>Define a trust model as a tuple $(\mathcal{T}, \mathcal{A}, \mathcal{F})$:</p>
+<ul>
+<li>$\mathcal{T}$: Trusted Computing Base (TCB) — the set of components that must be correct for security to hold.</li>
+<li>$\mathcal{A}$: Adversary model — what the attacker can do (corrupt software, corrupt hardware, corrupt $t$ of $n$ parties, etc.).</li>
+<li>$\mathcal{F}$: Failure consequence — what breaks when $\mathcal{T}$ is compromised (confidentiality, integrity, or both).</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Technology</th>
+          <th style="text-align: left">TCB</th>
+          <th style="text-align: left">Adversary</th>
+          <th style="text-align: left">Failure</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">ZK Proofs</td>
+          <td style="text-align: left">Proof system implementation</td>
+          <td style="text-align: left">Computationally bounded</td>
+          <td style="text-align: left">Soundness break (forged proofs)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">FHE</td>
+          <td style="text-align: left">Encryption library + key holder</td>
+          <td style="text-align: left">Computationally bounded</td>
+          <td style="text-align: left">Decryption of all data</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">MPC</td>
+          <td style="text-align: left">Honest majority of $n$ parties</td>
+          <td style="text-align: left">$< t$ corruptions</td>
+          <td style="text-align: left">Full data exposure if threshold exceeded</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TEE</td>
+          <td style="text-align: left">CPU silicon + firmware + manufacturer</td>
+          <td style="text-align: left">Physical + software side-channels</td>
+          <td style="text-align: left">Enclave data extraction</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Multisig</td>
+          <td style="text-align: left">$M$ of $N$ keyholders</td>
+          <td style="text-align: left">Bribery, coercion, social engineering</td>
+          <td style="text-align: left">Unauthorized signatures</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="trusted-execution-environments-tees">Trusted Execution Environments (TEEs)<a hidden class="anchor" aria-hidden="true" href="#trusted-execution-environments-tees">#</a></h3>
+<h4 id="core-concept">Core Concept<a hidden class="anchor" aria-hidden="true" href="#core-concept">#</a></h4>
+<p>Intel SGX, ARM TrustZone, AMD SEV</p>
+<p>A TEE is an isolated area within a device&rsquo;s processor that keeps code and data tamper-proof and confidential during execution. The isolation is enforced by hardware — the CPU itself encrypts the enclave&rsquo;s memory and refuses to let any external process (including the operating system, hypervisor, or someone with root access) read or modify it.</p>
+<blockquote>
+<p><strong>Definition</strong>: A TEE provides an isolated execution environment with three properties:</p>
+<ol>
+<li><strong>Confidentiality</strong>: Data inside the enclave is encrypted in memory; inaccessible to the host OS.</li>
+<li><strong>Integrity</strong>: Code and data cannot be tampered with by external processes.</li>
+<li><strong>Attestation</strong>: The enclave can produce a cryptographic proof that it is genuine hardware running a specific, untampered program.</li>
+</ol></blockquote>
+<p>The term &ldquo;enclave&rdquo; (used by Intel SGX) and &ldquo;secure world&rdquo; (used by ARM TrustZone) refer to the same concept: a hardware-isolated execution context.</p>
+<h4 id="architecture">Architecture<a hidden class="anchor" aria-hidden="true" href="#architecture">#</a></h4>
+<h5 id="hardware-isolation-mechanisms">Hardware Isolation Mechanisms<a hidden class="anchor" aria-hidden="true" href="#hardware-isolation-mechanisms">#</a></h5>
+<p>The major TEE implementations use different isolation strategies:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Platform</th>
+          <th style="text-align: left">Isolation Unit</th>
+          <th style="text-align: left">Memory Encryption</th>
+          <th style="text-align: left">Granularity</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Intel SGX</strong></td>
+          <td style="text-align: left">Application-level enclave</td>
+          <td style="text-align: left">Encrypted via MEE (Memory Encryption Engine)</td>
+          <td style="text-align: left">Per-application</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Intel TDX</strong></td>
+          <td style="text-align: left">Virtual machine (Trust Domain)</td>
+          <td style="text-align: left">AES-XTS per-TD</td>
+          <td style="text-align: left">Per-VM</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>AMD SEV / SEV-SNP</strong></td>
+          <td style="text-align: left">Virtual machine</td>
+          <td style="text-align: left">AES-128 per-VM</td>
+          <td style="text-align: left">Per-VM</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>ARM TrustZone</strong></td>
+          <td style="text-align: left">Secure world / normal world partition</td>
+          <td style="text-align: left">Bus-level partitioning via TZASC</td>
+          <td style="text-align: left">System-wide</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>ARM CCA</strong></td>
+          <td style="text-align: left">Realms (dynamic secure contexts)</td>
+          <td style="text-align: left">Granule Protection Tables</td>
+          <td style="text-align: left">Per-realm</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>NVIDIA Hopper/Blackwell</strong></td>
+          <td style="text-align: left">GPU enclave (Confidential Computing)</td>
+          <td style="text-align: left">On-die encryption</td>
+          <td style="text-align: left">Per-GPU-context</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>The emergence of GPU enclaves (NVIDIA Hopper H100) is significant for AI: it enables confidential ML inference at GPU-speed — something impossible with purely cryptographic approaches (ZK, FHE) at current performance levels.</p></blockquote>
+<h5 id="the-attestation-protocol">The Attestation Protocol<a hidden class="anchor" aria-hidden="true" href="#the-attestation-protocol">#</a></h5>
+<p>Attestation is the mechanism by which a TEE proves its identity and integrity to a remote verifier:</p>
+<ol>
+<li><strong>Measurement</strong>: At enclave launch, the CPU measures the Trusted Computing Base (boot firmware + OS kernel + application binaries) and stores the hash in secure hardware registers.</li>
+<li><strong>Signing</strong>: The CPU signs this measurement using a private <strong>attestation key</strong> embedded in the silicon during manufacturing.</li>
+<li><strong>Verification</strong>: A remote verifier checks the signature against the manufacturer&rsquo;s public key database, confirming: (a) the enclave runs on genuine hardware, and (b) the loaded code matches a known hash.</li>
+</ol>
+<blockquote>
+<p>Formally, attestation produces a report $\sigma = \text{Sign}_{sk_{\text{TEE}}}(H(\text{TCB}), H(\text{code}), \text{nonce})$ where $sk_{\text{TEE}}$ is the hardware-embedded key. The verifier checks $\text{Verify}(pk_{\text{mfg}}, \sigma) = 1$.</p></blockquote>
+<p>This is analogous to a ZK proof of correct execution — but the guarantee is rooted in hardware trust, not mathematical proof. If the attestation key is extracted (as in the SGAxe attack), arbitrary attestation reports can be forged.</p>
+<h5 id="execution-flow-for-private-smart-contracts">Execution Flow for Private Smart Contracts<a hidden class="anchor" aria-hidden="true" href="#execution-flow-for-private-smart-contracts">#</a></h5>
+<p>In the blockchain context (e.g., Secret Network, Oasis Network):</p>
+<ol>
+<li>Smart contract code is loaded into the enclave.</li>
+<li>Enclave generates a keypair $(pk, sk)$ and publishes $pk$ on-chain.</li>
+<li>The CPU produces an attestation report, verifiable by anyone.</li>
+<li>Users encrypt transaction inputs with $pk$ before submitting.</li>
+<li>Inside the enclave: decrypt inputs → execute contract → encrypt state updates.</li>
+<li>Encrypted state posted on-chain. Only the enclave (and authorised viewers) can decrypt.</li>
+</ol>
+<p>The node operator sees only ciphertext at every stage — confidentiality holds even against the infrastructure provider.</p>
+<h4 id="attack-surface-and-known-vulnerabilities">Attack Surface and Known Vulnerabilities<a hidden class="anchor" aria-hidden="true" href="#attack-surface-and-known-vulnerabilities">#</a></h4>
+<p>TEEs have been broken multiple times. The trust in hardware is <strong>conditional</strong>, not absolute.</p>
+<h5 id="side-channel-attacks">Side-Channel Attacks<a hidden class="anchor" aria-hidden="true" href="#side-channel-attacks">#</a></h5>
+<p>The fundamental problem: TEEs share physical CPU resources (power rails, caches, execution units, branch predictors) with untrusted code. Information leaks through these shared channels.</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Attack</th>
+          <th style="text-align: left">Year</th>
+          <th style="text-align: left">Mechanism</th>
+          <th style="text-align: left">Impact</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Spectre / Meltdown</strong></td>
+          <td style="text-align: left">2018</td>
+          <td style="text-align: left">Speculative execution leaks data across isolation boundaries</td>
+          <td style="text-align: left">Data extraction from enclaves</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Foreshadow (L1TF)</strong></td>
+          <td style="text-align: left">2018</td>
+          <td style="text-align: left">L1 cache timing attack specific to SGX</td>
+          <td style="text-align: left">Full enclave secret extraction</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Plundervolt</strong></td>
+          <td style="text-align: left">2019</td>
+          <td style="text-align: left">CPU voltage manipulation induces faults inside SGX, bypassing integrity checks</td>
+          <td style="text-align: left">Key extraction from encrypted memory</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>SGAxe / CrossTalk</strong></td>
+          <td style="text-align: left">2020</td>
+          <td style="text-align: left">Extracted SGX attestation keys via shared CPU buffers</td>
+          <td style="text-align: left">Undermines entire attestation model</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>ÆPIC Leak</strong></td>
+          <td style="text-align: left">2022</td>
+          <td style="text-align: left">Architectural bug in APIC leaks enclave data</td>
+          <td style="text-align: left">Unpatched data extraction</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>WireTap</strong></td>
+          <td style="text-align: left">2025</td>
+          <td style="text-align: left">DRAM bus interposition (physical)</td>
+          <td style="text-align: left">No software fix possible</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>Critical observation</strong>: side-channel attacks exploit the fact that a TEE is a <em>partition</em> of a general-purpose processor, not a separate chip. A Secure Element (SE) — like the chip on a smart card or Ledger hardware wallet — is physically separate and does not share resources, making side-channel attacks much harder. But SEs are too limited to run general programs.</p></blockquote>
+<h5 id="manufacturer-trust">Manufacturer Trust<a hidden class="anchor" aria-hidden="true" href="#manufacturer-trust">#</a></h5>
+<p>The attestation key is embedded by the manufacturer. This creates irreducible trust dependencies:</p>
+<ul>
+<li><strong>Backdoor risk</strong>: Intel, AMD, ARM could be compelled by governments to introduce backdoors (see Intel Management Engine vulnerabilities).</li>
+<li><strong>Supply chain attacks</strong>: Compromised manufacturing could embed rogue keys.</li>
+<li><strong>Firmware vulnerabilities</strong>: Updates to microcode or firmware can introduce new attack vectors — and users must trust the manufacturer&rsquo;s update pipeline.</li>
+</ul>
+<blockquote>
+<p>This is a fundamental difference from ZK proofs: a ZK proof is correct regardless of what hardware produced it. A TEE attestation is only trustworthy if the entire hardware supply chain is uncompromised.</p></blockquote>
+<hr>
+<h3 id="fully-homomorphic-encryption-fhe">Fully Homomorphic Encryption (FHE)<a hidden class="anchor" aria-hidden="true" href="#fully-homomorphic-encryption-fhe">#</a></h3>
+<h4 id="core-concept-1">Core Concept<a hidden class="anchor" aria-hidden="true" href="#core-concept-1">#</a></h4>
+<p>Lattice-Based Cryptography, TFHE, BGV Scheme</p>
+<p>FHE allows computation on encrypted data without decryption. Given ciphertexts $\text{Enc}(a)$ and $\text{Enc}(b)$, one can compute $\text{Enc}(a + b)$ and $\text{Enc}(a \cdot b)$ without ever seeing $a$ or $b$.</p>
+<blockquote>
+$$Dec(sk, Eval(pk, f, Enc(pk, x))) = f(x) \quad \forall f \in \mathcal{F}, \forall x$$<p> where $\mathcal{F}$ is the class of all polynomial-time computable functions.</p></blockquote>
+<p>Since addition and multiplication are universal (they generate all arithmetic circuits), FHE can evaluate <em>any</em> computation on encrypted data — hence &ldquo;fully&rdquo; homomorphic.</p>
+<h4 id="performance-reality">Performance Reality<a hidden class="anchor" aria-hidden="true" href="#performance-reality">#</a></h4>
+<p>FHE is often called the &ldquo;holy grail&rdquo; of encryption, but the performance overhead is severe:</p>
+<blockquote>
+<p>FHE is approximately $10^4$ to $10^5$ times slower than computing on unencrypted data (Feldmann et al., 2021; Microsoft SEAL benchmarks).</p></blockquote>
+<p>This makes FHE impractical for most real-time applications. Current research focuses on:</p>
+<ul>
+<li><strong>Hardware acceleration</strong>: Dedicated FHE accelerators (DARPA DPRIVE program, Intel HEXL).</li>
+<li><strong>Levelled FHE</strong>: Evaluate circuits of bounded multiplicative depth without bootstrapping.</li>
+<li><strong>Noise management</strong>: Bootstrapping refreshes noise but is extremely expensive ($> 10$ms per gate).</li>
+</ul>
+<h4 id="fhe-in-blockchain">FHE in Blockchain<a hidden class="anchor" aria-hidden="true" href="#fhe-in-blockchain">#</a></h4>
+<p>fhEVM, Zama, Fhenix</p>
+<p><strong>Zama</strong> developed the fhEVM — a framework for encrypted smart contracts where contract state is FHE-encrypted. Operations (addition, comparison, transfer) happen homomorphically. The decryption key is split via threshold MPC across multiple parties.</p>
+<p>The key management problem is fundamental: <em>someone</em> must hold the decryption key. FHE alone doesn&rsquo;t solve this — it pushes the trust to the key holder. This is why practical FHE systems combine FHE with MPC for distributed key management.</p>
+<h4 id="post-quantum-security">Post-Quantum Security<a hidden class="anchor" aria-hidden="true" href="#post-quantum-security">#</a></h4>
+<p>FHE schemes are based on Lattice-Based Cryptography (LWE, RLWE), which is believed to be resistant to quantum attacks (Shor&rsquo;s algorithm does not help). This is a significant advantage over pairing-based SNARKs and TEEs whose cryptographic components rely on classical assumptions.</p>
+<hr>
+<h3 id="secure-multi-party-computation-mpc">Secure Multi-Party Computation (MPC)<a hidden class="anchor" aria-hidden="true" href="#secure-multi-party-computation-mpc">#</a></h3>
+<h4 id="core-concept-2">Core Concept<a hidden class="anchor" aria-hidden="true" href="#core-concept-2">#</a></h4>
+<p>Secret Sharing, Garbled Circuits, Beaver Triples</p>
+<p>MPC allows $n$ parties to jointly compute a function $f(x_1, \ldots, x_n)$ where each party $i$ holds private input $x_i$, such that:</p>
+<ul>
+<li><strong>Correctness</strong>: All parties learn $f(x_1, \ldots, x_n)$.</li>
+<li><strong>Privacy</strong>: No party learns anything beyond the output and what can be inferred from their own input.</li>
+</ul>
+<blockquote>
+$$\text{REAL}_{\Pi, \mathcal{A}} \approx_c \text{IDEAL}_{f, \mathcal{S}}$$</blockquote>
+<p>This is the <strong>simulation paradigm</strong> — the same definitional framework used for Zero Knowledge Proofs, applied here to multiparty settings. See UC Security for composable definitions.</p>
+<h4 id="trust-model-threshold-assumptions">Trust Model: Threshold Assumptions<a hidden class="anchor" aria-hidden="true" href="#trust-model-threshold-assumptions">#</a></h4>
+<p>MPC security depends critically on the corruption threshold:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Model</th>
+          <th style="text-align: left">Assumption</th>
+          <th style="text-align: left">Security</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Honest majority</strong> ($t < n/2$)</td>
+          <td style="text-align: left">Majority of parties are honest</td>
+          <td style="text-align: left">Information-theoretic security possible (BGW)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Dishonest majority</strong> ($t < n$)</td>
+          <td style="text-align: left">At least 1 honest party</td>
+          <td style="text-align: left">Computational security only; requires OT or FHE</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Full corruption</strong> ($t = n$)</td>
+          <td style="text-align: left">None honest</td>
+          <td style="text-align: left">Impossible without additional assumptions</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>Connection to Mechanism Design</strong>: the threshold assumption is a trust assumption about agent behaviour. In game-theoretic terms, it assumes that fewer than $t$ agents have a payoff-dominant strategy to collude. Designing MPC protocols is therefore a mechanism design problem: how do you structure the protocol so that collusion is either technically impossible (honest majority) or economically irrational (via staking/slashing)?</p></blockquote>
+<h4 id="mpc-techniques">MPC Techniques<a hidden class="anchor" aria-hidden="true" href="#mpc-techniques">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Technique</th>
+          <th style="text-align: left">Based On</th>
+          <th style="text-align: left">Best For</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Shamir Secret Sharing</strong></td>
+          <td style="text-align: left">Polynomial interpolation over $\mathbb{F}_p$</td>
+          <td style="text-align: left">Arithmetic circuits, honest majority</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Garbled Circuits</strong> (Yao)</td>
+          <td style="text-align: left">Symmetric encryption of gate truth tables</td>
+          <td style="text-align: left">Boolean circuits, 2-party</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>SPDZ / MASCOT</strong></td>
+          <td style="text-align: left">SHE-based preprocessing + Beaver triples</td>
+          <td style="text-align: left">Dishonest majority, arithmetic</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>GMW</strong></td>
+          <td style="text-align: left">Oblivious Transfer</td>
+          <td style="text-align: left">Boolean circuits, multi-party</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="mpc-in-blockchain">MPC in Blockchain<a hidden class="anchor" aria-hidden="true" href="#mpc-in-blockchain">#</a></h4>
+<p>Threshold Signatures, MPC Wallets, Nillion</p>
+<p>Primary blockchain applications:</p>
+<ul>
+<li><strong>Threshold signatures</strong>: Split a signing key across $n$ parties; $t$-of-$n$ must collaborate to sign. No single party ever holds the full key. Used by institutional custodians (Fireblocks, Coinbase).</li>
+<li><strong>MPC-based key management</strong>: Distribute wallet keys without a single point of failure. More flexible than multisig (no on-chain footprint).</li>
+<li><strong>MPC + FHE hybrid</strong>: Nillion orchestrates MPC, FHE, and ZK proofs depending on computation requirements. Zama&rsquo;s fhEVM uses threshold MPC for FHE decryption key management.</li>
+</ul>
+<hr>
+<h3 id="comparative-analysis">Comparative Analysis<a hidden class="anchor" aria-hidden="true" href="#comparative-analysis">#</a></h3>
+<h4 id="trust-basis-math-vs-hardware-vs-people">Trust Basis: Math vs. Hardware vs. People<a hidden class="anchor" aria-hidden="true" href="#trust-basis-math-vs-hardware-vs-people">#</a></h4>
+<p>The fundamental taxonomy of verifiable computation:</p>
+<pre tabindex="0"><code>              Trust basis
+              
+  Math-only ──────────────── Hardware ──── Social
+      │                         │            │
+   ZK proofs                  TEEs        Multisig
+   FHE                    (attestation)   (M-of-N)
+   MPC (threshold)
+      │                         │            │
+  Failure mode:            Failure mode:   Failure mode:
+  Implementation bug       Side-channel,   Bribery,
+  (≈ rare, fixable)        backdoor        coercion
+                           (≈ hardware      (≈ social
+                            lifecycle)       engineering)
+</code></pre><blockquote>
+<p><strong>For mechanism designers</strong>: the choice of trust basis determines the <strong>residual trust</strong> that must be covered by incentive mechanisms. A system built on ZK proofs needs minimal incentive design for correctness (the math handles it), but may need incentives for <em>liveness</em> (someone must generate the proofs). A system built on TEEs needs incentive mechanisms for both correctness (TEEs can lie if compromised) and liveness — plus an additional social layer of trust in the hardware supply chain. See Implementation Theory, Hurwicz Framework.</p></blockquote>
+<h4 id="performancetrustexpressiveness-tradeoff">Performance–Trust–Expressiveness Tradeoff<a hidden class="anchor" aria-hidden="true" href="#performancetrustexpressiveness-tradeoff">#</a></h4>
+<p>No single technology dominates all three dimensions:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left"></th>
+          <th style="text-align: left">Low Trust (good)</th>
+          <th style="text-align: left">High Performance (good)</th>
+          <th style="text-align: left">High Expressiveness (good)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>ZK Proofs</strong></td>
+          <td style="text-align: left">✓ (math only)</td>
+          <td style="text-align: left">✗ (slow proving)</td>
+          <td style="text-align: left">~ (circuit compilation needed)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>FHE</strong></td>
+          <td style="text-align: left">✓ (math only)</td>
+          <td style="text-align: left">✗✗ ($10^4$–$10^5$× overhead)</td>
+          <td style="text-align: left">✓ (any computation)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MPC</strong></td>
+          <td style="text-align: left">~ (threshold trust)</td>
+          <td style="text-align: left">~ (communication overhead)</td>
+          <td style="text-align: left">✓ (any function)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TEE</strong></td>
+          <td style="text-align: left">✗ (hardware trust)</td>
+          <td style="text-align: left">✓✓ (near-native)</td>
+          <td style="text-align: left">✓✓ (run anything, out of the box)</td>
+      </tr>
+  </tbody>
+</table>
+<p>This is why hybrid architectures are emerging as the dominant pattern.</p>
+<h4 id="hybrid-architectures">Hybrid Architectures<a hidden class="anchor" aria-hidden="true" href="#hybrid-architectures">#</a></h4>
+<p>The most sophisticated production systems in 2025–2026 combine multiple technologies:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Combination</th>
+          <th style="text-align: left">How It Works</th>
+          <th style="text-align: left">What It Solves</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>TEE + ZK</strong></td>
+          <td style="text-align: left">Run computation in TEE for speed; periodically generate ZK proof of TEE output as a backstop</td>
+          <td style="text-align: left">TEE speed for real-time, ZK for long-term trustless verification</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MPC + FHE</strong></td>
+          <td style="text-align: left">Use MPC to distribute the FHE decryption key across $n$ parties (threshold decryption)</td>
+          <td style="text-align: left">FHE&rsquo;s &ldquo;who holds the key&rdquo; problem</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>ZK + MPC</strong></td>
+          <td style="text-align: left">Each party holds a share of the witness; collaborative ZK proof generation</td>
+          <td style="text-align: left">Multi-institutional compliance checks where no single entity sees all data</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TEE + MPC</strong></td>
+          <td style="text-align: left">TEE provides fast enclave execution; MPC distributes trust across multiple TEE operators</td>
+          <td style="text-align: left">Reduces single-manufacturer dependency</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>The Nillion model</strong>: orchestrates MPC, FHE, and ZK proofs dynamically depending on computation requirements — selecting the optimal point on the trust–performance spectrum for each sub-task.</p></blockquote>
+<hr>
+<h3 id="connection-to-mechanism-design-and-agent-coordination">Connection to Mechanism Design and Agent Coordination<a hidden class="anchor" aria-hidden="true" href="#connection-to-mechanism-design-and-agent-coordination">#</a></h3>
+<h4 id="computational-trust-as-a-mechanism-design-problem">Computational Trust as a Mechanism Design Problem<a hidden class="anchor" aria-hidden="true" href="#computational-trust-as-a-mechanism-design-problem">#</a></h4>
+<p>Mechanism Design, Implementation Theory, Hurwicz Framework</p>
+<p>The trust spectrum maps directly onto Mechanism Design concepts. Consider a multi-agent system where agents must jointly compute a function (e.g., aggregate preferences, execute a trade, verify a claim):</p>
+<blockquote>
+<p><strong>The mechanism design question</strong>: given that agents may be self-interested (or adversarial), how do you design the computation infrastructure so that the outcome is correct, private, and incentive-compatible?</p></blockquote>
+<p>The answer depends on what you trust:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Trust Basis</th>
+          <th style="text-align: left">IC Requirement</th>
+          <th style="text-align: left">Mechanism Implications</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>ZK proofs</strong></td>
+          <td style="text-align: left">Minimal — math guarantees correctness</td>
+          <td style="text-align: left">Incentives needed only for liveness (who runs the prover?)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MPC</strong></td>
+          <td style="text-align: left">Moderate — threshold honesty assumed</td>
+          <td style="text-align: left">Requires either honest majority or economic incentives (staking, slashing) to keep collusion below threshold</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TEE</strong></td>
+          <td style="text-align: left">High — hardware integrity assumed</td>
+          <td style="text-align: left">Requires reputation systems, hardware audits, attestation verification infrastructure</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Multisig</strong></td>
+          <td style="text-align: left">Maximal — social trust required</td>
+          <td style="text-align: left">Requires governance, legal frameworks, social accountability</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>In the language of Hurwicz Framework: ZK proofs achieve a form of &ldquo;strategy-proofness&rdquo; for the verification step — the verifier has no profitable deviation from honest checking, because the proof is self-certifying. TEE-based systems require additional incentive layers to approximate this property.</p></blockquote>
+<h4 id="agent-trust-and-coordination">Agent Trust and Coordination<a hidden class="anchor" aria-hidden="true" href="#agent-trust-and-coordination">#</a></h4>
+<p>Multi-Agent Systems, Game Theory, Cooperation Theory, Team Theory</p>
+<p>In multi-agent systems, the secure computation trust spectrum maps onto the question: <em>how much can agents trust each other&rsquo;s reported computations?</em></p>
+<p>Consider a setting with $n$ autonomous AI agents that must coordinate (e.g., distributed DeFi protocol, multi-agent supply chain optimisation, federated learning):</p>
+<p><strong>Scenario 1 — ZK-verified agents</strong>: Each agent produces a ZK proof alongside its output, attesting to correct computation. Other agents verify the proof before acting on the output. Trust is minimal — agents need not trust each other, only the proof system. This is analogous to the <strong>verifiable mechanism</strong> concept in Implementation Theory: the mechanism is self-enforcing because deviation is detectable.</p>
+<p><strong>Scenario 2 — TEE-attested agents</strong>: Each agent runs inside a TEE and provides an attestation report. Other agents trust the attestation if they trust the hardware manufacturer. This is analogous to <strong>reputation-based trust</strong> in Repeated Games: the hardware manufacturer&rsquo;s reputation is the enforcement mechanism. But unlike reputation in iterated games, hardware vulnerabilities are discovered discretely and affect all instances simultaneously (correlated failure).</p>
+<p><strong>Scenario 3 — MPC-coordinated agents</strong>: Agents engage in an MPC protocol, each contributing private inputs. Trust is distributed across the threshold. This maps to <strong>team theory</strong> (Marschak-Radner) with private information: agents jointly compute a function under incentive constraints, and the MPC protocol is the communication structure.</p>
+<blockquote>
+<p><strong>The correlated failure problem</strong>: TEEs introduce a unique risk absent in cryptographic approaches — all enclaves from the same manufacturer share the same vulnerability. A single side-channel discovery (e.g., Spectre) compromises <em>every</em> enclave simultaneously. In game-theoretic terms, this is a <strong>common shock</strong> — an exogenous event that correlates agent failures. Mechanism designers must account for this correlated structure when designing fallback systems. See Correlated Equilibrium, Common Knowledge.</p></blockquote>
+<h4 id="verification-layers-for-autonomous-agents">Verification Layers for Autonomous Agents<a hidden class="anchor" aria-hidden="true" href="#verification-layers-for-autonomous-agents">#</a></h4>
+<p>Verifiable AI, AI Safety, Multi-Agent Safety</p>
+<p>For autonomous AI agents operating on-chain, the trust spectrum becomes a <strong>verification architecture</strong> question:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Layer</th>
+          <th style="text-align: left">Technology</th>
+          <th style="text-align: left">What It Verifies</th>
+          <th style="text-align: left">Latency</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Real-time</strong></td>
+          <td style="text-align: left">TEE attestation</td>
+          <td style="text-align: left">&ldquo;Agent is running claimed model on genuine hardware&rdquo;</td>
+          <td style="text-align: left">Milliseconds</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Periodic</strong></td>
+          <td style="text-align: left">ZK proof of execution</td>
+          <td style="text-align: left">&ldquo;Agent&rsquo;s outputs are consistent with claimed model and inputs&rdquo;</td>
+          <td style="text-align: left">Minutes–hours</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Post-hoc</strong></td>
+          <td style="text-align: left">Fraud proof (optimistic)</td>
+          <td style="text-align: left">&ldquo;No validator has contested the agent&rsquo;s outputs within the challenge window&rdquo;</td>
+          <td style="text-align: left">Days</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Audit</strong></td>
+          <td style="text-align: left">Full re-execution + MPC</td>
+          <td style="text-align: left">&ldquo;Independent parties jointly verified the computation with private inputs&rdquo;</td>
+          <td style="text-align: left">Offline</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>Design principle</strong>: layer faster-but-weaker guarantees (TEE) with slower-but-stronger guarantees (ZK), creating a <strong>defense-in-depth</strong> for agent trust. This is the mechanism design analogue of combining screening and monitoring in Principal-Agent Problems — the principal uses cheap, noisy monitoring (TEE attestation) for real-time oversight and expensive, precise auditing (ZK proofs) for periodic verification.</p></blockquote>
+<h4 id="trust-spectrum-and-cooperation-theory">Trust Spectrum and Cooperation Theory<a hidden class="anchor" aria-hidden="true" href="#trust-spectrum-and-cooperation-theory">#</a></h4>
+<p>Cooperation Theory, Evolutionary Game Theory, Signaling Theory</p>
+<p>The trust technologies we&rsquo;ve examined can be understood through the lens of Cooperation Theory — specifically, as different solutions to the <strong>cooperation problem</strong> in multi-agent systems:</p>
+<blockquote>
+<p>How do you sustain cooperation when agents have private information, conflicting incentives, and the ability to defect?</p></blockquote>
+<p>Each technology corresponds to a different cooperation-enforcement mechanism:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Trust Technology</th>
+          <th style="text-align: left">Cooperation Mechanism</th>
+          <th style="text-align: left">Game-Theoretic Analogue</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>ZK Proofs</strong></td>
+          <td style="text-align: left">Verifiable commitment</td>
+          <td style="text-align: left">Costly signaling (Spence Signaling): the proof is a hard-to-forge signal of honest behavior. Producing a valid ZK proof is computationally expensive, creating a natural separation between honest and dishonest agents.</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TEE</strong></td>
+          <td style="text-align: left">Delegated enforcement</td>
+          <td style="text-align: left">Third-party arbitrator: Intel/AMD acts as an external enforcement mechanism, similar to a court in contract theory. The failure mode is that the &ldquo;court&rdquo; itself may be compromised.</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MPC</strong></td>
+          <td style="text-align: left">Distributed trust / mutual verification</td>
+          <td style="text-align: left">Conditional cooperation in Repeated Games: agents cooperate because they each hold a piece of the puzzle, and unilateral defection is detectable.</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Multisig</strong></td>
+          <td style="text-align: left">Social enforcement</td>
+          <td style="text-align: left">Ostrom&rsquo;s commons governance (Elinor Ostrom): cooperation sustained by social norms, reputation, and graduated sanctions among a known group.</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p><strong>The deep connection</strong>: ZK proofs are the cryptographic analogue of <strong>credible commitment</strong> in game theory. Just as Schelling&rsquo;s commitment devices make defection physically impossible (burning bridges), a ZK proof makes false claims mathematically impossible. TEEs are a weaker commitment device — they make false claims <em>hardware-costly</em> rather than impossible. MPC distributes the commitment across agents, making defection require collusion. Each maps to a different equilibrium concept: ZK → dominant strategy; TEE → Nash equilibrium (with hardware assumptions); MPC → correlated equilibrium with threshold constraints.</p></blockquote>
+<hr>
+<h3 id="blockchain-applications-of-tees">Blockchain Applications of TEEs<a hidden class="anchor" aria-hidden="true" href="#blockchain-applications-of-tees">#</a></h3>
+<h4 id="private-smart-contracts">Private Smart Contracts<a hidden class="anchor" aria-hidden="true" href="#private-smart-contracts">#</a></h4>
+<p>Secret Network, Oasis Network, Phala Network</p>
+<p>Secret Network was the first blockchain to implement private smart contracts via TEEs. Using Intel SGX, it enables &ldquo;Secret Contracts&rdquo; where contract logic, inputs, outputs, and state are hidden from node operators. Only addresses are visible on-chain.</p>
+<p><strong>Architecture</strong>: Each validator runs an SGX enclave. Contract state is encrypted with keys managed by a distributed Key Management Committee (KMC). If a KMC node is compromised, its access can be revoked through governance. Short-term keys are rotated frequently to limit breach impact.</p>
+<p><strong>Tradeoff vs. ZK private contracts</strong> (e.g., Aztec Network): TEE-based privacy runs at near-native speed and supports arbitrary contract logic today. ZK-based privacy is slower and requires circuit compilation, but doesn&rsquo;t depend on hardware trust. Long-term, ZK is likely to prevail as zkEVMs mature.</p>
+<h4 id="cross-chain-bridges">Cross-Chain Bridges<a hidden class="anchor" aria-hidden="true" href="#cross-chain-bridges">#</a></h4>
+<p>Traditional bridges use multisig committees — a social trust model with known failure modes (Ronin: $625M, Wormhole: $320M). TEE-secured bridges place signing keys and validation logic inside enclaves, reducing the trust assumption from &ldquo;M-of-N humans are honest&rdquo; to &ldquo;the enclave hardware is uncompromised.&rdquo; This is a strict improvement on the trust spectrum, though not as strong as ZK-verified bridges (which are still largely in development).</p>
+<h4 id="oracle-networks">Oracle Networks<a hidden class="anchor" aria-hidden="true" href="#oracle-networks">#</a></h4>
+<p>Chainlink, Town Crier</p>
+<p>Oracles deliver off-chain data to smart contracts. TEEs (specifically Town Crier, which influenced Chainlink&rsquo;s design) ensure that the data feed is fetched and delivered inside an enclave — the oracle operator cannot tamper with the data between source and chain. Attestation proves the data came from the claimed HTTPS endpoint.</p>
+<h4 id="confidential-ai-inference">Confidential AI Inference<a hidden class="anchor" aria-hidden="true" href="#confidential-ai-inference">#</a></h4>
+<p>NVIDIA Confidential Computing, Verifiable AI</p>
+<p>NVIDIA&rsquo;s Hopper and Blackwell GPUs include confidential computing enclaves, enabling private ML inference: the model weights stay encrypted in GPU memory, inputs are encrypted in transit, and the inference runs inside the enclave. This is orders of magnitude faster than proving the same inference in a ZK circuit (which is currently infeasible for large models).</p>
+<blockquote>
+<p><strong>TEE + ZK hybrid for AI</strong>: Run inference in a GPU enclave for speed; generate a ZK proof that the TEE&rsquo;s output is consistent with the attested model for trustless verification. This is the emerging architecture for verifiable AI agents.</p></blockquote>
+<hr>
+<h3 id="critical-pitfalls--warnings">Critical Pitfalls &amp; Warnings<a hidden class="anchor" aria-hidden="true" href="#critical-pitfalls--warnings">#</a></h3>
+<h4 id="tees-are-necessary-but-not-sufficient">TEEs Are Necessary But Not Sufficient<a hidden class="anchor" aria-hidden="true" href="#tees-are-necessary-but-not-sufficient">#</a></h4>
+<blockquote>
+<p>TEEs provide <em>conditional</em> security — they work if the hardware is uncompromised. ZK proofs provide <em>unconditional</em> computational security — they work regardless of the hardware.</p></blockquote>
+<p>A system that relies solely on TEEs inherits every past and future vulnerability of the underlying silicon. This is an irreducible risk that cannot be mitigated by software — the WireTap attack (CCS 2025) demonstrated a physical DRAM bus interposition that no firmware patch can fix.</p>
+<h4 id="attestation--trust">Attestation ≠ Trust<a hidden class="anchor" aria-hidden="true" href="#attestation--trust">#</a></h4>
+<p>Attestation proves the enclave is running specific code on genuine hardware. It does <em>not</em> prove:</p>
+<ul>
+<li>The code itself is bug-free or correct.</li>
+<li>The hardware has no undiscovered vulnerabilities.</li>
+<li>The manufacturer has not been coerced into providing backdoor access.</li>
+<li>The attestation key has not been extracted (as in SGAxe).</li>
+</ul>
+<blockquote>
+<p><strong>Analogy to Signaling Theory</strong>: attestation is a <em>signal</em>, not a <em>proof</em>. Its credibility depends on the signaler&rsquo;s (manufacturer&rsquo;s) incentives and the cost of forgery. When the cost of forgery decreases (via discovered vulnerabilities), the signal&rsquo;s informativeness degrades — a standard result from Spence Signaling models.</p></blockquote>
+<h4 id="the-correlated-failure-risk">The Correlated Failure Risk<a hidden class="anchor" aria-hidden="true" href="#the-correlated-failure-risk">#</a></h4>
+<p>All Intel SGX enclaves share the same silicon design. A single vulnerability discovery affects every deployed enclave simultaneously. This is unlike MPC (where failure requires independent corruption of $t$ parties) or ZK (where failure requires breaking a mathematical assumption).</p>
+<p>In mechanism design terms: TEE failures are <strong>correlated shocks</strong>, not independent failures. Systems built on TEEs must have fallback mechanisms (ZK proof generation, optimistic challenge windows, MPC-based key recovery) that activate when the hardware trust assumption is violated.</p>
+<hr>
+<h3 id="summary-choosing-the-right-trust-model">Summary: Choosing the Right Trust Model<a hidden class="anchor" aria-hidden="true" href="#summary-choosing-the-right-trust-model">#</a></h3>
+<p>The choice of secure computation technology is ultimately a mechanism design decision:</p>
+<ol>
+<li><strong>What is the cost of failure?</strong> High-stakes systems (bridges, custody, AI agent verification) should layer multiple trust bases.</li>
+<li><strong>What is the latency budget?</strong> Real-time systems (DeFi, gaming) may need TEE for speed, with ZK as a periodic backstop.</li>
+<li><strong>What is the threat model?</strong> Nation-state adversaries can compromise hardware supply chains; pure-crypto approaches (ZK, FHE) are more robust here.</li>
+<li><strong>What is the coordination structure?</strong> Multi-party settings naturally suit MPC; single-prover settings suit ZK or TEE.</li>
+<li><strong>What is the quantum timeline?</strong> Long-lived systems should prefer hash-based (STARKs) or lattice-based (FHE) constructions.</li>
+</ol>
+<blockquote>
+<p><strong>The emerging consensus</strong>: no single technology suffices. The future of secure computation is compositional — hybrid architectures that select the optimal trust–performance point for each sub-computation. The mechanism designer&rsquo;s job is to structure these compositions so that the overall system is incentive-compatible, resilient to correlated failures, and auditable across trust boundaries.</p></blockquote>
+<p>See Zero Knowledge Proofs, Mechanism Design, Implementation Theory, Multi-Agent Systems, Cooperation Theory, Signaling Theory, Hurwicz Framework, Team Theory, Elliptic Curve Cryptography, Lattice-Based Cryptography, Intel SGX, ARM TrustZone, Secret Network, Oasis Network.</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

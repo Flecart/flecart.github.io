@@ -7,7 +7,19 @@
 <meta name="robots" content="index, follow">
 <title>Reflection | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="programming-languages">
-<meta name="description" content="Reflection - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="What is Reflection?
+Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the base level (the application logic) and the meta level (objects representing the program itself).
+
+Core Concepts
+
+Introspection: The program can observe its own type information at run time.
+Intercession (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields).
+Reflective Code Generation: Creating executable code from data structures at run time.
+
+
+
+8.1 Introspection
+Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the Class object.">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/reflection/">
@@ -93,7 +105,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/reflection/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Reflection">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="What is Reflection? Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the base level (the application logic) and the meta level (objects representing the program itself).
+Core Concepts Introspection: The program can observe its own type information at run time. Intercession (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields). Reflective Code Generation: Creating executable code from data structures at run time. 8.1 Introspection Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the Class object.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -104,7 +117,19 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Reflection">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="What is Reflection?
+Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the base level (the application logic) and the meta level (objects representing the program itself).
+
+Core Concepts
+
+Introspection: The program can observe its own type information at run time.
+Intercession (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields).
+Reflective Code Generation: Creating executable code from data structures at run time.
+
+
+
+8.1 Introspection
+Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the Class object.">
 
 
 <script type="application/ld+json">
@@ -133,12 +158,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Reflection",
   "name": "Reflection",
-  "description": "",
+  "description": "What is Reflection? Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the base level (the application logic) and the meta level (objects representing the program itself).\nCore Concepts Introspection: The program can observe its own type information at run time. Intercession (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields). Reflective Code Generation: Creating executable code from data structures at run time. 8.1 Introspection Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the Class object.\n",
   "keywords": [
     "programming-languages"
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "What is Reflection? Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the base level (the application logic) and the meta level (objects representing the program itself).\nCore Concepts Introspection: The program can observe its own type information at run time. Intercession (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields). Reflective Code Generation: Creating executable code from data structures at run time. 8.1 Introspection Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the Class object.\nObtaining Class Objects There are three main ways to get a Class object in Java:\nObject instance: myObject.getClass() Class literal: String.class String name: Class.forName(\"java.lang.String\") (Can throw runtime errors) Inspecting Members Once you have the Class object, you can retrieve its members.\ngetMethods() / getFields(): Returns public members (including inherited ones). getDeclaredMethods() / getDeclaredFields(): Returns all members declared in the class (including private ones, but excluding inherited ones). [cite_start]Safety \u0026 Access: To access private members, you must suppress Java’s access checking using setAccessible(true)[cite: 147]. This breaks information hiding and encapsulation.\nExample: Universal toString A generic toString method can be written using reflection to iterate over all fields of any object.\npublic static String getString(Object o) { if (o == null) return \"null\"; Class c = o.getClass(); // We use getDeclaredFields to see private state Field[] fields = c.getDeclaredFields(); for (Field f : fields) { if (!Modifier.isStatic(f.getModifiers())) { f.setAccessible(true); // Bypass private check // ... read value ... } } } Safety checks (like IllegalAccessException) are moved from compile time to run time1111.\nDynamic Invocation (Unit Testing) Reflection allows invoking methods when their names are not known at compile time.\nMechanism: Method.invoke(Object receiver, Object... args)2. Use Case (JUnit): Test drivers can find all methods starting with “test” and invoke them dynamically. This decouples the test runner from the specific test classes3. Reflective Visitor Pattern Standard Visitor relies on accept methods in every element class. The Reflective Visitor uses introspection to dispatch calls, removing the need for accept4444.\nMechanism: The visitor constructs the method name dynamically based on the element’s class. // \"magic\" string construction String name = \"visit\" + e.getClass().getName(); Method m = this.getClass().getMethod(name, e.getClass()); m.invoke(this, e); Pros: Simpler code in element classes, flexible lookup. Cons: Not statically safe (runtime crash if method missing), slower performance. Generics and Erasure Due to Java’s erasure semantics, generic type parameters are not available via reflection on instances.\nExample: You cannot distinguish List from List at runtime. getMethod(\"add\", String.class) will fail on a List because the compiled method signature expects Object, not String8888. 8.2 Reflective Code Generation This involves creating executable code from data structures at runtime9.\nWhy Reflection? If code is represented as data, programs can create code from data. This allows adapting the program to user input or the environment (e.g., generating a specific SQL query based on a user filter)10.\nC# Expression Trees In C#, code (specifically lambda expressions) can be treated as data structures called Expression Trees11.\nStructure: Trees composed of BinaryExpression (operators), ParameterExpression (variables), etc.12. Compilation: A .Compile() method turns the tree data structure into executable code (a delegate) at runtime. // Builds the tree for: x \u003c c Expression.Lambda\u003cFunc\u003cint, bool\u003e\u003e( Expression.LessThan(lhs, ce), // The binary expression node new ParameterExpression[] { lhs } ).Compile(); // Transforms tree -\u003e executable function 8.3 Dynamic Code Manipulation This refers to modifying the structure of a program (adding/removing methods) while it is running14.\nPython Example Dynamic languages like Python allow extensive manipulation (“Intercession”).\nMonkey Patching: You can replace methods on a class at runtime15. Example: A generic wrapper can be applied to all methods of a class to make them case-insensitive16. Mechanism: Methods can be added, exchanged, or deleted using setattr and del17171717. # Injecting a new method into a class at runtime def new_method(self): return \"patched\" setattr(MyClass, \"method_name\", new_method) Reflection and Type Checking Degree of Reflection Type Checking Implications Introspection Code is type-checked once during compilation (though Class.forName is a runtime check)18. Reflective Code Generation Code is type-checked once when it is created (runtime compilation)19. Dynamic Code Manipulation Typically requires dynamic type checking as types change during execution20. Summary: Pros and Cons Benefits (Applications) Drawbacks Flexibility: Plug-ins, dynamic architectures21. No Static Safety: Type errors occur at runtime (exceptions)22. Serialization: Persisting objects generically23. Performance: Reflection is slower than direct calls24. Testing: Generic test drivers (JUnit)25. Complexity: Code is harder to understand, debug, and maintain26. Design Patterns: Simplifies patterns like Visitor27. Breaks Encapsulation: Can access private fields28. ",
+  "wordCount" : "755",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-12-06T00:00:00Z",
   "dateModified": "2025-12-06T00:00:00Z",
@@ -233,12 +258,220 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Reflection
     </h1>
-    <div class="post-meta"><span title='2025-12-06 00:00:00 +0000 UTC'>December 6, 2025</span>&nbsp;·&nbsp;Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta"><span title='2025-12-06 00:00:00 +0000 UTC'>December 6, 2025</span>&nbsp;·&nbsp;Reading Time: 4 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#what-is-reflection" aria-label="What is Reflection?">What is Reflection?</a></li>
+                <li>
+                    <a href="#core-concepts" aria-label="Core Concepts">Core Concepts</a></li></ul>
+                    
+                <li>
+                    <a href="#81-introspection" aria-label="8.1 Introspection">8.1 Introspection</a><ul>
+                        
+                <li>
+                    <a href="#obtaining-class-objects" aria-label="Obtaining Class Objects">Obtaining Class Objects</a></li>
+                <li>
+                    <a href="#inspecting-members" aria-label="Inspecting Members">Inspecting Members</a></li>
+                <li>
+                    <a href="#example-universal-tostring" aria-label="Example: Universal toString">Example: Universal toString</a></li>
+                <li>
+                    <a href="#dynamic-invocation-unit-testing" aria-label="Dynamic Invocation (Unit Testing)">Dynamic Invocation (Unit Testing)</a></li>
+                <li>
+                    <a href="#reflective-visitor-pattern" aria-label="Reflective Visitor Pattern">Reflective Visitor Pattern</a></li>
+                <li>
+                    <a href="#generics-and-erasure" aria-label="Generics and Erasure">Generics and Erasure</a></li></ul>
+                </li>
+                <li>
+                    <a href="#82-reflective-code-generation" aria-label="8.2 Reflective Code Generation">8.2 Reflective Code Generation</a><ul>
+                        
+                <li>
+                    <a href="#why-reflection" aria-label="Why Reflection?">Why Reflection?</a></li>
+                <li>
+                    <a href="#c-expression-trees" aria-label="C# Expression Trees">C# Expression Trees</a></li></ul>
+                </li>
+                <li>
+                    <a href="#83-dynamic-code-manipulation" aria-label="8.3 Dynamic Code Manipulation">8.3 Dynamic Code Manipulation</a><ul>
+                        
+                <li>
+                    <a href="#python-example" aria-label="Python Example">Python Example</a></li></ul>
+                </li>
+                <li>
+                    <a href="#reflection-and-type-checking" aria-label="Reflection and Type Checking">Reflection and Type Checking</a><ul>
+                        
+                <li>
+                    <a href="#summary-pros-and-cons" aria-label="Summary: Pros and Cons">Summary: Pros and Cons</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h4 id="what-is-reflection">What is Reflection?<a hidden class="anchor" aria-hidden="true" href="#what-is-reflection">#</a></h4>
+<p>Reflection enables a program to observe and modify its own structure and behavior. t bridges the gap between the <strong>base level</strong> (the application logic) and the <strong>meta level</strong> (objects representing the program itself).</p>
+<!--SR:!2025-12-19,9,250-->
+<h4 id="core-concepts">Core Concepts<a hidden class="anchor" aria-hidden="true" href="#core-concepts">#</a></h4>
+<ul>
+<li><strong>Introspection</strong>: The program can observe its own type information at run time.</li>
+<li><strong>Intercession</strong> (Dynamic Manipulation): The program can modify its own structure and behavior (e.g., adding methods, changing fields).</li>
+<li><strong>Reflective Code Generation</strong>: Creating executable code from data structures at run time.</li>
+</ul>
+<!--SR:!2025-12-12,2,230-->
+<hr>
+<h3 id="81-introspection"><strong>8.1 Introspection</strong><a hidden class="anchor" aria-hidden="true" href="#81-introspection">#</a></h3>
+<p>Introspection is the ability to examine the runtime type of an object. The entry point for this in Java is the <code>Class</code> object.</p>
+<h4 id="obtaining-class-objects">Obtaining Class Objects<a hidden class="anchor" aria-hidden="true" href="#obtaining-class-objects">#</a></h4>
+<p>There are three main ways to get a <code>Class</code> object in Java:</p>
+<ol>
+<li><strong>Object instance</strong>: <code>myObject.getClass()</code></li>
+<li><strong>Class literal</strong>: <code>String.class</code></li>
+<li><strong>String name</strong>: <code>Class.forName(&quot;java.lang.String&quot;)</code> (Can throw runtime errors)</li>
+</ol>
+<!--SR:!2025-12-12,2,230-->
+<h4 id="inspecting-members"><strong>Inspecting Members</strong><a hidden class="anchor" aria-hidden="true" href="#inspecting-members">#</a></h4>
+<p>Once you have the <code>Class</code> object, you can retrieve its members.</p>
+<ul>
+<li><code>getMethods()</code> / <code>getFields()</code>: Returns <strong>public</strong> members (including inherited ones).</li>
+<li><code>getDeclaredMethods()</code> / <code>getDeclaredFields()</code>: Returns <strong>all</strong> members declared in the class (including private ones, but <em>excluding</em> inherited ones).</li>
+</ul>
+<!--SR:!2025-12-12,2,230-->
+<blockquote>
+<p>[cite_start]<strong>Safety &amp; Access</strong>: To access private members, you must suppress Java&rsquo;s access checking using <code>setAccessible(true)</code>[cite: 147]. This breaks information hiding and encapsulation.</p></blockquote>
+<h4 id="example-universal-tostring"><strong>Example: Universal <code>toString</code></strong><a hidden class="anchor" aria-hidden="true" href="#example-universal-tostring">#</a></h4>
+<p>A generic <code>toString</code> method can be written using reflection to iterate over all fields of any object.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getString</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">&#34;null&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Class</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="na">getClass</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// We use getDeclaredFields to see private state</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Field</span><span class="o">[]</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="na">getDeclaredFields</span><span class="p">();</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Field</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">fields</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Modifier</span><span class="p">.</span><span class="na">isStatic</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="na">getModifiers</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">             </span><span class="n">f</span><span class="p">.</span><span class="na">setAccessible</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span><span class="w"> </span><span class="c1">// Bypass private check</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">             </span><span class="c1">// ... read value ...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>Safety checks (like <code>IllegalAccessException</code>) are moved from compile time to run time1111.</p>
+<h4 id="dynamic-invocation-unit-testing"><strong>Dynamic Invocation (Unit Testing)</strong><a hidden class="anchor" aria-hidden="true" href="#dynamic-invocation-unit-testing">#</a></h4>
+<p>Reflection allows invoking methods when their names are not known at compile time.</p>
+<ul>
+<li><strong>Mechanism</strong>: <code>Method.invoke(Object receiver, Object... args)</code>2.</li>
+<li><strong>Use Case (JUnit)</strong>: Test drivers can find all methods starting with &ldquo;test&rdquo; and invoke them dynamically. This decouples the test runner from the specific test classes3.</li>
+</ul>
+<h4 id="reflective-visitor-pattern">Reflective Visitor Pattern<a hidden class="anchor" aria-hidden="true" href="#reflective-visitor-pattern">#</a></h4>
+<p>Standard Visitor relies on accept methods in every element class. The Reflective Visitor uses introspection to dispatch calls, removing the need for accept4444.</p>
+<ul>
+<li><strong>Mechanism</strong>: The visitor constructs the method name dynamically based on the element&rsquo;s class.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// &#34;magic&#34; string construction</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;visit&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Method</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getMethod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getClass</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">m</span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div></li>
+</ul>
+<!--SR:!2025-12-21,11,270-->
+<ul>
+<li><strong>Pros</strong>: Simpler code in element classes, flexible lookup.</li>
+<li><strong>Cons</strong>: Not statically safe (runtime crash if method missing), slower performance.</li>
+</ul>
+<h4 id="generics-and-erasure">Generics and Erasure<a hidden class="anchor" aria-hidden="true" href="#generics-and-erasure">#</a></h4>
+<p>Due to Java&rsquo;s erasure semantics, generic type parameters are <strong>not</strong> available via reflection on instances.</p>
+<ul>
+<li>Example: You cannot distinguish <code>List&lt;String&gt;</code> from <code>List&lt;Integer&gt;</code> at runtime.</li>
+<li><code>getMethod(&quot;add&quot;, String.class)</code> will fail on a <code>List&lt;String&gt;</code> because the compiled method signature expects <code>Object</code>, not <code>String</code>8888.</li>
+</ul>
+<!--SR:!2025-12-19,9,250-->
+<h3 id="82-reflective-code-generation"><strong>8.2 Reflective Code Generation</strong><a hidden class="anchor" aria-hidden="true" href="#82-reflective-code-generation">#</a></h3>
+<p>This involves creating executable code from data structures at runtime9.</p>
+<h4 id="why-reflection">Why Reflection?<a hidden class="anchor" aria-hidden="true" href="#why-reflection">#</a></h4>
+<p>If code is represented as data, programs can create code from data. This allows adapting the program to user input or the environment (e.g., generating a specific SQL query based on a user filter)10.</p>
+<!--SR:!2025-12-19,9,250-->
+<h4 id="c-expression-trees">C# Expression Trees<a hidden class="anchor" aria-hidden="true" href="#c-expression-trees">#</a></h4>
+<p>In C#, code (specifically lambda expressions) can be treated as data structures called <strong>Expression Trees</strong>11.</p>
+<ul>
+<li><strong>Structure</strong>: Trees composed of <code>BinaryExpression</code> (operators), <code>ParameterExpression</code> (variables), etc.12.</li>
+<li><strong>Compilation</strong>: A <code>.Compile()</code> method turns the tree data structure into executable code (a delegate) at runtime.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="c1">// Builds the tree for: x &lt; c</span>
+</span></span><span class="line"><span class="cl"><span class="n">Expression</span><span class="p">.</span><span class="n">Lambda</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Expression</span><span class="p">.</span><span class="n">LessThan</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">ce</span><span class="p">),</span> <span class="c1">// The binary expression node</span>
+</span></span><span class="line"><span class="cl">    <span class="k">new</span> <span class="n">ParameterExpression</span><span class="p">[]</span> <span class="p">{</span> <span class="n">lhs</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">).</span><span class="n">Compile</span><span class="p">();</span> <span class="c1">// Transforms tree -&gt; executable function</span>
+</span></span></code></pre></div><hr>
+<h3 id="83-dynamic-code-manipulation"><strong>8.3 Dynamic Code Manipulation</strong><a hidden class="anchor" aria-hidden="true" href="#83-dynamic-code-manipulation">#</a></h3>
+<p>This refers to modifying the structure of a program (adding/removing methods) while it is running14.</p>
+<h4 id="python-example"><strong>Python Example</strong><a hidden class="anchor" aria-hidden="true" href="#python-example">#</a></h4>
+<p>Dynamic languages like Python allow extensive manipulation (&ldquo;Intercession&rdquo;).</p>
+<ul>
+<li><strong>Monkey Patching</strong>: You can replace methods on a class at runtime15.</li>
+<li><em>Example</em>: A generic wrapper can be applied to all methods of a class to make them case-insensitive16.</li>
+<li><strong>Mechanism</strong>: Methods can be added, exchanged, or deleted using <code>setattr</code> and <code>del</code>17171717.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Injecting a new method into a class at runtime</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">new_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&#34;patched&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">setattr</span><span class="p">(</span><span class="n">MyClass</span><span class="p">,</span> <span class="s2">&#34;method_name&#34;</span><span class="p">,</span> <span class="n">new_method</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="reflection-and-type-checking"><strong>Reflection and Type Checking</strong><a hidden class="anchor" aria-hidden="true" href="#reflection-and-type-checking">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Degree of Reflection</strong></th>
+          <th><strong>Type Checking Implications</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Introspection</strong></td>
+          <td>Code is type-checked once during compilation (though <code>Class.forName</code> is a runtime check)18.</td>
+      </tr>
+      <tr>
+          <td><strong>Reflective Code Generation</strong></td>
+          <td>Code is type-checked once <strong>when it is created</strong> (runtime compilation)19.</td>
+      </tr>
+      <tr>
+          <td><strong>Dynamic Code Manipulation</strong></td>
+          <td>Typically requires <strong>dynamic type checking</strong> as types change during execution20.</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="summary-pros-and-cons">Summary: Pros and Cons<a hidden class="anchor" aria-hidden="true" href="#summary-pros-and-cons">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Benefits (Applications)</strong></th>
+          <th><strong>Drawbacks</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Flexibility</strong>: Plug-ins, dynamic architectures21.</td>
+          <td><strong>No Static Safety</strong>: Type errors occur at runtime (exceptions)22.</td>
+      </tr>
+      <tr>
+          <td><strong>Serialization</strong>: Persisting objects generically23.</td>
+          <td><strong>Performance</strong>: Reflection is slower than direct calls24.</td>
+      </tr>
+      <tr>
+          <td><strong>Testing</strong>: Generic test drivers (JUnit)25.</td>
+          <td><strong>Complexity</strong>: Code is harder to understand, debug, and maintain26.</td>
+      </tr>
+      <tr>
+          <td><strong>Design Patterns</strong>: Simplifies patterns like Visitor27.</td>
+          <td><strong>Breaks Encapsulation</strong>: Can access private fields28.</td>
+      </tr>
+  </tbody>
+</table>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">

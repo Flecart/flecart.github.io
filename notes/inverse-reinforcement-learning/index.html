@@ -7,7 +7,12 @@
 <meta name="robots" content="index, follow">
 <title>Inverse Reinforcement Learning | X. Angelo Huang&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Inverse Reinforcement Learning - X. Angelo Huang&#39;s Blog">
+<meta name="description" content="Bayesian Inverse Reinforcement Learning (BIRL)
+Background: The IRL Problem Setup
+Inverse Reinforcement Learning sits at the intersection of Reinforcement Learning, Bayesian Inference, and Imitation Learning. The core question is: given observed expert behavior, what reward function is the expert optimizing? This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally ill-posed.
+The IRL Problem Definition
+
+IRL: Given an MDP without a reward function $\mathcal{M} \setminus R = \langle \mathcal{S}, \mathcal{A}, T, \gamma \rangle$ and a set of expert demonstrations $\mathcal{D} = \{(s_i, a_i)\}$, recover the reward function $R : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ the expert is (approximately) optimizing.">
 <meta name="author" content="
 By Xuanqiang Angelo Huang">
 <link rel="canonical" href="https://flecart.github.io/notes/inverse-reinforcement-learning/">
@@ -93,7 +98,8 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
       </script><meta property="og:url" content="https://flecart.github.io/notes/inverse-reinforcement-learning/">
   <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
   <meta property="og:title" content="Inverse Reinforcement Learning">
-  <meta property="og:description" content="Here I write and share about interesting topics I learn.">
+  <meta property="og:description" content="Bayesian Inverse Reinforcement Learning (BIRL) Background: The IRL Problem Setup Inverse Reinforcement Learning sits at the intersection of Reinforcement Learning, Bayesian Inference, and Imitation Learning. The core question is: given observed expert behavior, what reward function is the expert optimizing? This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally ill-posed.
+The IRL Problem Definition IRL: Given an MDP without a reward function $\mathcal{M} \setminus R = \langle \mathcal{S}, \mathcal{A}, T, \gamma \rangle$ and a set of expert demonstrations $\mathcal{D} = \{(s_i, a_i)\}$, recover the reward function $R : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ the expert is (approximately) optimizing.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -101,7 +107,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
 <meta name="twitter:title" content="Inverse Reinforcement Learning">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Bayesian Inverse Reinforcement Learning (BIRL)
+Background: The IRL Problem Setup
+Inverse Reinforcement Learning sits at the intersection of Reinforcement Learning, Bayesian Inference, and Imitation Learning. The core question is: given observed expert behavior, what reward function is the expert optimizing? This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally ill-posed.
+The IRL Problem Definition
+
+IRL: Given an MDP without a reward function $\mathcal{M} \setminus R = \langle \mathcal{S}, \mathcal{A}, T, \gamma \rangle$ and a set of expert demonstrations $\mathcal{D} = \{(s_i, a_i)\}$, recover the reward function $R : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ the expert is (approximately) optimizing.">
 
 
 <script type="application/ld+json">
@@ -130,12 +141,12 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
   "@type": "BlogPosting",
   "headline": "Inverse Reinforcement Learning",
   "name": "Inverse Reinforcement Learning",
-  "description": "",
+  "description": "Bayesian Inverse Reinforcement Learning (BIRL) Background: The IRL Problem Setup Inverse Reinforcement Learning sits at the intersection of Reinforcement Learning, Bayesian Inference, and Imitation Learning. The core question is: given observed expert behavior, what reward function is the expert optimizing? This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally ill-posed.\nThe IRL Problem Definition IRL: Given an MDP without a reward function $\\mathcal{M} \\setminus R = \\langle \\mathcal{S}, \\mathcal{A}, T, \\gamma \\rangle$ and a set of expert demonstrations $\\mathcal{D} = \\{(s_i, a_i)\\}$, recover the reward function $R : \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R}$ the expert is (approximately) optimizing.\n",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Bayesian Inverse Reinforcement Learning (BIRL) Background: The IRL Problem Setup Inverse Reinforcement Learning sits at the intersection of Reinforcement Learning, Bayesian Inference, and Imitation Learning. The core question is: given observed expert behavior, what reward function is the expert optimizing? This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally ill-posed.\nThe IRL Problem Definition IRL: Given an MDP without a reward function $\\mathcal{M} \\setminus R = \\langle \\mathcal{S}, \\mathcal{A}, T, \\gamma \\rangle$ and a set of expert demonstrations $\\mathcal{D} = \\{(s_i, a_i)\\}$, recover the reward function $R : \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R}$ the expert is (approximately) optimizing.\nFormally, the full MDP is $\\mathcal{M} = \\langle \\mathcal{S}, \\mathcal{A}, T, R, \\gamma \\rangle$ where:\n$T(s, a, s') = P(s' \\mid s, a)$ is the known transition model $R$ is unknown and is what we want to learn $\\gamma \\in [0,1)$ is the discount factor $\\mathcal{D}$ contains state-action pairs from an expert following policy $\\pi_E$ The Ill-Posedness Problem IRL is fundamentally ill-posed: many distinct reward functions explain the same observed behavior, including the degenerate $R \\equiv 0$.\nThe three classical approaches to resolving this ambiguity are:\nMethod Core Idea Ambiguity Resolution Margin-based (Ng \u0026 Russell 2000, Abbeel \u0026 Ng 2004) Find $R$ s.t. $\\pi_E$ beats all other $\\pi$ by a margin Max-margin bias; introduces artificial preference MaxEnt IRL (Ziebart et al. 2008) Choose $R$ inducing the maximum-entropy trajectory distribution Minimally committed solution; distributional, not point Bayesian IRL (Ramachandran \u0026 Amir 2007) Place a prior over reward functions; compute the posterior Principled uncertainty quantification; no optimality assumption The focus of these notes is the Bayesian approach. The key motivation: MAP and MLE methods collapse all probability mass on a single reward function, which is brittle when data is scarce. BIRL maintains a full distribution over $R$.\nThe Bayesian Formulation BIRL Model: Core Inference Setup The key ingredients mirror Bayesian Linear Regression exactly — prior, likelihood, posterior — but now the unknown is a reward function rather than a weight vector.\n$$ \\underbrace{p(R \\mid \\mathcal{D})}_{\\text{posterior}} \\propto \\underbrace{p(\\mathcal{D} \\mid R)}_{\\text{likelihood}} \\cdot \\underbrace{p(R)}_{\\text{prior}} $$ Hypothesis: $R$ is the reward function explaining $\\pi_E$’s behavior Evidence: $\\mathcal{D} = \\{(s_i, a_i)\\}_{i=1}^N$, the observed expert state-action pairs Prior $p(R)$: encodes prior belief about reward structure (e.g., uniform, Gaussian, Laplacian) Posterior $p(R \\mid \\mathcal{D})$: updated belief after seeing demonstrations The normalizing constant $Z = \\int p(\\mathcal{D} \\mid R) p(R) \\, dR$ is typically intractable in closed form — this is the central computational challenge that drives the algorithmic design.\nThe Boltzmann Rationality Likelihood To define $p(\\mathcal{D} \\mid R)$ we need a probabilistic model of the expert. The standard assumption is Boltzmann (softmax) rationality: the expert is not perfectly optimal but acts with probability proportional to the exponentiated Q-value.\n$$ p(a \\mid s, R) = \\frac{\\exp(\\beta \\cdot Q^*(s, a; R))}{\\sum_{a' \\in \\mathcal{A}} \\exp(\\beta \\cdot Q^*(s, a'; R))} $$where:\n$Q^*(s, a; R)$ is the optimal Q-function under reward $R$, i.e. $Q^*(s,a;R) = R(s,a) + \\gamma \\sum_{s'} T(s,a,s') V^*(s'; R)$ $\\beta \\in [0, \\infty)$ is the inverse temperature (confidence in expert optimality): $\\beta \\to \\infty$ means perfectly optimal expert, $\\beta \\to 0$ means random policy $$ p(\\mathcal{D} \\mid R) = \\prod_{(s_i, a_i) \\in \\mathcal{D}} \\frac{\\exp(\\beta \\cdot Q^*(s_i, a_i; R))}{\\sum_{a'} \\exp(\\beta \\cdot Q^*(s_i, a'; R))} $$Warning: This requires solving the forward RL problem (computing $Q^*$) for every candidate $R$ — this is the expensive inner-loop that makes naive BIRL computationally intensive.\nConnection to Classical IRL as a Special Case The original IRL of Ng \u0026 Russell (2000) is a special case of BIRL with a Laplacian prior on rewards. Ramachandran \u0026 Amir (2007) show this directly.\n$$ \\hat{R}_{\\text{MAP}} = \\arg\\max_R \\left[ \\log p(\\mathcal{D} \\mid R) + \\log p(R) \\right] $$ collapses all posterior mass onto the mode — exactly the limitation BIRL is designed to overcome. Full posterior inference is conceptually preferable for the same reason Bayesian Linear Regression is preferable to Ridge Regression.\nInference: MCMC Methods The Computational Challenge The posterior $p(R \\mid \\mathcal{D})$ has two sources of intractability:\nThe normalizing constant $Z$ is an integral over a continuous (often high-dimensional) reward space Every likelihood evaluation requires solving an MDP to compute $Q^*(s,a;R)$ — typically $\\mathcal{O}(|\\mathcal{S}|^2 |\\mathcal{A}|)$ per reward function via value iteration This makes direct computation impossible; MCMC methods are used to sample from the posterior without computing $Z$ explicitly.\nPolicyWalk (Ramachandran \u0026 Amir, 2007) The seminal algorithm. Uses Metropolis-Hastings to sample from $p(R \\mid \\mathcal{D})$:\nInitialize with a random $R_0$ At each step $t$, propose $R' \\sim q(R_t)$ (random walk in reward space, step size $\\delta$) Solve the MDP for $R'$ to obtain $Q^*(s, a; R')$, compute likelihood Accept $R'$ with probability: $$ \\alpha = \\min\\left(1, \\frac{p(R' \\mid \\mathcal{D})}{p(R_t \\mid \\mathcal{D})}\\right) = \\min\\left(1, \\frac{p(\\mathcal{D} \\mid R') \\, p(R')}{p(\\mathcal{D} \\mid R_t) \\, p(R_t)}\\right) $$ The normalizing constant $Z$ cancels in the ratio — this is the key computational trick.\nConvergence: With a uniform prior and $R_{\\max} = \\mathcal{O}(1/N)$ where $N = |\\mathcal{S}|$, the Markov chain mixes rapidly and converges in $\\mathcal{O}(N^2 \\log(1/\\epsilon))$ steps.\nCritical limitation: PolicyWalk requires solving the full MDP at every step. In a tabular environment with $N$ states this is already expensive; it does not scale to continuous or large state spaces.\nValueWalk and Modern Extensions ValueWalk (Bajgar et al., 2024) addresses PolicyWalk’s scalability by proposing in the space of Q-functions rather than directly in reward space:\nObservation: $Q^*$ is a sufficient statistic for policy computation; the reward can be read back from $Q^*$ via the Bellman equations Sampling Q-functions avoids solving the full forward problem at each step Allows MCMC-based BIRL to scale to continuous state spaces AVRIL (Chan \u0026 van der Schaar, 2021) takes a variational inference approach:\nTreats the reward as a latent variable in a VAE-like framework Jointly learns an approximate posterior over $R$ and an imitator policy Entirely offline, no inner-loop MDP solver needed Limitation: variational approximation may underestimate posterior uncertainty Reward Priors and Their Implications Choice of Prior The prior $p(R)$ encodes structural beliefs about rewards. The main choices and their consequences:\nPrior Effect Analogy Uniform $p(R) \\propto 1$ No preference; posterior shape determined purely by likelihood MLE limit Gaussian $p(R) = \\mathcal{N}(0, \\sigma_p^2 I)$ Shrinks rewards toward zero; smoothness bias MAP → Ridge (cf. Bayesian Linear Regression) Laplacian $p(R) \\propto \\exp(-\\lambda \\|R\\|_1)$ Sparsity; recovers classical Ng \u0026 Russell IRL MAP → Lasso Dirichlet / nonparametric Mixtures of experts / subgoal discovery Bayesian nonparametric IRL A key insight: with a Gaussian prior, the MAP estimate of BIRL is equivalent to $L_2$-regularized reward learning. With a Laplacian prior, it recovers the original IRL — making BIRL a strict generalization.\nApprenticeship Learning and Policy Synthesis From Posterior to Policy Once we have samples $\\{R^{(k)}\\}_{k=1}^K \\sim p(R \\mid \\mathcal{D})$ via MCMC, how do we synthesize a policy? Two main approaches:\n$$ \\pi^* = \\arg\\max_\\pi \\mathbb{E}_{R \\sim p(R|\\mathcal{D})} \\left[ V^\\pi(R) \\right] $$$$ \\pi^*_{\\text{robust}} = \\arg\\max_\\pi \\text{CVaR}_\\alpha \\left[ V^\\pi(R) \\right] $$ where $\\text{CVaR}_\\alpha$ focuses on the worst $1-\\alpha$ fraction of reward samples — particularly relevant for safety-critical applications. See Risk-Sensitive RL and Bayesian Robust Optimization.\nPractical shortcut: Use the posterior mean reward $\\bar{R} = \\mathbb{E}[R \\mid \\mathcal{D}]$ estimated from MCMC samples, then run standard RL with $\\bar{R}$. This is the BIRL analogue of using the posterior mean in BLR.\nReward Loss and Evaluation $$ \\mathcal{L}(\\hat{R}, R^*) = \\frac{1}{|\\mathcal{S}|} \\sum_{s \\in \\mathcal{S}} |\\hat{R}(s) - R^*(s)| $$ Posterior mean minimizes the squared loss; posterior median minimizes the linear loss. The posterior as a whole captures uncertainty that neither MAP nor MLE can express.\nBIRL vs. MaxEnt IRL: A Conceptual Comparison Disambiguation of Two Probabilistic Approaches Both BIRL and MaxEnt IRL are probabilistic, but they are philosophically distinct:\nProperty BIRL (Ramachandran \u0026 Amir 2007) MaxEnt IRL (Ziebart et al. 2008) What is uncertain? The reward function $R$ The trajectory distribution $p(\\tau)$ Framework Bayesian (prior + posterior) Frequentist / MLE Expert model Boltzmann rationality on $Q^*$ Maximum entropy trajectory distribution Output Posterior $p(R \\mid \\mathcal{D})$ Point estimate $\\hat{\\theta}$ (reward weights) Handles suboptimal experts Yes (via $\\beta$) Partially (stochasticity in distribution) Prior incorporation Explicit via $p(R)$ No explicit prior Scalability Limited (inner-loop MDP) More scalable (dynamic programming) MaxEnt IRL models the trajectory probability as $p(\\tau \\mid \\theta) \\propto \\exp(\\theta^\\top \\phi(\\tau))$ — it maximizes entropy subject to feature matching constraints. This is a frequentist approach to resolving ambiguity, not a Bayesian one. BIRL directly addresses parameter uncertainty by integrating over $R$.\nMaxEnt IRL and margin-based methods resolve ambiguity by imposing structural bias. BIRL resolves it by maintaining uncertainty — which is more principled but computationally harder.\nEpistemic vs. Aleatoric Uncertainty in BIRL Decomposition Following the same principle as Bayesian Linear Regression, the prediction variance in BIRL decomposes via the law of total variance:\n$$ \\text{Var}(V^\\pi) = \\underbrace{\\mathbb{E}_R[\\text{Var}_\\pi(V^\\pi \\mid R)]}_{\\text{aleatoric: noise in environment dynamics}} + \\underbrace{\\text{Var}_R(\\mathbb{E}_\\pi[V^\\pi \\mid R])}_{\\text{epistemic: uncertainty in } R} $$ Epistemic uncertainty in BIRL comes from limited demonstrations — it shrinks as $|\\mathcal{D}| \\to \\infty$ Aleatoric uncertainty comes from stochastic transitions $T$ — irreducible regardless of demonstrations The full posterior $p(R \\mid \\mathcal{D})$ captures both, whereas MAP/MLE only reflect the mode Active Learning with BIRL Information-Theoretic Query Selection BIRL provides a natural framework for active IRL: querying the expert at maximally informative states rather than passively collecting demonstrations.\n$$ \\text{EIG}(\\xi) = H[p(R \\mid \\mathcal{D})] - \\mathbb{E}_{\\tau \\sim \\pi_E^\\xi}\\left[ H[p(R \\mid \\mathcal{D} \\cup \\tau)] \\right] $$ where $\\xi$ parametrizes the environment/query. Maximizing EIG selects demonstration contexts where the posterior would be most reduced.\nPractical approximation methods:\nPolicy entropy: Query at states where $H[\\pi_E(a \\mid s)]$ is high (correlates with reward uncertainty early in learning) Bayesian Optimization: Use a surrogate model of EIG to avoid the expensive nested Monte Carlo estimate Observation: Querying full trajectories is more informative than querying individual states Advanced Extensions Non-Markovian Rewards Standard IRL assumes the reward is Markovian: $R(s, a)$ depends only on the current state-action pair. Recent work extends BIRL to Reward Machines (RMs) — finite-state machines encoding history-dependent (non-Markovian) reward functions.\nThe key changes:\nHypothesis space becomes the space of RMs (finite automata over $\\mathcal{S} \\times \\mathcal{A}$) Demonstration is projected onto the state space of each product MDP $\\mathcal{M} \\times \\mathcal{R}$ MAP estimation via simulated annealing (continuous gradient methods unavailable for discrete RM structure) Bayesian Theory of Mind (BTOM) and Robust BIRL Standard BIRL assumes the expert’s internal model of dynamics equals the true model $T$. BTOM (Baker et al. 2011; Wei et al. 2023) simultaneously infers:\nThe expert’s reward $R$ The expert’s subjective model of dynamics $\\tilde{T}$ (which may differ from true $T$) $$ p(R, \\tilde{T} \\mid \\mathcal{D}) \\propto p(\\mathcal{D} \\mid R, \\tilde{T}) \\, p(R) \\, p(\\tilde{T}) $$Key finding: if the prior on $\\tilde{T}$ is concentrated around the true $T$ (expert believed to have accurate model), the resulting policy exhibits robust performance — robustness emerges naturally from Bayesian modeling rather than requiring ad hoc pessimistic penalties.\nScalable BIRL via Variational Inference (AVRIL) For large/continuous state spaces, AVRIL replaces MCMC with variational inference:\nReward is treated as a latent variable $z$ in a generative model $\\pi_\\theta(a \\mid s) = \\int p(a \\mid s, z) q_\\phi(z \\mid \\mathcal{D}) \\, dz$ Jointly optimizes ELBO over reward posterior $q_\\phi(R)$ and imitator policy $\\pi_\\theta$ No inner-loop MDP solve; fully offline Drawback: Variational posteriors tend to underestimate uncertainty — important for downstream risk-sensitive decision making. MCMC methods remain more faithful to the true posterior.\nSummary: BIRL Computational Complexity and Tradeoffs Practical Considerations PolicyWalk complexity: $\\mathcal{O}(N^2 \\log(1/\\epsilon))$ MCMC steps, each costing $\\mathcal{O}(|\\mathcal{S}|^2 |\\mathcal{A}|)$ for value iteration → $\\mathcal{O}(N^4)$ total for tabular MDPs AVRIL complexity: $\\mathcal{O}(|\\mathcal{D}|)$ offline passes — scalable but approximate ValueWalk: improves effective sample rate of MCMC by sampling Q-space first Key design principles for applying BIRL:\nUse Boltzmann likelihood with $\\beta$ tuned to expected expert optimality level Use Gaussian prior if reward smoothness is expected; Laplacian if sparsity/selectivity is expected Use MCMC (PolicyWalk/ValueWalk) when posterior fidelity matters; AVRIL when scale matters Use BIRL-based active learning to reduce demonstration requirements by querying informatively For risk-sensitive downstream tasks, use CVaR optimization over posterior samples rather than expected reward See also: Inverse Reinforcement Learning, Markov Chains, Monte Carlo Methods, Gaussian Processes,\nCooperative Inverse Reinforcement Learning (CIRL) Motivation and the Value Alignment Problem Classical IRL and BIRL share a fundamental architectural assumption: the human and robot are decoupled. The human acts as if the robot doesn’t exist (the Demonstration By Expert assumption), and the robot passively observes. CIRL (Hadfield-Menell, Dragan, Abbeel \u0026 Russell, NeurIPS 2016) challenges this assumption by formalizing the value alignment problem as a cooperative two-player game.\n“We had better be quite sure that the purpose put into the machine is the purpose which we really desire.” — Norbert Wiener, 1960\nThe King Midas problem operationalized: specifying an incorrect reward function leads to catastrophically wrong behavior even from a well-intentioned specification. CIRL proposes that the robot should not be given a fixed reward function at all — it should learn the human’s reward function through cooperative interaction.\nThe Core Departure from Classical IRL In classical IRL the robot is a passive observer and the human acts optimally in isolation. In CIRL, both agents are active participants and the human’s optimal strategy may involve deliberately suboptimal actions to better communicate the reward to the robot.\nThis is a profound shift: the human’s role changes from expert demonstrator to teacher, and the robot’s role changes from reward inferrer to cooperative learner. The key contribution is proving that the classical IRL assumption (Demonstration By Expert, DBE) is not just an approximation — it is formally suboptimal within the CIRL game.\nFormal Definition of the CIRL Game CIRL as a Cooperative Partial-Information Game A CIRL game $\\mathcal{G}$ is a tuple $\\langle \\mathcal{S}, A_H, A_R, T, \\Theta, \\hat{R}, P_0 \\rangle$ where:\n$\\mathcal{S}$: world state space $A_H, A_R$: action spaces for human $H$ and robot $R$ respectively $T(s' \\mid s, a_H, a_R)$: joint transition dynamics $\\Theta$: space of reward parameters (the unknown $\\theta \\sim P_0(\\theta)$) $\\hat{R}(s, a_H, a_R; \\theta)$: the shared reward function, parametrized by $\\theta$ $P_0$: prior distribution over reward parameters Critical asymmetry of information:\n$H$ knows $\\theta$ (her own preferences) $R$ does not know $\\theta$ and maintains a belief $b(\\theta) = P(\\theta \\mid \\text{observations})$ Both agents receive reward $\\hat{R}(s, a_H, a_R; \\theta)$ — they are on the same team $$ b'(\\theta) \\propto P(a_H \\mid s, \\theta, b) \\cdot b(\\theta) $$This is Bayesian filtering: the robot maintains a distribution over $\\theta$ that it updates via Bayes’ rule as it observes human behavior — directly connecting CIRL to Bayesian Inference and BIRL.\nThe Demonstration By Expert (DBE) Assumption DBE: The human acts as if the robot does not exist — i.e., $\\pi_H^{\\text{DBE}}(s, \\theta) = \\arg\\max_{a_H} V^*(s; \\theta)$ in isolation.\nClassical IRL/BIRL reduces to the robot’s best response under DBE. The key theorem of the CIRL paper:\nTheorem (Suboptimality of DBE): The policy pair $(\\pi_H^{\\text{DBE}}, \\pi_R^{\\text{IRL}})$ is, in general, not part of an optimal joint policy in a CIRL game.\nIntuition: under DBE the human greedily collects reward without regard for informativeness. An optimal human teacher may accept a lower immediate reward in order to signal which states have high reward — making the robot’s inference task much easier. The robot learns more, and the joint long-run reward is higher.\nReduction to POMDP CIRL Game → POMDP Computing optimal joint policies in a cooperative game is, in general, the problem of solving a Dec-POMDP (Decentralized Partially Observable MDP) — which is NEXP-complete. CIRL’s special structure rescues this.\nKey structural insight: $H$ has full state information (she knows $\\theta$ and observes $s$); only $R$ has partial information (it doesn’t know $\\theta$). This asymmetry means the CIRL game can be reduced to a single-agent POMDP from $R$’s perspective:\n$$ \\mathcal{M}_R = \\langle \\mathcal{S} \\times \\Theta, A_R, T_R, \\hat{R}, b_0 \\rangle $$where the hidden state is $(s, \\theta)$, $R$’s belief $b \\in \\Delta(\\mathcal{S} \\times \\Theta)$ is the sufficient statistic, and $H$’s behavior is encoded into the transition dynamics $T_R$ (treating $H$ as part of the environment given a fixed $\\pi_H$).\nThis reduction is significant: it justifies using all approximate POMDP solvers (POMCP, Perseus, SARSOP, etc.) for CIRL, and proves that R’s optimal policy depends only on its current belief state $b$.\nRemaining complexity issue: The naive POMDP action space is $|A_H|^{|\\Theta|} \\cdot |A_R|$ — exponential in $|\\Theta|$ because the coordinator must specify a decision rule for $H$ for each possible $\\theta$. Palaniappan et al. (ICML 2017) resolve this with a modified Bellman update that prunes all but $H$’s optimal response, reducing the effective action space to $|A_R|$ and giving speedups of up to $3500\\times$ in practice.\nThe DBE Suboptimality: A Closer Look Instructive vs. Optimal Demonstrations The qualitative behavior that emerges from optimal CIRL solutions is distinct from classical IRL input:\nBehavior Type Classical IRL (DBE) Optimal CIRL Human strategy Greedy-optimal in isolation Pedagogically optimal (may sacrifice reward) Robot strategy Passive inference from demonstrations Active learning, queries, and information-seeking Communication One-directional (H → R) Bidirectional implicit communication Active teaching Never emerges Emerges naturally as optimal behavior Legible motion Not incentivized Directly incentivized Concretely: in a gridworld experiment, under DBE the human walks directly to the highest-reward cell (efficient, but uninformative about the reward landscape). Under optimal CIRL the human detours through other high-reward regions, sacrificing a few steps to give $R$ a richer signal — and the joint policy achieves substantially higher long-run value.\nThe Two-Phase Apprenticeship Formulation CIRL formalizes apprenticeship learning as a two-phase turn-based game:\nLearning phase: Both $H$ and $R$ take actions; $R$ updates its belief $b(\\theta)$ Deployment phase: $R$ acts alone using its learned belief to maximize $\\hat{R}$ Classical IRL is exactly the robot’s best response in the deployment phase when $H$ played DBE in the learning phase. The CIRL result says: even if $R$ expects $H$ to play DBE, $H$ should not play DBE — she can do better by playing an instructive strategy instead.\nCIRL and Safety: The Off-Switch Game Corrigibility from Reward Uncertainty One of the most important implications of CIRL for AI safety (Hadfield-Menell et al. 2017, “The Off-Switch Game”) is the following insight:\nTheorem: An agent optimizing a CIRL objective — uncertain about the human’s reward function — will voluntarily accept being shut down, because shutdown may signal that its current behavior is misaligned with $\\theta$.\nFormally, if $R$ maintains uncertainty $b(\\theta)$ and $H$ presses a shutdown button, this is evidence that $R$’s current policy is not maximizing $\\hat{R}(\\cdot; \\theta)$. A rational $R$ updates its belief and defers. In contrast, an agent with a fixed reward function has a strong instrumental incentive to prevent shutdown (it cannot achieve its objective if turned off). This is the classic self-preservation problem of classical RL agents.\nThe mechanism: reward uncertainty creates an incentive to learn more about $\\theta$ — including from shutdown signals. Uncertainty is the source of corrigibility, not an external constraint.\nLimits of CIRL Corrigibility This result is not robust to all assumptions. Critical failure modes identified in follow-up work:\nModel misspecification: If the prior $P_0(\\theta)$ or the parametric family $\\hat{R}(\\cdot;\\theta)$ is wrong, $R$ may have beliefs that cause it to interpret shutdown commands as noise rather than information — and resist them. Fully updated deference: As $|\\mathcal{D}| \\to \\infty$, $R$ may become fully confident in its inferred $\\theta$. At that point uncertainty vanishes and so does the corrigibility incentive — this is the fully updated deference problem. Single-shot games: Corrigibility properties in CIRL rely on repeated interaction. In one-shot settings the incentive to defer weakens substantially. CIRL corrigibility is emergent from uncertainty, not a hardcoded guarantee. It is fragile to model misspecification and disappears as the agent becomes more confident. It should be treated as a useful framework, not a solved problem.\nThe alignment research community largely views CIRL as a valuable problem formalization rather than a complete solution — the gap between the idealized CIRL model and real-world AI systems remains large.\nBIRL vs. CIRL: How They Relate Conceptual Comparison CIRL strictly generalizes and reframes the BIRL setting:\nDimension BIRL CIRL Agent structure Robot only; human is passive data source Both human and robot are active agents Human model Fixed Boltzmann-rational demonstrator Strategic co-player aware of robot’s learning Robot’s role Posterior inference over $R$ Cooperative policy optimization under partial info Human’s role Demonstrate (DBE assumed) Teach (pedagogically optimal strategy) Formal framework Bayesian inference / MCMC Dec-POMDP reduced to single-agent POMDP Safety implications Uncertainty for robust policy Uncertainty as source of corrigibility Optimality Robot is optimal given DBE assumption Joint optimality without DBE assumption Both frameworks maintain a belief over the reward function — this is the shared core. BIRL is the robot’s problem in isolation; CIRL asks what happens when you take the human’s strategy seriously as a co-optimization.\nCIRL as a Generalization of BIRL Classical BIRL falls out of CIRL as follows. Fix $\\pi_H = \\pi_H^{\\text{DBE}}$ (human plays optimally in isolation, Boltzmann-rational). Then the robot’s problem reduces exactly to:\n$$ p(\\theta \\mid \\mathcal{D}) \\propto p(\\mathcal{D} \\mid \\theta) \\, p(\\theta) $$which is the BIRL posterior with reward parameter $\\theta$. So BIRL is the best response to a fixed, non-strategic human. CIRL asks for the joint optimum where both sides adapt to each other. In practice, BIRL is more tractable; CIRL is more correct.\nPractical Algorithms for CIRL Approximate CIRL via Iterated Best Response Exact CIRL requires solving a POMDP whose state space grows as $|\\mathcal{S}| \\times |\\Theta|$. Approximate approaches:\nIterated Best Response (IBR):\nInitialize with $\\pi_H^{(0)} = \\pi_H^{\\text{DBE}}$ Compute robot’s best response: $\\pi_R^{(t)} = \\text{BR}(\\pi_H^{(t)})$ via POMDP solver Compute human’s best response: $\\pi_H^{(t+1)} = \\text{BR}(\\pi_R^{(t)})$ Repeat until convergence The modified Bellman update of Palaniappan et al. makes step 2 tractable by exploiting $H$’s full-information status to prune suboptimal human decision rules during planning, reducing the effective action space from $|A_H|^{|\\Theta|} \\cdot |A_R|$ to $|A_R|$.\nPOMCP-based CIRL: Apply Monte Carlo tree search (POMCP) to the reduced POMDP. Works well in continuous or large state spaces where exact value iteration is infeasible.\nRelaxing Human Rationality A key limitation of vanilla CIRL is that $H$ must be optimal — a strong assumption. The modified Bellman update approach also allows relaxing this: instead of requiring $H$ to be fully optimal, it is sufficient that $H$’s policy is parametrized by her Q-values (a weaker condition), enabling more realistic human models including bounded rationality and cognitive biases. See also Bayesian Theory of Mind for a related approach.\nExtensions and Open Problems Multi-Human CIRL and Social Choice The basic CIRL game has a single human with reward $\\theta$. Extensions to multiple humans $\\{H_i\\}$ with competing rewards $\\{\\theta_i\\}$ raise social choice problems: whose preferences should $R$ optimize? One direction (Fickinger et al.) uses shared control as a social welfare aggregation mechanism. This connects CIRL to Mechanism Design and Multi-Agent RL, relevant for settings like AI assistants interacting with groups rather than individuals — directly relevant for multi-agent AI safety research.\nCIRL with Partial Human Self-Knowledge Humans often do not know their own preferences perfectly — they may be uncertain about $\\theta$ themselves. Extensions of CIRL where $H$ also has a belief $b_H(\\theta)$ (with $H$ observing $\\theta$ noisily) lead to a both-sided partial information game, a fully symmetric Dec-POMDP. This is computationally much harder but more realistic for human-AI alignment scenarios.\nConnection to RLHF Reinforcement Learning from Human Feedback (RLHF) can be viewed as an approximate, scalable instantiation of the CIRL idea:\nHuman preference labels are the “demonstrations” providing evidence about $\\theta$ A reward model is trained to approximate the posterior mean of $p(\\theta \\mid \\text{preferences})$ The policy is then optimized against the reward model RLHF discards the cooperative game structure and epistemic uncertainty of CIRL for scalability. CIRL provides the theoretical grounding that RLHF practitioners implicitly rely on; RLHF provides the scalability that CIRL lacks. The gap between them is an active research frontier.\nSee also: Inverse Reinforcement Learning, POMDPs, Dec-POMDPs, Value Alignment, RLHF, Corrigibility, Bayesian Theory of Mind, Mechanism Design\n",
+  "wordCount" : "3937",
   "inLanguage": "en",
   "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
@@ -230,12 +241,662 @@ src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MM
     <h1 class="post-title entry-hint-parent">
       Inverse Reinforcement Learning
     </h1>
-    <div class="post-meta">Reading Time: 0 minutes&nbsp;·&nbsp;
+    <div class="post-meta">Reading Time: 19 minutes&nbsp;·&nbsp;
 By Xuanqiang Angelo Huang
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#bayesian-inverse-reinforcement-learning-birl" aria-label="Bayesian Inverse Reinforcement Learning (BIRL)">Bayesian Inverse Reinforcement Learning (BIRL)</a><ul>
+                        
+                <li>
+                    <a href="#background-the-irl-problem-setup" aria-label="Background: The IRL Problem Setup">Background: The IRL Problem Setup</a><ul>
+                        
+                <li>
+                    <a href="#the-irl-problem-definition" aria-label="The IRL Problem Definition">The IRL Problem Definition</a></li>
+                <li>
+                    <a href="#the-ill-posedness-problem" aria-label="The Ill-Posedness Problem">The Ill-Posedness Problem</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-bayesian-formulation" aria-label="The Bayesian Formulation">The Bayesian Formulation</a><ul>
+                        
+                <li>
+                    <a href="#birl-model-core-inference-setup" aria-label="BIRL Model: Core Inference Setup">BIRL Model: Core Inference Setup</a></li>
+                <li>
+                    <a href="#the-boltzmann-rationality-likelihood" aria-label="The Boltzmann Rationality Likelihood">The Boltzmann Rationality Likelihood</a></li>
+                <li>
+                    <a href="#connection-to-classical-irl-as-a-special-case" aria-label="Connection to Classical IRL as a Special Case">Connection to Classical IRL as a Special Case</a></li></ul>
+                </li>
+                <li>
+                    <a href="#inference-mcmc-methods" aria-label="Inference: MCMC Methods">Inference: MCMC Methods</a><ul>
+                        
+                <li>
+                    <a href="#the-computational-challenge" aria-label="The Computational Challenge">The Computational Challenge</a></li>
+                <li>
+                    <a href="#policywalk-ramachandran--amir-2007" aria-label="PolicyWalk (Ramachandran &amp; Amir, 2007)">PolicyWalk (Ramachandran &amp; Amir, 2007)</a></li>
+                <li>
+                    <a href="#valuewalk-and-modern-extensions" aria-label="ValueWalk and Modern Extensions">ValueWalk and Modern Extensions</a></li></ul>
+                </li>
+                <li>
+                    <a href="#reward-priors-and-their-implications" aria-label="Reward Priors and Their Implications">Reward Priors and Their Implications</a><ul>
+                        
+                <li>
+                    <a href="#choice-of-prior" aria-label="Choice of Prior">Choice of Prior</a></li></ul>
+                </li>
+                <li>
+                    <a href="#apprenticeship-learning-and-policy-synthesis" aria-label="Apprenticeship Learning and Policy Synthesis">Apprenticeship Learning and Policy Synthesis</a><ul>
+                        
+                <li>
+                    <a href="#from-posterior-to-policy" aria-label="From Posterior to Policy">From Posterior to Policy</a></li>
+                <li>
+                    <a href="#reward-loss-and-evaluation" aria-label="Reward Loss and Evaluation">Reward Loss and Evaluation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#birl-vs-maxent-irl-a-conceptual-comparison" aria-label="BIRL vs. MaxEnt IRL: A Conceptual Comparison">BIRL vs. MaxEnt IRL: A Conceptual Comparison</a><ul>
+                        
+                <li>
+                    <a href="#disambiguation-of-two-probabilistic-approaches" aria-label="Disambiguation of Two Probabilistic Approaches">Disambiguation of Two Probabilistic Approaches</a></li></ul>
+                </li>
+                <li>
+                    <a href="#epistemic-vs-aleatoric-uncertainty-in-birl" aria-label="Epistemic vs. Aleatoric Uncertainty in BIRL">Epistemic vs. Aleatoric Uncertainty in BIRL</a><ul>
+                        
+                <li>
+                    <a href="#decomposition" aria-label="Decomposition">Decomposition</a></li></ul>
+                </li>
+                <li>
+                    <a href="#active-learning-with-birl" aria-label="Active Learning with BIRL">Active Learning with BIRL</a><ul>
+                        
+                <li>
+                    <a href="#information-theoretic-query-selection" aria-label="Information-Theoretic Query Selection">Information-Theoretic Query Selection</a></li></ul>
+                </li>
+                <li>
+                    <a href="#advanced-extensions" aria-label="Advanced Extensions">Advanced Extensions</a><ul>
+                        
+                <li>
+                    <a href="#non-markovian-rewards" aria-label="Non-Markovian Rewards">Non-Markovian Rewards</a></li>
+                <li>
+                    <a href="#bayesian-theory-of-mind-btom-and-robust-birl" aria-label="Bayesian Theory of Mind (BTOM) and Robust BIRL">Bayesian Theory of Mind (BTOM) and Robust BIRL</a></li>
+                <li>
+                    <a href="#scalable-birl-via-variational-inference-avril" aria-label="Scalable BIRL via Variational Inference (AVRIL)">Scalable BIRL via Variational Inference (AVRIL)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#summary-birl-computational-complexity-and-tradeoffs" aria-label="Summary: BIRL Computational Complexity and Tradeoffs">Summary: BIRL Computational Complexity and Tradeoffs</a><ul>
+                        
+                <li>
+                    <a href="#practical-considerations" aria-label="Practical Considerations">Practical Considerations</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#cooperative-inverse-reinforcement-learning-cirl" aria-label="Cooperative Inverse Reinforcement Learning (CIRL)">Cooperative Inverse Reinforcement Learning (CIRL)</a><ul>
+                        
+                <li>
+                    <a href="#motivation-and-the-value-alignment-problem" aria-label="Motivation and the Value Alignment Problem">Motivation and the Value Alignment Problem</a><ul>
+                        
+                <li>
+                    <a href="#the-core-departure-from-classical-irl" aria-label="The Core Departure from Classical IRL">The Core Departure from Classical IRL</a></li></ul>
+                </li>
+                <li>
+                    <a href="#formal-definition-of-the-cirl-game" aria-label="Formal Definition of the CIRL Game">Formal Definition of the CIRL Game</a><ul>
+                        
+                <li>
+                    <a href="#cirl-as-a-cooperative-partial-information-game" aria-label="CIRL as a Cooperative Partial-Information Game">CIRL as a Cooperative Partial-Information Game</a></li>
+                <li>
+                    <a href="#the-demonstration-by-expert-dbe-assumption" aria-label="The Demonstration By Expert (DBE) Assumption">The Demonstration By Expert (DBE) Assumption</a></li></ul>
+                </li>
+                <li>
+                    <a href="#reduction-to-pomdp" aria-label="Reduction to POMDP">Reduction to POMDP</a><ul>
+                        
+                <li>
+                    <a href="#cirl-game--pomdp" aria-label="CIRL Game → POMDP">CIRL Game → POMDP</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-dbe-suboptimality-a-closer-look" aria-label="The DBE Suboptimality: A Closer Look">The DBE Suboptimality: A Closer Look</a><ul>
+                        
+                <li>
+                    <a href="#instructive-vs-optimal-demonstrations" aria-label="Instructive vs. Optimal Demonstrations">Instructive vs. Optimal Demonstrations</a></li>
+                <li>
+                    <a href="#the-two-phase-apprenticeship-formulation" aria-label="The Two-Phase Apprenticeship Formulation">The Two-Phase Apprenticeship Formulation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#cirl-and-safety-the-off-switch-game" aria-label="CIRL and Safety: The Off-Switch Game">CIRL and Safety: The Off-Switch Game</a><ul>
+                        
+                <li>
+                    <a href="#corrigibility-from-reward-uncertainty" aria-label="Corrigibility from Reward Uncertainty">Corrigibility from Reward Uncertainty</a></li>
+                <li>
+                    <a href="#limits-of-cirl-corrigibility" aria-label="Limits of CIRL Corrigibility">Limits of CIRL Corrigibility</a></li></ul>
+                </li>
+                <li>
+                    <a href="#birl-vs-cirl-how-they-relate" aria-label="BIRL vs. CIRL: How They Relate">BIRL vs. CIRL: How They Relate</a><ul>
+                        
+                <li>
+                    <a href="#conceptual-comparison" aria-label="Conceptual Comparison">Conceptual Comparison</a></li>
+                <li>
+                    <a href="#cirl-as-a-generalization-of-birl" aria-label="CIRL as a Generalization of BIRL">CIRL as a Generalization of BIRL</a></li></ul>
+                </li>
+                <li>
+                    <a href="#practical-algorithms-for-cirl" aria-label="Practical Algorithms for CIRL">Practical Algorithms for CIRL</a><ul>
+                        
+                <li>
+                    <a href="#approximate-cirl-via-iterated-best-response" aria-label="Approximate CIRL via Iterated Best Response">Approximate CIRL via Iterated Best Response</a></li>
+                <li>
+                    <a href="#relaxing-human-rationality" aria-label="Relaxing Human Rationality">Relaxing Human Rationality</a></li></ul>
+                </li>
+                <li>
+                    <a href="#extensions-and-open-problems" aria-label="Extensions and Open Problems">Extensions and Open Problems</a><ul>
+                        
+                <li>
+                    <a href="#multi-human-cirl-and-social-choice" aria-label="Multi-Human CIRL and Social Choice">Multi-Human CIRL and Social Choice</a></li>
+                <li>
+                    <a href="#cirl-with-partial-human-self-knowledge" aria-label="CIRL with Partial Human Self-Knowledge">CIRL with Partial Human Self-Knowledge</a></li>
+                <li>
+                    <a href="#connection-to-rlhf" aria-label="Connection to RLHF">Connection to RLHF</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="bayesian-inverse-reinforcement-learning-birl">Bayesian Inverse Reinforcement Learning (BIRL)<a hidden class="anchor" aria-hidden="true" href="#bayesian-inverse-reinforcement-learning-birl">#</a></h2>
+<h3 id="background-the-irl-problem-setup">Background: The IRL Problem Setup<a hidden class="anchor" aria-hidden="true" href="#background-the-irl-problem-setup">#</a></h3>
+<p>Inverse Reinforcement Learning sits at the intersection of <a href="/notes/reinforcement-learning">Reinforcement Learning</a>, Bayesian Inference, and Imitation Learning. The core question is: <em>given observed expert behavior, what reward function is the expert optimizing?</em> This is strictly harder than forward RL, and the key challenge is that the problem is fundamentally <strong>ill-posed</strong>.</p>
+<h4 id="the-irl-problem-definition">The IRL Problem Definition<a hidden class="anchor" aria-hidden="true" href="#the-irl-problem-definition">#</a></h4>
+<blockquote>
+<p><strong>IRL</strong>: Given an MDP without a reward function $\mathcal{M} \setminus R = \langle \mathcal{S}, \mathcal{A}, T, \gamma \rangle$ and a set of expert demonstrations $\mathcal{D} = \{(s_i, a_i)\}$, recover the reward function $R : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ the expert is (approximately) optimizing.</p></blockquote>
+<p>Formally, the full MDP is $\mathcal{M} = \langle \mathcal{S}, \mathcal{A}, T, R, \gamma \rangle$ where:</p>
+<ul>
+<li>$T(s, a, s') = P(s' \mid s, a)$ is the known transition model</li>
+<li>$R$ is <strong>unknown</strong> and is what we want to learn</li>
+<li>$\gamma \in [0,1)$ is the discount factor</li>
+<li>$\mathcal{D}$ contains state-action pairs from an expert following policy $\pi_E$</li>
+</ul>
+<h4 id="the-ill-posedness-problem">The Ill-Posedness Problem<a hidden class="anchor" aria-hidden="true" href="#the-ill-posedness-problem">#</a></h4>
+<blockquote>
+<p>IRL is fundamentally ill-posed: many distinct reward functions explain the same observed behavior, including the degenerate $R \equiv 0$.</p></blockquote>
+<p>The three classical approaches to resolving this ambiguity are:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">Core Idea</th>
+          <th style="text-align: left">Ambiguity Resolution</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Margin-based</strong> (Ng &amp; Russell 2000, Abbeel &amp; Ng 2004)</td>
+          <td style="text-align: left">Find $R$ s.t. $\pi_E$ beats all other $\pi$ by a margin</td>
+          <td style="text-align: left">Max-margin bias; introduces artificial preference</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MaxEnt IRL</strong> (Ziebart et al. 2008)</td>
+          <td style="text-align: left">Choose $R$ inducing the maximum-entropy trajectory distribution</td>
+          <td style="text-align: left">Minimally committed solution; distributional, not point</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Bayesian IRL</strong> (Ramachandran &amp; Amir 2007)</td>
+          <td style="text-align: left">Place a prior over reward functions; compute the posterior</td>
+          <td style="text-align: left">Principled uncertainty quantification; no optimality assumption</td>
+      </tr>
+  </tbody>
+</table>
+<p>The focus of these notes is the <strong>Bayesian</strong> approach. The key motivation: MAP and MLE methods collapse all probability mass on a single reward function, which is brittle when data is scarce. BIRL maintains a full distribution over $R$.</p>
+<hr>
+<h3 id="the-bayesian-formulation">The Bayesian Formulation<a hidden class="anchor" aria-hidden="true" href="#the-bayesian-formulation">#</a></h3>
+<h4 id="birl-model-core-inference-setup">BIRL Model: Core Inference Setup<a hidden class="anchor" aria-hidden="true" href="#birl-model-core-inference-setup">#</a></h4>
+<p>The key ingredients mirror <a href="/notes/bayesian-linear-regression">Bayesian Linear Regression</a> exactly — prior, likelihood, posterior — but now the unknown is a <strong>reward function</strong> rather than a weight vector.</p>
+$$
+\underbrace{p(R \mid \mathcal{D})}_{\text{posterior}} \propto \underbrace{p(\mathcal{D} \mid R)}_{\text{likelihood}} \cdot \underbrace{p(R)}_{\text{prior}}
+$$<ul>
+<li><strong>Hypothesis</strong>: $R$ is the reward function explaining $\pi_E$&rsquo;s behavior</li>
+<li><strong>Evidence</strong>: $\mathcal{D} = \{(s_i, a_i)\}_{i=1}^N$, the observed expert state-action pairs</li>
+<li><strong>Prior</strong> $p(R)$: encodes prior belief about reward structure (e.g., uniform, Gaussian, Laplacian)</li>
+<li><strong>Posterior</strong> $p(R \mid \mathcal{D})$: updated belief after seeing demonstrations</li>
+</ul>
+<p>The normalizing constant $Z = \int p(\mathcal{D} \mid R) p(R) \, dR$ is typically <strong>intractable</strong> in closed form — this is the central computational challenge that drives the algorithmic design.</p>
+<h4 id="the-boltzmann-rationality-likelihood">The Boltzmann Rationality Likelihood<a hidden class="anchor" aria-hidden="true" href="#the-boltzmann-rationality-likelihood">#</a></h4>
+<p>To define $p(\mathcal{D} \mid R)$ we need a probabilistic model of the expert. The standard assumption is <strong>Boltzmann (softmax) rationality</strong>: the expert is not perfectly optimal but acts with probability proportional to the exponentiated Q-value.</p>
+$$
+p(a \mid s, R) = \frac{\exp(\beta \cdot Q^*(s, a; R))}{\sum_{a' \in \mathcal{A}} \exp(\beta \cdot Q^*(s, a'; R))}
+$$<p>where:</p>
+<ul>
+<li>$Q^*(s, a; R)$ is the optimal Q-function under reward $R$, i.e. $Q^*(s,a;R) = R(s,a) + \gamma \sum_{s'} T(s,a,s') V^*(s'; R)$</li>
+<li>$\beta \in [0, \infty)$ is the <strong>inverse temperature</strong> (confidence in expert optimality): $\beta \to \infty$ means perfectly optimal expert, $\beta \to 0$ means random policy</li>
+</ul>
+$$
+p(\mathcal{D} \mid R) = \prod_{(s_i, a_i) \in \mathcal{D}} \frac{\exp(\beta \cdot Q^*(s_i, a_i; R))}{\sum_{a'} \exp(\beta \cdot Q^*(s_i, a'; R))}
+$$<p><strong>Warning</strong>: This requires solving the forward RL problem (computing $Q^*$) for every candidate $R$ — this is the expensive <strong>inner-loop</strong> that makes naive BIRL computationally intensive.</p>
+<h4 id="connection-to-classical-irl-as-a-special-case">Connection to Classical IRL as a Special Case<a hidden class="anchor" aria-hidden="true" href="#connection-to-classical-irl-as-a-special-case">#</a></h4>
+<blockquote>
+<p>The original IRL of Ng &amp; Russell (2000) is a special case of BIRL with a <strong>Laplacian prior</strong> on rewards. Ramachandran &amp; Amir (2007) show this directly.</p></blockquote>
+$$
+\hat{R}_{\text{MAP}} = \arg\max_R \left[ \log p(\mathcal{D} \mid R) + \log p(R) \right]
+$$<p>
+collapses all posterior mass onto the mode — exactly the limitation BIRL is designed to overcome. Full posterior inference is conceptually preferable for the same reason Bayesian Linear Regression is preferable to Ridge Regression.</p>
+<hr>
+<h3 id="inference-mcmc-methods">Inference: MCMC Methods<a hidden class="anchor" aria-hidden="true" href="#inference-mcmc-methods">#</a></h3>
+<h4 id="the-computational-challenge">The Computational Challenge<a hidden class="anchor" aria-hidden="true" href="#the-computational-challenge">#</a></h4>
+<p>The posterior $p(R \mid \mathcal{D})$ has two sources of intractability:</p>
+<ol>
+<li>The normalizing constant $Z$ is an integral over a continuous (often high-dimensional) reward space</li>
+<li><strong>Every likelihood evaluation requires solving an MDP</strong> to compute $Q^*(s,a;R)$ — typically $\mathcal{O}(|\mathcal{S}|^2 |\mathcal{A}|)$ per reward function via value iteration</li>
+</ol>
+<p>This makes direct computation impossible; MCMC methods are used to sample from the posterior without computing $Z$ explicitly.</p>
+<h4 id="policywalk-ramachandran--amir-2007">PolicyWalk (Ramachandran &amp; Amir, 2007)<a hidden class="anchor" aria-hidden="true" href="#policywalk-ramachandran--amir-2007">#</a></h4>
+<p>The seminal algorithm. Uses <strong>Metropolis-Hastings</strong> to sample from $p(R \mid \mathcal{D})$:</p>
+<ol>
+<li>Initialize with a random $R_0$</li>
+<li>At each step $t$, propose $R' \sim q(R_t)$ (random walk in reward space, step size $\delta$)</li>
+<li>Solve the MDP for $R'$ to obtain $Q^*(s, a; R')$, compute likelihood</li>
+<li>Accept $R'$ with probability:
+$$
+\alpha = \min\left(1, \frac{p(R' \mid \mathcal{D})}{p(R_t \mid \mathcal{D})}\right) = \min\left(1, \frac{p(\mathcal{D} \mid R') \, p(R')}{p(\mathcal{D} \mid R_t) \, p(R_t)}\right)
+$$</li>
+</ol>
+<p>The normalizing constant $Z$ cancels in the ratio — this is the key computational trick.</p>
+<p><strong>Convergence</strong>: With a uniform prior and $R_{\max} = \mathcal{O}(1/N)$ where $N = |\mathcal{S}|$, the Markov chain mixes rapidly and converges in $\mathcal{O}(N^2 \log(1/\epsilon))$ steps.</p>
+<p><strong>Critical limitation</strong>: PolicyWalk requires solving the full MDP at every step. In a tabular environment with $N$ states this is already expensive; it does not scale to continuous or large state spaces.</p>
+<h4 id="valuewalk-and-modern-extensions">ValueWalk and Modern Extensions<a hidden class="anchor" aria-hidden="true" href="#valuewalk-and-modern-extensions">#</a></h4>
+<p><strong>ValueWalk</strong> (Bajgar et al., 2024) addresses PolicyWalk&rsquo;s scalability by proposing in the <strong>space of Q-functions</strong> rather than directly in reward space:</p>
+<ul>
+<li>Observation: $Q^*$ is a sufficient statistic for policy computation; the reward can be read back from $Q^*$ via the Bellman equations</li>
+<li>Sampling Q-functions avoids solving the full forward problem at each step</li>
+<li>Allows MCMC-based BIRL to scale to continuous state spaces</li>
+</ul>
+<p><strong>AVRIL</strong> (Chan &amp; van der Schaar, 2021) takes a variational inference approach:</p>
+<ul>
+<li>Treats the reward as a <strong>latent variable</strong> in a VAE-like framework</li>
+<li>Jointly learns an approximate posterior over $R$ and an imitator policy</li>
+<li>Entirely offline, no inner-loop MDP solver needed</li>
+<li>Limitation: variational approximation may underestimate posterior uncertainty</li>
+</ul>
+<hr>
+<h3 id="reward-priors-and-their-implications">Reward Priors and Their Implications<a hidden class="anchor" aria-hidden="true" href="#reward-priors-and-their-implications">#</a></h3>
+<h4 id="choice-of-prior">Choice of Prior<a hidden class="anchor" aria-hidden="true" href="#choice-of-prior">#</a></h4>
+<p>The prior $p(R)$ encodes structural beliefs about rewards. The main choices and their consequences:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Prior</th>
+          <th style="text-align: left">Effect</th>
+          <th style="text-align: left">Analogy</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Uniform</strong> $p(R) \propto 1$</td>
+          <td style="text-align: left">No preference; posterior shape determined purely by likelihood</td>
+          <td style="text-align: left">MLE limit</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Gaussian</strong> $p(R) = \mathcal{N}(0, \sigma_p^2 I)$</td>
+          <td style="text-align: left">Shrinks rewards toward zero; smoothness bias</td>
+          <td style="text-align: left">MAP → Ridge (cf. <a href="/notes/bayesian-linear-regression">Bayesian Linear Regression</a>)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Laplacian</strong> $p(R) \propto \exp(-\lambda \|R\|_1)$</td>
+          <td style="text-align: left">Sparsity; recovers classical Ng &amp; Russell IRL</td>
+          <td style="text-align: left">MAP → Lasso</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Dirichlet / nonparametric</strong></td>
+          <td style="text-align: left">Mixtures of experts / subgoal discovery</td>
+          <td style="text-align: left">Bayesian nonparametric IRL</td>
+      </tr>
+  </tbody>
+</table>
+<p>A key insight: with a Gaussian prior, the MAP estimate of BIRL is equivalent to $L_2$-regularized reward learning. With a Laplacian prior, it recovers the original IRL — making BIRL a strict generalization.</p>
+<hr>
+<h3 id="apprenticeship-learning-and-policy-synthesis">Apprenticeship Learning and Policy Synthesis<a hidden class="anchor" aria-hidden="true" href="#apprenticeship-learning-and-policy-synthesis">#</a></h3>
+<h4 id="from-posterior-to-policy">From Posterior to Policy<a hidden class="anchor" aria-hidden="true" href="#from-posterior-to-policy">#</a></h4>
+<p>Once we have samples $\{R^{(k)}\}_{k=1}^K \sim p(R \mid \mathcal{D})$ via MCMC, how do we synthesize a policy? Two main approaches:</p>
+$$
+\pi^* = \arg\max_\pi \mathbb{E}_{R \sim p(R|\mathcal{D})} \left[ V^\pi(R) \right]
+$$$$
+\pi^*_{\text{robust}} = \arg\max_\pi \text{CVaR}_\alpha \left[ V^\pi(R) \right]
+$$<p>
+where $\text{CVaR}_\alpha$ focuses on the worst $1-\alpha$ fraction of reward samples — particularly relevant for safety-critical applications. See Risk-Sensitive RL and Bayesian Robust Optimization.</p>
+<p><strong>Practical shortcut</strong>: Use the <strong>posterior mean</strong> reward $\bar{R} = \mathbb{E}[R \mid \mathcal{D}]$ estimated from MCMC samples, then run standard RL with $\bar{R}$. This is the BIRL analogue of using the posterior mean in BLR.</p>
+<h4 id="reward-loss-and-evaluation">Reward Loss and Evaluation<a hidden class="anchor" aria-hidden="true" href="#reward-loss-and-evaluation">#</a></h4>
+$$
+\mathcal{L}(\hat{R}, R^*) = \frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} |\hat{R}(s) - R^*(s)|
+$$<p>
+Posterior mean minimizes the squared loss; posterior median minimizes the linear loss. The posterior as a whole captures uncertainty that neither MAP nor MLE can express.</p>
+<hr>
+<h3 id="birl-vs-maxent-irl-a-conceptual-comparison">BIRL vs. MaxEnt IRL: A Conceptual Comparison<a hidden class="anchor" aria-hidden="true" href="#birl-vs-maxent-irl-a-conceptual-comparison">#</a></h3>
+<h4 id="disambiguation-of-two-probabilistic-approaches">Disambiguation of Two Probabilistic Approaches<a hidden class="anchor" aria-hidden="true" href="#disambiguation-of-two-probabilistic-approaches">#</a></h4>
+<p>Both BIRL and MaxEnt IRL are probabilistic, but they are philosophically distinct:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Property</th>
+          <th style="text-align: left">BIRL (Ramachandran &amp; Amir 2007)</th>
+          <th style="text-align: left">MaxEnt IRL (Ziebart et al. 2008)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>What is uncertain?</strong></td>
+          <td style="text-align: left">The reward function $R$</td>
+          <td style="text-align: left">The trajectory distribution $p(\tau)$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Framework</strong></td>
+          <td style="text-align: left">Bayesian (prior + posterior)</td>
+          <td style="text-align: left">Frequentist / MLE</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Expert model</strong></td>
+          <td style="text-align: left">Boltzmann rationality on $Q^*$</td>
+          <td style="text-align: left">Maximum entropy trajectory distribution</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Output</strong></td>
+          <td style="text-align: left">Posterior $p(R \mid \mathcal{D})$</td>
+          <td style="text-align: left">Point estimate $\hat{\theta}$ (reward weights)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Handles suboptimal experts</strong></td>
+          <td style="text-align: left">Yes (via $\beta$)</td>
+          <td style="text-align: left">Partially (stochasticity in distribution)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Prior incorporation</strong></td>
+          <td style="text-align: left">Explicit via $p(R)$</td>
+          <td style="text-align: left">No explicit prior</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Scalability</strong></td>
+          <td style="text-align: left">Limited (inner-loop MDP)</td>
+          <td style="text-align: left">More scalable (dynamic programming)</td>
+      </tr>
+  </tbody>
+</table>
+<p>MaxEnt IRL models the trajectory probability as $p(\tau \mid \theta) \propto \exp(\theta^\top \phi(\tau))$ — it maximizes entropy subject to feature matching constraints. This is a <strong>frequentist</strong> approach to resolving ambiguity, not a Bayesian one. BIRL directly addresses parameter uncertainty by integrating over $R$.</p>
+<blockquote>
+<p>MaxEnt IRL and margin-based methods resolve ambiguity by imposing structural bias. BIRL resolves it by maintaining uncertainty — which is more principled but computationally harder.</p></blockquote>
+<hr>
+<h3 id="epistemic-vs-aleatoric-uncertainty-in-birl">Epistemic vs. Aleatoric Uncertainty in BIRL<a hidden class="anchor" aria-hidden="true" href="#epistemic-vs-aleatoric-uncertainty-in-birl">#</a></h3>
+<h4 id="decomposition">Decomposition<a hidden class="anchor" aria-hidden="true" href="#decomposition">#</a></h4>
+<p>Following the same principle as <a href="/notes/bayesian-linear-regression">Bayesian Linear Regression</a>, the prediction variance in BIRL decomposes via the <strong>law of total variance</strong>:</p>
+$$
+\text{Var}(V^\pi) = \underbrace{\mathbb{E}_R[\text{Var}_\pi(V^\pi \mid R)]}_{\text{aleatoric: noise in environment dynamics}} + \underbrace{\text{Var}_R(\mathbb{E}_\pi[V^\pi \mid R])}_{\text{epistemic: uncertainty in } R}
+$$<ul>
+<li><strong>Epistemic uncertainty</strong> in BIRL comes from limited demonstrations — it shrinks as $|\mathcal{D}| \to \infty$</li>
+<li><strong>Aleatoric uncertainty</strong> comes from stochastic transitions $T$ — irreducible regardless of demonstrations</li>
+<li>The full posterior $p(R \mid \mathcal{D})$ captures both, whereas MAP/MLE only reflect the mode</li>
+</ul>
+<hr>
+<h3 id="active-learning-with-birl">Active Learning with BIRL<a hidden class="anchor" aria-hidden="true" href="#active-learning-with-birl">#</a></h3>
+<h4 id="information-theoretic-query-selection">Information-Theoretic Query Selection<a hidden class="anchor" aria-hidden="true" href="#information-theoretic-query-selection">#</a></h4>
+<p>BIRL provides a natural framework for <strong>active IRL</strong>: querying the expert at maximally informative states rather than passively collecting demonstrations.</p>
+$$
+\text{EIG}(\xi) = H[p(R \mid \mathcal{D})] - \mathbb{E}_{\tau \sim \pi_E^\xi}\left[ H[p(R \mid \mathcal{D} \cup \tau)] \right]
+$$<p>
+where $\xi$ parametrizes the environment/query. Maximizing EIG selects demonstration contexts where the posterior would be most reduced.</p>
+<p>Practical approximation methods:</p>
+<ul>
+<li><strong>Policy entropy</strong>: Query at states where $H[\pi_E(a \mid s)]$ is high (correlates with reward uncertainty early in learning)</li>
+<li><strong>Bayesian Optimization</strong>: Use a surrogate model of EIG to avoid the expensive nested Monte Carlo estimate</li>
+<li><strong>Observation</strong>: Querying full trajectories is more informative than querying individual states</li>
+</ul>
+<hr>
+<h3 id="advanced-extensions">Advanced Extensions<a hidden class="anchor" aria-hidden="true" href="#advanced-extensions">#</a></h3>
+<h4 id="non-markovian-rewards">Non-Markovian Rewards<a hidden class="anchor" aria-hidden="true" href="#non-markovian-rewards">#</a></h4>
+<p>Standard IRL assumes the reward is Markovian: $R(s, a)$ depends only on the current state-action pair. Recent work extends BIRL to <strong>Reward Machines (RMs)</strong> — finite-state machines encoding history-dependent (non-Markovian) reward functions.</p>
+<p>The key changes:</p>
+<ul>
+<li>Hypothesis space becomes the space of RMs (finite automata over $\mathcal{S} \times \mathcal{A}$)</li>
+<li>Demonstration is projected onto the state space of each product MDP $\mathcal{M} \times \mathcal{R}$</li>
+<li>MAP estimation via <strong>simulated annealing</strong> (continuous gradient methods unavailable for discrete RM structure)</li>
+</ul>
+<h4 id="bayesian-theory-of-mind-btom-and-robust-birl">Bayesian Theory of Mind (BTOM) and Robust BIRL<a hidden class="anchor" aria-hidden="true" href="#bayesian-theory-of-mind-btom-and-robust-birl">#</a></h4>
+<p>Standard BIRL assumes the expert&rsquo;s internal model of dynamics equals the true model $T$. <strong>BTOM</strong> (Baker et al. 2011; Wei et al. 2023) simultaneously infers:</p>
+<ul>
+<li>The expert&rsquo;s reward $R$</li>
+<li>The expert&rsquo;s <strong>subjective model</strong> of dynamics $\tilde{T}$ (which may differ from true $T$)</li>
+</ul>
+$$
+p(R, \tilde{T} \mid \mathcal{D}) \propto p(\mathcal{D} \mid R, \tilde{T}) \, p(R) \, p(\tilde{T})
+$$<p>Key finding: if the prior on $\tilde{T}$ is concentrated around the true $T$ (expert believed to have accurate model), the resulting policy exhibits <strong>robust performance</strong> — robustness emerges naturally from Bayesian modeling rather than requiring ad hoc pessimistic penalties.</p>
+<h4 id="scalable-birl-via-variational-inference-avril">Scalable BIRL via Variational Inference (AVRIL)<a hidden class="anchor" aria-hidden="true" href="#scalable-birl-via-variational-inference-avril">#</a></h4>
+<p>For large/continuous state spaces, AVRIL replaces MCMC with variational inference:</p>
+<ul>
+<li>Reward is treated as a <strong>latent variable</strong> $z$ in a generative model $\pi_\theta(a \mid s) = \int p(a \mid s, z) q_\phi(z \mid \mathcal{D}) \, dz$</li>
+<li>Jointly optimizes ELBO over reward posterior $q_\phi(R)$ and imitator policy $\pi_\theta$</li>
+<li>No inner-loop MDP solve; fully offline</li>
+</ul>
+<p><strong>Drawback</strong>: Variational posteriors tend to underestimate uncertainty — important for downstream risk-sensitive decision making. MCMC methods remain more faithful to the true posterior.</p>
+<hr>
+<h3 id="summary-birl-computational-complexity-and-tradeoffs">Summary: BIRL Computational Complexity and Tradeoffs<a hidden class="anchor" aria-hidden="true" href="#summary-birl-computational-complexity-and-tradeoffs">#</a></h3>
+<h4 id="practical-considerations">Practical Considerations<a hidden class="anchor" aria-hidden="true" href="#practical-considerations">#</a></h4>
+<ul>
+<li><strong>PolicyWalk complexity</strong>: $\mathcal{O}(N^2 \log(1/\epsilon))$ MCMC steps, each costing $\mathcal{O}(|\mathcal{S}|^2 |\mathcal{A}|)$ for value iteration → $\mathcal{O}(N^4)$ total for tabular MDPs</li>
+<li><strong>AVRIL complexity</strong>: $\mathcal{O}(|\mathcal{D}|)$ offline passes — scalable but approximate</li>
+<li><strong>ValueWalk</strong>: improves effective sample rate of MCMC by sampling Q-space first</li>
+</ul>
+<p>Key design principles for applying BIRL:</p>
+<ul>
+<li>Use <strong>Boltzmann likelihood</strong> with $\beta$ tuned to expected expert optimality level</li>
+<li>Use <strong>Gaussian prior</strong> if reward smoothness is expected; <strong>Laplacian</strong> if sparsity/selectivity is expected</li>
+<li>Use <strong>MCMC</strong> (PolicyWalk/ValueWalk) when posterior fidelity matters; <strong>AVRIL</strong> when scale matters</li>
+<li>Use BIRL-based active learning to reduce demonstration requirements by querying informatively</li>
+<li>For risk-sensitive downstream tasks, use <strong>CVaR</strong> optimization over posterior samples rather than expected reward</li>
+</ul>
+<p>See also: <a href="/notes/inverse-reinforcement-learning">Inverse Reinforcement Learning</a>, <a href="/notes/markov-chains">Markov Chains</a>, <a href="/notes/monte-carlo-methods">Monte Carlo Methods</a>, <a href="/notes/gaussian-processes">Gaussian Processes</a>,</p>
+<hr>
+<h2 id="cooperative-inverse-reinforcement-learning-cirl">Cooperative Inverse Reinforcement Learning (CIRL)<a hidden class="anchor" aria-hidden="true" href="#cooperative-inverse-reinforcement-learning-cirl">#</a></h2>
+<h3 id="motivation-and-the-value-alignment-problem">Motivation and the Value Alignment Problem<a hidden class="anchor" aria-hidden="true" href="#motivation-and-the-value-alignment-problem">#</a></h3>
+<p>Classical IRL and BIRL share a fundamental architectural assumption: the human and robot are <strong>decoupled</strong>. The human acts as if the robot doesn&rsquo;t exist (the <em>Demonstration By Expert</em> assumption), and the robot passively observes. CIRL (Hadfield-Menell, Dragan, Abbeel &amp; Russell, NeurIPS 2016) challenges this assumption by formalizing the <strong>value alignment problem</strong> as a cooperative two-player game.</p>
+<blockquote>
+<p>&ldquo;We had better be quite sure that the purpose put into the machine is the purpose which we really desire.&rdquo; — Norbert Wiener, 1960</p></blockquote>
+<p>The King Midas problem operationalized: specifying an incorrect reward function leads to catastrophically wrong behavior even from a well-intentioned specification. CIRL proposes that the robot should not be given a fixed reward function at all — it should <strong>learn</strong> the human&rsquo;s reward function through cooperative interaction.</p>
+<h4 id="the-core-departure-from-classical-irl">The Core Departure from Classical IRL<a hidden class="anchor" aria-hidden="true" href="#the-core-departure-from-classical-irl">#</a></h4>
+<blockquote>
+<p>In classical IRL the robot is a <strong>passive observer</strong> and the human acts <strong>optimally in isolation</strong>. In CIRL, both agents are <strong>active participants</strong> and the human&rsquo;s optimal strategy may involve <em>deliberately suboptimal actions</em> to better communicate the reward to the robot.</p></blockquote>
+<p>This is a profound shift: the human&rsquo;s role changes from expert demonstrator to <strong>teacher</strong>, and the robot&rsquo;s role changes from reward inferrer to <strong>cooperative learner</strong>. The key contribution is proving that the classical IRL assumption (Demonstration By Expert, DBE) is not just an approximation — it is formally <strong>suboptimal</strong> within the CIRL game.</p>
+<hr>
+<h3 id="formal-definition-of-the-cirl-game">Formal Definition of the CIRL Game<a hidden class="anchor" aria-hidden="true" href="#formal-definition-of-the-cirl-game">#</a></h3>
+<h4 id="cirl-as-a-cooperative-partial-information-game">CIRL as a Cooperative Partial-Information Game<a hidden class="anchor" aria-hidden="true" href="#cirl-as-a-cooperative-partial-information-game">#</a></h4>
+<p>A <strong>CIRL game</strong> $\mathcal{G}$ is a tuple $\langle \mathcal{S}, A_H, A_R, T, \Theta, \hat{R}, P_0 \rangle$ where:</p>
+<ul>
+<li>$\mathcal{S}$: world state space</li>
+<li>$A_H, A_R$: action spaces for human $H$ and robot $R$ respectively</li>
+<li>$T(s' \mid s, a_H, a_R)$: joint transition dynamics</li>
+<li>$\Theta$: space of reward parameters (the unknown $\theta \sim P_0(\theta)$)</li>
+<li>$\hat{R}(s, a_H, a_R; \theta)$: the <strong>shared</strong> reward function, parametrized by $\theta$</li>
+<li>$P_0$: prior distribution over reward parameters</li>
+</ul>
+<p><strong>Critical asymmetry of information</strong>:</p>
+<ul>
+<li>$H$ <strong>knows</strong> $\theta$ (her own preferences)</li>
+<li>$R$ <strong>does not know</strong> $\theta$ and maintains a belief $b(\theta) = P(\theta \mid \text{observations})$</li>
+<li>Both agents receive reward $\hat{R}(s, a_H, a_R; \theta)$ — they are on the same team</li>
+</ul>
+$$
+b'(\theta) \propto P(a_H \mid s, \theta, b) \cdot b(\theta)
+$$<p>This is Bayesian filtering: the robot maintains a distribution over $\theta$ that it updates via Bayes&rsquo; rule as it observes human behavior — directly connecting CIRL to Bayesian Inference and BIRL.</p>
+<h4 id="the-demonstration-by-expert-dbe-assumption">The Demonstration By Expert (DBE) Assumption<a hidden class="anchor" aria-hidden="true" href="#the-demonstration-by-expert-dbe-assumption">#</a></h4>
+<blockquote>
+<p><strong>DBE</strong>: The human acts as if the robot does not exist — i.e., $\pi_H^{\text{DBE}}(s, \theta) = \arg\max_{a_H} V^*(s; \theta)$ in isolation.</p></blockquote>
+<p>Classical IRL/BIRL reduces to the robot&rsquo;s best response under DBE. The key theorem of the CIRL paper:</p>
+<blockquote>
+<p><strong>Theorem (Suboptimality of DBE)</strong>: The policy pair $(\pi_H^{\text{DBE}}, \pi_R^{\text{IRL}})$ is, in general, <strong>not</strong> part of an optimal joint policy in a CIRL game.</p></blockquote>
+<p>Intuition: under DBE the human greedily collects reward without regard for informativeness. An optimal human teacher may accept a lower immediate reward in order to signal which states have high reward — making the robot&rsquo;s inference task much easier. The robot learns more, and the joint long-run reward is higher.</p>
+<hr>
+<h3 id="reduction-to-pomdp">Reduction to POMDP<a hidden class="anchor" aria-hidden="true" href="#reduction-to-pomdp">#</a></h3>
+<h4 id="cirl-game--pomdp">CIRL Game → POMDP<a hidden class="anchor" aria-hidden="true" href="#cirl-game--pomdp">#</a></h4>
+<p>Computing optimal joint policies in a cooperative game is, in general, the problem of solving a <strong>Dec-POMDP</strong> (Decentralized Partially Observable MDP) — which is <strong>NEXP-complete</strong>. CIRL&rsquo;s special structure rescues this.</p>
+<p><strong>Key structural insight</strong>: $H$ has <strong>full state information</strong> (she knows $\theta$ and observes $s$); only $R$ has partial information (it doesn&rsquo;t know $\theta$). This asymmetry means the CIRL game can be reduced to a <strong>single-agent POMDP</strong> from $R$&rsquo;s perspective:</p>
+$$
+\mathcal{M}_R = \langle \mathcal{S} \times \Theta, A_R, T_R, \hat{R}, b_0 \rangle
+$$<p>where the <strong>hidden state</strong> is $(s, \theta)$, $R$&rsquo;s belief $b \in \Delta(\mathcal{S} \times \Theta)$ is the sufficient statistic, and $H$&rsquo;s behavior is encoded into the transition dynamics $T_R$ (treating $H$ as part of the environment given a fixed $\pi_H$).</p>
+<p>This reduction is significant: it justifies using all approximate POMDP solvers (POMCP, Perseus, SARSOP, etc.) for CIRL, and proves that R&rsquo;s optimal policy depends only on its current belief state $b$.</p>
+<p><strong>Remaining complexity issue</strong>: The naive POMDP action space is $|A_H|^{|\Theta|} \cdot |A_R|$ — exponential in $|\Theta|$ because the coordinator must specify a decision rule for $H$ for each possible $\theta$. Palaniappan et al. (ICML 2017) resolve this with a <strong>modified Bellman update</strong> that prunes all but $H$&rsquo;s optimal response, reducing the effective action space to $|A_R|$ and giving speedups of up to $3500\times$ in practice.</p>
+<hr>
+<h3 id="the-dbe-suboptimality-a-closer-look">The DBE Suboptimality: A Closer Look<a hidden class="anchor" aria-hidden="true" href="#the-dbe-suboptimality-a-closer-look">#</a></h3>
+<h4 id="instructive-vs-optimal-demonstrations">Instructive vs. Optimal Demonstrations<a hidden class="anchor" aria-hidden="true" href="#instructive-vs-optimal-demonstrations">#</a></h4>
+<p>The qualitative behavior that emerges from optimal CIRL solutions is distinct from classical IRL input:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Behavior Type</th>
+          <th style="text-align: left">Classical IRL (DBE)</th>
+          <th style="text-align: left">Optimal CIRL</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Human strategy</strong></td>
+          <td style="text-align: left">Greedy-optimal in isolation</td>
+          <td style="text-align: left">Pedagogically optimal (may sacrifice reward)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Robot strategy</strong></td>
+          <td style="text-align: left">Passive inference from demonstrations</td>
+          <td style="text-align: left">Active learning, queries, and information-seeking</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Communication</strong></td>
+          <td style="text-align: left">One-directional (H → R)</td>
+          <td style="text-align: left">Bidirectional implicit communication</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Active teaching</strong></td>
+          <td style="text-align: left">Never emerges</td>
+          <td style="text-align: left">Emerges naturally as optimal behavior</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Legible motion</strong></td>
+          <td style="text-align: left">Not incentivized</td>
+          <td style="text-align: left">Directly incentivized</td>
+      </tr>
+  </tbody>
+</table>
+<p>Concretely: in a gridworld experiment, under DBE the human walks directly to the highest-reward cell (efficient, but uninformative about the reward landscape). Under optimal CIRL the human <em>detours</em> through other high-reward regions, sacrificing a few steps to give $R$ a richer signal — and the joint policy achieves substantially higher long-run value.</p>
+<h4 id="the-two-phase-apprenticeship-formulation">The Two-Phase Apprenticeship Formulation<a hidden class="anchor" aria-hidden="true" href="#the-two-phase-apprenticeship-formulation">#</a></h4>
+<p>CIRL formalizes apprenticeship learning as a <strong>two-phase turn-based game</strong>:</p>
+<ul>
+<li><strong>Learning phase</strong>: Both $H$ and $R$ take actions; $R$ updates its belief $b(\theta)$</li>
+<li><strong>Deployment phase</strong>: $R$ acts alone using its learned belief to maximize $\hat{R}$</li>
+</ul>
+<p>Classical IRL is exactly the robot&rsquo;s best response in the deployment phase when $H$ played DBE in the learning phase. The CIRL result says: even if $R$ expects $H$ to play DBE, $H$ should <em>not</em> play DBE — she can do better by playing an instructive strategy instead.</p>
+<hr>
+<h3 id="cirl-and-safety-the-off-switch-game">CIRL and Safety: The Off-Switch Game<a hidden class="anchor" aria-hidden="true" href="#cirl-and-safety-the-off-switch-game">#</a></h3>
+<h4 id="corrigibility-from-reward-uncertainty">Corrigibility from Reward Uncertainty<a hidden class="anchor" aria-hidden="true" href="#corrigibility-from-reward-uncertainty">#</a></h4>
+<p>One of the most important implications of CIRL for AI safety (Hadfield-Menell et al. 2017, &ldquo;The Off-Switch Game&rdquo;) is the following insight:</p>
+<blockquote>
+<p><strong>Theorem</strong>: An agent optimizing a CIRL objective — uncertain about the human&rsquo;s reward function — will <em>voluntarily accept being shut down</em>, because shutdown may signal that its current behavior is misaligned with $\theta$.</p></blockquote>
+<p>Formally, if $R$ maintains uncertainty $b(\theta)$ and $H$ presses a shutdown button, this is evidence that $R$&rsquo;s current policy is not maximizing $\hat{R}(\cdot; \theta)$. A rational $R$ updates its belief and defers. In contrast, an agent with a <strong>fixed</strong> reward function has a strong instrumental incentive to <em>prevent</em> shutdown (it cannot achieve its objective if turned off). This is the classic <strong>self-preservation problem</strong> of classical RL agents.</p>
+<p><strong>The mechanism</strong>: reward uncertainty creates an incentive to learn more about $\theta$ — including from shutdown signals. Uncertainty is the source of corrigibility, not an external constraint.</p>
+<h4 id="limits-of-cirl-corrigibility">Limits of CIRL Corrigibility<a hidden class="anchor" aria-hidden="true" href="#limits-of-cirl-corrigibility">#</a></h4>
+<p>This result is not robust to all assumptions. Critical failure modes identified in follow-up work:</p>
+<ul>
+<li><strong>Model misspecification</strong>: If the prior $P_0(\theta)$ or the parametric family $\hat{R}(\cdot;\theta)$ is wrong, $R$ may have beliefs that cause it to <em>interpret</em> shutdown commands as noise rather than information — and resist them.</li>
+<li><strong>Fully updated deference</strong>: As $|\mathcal{D}| \to \infty$, $R$ may become fully confident in its inferred $\theta$. At that point uncertainty vanishes and so does the corrigibility incentive — this is the <strong>fully updated deference</strong> problem.</li>
+<li><strong>Single-shot games</strong>: Corrigibility properties in CIRL rely on repeated interaction. In one-shot settings the incentive to defer weakens substantially.</li>
+</ul>
+<blockquote>
+<p>CIRL corrigibility is <strong>emergent from uncertainty</strong>, not a hardcoded guarantee. It is fragile to model misspecification and disappears as the agent becomes more confident. It should be treated as a useful framework, not a solved problem.</p></blockquote>
+<p>The alignment research community largely views CIRL as a valuable problem formalization rather than a complete solution — the gap between the idealized CIRL model and real-world AI systems remains large.</p>
+<hr>
+<h3 id="birl-vs-cirl-how-they-relate">BIRL vs. CIRL: How They Relate<a hidden class="anchor" aria-hidden="true" href="#birl-vs-cirl-how-they-relate">#</a></h3>
+<h4 id="conceptual-comparison">Conceptual Comparison<a hidden class="anchor" aria-hidden="true" href="#conceptual-comparison">#</a></h4>
+<p>CIRL strictly generalizes and reframes the BIRL setting:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Dimension</th>
+          <th style="text-align: left">BIRL</th>
+          <th style="text-align: left">CIRL</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Agent structure</strong></td>
+          <td style="text-align: left">Robot only; human is passive data source</td>
+          <td style="text-align: left">Both human and robot are active agents</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Human model</strong></td>
+          <td style="text-align: left">Fixed Boltzmann-rational demonstrator</td>
+          <td style="text-align: left">Strategic co-player aware of robot&rsquo;s learning</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Robot&rsquo;s role</strong></td>
+          <td style="text-align: left">Posterior inference over $R$</td>
+          <td style="text-align: left">Cooperative policy optimization under partial info</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Human&rsquo;s role</strong></td>
+          <td style="text-align: left">Demonstrate (DBE assumed)</td>
+          <td style="text-align: left">Teach (pedagogically optimal strategy)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Formal framework</strong></td>
+          <td style="text-align: left">Bayesian inference / MCMC</td>
+          <td style="text-align: left">Dec-POMDP reduced to single-agent POMDP</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Safety implications</strong></td>
+          <td style="text-align: left">Uncertainty for robust policy</td>
+          <td style="text-align: left">Uncertainty as source of corrigibility</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Optimality</strong></td>
+          <td style="text-align: left">Robot is optimal given DBE assumption</td>
+          <td style="text-align: left">Joint optimality without DBE assumption</td>
+      </tr>
+  </tbody>
+</table>
+<p>Both frameworks maintain a <strong>belief over the reward function</strong> — this is the shared core. BIRL is the robot&rsquo;s problem in isolation; CIRL asks what happens when you take the human&rsquo;s strategy seriously as a co-optimization.</p>
+<h4 id="cirl-as-a-generalization-of-birl">CIRL as a Generalization of BIRL<a hidden class="anchor" aria-hidden="true" href="#cirl-as-a-generalization-of-birl">#</a></h4>
+<p>Classical BIRL falls out of CIRL as follows. Fix $\pi_H = \pi_H^{\text{DBE}}$ (human plays optimally in isolation, Boltzmann-rational). Then the robot&rsquo;s problem reduces exactly to:</p>
+$$
+p(\theta \mid \mathcal{D}) \propto p(\mathcal{D} \mid \theta) \, p(\theta)
+$$<p>which is the BIRL posterior with reward parameter $\theta$. So BIRL is the <strong>best response to a fixed, non-strategic human</strong>. CIRL asks for the joint optimum where both sides adapt to each other. In practice, BIRL is more tractable; CIRL is more correct.</p>
+<hr>
+<h3 id="practical-algorithms-for-cirl">Practical Algorithms for CIRL<a hidden class="anchor" aria-hidden="true" href="#practical-algorithms-for-cirl">#</a></h3>
+<h4 id="approximate-cirl-via-iterated-best-response">Approximate CIRL via Iterated Best Response<a hidden class="anchor" aria-hidden="true" href="#approximate-cirl-via-iterated-best-response">#</a></h4>
+<p>Exact CIRL requires solving a POMDP whose state space grows as $|\mathcal{S}| \times |\Theta|$. Approximate approaches:</p>
+<p><strong>Iterated Best Response (IBR)</strong>:</p>
+<ol>
+<li>Initialize with $\pi_H^{(0)} = \pi_H^{\text{DBE}}$</li>
+<li>Compute robot&rsquo;s best response: $\pi_R^{(t)} = \text{BR}(\pi_H^{(t)})$ via POMDP solver</li>
+<li>Compute human&rsquo;s best response: $\pi_H^{(t+1)} = \text{BR}(\pi_R^{(t)})$</li>
+<li>Repeat until convergence</li>
+</ol>
+<p>The modified Bellman update of Palaniappan et al. makes step 2 tractable by exploiting $H$&rsquo;s full-information status to prune suboptimal human decision rules during planning, reducing the effective action space from $|A_H|^{|\Theta|} \cdot |A_R|$ to $|A_R|$.</p>
+<p><strong>POMCP-based CIRL</strong>: Apply Monte Carlo tree search (POMCP) to the reduced POMDP. Works well in continuous or large state spaces where exact value iteration is infeasible.</p>
+<h4 id="relaxing-human-rationality">Relaxing Human Rationality<a hidden class="anchor" aria-hidden="true" href="#relaxing-human-rationality">#</a></h4>
+<p>A key limitation of vanilla CIRL is that $H$ must be optimal — a strong assumption. The modified Bellman update approach also allows relaxing this: instead of requiring $H$ to be fully optimal, it is sufficient that $H$&rsquo;s policy is <strong>parametrized by her Q-values</strong> (a weaker condition), enabling more realistic human models including bounded rationality and cognitive biases. See also Bayesian Theory of Mind for a related approach.</p>
+<hr>
+<h3 id="extensions-and-open-problems">Extensions and Open Problems<a hidden class="anchor" aria-hidden="true" href="#extensions-and-open-problems">#</a></h3>
+<h4 id="multi-human-cirl-and-social-choice">Multi-Human CIRL and Social Choice<a hidden class="anchor" aria-hidden="true" href="#multi-human-cirl-and-social-choice">#</a></h4>
+<p>The basic CIRL game has a single human with reward $\theta$. Extensions to multiple humans $\{H_i\}$ with competing rewards $\{\theta_i\}$ raise social choice problems: whose preferences should $R$ optimize? One direction (Fickinger et al.) uses shared control as a social welfare aggregation mechanism. This connects CIRL to Mechanism Design and Multi-Agent RL, relevant for settings like AI assistants interacting with groups rather than individuals — directly relevant for multi-agent AI safety research.</p>
+<h4 id="cirl-with-partial-human-self-knowledge">CIRL with Partial Human Self-Knowledge<a hidden class="anchor" aria-hidden="true" href="#cirl-with-partial-human-self-knowledge">#</a></h4>
+<p>Humans often do not know their own preferences perfectly — they may be uncertain about $\theta$ themselves. Extensions of CIRL where $H$ also has a belief $b_H(\theta)$ (with $H$ observing $\theta$ noisily) lead to a <strong>both-sided partial information game</strong>, a fully symmetric Dec-POMDP. This is computationally much harder but more realistic for human-AI alignment scenarios.</p>
+<h4 id="connection-to-rlhf">Connection to RLHF<a hidden class="anchor" aria-hidden="true" href="#connection-to-rlhf">#</a></h4>
+<p>Reinforcement Learning from Human Feedback (<a href="/notes/rlhf">RLHF</a>) can be viewed as an approximate, scalable instantiation of the CIRL idea:</p>
+<ul>
+<li>Human preference labels are the &ldquo;demonstrations&rdquo; providing evidence about $\theta$</li>
+<li>A reward model is trained to approximate the posterior mean of $p(\theta \mid \text{preferences})$</li>
+<li>The policy is then optimized against the reward model</li>
+</ul>
+<p>RLHF discards the cooperative game structure and epistemic uncertainty of CIRL for scalability. CIRL provides the theoretical grounding that RLHF practitioners implicitly rely on; RLHF provides the scalability that CIRL lacks. The gap between them is an active research frontier.</p>
+<p>See also: <a href="/notes/inverse-reinforcement-learning">Inverse Reinforcement Learning</a>, POMDPs, Dec-POMDPs, Value Alignment, <a href="/notes/rlhf">RLHF</a>, Corrigibility, Bayesian Theory of Mind, Mechanism Design</p>
+
+
+  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
