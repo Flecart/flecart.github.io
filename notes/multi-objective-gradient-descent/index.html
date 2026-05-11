@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Multi-Objective Gradient Descent | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Multi-Objective Gradient Descent (MGDA)
+Problem Formulation
+Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking Pareto-optimal solutions rather than a single weighted compromise.
+Multi-Objective Optimization Setup
+Single-objective baseline: minimize $\mathcal{L}(\theta)$ — one gradient, one direction.
+Multi-objective generalization: given $T$ task losses $\{\mathcal{L}_t(\theta)\}_{t=1}^T$, there is generally no $\theta$ minimizing all simultaneously. The target shifts to the Pareto front.
+
+Pareto optimality: $\theta^*$ is Pareto-optimal if there exists no $\theta&#39;$ such that $\mathcal{L}_t(\theta&#39;) \leq \mathcal{L}_t(\theta^*)$ for all $t$, with strict inequality for at least one $t$.">
+<meta name="author" content="
+By Xuanqiang Angelo Huang">
+<link rel="canonical" href="https://flecart.github.io/notes/multi-objective-gradient-descent/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/multi-objective-gradient-descent/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/multi-objective-gradient-descent/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Multi-Objective Gradient Descent">
+  <meta property="og:description" content="Multi-Objective Gradient Descent (MGDA) Problem Formulation Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking Pareto-optimal solutions rather than a single weighted compromise.
+Multi-Objective Optimization Setup Single-objective baseline: minimize $\mathcal{L}(\theta)$ — one gradient, one direction.
+Multi-objective generalization: given $T$ task losses $\{\mathcal{L}_t(\theta)\}_{t=1}^T$, there is generally no $\theta$ minimizing all simultaneously. The target shifts to the Pareto front.
+Pareto optimality: $\theta^*$ is Pareto-optimal if there exists no $\theta&#39;$ such that $\mathcal{L}_t(\theta&#39;) \leq \mathcal{L}_t(\theta^*)$ for all $t$, with strict inequality for at least one $t$.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Multi-Objective Gradient Descent">
+<meta name="twitter:description" content="Multi-Objective Gradient Descent (MGDA)
+Problem Formulation
+Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking Pareto-optimal solutions rather than a single weighted compromise.
+Multi-Objective Optimization Setup
+Single-objective baseline: minimize $\mathcal{L}(\theta)$ — one gradient, one direction.
+Multi-objective generalization: given $T$ task losses $\{\mathcal{L}_t(\theta)\}_{t=1}^T$, there is generally no $\theta$ minimizing all simultaneously. The target shifts to the Pareto front.
+
+Pareto optimality: $\theta^*$ is Pareto-optimal if there exists no $\theta&#39;$ such that $\mathcal{L}_t(\theta&#39;) \leq \mathcal{L}_t(\theta^*)$ for all $t$, with strict inequality for at least one $t$.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Multi-Objective Gradient Descent",
+      "item": "https://flecart.github.io/notes/multi-objective-gradient-descent/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Multi-Objective Gradient Descent",
+  "name": "Multi-Objective Gradient Descent",
+  "description": "Multi-Objective Gradient Descent (MGDA) Problem Formulation Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking Pareto-optimal solutions rather than a single weighted compromise.\nMulti-Objective Optimization Setup Single-objective baseline: minimize $\\mathcal{L}(\\theta)$ — one gradient, one direction.\nMulti-objective generalization: given $T$ task losses $\\{\\mathcal{L}_t(\\theta)\\}_{t=1}^T$, there is generally no $\\theta$ minimizing all simultaneously. The target shifts to the Pareto front.\nPareto optimality: $\\theta^*$ is Pareto-optimal if there exists no $\\theta'$ such that $\\mathcal{L}_t(\\theta') \\leq \\mathcal{L}_t(\\theta^*)$ for all $t$, with strict inequality for at least one $t$.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "Multi-Objective Gradient Descent (MGDA) Problem Formulation Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking Pareto-optimal solutions rather than a single weighted compromise.\nMulti-Objective Optimization Setup Single-objective baseline: minimize $\\mathcal{L}(\\theta)$ — one gradient, one direction.\nMulti-objective generalization: given $T$ task losses $\\{\\mathcal{L}_t(\\theta)\\}_{t=1}^T$, there is generally no $\\theta$ minimizing all simultaneously. The target shifts to the Pareto front.\nPareto optimality: $\\theta^*$ is Pareto-optimal if there exists no $\\theta'$ such that $\\mathcal{L}_t(\\theta') \\leq \\mathcal{L}_t(\\theta^*)$ for all $t$, with strict inequality for at least one $t$.\nPareto stationarity (weaker, necessary condition): $\\theta$ is Pareto stationary if no infinitesimal move simultaneously decreases all losses. MGDA converges to this.\n[!note] Pareto Stationary ≠ Pareto Optimal Pareto stationarity is only a necessary condition (like critical points in single-objective). In nonconvex settings, MGDA may converge to saddle points on the front.\nLinear Scalarization as Baseline $\\min_\\theta \\sum_{t=1}^T \\lambda_t \\mathcal{L}_t(\\theta)$\nReduces multi-objective to single-objective; simple to implement. Fatal flaw: fixed $\\lambda$ cannot reach non-convex regions of the Pareto front. Only convex combinations of extreme points are reachable. $\\lambda$ requires manual tuning per desired trade-off; not adaptive during training. See Pareto Front Geometry and Scalarization Methods for the convex-hull argument.\nCore MGDA Algorithm Common Descent Direction The key insight: replace a single gradient step with a gradient aggregation problem. At each step, find $\\alpha \\in \\Delta^T$ (probability simplex) such that:\n$$ d^* = -\\sum_{t=1}^T \\alpha_t^* \\nabla_\\theta \\mathcal{L}_t(\\theta) $$is a descent direction for every task simultaneously — i.e., $\\langle d^*, \\nabla_\\theta \\mathcal{L}_t \\rangle \\leq 0 \\; \\forall t$.\nThis is obtained by solving:\n$$ \\min_{\\alpha \\in \\Delta^T} \\left\\| \\sum_{t=1}^T \\alpha_t g_t \\right\\|^2, \\qquad g_t = \\nabla_\\theta \\mathcal{L}_t(\\theta) $$ [!note] Geometric Interpretation This finds the minimum-norm point in the convex hull of the task gradient vectors. If the origin lies inside the hull, $\\theta$ is already Pareto stationary.\nInner QP: Gram Matrix Formulation Let $G \\in \\mathbb{R}^{T \\times T}$ be the Gram matrix of task gradients:\n$$ G_{ij} = g_i^\\top g_j $$The inner problem becomes:\n$$ \\min_{\\alpha \\in \\Delta^T} \\; \\alpha^\\top G \\alpha $$ Convex QP on the simplex; solvable exactly via Frank-Wolfe in $O(T^2)$. For $T = 2$: closed-form solution based on the angle between $g_1$ and $g_2$. If $\\|\\alpha^{*\\top} G \\alpha^*\\|= 0$: Pareto stationary — no common descent exists. Parameter Update Rule $$ \\theta \\leftarrow \\theta - \\eta \\sum_{t=1}^T \\alpha_t^* g_t $$ Standard SGD step using the combined direction. Works with Adam: apply Adam preconditioning to each $g_t$ before solving the QP. Batch size sensitivity: noisy $g_t$ inflates the estimated $G$, causing spurious conflict signals → prefer larger batches. MGDA-UB: Scalable Variant Upper Bound Trick (Sener \u0026 Koltun, 2018) Computing $T$ full gradients $\\nabla_\\theta \\mathcal{L}_t$ w.r.t. all parameters is $O(T \\cdot |\\theta|)$ — prohibitive for large networks.\nAssumption: shared encoder $\\phi$ produces representation $z = \\phi(\\theta; x)$; each task has head $h_t$.\nKey result: solving the QP on the representation gradients $\\nabla_z \\mathcal{L}_t$ instead of $\\nabla_\\theta \\mathcal{L}_t$ provides a valid upper bound on the multi-objective loss descent. Cost drops from $O(T \\cdot |\\theta|)$ to $O(T \\cdot |z|)$.\n[!tip] Practical Architecture Implication MGDA-UB is most effective when the shared encoder dominates parameter count (e.g., ViT backbone + small task heads). If heads are large relative to encoder, the bound becomes loose.\nConvergence guarantees for encoder parameters are preserved under MGDA-UB. Task-specific heads are still trained by their individual losses. Convergence Theory Formal Guarantees Setting Result Convex objectives Convergence to Pareto optimal point Nonconvex (general) Convergence to Pareto critical point (necessary condition only) Smooth, nonconvex $O(1/\\sqrt{K})$ rate to $\\varepsilon$-Pareto stationarity MGDA-UB Same guarantees hold for encoder parameters [!question] Which point on the front does MGDA converge to? MGDA does not control which Pareto-optimal point it finds — initialization-dependent. To trace the full front: multiple restarts or combining with scalarization sweeps.\nComparison with Adjacent Methods Competing MTL Gradient Aggregation Methods Method Mechanism Cost per step Pareto guarantee Notes Scalarization Fixed $\\lambda_t$ weighted sum $O(\\theta)$ ✗ (misses non-convex front) Baseline; no conflict resolution MGDA Min-norm QP on simplex $O(T^2 + T\\|\\theta\\|)$ ✓ Pareto stationary Principled; expensive for large $T$ MGDA-UB QP on representation space $O(T^2 + T\\|z\\|)$ ✓ (encoder) Practical for deep MTL PCGrad Project conflicting gradients $O(T^2)$ ✗ (heuristic) Cheaper, no convergence proof CAGrad QP + proximity to mean gradient $O(T^2)$ Approx. Better empirical MTL performance Nash-MTL Nash bargaining solution $O(T^3)$ ✓ + fairness Most principled; heaviest compute [!note] PCGrad vs MGDA PCGrad (Gradient Surgery) projects each task’s gradient onto the normal plane of conflicting gradients. Cheaper and often competitive empirically, but theoretically weaker — no guarantee of common descent.\nPractical Considerations \u0026 Drawbacks Limitations and Failure Modes Large $T$: QP cost grows as $O(T^2)$ in gradient dimensionality; for $T \u003e 50$ tasks, this is prohibitive. Mitigations: random task subsampling, approximate QP solvers. Gradient noise: stochastic $g_t$ inflates $G$ — the solver may spuriously detect “conflict” where none exists. Larger batches or gradient averaging help. No front exploration: converges to a single point; must re-run with different seeds/initializations to map the Pareto front. Non-convex front: MGDA finds a Pareto critical point, not necessarily Pareto optimal. In practice, one cannot verify optimality without exhaustive search. Representation bottleneck (MGDA-UB): if the task heads are large or the encoder small, the upper bound is loose and the approximation degrades. [!warning] Adam + MGDA Interaction Naively applying MGDA after Adam preconditioning changes the geometry — Adam’s diagonal preconditioning distorts inner products in $G$. Either use raw gradients for $G$ and Adam-preconditioned for the update, or use a consistent metric throughout.\nKey References Désidéri, J.-A. (2012). Multiple-gradient descent algorithm (MGDA) for multiobjective optimization. C.R. Acad. Sci. Paris. — original formulation Sener, O. \u0026 Koltun, V. (2018). Multi-task learning as multi-objective optimization. NeurIPS. — MGDA-UB, deep learning application Yu, T. et al. (2020). Gradient surgery for multi-task learning. NeurIPS. — PCGrad Liu, B. et al. (2021). Conflict-averse gradient descent for multi-task learning. NeurIPS. — CAGrad Navon, A. et al. (2022). Multi-task learning as a bargaining game. ICML. — Nash-MTL ",
+  "wordCount" : "989",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang Angelo Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/notes/multi-objective-gradient-descent/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Multi-Objective Gradient Descent
+    </h1>
+    <div class="post-meta">Reading Time: 5 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#multi-objective-gradient-descent-mgda" aria-label="Multi-Objective Gradient Descent (MGDA)">Multi-Objective Gradient Descent (MGDA)</a><ul>
+                        
+                <li>
+                    <a href="#problem-formulation" aria-label="Problem Formulation">Problem Formulation</a><ul>
+                        
+                <li>
+                    <a href="#multi-objective-optimization-setup" aria-label="Multi-Objective Optimization Setup">Multi-Objective Optimization Setup</a></li>
+                <li>
+                    <a href="#linear-scalarization-as-baseline" aria-label="Linear Scalarization as Baseline">Linear Scalarization as Baseline</a></li></ul>
+                </li>
+                <li>
+                    <a href="#core-mgda-algorithm" aria-label="Core MGDA Algorithm">Core MGDA Algorithm</a><ul>
+                        
+                <li>
+                    <a href="#common-descent-direction" aria-label="Common Descent Direction">Common Descent Direction</a></li>
+                <li>
+                    <a href="#inner-qp-gram-matrix-formulation" aria-label="Inner QP: Gram Matrix Formulation">Inner QP: Gram Matrix Formulation</a></li>
+                <li>
+                    <a href="#parameter-update-rule" aria-label="Parameter Update Rule">Parameter Update Rule</a></li></ul>
+                </li>
+                <li>
+                    <a href="#mgda-ub-scalable-variant" aria-label="MGDA-UB: Scalable Variant">MGDA-UB: Scalable Variant</a><ul>
+                        
+                <li>
+                    <a href="#upper-bound-trick-sener--koltun-2018" aria-label="Upper Bound Trick (Sener &amp; Koltun, 2018)">Upper Bound Trick (Sener &amp; Koltun, 2018)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#convergence-theory" aria-label="Convergence Theory">Convergence Theory</a><ul>
+                        
+                <li>
+                    <a href="#formal-guarantees" aria-label="Formal Guarantees">Formal Guarantees</a></li></ul>
+                </li>
+                <li>
+                    <a href="#comparison-with-adjacent-methods" aria-label="Comparison with Adjacent Methods">Comparison with Adjacent Methods</a><ul>
+                        
+                <li>
+                    <a href="#competing-mtl-gradient-aggregation-methods" aria-label="Competing MTL Gradient Aggregation Methods">Competing MTL Gradient Aggregation Methods</a></li></ul>
+                </li>
+                <li>
+                    <a href="#practical-considerations--drawbacks" aria-label="Practical Considerations &amp; Drawbacks">Practical Considerations &amp; Drawbacks</a><ul>
+                        
+                <li>
+                    <a href="#limitations-and-failure-modes" aria-label="Limitations and Failure Modes">Limitations and Failure Modes</a></li></ul>
+                </li>
+                <li>
+                    <a href="#key-references" aria-label="Key References">Key References</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="multi-objective-gradient-descent-mgda">Multi-Objective Gradient Descent (MGDA)<a hidden class="anchor" aria-hidden="true" href="#multi-objective-gradient-descent-mgda">#</a></h2>
+<h3 id="problem-formulation">Problem Formulation<a hidden class="anchor" aria-hidden="true" href="#problem-formulation">#</a></h3>
+<p>Brief context: standard gradient descent optimizes a single scalar loss. MGDA generalizes this to $T$ tasks, seeking <strong>Pareto-optimal</strong> solutions rather than a single weighted compromise.</p>
+<h4 id="multi-objective-optimization-setup">Multi-Objective Optimization Setup<a hidden class="anchor" aria-hidden="true" href="#multi-objective-optimization-setup">#</a></h4>
+<p><strong>Single-objective baseline</strong>: minimize $\mathcal{L}(\theta)$ — one gradient, one direction.</p>
+<p><strong>Multi-objective generalization</strong>: given $T$ task losses $\{\mathcal{L}_t(\theta)\}_{t=1}^T$, there is generally no $\theta$ minimizing all simultaneously. The target shifts to the <strong>Pareto front</strong>.</p>
+<blockquote>
+<p><strong>Pareto optimality</strong>: $\theta^*$ is Pareto-optimal if there exists no $\theta'$ such that $\mathcal{L}_t(\theta') \leq \mathcal{L}_t(\theta^*)$ for all $t$, with strict inequality for at least one $t$.</p></blockquote>
+<p><strong>Pareto stationarity</strong> (weaker, necessary condition): $\theta$ is Pareto stationary if no infinitesimal move simultaneously decreases all losses. MGDA converges to this.</p>
+<blockquote>
+<p>[!note] Pareto Stationary ≠ Pareto Optimal
+Pareto stationarity is only a necessary condition (like critical points in single-objective). In nonconvex settings, MGDA may converge to saddle points on the front.</p></blockquote>
+<h4 id="linear-scalarization-as-baseline">Linear Scalarization as Baseline<a hidden class="anchor" aria-hidden="true" href="#linear-scalarization-as-baseline">#</a></h4>
+<blockquote>
+<p>$\min_\theta \sum_{t=1}^T \lambda_t \mathcal{L}_t(\theta)$</p></blockquote>
+<ul>
+<li>Reduces multi-objective to single-objective; simple to implement.</li>
+<li><strong>Fatal flaw</strong>: fixed $\lambda$ cannot reach <strong>non-convex regions</strong> of the Pareto front. Only convex combinations of extreme points are reachable.</li>
+<li>$\lambda$ requires manual tuning per desired trade-off; not adaptive during training.</li>
+</ul>
+<p>See Pareto Front Geometry and Scalarization Methods for the convex-hull argument.</p>
+<hr>
+<h3 id="core-mgda-algorithm">Core MGDA Algorithm<a hidden class="anchor" aria-hidden="true" href="#core-mgda-algorithm">#</a></h3>
+<h4 id="common-descent-direction">Common Descent Direction<a hidden class="anchor" aria-hidden="true" href="#common-descent-direction">#</a></h4>
+<p>The key insight: replace a single gradient step with a <strong>gradient aggregation problem</strong>. At each step, find $\alpha \in \Delta^T$ (probability simplex) such that:</p>
+$$
+d^* = -\sum_{t=1}^T \alpha_t^* \nabla_\theta \mathcal{L}_t(\theta)
+$$<p>is a <strong>descent direction for every task simultaneously</strong> — i.e., $\langle d^*, \nabla_\theta \mathcal{L}_t \rangle \leq 0 \; \forall t$.</p>
+<p>This is obtained by solving:</p>
+$$
+\min_{\alpha \in \Delta^T} \left\| \sum_{t=1}^T \alpha_t g_t \right\|^2, \qquad g_t = \nabla_\theta \mathcal{L}_t(\theta)
+$$<blockquote>
+<p>[!note] Geometric Interpretation
+This finds the <strong>minimum-norm point</strong> in the convex hull of the task gradient vectors. If the origin lies inside the hull, $\theta$ is already Pareto stationary.</p></blockquote>
+<h4 id="inner-qp-gram-matrix-formulation">Inner QP: Gram Matrix Formulation<a hidden class="anchor" aria-hidden="true" href="#inner-qp-gram-matrix-formulation">#</a></h4>
+<p>Let $G \in \mathbb{R}^{T \times T}$ be the <strong>Gram matrix</strong> of task gradients:</p>
+$$
+G_{ij} = g_i^\top g_j
+$$<p>The inner problem becomes:</p>
+$$
+\min_{\alpha \in \Delta^T} \; \alpha^\top G \alpha
+$$<ul>
+<li>Convex QP on the simplex; solvable exactly via <strong>Frank-Wolfe</strong> in $O(T^2)$.</li>
+<li>For $T = 2$: closed-form solution based on the angle between $g_1$ and $g_2$.</li>
+<li>If $\|\alpha^{*\top} G \alpha^*\|= 0$: <strong>Pareto stationary</strong> — no common descent exists.</li>
+</ul>
+<h4 id="parameter-update-rule">Parameter Update Rule<a hidden class="anchor" aria-hidden="true" href="#parameter-update-rule">#</a></h4>
+$$
+\theta \leftarrow \theta - \eta \sum_{t=1}^T \alpha_t^* g_t
+$$<ul>
+<li>Standard SGD step using the combined direction.</li>
+<li>Works with Adam: apply Adam preconditioning to each $g_t$ <strong>before</strong> solving the QP.</li>
+<li><strong>Batch size sensitivity</strong>: noisy $g_t$ inflates the estimated $G$, causing spurious conflict signals → prefer larger batches.</li>
+</ul>
+<hr>
+<h3 id="mgda-ub-scalable-variant">MGDA-UB: Scalable Variant<a hidden class="anchor" aria-hidden="true" href="#mgda-ub-scalable-variant">#</a></h3>
+<h4 id="upper-bound-trick-sener--koltun-2018">Upper Bound Trick (Sener &amp; Koltun, 2018)<a hidden class="anchor" aria-hidden="true" href="#upper-bound-trick-sener--koltun-2018">#</a></h4>
+<p>Computing $T$ full gradients $\nabla_\theta \mathcal{L}_t$ w.r.t. all parameters is $O(T \cdot |\theta|)$ — prohibitive for large networks.</p>
+<p><strong>Assumption</strong>: shared encoder $\phi$ produces representation $z = \phi(\theta; x)$; each task has head $h_t$.</p>
+<p><strong>Key result</strong>: solving the QP on the <strong>representation gradients</strong> $\nabla_z \mathcal{L}_t$ instead of $\nabla_\theta \mathcal{L}_t$ provides a valid upper bound on the multi-objective loss descent. Cost drops from $O(T \cdot |\theta|)$ to $O(T \cdot |z|)$.</p>
+<blockquote>
+<p>[!tip] Practical Architecture Implication
+MGDA-UB is most effective when the shared encoder dominates parameter count (e.g., ViT backbone + small task heads). If heads are large relative to encoder, the bound becomes loose.</p></blockquote>
+<ul>
+<li>Convergence guarantees for encoder parameters are preserved under MGDA-UB.</li>
+<li>Task-specific heads are still trained by their individual losses.</li>
+</ul>
+<hr>
+<h3 id="convergence-theory">Convergence Theory<a hidden class="anchor" aria-hidden="true" href="#convergence-theory">#</a></h3>
+<h4 id="formal-guarantees">Formal Guarantees<a hidden class="anchor" aria-hidden="true" href="#formal-guarantees">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Setting</th>
+          <th style="text-align: left">Result</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Convex objectives</strong></td>
+          <td style="text-align: left">Convergence to Pareto optimal point</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Nonconvex (general)</strong></td>
+          <td style="text-align: left">Convergence to Pareto critical point (necessary condition only)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Smooth, nonconvex</strong></td>
+          <td style="text-align: left">$O(1/\sqrt{K})$ rate to $\varepsilon$-Pareto stationarity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MGDA-UB</strong></td>
+          <td style="text-align: left">Same guarantees hold for encoder parameters</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>[!question] Which point on the front does MGDA converge to?
+MGDA does not control which Pareto-optimal point it finds — initialization-dependent. To trace the full front: multiple restarts or combining with scalarization sweeps.</p></blockquote>
+<hr>
+<h3 id="comparison-with-adjacent-methods">Comparison with Adjacent Methods<a hidden class="anchor" aria-hidden="true" href="#comparison-with-adjacent-methods">#</a></h3>
+<h4 id="competing-mtl-gradient-aggregation-methods">Competing MTL Gradient Aggregation Methods<a hidden class="anchor" aria-hidden="true" href="#competing-mtl-gradient-aggregation-methods">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">Mechanism</th>
+          <th style="text-align: left">Cost per step</th>
+          <th style="text-align: left">Pareto guarantee</th>
+          <th style="text-align: left">Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Scalarization</strong></td>
+          <td style="text-align: left">Fixed $\lambda_t$ weighted sum</td>
+          <td style="text-align: left">$O(\theta)$</td>
+          <td style="text-align: left">✗ (misses non-convex front)</td>
+          <td style="text-align: left">Baseline; no conflict resolution</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MGDA</strong></td>
+          <td style="text-align: left">Min-norm QP on simplex</td>
+          <td style="text-align: left">$O(T^2 + T\|\theta\|)$</td>
+          <td style="text-align: left">✓ Pareto stationary</td>
+          <td style="text-align: left">Principled; expensive for large $T$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>MGDA-UB</strong></td>
+          <td style="text-align: left">QP on representation space</td>
+          <td style="text-align: left">$O(T^2 + T\|z\|)$</td>
+          <td style="text-align: left">✓ (encoder)</td>
+          <td style="text-align: left">Practical for deep MTL</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>PCGrad</strong></td>
+          <td style="text-align: left">Project conflicting gradients</td>
+          <td style="text-align: left">$O(T^2)$</td>
+          <td style="text-align: left">✗ (heuristic)</td>
+          <td style="text-align: left">Cheaper, no convergence proof</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>CAGrad</strong></td>
+          <td style="text-align: left">QP + proximity to mean gradient</td>
+          <td style="text-align: left">$O(T^2)$</td>
+          <td style="text-align: left">Approx.</td>
+          <td style="text-align: left">Better empirical MTL performance</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Nash-MTL</strong></td>
+          <td style="text-align: left">Nash bargaining solution</td>
+          <td style="text-align: left">$O(T^3)$</td>
+          <td style="text-align: left">✓ + fairness</td>
+          <td style="text-align: left">Most principled; heaviest compute</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>[!note] PCGrad vs MGDA
+PCGrad (Gradient Surgery) projects each task&rsquo;s gradient onto the normal plane of conflicting gradients. Cheaper and often competitive empirically, but theoretically weaker — no guarantee of common descent.</p></blockquote>
+<h3 id="practical-considerations--drawbacks">Practical Considerations &amp; Drawbacks<a hidden class="anchor" aria-hidden="true" href="#practical-considerations--drawbacks">#</a></h3>
+<h4 id="limitations-and-failure-modes">Limitations and Failure Modes<a hidden class="anchor" aria-hidden="true" href="#limitations-and-failure-modes">#</a></h4>
+<ul>
+<li><strong>Large $T$</strong>: QP cost grows as $O(T^2)$ in gradient dimensionality; for $T > 50$ tasks, this is prohibitive. Mitigations: random task subsampling, approximate QP solvers.</li>
+<li><strong>Gradient noise</strong>: stochastic $g_t$ inflates $G$ — the solver may spuriously detect &ldquo;conflict&rdquo; where none exists. Larger batches or gradient averaging help.</li>
+<li><strong>No front exploration</strong>: converges to a single point; must re-run with different seeds/initializations to map the Pareto front.</li>
+<li><strong>Non-convex front</strong>: MGDA finds a Pareto <em>critical</em> point, not necessarily Pareto <em>optimal</em>. In practice, one cannot verify optimality without exhaustive search.</li>
+<li><strong>Representation bottleneck (MGDA-UB)</strong>: if the task heads are large or the encoder small, the upper bound is loose and the approximation degrades.</li>
+</ul>
+<blockquote>
+<p>[!warning] Adam + MGDA Interaction
+Naively applying MGDA after Adam preconditioning changes the geometry — Adam&rsquo;s diagonal preconditioning distorts inner products in $G$. Either use raw gradients for $G$ and Adam-preconditioned for the update, or use a consistent metric throughout.</p></blockquote>
+<hr>
+<h3 id="key-references">Key References<a hidden class="anchor" aria-hidden="true" href="#key-references">#</a></h3>
+<ul>
+<li>Désidéri, J.-A. (2012). <em>Multiple-gradient descent algorithm (MGDA) for multiobjective optimization.</em> C.R. Acad. Sci. Paris. — <strong>original formulation</strong></li>
+<li>Sener, O. &amp; Koltun, V. (2018). <em>Multi-task learning as multi-objective optimization.</em> NeurIPS. — <strong>MGDA-UB, deep learning application</strong></li>
+<li>Yu, T. et al. (2020). <em>Gradient surgery for multi-task learning.</em> NeurIPS. — <strong>PCGrad</strong></li>
+<li>Liu, B. et al. (2021). <em>Conflict-averse gradient descent for multi-task learning.</em> NeurIPS. — <strong>CAGrad</strong></li>
+<li>Navon, A. et al. (2022). <em>Multi-task learning as a bargaining game.</em> ICML. — <strong>Nash-MTL</strong></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on x"
+            href="https://x.com/intent/tweet/?text=Multi-Objective%20Gradient%20Descent&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f&amp;title=Multi-Objective%20Gradient%20Descent&amp;summary=Multi-Objective%20Gradient%20Descent&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f&title=Multi-Objective%20Gradient%20Descent">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on whatsapp"
+            href="https://api.whatsapp.com/send?text=Multi-Objective%20Gradient%20Descent%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on telegram"
+            href="https://telegram.me/share/url?text=Multi-Objective%20Gradient%20Descent&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Multi-Objective Gradient Descent on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Multi-Objective%20Gradient%20Descent&u=https%3a%2f%2fflecart.github.io%2fnotes%2fmulti-objective-gradient-descent%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Topology Crash Course | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="A Crash Course in Topology
+This is a tour of the landmarks beyond Topological Spaces and Metric Spaces. Order of climb: first see how topologies are generated, then ascend the axiom ladder (separation, countability, compactness), then meet the invariants (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.
+Generating Topologies
+Listing all open sets is intractable. We generate them.
+Basis
+A basis $\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:">
+<meta name="author" content="
+By Xuanqiang Angelo Huang">
+<link rel="canonical" href="https://flecart.github.io/notes/topology-crash-course/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/topology-crash-course/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/topology-crash-course/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Topology Crash Course">
+  <meta property="og:description" content="A Crash Course in Topology This is a tour of the landmarks beyond Topological Spaces and Metric Spaces. Order of climb: first see how topologies are generated, then ascend the axiom ladder (separation, countability, compactness), then meet the invariants (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.
+Generating Topologies Listing all open sets is intractable. We generate them.
+Basis A basis $\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Topology Crash Course">
+<meta name="twitter:description" content="A Crash Course in Topology
+This is a tour of the landmarks beyond Topological Spaces and Metric Spaces. Order of climb: first see how topologies are generated, then ascend the axiom ladder (separation, countability, compactness), then meet the invariants (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.
+Generating Topologies
+Listing all open sets is intractable. We generate them.
+Basis
+A basis $\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Topology Crash Course",
+      "item": "https://flecart.github.io/notes/topology-crash-course/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Topology Crash Course",
+  "name": "Topology Crash Course",
+  "description": "A Crash Course in Topology This is a tour of the landmarks beyond Topological Spaces and Metric Spaces. Order of climb: first see how topologies are generated, then ascend the axiom ladder (separation, countability, compactness), then meet the invariants (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.\nGenerating Topologies Listing all open sets is intractable. We generate them.\nBasis A basis $\\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "A Crash Course in Topology This is a tour of the landmarks beyond Topological Spaces and Metric Spaces. Order of climb: first see how topologies are generated, then ascend the axiom ladder (separation, countability, compactness), then meet the invariants (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.\nGenerating Topologies Listing all open sets is intractable. We generate them.\nBasis A basis $\\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:\n$\\forall x \\in X,\\ \\exists B \\in \\mathcal{B} : x \\in B$ If $x \\in B_1 \\cap B_2$, $\\exists B_3 \\in \\mathcal{B} : x \\in B_3 \\subseteq B_1 \\cap B_2$. Open sets are then arbitrary unions of basis elements. Equivalently, $U$ is open iff $\\forall x \\in U,\\ \\exists B \\in \\mathcal{B} : x \\in B \\subseteq U$.\n[!note] Generating analogy A basis is to a topology what a generating set is to a vector space, or productions are to a grammar — a small description closed under prescribed operations (here: arbitrary union, finite intersection).\nThe canonical basis on a metric space is $\\{B(x, r)\\}_{x, r\u003e0}$. This is exactly the route that takes Metric Spaces to topologies.\nSubbasis A subbasis $\\mathcal{S}$ is any family covering $X$. The induced basis is the set of all finite intersections of subbasis elements; the topology is then arbitrary unions of those.\n[!tip] Why this matters The product topology on $\\prod_{i \\in I} X_i$ is defined as the topology generated by the subbasis $\\{\\pi_i^{-1}(U_i) : U_i \\text{ open in } X_i\\}$. This is the coarsest topology making every projection continuous — a universal property.\nSubspace topology For $A \\subseteq X$: $\\mathcal{T}_A = \\{A \\cap U : U \\in \\mathcal{T}\\}$. The smallest topology on $A$ making the inclusion $A \\hookrightarrow X$ continuous. Warning: open in $A$ ≠ open in $X$; e.g. $[0, \\tfrac{1}{2})$ is open in $[0,1]$ but not in $\\mathbb{R}$.\nProduct topology (revisited) Finite products: $U \\times V$ is a basis. Infinite products $\\prod_{i \\in I} X_i$ have the crucial restriction that basic opens look like $\\prod_i U_i$ where $U_i = X_i$ for all but finitely many $i$. The naive “box topology” (any product of opens) is strictly finer and kills compactness theorems.\nQuotient topology Given $X$ and $\\sim$, let $q: X \\to X/\\!\\sim$ be the projection. Then $U \\subseteq X/\\!\\sim$ is open iff $q^{-1}(U)$ is open in $X$. The universal property: a map $\\bar f : X/\\!\\sim \\to Y$ is continuous iff $\\bar f \\circ q : X \\to Y$ is. This is the workhorse for building non-trivial spaces.\nConstruction Identification Result Square $[0,1]^2$ $(0,y) \\sim (1,y)$ and $(x,0) \\sim (x,1)$ Torus $T^2$ Square $(0,y) \\sim (1, 1-y)$ Möbius strip Square Both pairs with twist Klein bottle Disk $D^2$ $\\partial D^2$ collapsed to a point $S^2$ $S^n$ antipodal $x \\sim -x$ $\\mathbb{RP}^n$ [!tip] Connection to your work Quotient topologies are the natural setting when an incontractibility partition on histories induces a coarser space — the strategy space modulo “indistinguishable to a contract.” Continuity claims about mechanisms over those classes are quotient-topology claims. Worth bookmarking next to your Cooperation Gap partition machinery.\nThe Separation Axioms ($T_0 \\to T_4$) These measure how well opens distinguish points. The hierarchy is strictly increasing in restrictiveness.\nHierarchy Axiom Name Condition $T_0$ Kolmogorov $\\forall x \\ne y$, $\\exists$ open separating one from the other $T_1$ Fréchet Singletons $\\{x\\}$ are closed $T_2$ Hausdorff $\\forall x \\ne y$, $\\exists$ disjoint opens $U \\ni x, V \\ni y$ $T_3$ Regular $T_1$ + can separate point from closed set by disjoint opens $T_4$ Normal $T_1$ + can separate any two disjoint closed sets by disjoint opens Hausdorff is the line in the sand $T_2$ is where things start behaving like you expect:\nLimits are unique. Compact sets are closed. The diagonal $\\Delta \\subseteq X \\times X$ is closed. Below $T_2$, e.g. the Zariski topology on $\\text{Spec}(R)$, none of these need hold — and that’s why algebraic geometers had to invent schemes.\n[!note] Counterexample to lean on The Sierpiński space $\\{0, 1\\}$ with opens $\\{\\emptyset, \\{1\\}, \\{0,1\\}\\}$ is $T_0$ but not $T_1$. It is the right object for “semi-decidable predicates” in domain theory — and it appears whenever computability meets topology.\nUrysohn’s Lemma If $X$ is normal ($T_4$) and $A, B \\subseteq X$ are disjoint closed sets, then there exists a continuous $f : X \\to [0, 1]$ with $f|_A = 0$ and $f|_B = 1$.\nThis is the bridge from set-theoretic separation to function-theoretic separation. Without it, you cannot do partitions of unity, and analysis on manifolds collapses.\nTietze Extension If $X$ is normal and $A \\subseteq X$ is closed, every continuous $f: A \\to \\mathbb{R}$ extends to a continuous $\\tilde f: X \\to \\mathbb{R}$.\nTightly equivalent to Urysohn. Crucial in extending sections, partial functions, etc.\nCountability Axioms These are about how “small” a description of opens you need locally and globally.\nFirst / Second Countable, Separable First countable: every point has a countable neighborhood basis. (Metric spaces are first countable.) Second countable: the whole topology has a countable basis. (Strictly stronger.) Separable: there exists a countable dense subset.\nFor metric spaces, second countable ⟺ separable ⟺ Lindelöf (every open cover has countable subcover). These split apart for general topologies.\n[!note] Why first countability matters In first-countable spaces, sequences suffice to detect closure and continuity. In general topological spaces, they do not — you need nets or filters (see below). This is a recurring trap.\nCompactness The single most important property in topology.\nDefinition (Heine-Borel style) $X$ is compact if every open cover $\\{U_\\alpha\\}$ admits a finite subcover. Closed-and-bounded is the metric special case; the open-cover definition is the right one in general.\nHeine-Borel Theorem In $\\mathbb{R}^n$ (with Euclidean topology), a set is compact iff it is closed and bounded.\nThis fails in infinite-dimensional Banach spaces — the closed unit ball is not compact in $\\ell^2$ (Riesz’s lemma). This is why functional analysis needs weak topologies.\nContinuous image of compact is compact If $f: X \\to Y$ continuous, $X$ compact, then $f(X) \\subseteq Y$ compact.\nImmediate corollary: a continuous real function on a compact space attains its maximum (extreme value theorem).\nCompactness + Hausdorff = Normal Every compact Hausdorff space is normal ($T_4$).\nThis is why “compact Hausdorff” is the gold-standard category — you automatically get Urysohn, Tietze, partitions of unity. Differentiable manifolds, when compact, sit here.\nBonus property: in compact Hausdorff, a bijective continuous map is automatically a homeomorphism (its inverse is continuous “for free”). This is a routine technique for proving things are homeomorphisms.\nTychonoff’s Theorem An arbitrary product $\\prod_{i \\in I} X_i$ of compact spaces is compact (in the product topology).\nEquivalent to the Axiom of Choice (and uses Zorn or ultrafilters in any proof). Underpins, among many things, the Banach-Alaoglu theorem in functional analysis and compactness arguments in model theory and game theory (compactness of strategy spaces in infinite games).\nCompactness vs Sequential Compactness Sequentially compact: every sequence has a convergent subsequence.\nIn metric spaces: compact ⟺ sequentially compact ⟺ complete + totally bounded. In general: they are incomparable. Both compact-not-sequentially-compact and sequentially-compact-not-compact exist (e.g. $[0,1]^{[0,1]}$ and the long line, respectively).\nConvergence Beyond Sequences Nets and Filters In a non-first-countable space, sequences fail to characterize closure: there may be $x \\in \\bar A$ with no sequence in $A$ converging to $x$.\nA net is a function $\\phi : D \\to X$ where $D$ is a directed set (preorder with upper bounds for pairs). Generalizes sequences (directed set $\\mathbb{N}$) and lets you index by, e.g., open neighborhoods ordered by reverse inclusion.\nA filter $\\mathcal{F}$ on $X$ is a non-empty family of subsets closed under finite intersection and upward closure, with $\\emptyset \\notin \\mathcal{F}$. An ultrafilter is a maximal filter. Filters/ultrafilters generalize “tail behavior” and are dual to nets.\n[!note] Pragmatic takeaway Theorems “sequences detect $X$” are first-countable theorems. In general, replace sequences with nets/filters and the proofs go through (compactness ⟺ every net has a convergent subnet ⟺ every ultrafilter converges).\nConnectedness, Extended You already have the disjoint-opens definition and $[0,1]$ connected.\nComponents The connected component of $x$ is the largest connected set containing $x$ — equivalently, the union of all connected sets containing $x$. Components partition $X$ and are always closed (not always open: e.g. $\\mathbb{Q}$ has singleton components, none open).\nPath components partition $X$ via the equivalence $x \\sim y$ iff there is a path. Path components $\\subseteq$ components. They coincide for locally path-connected spaces.\nTotally Disconnected $X$ is totally disconnected if components are singletons. Canonical examples: $\\mathbb{Q}$, $p$-adic numbers $\\mathbb{Z}_p$, the Cantor set $\\mathcal{C}$.\n[!note] Cantor set as universal object Every compact metric totally disconnected space without isolated points is homeomorphic to $\\mathcal{C}$. It is also homeomorphic to $\\{0,1\\}^\\mathbb{N}$ — the natural state space for infinite binary processes. This is one reason it appears in the formalization of stochastic strategies and infinite trees in game theory.\nLocally (Path) Connected Each point has a neighborhood basis of (path-)connected opens. This is what you need for path components to equal components, and for covering space theory (next) to behave.\nMetrization When can a topology be re-derived from a metric? This is the inverse of the metric-induced-topology direction.\nUrysohn Metrization A second-countable Hausdorff topological space is metrizable iff it is regular ($T_3$).\nSo for second-countable spaces, separation up to regularity is exactly the metrization condition.\nNagata–Smirnov $X$ is metrizable iff $X$ is regular and has a $\\sigma$-locally finite basis.\nThe general necessary-and-sufficient condition without assuming second countability. The takeaway: metrizability is a separation + combinatorial-size condition.\nAlgebraic Topology in Five Steps The shift: classify spaces up to homeomorphism (or weaker, homotopy) by algebraic invariants.\nHomotopy Two continuous maps $f, g : X \\to Y$ are homotopic, $f \\simeq g$, if there is a continuous $H : X \\times [0,1] \\to Y$ with $H(\\cdot, 0) = f$, $H(\\cdot, 1) = g$. Two spaces are homotopy equivalent if there exist $f: X \\to Y, g: Y \\to X$ with $gf \\simeq \\mathrm{id}_X$, $fg \\simeq \\mathrm{id}_Y$.\nHomotopy equivalence is strictly weaker than homeomorphism. $\\mathbb{R}^n$ is homotopy equivalent to a point (contractible), though not homeomorphic to one.\nFundamental Group $\\pi_1(X, x_0)$ The set of homotopy classes of loops $\\gamma : [0,1] \\to X$ with $\\gamma(0) = \\gamma(1) = x_0$, under concatenation. This forms a group.\n$$ \\pi_1(X, x_0) = \\{ [\\gamma] : \\gamma \\text{ loop at } x_0 \\} / \\simeq $$Functorial: a continuous $f : (X, x_0) \\to (Y, y_0)$ induces a homomorphism $f_* : \\pi_1(X, x_0) \\to \\pi_1(Y, y_0)$.\nKey computations:\n$\\pi_1(S^1) = \\mathbb{Z}$ (the “winding number” theorem). $\\pi_1(S^n) = 0$ for $n \\ge 2$ (simply connected). $\\pi_1(T^2) = \\mathbb{Z}^2$. $\\pi_1(\\mathbb{RP}^n) = \\mathbb{Z}/2\\mathbb{Z}$ for $n \\ge 2$. The winding-number computation immediately yields a topological proof of the Fundamental Theorem of Algebra and of Brouwer Fixed Point Theorem in dimension 2.\nCovering Spaces A covering map $p: \\tilde X \\to X$ is one where every $x \\in X$ has an open neighborhood $U$ with $p^{-1}(U)$ a disjoint union of opens each homeomorphic to $U$ via $p$. Examples: $\\mathbb{R} \\to S^1$ via $t \\mapsto e^{2\\pi i t}$; $S^n \\to \\mathbb{RP}^n$ via antipodal quotient.\nThe Galois correspondence for covering spaces: subgroups of $\\pi_1(X)$ ↔ connected covering spaces of $X$.\nThe universal cover $\\tilde X$ is simply connected and covers every other cover. Beautiful parallel to Galois theory in algebra.\nHomology (sketch) $\\pi_1$ is non-abelian and hard to compute past dimension 1. Singular homology $H_n(X; \\mathbb{Z})$ assigns to each $X$ an abelian group per dimension $n$, with $H_0$ counting components, $H_1 = \\pi_1^{\\text{ab}}$ (abelianization), and $H_n$ for $n \\ge 2$ detecting “$n$-dimensional holes.”\nFor spheres: $H_n(S^k) = \\mathbb{Z}$ if $n \\in \\{0, k\\}$, else $0$. This single computation gives:\n$\\mathbb{R}^n \\not\\simeq \\mathbb{R}^m$ for $n \\ne m$ (invariance of domain). The Brouwer fixed point theorem in every dimension. Euler Characteristic For finite CW complexes: $\\chi(X) = \\sum_n (-1)^n \\dim H_n(X; \\mathbb{Q})$. For a polyhedron this gives back your Euler formula $v - e + f = \\chi$. For surfaces:\nSurface $\\chi$ $\\pi_1$ $S^2$ $2$ $0$ Torus $T^2$ $0$ $\\mathbb{Z}^2$ Genus-$g$ surface $2 - 2g$ $\\langle a_1, b_1, \\dots, a_g, b_g \\mid \\prod [a_i, b_i] \\rangle$ $\\mathbb{RP}^2$ $1$ $\\mathbb{Z}/2$ Klein bottle $0$ non-abelian This connects directly to your existing Euler’s Theorem note — Legendre’s spherical-excess proof is the $g = 0$ case of a vast machine.\nManifolds Topological Manifold $M$ is an $n$-manifold if it is second-countable, Hausdorff, and locally homeomorphic to $\\mathbb{R}^n$. Adding a compatible smooth atlas gives a smooth manifold; adding a Riemannian metric gives geometry.\nThe second-countable + Hausdorff conditions exclude pathologies like the line with two origins and the long line. These are non-paracompact and break partitions of unity.\nClassification of Surfaces (revisited) Compact connected surfaces without boundary, up to homeomorphism:\nClass Orientable $\\chi$ Sphere $S^2$ Yes $2$ Genus-$g$ surface $\\Sigma_g$ Yes $2 - 2g$ $N_k = \\mathbb{RP}^2 \\# \\cdots \\# \\mathbb{RP}^2$ ($k$ copies) No $2 - k$ The $(g, k)$ classification is complete and computable via $\\chi$ + orientability. No higher-dimensional analog: classification in dimension $\\ge 4$ is undecidable (Markov, 1958), connected to the word problem in group theory.\n[!note] Decidability boundary Dimensions $\\le 3$: classifiable. Dimension $\\ge 4$: undecidable. There is something deep here, of a flavor adjacent to your computability of moral reasoning threads — formalization is bounded by group-theoretic word problems, an ambient computability ceiling.\nFixed-Point Theorems — Bridge to Game Theory This is where the topology you’ve collected becomes directly a game-theoretic tool.\nBrouwer Fixed Point Theorem Any continuous map $f : D^n \\to D^n$ from the closed $n$-disk to itself has a fixed point: $\\exists x : f(x) = x$.\nEquivalent formulations: the sphere $S^{n-1}$ is not a retract of $D^n$; $H_{n-1}(S^{n-1}) \\ne 0$. Sperner’s lemma gives a combinatorial proof.\nKakutani Fixed Point Theorem Let $X \\subseteq \\mathbb{R}^n$ be non-empty, compact, convex. Let $\\Phi : X \\rightrightarrows X$ be a correspondence (set-valued) with $\\Phi(x)$ non-empty, convex, and with closed graph. Then $\\exists x : x \\in \\Phi(x)$.\nWhy these matter for your work Nash’s existence theorem is Brouwer applied to the best-response map on the simplex of mixed strategies — or, in the version for correspondences, Kakutani applied to the best-response correspondence (since the argmax is generally set-valued).\nThe topology of the mixed-strategy space (compactness, convexity, continuity of expected utilities in the mixture weights) is what makes equilibrium exist. Any time you reach for an existence result for an equilibrium concept in a richer setting.\n[!tip] A research-grade hook Your No Mechanism Sufficiency Corollary lives in this neighborhood: when the contractible quotient becomes too coarse, the relevant best-response correspondence loses upper hemicontinuity, and Kakutani’s hypotheses break — which is a topological way to read mechanism incompleteness.\nBanach Fixed Point Theorem For metric (not just topological) spaces: a contraction on a complete metric space has a unique fixed point, and iteration converges geometrically. This is the constructive cousin — Brouwer is existence-only, Banach gives an algorithm. The contrast (existence-only vs. constructive convergence) is itself a recurring theme in mechanism design.\nBorsuk–Ulam Any continuous $f : S^n \\to \\mathbb{R}^n$ identifies some antipodal pair: $\\exists x : f(x) = f(-x)$.\nCorollaries: ham-sandwich theorem, Lusternik–Schnirelmann results, and — surprisingly — fair division and necklace splitting in combinatorics. The bridge from topology to combinatorial fairness is the Borsuk–Ulam family.\nTwo Theorems That Punch Above Their Weight Baire Category Theorem A complete metric space (or a locally compact Hausdorff space) is not a countable union of nowhere-dense sets.\nEquivalently: a countable intersection of dense open sets is dense. The hidden engine behind the open mapping theorem, closed graph theorem, and uniform boundedness in functional analysis. Whenever someone in analysis says “generic,” they probably mean “comeager” (complement of meager), which is a Baire-category statement.\nInvariance of Domain If $U \\subseteq \\mathbb{R}^n$ is open and $f : U \\to \\mathbb{R}^n$ is continuous and injective, then $f(U)$ is open and $f$ is a homeomorphism onto its image.\nSounds obvious; isn’t. Implies $\\mathbb{R}^n \\cong \\mathbb{R}^m \\Rightarrow n = m$, and is foundational for the well-definedness of manifold dimension.\nA Curiosity to Close Banach–Tarski Using the Axiom of Choice, a solid unit ball in $\\mathbb{R}^3$ can be partitioned into finitely many pieces, which can be reassembled by rigid motions into two solid unit balls.\nNot a paradox of geometry — a statement about the failure of finite additivity for non-measurable sets under the action of a free subgroup of $SO(3)$. Sets the conceptual boundary of what “measurable” topology will allow you to do.\nSuggested Mental Map Layer Concept Slogan Generation Basis, subbasis, product, quotient “Topologies are universal constructions” Separation $T_0 \\to T_4$, Urysohn, Tietze “How much can opens distinguish?” Size First/second countable, separable “How small a description?” Compactness Tychonoff, Heine-Borel “Continuous + compact = good” Convergence Nets, filters “Sequences are not enough” Invariants $\\pi_1$, $H_*$, $\\chi$ “Classify up to homotopy” Fixed points Brouwer, Kakutani, Banach “Existence theorems for equilibria” The single takeaway: topology is the minimal structure for talking about continuity and convergence, and most of the deep theorems are about how separation + compactness + countability conspire to make a space behave. Everything else (algebraic topology, manifold theory, fixed-point theorems) is a payoff from that setup.\n",
+  "wordCount" : "2842",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang Angelo Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/notes/topology-crash-course/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Topology Crash Course
+    </h1>
+    <div class="post-meta">Reading Time: 14 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#a-crash-course-in-topology" aria-label="A Crash Course in Topology">A Crash Course in Topology</a><ul>
+                        
+                <li>
+                    <a href="#generating-topologies" aria-label="Generating Topologies">Generating Topologies</a><ul>
+                        
+                <li>
+                    <a href="#basis" aria-label="Basis">Basis</a></li>
+                <li>
+                    <a href="#subbasis" aria-label="Subbasis">Subbasis</a></li>
+                <li>
+                    <a href="#subspace-topology" aria-label="Subspace topology">Subspace topology</a></li>
+                <li>
+                    <a href="#product-topology-revisited" aria-label="Product topology (revisited)">Product topology (revisited)</a></li>
+                <li>
+                    <a href="#quotient-topology" aria-label="Quotient topology">Quotient topology</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-separation-axioms-t_0-to-t_4" aria-label="The Separation Axioms ($T_0 \to T_4$)">The Separation Axioms ($T_0 \to T_4$)</a><ul>
+                        
+                <li>
+                    <a href="#hierarchy" aria-label="Hierarchy">Hierarchy</a></li>
+                <li>
+                    <a href="#hausdorff-is-the-line-in-the-sand" aria-label="Hausdorff is the line in the sand">Hausdorff is the line in the sand</a></li>
+                <li>
+                    <a href="#urysohns-lemma" aria-label="Urysohn&rsquo;s Lemma">Urysohn&rsquo;s Lemma</a></li>
+                <li>
+                    <a href="#tietze-extension" aria-label="Tietze Extension">Tietze Extension</a></li></ul>
+                </li>
+                <li>
+                    <a href="#countability-axioms" aria-label="Countability Axioms">Countability Axioms</a><ul>
+                        
+                <li>
+                    <a href="#first--second-countable-separable" aria-label="First / Second Countable, Separable">First / Second Countable, Separable</a></li></ul>
+                </li>
+                <li>
+                    <a href="#compactness" aria-label="Compactness">Compactness</a><ul>
+                        
+                <li>
+                    <a href="#definition-heine-borel-style" aria-label="Definition (Heine-Borel style)">Definition (Heine-Borel style)</a></li>
+                <li>
+                    <a href="#heine-borel-theorem" aria-label="Heine-Borel Theorem">Heine-Borel Theorem</a></li>
+                <li>
+                    <a href="#continuous-image-of-compact-is-compact" aria-label="Continuous image of compact is compact">Continuous image of compact is compact</a></li>
+                <li>
+                    <a href="#compactness--hausdorff--normal" aria-label="Compactness &#43; Hausdorff = Normal">Compactness + Hausdorff = Normal</a></li>
+                <li>
+                    <a href="#tychonoffs-theorem" aria-label="Tychonoff&rsquo;s Theorem">Tychonoff&rsquo;s Theorem</a></li>
+                <li>
+                    <a href="#compactness-vs-sequential-compactness" aria-label="Compactness vs Sequential Compactness">Compactness vs Sequential Compactness</a></li></ul>
+                </li>
+                <li>
+                    <a href="#convergence-beyond-sequences" aria-label="Convergence Beyond Sequences">Convergence Beyond Sequences</a><ul>
+                        
+                <li>
+                    <a href="#nets-and-filters" aria-label="Nets and Filters">Nets and Filters</a></li></ul>
+                </li>
+                <li>
+                    <a href="#connectedness-extended" aria-label="Connectedness, Extended">Connectedness, Extended</a><ul>
+                        
+                <li>
+                    <a href="#components" aria-label="Components">Components</a></li>
+                <li>
+                    <a href="#totally-disconnected" aria-label="Totally Disconnected">Totally Disconnected</a></li>
+                <li>
+                    <a href="#locally-path-connected" aria-label="Locally (Path) Connected">Locally (Path) Connected</a></li></ul>
+                </li>
+                <li>
+                    <a href="#metrization" aria-label="Metrization">Metrization</a><ul>
+                        
+                <li>
+                    <a href="#urysohn-metrization" aria-label="Urysohn Metrization">Urysohn Metrization</a></li>
+                <li>
+                    <a href="#nagatasmirnov" aria-label="Nagata–Smirnov">Nagata–Smirnov</a></li></ul>
+                </li>
+                <li>
+                    <a href="#algebraic-topology-in-five-steps" aria-label="Algebraic Topology in Five Steps">Algebraic Topology in Five Steps</a><ul>
+                        
+                <li>
+                    <a href="#homotopy" aria-label="Homotopy">Homotopy</a></li>
+                <li>
+                    <a href="#fundamental-group-pi_1x-x_0" aria-label="Fundamental Group $\pi_1(X, x_0)$">Fundamental Group $\pi_1(X, x_0)$</a></li>
+                <li>
+                    <a href="#covering-spaces" aria-label="Covering Spaces">Covering Spaces</a></li>
+                <li>
+                    <a href="#homology-sketch" aria-label="Homology (sketch)">Homology (sketch)</a></li>
+                <li>
+                    <a href="#euler-characteristic" aria-label="Euler Characteristic">Euler Characteristic</a></li></ul>
+                </li>
+                <li>
+                    <a href="#manifolds" aria-label="Manifolds">Manifolds</a><ul>
+                        
+                <li>
+                    <a href="#topological-manifold" aria-label="Topological Manifold">Topological Manifold</a></li>
+                <li>
+                    <a href="#classification-of-surfaces-revisited" aria-label="Classification of Surfaces (revisited)">Classification of Surfaces (revisited)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#fixed-point-theorems--bridge-to-game-theory" aria-label="Fixed-Point Theorems — Bridge to Game Theory">Fixed-Point Theorems — Bridge to Game Theory</a><ul>
+                        
+                <li>
+                    <a href="#brouwer-fixed-point-theorem" aria-label="Brouwer Fixed Point Theorem">Brouwer Fixed Point Theorem</a></li>
+                <li>
+                    <a href="#kakutani-fixed-point-theorem" aria-label="Kakutani Fixed Point Theorem">Kakutani Fixed Point Theorem</a></li>
+                <li>
+                    <a href="#why-these-matter-for-your-work" aria-label="Why these matter for your work">Why these matter for your work</a></li>
+                <li>
+                    <a href="#banach-fixed-point-theorem" aria-label="Banach Fixed Point Theorem">Banach Fixed Point Theorem</a></li>
+                <li>
+                    <a href="#borsukulam" aria-label="Borsuk–Ulam">Borsuk–Ulam</a></li></ul>
+                </li>
+                <li>
+                    <a href="#two-theorems-that-punch-above-their-weight" aria-label="Two Theorems That Punch Above Their Weight">Two Theorems That Punch Above Their Weight</a><ul>
+                        
+                <li>
+                    <a href="#baire-category-theorem" aria-label="Baire Category Theorem">Baire Category Theorem</a></li>
+                <li>
+                    <a href="#invariance-of-domain" aria-label="Invariance of Domain">Invariance of Domain</a></li></ul>
+                </li>
+                <li>
+                    <a href="#a-curiosity-to-close" aria-label="A Curiosity to Close">A Curiosity to Close</a><ul>
+                        
+                <li>
+                    <a href="#banachtarski" aria-label="Banach–Tarski">Banach–Tarski</a></li></ul>
+                </li>
+                <li>
+                    <a href="#suggested-mental-map" aria-label="Suggested Mental Map">Suggested Mental Map</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="a-crash-course-in-topology">A Crash Course in Topology<a hidden class="anchor" aria-hidden="true" href="#a-crash-course-in-topology">#</a></h2>
+<p>This is a tour of the landmarks beyond <a href="/notes/topological-spaces">Topological Spaces</a> and <a href="/notes/metric-spaces">Metric Spaces</a>. Order of climb: first see how topologies are <em>generated</em>, then ascend the <em>axiom ladder</em> (separation, countability, compactness), then meet the <em>invariants</em> (algebraic topology, Euler characteristic), and finally connect back to fixed-point arguments — the bridge to game theory and mechanism design.</p>
+<h3 id="generating-topologies">Generating Topologies<a hidden class="anchor" aria-hidden="true" href="#generating-topologies">#</a></h3>
+<p>Listing all open sets is intractable. We generate them.</p>
+<h4 id="basis">Basis<a hidden class="anchor" aria-hidden="true" href="#basis">#</a></h4>
+<p>A <strong>basis</strong> $\mathcal{B}$ for a topology on $X$ is a family of subsets satisfying:</p>
+<ol>
+<li>$\forall x \in X,\ \exists B \in \mathcal{B} : x \in B$</li>
+<li>If $x \in B_1 \cap B_2$, $\exists B_3 \in \mathcal{B} : x \in B_3 \subseteq B_1 \cap B_2$.</li>
+</ol>
+<p>Open sets are then <em>arbitrary unions</em> of basis elements. Equivalently, $U$ is open iff $\forall x \in U,\ \exists B \in \mathcal{B} : x \in B \subseteq U$.</p>
+<blockquote>
+<p>[!note] Generating analogy
+A basis is to a topology what a generating set is to a vector space, or productions are to a <a href="/notes/grammatiche-regolari">grammar</a> — a small description closed under prescribed operations (here: arbitrary union, finite intersection).</p></blockquote>
+<p>The canonical basis on a metric space is $\{B(x, r)\}_{x, r>0}$. This is exactly the route that takes <a href="/notes/metric-spaces">Metric Spaces</a> to topologies.</p>
+<h4 id="subbasis">Subbasis<a hidden class="anchor" aria-hidden="true" href="#subbasis">#</a></h4>
+<p>A <strong>subbasis</strong> $\mathcal{S}$ is <em>any</em> family covering $X$. The induced basis is the set of all <em>finite intersections</em> of subbasis elements; the topology is then arbitrary unions of those.</p>
+<blockquote>
+<p>[!tip] Why this matters
+The product topology on $\prod_{i \in I} X_i$ is defined as the topology generated by the subbasis $\{\pi_i^{-1}(U_i) : U_i \text{ open in } X_i\}$. This is the <strong>coarsest</strong> topology making every projection continuous — a <em>universal property</em>.</p></blockquote>
+<h4 id="subspace-topology">Subspace topology<a hidden class="anchor" aria-hidden="true" href="#subspace-topology">#</a></h4>
+<p>For $A \subseteq X$: $\mathcal{T}_A = \{A \cap U : U \in \mathcal{T}\}$. The smallest topology on $A$ making the inclusion $A \hookrightarrow X$ continuous. Warning: open in $A$ ≠ open in $X$; e.g. $[0, \tfrac{1}{2})$ is open in $[0,1]$ but not in $\mathbb{R}$.</p>
+<h4 id="product-topology-revisited">Product topology (revisited)<a hidden class="anchor" aria-hidden="true" href="#product-topology-revisited">#</a></h4>
+<p>Finite products: $U \times V$ is a basis. Infinite products $\prod_{i \in I} X_i$ have the crucial restriction that basic opens look like $\prod_i U_i$ where $U_i = X_i$ for <strong>all but finitely many</strong> $i$. The naive &ldquo;box topology&rdquo; (any product of opens) is strictly finer and kills compactness theorems.</p>
+<h4 id="quotient-topology">Quotient topology<a hidden class="anchor" aria-hidden="true" href="#quotient-topology">#</a></h4>
+<p>Given $X$ and $\sim$, let $q: X \to X/\!\sim$ be the projection. Then $U \subseteq X/\!\sim$ is open iff $q^{-1}(U)$ is open in $X$. The universal property: a map $\bar f : X/\!\sim \to Y$ is continuous iff $\bar f \circ q : X \to Y$ is. This is the workhorse for building non-trivial spaces.</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Construction</th>
+          <th style="text-align: left">Identification</th>
+          <th style="text-align: left">Result</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Square $[0,1]^2$</td>
+          <td style="text-align: left">$(0,y) \sim (1,y)$ and $(x,0) \sim (x,1)$</td>
+          <td style="text-align: left">Torus $T^2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Square</td>
+          <td style="text-align: left">$(0,y) \sim (1, 1-y)$</td>
+          <td style="text-align: left">Möbius strip</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Square</td>
+          <td style="text-align: left">Both pairs with twist</td>
+          <td style="text-align: left">Klein bottle</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Disk $D^2$</td>
+          <td style="text-align: left">$\partial D^2$ collapsed to a point</td>
+          <td style="text-align: left">$S^2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$S^n$</td>
+          <td style="text-align: left">antipodal $x \sim -x$</td>
+          <td style="text-align: left">$\mathbb{RP}^n$</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>[!tip] Connection to your work
+Quotient topologies are the natural setting when an <em>incontractibility partition</em> on histories induces a coarser space — the strategy space modulo &ldquo;indistinguishable to a contract.&rdquo; Continuity claims about mechanisms over those classes are quotient-topology claims. Worth bookmarking next to your Cooperation Gap partition machinery.</p></blockquote>
+<h3 id="the-separation-axioms-t_0-to-t_4">The Separation Axioms ($T_0 \to T_4$)<a hidden class="anchor" aria-hidden="true" href="#the-separation-axioms-t_0-to-t_4">#</a></h3>
+<p>These measure how well opens distinguish points. The hierarchy is strictly increasing in restrictiveness.</p>
+<h4 id="hierarchy">Hierarchy<a hidden class="anchor" aria-hidden="true" href="#hierarchy">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Axiom</th>
+          <th style="text-align: left">Name</th>
+          <th style="text-align: left">Condition</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$T_0$</td>
+          <td style="text-align: left">Kolmogorov</td>
+          <td style="text-align: left">$\forall x \ne y$, $\exists$ open separating one from the other</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$T_1$</td>
+          <td style="text-align: left">Fréchet</td>
+          <td style="text-align: left">Singletons $\{x\}$ are closed</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$T_2$</td>
+          <td style="text-align: left"><strong>Hausdorff</strong></td>
+          <td style="text-align: left">$\forall x \ne y$, $\exists$ <em>disjoint</em> opens $U \ni x, V \ni y$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$T_3$</td>
+          <td style="text-align: left">Regular</td>
+          <td style="text-align: left">$T_1$ + can separate point from closed set by disjoint opens</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$T_4$</td>
+          <td style="text-align: left">Normal</td>
+          <td style="text-align: left">$T_1$ + can separate any two disjoint closed sets by disjoint opens</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="hausdorff-is-the-line-in-the-sand">Hausdorff is the line in the sand<a hidden class="anchor" aria-hidden="true" href="#hausdorff-is-the-line-in-the-sand">#</a></h4>
+<p>$T_2$ is where things start behaving like you expect:</p>
+<ul>
+<li>Limits are unique.</li>
+<li>Compact sets are closed.</li>
+<li>The diagonal $\Delta \subseteq X \times X$ is closed.</li>
+</ul>
+<p>Below $T_2$, e.g. the <em>Zariski topology</em> on $\text{Spec}(R)$, none of these need hold — and that&rsquo;s why algebraic geometers had to invent schemes.</p>
+<blockquote>
+<p>[!note] Counterexample to lean on
+The Sierpiński space $\{0, 1\}$ with opens $\{\emptyset, \{1\}, \{0,1\}\}$ is $T_0$ but not $T_1$. It is the right object for &ldquo;semi-decidable predicates&rdquo; in domain theory — and it appears whenever computability meets topology.</p></blockquote>
+<h4 id="urysohns-lemma">Urysohn&rsquo;s Lemma<a hidden class="anchor" aria-hidden="true" href="#urysohns-lemma">#</a></h4>
+<blockquote>
+<p>If $X$ is <strong>normal</strong> ($T_4$) and $A, B \subseteq X$ are disjoint closed sets, then there exists a continuous $f : X \to [0, 1]$ with $f|_A = 0$ and $f|_B = 1$.</p></blockquote>
+<p>This is the bridge from set-theoretic separation to <em>function-theoretic</em> separation. Without it, you cannot do partitions of unity, and analysis on manifolds collapses.</p>
+<h4 id="tietze-extension">Tietze Extension<a hidden class="anchor" aria-hidden="true" href="#tietze-extension">#</a></h4>
+<blockquote>
+<p>If $X$ is normal and $A \subseteq X$ is closed, every continuous $f: A \to \mathbb{R}$ extends to a continuous $\tilde f: X \to \mathbb{R}$.</p></blockquote>
+<p>Tightly equivalent to Urysohn. Crucial in extending sections, partial functions, etc.</p>
+<h3 id="countability-axioms">Countability Axioms<a hidden class="anchor" aria-hidden="true" href="#countability-axioms">#</a></h3>
+<p>These are about how &ldquo;small&rdquo; a description of opens you need locally and globally.</p>
+<h4 id="first--second-countable-separable">First / Second Countable, Separable<a hidden class="anchor" aria-hidden="true" href="#first--second-countable-separable">#</a></h4>
+<p><strong>First countable</strong>: every point has a countable neighborhood basis. (Metric spaces are first countable.)
+<strong>Second countable</strong>: the <em>whole</em> topology has a countable basis. (Strictly stronger.)
+<strong>Separable</strong>: there exists a countable dense subset.</p>
+<p>For metric spaces, second countable ⟺ separable ⟺ Lindelöf (every open cover has countable subcover). These split apart for general topologies.</p>
+<blockquote>
+<p>[!note] Why first countability matters
+In first-countable spaces, <em>sequences suffice</em> to detect closure and continuity. In general topological spaces, they do not — you need nets or filters (see below). This is a recurring trap.</p></blockquote>
+<h3 id="compactness">Compactness<a hidden class="anchor" aria-hidden="true" href="#compactness">#</a></h3>
+<p>The single most important property in topology.</p>
+<h4 id="definition-heine-borel-style">Definition (Heine-Borel style)<a hidden class="anchor" aria-hidden="true" href="#definition-heine-borel-style">#</a></h4>
+<p>$X$ is <strong>compact</strong> if every open cover $\{U_\alpha\}$ admits a <em>finite</em> subcover. Closed-and-bounded is the metric special case; the open-cover definition is the right one in general.</p>
+<h4 id="heine-borel-theorem">Heine-Borel Theorem<a hidden class="anchor" aria-hidden="true" href="#heine-borel-theorem">#</a></h4>
+<blockquote>
+<p>In $\mathbb{R}^n$ (with Euclidean topology), a set is compact iff it is closed and bounded.</p></blockquote>
+<p>This fails in infinite-dimensional Banach spaces — the closed unit ball is <strong>not</strong> compact in $\ell^2$ (Riesz&rsquo;s lemma). This is why functional analysis needs weak topologies.</p>
+<h4 id="continuous-image-of-compact-is-compact">Continuous image of compact is compact<a hidden class="anchor" aria-hidden="true" href="#continuous-image-of-compact-is-compact">#</a></h4>
+<blockquote>
+<p>If $f: X \to Y$ continuous, $X$ compact, then $f(X) \subseteq Y$ compact.</p></blockquote>
+<p>Immediate corollary: a continuous real function on a compact space attains its maximum (extreme value theorem).</p>
+<h4 id="compactness--hausdorff--normal">Compactness + Hausdorff = Normal<a hidden class="anchor" aria-hidden="true" href="#compactness--hausdorff--normal">#</a></h4>
+<blockquote>
+<p>Every compact Hausdorff space is normal ($T_4$).</p></blockquote>
+<p>This is why &ldquo;compact Hausdorff&rdquo; is the gold-standard category — you automatically get Urysohn, Tietze, partitions of unity. Differentiable manifolds, when compact, sit here.</p>
+<p>Bonus property: in compact Hausdorff, a bijective continuous map is automatically a homeomorphism (its inverse is continuous &ldquo;for free&rdquo;). This is a routine technique for proving things are homeomorphisms.</p>
+<h4 id="tychonoffs-theorem">Tychonoff&rsquo;s Theorem<a hidden class="anchor" aria-hidden="true" href="#tychonoffs-theorem">#</a></h4>
+<blockquote>
+<p>An arbitrary product $\prod_{i \in I} X_i$ of compact spaces is compact (in the product topology).</p></blockquote>
+<p>Equivalent to the Axiom of Choice (and uses Zorn or ultrafilters in any proof). Underpins, among many things, the Banach-Alaoglu theorem in functional analysis and compactness arguments in model theory and game theory (compactness of strategy spaces in infinite games).</p>
+<h4 id="compactness-vs-sequential-compactness">Compactness vs Sequential Compactness<a hidden class="anchor" aria-hidden="true" href="#compactness-vs-sequential-compactness">#</a></h4>
+<p><strong>Sequentially compact</strong>: every sequence has a convergent subsequence.</p>
+<p>In metric spaces: compact ⟺ sequentially compact ⟺ complete + totally bounded. In general: they are incomparable. Both compact-not-sequentially-compact and sequentially-compact-not-compact exist (e.g. $[0,1]^{[0,1]}$ and the long line, respectively).</p>
+<h3 id="convergence-beyond-sequences">Convergence Beyond Sequences<a hidden class="anchor" aria-hidden="true" href="#convergence-beyond-sequences">#</a></h3>
+<h4 id="nets-and-filters">Nets and Filters<a hidden class="anchor" aria-hidden="true" href="#nets-and-filters">#</a></h4>
+<p>In a non-first-countable space, sequences fail to characterize closure: there may be $x \in \bar A$ with no sequence in $A$ converging to $x$.</p>
+<p>A <strong>net</strong> is a function $\phi : D \to X$ where $D$ is a <em>directed set</em> (preorder with upper bounds for pairs). Generalizes sequences (directed set $\mathbb{N}$) and lets you index by, e.g., open neighborhoods ordered by reverse inclusion.</p>
+<p>A <strong>filter</strong> $\mathcal{F}$ on $X$ is a non-empty family of subsets closed under finite intersection and upward closure, with $\emptyset \notin \mathcal{F}$. An <strong>ultrafilter</strong> is a maximal filter. Filters/ultrafilters generalize &ldquo;tail behavior&rdquo; and are dual to nets.</p>
+<blockquote>
+<p>[!note] Pragmatic takeaway
+Theorems &ldquo;sequences detect $X$&rdquo; are first-countable theorems. In general, replace sequences with nets/filters and the proofs go through (compactness ⟺ every net has a convergent subnet ⟺ every ultrafilter converges).</p></blockquote>
+<h3 id="connectedness-extended">Connectedness, Extended<a hidden class="anchor" aria-hidden="true" href="#connectedness-extended">#</a></h3>
+<p>You already have the disjoint-opens definition and $[0,1]$ connected.</p>
+<h4 id="components">Components<a hidden class="anchor" aria-hidden="true" href="#components">#</a></h4>
+<p>The <strong>connected component</strong> of $x$ is the largest connected set containing $x$ — equivalently, the union of all connected sets containing $x$. Components partition $X$ and are always closed (not always open: e.g. $\mathbb{Q}$ has singleton components, none open).</p>
+<p><strong>Path components</strong> partition $X$ via the equivalence $x \sim y$ iff there is a path. Path components $\subseteq$ components. They coincide for locally path-connected spaces.</p>
+<h4 id="totally-disconnected">Totally Disconnected<a hidden class="anchor" aria-hidden="true" href="#totally-disconnected">#</a></h4>
+<p>$X$ is <strong>totally disconnected</strong> if components are singletons. Canonical examples: $\mathbb{Q}$, $p$-adic numbers $\mathbb{Z}_p$, the <strong>Cantor set</strong> $\mathcal{C}$.</p>
+<blockquote>
+<p>[!note] Cantor set as universal object
+Every compact metric totally disconnected space without isolated points is homeomorphic to $\mathcal{C}$. It is also homeomorphic to $\{0,1\}^\mathbb{N}$ — the natural state space for infinite binary processes. This is one reason it appears in the formalization of stochastic strategies and infinite trees in game theory.</p></blockquote>
+<h4 id="locally-path-connected">Locally (Path) Connected<a hidden class="anchor" aria-hidden="true" href="#locally-path-connected">#</a></h4>
+<p>Each point has a neighborhood basis of (path-)connected opens. This is what you need for path components to equal components, and for covering space theory (next) to behave.</p>
+<h3 id="metrization">Metrization<a hidden class="anchor" aria-hidden="true" href="#metrization">#</a></h3>
+<p>When can a topology be re-derived from a metric? This is the inverse of the metric-induced-topology direction.</p>
+<h4 id="urysohn-metrization">Urysohn Metrization<a hidden class="anchor" aria-hidden="true" href="#urysohn-metrization">#</a></h4>
+<blockquote>
+<p>A second-countable Hausdorff topological space is metrizable iff it is regular ($T_3$).</p></blockquote>
+<p>So for second-countable spaces, separation up to regularity is exactly the metrization condition.</p>
+<h4 id="nagatasmirnov">Nagata–Smirnov<a hidden class="anchor" aria-hidden="true" href="#nagatasmirnov">#</a></h4>
+<blockquote>
+<p>$X$ is metrizable iff $X$ is regular and has a <em>$\sigma$-locally finite</em> basis.</p></blockquote>
+<p>The general necessary-and-sufficient condition without assuming second countability. The takeaway: metrizability is a <em>separation</em> + <em>combinatorial-size</em> condition.</p>
+<h3 id="algebraic-topology-in-five-steps">Algebraic Topology in Five Steps<a hidden class="anchor" aria-hidden="true" href="#algebraic-topology-in-five-steps">#</a></h3>
+<p>The shift: classify spaces <em>up to homeomorphism</em> (or weaker, <em>homotopy</em>) by algebraic invariants.</p>
+<h4 id="homotopy">Homotopy<a hidden class="anchor" aria-hidden="true" href="#homotopy">#</a></h4>
+<p>Two continuous maps $f, g : X \to Y$ are <strong>homotopic</strong>, $f \simeq g$, if there is a continuous $H : X \times [0,1] \to Y$ with $H(\cdot, 0) = f$, $H(\cdot, 1) = g$. Two spaces are <strong>homotopy equivalent</strong> if there exist $f: X \to Y, g: Y \to X$ with $gf \simeq \mathrm{id}_X$, $fg \simeq \mathrm{id}_Y$.</p>
+<p>Homotopy equivalence is strictly weaker than homeomorphism. $\mathbb{R}^n$ is homotopy equivalent to a point (contractible), though not homeomorphic to one.</p>
+<h4 id="fundamental-group-pi_1x-x_0">Fundamental Group $\pi_1(X, x_0)$<a hidden class="anchor" aria-hidden="true" href="#fundamental-group-pi_1x-x_0">#</a></h4>
+<p>The set of homotopy classes of loops $\gamma : [0,1] \to X$ with $\gamma(0) = \gamma(1) = x_0$, under concatenation. This forms a group.</p>
+$$
+\pi_1(X, x_0) = \{ [\gamma] : \gamma \text{ loop at } x_0 \} / \simeq
+$$<p>Functorial: a continuous $f : (X, x_0) \to (Y, y_0)$ induces a homomorphism $f_* : \pi_1(X, x_0) \to \pi_1(Y, y_0)$.</p>
+<p>Key computations:</p>
+<ul>
+<li>$\pi_1(S^1) = \mathbb{Z}$ (the &ldquo;winding number&rdquo; theorem).</li>
+<li>$\pi_1(S^n) = 0$ for $n \ge 2$ (simply connected).</li>
+<li>$\pi_1(T^2) = \mathbb{Z}^2$.</li>
+<li>$\pi_1(\mathbb{RP}^n) = \mathbb{Z}/2\mathbb{Z}$ for $n \ge 2$.</li>
+</ul>
+<p>The winding-number computation immediately yields a topological proof of the Fundamental Theorem of Algebra and of Brouwer Fixed Point Theorem in dimension 2.</p>
+<h4 id="covering-spaces">Covering Spaces<a hidden class="anchor" aria-hidden="true" href="#covering-spaces">#</a></h4>
+<p>A <strong>covering map</strong> $p: \tilde X \to X$ is one where every $x \in X$ has an open neighborhood $U$ with $p^{-1}(U)$ a disjoint union of opens each homeomorphic to $U$ via $p$. Examples: $\mathbb{R} \to S^1$ via $t \mapsto e^{2\pi i t}$; $S^n \to \mathbb{RP}^n$ via antipodal quotient.</p>
+<blockquote>
+<p>The <strong>Galois correspondence for covering spaces</strong>: subgroups of $\pi_1(X)$ ↔ connected covering spaces of $X$.</p></blockquote>
+<p>The <em>universal cover</em> $\tilde X$ is simply connected and covers every other cover. Beautiful parallel to Galois theory in algebra.</p>
+<h4 id="homology-sketch">Homology (sketch)<a hidden class="anchor" aria-hidden="true" href="#homology-sketch">#</a></h4>
+<p>$\pi_1$ is non-abelian and hard to compute past dimension 1. <strong>Singular homology</strong> $H_n(X; \mathbb{Z})$ assigns to each $X$ an abelian group per dimension $n$, with $H_0$ counting components, $H_1 = \pi_1^{\text{ab}}$ (abelianization), and $H_n$ for $n \ge 2$ detecting &ldquo;$n$-dimensional holes.&rdquo;</p>
+<p>For spheres: $H_n(S^k) = \mathbb{Z}$ if $n \in \{0, k\}$, else $0$. This single computation gives:</p>
+<ul>
+<li>$\mathbb{R}^n \not\simeq \mathbb{R}^m$ for $n \ne m$ (invariance of domain).</li>
+<li>The Brouwer fixed point theorem in every dimension.</li>
+</ul>
+<h4 id="euler-characteristic">Euler Characteristic<a hidden class="anchor" aria-hidden="true" href="#euler-characteristic">#</a></h4>
+<p>For finite CW complexes: $\chi(X) = \sum_n (-1)^n \dim H_n(X; \mathbb{Q})$. For a polyhedron this gives back your Euler formula $v - e + f = \chi$. For surfaces:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Surface</th>
+          <th style="text-align: left">$\chi$</th>
+          <th style="text-align: left">$\pi_1$</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$S^2$</td>
+          <td style="text-align: left">$2$</td>
+          <td style="text-align: left">$0$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Torus $T^2$</td>
+          <td style="text-align: left">$0$</td>
+          <td style="text-align: left">$\mathbb{Z}^2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Genus-$g$ surface</td>
+          <td style="text-align: left">$2 - 2g$</td>
+          <td style="text-align: left">$\langle a_1, b_1, \dots, a_g, b_g \mid \prod [a_i, b_i] \rangle$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$\mathbb{RP}^2$</td>
+          <td style="text-align: left">$1$</td>
+          <td style="text-align: left">$\mathbb{Z}/2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Klein bottle</td>
+          <td style="text-align: left">$0$</td>
+          <td style="text-align: left">non-abelian</td>
+      </tr>
+  </tbody>
+</table>
+<p>This connects directly to your existing Euler&rsquo;s Theorem note — Legendre&rsquo;s spherical-excess proof is the $g = 0$ case of a vast machine.</p>
+<h3 id="manifolds">Manifolds<a hidden class="anchor" aria-hidden="true" href="#manifolds">#</a></h3>
+<h4 id="topological-manifold">Topological Manifold<a hidden class="anchor" aria-hidden="true" href="#topological-manifold">#</a></h4>
+<p>$M$ is an <strong>$n$-manifold</strong> if it is second-countable, Hausdorff, and locally homeomorphic to $\mathbb{R}^n$. Adding a compatible smooth atlas gives a <em>smooth manifold</em>; adding a Riemannian metric gives geometry.</p>
+<p>The second-countable + Hausdorff conditions exclude pathologies like the <em>line with two origins</em> and the <em>long line</em>. These are non-paracompact and break partitions of unity.</p>
+<h4 id="classification-of-surfaces-revisited">Classification of Surfaces (revisited)<a hidden class="anchor" aria-hidden="true" href="#classification-of-surfaces-revisited">#</a></h4>
+<p>Compact connected surfaces without boundary, up to homeomorphism:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Class</th>
+          <th style="text-align: left">Orientable</th>
+          <th style="text-align: left">$\chi$</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Sphere $S^2$</td>
+          <td style="text-align: left">Yes</td>
+          <td style="text-align: left">$2$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Genus-$g$ surface $\Sigma_g$</td>
+          <td style="text-align: left">Yes</td>
+          <td style="text-align: left">$2 - 2g$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$N_k = \mathbb{RP}^2 \# \cdots \# \mathbb{RP}^2$ ($k$ copies)</td>
+          <td style="text-align: left">No</td>
+          <td style="text-align: left">$2 - k$</td>
+      </tr>
+  </tbody>
+</table>
+<p>The $(g, k)$ classification is <em>complete and computable</em> via $\chi$ + orientability. No higher-dimensional analog: classification in dimension $\ge 4$ is undecidable (Markov, 1958), connected to the <em>word problem</em> in group theory.</p>
+<blockquote>
+<p>[!note] Decidability boundary
+Dimensions $\le 3$: classifiable. Dimension $\ge 4$: undecidable. There is something deep here, of a flavor adjacent to your <em>computability of moral reasoning</em> threads — formalization is bounded by group-theoretic word problems, an ambient computability ceiling.</p></blockquote>
+<h3 id="fixed-point-theorems--bridge-to-game-theory">Fixed-Point Theorems — Bridge to Game Theory<a hidden class="anchor" aria-hidden="true" href="#fixed-point-theorems--bridge-to-game-theory">#</a></h3>
+<p>This is where the topology you&rsquo;ve collected becomes <em>directly</em> a game-theoretic tool.</p>
+<h4 id="brouwer-fixed-point-theorem">Brouwer Fixed Point Theorem<a hidden class="anchor" aria-hidden="true" href="#brouwer-fixed-point-theorem">#</a></h4>
+<blockquote>
+<p>Any continuous map $f : D^n \to D^n$ from the closed $n$-disk to itself has a fixed point: $\exists x : f(x) = x$.</p></blockquote>
+<p>Equivalent formulations: the sphere $S^{n-1}$ is not a retract of $D^n$; $H_{n-1}(S^{n-1}) \ne 0$. Sperner&rsquo;s lemma gives a combinatorial proof.</p>
+<h4 id="kakutani-fixed-point-theorem">Kakutani Fixed Point Theorem<a hidden class="anchor" aria-hidden="true" href="#kakutani-fixed-point-theorem">#</a></h4>
+<blockquote>
+<p>Let $X \subseteq \mathbb{R}^n$ be non-empty, compact, convex. Let $\Phi : X \rightrightarrows X$ be a <em>correspondence</em> (set-valued) with $\Phi(x)$ non-empty, convex, and with closed graph. Then $\exists x : x \in \Phi(x)$.</p></blockquote>
+<h4 id="why-these-matter-for-your-work">Why these matter for your work<a hidden class="anchor" aria-hidden="true" href="#why-these-matter-for-your-work">#</a></h4>
+<p><strong>Nash&rsquo;s existence theorem</strong> is Brouwer applied to the best-response map on the simplex of mixed strategies — or, in the version for correspondences, Kakutani applied to the best-response <em>correspondence</em> (since the argmax is generally set-valued).</p>
+<p>The topology of the mixed-strategy space (compactness, convexity, continuity of expected utilities in the mixture weights) is what <em>makes</em> equilibrium exist. Any time you reach for an existence result for an equilibrium concept in a richer setting.</p>
+<blockquote>
+<p>[!tip] A research-grade hook
+Your <em>No Mechanism Sufficiency Corollary</em> lives in this neighborhood: when the contractible quotient becomes too coarse, the relevant best-response correspondence loses upper hemicontinuity, and Kakutani&rsquo;s hypotheses break — which is a topological way to read mechanism incompleteness.</p></blockquote>
+<h4 id="banach-fixed-point-theorem">Banach Fixed Point Theorem<a hidden class="anchor" aria-hidden="true" href="#banach-fixed-point-theorem">#</a></h4>
+<p>For <em>metric</em> (not just topological) spaces: a contraction on a complete metric space has a unique fixed point, and iteration converges geometrically. This is the constructive cousin — Brouwer is existence-only, Banach gives an algorithm. The contrast (existence-only vs. constructive convergence) is itself a recurring theme in mechanism design.</p>
+<h4 id="borsukulam">Borsuk–Ulam<a hidden class="anchor" aria-hidden="true" href="#borsukulam">#</a></h4>
+<blockquote>
+<p>Any continuous $f : S^n \to \mathbb{R}^n$ identifies some antipodal pair: $\exists x : f(x) = f(-x)$.</p></blockquote>
+<p>Corollaries: ham-sandwich theorem, Lusternik–Schnirelmann results, and — surprisingly — <em>fair division</em> and <em>necklace splitting</em> in combinatorics. The bridge from topology to combinatorial fairness is the Borsuk–Ulam family.</p>
+<h3 id="two-theorems-that-punch-above-their-weight">Two Theorems That Punch Above Their Weight<a hidden class="anchor" aria-hidden="true" href="#two-theorems-that-punch-above-their-weight">#</a></h3>
+<h4 id="baire-category-theorem">Baire Category Theorem<a hidden class="anchor" aria-hidden="true" href="#baire-category-theorem">#</a></h4>
+<blockquote>
+<p>A complete metric space (or a locally compact Hausdorff space) is <em>not</em> a countable union of nowhere-dense sets.</p></blockquote>
+<p>Equivalently: a countable intersection of dense open sets is dense. The hidden engine behind the open mapping theorem, closed graph theorem, and uniform boundedness in functional analysis. Whenever someone in analysis says &ldquo;generic,&rdquo; they probably mean &ldquo;comeager&rdquo; (complement of meager), which is a Baire-category statement.</p>
+<h4 id="invariance-of-domain">Invariance of Domain<a hidden class="anchor" aria-hidden="true" href="#invariance-of-domain">#</a></h4>
+<blockquote>
+<p>If $U \subseteq \mathbb{R}^n$ is open and $f : U \to \mathbb{R}^n$ is continuous and injective, then $f(U)$ is open and $f$ is a homeomorphism onto its image.</p></blockquote>
+<p>Sounds obvious; isn&rsquo;t. Implies $\mathbb{R}^n \cong \mathbb{R}^m \Rightarrow n = m$, and is foundational for the well-definedness of manifold dimension.</p>
+<h3 id="a-curiosity-to-close">A Curiosity to Close<a hidden class="anchor" aria-hidden="true" href="#a-curiosity-to-close">#</a></h3>
+<h4 id="banachtarski">Banach–Tarski<a hidden class="anchor" aria-hidden="true" href="#banachtarski">#</a></h4>
+<blockquote>
+<p>Using the Axiom of Choice, a solid unit ball in $\mathbb{R}^3$ can be partitioned into finitely many pieces, which can be reassembled by rigid motions into two solid unit balls.</p></blockquote>
+<p>Not a paradox of geometry — a statement about the failure of finite additivity for non-measurable sets under the action of a free subgroup of $SO(3)$. Sets the conceptual boundary of what &ldquo;measurable&rdquo; topology will allow you to do.</p>
+<hr>
+<h3 id="suggested-mental-map">Suggested Mental Map<a hidden class="anchor" aria-hidden="true" href="#suggested-mental-map">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Layer</th>
+          <th style="text-align: left">Concept</th>
+          <th style="text-align: left">Slogan</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Generation</td>
+          <td style="text-align: left">Basis, subbasis, product, quotient</td>
+          <td style="text-align: left">&ldquo;Topologies are universal constructions&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Separation</td>
+          <td style="text-align: left">$T_0 \to T_4$, Urysohn, Tietze</td>
+          <td style="text-align: left">&ldquo;How much can opens distinguish?&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Size</td>
+          <td style="text-align: left">First/second countable, separable</td>
+          <td style="text-align: left">&ldquo;How small a description?&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Compactness</td>
+          <td style="text-align: left">Tychonoff, Heine-Borel</td>
+          <td style="text-align: left">&ldquo;Continuous + compact = good&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Convergence</td>
+          <td style="text-align: left">Nets, filters</td>
+          <td style="text-align: left">&ldquo;Sequences are not enough&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Invariants</td>
+          <td style="text-align: left">$\pi_1$, $H_*$, $\chi$</td>
+          <td style="text-align: left">&ldquo;Classify up to homotopy&rdquo;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Fixed points</td>
+          <td style="text-align: left">Brouwer, Kakutani, Banach</td>
+          <td style="text-align: left">&ldquo;Existence theorems for equilibria&rdquo;</td>
+      </tr>
+  </tbody>
+</table>
+<p>The single takeaway: <strong>topology is the minimal structure for talking about continuity and convergence, and most of the deep theorems are about how separation + compactness + countability conspire to make a space <em>behave</em>.</strong> Everything else (algebraic topology, manifold theory, fixed-point theorems) is a payoff from that setup.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on x"
+            href="https://x.com/intent/tweet/?text=Topology%20Crash%20Course&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f&amp;title=Topology%20Crash%20Course&amp;summary=Topology%20Crash%20Course&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f&title=Topology%20Crash%20Course">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on whatsapp"
+            href="https://api.whatsapp.com/send?text=Topology%20Crash%20Course%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on telegram"
+            href="https://telegram.me/share/url?text=Topology%20Crash%20Course&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Topology Crash Course on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Topology%20Crash%20Course&u=https%3a%2f%2fflecart.github.io%2fnotes%2ftopology-crash-course%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
