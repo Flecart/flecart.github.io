@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Sobolev Spaces | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Sobolev Spaces
+Motivation &amp; Setup
+PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). Sobolev spaces $W^{k,p}$ are the fix: they replace pointwise differentiation with the weak derivative and complete $C^k$ under the natural $L^p$-Sobolev norm.">
+<meta name="author" content="
+By Xuanqiang Angelo Huang">
+<link rel="canonical" href="https://flecart.github.io/notes/sobolev-spaces/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/sobolev-spaces/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/sobolev-spaces/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Sobolev Spaces">
+  <meta property="og:description" content="Sobolev Spaces Motivation &amp; Setup PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). Sobolev spaces $W^{k,p}$ are the fix: they replace pointwise differentiation with the weak derivative and complete $C^k$ under the natural $L^p$-Sobolev norm.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Sobolev Spaces">
+<meta name="twitter:description" content="Sobolev Spaces
+Motivation &amp; Setup
+PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). Sobolev spaces $W^{k,p}$ are the fix: they replace pointwise differentiation with the weak derivative and complete $C^k$ under the natural $L^p$-Sobolev norm.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Sobolev Spaces",
+      "item": "https://flecart.github.io/notes/sobolev-spaces/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Sobolev Spaces",
+  "name": "Sobolev Spaces",
+  "description": "Sobolev Spaces Motivation \u0026amp; Setup PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). Sobolev spaces $W^{k,p}$ are the fix: they replace pointwise differentiation with the weak derivative and complete $C^k$ under the natural $L^p$-Sobolev norm.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "Sobolev Spaces Motivation \u0026 Setup PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). Sobolev spaces $W^{k,p}$ are the fix: they replace pointwise differentiation with the weak derivative and complete $C^k$ under the natural $L^p$-Sobolev norm.\nThroughout: $\\Omega \\subset \\mathbb{R}^n$ open, $1 \\le p \\le \\infty$, $k \\in \\mathbb{N}_0$. Use multi-index $\\alpha = (\\alpha_1,\\dots,\\alpha_n)$, $|\\alpha| = \\sum \\alpha_i$, $D^\\alpha = \\partial_1^{\\alpha_1}\\cdots\\partial_n^{\\alpha_n}$.\nWhy Classical Spaces Fail $C^k(\\bar\\Omega)$ with $\\|\\cdot\\|_{C^k}$ is complete but ignores $L^p$ structure; minimizing sequences of integral energies need not converge in $C^k$. $C^k(\\bar\\Omega)$ with the $L^p$-Sobolev norm is not complete; its completion is precisely $W^{k,p}$. The Dirichlet energy $E(u) = \\tfrac12\\int_\\Omega|\\nabla u|^2$ is minimized naturally over $H^1$, not over $C^1$. [!note] The Direct Method The Direct Method of the Calculus of Variations needs: lower semicontinuity + coercivity + a reflexive space to extract weakly convergent minimizing subsequences. Sobolev spaces are the canonical reflexive choice (when $1",
+  "wordCount" : "187",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang Angelo Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/notes/sobolev-spaces/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Sobolev Spaces
+    </h1>
+    <div class="post-meta">Reading Time: 1 minute&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#sobolev-spaces" aria-label="Sobolev Spaces">Sobolev Spaces</a><ul>
+                        
+                <li>
+                    <a href="#motivation--setup" aria-label="Motivation &amp; Setup">Motivation &amp; Setup</a><ul>
+                        
+                <li>
+                    <a href="#why-classical-spaces-fail" aria-label="Why Classical Spaces Fail">Why Classical Spaces Fail</a></li></ul>
+                </li>
+                <li>
+                    <a href="#weak-derivatives" aria-label="Weak Derivatives">Weak Derivatives</a><ul>
+                        
+                <li>
+                    <a href="#definition-weak-derivative" aria-label="Definition: Weak Derivative">Definition: Weak Derivative</a></li>
+                <li>
+                    <a href="#calculus-rules-for-weak-derivatives" aria-label="Calculus Rules for Weak Derivatives">Calculus Rules for Weak Derivatives</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-spaces-wkp-and-hk" aria-label="The Spaces $W^{k,p}$ and $H^k$">The Spaces $W^{k,p}$ and $H^k$</a><ul>
+                        
+                <li>
+                    <a href="#definition-sobolev-space-wkpomega" aria-label="Definition: Sobolev Space $W^{k,p}(\Omega)$">Definition: Sobolev Space $W^{k,p}(\Omega)$</a></li>
+                <li>
+                    <a href="#definition-hk--the-hilbert-case" aria-label="Definition: $H^k$ — the Hilbert Case">Definition: $H^k$ — the Hilbert Case</a></li>
+                <li>
+                    <a href="#definition-wkp_0omega--zero-boundary-trace" aria-label="Definition: $W^{k,p}_0(\Omega)$ — Zero Boundary Trace">Definition: $W^{k,p}_0(\Omega)$ — Zero Boundary Trace</a></li>
+                <li>
+                    <a href="#banach--hilbert--reflexive--separable-properties" aria-label="Banach / Hilbert / Reflexive / Separable Properties">Banach / Hilbert / Reflexive / Separable Properties</a></li></ul>
+                </li>
+                <li>
+                    <a href="#approximation-by-smooth-functions" aria-label="Approximation by Smooth Functions">Approximation by Smooth Functions</a><ul>
+                        
+                <li>
+                    <a href="#mollifiers" aria-label="Mollifiers">Mollifiers</a></li>
+                <li>
+                    <a href="#local-approximation" aria-label="Local Approximation">Local Approximation</a></li>
+                <li>
+                    <a href="#theorem-meyersserrin-h--w" aria-label="Theorem: Meyers–Serrin &ldquo;$H = W$&rdquo;">Theorem: Meyers–Serrin &ldquo;$H = W$&rdquo;</a></li></ul>
+                </li>
+                <li>
+                    <a href="#extension-theorems" aria-label="Extension Theorems">Extension Theorems</a><ul>
+                        
+                <li>
+                    <a href="#extension-operator" aria-label="Extension Operator">Extension Operator</a></li></ul>
+                </li>
+                <li>
+                    <a href="#traces" aria-label="Traces">Traces</a><ul>
+                        
+                <li>
+                    <a href="#theorem-trace-operator" aria-label="Theorem: Trace Operator">Theorem: Trace Operator</a></li>
+                <li>
+                    <a href="#trace-as-loss-of-1p-regularity" aria-label="Trace as Loss of $1/p$ Regularity">Trace as Loss of $1/p$ Regularity</a></li></ul>
+                </li>
+                <li>
+                    <a href="#sobolev-embedding-theorems" aria-label="Sobolev Embedding Theorems">Sobolev Embedding Theorems</a><ul>
+                        
+                <li>
+                    <a href="#theorem-gagliardonirenbergsobolev-kp--n" aria-label="Theorem: Gagliardo–Nirenberg–Sobolev ($kp &lt; n$)">Theorem: Gagliardo–Nirenberg–Sobolev ($kp < n$)</a></li>
+                <li>
+                    <a href="#theorem-morrey-kp--n" aria-label="Theorem: Morrey ($kp &gt; n$)">Theorem: Morrey ($kp > n$)</a></li>
+                <li>
+                    <a href="#the-borderline-case-kp--n" aria-label="The Borderline Case $kp = n$">The Borderline Case $kp = n$</a></li>
+                <li>
+                    <a href="#summary-table-of-embeddings" aria-label="Summary Table of Embeddings">Summary Table of Embeddings</a></li>
+                <li>
+                    <a href="#proof-sketch--gns-via-the-p1-identity" aria-label="Proof Sketch — GNS via the $p=1$ Identity">Proof Sketch — GNS via the $p=1$ Identity</a></li></ul>
+                </li>
+                <li>
+                    <a href="#compactness-rellichkondrachov" aria-label="Compactness: Rellich–Kondrachov">Compactness: Rellich–Kondrachov</a><ul>
+                        
+                <li>
+                    <a href="#theorem-rellichkondrachov" aria-label="Theorem: Rellich–Kondrachov">Theorem: Rellich–Kondrachov</a></li>
+                <li>
+                    <a href="#consequences-for-variational-methods" aria-label="Consequences for Variational Methods">Consequences for Variational Methods</a></li></ul>
+                </li>
+                <li>
+                    <a href="#poincar%c3%a9-type-inequalities" aria-label="Poincaré-Type Inequalities">Poincaré-Type Inequalities</a><ul>
+                        
+                <li>
+                    <a href="#poincar%c3%a9-inequality-zero-trace-version" aria-label="Poincaré Inequality (Zero-Trace Version)">Poincaré Inequality (Zero-Trace Version)</a></li>
+                <li>
+                    <a href="#poincar%c3%a9wirtinger-zero-mean-version" aria-label="Poincaré–Wirtinger (Zero-Mean Version)">Poincaré–Wirtinger (Zero-Mean Version)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#fractional-sobolev-spaces-wsp" aria-label="Fractional Sobolev Spaces $W^{s,p}$">Fractional Sobolev Spaces $W^{s,p}$</a><ul>
+                        
+                <li>
+                    <a href="#slobodeckij-seminorm-gagliardo" aria-label="Slobodeckij Seminorm (Gagliardo)">Slobodeckij Seminorm (Gagliardo)</a></li>
+                <li>
+                    <a href="#bessel-potential-spaces-hsp" aria-label="Bessel Potential Spaces $H^{s,p}$">Bessel Potential Spaces $H^{s,p}$</a></li>
+                <li>
+                    <a href="#trace-spaces-revisited" aria-label="Trace Spaces Revisited">Trace Spaces Revisited</a></li></ul>
+                </li>
+                <li>
+                    <a href="#dual-spaces-and-negative-order-sobolev-spaces" aria-label="Dual Spaces and Negative-Order Sobolev Spaces">Dual Spaces and Negative-Order Sobolev Spaces</a><ul>
+                        
+                <li>
+                    <a href="#h-1omega--dual-of-h1_0" aria-label="$H^{-1}(\Omega)$ — Dual of $H^1_0$">$H^{-1}(\Omega)$ — Dual of $H^1_0$</a></li>
+                <li>
+                    <a href="#negative-fractional-spaces" aria-label="Negative Fractional Spaces">Negative Fractional Spaces</a></li></ul>
+                </li>
+                <li>
+                    <a href="#bounded-variation-bv-and-the-w11-subtleties" aria-label="Bounded Variation $BV$ and the $W^{1,1}$ Subtleties">Bounded Variation $BV$ and the $W^{1,1}$ Subtleties</a><ul>
+                        
+                <li>
+                    <a href="#bvomega" aria-label="$BV(\Omega)$">$BV(\Omega)$</a></li></ul>
+                </li>
+                <li>
+                    <a href="#connections-comparisons-applications" aria-label="Connections, Comparisons, Applications">Connections, Comparisons, Applications</a><ul>
+                        
+                <li>
+                    <a href="#sobolev-vs-h%c3%b6lder-vs-lipschitz-spaces" aria-label="Sobolev vs. Hölder vs. Lipschitz Spaces">Sobolev vs. Hölder vs. Lipschitz Spaces</a></li>
+                <li>
+                    <a href="#why-p2-is-privileged" aria-label="Why $p=2$ Is Privileged">Why $p=2$ Is Privileged</a></li>
+                <li>
+                    <a href="#connection-to-statistical-learning--nn-approximation" aria-label="Connection to Statistical Learning / NN Approximation">Connection to Statistical Learning / NN Approximation</a></li>
+                <li>
+                    <a href="#connection-to-optimal-transport--functional-inequalities" aria-label="Connection to Optimal Transport &amp; Functional Inequalities">Connection to Optimal Transport &amp; Functional Inequalities</a></li></ul>
+                </li>
+                <li>
+                    <a href="#canonical-references" aria-label="Canonical References">Canonical References</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="sobolev-spaces">Sobolev Spaces<a hidden class="anchor" aria-hidden="true" href="#sobolev-spaces">#</a></h2>
+<h3 id="motivation--setup">Motivation &amp; Setup<a hidden class="anchor" aria-hidden="true" href="#motivation--setup">#</a></h3>
+<p>PDE theory and the calculus of variations require function spaces in which (i) differentiation makes sense for non-smooth functions, (ii) the space is complete under an $L^p$-flavored norm, and (iii) one can embed into $L^q$ or Hölder spaces. The classical $C^k$ spaces fail (ii); pure $L^p$ fails (i). <strong>Sobolev spaces $W^{k,p}$</strong> are the fix: they replace pointwise differentiation with the <em>weak derivative</em> and complete $C^k$ under the natural $L^p$-Sobolev norm.</p>
+<p>Throughout: $\Omega \subset \mathbb{R}^n$ open, $1 \le p \le \infty$, $k \in \mathbb{N}_0$. Use multi-index $\alpha = (\alpha_1,\dots,\alpha_n)$, $|\alpha| = \sum \alpha_i$, $D^\alpha = \partial_1^{\alpha_1}\cdots\partial_n^{\alpha_n}$.</p>
+<h4 id="why-classical-spaces-fail">Why Classical Spaces Fail<a hidden class="anchor" aria-hidden="true" href="#why-classical-spaces-fail">#</a></h4>
+<ul>
+<li>$C^k(\bar\Omega)$ with $\|\cdot\|_{C^k}$ is complete but ignores $L^p$ structure; minimizing sequences of integral energies need not converge in $C^k$.</li>
+<li>$C^k(\bar\Omega)$ with the $L^p$-Sobolev norm is <strong>not complete</strong>; its completion is precisely $W^{k,p}$.</li>
+<li>The Dirichlet energy $E(u) = \tfrac12\int_\Omega|\nabla u|^2$ is minimized naturally over $H^1$, not over $C^1$.</li>
+</ul>
+<blockquote>
+<p>[!note] The Direct Method
+The Direct Method of the Calculus of Variations needs: lower semicontinuity + coercivity + a <em>reflexive</em> space to extract weakly convergent minimizing subsequences. Sobolev spaces are the canonical reflexive choice (when $1<p<\infty$).</p></blockquote>
+<hr>
+<h3 id="weak-derivatives">Weak Derivatives<a hidden class="anchor" aria-hidden="true" href="#weak-derivatives">#</a></h3>
+<h4 id="definition-weak-derivative">Definition: Weak Derivative<a hidden class="anchor" aria-hidden="true" href="#definition-weak-derivative">#</a></h4>
+$$
+\int_\Omega u\, D^\alpha\varphi\,dx \;=\; (-1)^{|\alpha|}\int_\Omega v\,\varphi\,dx \qquad \forall \varphi \in C_c^\infty(\Omega).
+$$<p>
+Notation: $v = D^\alpha u$. The definition is the distributional derivative restricted to those distributions representable by an $L^1_{\text{loc}}$ function.</p>
+<p><strong>Uniqueness</strong>: a.e. uniqueness follows from the fundamental lemma of the calculus of variations (du Bois-Reymond).</p>
+<blockquote>
+<p>[!tip] Recognizing weak derivatives
+If $u \in C^k$, weak and classical derivatives coincide. If $u$ has a jump, the weak derivative does <strong>not</strong> exist as a function — it picks up a Dirac mass and lives only as a distribution. Example: $u = \mathbf{1}_{[0,\infty)}$ has $u' = \delta_0 \notin L^1_{\text{loc}}$.</p></blockquote>
+<h4 id="calculus-rules-for-weak-derivatives">Calculus Rules for Weak Derivatives<a hidden class="anchor" aria-hidden="true" href="#calculus-rules-for-weak-derivatives">#</a></h4>
+<p>The following hold in $W^{k,p}$ provided RHS makes sense:</p>
+<ul>
+<li><strong>Linearity</strong>: $D^\alpha(au+bv) = aD^\alpha u + bD^\alpha v$.</li>
+<li><strong>Product rule</strong> (chain): if $u \in W^{1,p}$ and $\eta \in C_c^\infty$, then $\eta u \in W^{1,p}$ and $\partial_i(\eta u) = \eta \partial_i u + u\partial_i\eta$.</li>
+<li><strong>Chain rule</strong> (Stampacchia): if $F \in C^1(\mathbb{R})$, $F' \in L^\infty$, $F(0)=0$, and $u\in W^{1,p}$, then $F(u)\in W^{1,p}$ with $\partial_i F(u) = F'(u)\partial_i u$.</li>
+<li><strong>Truncation</strong>: $u^+ = \max(u,0) \in W^{1,p}$ with $\nabla u^+ = \nabla u \cdot \mathbf{1}_{\{u>0\}}$ (almost everywhere).</li>
+</ul>
+<p>The truncation rule underlies the maximum principle for weak solutions.</p>
+<hr>
+<h3 id="the-spaces-wkp-and-hk">The Spaces $W^{k,p}$ and $H^k$<a hidden class="anchor" aria-hidden="true" href="#the-spaces-wkp-and-hk">#</a></h3>
+<h4 id="definition-sobolev-space-wkpomega">Definition: Sobolev Space $W^{k,p}(\Omega)$<a hidden class="anchor" aria-hidden="true" href="#definition-sobolev-space-wkpomega">#</a></h4>
+$$
+W^{k,p}(\Omega) \;=\; \{\, u \in L^p(\Omega) : D^\alpha u \in L^p(\Omega) \text{ for all } |\alpha| \le k \,\}.
+$$$$
+\|u\|_{W^{k,p}} \;=\; \Bigl(\sum_{|\alpha|\le k}\|D^\alpha u\|_{L^p}^p\Bigr)^{1/p} \quad (1\le p<\infty), \qquad
+\|u\|_{W^{k,\infty}} = \max_{|\alpha|\le k}\|D^\alpha u\|_{L^\infty}.
+$$<p>
+Equivalent norms abound — e.g., $\|u\|_{L^p} + \sum_{|\alpha|=k}\|D^\alpha u\|_{L^p}$.</p>
+<h4 id="definition-hk--the-hilbert-case">Definition: $H^k$ — the Hilbert Case<a hidden class="anchor" aria-hidden="true" href="#definition-hk--the-hilbert-case">#</a></h4>
+$$
+\langle u,v\rangle_{H^k} \;=\; \sum_{|\alpha|\le k}\int_\Omega D^\alpha u\, D^\alpha v\,dx.
+$$<p>
+This is the only $p$ giving a Hilbert space — it&rsquo;s the workhorse for linear elliptic PDE and spectral theory.</p>
+<h4 id="definition-wkp_0omega--zero-boundary-trace">Definition: $W^{k,p}_0(\Omega)$ — Zero Boundary Trace<a hidden class="anchor" aria-hidden="true" href="#definition-wkp_0omega--zero-boundary-trace">#</a></h4>
+$$
+W^{k,p}_0(\Omega) \;:=\; \overline{C_c^\infty(\Omega)}^{\,\|\cdot\|_{W^{k,p}}}.
+$$<p>
+Heuristically: functions with &ldquo;zero boundary values up to order $k-1$&rdquo;. On all of $\mathbb{R}^n$, $W^{k,p}_0(\mathbb{R}^n) = W^{k,p}(\mathbb{R}^n)$. On bounded $\Omega$ with reasonable boundary, the inclusion $W^{k,p}_0 \subsetneq W^{k,p}$ is strict (constants live in the latter, not the former).</p>
+<h4 id="banach--hilbert--reflexive--separable-properties">Banach / Hilbert / Reflexive / Separable Properties<a hidden class="anchor" aria-hidden="true" href="#banach--hilbert--reflexive--separable-properties">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Property</th>
+          <th style="text-align: center">$W^{k,p}$, $1\le p < \infty$</th>
+          <th style="text-align: center">$W^{k,\infty}$</th>
+          <th style="text-align: center">$H^k$</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Banach</td>
+          <td style="text-align: center">✓</td>
+          <td style="text-align: center">✓</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Hilbert</td>
+          <td style="text-align: center">only $p=2$</td>
+          <td style="text-align: center">✗</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Separable</td>
+          <td style="text-align: center">✓</td>
+          <td style="text-align: center">✗</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Reflexive</td>
+          <td style="text-align: center">✓ iff $1<p<\infty$</td>
+          <td style="text-align: center">✗</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Uniformly convex</td>
+          <td style="text-align: center">$1<p<\infty$</td>
+          <td style="text-align: center">✗</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+  </tbody>
+</table>
+<p>Completeness proof sketch: a Cauchy sequence $\{u_m\} \subset W^{k,p}$ has $\{D^\alpha u_m\}$ Cauchy in $L^p$ for each $|\alpha|\le k$; pass to $L^p$-limits, then verify the limits satisfy the weak-derivative identity by passing the limit through the integration-by-parts identity (dominated convergence on the test function side).</p>
+<hr>
+<h3 id="approximation-by-smooth-functions">Approximation by Smooth Functions<a hidden class="anchor" aria-hidden="true" href="#approximation-by-smooth-functions">#</a></h3>
+<h4 id="mollifiers">Mollifiers<a hidden class="anchor" aria-hidden="true" href="#mollifiers">#</a></h4>
+<p>$\eta \in C_c^\infty(\mathbb{R}^n)$, $\eta \ge 0$, $\int\eta = 1$, $\operatorname{supp}\eta \subset B_1(0)$. Set $\eta_\varepsilon(x) = \varepsilon^{-n}\eta(x/\varepsilon)$. Define $u_\varepsilon = \eta_\varepsilon * u$ on $\Omega_\varepsilon = \{x \in \Omega : \operatorname{dist}(x,\partial\Omega)>\varepsilon\}$. Then $u_\varepsilon \in C^\infty(\Omega_\varepsilon)$ and $D^\alpha u_\varepsilon = \eta_\varepsilon * D^\alpha u$ on $\Omega_\varepsilon$ (the weak derivative commutes with convolution).</p>
+<h4 id="local-approximation">Local Approximation<a hidden class="anchor" aria-hidden="true" href="#local-approximation">#</a></h4>
+<p>If $u \in W^{k,p}_{\text{loc}}(\Omega)$, $1\le p<\infty$, then $u_\varepsilon \to u$ in $W^{k,p}_{\text{loc}}(\Omega)$. The proof is Friedrichs&rsquo;s classical mollification argument.</p>
+<h4 id="theorem-meyersserrin-h--w">Theorem: Meyers–Serrin &ldquo;$H = W$&rdquo;<a hidden class="anchor" aria-hidden="true" href="#theorem-meyersserrin-h--w">#</a></h4>
+<blockquote>
+<p>For every open $\Omega \subset \mathbb{R}^n$ and $1 \le p < \infty$, $C^\infty(\Omega) \cap W^{k,p}(\Omega)$ is dense in $W^{k,p}(\Omega)$.</p></blockquote>
+<p>The historical name: $H^{k,p}$ used to denote the completion of $C^\infty \cap W^{k,p}$ under $\|\cdot\|_{W^{k,p}}$. Meyers–Serrin (1964) proved $H^{k,p} = W^{k,p}$ for <strong>arbitrary</strong> open sets, with no boundary regularity assumed. The proof partitions $\Omega$ into shells and mollifies on each, gluing with a partition of unity.</p>
+<blockquote>
+<p>[!note] What can fail at the boundary
+Density of $C^\infty(\bar\Omega)$ (note the closure) requires $\Omega$ to have, e.g., the <em>segment property</em> (a weak boundary regularity). Without it, $C^\infty(\Omega) \cap W^{k,p}$ may fail to be dense in $W^{k,p}$ in the $C^\infty(\bar\Omega)$ subspace sense — though Meyers–Serrin density is unaffected.</p></blockquote>
+<hr>
+<h3 id="extension-theorems">Extension Theorems<a hidden class="anchor" aria-hidden="true" href="#extension-theorems">#</a></h3>
+<h4 id="extension-operator">Extension Operator<a hidden class="anchor" aria-hidden="true" href="#extension-operator">#</a></h4>
+<p>A bounded linear $E\colon W^{k,p}(\Omega)\to W^{k,p}(\mathbb{R}^n)$ with $Eu|_\Omega = u$. Such an operator lets you transfer Fourier-analytic and global-$\mathbb{R}^n$ results back to $\Omega$.</p>
+<p><strong>Existence</strong>: $E$ exists when $\partial\Omega$ is sufficiently regular — Lipschitz suffices for $k=1$; $C^k$ suffices in general. Constructions: reflection across the boundary (half-space), then partition of unity + local charts.</p>
+<blockquote>
+<p>[!note] Calderón–Stein extension
+For bounded Lipschitz $\Omega$, Stein (1970) constructed a <em>universal</em> extension operator $E$ that works simultaneously for all $W^{k,p}$, $k\in\mathbb{N}_0$, $1\le p\le\infty$. Without boundary regularity, extension can fail.</p></blockquote>
+<hr>
+<h3 id="traces">Traces<a hidden class="anchor" aria-hidden="true" href="#traces">#</a></h3>
+<p>The trace problem: $u \in W^{1,p}(\Omega)$ is only defined a.e., so the boundary $\partial\Omega$ (measure-zero set) sees no canonical value. <strong>Trace theorems</strong> make this work via continuity.</p>
+<h4 id="theorem-trace-operator">Theorem: Trace Operator<a hidden class="anchor" aria-hidden="true" href="#theorem-trace-operator">#</a></h4>
+$$
+T \colon W^{1,p}(\Omega) \longrightarrow L^p(\partial\Omega), \qquad Tu = u|_{\partial\Omega} \text{ if } u\in C(\bar\Omega).
+$$$$
+W^{1,p}_0(\Omega) \;=\; \ker T \;=\; \{u\in W^{1,p}(\Omega) : Tu = 0\}.
+$$<h4 id="trace-as-loss-of-1p-regularity">Trace as Loss of $1/p$ Regularity<a hidden class="anchor" aria-hidden="true" href="#trace-as-loss-of-1p-regularity">#</a></h4>
+<p>The &ldquo;$1-1/p$&rdquo; reflects a general principle: restricting to a codimension-$d$ surface costs $d/p$ derivatives. Heuristic via Fourier: restriction in $\mathbb{R}^n$ corresponds to summing over the normal frequency, which behaves like a Riemann sum against $|\xi|^{-d}$, hence the $d/p$ deficit.</p>
+<blockquote>
+<p>[!question] Why no trace for $p=1$ on the kernel side?
+$W^{1,1}_0(\Omega)$ still equals $\ker T$, but $W^{1-1,1} = L^1$, and the trace operator $W^{1,1}\to L^1(\partial\Omega)$ is surjective onto $L^1(\partial\Omega)$ — the fractional space &ldquo;collapses&rdquo;. For $p=\infty$ traces land in $W^{1,\infty}(\partial\Omega)$ directly (it&rsquo;s just Lipschitz restriction).</p></blockquote>
+<hr>
+<h3 id="sobolev-embedding-theorems">Sobolev Embedding Theorems<a hidden class="anchor" aria-hidden="true" href="#sobolev-embedding-theorems">#</a></h3>
+<p>The heart of the theory. Set the <strong>Sobolev conjugate</strong> $p^* := \frac{np}{n-p}$ for $1 \le p < n$. Three regimes by $kp$ vs. $n$.</p>
+<h4 id="theorem-gagliardonirenbergsobolev-kp--n">Theorem: Gagliardo–Nirenberg–Sobolev ($kp < n$)<a hidden class="anchor" aria-hidden="true" href="#theorem-gagliardonirenbergsobolev-kp--n">#</a></h4>
+$$
+\|u\|_{L^{p^*}(\Omega)} \;\le\; C\,\|u\|_{W^{1,p}(\Omega)}.
+$$$$
+\|u\|_{L^{p^*}(\mathbb{R}^n)} \;\le\; C(n,p)\,\|\nabla u\|_{L^p(\mathbb{R}^n)}.
+$$<p>
+<strong>Sharp constant</strong>: Talenti–Aubin (1976). Extremizers exist only for $1<p<n$ and are translates/dilates of the Aubin–Talenti profile $U(x) = (1+|x|^{p/(p-1)})^{-(n-p)/p}$ (mod scaling).</p>
+<p><strong>General order</strong>: $W^{k,p}(\Omega)\hookrightarrow L^q(\Omega)$ for $\frac{1}{q} = \frac{1}{p} - \frac{k}{n}$ when $kp<n$.</p>
+<h4 id="theorem-morrey-kp--n">Theorem: Morrey ($kp > n$)<a hidden class="anchor" aria-hidden="true" href="#theorem-morrey-kp--n">#</a></h4>
+$$
+W^{k,p}(\Omega) \hookrightarrow C^{m,\alpha}(\bar\Omega), \qquad m + \alpha = k - n/p,\; m\in\mathbb{N}_0,\; \alpha\in(0,1].
+$$<p>
+In particular $W^{1,p}\hookrightarrow C^{0,1-n/p}$ for $p>n$ on Lipschitz domains. This is the <strong>Morrey embedding</strong>, with explicit Hölder modulus.</p>
+<h4 id="the-borderline-case-kp--n">The Borderline Case $kp = n$<a hidden class="anchor" aria-hidden="true" href="#the-borderline-case-kp--n">#</a></h4>
+<p>The naive guess $L^\infty$ <strong>fails</strong>: $W^{1,n} \not\hookrightarrow L^\infty$. Counterexample (n=2): $u(x) = \log\log(1+1/|x|)$ on the unit ball, in $W^{1,2}$ but unbounded.</p>
+<ul>
+<li>One has $W^{1,n} \hookrightarrow L^q$ for all $q\in[n,\infty)$ but not $q=\infty$.</li>
+<li><strong>Trudinger–Moser inequality</strong>: there exists $\alpha_n>0$ such that
+$$
+\sup_{\|\nabla u\|_{L^n}\le 1}\int_\Omega \exp\bigl(\alpha_n |u|^{n/(n-1)}\bigr)\,dx < \infty.
+$$
+Sharp constant $\alpha_n = n\omega_{n-1}^{1/(n-1)}$ (Moser, 1971). This is the natural limit replacing $L^\infty$.</li>
+</ul>
+<h4 id="summary-table-of-embeddings">Summary Table of Embeddings<a hidden class="anchor" aria-hidden="true" href="#summary-table-of-embeddings">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Regime</th>
+          <th style="text-align: left">Embedding</th>
+          <th style="text-align: left">Borderline</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$kp < n$</td>
+          <td style="text-align: left">$W^{k,p}\hookrightarrow L^q$, $\tfrac1q=\tfrac1p-\tfrac kn$</td>
+          <td style="text-align: left">$q = p^* = np/(n-p)$ best</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$kp = n$</td>
+          <td style="text-align: left">$W^{k,p}\hookrightarrow L^q$ all $q<\infty$</td>
+          <td style="text-align: left">Trudinger–Moser exponential</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$kp > n$</td>
+          <td style="text-align: left">$W^{k,p}\hookrightarrow C^{m,\alpha}$, $m+\alpha=k-n/p$</td>
+          <td style="text-align: left">$\alpha=1$ requires $kp>n$ strict</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="proof-sketch--gns-via-the-p1-identity">Proof Sketch — GNS via the $p=1$ Identity<a hidden class="anchor" aria-hidden="true" href="#proof-sketch--gns-via-the-p1-identity">#</a></h4>
+$$
+|u(x)| \;\le\; \int_{-\infty}^{x_i} |\partial_i u(\dots,t,\dots)|\,dt.
+$$$$
+\|u\|_{L^{n/(n-1)}}\le \prod_{i=1}^n\|\partial_i u\|_{L^1}^{1/n} \;\le\; \|\nabla u\|_{L^1}.
+$$<p>
+This is the $p=1$ case. For general $1<p<n$, apply the $p=1$ inequality to $v = |u|^\gamma$ with $\gamma$ chosen so the $L^{n/(n-1)}$ exponent matches $p^*$. Standard, e.g., Evans Ch. 5.6.</p>
+<hr>
+<h3 id="compactness-rellichkondrachov">Compactness: Rellich–Kondrachov<a hidden class="anchor" aria-hidden="true" href="#compactness-rellichkondrachov">#</a></h3>
+<h4 id="theorem-rellichkondrachov">Theorem: Rellich–Kondrachov<a hidden class="anchor" aria-hidden="true" href="#theorem-rellichkondrachov">#</a></h4>
+$$
+W^{1,p}(\Omega) \;\hookrightarrow\hookrightarrow\; L^q(\Omega) \qquad \text{is compact for every } 1\le q < p^*.
+$$<p>
+At the critical exponent $q=p^*$ the embedding is continuous but <strong>not</strong> compact. For $p\ge n$ compact embeddings into $L^q$ all $q<\infty$ (resp. into $C^{0,\alpha}$ for $p>n$ and $\alpha < 1-n/p$).</p>
+<h4 id="consequences-for-variational-methods">Consequences for Variational Methods<a hidden class="anchor" aria-hidden="true" href="#consequences-for-variational-methods">#</a></h4>
+<p>Compactness is <strong>the</strong> workhorse for:</p>
+<ul>
+<li>Existence of minimizers (extract weakly convergent subsequence → strongly convergent in $L^q$ for sub-critical $q$).</li>
+<li>Discrete spectrum of self-adjoint elliptic operators (Laplacian on bounded domain with Dirichlet BC → compact resolvent → countable eigenvalues $\lambda_k\to\infty$).</li>
+<li>Concentration-compactness (Lions) handles loss at critical exponents.</li>
+</ul>
+<blockquote>
+<p>[!note] Loss of compactness at the critical exponent
+Failure of $H^1\hookrightarrow\hookrightarrow L^{2^*}$ (with $2^*=2n/(n-2)$) is the source of all critical-exponent phenomena: Yamabe problem, prescribed scalar curvature, Brezis–Nirenberg. Bubbles $u_\varepsilon(x) = \varepsilon^{-(n-2)/2}U(x/\varepsilon)$ converge weakly but not strongly.</p></blockquote>
+<hr>
+<h3 id="poincaré-type-inequalities">Poincaré-Type Inequalities<a hidden class="anchor" aria-hidden="true" href="#poincaré-type-inequalities">#</a></h3>
+<p>These convert control of $\nabla u$ into control of $u$ — essential for coercivity of the Dirichlet form.</p>
+<h4 id="poincaré-inequality-zero-trace-version">Poincaré Inequality (Zero-Trace Version)<a hidden class="anchor" aria-hidden="true" href="#poincaré-inequality-zero-trace-version">#</a></h4>
+$$
+\|u\|_{L^p(\Omega)} \;\le\; C(\Omega, p)\,\|\nabla u\|_{L^p(\Omega)}.
+$$<p>
+Best constant for $p=2$ is $1/\sqrt{\lambda_1}$, where $\lambda_1$ is the first Dirichlet eigenvalue of $-\Delta$ on $\Omega$.</p>
+<p>Consequence: on $W^{1,p}_0$, the seminorm $\|\nabla u\|_{L^p}$ is an equivalent norm.</p>
+<h4 id="poincaréwirtinger-zero-mean-version">Poincaré–Wirtinger (Zero-Mean Version)<a hidden class="anchor" aria-hidden="true" href="#poincaréwirtinger-zero-mean-version">#</a></h4>
+$$
+\Bigl\|u - \frac{1}{|\Omega|}\!\!\int_\Omega u\Bigr\|_{L^p(\Omega)} \;\le\; C(\Omega,p)\,\|\nabla u\|_{L^p(\Omega)}.
+$$<p>
+Best $p=2$ constant: $1/\sqrt{\mu_1}$ where $\mu_1$ is the first <strong>Neumann</strong> eigenvalue (the second eigenvalue of the Neumann Laplacian; the first is 0 with constant eigenfunction).</p>
+<blockquote>
+<p>[!tip] When you need a Poincaré
+Any time you want coercivity for $\int|\nabla u|^p$ as a norm. If you have Dirichlet BC, use the zero-trace version. If you&rsquo;re working on $W^{1,p}/\mathbb{R}$ (e.g., Neumann problems), use Poincaré–Wirtinger.</p></blockquote>
+<hr>
+<h3 id="fractional-sobolev-spaces-wsp">Fractional Sobolev Spaces $W^{s,p}$<a hidden class="anchor" aria-hidden="true" href="#fractional-sobolev-spaces-wsp">#</a></h3>
+<p>Two main definitions; for $p=2$ they coincide and equal the Bessel potential space.</p>
+<h4 id="slobodeckij-seminorm-gagliardo">Slobodeckij Seminorm (Gagliardo)<a hidden class="anchor" aria-hidden="true" href="#slobodeckij-seminorm-gagliardo">#</a></h4>
+$$
+[u]_{W^{s,p}(\Omega)}^p \;:=\; \int_\Omega\!\!\int_\Omega \frac{|u(x)-u(y)|^p}{|x-y|^{n+sp}}\,dx\,dy,
+$$$$
+\|u\|_{W^{s,p}}^p := \|u\|_{L^p}^p + [u]_{W^{s,p}}^p.
+$$<p>
+For $s>1$, write $s = k + \sigma$ with $k\in\mathbb{N}$, $\sigma\in(0,1)$, and require $D^\alpha u \in W^{\sigma,p}$ for $|\alpha|=k$.</p>
+<h4 id="bessel-potential-spaces-hsp">Bessel Potential Spaces $H^{s,p}$<a hidden class="anchor" aria-hidden="true" href="#bessel-potential-spaces-hsp">#</a></h4>
+$$
+H^{s,p}(\mathbb{R}^n) := \{u \in \mathcal{S}'(\mathbb{R}^n) : (1-\Delta)^{s/2}u \in L^p(\mathbb{R}^n)\},
+$$<p>
+i.e. $\widehat{(1-\Delta)^{s/2}u}(\xi) = (1+|\xi|^2)^{s/2}\widehat{u}(\xi)$.</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Property</th>
+          <th style="text-align: center">$W^{s,p}$ (Slobodeckij)</th>
+          <th style="text-align: center">$H^{s,p}$ (Bessel)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Defined via</td>
+          <td style="text-align: center">Difference quotients</td>
+          <td style="text-align: center">Fourier multipliers</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Equals $W^{s,p}$ for $p=2$</td>
+          <td style="text-align: center">✓</td>
+          <td style="text-align: center">✓</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Equals $W^{s,p}$ for $p\neq 2$</td>
+          <td style="text-align: center">—</td>
+          <td style="text-align: center">only if $s\in\mathbb{N}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Interpolation behavior</td>
+          <td style="text-align: center">Real interp. (Besov-like)</td>
+          <td style="text-align: center">Complex interp.</td>
+      </tr>
+  </tbody>
+</table>
+<p>In fact, $W^{s,p}$ (Slobodeckij) coincides with the <strong>Besov</strong> space $B^s_{p,p}$, not with $H^{s,p}=F^s_{p,2}$ — the latter is Triebel–Lizorkin. The mismatch for $p\neq 2$, $s\notin\mathbb{N}$ is fundamental.</p>
+<h4 id="trace-spaces-revisited">Trace Spaces Revisited<a hidden class="anchor" aria-hidden="true" href="#trace-spaces-revisited">#</a></h4>
+<p>The trace operator $T\colon W^{k,p}(\Omega) \to W^{k-1/p,\,p}(\partial\Omega)$ uses precisely the Slobodeckij version because $\partial\Omega$ is a manifold without group structure where Fourier is awkward. The image is genuinely fractional unless $p=2$, where everything coincides nicely.</p>
+<hr>
+<h3 id="dual-spaces-and-negative-order-sobolev-spaces">Dual Spaces and Negative-Order Sobolev Spaces<a hidden class="anchor" aria-hidden="true" href="#dual-spaces-and-negative-order-sobolev-spaces">#</a></h3>
+<h4 id="h-1omega--dual-of-h1_0">$H^{-1}(\Omega)$ — Dual of $H^1_0$<a hidden class="anchor" aria-hidden="true" href="#h-1omega--dual-of-h1_0">#</a></h4>
+$$
+H^{-1}(\Omega) := (H^1_0(\Omega))^* .
+$$<p>
+Characterization: $f \in H^{-1}$ iff $f = f_0 + \sum_{i=1}^n \partial_i f_i$ for some $f_0,\dots,f_n \in L^2(\Omega)$ (in distributional sense). Norm: infimum of $\bigl(\sum\|f_i\|_{L^2}^2\bigr)^{1/2}$ over such decompositions.</p>
+$$
+-\Delta \;\colon\; H^1_0(\Omega) \;\to\; H^{-1}(\Omega) \quad \text{is an isomorphism}.
+$$<p>
+(Lax–Milgram applied to the bilinear form $a(u,v)=\int\nabla u\cdot\nabla v$.)</p>
+<h4 id="negative-fractional-spaces">Negative Fractional Spaces<a hidden class="anchor" aria-hidden="true" href="#negative-fractional-spaces">#</a></h4>
+<p>For $s>0$, $W^{-s,p}(\Omega) := (W^{s,p'}_0(\Omega))^*$ where $p' = p/(p-1)$. These appear when applying differential operators of order $>k$ to $W^{k,p}$ functions, the result lying in negative-order spaces.</p>
+<hr>
+<h3 id="bounded-variation-bv-and-the-w11-subtleties">Bounded Variation $BV$ and the $W^{1,1}$ Subtleties<a hidden class="anchor" aria-hidden="true" href="#bounded-variation-bv-and-the-w11-subtleties">#</a></h3>
+<h4 id="bvomega">$BV(\Omega)$<a hidden class="anchor" aria-hidden="true" href="#bvomega">#</a></h4>
+$$
+BV(\Omega) := \{u \in L^1(\Omega) : Du \in \mathcal{M}(\Omega;\mathbb{R}^n)\}
+$$<p>
+where $\mathcal{M}$ is the space of finite Radon measures. $W^{1,1}\subsetneq BV$: $BV$ allows the gradient to be a <em>measure</em>, e.g., $\mathbf{1}_E$ for $E$ a set of finite perimeter has $D\mathbf{1}_E = \nu_E \mathcal{H}^{n-1}\lfloor\partial^* E$ (the reduced boundary times the outer normal).</p>
+<p>$BV$ replaces $W^{1,1}$ in image processing (Rudin–Osher–Fatemi total variation denoising), free-boundary problems, and minimal surface theory. It is <strong>not reflexive</strong>, only weak-$*$ compact (Banach–Alaoglu on the dual of a separable space).</p>
+<hr>
+<h3 id="connections-comparisons-applications">Connections, Comparisons, Applications<a hidden class="anchor" aria-hidden="true" href="#connections-comparisons-applications">#</a></h3>
+<h4 id="sobolev-vs-hölder-vs-lipschitz-spaces">Sobolev vs. Hölder vs. Lipschitz Spaces<a hidden class="anchor" aria-hidden="true" href="#sobolev-vs-hölder-vs-lipschitz-spaces">#</a></h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Space</th>
+          <th style="text-align: left">Norm strength</th>
+          <th style="text-align: left">When useful</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$W^{k,p}$</td>
+          <td style="text-align: left">$L^p$ of $k$ derivatives</td>
+          <td style="text-align: left">Variational PDE, weak solutions</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$C^{k,\alpha}$</td>
+          <td style="text-align: left">Hölder modulus</td>
+          <td style="text-align: left">Regularity theory, Schauder estimates</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$W^{k,\infty} = C^{k-1,1}$</td>
+          <td style="text-align: left">Bounded $k$th derivative</td>
+          <td style="text-align: left">Lipschitz / semiconcave regularity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$BV$</td>
+          <td style="text-align: left">Measure-valued gradient</td>
+          <td style="text-align: left">Free discontinuities, $L^1$-coercivity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$H^{s,p}$</td>
+          <td style="text-align: left">Bessel/Fourier</td>
+          <td style="text-align: left">Pseudodifferential, harmonic analysis</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="why-p2-is-privileged">Why $p=2$ Is Privileged<a hidden class="anchor" aria-hidden="true" href="#why-p2-is-privileged">#</a></h4>
+<ul>
+<li>Only $p$ giving Hilbert structure → Riesz representation, Lax–Milgram, spectral theory.</li>
+<li>Fourier transform is unitary on $L^2$ → exact characterization of $H^s$ via $\int(1+|\xi|^2)^s|\hat u|^2$.</li>
+<li>Coincidence of all definitions: $W^{s,2} = H^{s,2} = B^s_{2,2} = F^s_{2,2}$.</li>
+<li>Self-dual scale: $(H^s)^* = H^{-s}$.</li>
+</ul>
+<h4 id="connection-to-statistical-learning--nn-approximation">Connection to Statistical Learning / NN Approximation<a hidden class="anchor" aria-hidden="true" href="#connection-to-statistical-learning--nn-approximation">#</a></h4>
+<ul>
+<li><strong>Barron spaces</strong> and <strong>RKHSs</strong> sit inside Sobolev spaces — used to bound NN approximation rates.</li>
+<li>Curse of dimensionality manifests through Sobolev embeddings: to approximate $W^{k,p}$ functions in $L^\infty$ requires $k > n/p$, giving the classical $n^{-k/d}$ rate.</li>
+<li>Neural ODEs / flow-based models implicitly minimize Sobolev-type norms on the velocity field (e.g., FFJORD).</li>
+<li>For Stein discrepancies / score matching, Sobolev regularity of the data density controls convergence.</li>
+</ul>
+<h4 id="connection-to-optimal-transport--functional-inequalities">Connection to Optimal Transport &amp; Functional Inequalities<a hidden class="anchor" aria-hidden="true" href="#connection-to-optimal-transport--functional-inequalities">#</a></h4>
+<ul>
+<li>The <strong>log-Sobolev inequality</strong> $\operatorname{Ent}_\mu(f^2)\le 2c \int|\nabla f|^2 d\mu$ controls hypercontractivity and exponential ergodicity of diffusions.</li>
+<li>Bakry–Émery $\Gamma_2$-calculus uses Sobolev-type spaces on metric measure spaces.</li>
+<li>Sobolev–type inequalities ↔ <strong>isoperimetric</strong> inequalities (Federer–Fleming), via $W^{1,1}$ and BV.</li>
+<li>The Otto–Villani theorem links log-Sobolev → Talagrand $T_2$ → Wasserstein concentration.</li>
+</ul>
+<blockquote>
+<p>[!note] Tangent to Angelo&rsquo;s work
+Sobolev structure underlies most rigorous analysis of <em>continuous-time/space</em> multi-agent systems and continuous strategy spaces. Mechanism-design impossibility results (Myerson–Satterthwaite, Gibbard–Satterthwaite) live in discrete/measurable settings — but their continuous analogues (e.g. matching with continuous types, Hotelling-style games) often require Sobolev-regular type distributions, and welfare functionals&rsquo; minimizers naturally live in $H^1$-type spaces over the strategy simplex. The Cooperation Gap framework&rsquo;s &ldquo;approximate mechanism&rdquo; notion could be re-cast as a closeness condition in a Sobolev-type seminorm over the policy space.</p></blockquote>
+<hr>
+<h3 id="canonical-references">Canonical References<a hidden class="anchor" aria-hidden="true" href="#canonical-references">#</a></h3>
+<ul>
+<li>Evans, <em>Partial Differential Equations</em>, Ch. 5 — the standard graduate intro.</li>
+<li>Brezis, <em>Functional Analysis, Sobolev Spaces, and PDEs</em> — clean, modern.</li>
+<li>Adams &amp; Fournier, <em>Sobolev Spaces</em> — encyclopedic.</li>
+<li>Maz&rsquo;ya, <em>Sobolev Spaces with Applications to Elliptic PDE</em> — deep and technical, capacity theory.</li>
+<li>Di Nezza–Palatucci–Valdinoci, <em>Hitchhiker&rsquo;s guide to the fractional Sobolev spaces</em> (2012) — best intro to $W^{s,p}$.</li>
+<li>Triebel, <em>Theory of Function Spaces</em> I–III — for Besov / Triebel–Lizorkin scales.</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on x"
+            href="https://x.com/intent/tweet/?text=Sobolev%20Spaces&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f&amp;title=Sobolev%20Spaces&amp;summary=Sobolev%20Spaces&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f&title=Sobolev%20Spaces">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on whatsapp"
+            href="https://api.whatsapp.com/send?text=Sobolev%20Spaces%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on telegram"
+            href="https://telegram.me/share/url?text=Sobolev%20Spaces&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Sobolev Spaces on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Sobolev%20Spaces&u=https%3a%2f%2fflecart.github.io%2fnotes%2fsobolev-spaces%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

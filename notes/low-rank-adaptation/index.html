@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Low-Rank Adaptation | X. Angelo Huang&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="LoRA: Low-Rank Adaptation for Fine-Tuning Large Models
+Motivation &amp; Problem Setting
+Full fine-tuning of modern foundation models updates all $|\Theta|$ parameters, where $|\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.">
+<meta name="author" content="
+By Xuanqiang Angelo Huang">
+<link rel="canonical" href="https://flecart.github.io/notes/low-rank-adaptation/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/low-rank-adaptation/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+<script type="text/javascript" async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WW6NN2QGKF');
+        }
+      </script><meta property="og:url" content="https://flecart.github.io/notes/low-rank-adaptation/">
+  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
+  <meta property="og:title" content="Low-Rank Adaptation">
+  <meta property="og:description" content="LoRA: Low-Rank Adaptation for Fine-Tuning Large Models Motivation &amp; Problem Setting Full fine-tuning of modern foundation models updates all $|\Theta|$ parameters, where $|\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
+<meta name="twitter:title" content="Low-Rank Adaptation">
+<meta name="twitter:description" content="LoRA: Low-Rank Adaptation for Fine-Tuning Large Models
+Motivation &amp; Problem Setting
+Full fine-tuning of modern foundation models updates all $|\Theta|$ parameters, where $|\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://flecart.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Low-Rank Adaptation",
+      "item": "https://flecart.github.io/notes/low-rank-adaptation/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Low-Rank Adaptation",
+  "name": "Low-Rank Adaptation",
+  "description": "LoRA: Low-Rank Adaptation for Fine-Tuning Large Models Motivation \u0026amp; Problem Setting Full fine-tuning of modern foundation models updates all $|\\Theta|$ parameters, where $|\\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "LoRA: Low-Rank Adaptation for Fine-Tuning Large Models Motivation \u0026 Problem Setting Full fine-tuning of modern foundation models updates all $|\\Theta|$ parameters, where $|\\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.\nWhy not just freeze + linear probe? Linear probing is too weak for generative tasks (no internal representations adapt). We need a method that adapts internal computations of every transformer block, but cheaply.\nWhy not adapters? Adapters (Houlsby et al., 2019; Pfeiffer et al.) insert small bottleneck MLPs $\\sigma(xW_{\\text{down}})W_{\\text{up}}$ inside each transformer block. They work, but the inserted modules are sequentially on the forward path → inference latency overhead, especially painful at batch size 1 in autoregressive decoding. LoRA’s key engineering win is that its reparameterization can be algebraically merged into the base weight at inference time.\nCore Mathematical Formulation The LoRA Reparameterization Let $W_0 \\in \\mathbb{R}^{d \\times k}$ be a frozen pre-trained weight matrix (e.g., $W_Q$, $W_V$ in attention). Standard fine-tuning learns\n$$ W = W_0 + \\Delta W, \\quad \\Delta W \\in \\mathbb{R}^{d \\times k}. $$LoRA constrains $\\Delta W$ to be low-rank:\n$$ \\Delta W = B A, \\quad B \\in \\mathbb{R}^{d \\times r}, \\quad A \\in \\mathbb{R}^{r \\times k}, \\quad r \\ll \\min(d, k). $$The forward pass becomes:\n$$ h = W_0 x + \\Delta W\\, x = W_0 x + B(Ax). $$ [!note] Algebraic Merge at Inference Once trained, you compute $W' = W_0 + BA$ once and serve $W'$. Zero added latency, zero added memory at inference. This is the defining advantage over adapters and prefix tuning.\nParameter Count Full FT of one matrix: $dk$ params. LoRA: $r(d+k)$ params. For $d=k=4096$, $r=8$: $\\frac{r(d+k)}{dk} = \\frac{8 \\cdot 8192}{16{,}777{,}216} \\approx 0.0004$ — a ~2500× reduction for that matrix. Initialization Scheme $$ A \\sim \\mathcal{N}(0, \\sigma^2), \\quad B = \\mathbf{0}. $$Hence at step 0: $\\Delta W = B A = 0$, so the model behaves exactly like the frozen base. Training starts at the pre-trained solution and moves outward.\n[!question] Why not initialize both to small random? Two reasons. (1) Symmetry: if both are random, $\\Delta W_0$ is nonzero and the model is perturbed before any data is seen — you lose the pre-trained init guarantee. (2) Gradient pathology: with $B=0$, the gradient $\\partial \\mathcal{L}/\\partial A \\propto B^\\top (\\cdot) = 0$ at the very first step, so only $B$ updates first. This staggered update actually helps stability — see LoRA+ below for the asymmetric-LR analysis.\nScaling Factor $\\alpha/r$ LoRA introduces a scalar $\\alpha$ and uses:\n$$ \\Delta W = \\frac{\\alpha}{r} BA. $$The original paper sets $\\alpha$ once and varies $r$, claiming this approximately removes the need to retune the learning rate when sweeping $r$. The intuition: as $r$ grows, $\\|BA\\|$ tends to grow proportionally; dividing by $r$ keeps the effective update magnitude scale-invariant.\n[!tip] Practical rule of thumb Many practitioners fix $\\alpha = 2r$ (e.g. $r=8, \\alpha=16$). Some fix $\\alpha = r$. The choice is empirical, but be aware that changing $\\alpha$ at fixed $r$ is equivalent to scaling the LR for the LoRA branch — they are not independent knobs.\nTheoretical Foundations The Intrinsic-Rank Hypothesis LoRA’s central conjecture: the update matrix $\\Delta W$ acquired during fine-tuning has low intrinsic rank, even though it sits in an ambient space of dimension $dk$.\nEmpirical evidence in the paper:\nRandom projection to $r=1$ or $r=2$ subspaces sometimes nearly matches $r=64$. The top singular directions of $\\Delta W$ amplify features that are already present but underused in $W_0$ (i.e., $\\Delta W$ correlates with task-relevant singular directions of $W_0$ that have small singular values). This builds directly on Aghajanyan et al. 2020 “Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning” which showed that one can re-parameterize the entire fine-tuning trajectory in a $\\sim 200$-dimensional subspace and recover ≥90% of full-FT performance for BERT-base. Larger pre-trained models have smaller intrinsic dimension — the opposite of what naive parameter-counting would suggest.\n[!note] Why low intrinsic rank is plausible Pre-training already learns generic features. Adapting to a downstream task should mostly require amplifying or suppressing a small number of feature directions — not learning new bases from scratch. This connects to Linear Mode Connectivity and the observation that fine-tuned and pre-trained models are connected by low-loss paths.\nExpressivity of Rank-$r$ Updates Any matrix in $\\mathbb{R}^{d \\times k}$ of rank $\\le r$ can be written as $BA$ with the given shapes. So LoRA’s hypothesis class is exactly the rank-$\\le r$ matrices. This is a strict subset of $\\mathbb{R}^{d \\times k}$. When $r = \\min(d,k)$, LoRA recovers full fine-tuning capacity (but loses parameter savings).\nThe implicit prior: $\\Delta W$ should be a low-rank perturbation. This is a strong inductive bias and is also a source of LoRA’s limitations (see Biderman et al. critique below).\nGradient Dynamics For loss $\\mathcal{L}$:\n$$ \\begin{align*} \\frac{\\partial \\mathcal{L}}{\\partial B} \u0026= \\frac{\\partial \\mathcal{L}}{\\partial \\Delta W} A^\\top \\\\ \\frac{\\partial \\mathcal{L}}{\\partial A} \u0026= B^\\top \\frac{\\partial \\mathcal{L}}{\\partial \\Delta W} \\end{align*} $$Note the asymmetry: $A$’s gradient is left-multiplied by $B^\\top$, which is small early in training (init at 0). $B$’s gradient depends on $A^\\top$, which is full-rank random Gaussian. This creates a feature-extraction/feature-projection split: $A$ identifies useful input directions, $B$ projects them into output space. The asymmetry motivates LoRA+ (Hayou et al. 2024), which argues $B$ should have a much larger LR than $A$ (often $\\lambda_B = 16 \\lambda_A$) to be in the feature-learning regime rather than the lazy regime.\nWhich Weights to Adapt? Standard Application The original paper applies LoRA only to attention weight matrices, and within attention, finds:\nTargets Quality $W_Q$ only Weak $W_V$ only Decent $W_Q + W_V$ Strong (best param-efficient) All of $\\{W_Q, W_K, W_V, W_O\\}$ Marginally better, doubled params FFN layers Often substantial gains in modern practice In modern instruction tuning (LLaMA, Mistral), it is now standard to apply LoRA to all linear projections (attention + MLP up/gate/down). This is what HuggingFace PEFT defaults to via target_modules=\"all-linear\".\n[!tip] Heuristic If you have any compute budget, apply LoRA to all linear layers. The marginal cost is small compared to base model forward/backward, and FFN adaptation often matters more than the original paper suggested for generative tasks.\nEmbeddings and Output Heads LoRA is usually not applied to token embeddings or LM head. If your task requires new tokens (e.g., role markers \u003c|user|\u003e), you typically train those embeddings with full precision separately — they’re cheap.\nImplementation Sketch (PyTorch) import torch import torch.nn as nn import math class LoRALinear(nn.Module): def __init__(self, base_linear: nn.Linear, r: int, alpha: float, dropout=0.0): super().__init__() self.base = base_linear # frozen for p in self.base.parameters(): p.requires_grad = False in_f, out_f = base_linear.in_features, base_linear.out_features self.A = nn.Parameter(torch.empty(r, in_f)) self.B = nn.Parameter(torch.zeros(out_f, r)) nn.init.kaiming_uniform_(self.A, a=math.sqrt(5)) self.scale = alpha / r self.dropout = nn.Dropout(dropout) def forward(self, x): # base path (frozen) out = self.base(x) # LoRA path out = out + (self.dropout(x) @ self.A.T @ self.B.T) * self.scale return out Two design choices worth noting:\nDropout on the LoRA branch only (regularizes the low-rank update). The base forward and LoRA forward are independent computational graphs — only LoRA params accumulate gradients. Major Variants QLoRA Dettmers et al. 2023. Combines:\n4-bit NormalFloat (NF4) quantization of the frozen base $W_0$. Double quantization of the quantization constants themselves. Paged optimizers to handle memory spikes from gradient checkpointing. Standard LoRA on top of the quantized base. Forward pass: dequantize $W_0$ block-wise on-the-fly, compute $W_0 x$, add $BAx$. Backward pass: gradients flow only into $B, A$ (the quantized base is non-differentiable).\n[!note] Why QLoRA matters QLoRA reduced the memory cost of fine-tuning a 65B model from ~780 GB to \u003c48 GB, enabling single-A100 fine-tuning of LLaMA-65B. This single paper made LoRA the universal default for open-source LLM adaptation.\nNF4 is theoretically the information-optimal 4-bit datatype for normally-distributed weights (which pre-trained LLM weights approximately are, post-LayerNorm), based on quantile quantization.\nDoRA — Weight-Decomposed LoRA Liu et al. 2024. Decomposes $W$ into magnitude and direction:\n$$ W = m \\cdot \\frac{V}{|V|_c}, \\quad m \\in \\mathbb{R}^{1 \\times k},, V \\in \\mathbb{R}^{d \\times k} $$where $|\\cdot|_c$ is column-wise L2 norm. Then $V$ is LoRA-decomposed ($V_0 + BA$) and the magnitude $m$ is learned directly. Empirically narrows the gap to full FT, especially at low rank. Interpretation: full FT adjusts both magnitude and direction; vanilla LoRA only adjusts a low-rank combination of both, which is sub-optimal when the task primarily requires magnitude recalibration.\nAdaLoRA Zhang et al. 2023. Instead of fixing rank $r$ uniformly, parameterize $\\Delta W = P \\Lambda Q$ (SVD form) and prune $\\Lambda$’s singular values during training via an importance score. Allocates more rank to layers/heads that need it. The bookkeeping is non-trivial and gains are modest; less popular in production than DoRA.\nLoRA+ Hayou et al. 2024. Pure theory result: in the infinite-width limit, $A$ and $B$ require different learning rates to be in the feature-learning regime. Empirically, $\\lambda_B / \\lambda_A \\in [4, 16]$ improves convergence speed and final quality, especially for harder tasks. Drop-in compatible with any LoRA codebase.\nVeRA — Vector-based Random Matrix Adaptation Kopiczko et al. 2024. Freezes $A, B$ as random projections shared across layers and only learns per-layer scaling vectors $b, d$:\n$$ \\Delta W_\\ell = \\text{diag}(b_\\ell) B , \\text{diag}(d_\\ell) A $$with $A, B$ random and identical across layers. Reduces trainable params by another order of magnitude vs. LoRA, with surprisingly small quality loss. Echoes the Lottery Ticket Hypothesis family — most of the work can be done by selecting/scaling random features.\nLoHa, LoKr LyCORIS family (originally from diffusion fine-tuning). Replace the $BA$ outer product with Hadamard (element-wise) or Kronecker products of two low-rank factorizations. Higher effective rank at the same param count. More common in image generation (Stable Diffusion LoRAs) than in LLM land.\nComparison Table — PEFT Methods Method Trainable params Inference latency Mergeable Modifies architecture Full FT $ \\Theta $ 0 Adapter (Houlsby) ~3% ↑ No Yes (inserts modules) Prefix tuning ~0.1% ↑ (longer seq) No No (input-side) Prompt tuning ~0.01% ↑ slight No No BitFit ~0.05% (biases only) 0 Trivially No LoRA ~0.1%–1% 0 Yes No QLoRA ~0.1%–1% 0 Yes (after dequant) No (base is quantized) DoRA ~LoRA + small 0 Yes No VeRA ~0.01% 0 Yes No [!note] The “merge” property dominates in production Most companies serving fine-tuned LLMs to many tenants use a base model + per-tenant LoRA swap: keep $W_0$ shared, hot-swap ${B, A}$ pairs per request via S-LoRA or similar serving stacks. This is structurally impossible for adapters or prefix tuning.\nLimitations \u0026 Recent Critiques LoRA Learns Less and Forgets Less Biderman et al. 2024. Controlled study on code and math fine-tuning. Headline findings:\nLoRA underperforms full FT on out-of-distribution generalization for hard domains (e.g., code generation, math). LoRA preserves the base model’s behavior on tasks outside the adaptation domain better than full FT — i.e., less catastrophic forgetting. Both effects come from the same source: the low-rank constraint limits how far the model can move from $W_0$. [!question] When should you NOT use LoRA? When the target distribution is very far from pre-training (large domain shift, new capabilities like new programming languages or specialized math). For instruction tuning on data close to pre-training distribution, LoRA matches full FT. For capability acquisition, full FT or large-rank LoRA may be required.\nEffective Rank ≠ Nominal Rank Empirical analyses show the effective rank of LoRA-learned $\\Delta W$ (top-$k$ singular values containing 95% of energy) is often much smaller than nominal $r$. So setting $r=64$ vs $r=8$ may not give you a meaningfully more expressive update — the optimizer simply doesn’t use the additional capacity. Implication: simply cranking $r$ up isn’t a free lunch.\nCatastrophic Interference in Multi-Task LoRA Composing multiple LoRAs (e.g., averaging two task adapters’ $\\Delta W$) often produces a model that is worse at both tasks than either individually. The space of low-rank updates is not closed under addition in a task-preserving sense. See LoRA Hub (Huang et al.), Mixture-of-LoRAs, and the broader Model Merging literature (Task Arithmetic, TIES Merging, DARE).\nConnection to Adjacent Topics vs. Sparse Fine-Tuning Sparse FT (e.g., LT-SFT, FISH Mask): learn $\\Delta W$ as a sparse matrix rather than a low-rank one. Same goal (parameter-efficient), different inductive bias. Sparse FT is harder to implement efficiently on GPU because sparse matmul kernels are slower than dense ones, despite the smaller flop count. This is why low-rank (which uses dense small matmuls) dominates in practice — hardware bias, not algorithmic superiority.\nvs. RLHF Fine-Tuning RLHF (or DPO) on top of LoRA is now standard: SFT-LoRA → DPO-LoRA on a frozen base. Memory savings compound, but be aware that DPO’s reference model is the SFT-LoRA-merged model, which adds bookkeeping. The reward model itself is usually a separate model (often LoRA-tuned too).\nThis is directly relevant to safety fine-tuning: many RLHF and Constitutional AI pipelines train safety-relevant heads or behaviors via LoRA, which means the safety modification is a low-rank perturbation and thus potentially fragile — see the literature on LoRA jailbreaks and the Shadow Alignment paper (Yang et al. 2023) showing that 100 examples of bad LoRA training can undo safety alignment. For your line of work on safe-by-construction AI: the fact that alignment lives in a low-rank subspace that can be easily perturbed by another low-rank update is a structural alignment fragility worth taking seriously.\nvs. Mechanistic Interpretability Recent work (e.g., Sharkey et al., Bushnaq et al. on circuits) is starting to ask: what subspace does LoRA modify? If you can characterize the low-rank update’s singular directions in terms of pre-existing model features (SAE directions, attention head functions), you can predict generalization. This connects to Linear Representation Hypothesis and the broader project of treating fine-tuning as a tractable, low-dimensional intervention rather than an opaque parameter shift.\nPractical Recipe (Default Settings, May 2026) [!tip] LoRA Defaults That Just Work\nBase: 4-bit NF4 quantization (QLoRA). Targets: all linear layers (target_modules=\"all-linear\"). Rank: $r = 16$ for instruction tuning, $r = 64$–$128$ for capability acquisition. Alpha: $\\alpha = 2r$. Dropout: $0.05$. LR: $2 \\times 10^{-4}$ for $A$, $3 \\times 10^{-3}$ for $B$ (LoRA+ ratio ≈ 16). Schedule: cosine with warmup over ~3% of steps. Optimizer: paged AdamW 8-bit if memory-constrained, else AdamW. Precision: bf16 mixed-precision for LoRA weights and activations. Variant: vanilla LoRA → DoRA if the gap to full FT matters. Final Synthesis LoRA’s enduring impact comes from a clean factorization of two concerns: (1) the inductive-bias claim that fine-tuning lives in a low-rank subspace, which is theoretically grounded in intrinsic-dimension work, and (2) the engineering claim that low-rank + mergeable at inference are the two properties that matter for production. Variants (QLoRA, DoRA, VeRA, LoRA+) refine each axis without abandoning the framework. The most interesting open questions are not “can we make $r$ smaller” but “what does the low-rank update actually represent, and what behaviors are categorically out of reach for any low-rank intervention?” — and the latter is where the alignment/safety community is now circling.\nMemory Cheatsheet: Training vs Inference (with LoRA) Quick mental model: in inference you only pay for weights + activations + KV cache. In training you also pay for gradients, optimizer states, and activations have to be kept around for backward. That last bit is the killer.\nThe base unit: bytes per parameter Precision Bytes/param fp32 4 fp16 / bf16 2 int8 1 int4 / NF4 0.5 So a 7B model in bf16 weights = $7 \\times 10^9 \\times 2 = 14$ GB. Memorize this — everything else is multipliers on top.\nInference memory Roughly three buckets:\nTotal ≈ Weights + KV Cache + Activations(small) Weights: params × bytes_per_param. 7B bf16 → 14 GB. 70B bf16 → 140 GB.\n$$ \\text{KV} = 2 \\times L \\times n_{\\text{kv-heads}} \\times d_{\\text{head}} \\times \\text{seq\\_len} \\times \\text{batch} \\times \\text{bytes}$$ The 2 is for K and V. For LLaMA-2-7B (L=32, 32 heads, d_head=128, bf16) at seq_len=4096, batch=1: $2 \\times 32 \\times 32 \\times 128 \\times 4096 \\times 1 \\times 2 \\approx 2.1$ GB. Doubles every time you double context.\nQuick trick: for a 7B-class model, KV ≈ 0.5 MB per token per batch in bf16. So 8k context, batch 4 = ~16 GB just in KV. This is why GQA / MQA exist.\nActivations: tiny at inference (you discard them layer by layer). Ignore unless you’re being pedantic.\nTraining memory — the 4× rule Rule of thumb for full fine-tuning with AdamW in mixed precision:\nTotal ≈ Weights + Gradients + Optimizer + Activations ≈ 2P + 2P + 8P + activations ≈ ~16 bytes/param + activations Where the 8P for Adam = two moments (m, v) in fp32 = 4+4 bytes, plus often a fp32 master copy of weights = another 4. People bookkeep this slightly differently, but ~16–20 bytes/param is the right ballpark.\nSo a 7B model needs ~112 GB just for the static stuff — already over an A100-80GB. Add activations and you’re toast. This is why nobody full-FTs 7B on one GPU without tricks.\n$$ \\text{act} \\sim \\text{batch} \\times \\text{seq\\_len} \\times L \\times d_{\\text{model}} \\times \\text{(some multiplier ~10-30)} $$ The multiplier depends on what gets saved for backward (attention scores hurt the most — quadratic in seq_len without FlashAttention). With gradient checkpointing, you trade ~30% compute for activations going from $O(L)$ down to $O(\\sqrt{L})$ — typically cuts activation memory by 5–10×.\nThe LoRA cheat LoRA changes the picture dramatically because only the adapter params get gradients + optimizer states. Let $P$ = base params, $P_{\\text{LoRA}}$ = LoRA params (typically 0.1–1% of $P$).\nLoRA training ≈ 2P (frozen weights) ← bf16, no grads + 16 × P_LoRA ← grads + Adam on tiny matrices + activations ← still depend on full forward! Concrete: 7B in bf16, LoRA with r=16 on all linears, ~40M trainable params:\nFrozen weights: 14 GB LoRA grads + optimizer: $16 \\times 40\\text{M} \\approx 0.6$ GB Activations: maybe 5–15 GB depending on batch/seq Total ~20–30 GB. Fits an A6000 or even a 3090 with checkpointing.\nQLoRA — the further cheat Quantize the frozen base to 4-bit NF4:\nFrozen weights: $7\\text{B} \\times 0.5 = 3.5$ GB (was 14) LoRA grads + optimizer: ~0.6 GB Activations: same Total ~10–15 GB. This is why a 65B model fits on one A100-80GB — it goes from ~130 GB frozen to ~32.5 GB frozen.\nQuick estimation workflow When someone asks “will this fit?”:\nWeights: params × bytes (2 for bf16, 0.5 for 4-bit). Mode: Inference → add KV cache (≈ 0.5 MB/token for 7B-class, scales with model size). Full FT → multiply weights cost by ~8 (so bf16 weights × 8 ≈ training static cost). LoRA → just weights cost + ~1 GB for adapters. Activations: rough guess batch × seq × 0.5 MB for 7B-class without checkpointing; divide by ~5 with checkpointing. Add 10–20% slop for fragmentation, CUDA workspace, etc. Sanity check examples Setup Memory 7B inference, bf16, seq=2k, bs=1 ~16 GB 7B inference, bf16, seq=32k, bs=1 ~30 GB (KV dominates) 7B full FT, bf16, bs=4, seq=2k ~110 GB + activations → multi-GPU 7B LoRA, bf16, bs=4, seq=2k ~25 GB → single 3090/A6000 7B QLoRA, bs=4, seq=2k ~12 GB → single 4090 70B QLoRA, bs=1, seq=2k ~45 GB → single A100-80GB The mental shortcut I actually use: bf16 inference ≈ 2× params in GB. Full FT ≈ 16× params in GB. LoRA training ≈ inference cost + a bit. QLoRA ≈ inference cost / 4.\n",
+  "wordCount" : "3229",
+  "inLanguage": "en",
+  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Xuanqiang Angelo Huang"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://flecart.github.io/notes/low-rank-adaptation/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "X. Angelo Huang's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://flecart.github.io/favicon-192x192.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://flecart.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://flecart.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Low-Rank Adaptation
+    </h1>
+    <div class="post-meta">Reading Time: 16 minutes&nbsp;·&nbsp;
+By Xuanqiang Angelo Huang
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#lora-low-rank-adaptation-for-fine-tuning-large-models" aria-label="LoRA: Low-Rank Adaptation for Fine-Tuning Large Models">LoRA: Low-Rank Adaptation for Fine-Tuning Large Models</a><ul>
+                        
+                <li>
+                    <a href="#motivation--problem-setting" aria-label="Motivation &amp; Problem Setting">Motivation &amp; Problem Setting</a><ul>
+                        
+                <li>
+                    <a href="#why-not-just-freeze--linear-probe" aria-label="Why not just freeze &#43; linear probe?">Why not just freeze + linear probe?</a></li>
+                <li>
+                    <a href="#why-not-adapters" aria-label="Why not adapters?">Why not adapters?</a></li></ul>
+                </li>
+                <li>
+                    <a href="#core-mathematical-formulation" aria-label="Core Mathematical Formulation">Core Mathematical Formulation</a><ul>
+                        
+                <li>
+                    <a href="#the-lora-reparameterization" aria-label="The LoRA Reparameterization">The LoRA Reparameterization</a></li>
+                <li>
+                    <a href="#parameter-count" aria-label="Parameter Count">Parameter Count</a></li>
+                <li>
+                    <a href="#initialization-scheme" aria-label="Initialization Scheme">Initialization Scheme</a></li>
+                <li>
+                    <a href="#scaling-factor-alphar" aria-label="Scaling Factor $\alpha/r$">Scaling Factor $\alpha/r$</a></li></ul>
+                </li>
+                <li>
+                    <a href="#theoretical-foundations" aria-label="Theoretical Foundations">Theoretical Foundations</a><ul>
+                        
+                <li>
+                    <a href="#the-intrinsic-rank-hypothesis" aria-label="The Intrinsic-Rank Hypothesis">The Intrinsic-Rank Hypothesis</a></li>
+                <li>
+                    <a href="#expressivity-of-rank-r-updates" aria-label="Expressivity of Rank-$r$ Updates">Expressivity of Rank-$r$ Updates</a></li>
+                <li>
+                    <a href="#gradient-dynamics" aria-label="Gradient Dynamics">Gradient Dynamics</a></li></ul>
+                </li>
+                <li>
+                    <a href="#which-weights-to-adapt" aria-label="Which Weights to Adapt?">Which Weights to Adapt?</a><ul>
+                        
+                <li>
+                    <a href="#standard-application" aria-label="Standard Application">Standard Application</a></li>
+                <li>
+                    <a href="#embeddings-and-output-heads" aria-label="Embeddings and Output Heads">Embeddings and Output Heads</a></li></ul>
+                </li>
+                <li>
+                    <a href="#implementation-sketch-pytorch" aria-label="Implementation Sketch (PyTorch)">Implementation Sketch (PyTorch)</a></li>
+                <li>
+                    <a href="#major-variants" aria-label="Major Variants">Major Variants</a><ul>
+                        
+                <li>
+                    <a href="#qlora" aria-label="QLoRA">QLoRA</a></li>
+                <li>
+                    <a href="#dora--weight-decomposed-lora" aria-label="DoRA — Weight-Decomposed LoRA">DoRA — Weight-Decomposed LoRA</a></li>
+                <li>
+                    <a href="#adalora" aria-label="AdaLoRA">AdaLoRA</a></li>
+                <li>
+                    <a href="#lora" aria-label="LoRA&#43;">LoRA+</a></li>
+                <li>
+                    <a href="#vera--vector-based-random-matrix-adaptation" aria-label="VeRA — Vector-based Random Matrix Adaptation">VeRA — Vector-based Random Matrix Adaptation</a></li>
+                <li>
+                    <a href="#loha-lokr" aria-label="LoHa, LoKr">LoHa, LoKr</a></li></ul>
+                </li>
+                <li>
+                    <a href="#comparison-table--peft-methods" aria-label="Comparison Table — PEFT Methods">Comparison Table — PEFT Methods</a></li>
+                <li>
+                    <a href="#limitations--recent-critiques" aria-label="Limitations &amp; Recent Critiques">Limitations &amp; Recent Critiques</a><ul>
+                        
+                <li>
+                    <a href="#lora-learns-less-and-forgets-less" aria-label="LoRA Learns Less and Forgets Less">LoRA Learns Less and Forgets Less</a></li>
+                <li>
+                    <a href="#effective-rank--nominal-rank" aria-label="Effective Rank ≠ Nominal Rank">Effective Rank ≠ Nominal Rank</a></li>
+                <li>
+                    <a href="#catastrophic-interference-in-multi-task-lora" aria-label="Catastrophic Interference in Multi-Task LoRA">Catastrophic Interference in Multi-Task LoRA</a></li></ul>
+                </li>
+                <li>
+                    <a href="#connection-to-adjacent-topics" aria-label="Connection to Adjacent Topics">Connection to Adjacent Topics</a><ul>
+                        
+                <li>
+                    <a href="#vs-sparse-fine-tuning" aria-label="vs. Sparse Fine-Tuning">vs. Sparse Fine-Tuning</a></li>
+                <li>
+                    <a href="#vs-rlhf-fine-tuning" aria-label="vs. RLHF Fine-Tuning">vs. RLHF Fine-Tuning</a></li>
+                <li>
+                    <a href="#vs-mechanistic-interpretability" aria-label="vs. Mechanistic Interpretability">vs. Mechanistic Interpretability</a></li></ul>
+                </li>
+                <li>
+                    <a href="#practical-recipe-default-settings-may-2026" aria-label="Practical Recipe (Default Settings, May 2026)">Practical Recipe (Default Settings, May 2026)</a></li>
+                <li>
+                    <a href="#final-synthesis" aria-label="Final Synthesis">Final Synthesis</a></li></ul>
+                </li></ul>
+                    
+                <li>
+                    <a href="#memory-cheatsheet-training-vs-inference-with-lora" aria-label="Memory Cheatsheet: Training vs Inference (with LoRA)">Memory Cheatsheet: Training vs Inference (with LoRA)</a><ul>
+                        
+                <li>
+                    <a href="#the-base-unit-bytes-per-parameter" aria-label="The base unit: bytes per parameter">The base unit: bytes per parameter</a></li>
+                <li>
+                    <a href="#inference-memory" aria-label="Inference memory">Inference memory</a></li>
+                <li>
+                    <a href="#training-memory--the-4-rule" aria-label="Training memory — the 4× rule">Training memory — the 4× rule</a></li>
+                <li>
+                    <a href="#the-lora-cheat" aria-label="The LoRA cheat">The LoRA cheat</a></li>
+                <li>
+                    <a href="#qlora--the-further-cheat" aria-label="QLoRA — the further cheat">QLoRA — the further cheat</a></li>
+                <li>
+                    <a href="#quick-estimation-workflow" aria-label="Quick estimation workflow">Quick estimation workflow</a></li>
+                <li>
+                    <a href="#sanity-check-examples" aria-label="Sanity check examples">Sanity check examples</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="lora-low-rank-adaptation-for-fine-tuning-large-models">LoRA: Low-Rank Adaptation for Fine-Tuning Large Models<a hidden class="anchor" aria-hidden="true" href="#lora-low-rank-adaptation-for-fine-tuning-large-models">#</a></h2>
+<h3 id="motivation--problem-setting">Motivation &amp; Problem Setting<a hidden class="anchor" aria-hidden="true" href="#motivation--problem-setting">#</a></h3>
+<p>Full fine-tuning of modern foundation models updates all $|\Theta|$ parameters, where $|\Theta|$ can reach $10^{11}$. Each downstream task produces a full-sized checkpoint, making per-task storage, distribution, and serving infeasible. We want a method that (i) reduces trainable parameters by orders of magnitude, (ii) does not add inference latency, and (iii) matches full fine-tuning quality. LoRA — introduced by Hu et al. (2021, Microsoft) — is currently the dominant answer.</p>
+<h4 id="why-not-just-freeze--linear-probe">Why not just freeze + linear probe?<a hidden class="anchor" aria-hidden="true" href="#why-not-just-freeze--linear-probe">#</a></h4>
+<p>Linear probing is too weak for generative tasks (no internal representations adapt). We need a method that adapts internal computations of every transformer block, but cheaply.</p>
+<h4 id="why-not-adapters">Why not adapters?<a hidden class="anchor" aria-hidden="true" href="#why-not-adapters">#</a></h4>
+<p><strong>Adapters</strong> (Houlsby et al., 2019; Pfeiffer et al.) insert small bottleneck MLPs $\sigma(xW_{\text{down}})W_{\text{up}}$ inside each transformer block. They work, but the inserted modules are <em>sequentially</em> on the forward path → <strong>inference latency overhead</strong>, especially painful at batch size 1 in autoregressive decoding. LoRA&rsquo;s key engineering win is that its reparameterization can be <strong>algebraically merged</strong> into the base weight at inference time.</p>
+<hr>
+<h3 id="core-mathematical-formulation">Core Mathematical Formulation<a hidden class="anchor" aria-hidden="true" href="#core-mathematical-formulation">#</a></h3>
+<h4 id="the-lora-reparameterization">The LoRA Reparameterization<a hidden class="anchor" aria-hidden="true" href="#the-lora-reparameterization">#</a></h4>
+<p>Let $W_0 \in \mathbb{R}^{d \times k}$ be a frozen pre-trained weight matrix (e.g., $W_Q$, $W_V$ in attention). Standard fine-tuning learns</p>
+$$
+W = W_0 + \Delta W, \quad \Delta W \in \mathbb{R}^{d \times k}.
+$$<p>LoRA constrains $\Delta W$ to be <strong>low-rank</strong>:</p>
+$$
+\Delta W = B A, \quad B \in \mathbb{R}^{d \times r}, \quad A \in \mathbb{R}^{r \times k}, \quad r \ll \min(d, k).
+$$<p>The forward pass becomes:</p>
+$$
+h = W_0 x + \Delta W\, x = W_0 x + B(Ax).
+$$<blockquote>
+<p>[!note] Algebraic Merge at Inference
+Once trained, you compute $W' = W_0 + BA$ once and serve $W'$. <strong>Zero added latency, zero added memory</strong> at inference. This is the defining advantage over adapters and prefix tuning.</p></blockquote>
+<h4 id="parameter-count">Parameter Count<a hidden class="anchor" aria-hidden="true" href="#parameter-count">#</a></h4>
+<ul>
+<li>Full FT of one matrix: $dk$ params.</li>
+<li>LoRA: $r(d+k)$ params.</li>
+<li>For $d=k=4096$, $r=8$: $\frac{r(d+k)}{dk} = \frac{8 \cdot 8192}{16{,}777{,}216} \approx 0.0004$ — a <strong>~2500× reduction</strong> for that matrix.</li>
+</ul>
+<h4 id="initialization-scheme">Initialization Scheme<a hidden class="anchor" aria-hidden="true" href="#initialization-scheme">#</a></h4>
+$$
+A \sim \mathcal{N}(0, \sigma^2), \quad B = \mathbf{0}.
+$$<p>Hence at step 0: $\Delta W = B A = 0$, so the model behaves <em>exactly</em> like the frozen base. Training starts at the pre-trained solution and moves outward.</p>
+<blockquote>
+<p>[!question] Why not initialize both to small random?
+Two reasons. (1) Symmetry: if both are random, $\Delta W_0$ is nonzero and the model is perturbed before any data is seen — you lose the pre-trained init guarantee. (2) Gradient pathology: with $B=0$, the gradient $\partial \mathcal{L}/\partial A \propto B^\top (\cdot) = 0$ at the very first step, so only $B$ updates first. This staggered update actually <em>helps</em> stability — see <a href="/notes/lora+">LoRA+</a> below for the asymmetric-LR analysis.</p></blockquote>
+<h4 id="scaling-factor-alphar">Scaling Factor $\alpha/r$<a hidden class="anchor" aria-hidden="true" href="#scaling-factor-alphar">#</a></h4>
+<p>LoRA introduces a scalar $\alpha$ and uses:</p>
+$$
+\Delta W = \frac{\alpha}{r} BA.
+$$<p>The original paper sets $\alpha$ once and varies $r$, claiming this approximately removes the need to retune the learning rate when sweeping $r$. The intuition: as $r$ grows, $\|BA\|$ tends to grow proportionally; dividing by $r$ keeps the effective update magnitude scale-invariant.</p>
+<blockquote>
+<p>[!tip] Practical rule of thumb
+Many practitioners fix $\alpha = 2r$ (e.g. $r=8, \alpha=16$). Some fix $\alpha = r$. The choice is empirical, but be aware that <strong>changing $\alpha$ at fixed $r$ is equivalent to scaling the LR for the LoRA branch</strong> — they are not independent knobs.</p></blockquote>
+<hr>
+<h3 id="theoretical-foundations">Theoretical Foundations<a hidden class="anchor" aria-hidden="true" href="#theoretical-foundations">#</a></h3>
+<h4 id="the-intrinsic-rank-hypothesis">The Intrinsic-Rank Hypothesis<a hidden class="anchor" aria-hidden="true" href="#the-intrinsic-rank-hypothesis">#</a></h4>
+<p>LoRA&rsquo;s central conjecture: <strong>the update matrix $\Delta W$ acquired during fine-tuning has low intrinsic rank</strong>, even though it sits in an ambient space of dimension $dk$.</p>
+<p>Empirical evidence in the paper:</p>
+<ul>
+<li>Random projection to $r=1$ or $r=2$ subspaces sometimes nearly matches $r=64$.</li>
+<li>The top singular directions of $\Delta W$ amplify features that are <em>already present but underused</em> in $W_0$ (i.e., $\Delta W$ correlates with task-relevant singular directions of $W_0$ that have small singular values).</li>
+</ul>
+<p>This builds directly on Aghajanyan et al. 2020 <em>&ldquo;Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning&rdquo;</em> which showed that one can re-parameterize the <em>entire</em> fine-tuning trajectory in a $\sim 200$-dimensional subspace and recover ≥90% of full-FT performance for BERT-base. Larger pre-trained models have <strong>smaller</strong> intrinsic dimension — the opposite of what naive parameter-counting would suggest.</p>
+<blockquote>
+<p>[!note] Why low intrinsic rank is plausible
+Pre-training already learns generic features. Adapting to a downstream task should mostly require <em>amplifying</em> or <em>suppressing</em> a small number of feature directions — not learning new bases from scratch. This connects to Linear Mode Connectivity and the observation that fine-tuned and pre-trained models are connected by low-loss paths.</p></blockquote>
+<h4 id="expressivity-of-rank-r-updates">Expressivity of Rank-$r$ Updates<a hidden class="anchor" aria-hidden="true" href="#expressivity-of-rank-r-updates">#</a></h4>
+<p>Any matrix in $\mathbb{R}^{d \times k}$ of rank $\le r$ can be written as $BA$ with the given shapes. So LoRA&rsquo;s hypothesis class is <strong>exactly the rank-$\le r$ matrices</strong>. This is a strict subset of $\mathbb{R}^{d \times k}$. When $r = \min(d,k)$, LoRA recovers full fine-tuning capacity (but loses parameter savings).</p>
+<p>The implicit prior: $\Delta W$ should be a low-rank perturbation. This is a <strong>strong inductive bias</strong> and is also a source of LoRA&rsquo;s limitations (see Biderman et al. critique below).</p>
+<h4 id="gradient-dynamics">Gradient Dynamics<a hidden class="anchor" aria-hidden="true" href="#gradient-dynamics">#</a></h4>
+<p>For loss $\mathcal{L}$:</p>
+$$
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial B} &= \frac{\partial \mathcal{L}}{\partial \Delta W} A^\top \\
+\frac{\partial \mathcal{L}}{\partial A} &= B^\top \frac{\partial \mathcal{L}}{\partial \Delta W}
+\end{align*}
+$$<p>Note the <strong>asymmetry</strong>: $A$&rsquo;s gradient is left-multiplied by $B^\top$, which is small early in training (init at 0). $B$&rsquo;s gradient depends on $A^\top$, which is full-rank random Gaussian. This creates a feature-extraction/feature-projection split: $A$ identifies useful input directions, $B$ projects them into output space. The asymmetry motivates <strong>LoRA+</strong> (Hayou et al. 2024), which argues $B$ should have a much larger LR than $A$ (often $\lambda_B = 16 \lambda_A$) to be in the <strong>feature-learning regime</strong> rather than the lazy regime.</p>
+<hr>
+<h3 id="which-weights-to-adapt">Which Weights to Adapt?<a hidden class="anchor" aria-hidden="true" href="#which-weights-to-adapt">#</a></h3>
+<h4 id="standard-application">Standard Application<a hidden class="anchor" aria-hidden="true" href="#standard-application">#</a></h4>
+<p>The original paper applies LoRA only to <strong>attention weight matrices</strong>, and within attention, finds:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Targets</th>
+          <th style="text-align: left">Quality</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">$W_Q$ only</td>
+          <td style="text-align: left">Weak</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$W_V$ only</td>
+          <td style="text-align: left">Decent</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">$W_Q + W_V$</td>
+          <td style="text-align: left">Strong (best param-efficient)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">All of $\{W_Q, W_K, W_V, W_O\}$</td>
+          <td style="text-align: left">Marginally better, doubled params</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">FFN layers</td>
+          <td style="text-align: left">Often substantial gains in modern practice</td>
+      </tr>
+  </tbody>
+</table>
+<p>In modern instruction tuning (LLaMA, Mistral), it is now <strong>standard</strong> to apply LoRA to <strong>all linear projections</strong> (attention + MLP up/gate/down). This is what HuggingFace PEFT defaults to via <code>target_modules=&quot;all-linear&quot;</code>.</p>
+<blockquote>
+<p>[!tip] Heuristic
+If you have any compute budget, apply LoRA to all linear layers. The marginal cost is small compared to base model forward/backward, and FFN adaptation often matters more than the original paper suggested for generative tasks.</p></blockquote>
+<h4 id="embeddings-and-output-heads">Embeddings and Output Heads<a hidden class="anchor" aria-hidden="true" href="#embeddings-and-output-heads">#</a></h4>
+<p>LoRA is usually <strong>not</strong> applied to token embeddings or LM head. If your task requires new tokens (e.g., role markers <code>&lt;|user|&gt;</code>), you typically train those embeddings with full precision separately — they&rsquo;re cheap.</p>
+<hr>
+<h3 id="implementation-sketch-pytorch">Implementation Sketch (PyTorch)<a hidden class="anchor" aria-hidden="true" href="#implementation-sketch-pytorch">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">math</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">LoRALinear</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_linear</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base_linear</span>            <span class="c1"># frozen</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">        <span class="n">in_f</span><span class="p">,</span> <span class="n">out_f</span> <span class="o">=</span> <span class="n">base_linear</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="n">base_linear</span><span class="o">.</span><span class="n">out_features</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">in_f</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_f</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">kaiming_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="n">r</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># base path (frozen)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># LoRA path</span>
+</span></span><span class="line"><span class="cl">        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">out</span>
+</span></span></code></pre></div><p>Two design choices worth noting:</p>
+<ul>
+<li><strong>Dropout</strong> on the LoRA branch only (regularizes the low-rank update).</li>
+<li>The base forward and LoRA forward are <strong>independent computational graphs</strong> — only LoRA params accumulate gradients.</li>
+</ul>
+<hr>
+<h3 id="major-variants">Major Variants<a hidden class="anchor" aria-hidden="true" href="#major-variants">#</a></h3>
+<h4 id="qlora">QLoRA<a hidden class="anchor" aria-hidden="true" href="#qlora">#</a></h4>
+<p><strong>Dettmers et al. 2023.</strong> Combines:</p>
+<ol>
+<li><strong>4-bit NormalFloat (NF4) quantization</strong> of the frozen base $W_0$.</li>
+<li><strong>Double quantization</strong> of the quantization constants themselves.</li>
+<li><strong>Paged optimizers</strong> to handle memory spikes from gradient checkpointing.</li>
+<li>Standard LoRA on top of the quantized base.</li>
+</ol>
+<p>Forward pass: dequantize $W_0$ block-wise on-the-fly, compute $W_0 x$, add $BAx$. Backward pass: gradients flow only into $B, A$ (the quantized base is non-differentiable).</p>
+<blockquote>
+<p>[!note] Why QLoRA matters QLoRA reduced the memory cost of fine-tuning a 65B model from ~780 GB to <strong>&lt;48 GB</strong>, enabling single-A100 fine-tuning of LLaMA-65B. This single paper made LoRA the universal default for open-source LLM adaptation.</p></blockquote>
+<p>NF4 is <em>theoretically</em> the information-optimal 4-bit datatype for normally-distributed weights (which pre-trained LLM weights approximately are, post-LayerNorm), based on quantile quantization.</p>
+<h4 id="dora--weight-decomposed-lora">DoRA — Weight-Decomposed LoRA<a hidden class="anchor" aria-hidden="true" href="#dora--weight-decomposed-lora">#</a></h4>
+<p><strong>Liu et al. 2024.</strong> Decomposes $W$ into magnitude and direction:</p>
+$$ W = m \cdot \frac{V}{|V|_c}, \quad m \in \mathbb{R}^{1 \times k},, V \in \mathbb{R}^{d \times k} $$<p>where $|\cdot|_c$ is column-wise L2 norm. Then $V$ is LoRA-decomposed ($V_0 + BA$) and the magnitude $m$ is learned directly. Empirically narrows the gap to full FT, especially at low rank. Interpretation: full FT adjusts both magnitude <em>and</em> direction; vanilla LoRA only adjusts a low-rank combination of both, which is sub-optimal when the task primarily requires <em>magnitude</em> recalibration.</p>
+<h4 id="adalora">AdaLoRA<a hidden class="anchor" aria-hidden="true" href="#adalora">#</a></h4>
+<p><strong>Zhang et al. 2023.</strong> Instead of fixing rank $r$ uniformly, parameterize $\Delta W = P \Lambda Q$ (SVD form) and <strong>prune $\Lambda$&rsquo;s singular values during training</strong> via an importance score. Allocates more rank to layers/heads that need it. The bookkeeping is non-trivial and gains are modest; less popular in production than DoRA.</p>
+<h4 id="lora">LoRA+<a hidden class="anchor" aria-hidden="true" href="#lora">#</a></h4>
+<p><strong>Hayou et al. 2024.</strong> Pure theory result: in the infinite-width limit, $A$ and $B$ require <strong>different learning rates</strong> to be in the feature-learning regime. Empirically, $\lambda_B / \lambda_A \in [4, 16]$ improves convergence speed and final quality, especially for harder tasks. Drop-in compatible with any LoRA codebase.</p>
+<h4 id="vera--vector-based-random-matrix-adaptation">VeRA — Vector-based Random Matrix Adaptation<a hidden class="anchor" aria-hidden="true" href="#vera--vector-based-random-matrix-adaptation">#</a></h4>
+<p><strong>Kopiczko et al. 2024.</strong> Freezes $A, B$ as <strong>random projections shared across layers</strong> and only learns per-layer <strong>scaling vectors</strong> $b, d$:</p>
+$$ \Delta W_\ell = \text{diag}(b_\ell) B , \text{diag}(d_\ell) A $$<p>with $A, B$ random and identical across layers. Reduces trainable params by another order of magnitude vs. LoRA, with surprisingly small quality loss. Echoes the Lottery Ticket Hypothesis family — most of the work can be done by selecting/scaling random features.</p>
+<h4 id="loha-lokr">LoHa, LoKr<a hidden class="anchor" aria-hidden="true" href="#loha-lokr">#</a></h4>
+<p><strong>LyCORIS family</strong> (originally from diffusion fine-tuning). Replace the $BA$ outer product with <strong>Hadamard</strong> (element-wise) or <strong>Kronecker</strong> products of two low-rank factorizations. Higher effective rank at the same param count. More common in image generation (Stable Diffusion LoRAs) than in LLM land.</p>
+<hr>
+<h3 id="comparison-table--peft-methods">Comparison Table — PEFT Methods<a hidden class="anchor" aria-hidden="true" href="#comparison-table--peft-methods">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">Trainable params</th>
+          <th style="text-align: left">Inference latency</th>
+          <th style="text-align: left">Mergeable</th>
+          <th style="text-align: left">Modifies architecture</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Full FT</strong></td>
+          <td style="text-align: left">$</td>
+          <td style="text-align: left">\Theta</td>
+          <td style="text-align: left">$</td>
+          <td style="text-align: left">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Adapter (Houlsby)</strong></td>
+          <td style="text-align: left">~3%</td>
+          <td style="text-align: left">↑</td>
+          <td style="text-align: left">No</td>
+          <td style="text-align: left">Yes (inserts modules)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Prefix tuning</strong></td>
+          <td style="text-align: left">~0.1%</td>
+          <td style="text-align: left">↑ (longer seq)</td>
+          <td style="text-align: left">No</td>
+          <td style="text-align: left">No (input-side)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Prompt tuning</strong></td>
+          <td style="text-align: left">~0.01%</td>
+          <td style="text-align: left">↑ slight</td>
+          <td style="text-align: left">No</td>
+          <td style="text-align: left">No</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>BitFit</strong></td>
+          <td style="text-align: left">~0.05% (biases only)</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">Trivially</td>
+          <td style="text-align: left">No</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>LoRA</strong></td>
+          <td style="text-align: left">~0.1%–1%</td>
+          <td style="text-align: left"><strong>0</strong></td>
+          <td style="text-align: left"><strong>Yes</strong></td>
+          <td style="text-align: left">No</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>QLoRA</strong></td>
+          <td style="text-align: left">~0.1%–1%</td>
+          <td style="text-align: left"><strong>0</strong></td>
+          <td style="text-align: left">Yes (after dequant)</td>
+          <td style="text-align: left">No (base is quantized)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>DoRA</strong></td>
+          <td style="text-align: left">~LoRA + small</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">Yes</td>
+          <td style="text-align: left">No</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>VeRA</strong></td>
+          <td style="text-align: left">~0.01%</td>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">Yes</td>
+          <td style="text-align: left">No</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>[!note] The &ldquo;merge&rdquo; property dominates in production Most companies serving fine-tuned LLMs to many tenants use a <strong>base model + per-tenant LoRA swap</strong>: keep $W_0$ shared, hot-swap ${B, A}$ pairs per request via S-LoRA or similar serving stacks. This is structurally impossible for adapters or prefix tuning.</p></blockquote>
+<hr>
+<h3 id="limitations--recent-critiques">Limitations &amp; Recent Critiques<a hidden class="anchor" aria-hidden="true" href="#limitations--recent-critiques">#</a></h3>
+<h4 id="lora-learns-less-and-forgets-less">LoRA Learns Less and Forgets Less<a hidden class="anchor" aria-hidden="true" href="#lora-learns-less-and-forgets-less">#</a></h4>
+<p><strong>Biderman et al. 2024.</strong> Controlled study on code and math fine-tuning. Headline findings:</p>
+<ul>
+<li>LoRA <strong>underperforms</strong> full FT on out-of-distribution generalization for hard domains (e.g., code generation, math).</li>
+<li>LoRA <strong>preserves</strong> the base model&rsquo;s behavior on tasks outside the adaptation domain better than full FT — i.e., <strong>less catastrophic forgetting</strong>.</li>
+<li>Both effects come from the same source: the low-rank constraint limits how far the model can move from $W_0$.</li>
+</ul>
+<blockquote>
+<p>[!question] When should you NOT use LoRA? When the target distribution is very far from pre-training (large domain shift, new capabilities like new programming languages or specialized math). For <em>instruction tuning</em> on data close to pre-training distribution, LoRA matches full FT. For <em>capability acquisition</em>, full FT or large-rank LoRA may be required.</p></blockquote>
+<h4 id="effective-rank--nominal-rank">Effective Rank ≠ Nominal Rank<a hidden class="anchor" aria-hidden="true" href="#effective-rank--nominal-rank">#</a></h4>
+<p>Empirical analyses show the <strong>effective rank</strong> of LoRA-learned $\Delta W$ (top-$k$ singular values containing 95% of energy) is often much smaller than nominal $r$. So setting $r=64$ vs $r=8$ may not give you a meaningfully more expressive update — the optimizer simply doesn&rsquo;t <em>use</em> the additional capacity. Implication: simply cranking $r$ up isn&rsquo;t a free lunch.</p>
+<h4 id="catastrophic-interference-in-multi-task-lora">Catastrophic Interference in Multi-Task LoRA<a hidden class="anchor" aria-hidden="true" href="#catastrophic-interference-in-multi-task-lora">#</a></h4>
+<p>Composing multiple LoRAs (e.g., averaging two task adapters&rsquo; $\Delta W$) often produces a model that is worse at both tasks than either individually. The space of low-rank updates is <strong>not closed under addition</strong> in a task-preserving sense. See LoRA Hub (Huang et al.), Mixture-of-LoRAs, and the broader Model Merging literature (Task Arithmetic, TIES Merging, DARE).</p>
+<hr>
+<h3 id="connection-to-adjacent-topics">Connection to Adjacent Topics<a hidden class="anchor" aria-hidden="true" href="#connection-to-adjacent-topics">#</a></h3>
+<h4 id="vs-sparse-fine-tuning">vs. Sparse Fine-Tuning<a hidden class="anchor" aria-hidden="true" href="#vs-sparse-fine-tuning">#</a></h4>
+<p><strong>Sparse FT</strong> (e.g., LT-SFT, FISH Mask): learn $\Delta W$ as a <strong>sparse</strong> matrix rather than a low-rank one. Same goal (parameter-efficient), different inductive bias. Sparse FT is harder to implement efficiently on GPU because sparse matmul kernels are slower than dense ones, despite the smaller flop count. This is why low-rank (which uses dense small matmuls) dominates in practice — <strong>hardware bias</strong>, not algorithmic superiority.</p>
+<h4 id="vs-rlhf-fine-tuning">vs. RLHF Fine-Tuning<a hidden class="anchor" aria-hidden="true" href="#vs-rlhf-fine-tuning">#</a></h4>
+<p>RLHF (or DPO) on top of LoRA is now standard: SFT-LoRA → DPO-LoRA on a frozen base. Memory savings compound, but be aware that DPO&rsquo;s <em>reference</em> model is the SFT-LoRA-merged model, which adds bookkeeping. The reward model itself is usually a separate model (often LoRA-tuned too).</p>
+<p>This is directly relevant to safety fine-tuning: many <a href="/notes/rlhf">RLHF</a> and Constitutional AI pipelines train safety-relevant heads or behaviors via LoRA, which means <strong>the safety modification is a low-rank perturbation</strong> and thus potentially fragile — see the literature on <strong>LoRA jailbreaks</strong> and the Shadow Alignment paper (Yang et al. 2023) showing that 100 examples of bad LoRA training can undo safety alignment. <em>For your line of work on safe-by-construction AI: the fact that alignment lives in a low-rank subspace that can be easily perturbed by another low-rank update is a structural alignment fragility worth taking seriously.</em></p>
+<h4 id="vs-mechanistic-interpretability">vs. Mechanistic Interpretability<a hidden class="anchor" aria-hidden="true" href="#vs-mechanistic-interpretability">#</a></h4>
+<p>Recent work (e.g., Sharkey et al., Bushnaq et al. on circuits) is starting to ask: <em>what subspace does LoRA modify?</em> If you can characterize the low-rank update&rsquo;s singular directions in terms of pre-existing model features (SAE directions, attention head functions), you can predict generalization. This connects to Linear Representation Hypothesis and the broader project of treating fine-tuning as a tractable, low-dimensional intervention rather than an opaque parameter shift.</p>
+<hr>
+<h3 id="practical-recipe-default-settings-may-2026">Practical Recipe (Default Settings, May 2026)<a hidden class="anchor" aria-hidden="true" href="#practical-recipe-default-settings-may-2026">#</a></h3>
+<blockquote>
+<p>[!tip] LoRA Defaults That Just Work</p>
+<ul>
+<li><strong>Base</strong>: 4-bit NF4 quantization (QLoRA).</li>
+<li><strong>Targets</strong>: all linear layers (<code>target_modules=&quot;all-linear&quot;</code>).</li>
+<li><strong>Rank</strong>: $r = 16$ for instruction tuning, $r = 64$–$128$ for capability acquisition.</li>
+<li><strong>Alpha</strong>: $\alpha = 2r$.</li>
+<li><strong>Dropout</strong>: $0.05$.</li>
+<li><strong>LR</strong>: $2 \times 10^{-4}$ for $A$, $3 \times 10^{-3}$ for $B$ (LoRA+ ratio ≈ 16).</li>
+<li><strong>Schedule</strong>: cosine with warmup over ~3% of steps.</li>
+<li><strong>Optimizer</strong>: paged AdamW 8-bit if memory-constrained, else AdamW.</li>
+<li><strong>Precision</strong>: bf16 mixed-precision for LoRA weights and activations.</li>
+<li><strong>Variant</strong>: vanilla LoRA → DoRA if the gap to full FT matters.</li>
+</ul></blockquote>
+<h3 id="final-synthesis">Final Synthesis<a hidden class="anchor" aria-hidden="true" href="#final-synthesis">#</a></h3>
+<p>LoRA&rsquo;s enduring impact comes from a <strong>clean factorization</strong> of two concerns: (1) the inductive-bias claim that fine-tuning lives in a low-rank subspace, which is theoretically grounded in intrinsic-dimension work, and (2) the engineering claim that <em>low-rank</em> + <em>mergeable at inference</em> are the two properties that matter for production. Variants (QLoRA, DoRA, VeRA, LoRA+) refine each axis without abandoning the framework. The most interesting open questions are not &ldquo;can we make $r$ smaller&rdquo; but <strong>&ldquo;what does the low-rank update actually represent, and what behaviors are categorically out of reach for any low-rank intervention?&rdquo;</strong> — and the latter is where the alignment/safety community is now circling.</p>
+<h1 id="memory-cheatsheet-training-vs-inference-with-lora">Memory Cheatsheet: Training vs Inference (with LoRA)<a hidden class="anchor" aria-hidden="true" href="#memory-cheatsheet-training-vs-inference-with-lora">#</a></h1>
+<p>Quick mental model: in <strong>inference</strong> you only pay for weights + activations + KV cache. In <strong>training</strong> you also pay for gradients, optimizer states, and activations have to be kept around for backward. That last bit is the killer.</p>
+<h2 id="the-base-unit-bytes-per-parameter">The base unit: bytes per parameter<a hidden class="anchor" aria-hidden="true" href="#the-base-unit-bytes-per-parameter">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Precision</th>
+          <th>Bytes/param</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>fp32</td>
+          <td>4</td>
+      </tr>
+      <tr>
+          <td>fp16 / bf16</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>int8</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>int4 / NF4</td>
+          <td>0.5</td>
+      </tr>
+  </tbody>
+</table>
+<p>So a 7B model in bf16 weights = $7 \times 10^9 \times 2 = 14$ GB. Memorize this — everything else is multipliers on top.</p>
+<h2 id="inference-memory">Inference memory<a hidden class="anchor" aria-hidden="true" href="#inference-memory">#</a></h2>
+<p>Roughly three buckets:</p>
+<pre tabindex="0"><code>Total ≈ Weights + KV Cache + Activations(small)
+</code></pre><p><strong>Weights</strong>: <code>params × bytes_per_param</code>. 7B bf16 → 14 GB. 70B bf16 → 140 GB.</p>
+$$ \text{KV} = 2 \times L \times n_{\text{kv-heads}} \times d_{\text{head}} \times \text{seq\_len} \times \text{batch} \times \text{bytes}$$<p>
+The <code>2</code> is for K and V. For LLaMA-2-7B (L=32, 32 heads, d_head=128, bf16) at seq_len=4096, batch=1: $2 \times 32 \times 32 \times 128 \times 4096 \times 1 \times 2 \approx 2.1$ GB. Doubles every time you double context.</p>
+<p>Quick trick: for a 7B-class model, <strong>KV ≈ 0.5 MB per token per batch</strong> in bf16. So 8k context, batch 4 = ~16 GB just in KV. This is why GQA / MQA exist.</p>
+<p><strong>Activations</strong>: tiny at inference (you discard them layer by layer). Ignore unless you&rsquo;re being pedantic.</p>
+<h2 id="training-memory--the-4-rule">Training memory — the 4× rule<a hidden class="anchor" aria-hidden="true" href="#training-memory--the-4-rule">#</a></h2>
+<p>Rule of thumb for <strong>full fine-tuning with AdamW in mixed precision</strong>:</p>
+<pre tabindex="0"><code>Total ≈ Weights + Gradients + Optimizer + Activations
+      ≈ 2P     + 2P        + 8P        + activations
+      ≈ ~16 bytes/param  +  activations
+</code></pre><p>Where the 8P for Adam = two moments (m, v) in fp32 = 4+4 bytes, plus often a fp32 master copy of weights = another 4. People bookkeep this slightly differently, but <strong>~16–20 bytes/param</strong> is the right ballpark.</p>
+<blockquote>
+<p>So a 7B model needs <strong>~112 GB just for the static stuff</strong> — already over an A100-80GB. Add activations and you&rsquo;re toast. This is why nobody full-FTs 7B on one GPU without tricks.</p></blockquote>
+$$ \text{act} \sim \text{batch} \times \text{seq\_len} \times L \times d_{\text{model}} \times \text{(some multiplier ~10-30)} $$<p> The multiplier depends on what gets saved for backward (attention scores hurt the most — quadratic in seq_len without FlashAttention). With <strong>gradient checkpointing</strong>, you trade ~30% compute for activations going from $O(L)$ down to $O(\sqrt{L})$ — typically cuts activation memory by 5–10×.</p>
+<h2 id="the-lora-cheat">The LoRA cheat<a hidden class="anchor" aria-hidden="true" href="#the-lora-cheat">#</a></h2>
+<p>LoRA changes the picture dramatically because <strong>only the adapter params get gradients + optimizer states</strong>. Let $P$ = base params, $P_{\text{LoRA}}$ = LoRA params (typically 0.1–1% of $P$).</p>
+<pre tabindex="0"><code>LoRA training ≈ 2P (frozen weights)        ← bf16, no grads
+              + 16 × P_LoRA                ← grads + Adam on tiny matrices
+              + activations                ← still depend on full forward!
+</code></pre><p>Concrete: 7B in bf16, LoRA with r=16 on all linears, ~40M trainable params:</p>
+<ul>
+<li>Frozen weights: 14 GB</li>
+<li>LoRA grads + optimizer: $16 \times 40\text{M} \approx 0.6$ GB</li>
+<li>Activations: maybe 5–15 GB depending on batch/seq</li>
+</ul>
+<p>Total ~20–30 GB. Fits an A6000 or even a 3090 with checkpointing.</p>
+<h2 id="qlora--the-further-cheat">QLoRA — the further cheat<a hidden class="anchor" aria-hidden="true" href="#qlora--the-further-cheat">#</a></h2>
+<p>Quantize the frozen base to 4-bit NF4:</p>
+<ul>
+<li>Frozen weights: $7\text{B} \times 0.5 = 3.5$ GB (was 14)</li>
+<li>LoRA grads + optimizer: ~0.6 GB</li>
+<li>Activations: same</li>
+</ul>
+<p>Total ~10–15 GB. <strong>This is why a 65B model fits on one A100-80GB</strong> — it goes from ~130 GB frozen to ~32.5 GB frozen.</p>
+<h2 id="quick-estimation-workflow">Quick estimation workflow<a hidden class="anchor" aria-hidden="true" href="#quick-estimation-workflow">#</a></h2>
+<p>When someone asks &ldquo;will this fit?&rdquo;:</p>
+<ol>
+<li><strong>Weights</strong>: params × bytes (2 for bf16, 0.5 for 4-bit).</li>
+<li><strong>Mode</strong>:
+<ul>
+<li>Inference → add KV cache (≈ 0.5 MB/token for 7B-class, scales with model size).</li>
+<li>Full FT → multiply weights cost by ~8 (so bf16 weights × 8 ≈ training static cost).</li>
+<li>LoRA → just weights cost + ~1 GB for adapters.</li>
+</ul>
+</li>
+<li><strong>Activations</strong>: rough guess <code>batch × seq × 0.5 MB</code> for 7B-class without checkpointing; divide by ~5 with checkpointing.</li>
+<li>Add 10–20% slop for fragmentation, CUDA workspace, etc.</li>
+</ol>
+<h2 id="sanity-check-examples">Sanity check examples<a hidden class="anchor" aria-hidden="true" href="#sanity-check-examples">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Setup</th>
+          <th>Memory</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>7B inference, bf16, seq=2k, bs=1</td>
+          <td>~16 GB</td>
+      </tr>
+      <tr>
+          <td>7B inference, bf16, seq=32k, bs=1</td>
+          <td>~30 GB (KV dominates)</td>
+      </tr>
+      <tr>
+          <td>7B full FT, bf16, bs=4, seq=2k</td>
+          <td>~110 GB + activations → multi-GPU</td>
+      </tr>
+      <tr>
+          <td>7B LoRA, bf16, bs=4, seq=2k</td>
+          <td>~25 GB → single 3090/A6000</td>
+      </tr>
+      <tr>
+          <td>7B QLoRA, bs=4, seq=2k</td>
+          <td>~12 GB → single 4090</td>
+      </tr>
+      <tr>
+          <td>70B QLoRA, bs=1, seq=2k</td>
+          <td>~45 GB → single A100-80GB</td>
+      </tr>
+  </tbody>
+</table>
+<p>The mental shortcut I actually use: <strong>bf16 inference ≈ 2× params in GB. Full FT ≈ 16× params in GB. LoRA training ≈ inference cost + a bit. QLoRA ≈ inference cost / 4.</strong></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on x"
+            href="https://x.com/intent/tweet/?text=Low-Rank%20Adaptation&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f&amp;title=Low-Rank%20Adaptation&amp;summary=Low-Rank%20Adaptation&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f&title=Low-Rank%20Adaptation">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on whatsapp"
+            href="https://api.whatsapp.com/send?text=Low-Rank%20Adaptation%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on telegram"
+            href="https://telegram.me/share/url?text=Low-Rank%20Adaptation&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Low-Rank Adaptation on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Low-Rank%20Adaptation&u=https%3a%2f%2fflecart.github.io%2fnotes%2flow-rank-adaptation%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
