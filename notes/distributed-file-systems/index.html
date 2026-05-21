@@ -1,344 +1,25 @@
-<!DOCTYPE html>
-<html lang="en" dir="auto">
-
-<head><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>Distributed file systems | X. Angelo Huang&#39;s Blog</title>
-<meta name="keywords" content="📓big-data">
-<meta name="description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs
-The Use Case
-Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
-Here, we would like to easily store petabytes of data in a single file, for example big datasets.
-Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
-<meta name="author" content="
-By Xuanqiang Angelo Huang">
-<link rel="canonical" href="https://flecart.github.io/notes/distributed-file-systems/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css" integrity="sha256-95DZr5acVsB5wc4tWXKgRIa/PWFEKV1fujGYMOHlWno=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://flecart.github.io/favicon-192x192.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://flecart.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://flecart.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://flecart.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://flecart.github.io/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://flecart.github.io/notes/distributed-file-systems/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript>
-
-
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        processEscapes: true
-      }
-    });
-  </script>
-<script type="text/javascript" async
-src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-
-
-
-
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-WW6NN2QGKF');
-        }
-      </script><meta property="og:url" content="https://flecart.github.io/notes/distributed-file-systems/">
-  <meta property="og:site_name" content="X. Angelo Huang&#39;s Blog">
-  <meta property="og:title" content="Distributed file systems">
-  <meta property="og:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes. Here, we would like to easily store petabytes of data in a single file, for example big datasets. Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="notes">
-    <meta property="article:published_time" content="2025-01-26T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-01-26T00:00:00+00:00">
-    <meta property="article:tag" content="📓Big-Data">
-      <meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png">
-<meta name="twitter:title" content="Distributed file systems">
-<meta name="twitter:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.
-Designing DFSs
-The Use Case
-Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
-Here, we would like to easily store petabytes of data in a single file, for example big datasets.
-Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Notes",
-      "item": "https://flecart.github.io/notes/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Distributed file systems",
-      "item": "https://flecart.github.io/notes/distributed-file-systems/"
-    }
-  ]
+<!DOCTYPE html><!--ZqZe8XS80taMN_wqGIdMk--><html lang="en" dir="auto"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/cd80011e7c08efe9.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-ae211b618d5f14de.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-81ba70bd132d3eed.js" async=""></script><script src="/_next/static/chunks/main-app-c8b6726d9be6c915.js" async=""></script><script src="/_next/static/chunks/619-ba102abea3e3d0e4.js" async=""></script><script src="/_next/static/chunks/app/notes/%5Bslug%5D/page-beb59f3081b5a80d.js" async=""></script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF"></script><script src="/_next/static/chunks/app/layout-f77dcff2621ebb91.js" async=""></script><link rel="preload stylesheet" as="style" crossorigin="anonymous" href="/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css"/><link rel="icon" href="/favicon-192x192.png"/><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="mask-icon" href="/safari-pinned-tab.svg"/><meta name="theme-color" content="#2e2e33"/><meta name="msapplication-TileColor" content="#2e2e33"/><link rel="alternate" type="application/rss+xml" href="https://flecart.github.io/index.xml"/><link rel="alternate" hrefLang="en" href="https://flecart.github.io/"/><title>Distributed file systems | X. Angelo Huang&#x27;s Blog</title><meta name="description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta"/><meta name="author" content="Xuanqiang Angelo Huang"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://flecart.github.io/notes/distributed-file-systems/"/><meta property="og:title" content="Distributed file systems"/><meta property="og:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta"/><meta property="og:url" content="https://flecart.github.io/notes/distributed-file-systems/"/><meta property="og:image" content="https://flecart.github.io/images/papermod-cover.png"/><meta property="og:type" content="article"/><meta property="article:section" content="notes"/><meta property="article:tag" content="📓big-data"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Distributed file systems"/><meta name="twitter:description" content="We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta"/><meta name="twitter:image" content="https://flecart.github.io/images/papermod-cover.png"/><script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-WW6NN2QGKF');</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"X. Angelo Huang's Blog","url":"https://flecart.github.io/","description":"Here I write and share about interesting topics I learn.","logo":"https://flecart.github.io/favicon-192x192.png","sameAs":["","https://github.com/flecart","https://twitter.com/x_angelohuang","https://www.linkedin.com/in/angelo-huang/","https://t.me/flecarts"]}</script><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body class="list" id="top"><div hidden=""><!--$--><!--/$--></div><script>
+if (localStorage.getItem("pref-theme") === "dark") {
+  document.body.classList.add('dark');
+} else if (localStorage.getItem("pref-theme") === "light") {
+  document.body.classList.remove('dark');
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.body.classList.add('dark');
 }
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Distributed file systems",
-  "name": "Distributed file systems",
-  "description": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesigning DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes. Here, we would like to easily store petabytes of data in a single file, for example big datasets. Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.\n",
-  "keywords": [
-    "📓big-data"
-  ],
-  "articleBody": "We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage. Object storage could store billions of files, we want to handle millions of petabyte files.\nDesigning DFSs The Use Case Remember that the size of the files where heavily limited for Cloud Storage. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes. Here, we would like to easily store petabytes of data in a single file, for example big datasets. Another feature that should be easily supported is highly concurrent access to the filesystem, last but not least being able to set up permissions in the system.\nDesiderata of distributed file systems In this case we have a Filesystem. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of\nfault tolerance We need to detect these errors so we need monitoring and error detection we would like the system to be self-regulatory and have the ability of automatic recovery Efficiency in operations HDFS is designed primarily for write-once, read-many access patterns typical of big data processing workloads. We will later see that MapReduce works quite well with this methods.\nWe want to be efficient in\nScanning the file Appending information to file atomically So that we can have a temporary place for intermediate data or sensors or logs. This needs to be very efficient for appends. Immutability is ok in this case. Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck. This is why the Distributed File System that we will be studying is optimized for high-throughput data processing rather than low-latency access to small files.\nHadoop Primarily:\n• Distributed File System (HDFS)\n• MapReduce\n• Wide column store (HBase)\nStarting form 188 in 2006 when the filesystem has been developed, now it should handle more about 100k files, about 600PB of data!\nWe will start first by looking at the logical model and then to the physical model, following Codd’s data independence idea (Codd 1970).\nThe logical model In this case we have a file hierarchy. And we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in Cloud Storage#Object Stores, which are seen as a single big object. These documents have a far larger block size, usually of 64-128MB. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don’t have fragmentation on the filesystem. This is because on a network cable having many files takes more time than a single bigger file, because of the latency. of file disk seeks. There are also other reasons it might be advantageous having this block size:\nLimit metadata on NameNode about every block Client need to interact less with the NameNode. Limit the number of TCP connections that the Client would need to open for each data block on the datanodes. Just few persistent TCPs are ok. See Livello di trasporto for TCP. The architecture With HDFS we have a centralized architecture where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.\nWhen we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won’t use it, see Devices OS#RAID for more information.\nThe physical model Structure of the NameNode Mapping of file -\u003e Block. Block -\u003e Locations on nodes. State of the blocks (corrupted updated). and permissions. ACL information and filesystem information. More in particular:\nthe file namespace, that is, the hierarchy of directory names and file names, as well as any access control (ACL) information similar to Unix-based systems. a mapping from each file to the list of its blocks. Each block, in this list, is represented with a 64-bit identifier; the content of the blocks is not on the NameNode. Blocks are local files. to the locations of its replicas, that is, the list of the DataNodes that store a copy of this block. The NameNode never initiates connection with the DataNode. It can just answer to DataNodes’ heartbeats.\nStructure of the DataNode One important fact that the DataNode has to handle are the heartbeats. These are small communications that the DataNode sends to the NameNode that serve mainly two roles:\nLiveness: to make known that everything is all right, that the node is still alive and running (peculiar observation is that also human communication frequency has something related to this), If no hearthbeat is receaved in 10 minutes (Shvachko et al. 2010), then the node is considered dead. Occasionally, contain information about storage of blocks, like the ACKs for successful storage. It can also contain notification of block corruptions, so that the namenode knows it can add it to the list of nodes that contain that block. This is usually done once every 3 seconds but can be configured. Along side this pattern, the DataNode also sends every six hours (configurable) a full report of every block that it contains. Another responsibility of the DataNode is the replication pipeline. When it receives a file, it should replicate it to the other nodes.\nThe file systems operations Read The client asks the NameNode for the blocks and DataNodes. The NameNode answers with the list of each block of the file and the DataNodes that store it ordered from distance to the client. Then the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn. It is informative to think about the interaction between HBase and HDFS. […] Who is the client here? The RegionServer, which does co-habit with a DataNode. […] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally without communicating with the NameNode: this is known as short-circuiting in HDFS.\nWrite This operations is a little bit more complex and needs many machines to be organized with each other:\nThe client first locks the file that he’s writing. The client asks the NameNode for each block a series of DataNodes with which he can initialize connection. Then client instructs the given DataNodes to create the replication pipeline Then client sends the block and waits for acks by the DataNodes (only this part is syncronous for the client I think). This is done for every block of the file, when it’s finished the client tells the NameNode to release the lock. After a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client. and it is finished… Then if one gets corrupted the NameNode automatically regulates the replicas Replication strategy Blocks are replicated with some general guidelines in mind. There is first a notion of distance from nodes that is defined by a physical connection distance:\n2: if the two nodes are in the same rack 4: if they are in different racks There is a general guideline that each node should have at maximum a single replica, and each rack should have at maximum two replicas. Usually the node that processes the request stores a version, then it stores replicas in two nodes in a rack different from the one that is processing the current version. The number of replicas to store is handled by a parameter called replication factor.\nUsually the replication is node in this manner:\nIn the same node that receives the request On two different nodes on another rack The fourth, if present, is on a random node. The reason why two replicas are usually not put on the same node, is that it would become too concentrated.\nHigh Availability One clear pain point of the current design is the single point of failure of the system: if a NameNode corrupts the data or fails irrecoverably, then the whole system would become unusable. One clearly wants to prevent this from happens. This leads to the idea of logs and namespace files.\nSnapshots If the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don’t have a way to recover the mappings between the block ids and the files. For this reason a snapshot (namespace file), which contains all the relevant information for a NameNode to work, is usually created and stored on some persistent storage or backed using Cloud Storage options.\nLogs We also need to balance the creation of snapshots and the number of updates. It would be quite infeasible to create a whole new snapshot after every update, yet at the same time we need to track every change to avoid to lose any.. This brings up the use of logs for every change, that act as a diff file for every single change that has not been saved in the snapshot (when we need to restore, we reapply every single registered change in order to return back to the same state, it usually takes 30 minutes to restore from a crash).\nCheckpointing When a merge happens this is called a checkpoint, which happens in a periodical fashion. (or could also be manually triggered). The merge is usually done by another node, called phantom node who merges the logs. If the phantom node is configured to take over the main node in case of failure, this is the StandbyNode, explored in a later section.\nThe snapshot and the logs is usually stored externally in a NAS or something similar (e.g. AWS Glacier, latency is OK for backups)\nSpecial NameNodes StandBy NameNodes These NameNodes just keep the namespace file updated and up to date without interfering with the main NameNode. Their existence is for high availability of the service, making the system a little more reliable. They do not process write or reads. They just keep reading the edit log and updating the namespace file and the current state of the mappings.\nThere are also other proposals for merging the logs to the snapshot, so that it would not take half an hour to restart the NameNode in the case of a crash, these are called standby NameNodes that keep track of the current mappings between block ids and files.\nUsually these types of NameNodes also receive heartbeats by the NameNodes.\nObserver NameNode This is very similar to the standby NameNode, but just handles the Read Request. Clients can connect to the Observer NameNode to know what blocks to read but not write. This is the main different with the StandBy NameNodes: they accept requests, but only reads.\nFederated HDFS In these case there are several NameNodes that run at the same time. Each of them has the responsibility for different directories in the filesystem hierarchy. The workload is spread into different nodes. I don’t know what happens when a NameNode fails and you cannot access some directories anymore.\nComparison with GFS GFS is another distributed filesystem. The main difference is that the terms are different:\nNameNode - Master DataNode - Chunkserver Block - Chunk FS Image - Checkpoint image Edit log - Operation log Another difference is that the block size is smaller for GFS, in this case 64MB.\nReferences [1] Shvachko et al. “The Hadoop Distributed File System” 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST) 2010 [2] Codd “A Relational Model of Data for Large Shared Data Banks” Communications of the ACM Vol. 13(6), pp. 377--387 1970 ",
-  "wordCount" : "1968",
-  "inLanguage": "en",
-  "image": "https://flecart.github.io/images/papermod-cover.png","datePublished": "2025-01-26T00:00:00Z",
-  "dateModified": "2025-01-26T00:00:00Z",
-  "author":{
-    "@type": "Person",
-    "name": "Xuanqiang Angelo Huang"
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://flecart.github.io/notes/distributed-file-systems/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "X. Angelo Huang's Blog",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://flecart.github.io/favicon-192x192.png"
-    }
-  }
-}
-</script>
-</head>
-
-<body class="" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://flecart.github.io/" accesskey="h" title="X. Angelo Huang&#39;s Blog (Alt + H)">X. Angelo Huang&#39;s Blog</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="https://flecart.github.io/notes/" title="Notes">
-                    <span>Notes</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://flecart.github.io/archives" title="Archive">
-                    <span>Archive</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://flecart.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
-                    <span>Search</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://flecart.github.io/tags/" title="Tags">
-                    <span>Tags</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
-
-<article class="post-single">
-  <header class="post-header">
-    <div class="breadcrumbs"><a href="https://flecart.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://flecart.github.io/notes/">Notes</a></div>
-    <h1 class="post-title entry-hint-parent">
-      Distributed file systems
-    </h1>
-    <div class="post-meta"><span title='2025-01-26 00:00:00 +0000 UTC'>January 26, 2025</span>&nbsp;·&nbsp;Reading Time: 10 minutes&nbsp;·&nbsp;
-By Xuanqiang Angelo Huang
-
-</div>
-  </header> <div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
-
-        <div class="inner"><ul><ul><ul>
-                <li>
-                    <a href="#designing-dfss" aria-label="Designing DFSs">Designing DFSs</a><ul>
-                        
-                <li>
-                    <a href="#the-use-case" aria-label="The Use Case">The Use Case</a></li>
-                <li>
-                    <a href="#desiderata-of-distributed-file-systems" aria-label="Desiderata of distributed file systems">Desiderata of distributed file systems</a></li>
-                <li>
-                    <a href="#efficiency-in-operations" aria-label="Efficiency in operations">Efficiency in operations</a></li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#hadoop" aria-label="Hadoop">Hadoop</a><ul>
-                        
-                <li>
-                    <a href="#the-logical-model" aria-label="The logical model">The logical model</a><ul>
-                        
-                <li>
-                    <a href="#the-architecture" aria-label="The architecture">The architecture</a></li></ul>
-                </li>
-                <li>
-                    <a href="#the-physical-model" aria-label="The physical model">The physical model</a><ul>
-                        
-                <li>
-                    <a href="#structure-of-the-namenode" aria-label="Structure of the NameNode">Structure of the NameNode</a></li>
-                <li>
-                    <a href="#structure-of-the-datanode" aria-label="Structure of the DataNode">Structure of the DataNode</a></li>
-                <li>
-                    <a href="#the-file-systems-operations" aria-label="The file systems operations">The file systems operations</a><ul>
-                        
-                <li>
-                    <a href="#read" aria-label="Read">Read</a></li>
-                <li>
-                    <a href="#write" aria-label="Write">Write</a></li></ul>
-                </li>
-                <li>
-                    <a href="#replication-strategy" aria-label="Replication strategy">Replication strategy</a></li></ul>
-                </li>
-                <li>
-                    <a href="#high-availability" aria-label="High Availability">High Availability</a><ul>
-                        
-                <li>
-                    <a href="#snapshots" aria-label="Snapshots">Snapshots</a></li>
-                <li>
-                    <a href="#logs" aria-label="Logs">Logs</a></li>
-                <li>
-                    <a href="#checkpointing" aria-label="Checkpointing">Checkpointing</a></li></ul>
-                </li>
-                <li>
-                    <a href="#special-namenodes" aria-label="Special NameNodes">Special NameNodes</a><ul>
-                        
-                <li>
-                    <a href="#standby-namenodes" aria-label="StandBy NameNodes">StandBy NameNodes</a></li>
-                <li>
-                    <a href="#observer-namenode" aria-label="Observer NameNode">Observer NameNode</a></li>
-                <li>
-                    <a href="#federated-hdfs" aria-label="Federated HDFS">Federated HDFS</a></li>
-                <li>
-                    <a href="#comparison-with-gfs" aria-label="Comparison with GFS">Comparison with GFS</a></li></ul>
-                </li></ul>
-                </li></ul>
-                    
-                <li>
-                    <a href="#references" aria-label="References">References</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
-
-  <div class="post-content"><p>We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see <a href="/notes/cloud-storage">Cloud Storage</a>. Object storage could store billions of files, we want to handle millions of petabyte files.</p>
-<h3 id="designing-dfss">Designing DFSs<a hidden class="anchor" aria-hidden="true" href="#designing-dfss">#</a></h3>
-<h4 id="the-use-case">The Use Case<a hidden class="anchor" aria-hidden="true" href="#the-use-case">#</a></h4>
-<p>Remember that the size of the files where heavily limited for <a href="/notes/cloud-storage">Cloud Storage</a>. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
+</script><header class="header"><nav class="nav"><div class="logo"><a accessKey="h" title="X. Angelo Huang&#x27;s Blog (Alt + H)" href="/">X. Angelo Huang&#x27;s Blog</a><div class="logo-switches"><button id="theme-toggle" accessKey="t" title="(Alt + T)" aria-label="theme"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><ul id="menu"><li><a title="Notes" href="/notes/"><span>Notes</span></a></li><li><a title="Archive" href="/archives/"><span>Archive</span></a></li><li><a title="Search" accessKey="/" href="/search/"><span>Search</span></a></li><li><a title="Tags" href="/tags/"><span>Tags</span></a></li></ul></nav></header><main class="main"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://flecart.github.io/"},{"@type":"ListItem","position":2,"name":"Notes","item":"https://flecart.github.io/notes/"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Distributed file systems","name":"Distributed file systems","description":"We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta","keywords":["📓big-data"],"wordCount":"2013","inLanguage":"en","image":"https://flecart.github.io/images/papermod-cover.png","datePublished":"2025-01-26T00:00:00.000Z","dateModified":"2025-01-26T00:00:00.000Z","author":{"@type":"Person","name":"Xuanqiang Angelo Huang"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://flecart.github.io/notes/distributed-file-systems/"},"publisher":{"@type":"Organization","name":"X. Angelo Huang's Blog","logo":{"@type":"ImageObject","url":"https://flecart.github.io/favicon-192x192.png"}}}</script><article class="post-single"><header class="post-header"><div class="breadcrumbs"><span><a href="/">Home</a> » </span><span><a href="/notes/">Notes</a></span></div><h1 class="post-title entry-hint-parent">Distributed file systems</h1><div class="post-meta"><span title="2025-01-26T00:00:00.000Z">January 26, 2025</span> · <span>Reading Time: <!-- -->10<!-- --> minutes</span> · <span>By <!-- -->Xuanqiang Angelo Huang</span></div></header><div class="toc"><details><summary accessKey="c" title="(Alt + C)"><span class="details">Table of Contents</span></summary><div class="inner"><ul><li><a href="#designing-dfss" aria-label="Designing DFSs">Designing DFSs</a><ul><li><a href="#the-use-case" aria-label="The Use Case">The Use Case</a></li><li><a href="#desiderata-of-distributed-file-systems" aria-label="Desiderata of distributed file systems">Desiderata of distributed file systems</a></li><li><a href="#efficiency-in-operations" aria-label="Efficiency in operations">Efficiency in operations</a></li></ul></li><li><a href="#hadoop" aria-label="Hadoop">Hadoop</a><ul><li><a href="#the-logical-model" aria-label="The logical model">The logical model</a><ul><li><a href="#the-architecture" aria-label="The architecture">The architecture</a></li></ul></li><li><a href="#the-physical-model" aria-label="The physical model">The physical model</a><ul><li><a href="#structure-of-the-namenode" aria-label="Structure of the NameNode">Structure of the NameNode</a></li><li><a href="#structure-of-the-datanode" aria-label="Structure of the DataNode">Structure of the DataNode</a></li><li><a href="#the-file-systems-operations" aria-label="The file systems operations">The file systems operations</a></li><li><a href="#replication-strategy" aria-label="Replication strategy">Replication strategy</a></li></ul></li><li><a href="#high-availability" aria-label="High Availability">High Availability</a><ul><li><a href="#snapshots" aria-label="Snapshots">Snapshots</a></li><li><a href="#logs" aria-label="Logs">Logs</a></li><li><a href="#checkpointing" aria-label="Checkpointing">Checkpointing</a></li></ul></li><li><a href="#special-namenodes" aria-label="Special NameNodes">Special NameNodes</a><ul><li><a href="#standby-namenodes" aria-label="StandBy NameNodes">StandBy NameNodes</a></li><li><a href="#observer-namenode" aria-label="Observer NameNode">Observer NameNode</a></li><li><a href="#federated-hdfs" aria-label="Federated HDFS">Federated HDFS</a></li><li><a href="#comparison-with-gfs" aria-label="Comparison with GFS">Comparison with GFS</a></li></ul></li></ul></li></ul></div></details></div><div class="post-content"><p>We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see <a href="/notes/cloud-storage/">Cloud Storage</a>. Object storage could store billions of files, we want to handle millions of petabyte files.</p>
+<h3 id="designing-dfss">Designing DFSs<a class="anchor" aria-hidden="true" hidden href="#designing-dfss">#</a></h3>
+<h4 id="the-use-case">The Use Case<a class="anchor" aria-hidden="true" hidden href="#the-use-case">#</a></h4>
+<p>Remember that the size of the files where heavily limited for <a href="/notes/cloud-storage/">Cloud Storage</a>. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.
 Here, we would like to easily store <em>petabytes</em> of data in a single file, for example <strong>big datasets</strong>.
 Another feature that should be easily supported is <strong>highly concurrent access</strong> to the filesystem, last but not least being able to set up permissions in the system.</p>
-<h4 id="desiderata-of-distributed-file-systems">Desiderata of distributed file systems<a hidden class="anchor" aria-hidden="true" href="#desiderata-of-distributed-file-systems">#</a></h4>
-<p>In this case we have a <em><a href="/notes/filesystem">Filesystem</a></em>. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of</p>
+<h4 id="desiderata-of-distributed-file-systems">Desiderata of distributed file systems<a class="anchor" aria-hidden="true" hidden href="#desiderata-of-distributed-file-systems">#</a></h4>
+<p>In this case we have a <em><a href="/notes/filesystem/">Filesystem</a></em>. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of</p>
 <ul>
 <li><strong>fault tolerance</strong></li>
 <li>We need to detect these errors so we need <strong>monitoring and error detection</strong></li>
 <li>we would like the system to be self-regulatory and have the ability of <strong>automatic recovery</strong></li>
 </ul>
-<h4 id="efficiency-in-operations">Efficiency in operations<a hidden class="anchor" aria-hidden="true" href="#efficiency-in-operations">#</a></h4>
+<h4 id="efficiency-in-operations">Efficiency in operations<a class="anchor" aria-hidden="true" hidden href="#efficiency-in-operations">#</a></h4>
 <p>HDFS is designed primarily for <strong>write-once, read-many</strong> access patterns typical of big data processing workloads. We will later see that MapReduce works quite well with this methods.</p>
 <p>We want to be efficient in</p>
 <ul>
@@ -348,32 +29,32 @@ So that we can have a temporary place for intermediate data or sensors or logs. 
 </ul>
 <p>Latency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck.
 This is why the Distributed File System that we will be studying is optimized for high-throughput data processing rather than low-latency access to small files.</p>
-<h2 id="hadoop">Hadoop<a hidden class="anchor" aria-hidden="true" href="#hadoop">#</a></h2>
+<h2 id="hadoop">Hadoop<a class="anchor" aria-hidden="true" hidden href="#hadoop">#</a></h2>
 <p>Primarily:<br>
 • Distributed File System (HDFS)<br>
 • MapReduce<br>
 • Wide column store (HBase)</p>
 <p>Starting form 188 in 2006 when the filesystem has been developed, now it should handle more about 100k files, about 600PB of data!</p>
-<p>We will start first by looking at the logical model and then to the physical model, following Codd&rsquo;s data independence idea <a href="https://dl.acm.org/doi/10.1145/362384.362685">(Codd 1970)</a>.</p>
-<h3 id="the-logical-model">The logical model<a hidden class="anchor" aria-hidden="true" href="#the-logical-model">#</a></h3>
+<p>We will start first by looking at the logical model and then to the physical model, following Codd's data independence idea <a href="https://dl.acm.org/doi/10.1145/362384.362685">(Codd 1970)</a>.</p>
+<h3 id="the-logical-model">The logical model<a class="anchor" aria-hidden="true" hidden href="#the-logical-model">#</a></h3>
 <p>In this case we have a <strong>file hierarchy</strong>.
-And we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in <a href="/notes/cloud-storage#object-stores">Cloud Storage#Object Stores</a>, which are seen as a single big object.
-These documents have a far larger block size, usually of <strong>64-128MB</strong>. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don&rsquo;t have fragmentation on the filesystem.
+And we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in <a href="/notes/cloud-storage/#object-stores">Cloud Storage#Object Stores</a>, which are seen as a single big object.
+These documents have a far larger block size, usually of <strong>64-128MB</strong>. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don't have fragmentation on the filesystem.
 This is because on a network cable having many files takes more time than a single bigger file, because of the <strong>latency.</strong> of file disk seeks.
 There are also other reasons it might be advantageous having this block size:</p>
 <ul>
 <li>Limit metadata on NameNode about every block</li>
 <li>Client need to interact less with the NameNode.</li>
-<li>Limit the number of TCP connections that the Client would need to open for each data block on the datanodes. Just few persistent TCPs are ok. See <a href="/notes/livello-di-trasporto">Livello di trasporto</a> for TCP.</li>
+<li>Limit the number of TCP connections that the Client would need to open for each data block on the datanodes. Just few persistent TCPs are ok. See <a href="/notes/livello-di-trasporto/">Livello di trasporto</a> for TCP.</li>
 </ul>
-<h4 id="the-architecture">The architecture<a hidden class="anchor" aria-hidden="true" href="#the-architecture">#</a></h4>
+<h4 id="the-architecture">The architecture<a class="anchor" aria-hidden="true" hidden href="#the-architecture">#</a></h4>
 <p>With HDFS we have a <strong>centralized architecture</strong> where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.</p>
-<p>When we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won&rsquo;t use it, see <a href="/notes/devices-os#raid">Devices OS#RAID</a> for more information.</p>
-<h3 id="the-physical-model">The physical model<a hidden class="anchor" aria-hidden="true" href="#the-physical-model">#</a></h3>
-<h4 id="structure-of-the-namenode">Structure of the NameNode<a hidden class="anchor" aria-hidden="true" href="#structure-of-the-namenode">#</a></h4>
+<p>When we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won't use it, see <a href="/notes/devices-os/#raid">Devices OS#RAID</a> for more information.</p>
+<h3 id="the-physical-model">The physical model<a class="anchor" aria-hidden="true" hidden href="#the-physical-model">#</a></h3>
+<h4 id="structure-of-the-namenode">Structure of the NameNode<a class="anchor" aria-hidden="true" hidden href="#structure-of-the-namenode">#</a></h4>
 <ol>
-<li>Mapping of file -&gt; Block.</li>
-<li>Block -&gt; Locations on nodes.</li>
+<li>Mapping of file -> Block.</li>
+<li>Block -> Locations on nodes.</li>
 <li>State of the blocks (corrupted updated). and permissions.</li>
 <li>ACL information and filesystem information.</li>
 </ol>
@@ -385,8 +66,8 @@ to Unix-based systems.</li>
 <li><strong>a mapping from each file to the list of its blocks</strong>. Each block, in this list, is represented with a 64-bit identifier; the content of the blocks is not on the NameNode. <em>Blocks are local files</em>.
 to the <strong>locations of its replicas</strong>, that is, the list of the DataNodes that store a copy of this block.</li>
 </ul>
-<p>The NameNode <strong>never initiates</strong> connection with the DataNode. It can just answer to DataNodes&rsquo; heartbeats.</p>
-<h4 id="structure-of-the-datanode">Structure of the DataNode<a hidden class="anchor" aria-hidden="true" href="#structure-of-the-datanode">#</a></h4>
+<p>The NameNode <strong>never initiates</strong> connection with the DataNode. It can just answer to DataNodes' heartbeats.</p>
+<h4 id="structure-of-the-datanode">Structure of the DataNode<a class="anchor" aria-hidden="true" hidden href="#structure-of-the-datanode">#</a></h4>
 <p>One important fact that the DataNode has to handle are the <strong>heartbeats</strong>. These are small communications that the DataNode sends to the NameNode that serve mainly two roles:</p>
 <ol>
 <li><strong>Liveness</strong>: to make known that everything is all right, that the node is still alive and running (peculiar observation is that also human communication frequency has something related to this),
@@ -396,27 +77,28 @@ This is usually done once every <strong>3 seconds</strong> but can be configured
 Along side this pattern, the DataNode also sends every <strong>six hours</strong> (configurable) a full <em>report of every</em> block that it contains.</li>
 </ol>
 <p>Another responsibility of the DataNode is the <strong>replication pipeline</strong>. When it receives a file, it should replicate it to the other nodes.</p>
-<h4 id="the-file-systems-operations">The file systems operations<a hidden class="anchor" aria-hidden="true" href="#the-file-systems-operations">#</a></h4>
-<h5 id="read">Read<a hidden class="anchor" aria-hidden="true" href="#read">#</a></h5>
+<h4 id="the-file-systems-operations">The file systems operations<a class="anchor" aria-hidden="true" hidden href="#the-file-systems-operations">#</a></h4>
+<h5 id="read">Read<a class="anchor" aria-hidden="true" hidden href="#read">#</a></h5>
 <ul>
 <li>The client asks the NameNode for the blocks and DataNodes.</li>
 <li>The NameNode answers with the list of each block of the file and the DataNodes that store it ordered from distance to the client.</li>
 <li>Then the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn.</li>
 </ul>
 <blockquote>
-<p><em>It is informative to think about the interaction between HBase and HDFS. [&hellip;] Who is the client here? The RegionServer, which does co-habit with a DataNode. [&hellip;] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally <strong>without communicating with the NameNode</strong>: this is known as short-circuiting in HDFS.</em></p></blockquote>
-<h5 id="write">Write<a hidden class="anchor" aria-hidden="true" href="#write">#</a></h5>
+<p><em>It is informative to think about the interaction between HBase and HDFS. [...] Who is the client here? The RegionServer, which does co-habit with a DataNode. [...] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally <strong>without communicating with the NameNode</strong>: this is known as short-circuiting in HDFS.</em></p>
+</blockquote>
+<h5 id="write">Write<a class="anchor" aria-hidden="true" hidden href="#write">#</a></h5>
 <p>This operations is a little bit more complex and needs many machines to be organized with each other:</p>
 <ul>
-<li>The client first locks the file that he&rsquo;s writing.</li>
+<li>The client first locks the file that he's writing.</li>
 <li>The client asks the NameNode for each block a series of DataNodes with which he can initialize connection.</li>
 <li>Then client instructs the given DataNodes to create the replication pipeline</li>
 <li>Then client sends the block and waits for acks by the DataNodes (only this part is syncronous for the client I think).</li>
-<li>This is done for every block of the file, when it&rsquo;s finished the client tells the NameNode to release the lock.</li>
-<li>After a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client. and it is finished&hellip;</li>
+<li>This is done for every block of the file, when it's finished the client tells the NameNode to release the lock.</li>
+<li>After a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client. and it is finished...</li>
 <li>Then if one gets corrupted the NameNode automatically regulates the replicas</li>
 </ul>
-<h4 id="replication-strategy">Replication strategy<a hidden class="anchor" aria-hidden="true" href="#replication-strategy">#</a></h4>
+<h4 id="replication-strategy">Replication strategy<a class="anchor" aria-hidden="true" hidden href="#replication-strategy">#</a></h4>
 <p>Blocks are replicated with some general guidelines in mind. There is first a notion of distance from nodes that is defined by a physical connection distance:</p>
 <ul>
 <li>2: if the two nodes are in the <strong>same rack</strong></li>
@@ -432,33 +114,33 @@ The number of replicas to store is handled by a parameter called <strong>replica
 <li>The fourth, if present, is on a random node.</li>
 </ol>
 <p>The reason why two replicas are usually not put on the same node, is that it would become too concentrated.</p>
-<h3 id="high-availability">High Availability<a hidden class="anchor" aria-hidden="true" href="#high-availability">#</a></h3>
+<h3 id="high-availability">High Availability<a class="anchor" aria-hidden="true" hidden href="#high-availability">#</a></h3>
 <p>One clear pain point of the current design is the <strong>single point of failure</strong> of the system: if a NameNode corrupts the data or fails irrecoverably, then the whole system would become unusable.
 One clearly wants to prevent this from happens.
 This leads to the idea of logs and namespace files.</p>
-<h4 id="snapshots">Snapshots<a hidden class="anchor" aria-hidden="true" href="#snapshots">#</a></h4>
-<p>If the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don&rsquo;t have a way to recover the mappings between the block ids and the files.
-For this reason a <strong>snapshot (namespace file)</strong>, which contains all the relevant information for a NameNode to work, is usually created and stored on some persistent storage or backed using <a href="/notes/cloud-storage">Cloud Storage</a> options.</p>
-<h4 id="logs">Logs<a hidden class="anchor" aria-hidden="true" href="#logs">#</a></h4>
+<h4 id="snapshots">Snapshots<a class="anchor" aria-hidden="true" hidden href="#snapshots">#</a></h4>
+<p>If the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don't have a way to recover the mappings between the block ids and the files.
+For this reason a <strong>snapshot (namespace file)</strong>, which contains all the relevant information for a NameNode to work, is usually created and stored on some persistent storage or backed using <a href="/notes/cloud-storage/">Cloud Storage</a> options.</p>
+<h4 id="logs">Logs<a class="anchor" aria-hidden="true" hidden href="#logs">#</a></h4>
 <p>We also need to balance the creation of snapshots and the number of updates. It would be quite infeasible to create a whole new snapshot after every update, yet at the same time we need to track every change to avoid to lose any..
 This brings up the use of <strong>logs</strong> for every change, that act as a diff file for every single change that has not been saved in the snapshot (when we need to restore, we reapply every single registered change in order to return back to the same state, it usually takes <em>30 minutes</em> to restore from a crash).</p>
-<h4 id="checkpointing">Checkpointing<a hidden class="anchor" aria-hidden="true" href="#checkpointing">#</a></h4>
+<h4 id="checkpointing">Checkpointing<a class="anchor" aria-hidden="true" hidden href="#checkpointing">#</a></h4>
 <p>When a merge happens this is called a <strong>checkpoint</strong>, which happens in a <em>periodical</em> fashion. (or could also be manually triggered). The merge is usually done by another node, called <em>phantom node</em> who merges the logs. If the phantom node is configured to take over the main node in case of failure, this is the StandbyNode, explored in a later section.</p>
 <p>The snapshot and the logs is usually <strong>stored externally</strong> in a NAS or something similar (e.g. AWS Glacier, latency is OK for backups)</p>
-<h3 id="special-namenodes">Special NameNodes<a hidden class="anchor" aria-hidden="true" href="#special-namenodes">#</a></h3>
-<h4 id="standby-namenodes">StandBy NameNodes<a hidden class="anchor" aria-hidden="true" href="#standby-namenodes">#</a></h4>
+<h3 id="special-namenodes">Special NameNodes<a class="anchor" aria-hidden="true" hidden href="#special-namenodes">#</a></h3>
+<h4 id="standby-namenodes">StandBy NameNodes<a class="anchor" aria-hidden="true" hidden href="#standby-namenodes">#</a></h4>
 <p>These NameNodes just keep the namespace file updated and up to date without interfering with the main NameNode. Their existence is for <strong>high availability</strong> of the service, making the system a little more reliable.
 They do not process write or reads. They just keep reading the edit log and updating the namespace file and the current state of the mappings.</p>
 <p>There are also other proposals for merging the logs to the snapshot, so that it would not take half an hour to restart the NameNode in the case of a crash, these are called <strong>standby NameNodes</strong> that keep track of the current mappings between block ids and files.</p>
 <p>Usually these types of NameNodes also receive heartbeats by the NameNodes.</p>
-<h4 id="observer-namenode">Observer NameNode<a hidden class="anchor" aria-hidden="true" href="#observer-namenode">#</a></h4>
+<h4 id="observer-namenode">Observer NameNode<a class="anchor" aria-hidden="true" hidden href="#observer-namenode">#</a></h4>
 <p>This is very similar to the standby NameNode, but just handles the Read Request. Clients can connect to the Observer NameNode to know what blocks to <strong>read</strong> but not write.
 This is the main different with the StandBy NameNodes: they accept requests, but only reads.</p>
-<h4 id="federated-hdfs">Federated HDFS<a hidden class="anchor" aria-hidden="true" href="#federated-hdfs">#</a></h4>
+<h4 id="federated-hdfs">Federated HDFS<a class="anchor" aria-hidden="true" hidden href="#federated-hdfs">#</a></h4>
 <p>In these case there are several NameNodes that run at the same time. Each of them has the responsibility for <strong>different directories</strong> in the filesystem hierarchy.
 The workload is spread into different nodes.
-I don&rsquo;t know what happens when a NameNode fails and you cannot access some directories anymore.</p>
-<h4 id="comparison-with-gfs">Comparison with GFS<a hidden class="anchor" aria-hidden="true" href="#comparison-with-gfs">#</a></h4>
+I don't know what happens when a NameNode fails and you cannot access some directories anymore.</p>
+<h4 id="comparison-with-gfs">Comparison with GFS<a class="anchor" aria-hidden="true" hidden href="#comparison-with-gfs">#</a></h4>
 <p>GFS is another distributed filesystem. The main difference is that the terms are different:</p>
 <ol>
 <li>NameNode - Master</li>
@@ -468,207 +150,6 @@ I don&rsquo;t know what happens when a NameNode fails and you cannot access some
 <li>Edit log - Operation log</li>
 </ol>
 <p>Another difference is that the block size is smaller for GFS, in this case 64MB.</p>
-<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
-<p id=shvachkoHadoopDistributedFile2010>[1] Shvachko et al. <a href="https://ieeexplore.ieee.org/document/5496972">“The Hadoop Distributed File System”</a> 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST)  2010
- </p>
-<p id=coddRelationalModelData1970>[2] Codd <a href="https://dl.acm.org/doi/10.1145/362384.362685">“A Relational Model of Data for Large Shared Data Banks”</a> Communications of the ACM Vol. 13(6), pp. 377--387 1970
- </p>
-
-  </div>
-
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="https://flecart.github.io/tags/big-data/">📓Big-Data</a></li>
-    </ul>
-
-
-<ul class="share-buttons">
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on x"
-            href="https://x.com/intent/tweet/?text=Distributed%20file%20systems&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f&amp;hashtags=%f0%9f%93%93big-data">
-            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f&amp;title=Distributed%20file%20systems&amp;summary=Distributed%20file%20systems&amp;source=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f">
-            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f&title=Distributed%20file%20systems">
-            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f">
-            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on whatsapp"
-            href="https://api.whatsapp.com/send?text=Distributed%20file%20systems%20-%20https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f">
-            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on telegram"
-            href="https://telegram.me/share/url?text=Distributed%20file%20systems&amp;url=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f">
-            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
-                <path
-                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
-            </svg>
-        </a>
-    </li>
-    <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=Distributed%20file%20systems&u=https%3a%2f%2fflecart.github.io%2fnotes%2fdistributed-file-systems%2f">
-            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
-                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
-                <path
-                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
-            </svg>
-        </a>
-    </li>
-</ul>
-
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="https://flecart.github.io/">X. Angelo Huang&#39;s Blog</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
-<script>
-    document.querySelectorAll('pre > code').forEach((codeblock) => {
-        const container = codeblock.parentNode.parentNode;
-
-        const copybutton = document.createElement('button');
-        copybutton.classList.add('copy-code');
-        copybutton.innerHTML = 'copy';
-
-        function copyingDone() {
-            copybutton.innerHTML = 'copied!';
-            setTimeout(() => {
-                copybutton.innerHTML = 'copy';
-            }, 2000);
-        }
-
-        copybutton.addEventListener('click', (cb) => {
-            if ('clipboard' in navigator) {
-                navigator.clipboard.writeText(codeblock.textContent);
-                copyingDone();
-                return;
-            }
-
-            const range = document.createRange();
-            range.selectNodeContents(codeblock);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            try {
-                document.execCommand('copy');
-                copyingDone();
-            } catch (e) { };
-            selection.removeRange(range);
-        });
-
-        if (container.classList.contains("highlight")) {
-            container.appendChild(copybutton);
-        } else if (container.parentNode.firstChild == container) {
-            
-        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
-            
-            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
-        } else {
-            
-            codeblock.parentNode.appendChild(copybutton);
-        }
-    });
-</script>
-</body>
-
-</html>
+<h1 id="references">References<a class="anchor" aria-hidden="true" hidden href="#references">#</a></h1>
+<p id="coddRelationalModelData1970">[1] Codd <a href="https://dl.acm.org/doi/10.1145/362384.362685">“A Relational Model of Data for Large Shared Data Banks”</a> Communications of the ACM Vol. 13(6), pp. 377–387 1970</p>
+<p id="shvachkoHadoopDistributedFile2010">[2] Shvachko et al. <a href="https://ieeexplore.ieee.org/document/5496972">“The Hadoop Distributed File System”</a> 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST) 2010</p></div><footer class="post-footer"><ul class="post-tags"><li><a href="/tags/📓big-data/">📓big-data</a></li></ul><ul class="share-buttons"><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on x" href="https://x.com/intent/tweet/?text=Distributed%20file%20systems&amp;url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F&amp;hashtags=%F0%9F%93%93big-data"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F&amp;title=Distributed%20file%20systems&amp;summary=Distributed%20file%20systems&amp;source=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on reddit" href="https://reddit.com/submit?url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F&amp;title=Distributed%20file%20systems"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on whatsapp" href="https://api.whatsapp.com/send?text=Distributed%20file%20systems%20-%20https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-141.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on telegram" href="https://telegram.me/share/url?text=Distributed%20file%20systems&amp;url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F"><svg version="1.1" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor"><path d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z"></path></svg></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label="share Distributed file systems on ycombinator" href="https://news.ycombinator.com/submitlink?t=Distributed%20file%20systems&amp;u=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F"><svg version="1.1" viewBox="0 0 512 512" height="30px" width="30px" fill="currentColor"><path d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z"></path></svg></a></li></ul></footer></article><!--$--><!--/$--></main><footer class="footer"><span>© <!-- -->2026<!-- --> <a href="/">X. Angelo Huang&#x27;s Blog</a></span> </footer><a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accessKey="g"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"></path></svg></a><script src="/_next/static/chunks/webpack-ae211b618d5f14de.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[2619,[\"619\",\"static/chunks/619-ba102abea3e3d0e4.js\",\"740\",\"static/chunks/app/notes/%5Bslug%5D/page-beb59f3081b5a80d.js\"],\"\"]\nc:I[7150,[],\"\"]\n:HL[\"/_next/static/css/cd80011e7c08efe9.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"ZqZe8XS80taMN_wqGIdMk\",\"p\":\"\",\"c\":[\"\",\"notes\",\"distributed-file-systems\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"notes\",{\"children\":[[\"slug\",\"distributed-file-systems\",\"d\"],{\"children\":[\"__PAGE__\",{}]}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/cd80011e7c08efe9.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"dir\":\"auto\",\"children\":[[\"$\",\"head\",null,{\"children\":[[[\"$\",\"link\",null,{\"rel\":\"preload stylesheet\",\"as\":\"style\",\"crossOrigin\":\"anonymous\",\"href\":\"/assets/css/stylesheet.f790d9af969c56c079c1ce2d5972a04486bf3d6144295d5fba319830e1e55a7a.css\"}],[\"$\",\"link\",null,{\"rel\":\"icon\",\"href\":\"/favicon-192x192.png\"}],[\"$\",\"link\",null,{\"rel\":\"icon\",\"type\":\"image/png\",\"sizes\":\"16x16\",\"href\":\"/favicon-16x16.png\"}],[\"$\",\"link\",null,{\"rel\":\"icon\",\"type\":\"image/png\",\"sizes\":\"32x32\",\"href\":\"/favicon-32x32.png\"}],[\"$\",\"link\",null,{\"rel\":\"apple-touch-icon\",\"href\":\"/apple-touch-icon.png\"}],[\"$\",\"link\",null,{\"rel\":\"mask-icon\",\"href\":\"/safari-pinned-tab.svg\"}],[\"$\",\"meta\",null,{\"name\":\"theme-color\",\"content\":\"#2e2e33\"}],[\"$\",\"meta\",null,{\"name\":\"msapplication-TileColor\",\"content\":\"#2e2e33\"}],[\"$\",\"link\",null,{\"rel\":\"alternate\",\"type\":\"application/rss+xml\",\"href\":\"https://flecart.github.io/index.xml\"}],[\"$\",\"link\",null,{\"rel\":\"alternate\",\"hrefLang\":\"en\",\"href\":\"https://flecart.github.io/\"}]],[\"$\",\"script\",null,{\"async\":true,\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-WW6NN2QGKF\"}],[\"$\",\"script\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-WW6NN2QGKF');\"}}],[\"$\",\"script\",null,{\"type\":\"application/ld+json\",\"dangerouslySetInnerHTML\":{\"__html\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Organization\\\",\\\"name\\\":\\\"X. Angelo Huang's Blog\\\",\\\"url\\\":\\\"https://flecart.github.io/\\\",\\\"description\\\":\\\"Here I write and share about interesting topics I learn.\\\",\\\"logo\\\":\\\"https://flecart.github.io/favicon-192x192.png\\\",\\\"sameAs\\\":[\\\"\\\",\\\"https://github.com/flecart\\\",\\\"https://twitter.com/x_angelohuang\\\",\\\"https://www.linkedin.com/in/angelo-huang/\\\",\\\"https://t.me/flecarts\\\"]}\"}}]]}],[\"$\",\"body\",null,{\"className\":\"list\",\"id\":\"top\",\"children\":[[\"$\",\"script\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"\\nif (localStorage.getItem(\\\"pref-theme\\\") === \\\"dark\\\") {\\n  document.body.classList.add('dark');\\n} else if (localStorage.getItem(\\\"pref-theme\\\") === \\\"light\\\") {\\n  document.body.classList.remove('dark');\\n} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {\\n  document.body.classList.add('dark');\\n}\\n\"}}],[\"$\",\"header\",null,{\"className\":\"header\",\"children\":[\"$\",\"nav\",null,{\"className\":\"nav\",\"children\":[[\"$\",\"div\",null,{\"className\":\"logo\",\"children\":[[\"$\",\"$L2\",null,{\"href\":\"/\",\"accessKey\":\"h\",\"title\":\"X. Angelo Huang's Blog (Alt + H)\",\"children\":\"X. Angelo Huang's Blog\"}],[\"$\",\"div\",null,{\"className\":\"logo-switches\",\"children\":[\"$\",\"button\",null,{\"id\":\"theme-toggle\",\"accessKey\":\"t\",\"title\":\"(Alt + T)\",\"aria-label\":\"theme\",\"children\":[[\"$\",\"svg\",null,{\"id\":\"moon\",\"xmlns\":\"http://www.w3.org/2000/svg\",\"width\":\"24\",\"height\":\"18\",\"viewBox\":\"0 0 24 24\",\"fill\":\"none\",\"stroke\":\"currentColor\",\"strokeWidth\":\"2\",\"strokeLinecap\":\"round\",\"strokeLinejoin\":\"round\",\"children\":[\"$\",\"path\",null,{\"d\":\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"}]}],[\"$\",\"svg\",null,{\"id\":\"sun\",\"xmlns\":\"http://www.w3.org/2000/svg\",\"width\":\"24\",\"height\":\"18\",\"viewBox\":\"0 0 24 24\",\"fill\":\"none\",\"stroke\":\"currentColor\",\"strokeWidth\":\"2\",\"strokeLinecap\":\"round\",\"strokeLinejoin\":\"round\",\"children\":[[\"$\",\"circle\",null,{\"cx\":\"12\",\"cy\":\"12\",\"r\":\"5\"}],[\"$\",\"line\",null,{\"x1\":\"12\",\"y1\":\"1\",\"x2\":\"12\",\"y2\":\"3\"}],[\"$\",\"line\",null,{\"x1\":\"12\",\"y1\":\"21\",\"x2\":\"12\",\"y2\":\"23\"}],[\"$\",\"line\",null,{\"x1\":\"4.22\",\"y1\":\"4.22\",\"x2\":\"5.64\",\"y2\":\"5.64\"}],[\"$\",\"line\",null,{\"x1\":\"18.36\",\"y1\":\"18.36\",\"x2\":\"19.78\",\"y2\":\"19.78\"}],[\"$\",\"line\",null,{\"x1\":\"1\",\"y1\":\"12\",\"x2\":\"3\",\"y2\":\"12\"}],[\"$\",\"line\",null,{\"x1\":\"21\",\"y1\":\"12\",\"x2\":\"23\",\"y2\":\"12\"}],[\"$\",\"line\",null,{\"x1\":\"4.22\",\"y1\":\"19.78\",\"x2\":\"5.64\",\"y2\":\"18.36\"}],[\"$\",\"line\",null,{\"x1\":\"18.36\",\"y1\":\"5.64\",\"x2\":\"19.78\",\"y2\":\"4.22\"}]]}]]}]}]]}],[\"$\",\"ul\",null,{\"id\":\"menu\",\"children\":[[\"$\",\"li\",\"/notes/\",{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/notes/\",\"title\":\"Notes\",\"accessKey\":\"$undefined\",\"children\":[\"$\",\"span\",null,{\"children\":\"Notes\"}]}]}],[\"$\",\"li\",\"/archives/\",{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/archives/\",\"title\":\"Archive\",\"accessKey\":\"$undefined\",\"children\":[\"$\",\"span\",null,{\"children\":\"Archive\"}]}]}],[\"$\",\"li\",\"/search/\",{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/search/\",\"title\":\"Search\",\"accessKey\":\"/\",\"children\":\"$L3\"}]}],\"$L4\"]}]]}]}],\"$L5\",\"$L6\",\"$L7\"]}]]}]]}],{\"children\":[\"notes\",\"$L8\",{\"children\":[[\"slug\",\"distributed-file-systems\",\"d\"],\"$L9\",{\"children\":[\"__PAGE__\",\"$La\",{},null,false]},null,false]},null,false]},null,false],\"$Lb\",false]],\"m\":\"$undefined\",\"G\":[\"$c\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"d:I[9766,[],\"\"]\ne:I[8924,[],\"\"]\nf:I[4185,[\"619\",\"static/chunks/619-ba102abea3e3d0e4.js\",\"177\",\"static/chunks/app/layout-f77dcff2621ebb91.js\"],\"ClientScripts\"]\n11:I[4431,[],\"OutletBoundary\"]\n13:I[5278,[],\"AsyncMetadataOutlet\"]\n15:I[4431,[],\"ViewportBoundary\"]\n17:I[4431,[],\"MetadataBoundary\"]\n18:\"$Sreact.suspense\"\n3:[\"$\",\"span\",null,{\"children\":\"Search\"}]\n4:[\"$\",\"li\",\"/tags/\",{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/tags/\",\"title\":\"Tags\",\"accessKey\":\"$undefined\",\"children\":[\"$\",\"span\",null,{\"children\":\"Tags\"}]}]}]\n5:[\"$\",\"main\",null,{\"className\":\"main\",\"children\":[\"$\",\"$Ld\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$Le\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[\"$\",\"div\",null,{\"className\":\"not-found\",\"children\":[[\"$\",\"h1\",null,{\"children\":\"404\"}],[\"$\",\"p\",null,{\"children\":\"Page not found.\"}],[\"$\",\"p\",null,{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/\",\"children\":\"← Go home\"}]}]]}],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]\n6:[[\"$\",\"footer\",null,{\"className\":\"footer\",\"children\":[[\"$\",\"span\",null,{\"children\":[\"© \",2026,\" \",[\"$\",\"a\",null,{\"href\":\"/\",\"children\":\"X. Angelo Huang's Blog\"}]]}],\" \"]}],[\"$\",\"a\",null,{\"href\":\"#top\",\"aria-label\":\"go to top\",\"title\":\"Go to Top (Alt + G)\",\"className\":\"top-link\",\"id\":\"top-link\",\"accessKey\":\"g\",\"children\":[\"$\",\"svg\",null,{\"xmlns\":\"http://www.w3.org/2000/svg\",\"viewBox\":\"0 0 12 6\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M12 6H0l6-6z\"}]}]}]]\n7:[\"$\",\"$Lf\",null,{}]\n8:[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$Ld\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$Le\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}]\n9:[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$Ld\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts"])</script><script>self.__next_f.push([1,"\":\"$undefined\",\"template\":[\"$\",\"$Le\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}]\na:[\"$\",\"$1\",\"c\",{\"children\":[\"$L10\",null,[\"$\",\"$L11\",null,{\"children\":[\"$L12\",[\"$\",\"$L13\",null,{\"promise\":\"$@14\"}]]}]]}]\nb:[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$L15\",null,{\"children\":\"$L16\"}],null],[\"$\",\"$L17\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$18\",null,{\"fallback\":null,\"children\":\"$L19\"}]}]}]]}]\n"])</script><script>self.__next_f.push([1,"10:[[\"$\",\"script\",null,{\"type\":\"application/ld+json\",\"dangerouslySetInnerHTML\":{\"__html\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"BreadcrumbList\\\",\\\"itemListElement\\\":[{\\\"@type\\\":\\\"ListItem\\\",\\\"position\\\":1,\\\"name\\\":\\\"Home\\\",\\\"item\\\":\\\"https://flecart.github.io/\\\"},{\\\"@type\\\":\\\"ListItem\\\",\\\"position\\\":2,\\\"name\\\":\\\"Notes\\\",\\\"item\\\":\\\"https://flecart.github.io/notes/\\\"}]}\"}}],[\"$\",\"script\",null,{\"type\":\"application/ld+json\",\"dangerouslySetInnerHTML\":{\"__html\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"BlogPosting\\\",\\\"headline\\\":\\\"Distributed file systems\\\",\\\"name\\\":\\\"Distributed file systems\\\",\\\"description\\\":\\\"We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta\\\",\\\"keywords\\\":[\\\"📓big-data\\\"],\\\"wordCount\\\":\\\"2013\\\",\\\"inLanguage\\\":\\\"en\\\",\\\"image\\\":\\\"https://flecart.github.io/images/papermod-cover.png\\\",\\\"datePublished\\\":\\\"2025-01-26T00:00:00.000Z\\\",\\\"dateModified\\\":\\\"2025-01-26T00:00:00.000Z\\\",\\\"author\\\":{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"Xuanqiang Angelo Huang\\\"},\\\"mainEntityOfPage\\\":{\\\"@type\\\":\\\"WebPage\\\",\\\"@id\\\":\\\"https://flecart.github.io/notes/distributed-file-systems/\\\"},\\\"publisher\\\":{\\\"@type\\\":\\\"Organization\\\",\\\"name\\\":\\\"X. Angelo Huang's Blog\\\",\\\"logo\\\":{\\\"@type\\\":\\\"ImageObject\\\",\\\"url\\\":\\\"https://flecart.github.io/favicon-192x192.png\\\"}}}\"}}],[\"$\",\"article\",null,{\"className\":\"post-single\",\"children\":[[\"$\",\"header\",null,{\"className\":\"post-header\",\"children\":[[\"$\",\"div\",null,{\"className\":\"breadcrumbs\",\"children\":[[\"$\",\"span\",\"0\",{\"children\":[[\"$\",\"$L2\",null,{\"href\":\"/\",\"children\":\"Home\"}],\" » \"]}],[\"$\",\"span\",\"1\",{\"children\":[[\"$\",\"$L2\",null,{\"href\":\"/notes/\",\"children\":\"Notes\"}],null]}]]}],[\"$\",\"h1\",null,{\"className\":\"post-title entry-hint-parent\",\"children\":\"Distributed file systems\"}],null,[\"$\",\"div\",null,{\"className\":\"post-meta\",\"children\":[[[\"$\",\"span\",null,{\"title\":\"2025-01-26T00:00:00.000Z\",\"children\":\"January 26, 2025\"}],\" · \"],[\"$\",\"span\",null,{\"children\":[\"Reading Time: \",10,\" minutes\"]}],\" · \",[\"$\",\"span\",null,{\"children\":[\"By \",\"Xuanqiang Angelo Huang\"]}]]}]]}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[\"$\",\"details\",null,{\"children\":[[\"$\",\"summary\",null,{\"accessKey\":\"c\",\"title\":\"(Alt + C)\",\"children\":[\"$\",\"span\",null,{\"className\":\"details\",\"children\":\"Table of Contents\"}]}],[\"$\",\"div\",null,{\"className\":\"inner\",\"children\":[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"designing-dfss\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#designing-dfss\",\"aria-label\":\"Designing DFSs\",\"children\":\"Designing DFSs\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"the-use-case\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#the-use-case\",\"aria-label\":\"The Use Case\",\"children\":\"The Use Case\"}],null]}],[\"$\",\"li\",\"desiderata-of-distributed-file-systems\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#desiderata-of-distributed-file-systems\",\"aria-label\":\"Desiderata of distributed file systems\",\"children\":\"Desiderata of distributed file systems\"}],null]}],[\"$\",\"li\",\"efficiency-in-operations\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#efficiency-in-operations\",\"aria-label\":\"Efficiency in operations\",\"children\":\"Efficiency in operations\"}],null]}]]}]]}],[\"$\",\"li\",\"hadoop\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#hadoop\",\"aria-label\":\"Hadoop\",\"children\":\"Hadoop\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"the-logical-model\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#the-logical-model\",\"aria-label\":\"The logical model\",\"children\":\"The logical model\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"the-architecture\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#the-architecture\",\"aria-label\":\"The architecture\",\"children\":\"The architecture\"}],null]}]]}]]}],[\"$\",\"li\",\"the-physical-model\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#the-physical-model\",\"aria-label\":\"The physical model\",\"children\":\"The physical model\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"structure-of-the-namenode\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#structure-of-the-namenode\",\"aria-label\":\"Structure of the NameNode\",\"children\":\"Structure of the NameNode\"}],null]}],[\"$\",\"li\",\"structure-of-the-datanode\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#structure-of-the-datanode\",\"aria-label\":\"Structure of the DataNode\",\"children\":\"Structure of the DataNode\"}],null]}],\"$L1a\",\"$L1b\"]}]]}],\"$L1c\",\"$L1d\"]}]]}]]}]}]]}]}],\"$L1e\",\"$L1f\"]}]]\n"])</script><script>self.__next_f.push([1,"1a:[\"$\",\"li\",\"the-file-systems-operations\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#the-file-systems-operations\",\"aria-label\":\"The file systems operations\",\"children\":\"The file systems operations\"}],null]}]\n1b:[\"$\",\"li\",\"replication-strategy\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#replication-strategy\",\"aria-label\":\"Replication strategy\",\"children\":\"Replication strategy\"}],null]}]\n1c:[\"$\",\"li\",\"high-availability\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#high-availability\",\"aria-label\":\"High Availability\",\"children\":\"High Availability\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"snapshots\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#snapshots\",\"aria-label\":\"Snapshots\",\"children\":\"Snapshots\"}],null]}],[\"$\",\"li\",\"logs\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#logs\",\"aria-label\":\"Logs\",\"children\":\"Logs\"}],null]}],[\"$\",\"li\",\"checkpointing\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#checkpointing\",\"aria-label\":\"Checkpointing\",\"children\":\"Checkpointing\"}],null]}]]}]]}]\n"])</script><script>self.__next_f.push([1,"1d:[\"$\",\"li\",\"special-namenodes\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#special-namenodes\",\"aria-label\":\"Special NameNodes\",\"children\":\"Special NameNodes\"}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",\"standby-namenodes\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#standby-namenodes\",\"aria-label\":\"StandBy NameNodes\",\"children\":\"StandBy NameNodes\"}],null]}],[\"$\",\"li\",\"observer-namenode\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#observer-namenode\",\"aria-label\":\"Observer NameNode\",\"children\":\"Observer NameNode\"}],null]}],[\"$\",\"li\",\"federated-hdfs\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#federated-hdfs\",\"aria-label\":\"Federated HDFS\",\"children\":\"Federated HDFS\"}],null]}],[\"$\",\"li\",\"comparison-with-gfs\",{\"children\":[[\"$\",\"a\",null,{\"href\":\"#comparison-with-gfs\",\"aria-label\":\"Comparison with GFS\",\"children\":\"Comparison with GFS\"}],null]}]]}]]}]\n"])</script><script>self.__next_f.push([1,"20:T3eec,"])</script><script>self.__next_f.push([1,"\u003cp\u003eWe want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see \u003ca href=\"/notes/cloud-storage/\"\u003eCloud Storage\u003c/a\u003e. Object storage could store billions of files, we want to handle millions of petabyte files.\u003c/p\u003e\n\u003ch3 id=\"designing-dfss\"\u003eDesigning DFSs\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#designing-dfss\"\u003e#\u003c/a\u003e\u003c/h3\u003e\n\u003ch4 id=\"the-use-case\"\u003eThe Use Case\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#the-use-case\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eRemember that the size of the files where heavily limited for \u003ca href=\"/notes/cloud-storage/\"\u003eCloud Storage\u003c/a\u003e. The physical limitation was due to the limited size of a single hard disk, which was usually in the order of the Terabytes.\nHere, we would like to easily store \u003cem\u003epetabytes\u003c/em\u003e of data in a single file, for example \u003cstrong\u003ebig datasets\u003c/strong\u003e.\nAnother feature that should be easily supported is \u003cstrong\u003ehighly concurrent access\u003c/strong\u003e to the filesystem, last but not least being able to set up permissions in the system.\u003c/p\u003e\n\u003ch4 id=\"desiderata-of-distributed-file-systems\"\u003eDesiderata of distributed file systems\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#desiderata-of-distributed-file-systems\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eIn this case we have a \u003cem\u003e\u003ca href=\"/notes/filesystem/\"\u003eFilesystem\u003c/a\u003e\u003c/em\u003e. In 2004 google created his own FS. With hundreds or thousands of machines the systems are practically guaranteed to fail. This leads to a requirement of\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003efault tolerance\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003eWe need to detect these errors so we need \u003cstrong\u003emonitoring and error detection\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003ewe would like the system to be self-regulatory and have the ability of \u003cstrong\u003eautomatic recovery\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"efficiency-in-operations\"\u003eEfficiency in operations\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#efficiency-in-operations\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eHDFS is designed primarily for \u003cstrong\u003ewrite-once, read-many\u003c/strong\u003e access patterns typical of big data processing workloads. We will later see that MapReduce works quite well with this methods.\u003c/p\u003e\n\u003cp\u003eWe want to be efficient in\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eScanning the file\u003c/li\u003e\n\u003cli\u003eAppending information to file \u003cstrong\u003eatomically\u003c/strong\u003e\nSo that we can have a temporary place for intermediate data or sensors or logs. This needs to be very efficient for appends. Immutability is ok in this case.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eLatency should not be the bottleneck (with plenty of small files we are losing a lot of files to lookup) but throughput should be the bottleneck.\nThis is why the Distributed File System that we will be studying is optimized for high-throughput data processing rather than low-latency access to small files.\u003c/p\u003e\n\u003ch2 id=\"hadoop\"\u003eHadoop\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#hadoop\"\u003e#\u003c/a\u003e\u003c/h2\u003e\n\u003cp\u003ePrimarily:\u003cbr\u003e\n• Distributed File System (HDFS)\u003cbr\u003e\n• MapReduce\u003cbr\u003e\n• Wide column store (HBase)\u003c/p\u003e\n\u003cp\u003eStarting form 188 in 2006 when the filesystem has been developed, now it should handle more about 100k files, about 600PB of data!\u003c/p\u003e\n\u003cp\u003eWe will start first by looking at the logical model and then to the physical model, following Codd's data independence idea \u003ca href=\"https://dl.acm.org/doi/10.1145/362384.362685\"\u003e(Codd 1970)\u003c/a\u003e.\u003c/p\u003e\n\u003ch3 id=\"the-logical-model\"\u003eThe logical model\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#the-logical-model\"\u003e#\u003c/a\u003e\u003c/h3\u003e\n\u003cp\u003eIn this case we have a \u003cstrong\u003efile hierarchy\u003c/strong\u003e.\nAnd we have block storage (also called chunk, split, shard, partition) instead of unstructured object storage we studied in \u003ca href=\"/notes/cloud-storage/#object-stores\"\u003eCloud Storage#Object Stores\u003c/a\u003e, which are seen as a single big object.\nThese documents have a far larger block size, usually of \u003cstrong\u003e64-128MB\u003c/strong\u003e. We have 64 for Google and 128 for Hadoop. In Hadoop, blocks are files, so we don't have fragmentation on the filesystem.\nThis is because on a network cable having many files takes more time than a single bigger file, because of the \u003cstrong\u003elatency.\u003c/strong\u003e of file disk seeks.\nThere are also other reasons it might be advantageous having this block size:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eLimit metadata on NameNode about every block\u003c/li\u003e\n\u003cli\u003eClient need to interact less with the NameNode.\u003c/li\u003e\n\u003cli\u003eLimit the number of TCP connections that the Client would need to open for each data block on the datanodes. Just few persistent TCPs are ok. See \u003ca href=\"/notes/livello-di-trasporto/\"\u003eLivello di trasporto\u003c/a\u003e for TCP.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"the-architecture\"\u003eThe architecture\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#the-architecture\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eWith HDFS we have a \u003cstrong\u003ecentralized architecture\u003c/strong\u003e where we have a main node, called Coordinator, Primary, Leader, NameNode and then secondary nodes called Worker, Secondary, Follower, DataNodes.\u003c/p\u003e\n\u003cp\u003eWhen we have a file, we split it into chunks and store it multiple times (3) into different machines. RAID is redundant in this case, so we won't use it, see \u003ca href=\"/notes/devices-os/#raid\"\u003eDevices OS#RAID\u003c/a\u003e for more information.\u003c/p\u003e\n\u003ch3 id=\"the-physical-model\"\u003eThe physical model\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#the-physical-model\"\u003e#\u003c/a\u003e\u003c/h3\u003e\n\u003ch4 id=\"structure-of-the-namenode\"\u003eStructure of the NameNode\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#structure-of-the-namenode\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003col\u003e\n\u003cli\u003eMapping of file -\u003e Block.\u003c/li\u003e\n\u003cli\u003eBlock -\u003e Locations on nodes.\u003c/li\u003e\n\u003cli\u003eState of the blocks (corrupted updated). and permissions.\u003c/li\u003e\n\u003cli\u003eACL information and filesystem information.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eMore in particular:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003ethe file namespace\u003c/strong\u003e, that is, the hierarchy of directory names and\nfile names, as well as any access control (ACL) information similar\nto Unix-based systems.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003ea mapping from each file to the list of its blocks\u003c/strong\u003e. Each block, in this list, is represented with a 64-bit identifier; the content of the blocks is not on the NameNode. \u003cem\u003eBlocks are local files\u003c/em\u003e.\nto the \u003cstrong\u003elocations of its replicas\u003c/strong\u003e, that is, the list of the DataNodes that store a copy of this block.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThe NameNode \u003cstrong\u003enever initiates\u003c/strong\u003e connection with the DataNode. It can just answer to DataNodes' heartbeats.\u003c/p\u003e\n\u003ch4 id=\"structure-of-the-datanode\"\u003eStructure of the DataNode\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#structure-of-the-datanode\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eOne important fact that the DataNode has to handle are the \u003cstrong\u003eheartbeats\u003c/strong\u003e. These are small communications that the DataNode sends to the NameNode that serve mainly two roles:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\u003cstrong\u003eLiveness\u003c/strong\u003e: to make known that everything is all right, that the node is still alive and running (peculiar observation is that also human communication frequency has something related to this),\nIf no hearthbeat is receaved in 10 minutes \u003ca href=\"https://ieeexplore.ieee.org/document/5496972\"\u003e(Shvachko et al. 2010)\u003c/a\u003e, then the node is considered dead.\u003c/li\u003e\n\u003cli\u003eOccasionally, contain information about \u003cstrong\u003estorage of blocks\u003c/strong\u003e, like the ACKs for successful storage. It can also contain notification of block corruptions, so that the namenode knows it can add it to the list of nodes that contain that block.\nThis is usually done once every \u003cstrong\u003e3 seconds\u003c/strong\u003e but can be configured.\nAlong side this pattern, the DataNode also sends every \u003cstrong\u003esix hours\u003c/strong\u003e (configurable) a full \u003cem\u003ereport of every\u003c/em\u003e block that it contains.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eAnother responsibility of the DataNode is the \u003cstrong\u003ereplication pipeline\u003c/strong\u003e. When it receives a file, it should replicate it to the other nodes.\u003c/p\u003e\n\u003ch4 id=\"the-file-systems-operations\"\u003eThe file systems operations\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#the-file-systems-operations\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003ch5 id=\"read\"\u003eRead\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#read\"\u003e#\u003c/a\u003e\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003eThe client asks the NameNode for the blocks and DataNodes.\u003c/li\u003e\n\u003cli\u003eThe NameNode answers with the list of each block of the file and the DataNodes that store it ordered from distance to the client.\u003c/li\u003e\n\u003cli\u003eThen the client asks the DataNodes for the files, which is usually a stream of bytes. It downloads every block in turn.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cblockquote\u003e\n\u003cp\u003e\u003cem\u003eIt is informative to think about the interaction between HBase and HDFS. [...] Who is the client here? The RegionServer, which does co-habit with a DataNode. [...] This makes accessing the KeyValues in future reads by the RegionServer extremely efficient, because the RegionServer can read the data locally \u003cstrong\u003ewithout communicating with the NameNode\u003c/strong\u003e: this is known as short-circuiting in HDFS.\u003c/em\u003e\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch5 id=\"write\"\u003eWrite\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#write\"\u003e#\u003c/a\u003e\u003c/h5\u003e\n\u003cp\u003eThis operations is a little bit more complex and needs many machines to be organized with each other:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eThe client first locks the file that he's writing.\u003c/li\u003e\n\u003cli\u003eThe client asks the NameNode for each block a series of DataNodes with which he can initialize connection.\u003c/li\u003e\n\u003cli\u003eThen client instructs the given DataNodes to create the replication pipeline\u003c/li\u003e\n\u003cli\u003eThen client sends the block and waits for acks by the DataNodes (only this part is syncronous for the client I think).\u003c/li\u003e\n\u003cli\u003eThis is done for every block of the file, when it's finished the client tells the NameNode to release the lock.\u003c/li\u003e\n\u003cli\u003eAfter a bit of time the NameNode should receive information about correct storage by the DataNodes, and checks if every replica is ok, and gives ACK to the client. and it is finished...\u003c/li\u003e\n\u003cli\u003eThen if one gets corrupted the NameNode automatically regulates the replicas\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"replication-strategy\"\u003eReplication strategy\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#replication-strategy\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eBlocks are replicated with some general guidelines in mind. There is first a notion of distance from nodes that is defined by a physical connection distance:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e2: if the two nodes are in the \u003cstrong\u003esame rack\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e4: if they are in \u003cstrong\u003edifferent racks\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThere is a general guideline that \u003cem\u003eeach node should have at maximum a single replica, and each rack should have at maximum two replicas.\u003c/em\u003e\nUsually the node that processes the request stores a version, then it stores replicas in two nodes in a rack different from the one that is processing the current version.\nThe number of replicas to store is handled by a parameter called \u003cstrong\u003ereplication factor\u003c/strong\u003e.\u003c/p\u003e\n\u003cp\u003eUsually the replication is node in this manner:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eIn the same node that receives the request\u003c/li\u003e\n\u003cli\u003eOn two different nodes on another rack\u003c/li\u003e\n\u003cli\u003eThe fourth, if present, is on a random node.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eThe reason why two replicas are usually not put on the same node, is that it would become too concentrated.\u003c/p\u003e\n\u003ch3 id=\"high-availability\"\u003eHigh Availability\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#high-availability\"\u003e#\u003c/a\u003e\u003c/h3\u003e\n\u003cp\u003eOne clear pain point of the current design is the \u003cstrong\u003esingle point of failure\u003c/strong\u003e of the system: if a NameNode corrupts the data or fails irrecoverably, then the whole system would become unusable.\nOne clearly wants to prevent this from happens.\nThis leads to the idea of logs and namespace files.\u003c/p\u003e\n\u003ch4 id=\"snapshots\"\u003eSnapshots\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#snapshots\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eIf the NameNode crashes, then everything could be lost, the whole cluster would be useless because we don't have a way to recover the mappings between the block ids and the files.\nFor this reason a \u003cstrong\u003esnapshot (namespace file)\u003c/strong\u003e, which contains all the relevant information for a NameNode to work, is usually created and stored on some persistent storage or backed using \u003ca href=\"/notes/cloud-storage/\"\u003eCloud Storage\u003c/a\u003e options.\u003c/p\u003e\n\u003ch4 id=\"logs\"\u003eLogs\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#logs\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eWe also need to balance the creation of snapshots and the number of updates. It would be quite infeasible to create a whole new snapshot after every update, yet at the same time we need to track every change to avoid to lose any..\nThis brings up the use of \u003cstrong\u003elogs\u003c/strong\u003e for every change, that act as a diff file for every single change that has not been saved in the snapshot (when we need to restore, we reapply every single registered change in order to return back to the same state, it usually takes \u003cem\u003e30 minutes\u003c/em\u003e to restore from a crash).\u003c/p\u003e\n\u003ch4 id=\"checkpointing\"\u003eCheckpointing\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#checkpointing\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eWhen a merge happens this is called a \u003cstrong\u003echeckpoint\u003c/strong\u003e, which happens in a \u003cem\u003eperiodical\u003c/em\u003e fashion. (or could also be manually triggered). The merge is usually done by another node, called \u003cem\u003ephantom node\u003c/em\u003e who merges the logs. If the phantom node is configured to take over the main node in case of failure, this is the StandbyNode, explored in a later section.\u003c/p\u003e\n\u003cp\u003eThe snapshot and the logs is usually \u003cstrong\u003estored externally\u003c/strong\u003e in a NAS or something similar (e.g. AWS Glacier, latency is OK for backups)\u003c/p\u003e\n\u003ch3 id=\"special-namenodes\"\u003eSpecial NameNodes\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#special-namenodes\"\u003e#\u003c/a\u003e\u003c/h3\u003e\n\u003ch4 id=\"standby-namenodes\"\u003eStandBy NameNodes\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#standby-namenodes\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eThese NameNodes just keep the namespace file updated and up to date without interfering with the main NameNode. Their existence is for \u003cstrong\u003ehigh availability\u003c/strong\u003e of the service, making the system a little more reliable.\nThey do not process write or reads. They just keep reading the edit log and updating the namespace file and the current state of the mappings.\u003c/p\u003e\n\u003cp\u003eThere are also other proposals for merging the logs to the snapshot, so that it would not take half an hour to restart the NameNode in the case of a crash, these are called \u003cstrong\u003estandby NameNodes\u003c/strong\u003e that keep track of the current mappings between block ids and files.\u003c/p\u003e\n\u003cp\u003eUsually these types of NameNodes also receive heartbeats by the NameNodes.\u003c/p\u003e\n\u003ch4 id=\"observer-namenode\"\u003eObserver NameNode\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#observer-namenode\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eThis is very similar to the standby NameNode, but just handles the Read Request. Clients can connect to the Observer NameNode to know what blocks to \u003cstrong\u003eread\u003c/strong\u003e but not write.\nThis is the main different with the StandBy NameNodes: they accept requests, but only reads.\u003c/p\u003e\n\u003ch4 id=\"federated-hdfs\"\u003eFederated HDFS\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#federated-hdfs\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eIn these case there are several NameNodes that run at the same time. Each of them has the responsibility for \u003cstrong\u003edifferent directories\u003c/strong\u003e in the filesystem hierarchy.\nThe workload is spread into different nodes.\nI don't know what happens when a NameNode fails and you cannot access some directories anymore.\u003c/p\u003e\n\u003ch4 id=\"comparison-with-gfs\"\u003eComparison with GFS\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#comparison-with-gfs\"\u003e#\u003c/a\u003e\u003c/h4\u003e\n\u003cp\u003eGFS is another distributed filesystem. The main difference is that the terms are different:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eNameNode - Master\u003c/li\u003e\n\u003cli\u003eDataNode - Chunkserver\u003c/li\u003e\n\u003cli\u003eBlock - Chunk\u003c/li\u003e\n\u003cli\u003eFS Image - Checkpoint image\u003c/li\u003e\n\u003cli\u003eEdit log - Operation log\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eAnother difference is that the block size is smaller for GFS, in this case 64MB.\u003c/p\u003e\n\u003ch1 id=\"references\"\u003eReferences\u003ca class=\"anchor\" aria-hidden=\"true\" hidden href=\"#references\"\u003e#\u003c/a\u003e\u003c/h1\u003e\n\u003cp id=\"coddRelationalModelData1970\"\u003e[1] Codd \u003ca href=\"https://dl.acm.org/doi/10.1145/362384.362685\"\u003e“A Relational Model of Data for Large Shared Data Banks”\u003c/a\u003e Communications of the ACM Vol. 13(6), pp. 377–387 1970\u003c/p\u003e\n\u003cp id=\"shvachkoHadoopDistributedFile2010\"\u003e[2] Shvachko et al. \u003ca href=\"https://ieeexplore.ieee.org/document/5496972\"\u003e“The Hadoop Distributed File System”\u003c/a\u003e 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST) 2010\u003c/p\u003e"])</script><script>self.__next_f.push([1,"1e:[\"$\",\"div\",null,{\"className\":\"post-content\",\"dangerouslySetInnerHTML\":{\"__html\":\"$20\"}}]\n21:T698,"])</script><script>self.__next_f.push([1,"M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z"])</script><script>self.__next_f.push([1,"1f:[\"$\",\"footer\",null,{\"className\":\"post-footer\",\"children\":[[\"$\",\"ul\",null,{\"className\":\"post-tags\",\"children\":[[\"$\",\"li\",\"📓big-data\",{\"children\":[\"$\",\"$L2\",null,{\"href\":\"/tags/📓big-data/\",\"children\":\"📓big-data\"}]}]]}],[\"$\",\"ul\",null,{\"className\":\"share-buttons\",\"children\":[[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on x\",\"href\":\"https://x.com/intent/tweet/?text=Distributed%20file%20systems\u0026url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\u0026hashtags=%F0%9F%93%93big-data\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z\"}]}]}]}],[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on linkedin\",\"href\":\"https://www.linkedin.com/shareArticle?mini=true\u0026url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\u0026title=Distributed%20file%20systems\u0026summary=Distributed%20file%20systems\u0026source=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z\"}]}]}]}],[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on reddit\",\"href\":\"https://reddit.com/submit?url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\u0026title=Distributed%20file%20systems\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"$21\"}]}]}]}],\"$L22\",\"$L23\",\"$L24\",\"$L25\"]}]]}]\n"])</script><script>self.__next_f.push([1,"22:[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on facebook\",\"href\":\"https://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z\"}]}]}]}]\n"])</script><script>self.__next_f.push([1,"26:T6fd,"])</script><script>self.__next_f.push([1,"M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-141.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z"])</script><script>self.__next_f.push([1,"23:[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on whatsapp\",\"href\":\"https://api.whatsapp.com/send?text=Distributed%20file%20systems%20-%20https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"$26\"}]}]}]}]\n"])</script><script>self.__next_f.push([1,"24:[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on telegram\",\"href\":\"https://telegram.me/share/url?text=Distributed%20file%20systems\u0026url=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"2 2 28 28\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z\"}]}]}]}]\n"])</script><script>self.__next_f.push([1,"25:[\"$\",\"li\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"rel\":\"noopener noreferrer\",\"aria-label\":\"share Distributed file systems on ycombinator\",\"href\":\"https://news.ycombinator.com/submitlink?t=Distributed%20file%20systems\u0026u=https%3A%2F%2Fflecart.github.io%2Fnotes%2Fdistributed-file-systems%2F\",\"children\":[\"$\",\"svg\",null,{\"version\":\"1.1\",\"viewBox\":\"0 0 512 512\",\"height\":\"30px\",\"width\":\"30px\",\"fill\":\"currentColor\",\"children\":[\"$\",\"path\",null,{\"d\":\"M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z\"}]}]}]}]\n"])</script><script>self.__next_f.push([1,"16:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n12:null\n"])</script><script>self.__next_f.push([1,"14:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"Distributed file systems | X. Angelo Huang's Blog\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta\"}],[\"$\",\"meta\",\"2\",{\"name\":\"author\",\"content\":\"Xuanqiang Angelo Huang\"}],[\"$\",\"meta\",\"3\",{\"name\":\"robots\",\"content\":\"index, follow\"}],[\"$\",\"link\",\"4\",{\"rel\":\"canonical\",\"href\":\"https://flecart.github.io/notes/distributed-file-systems/\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:title\",\"content\":\"Distributed file systems\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:description\",\"content\":\"We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta\"}],[\"$\",\"meta\",\"7\",{\"property\":\"og:url\",\"content\":\"https://flecart.github.io/notes/distributed-file-systems/\"}],[\"$\",\"meta\",\"8\",{\"property\":\"og:image\",\"content\":\"https://flecart.github.io/images/papermod-cover.png\"}],[\"$\",\"meta\",\"9\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"$\",\"meta\",\"10\",{\"property\":\"article:section\",\"content\":\"notes\"}],[\"$\",\"meta\",\"11\",{\"property\":\"article:tag\",\"content\":\"📓big-data\"}],[\"$\",\"meta\",\"12\",{\"name\":\"twitter:card\",\"content\":\"summary_large_image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"twitter:title\",\"content\":\"Distributed file systems\"}],[\"$\",\"meta\",\"14\",{\"name\":\"twitter:description\",\"content\":\"We want to know how to handle systems that have a large number of data. In previous lesson we have discovered how to quickly access and make Scalable systems with huge dimensions, see Cloud Storage . Object storage could store billions of files, we want to handle millions of peta\"}],[\"$\",\"meta\",\"15\",{\"name\":\"twitter:image\",\"content\":\"https://flecart.github.io/images/papermod-cover.png\"}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"19:\"$14:metadata\"\n"])</script></body></html>
