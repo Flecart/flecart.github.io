@@ -11,8 +11,249 @@
     </image>
     <generator>Next.js</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 28 Dec 2025 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://flecart.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Infrastruttura Email</title>
+      <link>https://flecart.github.io/notes/infrastruttura-email/</link>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+      <guid>https://flecart.github.io/notes/infrastruttura-email/</guid>
+      <description>Infrastruttura Email # L&#39;email è uno dei protocolli più vecchi di Internet, ma la sua infrastruttura è sorprendentemente complessa. Questa nota copre tutti i componenti necessari per gestire un dominio email, dalla ricezione all&#39;invio, dall&#39;autenticazione alla sicurezza. Protocol</description>
+      <content:encoded><![CDATA[<h1 id="infrastruttura-email">Infrastruttura Email<a class="anchor" aria-hidden="true" hidden href="#infrastruttura-email">#</a></h1>
+<p>L'email è uno dei protocolli più vecchi di Internet, ma la sua infrastruttura è sorprendentemente complessa. Questa nota copre tutti i componenti necessari per gestire un dominio email, dalla ricezione all'invio, dall'autenticazione alla sicurezza.</p>
+<h2 id="protocolli-fondamentali">Protocolli fondamentali<a class="anchor" aria-hidden="true" hidden href="#protocolli-fondamentali">#</a></h2>
+<h3 id="smtp-simple-mail-transfer-protocol">SMTP (Simple Mail Transfer Protocol)<a class="anchor" aria-hidden="true" hidden href="#smtp-simple-mail-transfer-protocol">#</a></h3>
+<p>SMTP è il protocollo usato per <strong>inviare</strong> email tra server. Opera sulla porta 25 (server-to-server), 587 (submission con STARTTLS) o 465 (submission con TLS implicito).</p>
+<p>Il flusso è:</p>
+<ol>
+<li>Il client si connette al server SMTP</li>
+<li>Si identifica con <code>HELO</code>/<code>EHLO</code></li>
+<li>Specifica il mittente (<code>MAIL FROM:</code>) e il destinatario (<code>RCPT TO:</code>)</li>
+<li>Invia il corpo del messaggio (<code>DATA</code>)</li>
+</ol>
+<p>Importante: SMTP distingue tra <strong>envelope</strong> (busta) e <strong>headers</strong> (intestazioni). L'envelope è quello che i server usano per il routing, gli headers sono quello che l'utente vede nel client email. Possono essere diversi, e questa distinzione è fondamentale per capire SPF e il forwarding.</p>
+<h3 id="imap-e-pop3">IMAP e POP3<a class="anchor" aria-hidden="true" hidden href="#imap-e-pop3">#</a></h3>
+<p>Sono i protocolli per <strong>ricevere/leggere</strong> email da una casella:</p>
+<ul>
+<li><strong>IMAP</strong> (porta 993): mantiene le email sul server, sincronizzazione multi-dispositivo</li>
+<li><strong>POP3</strong> (porta 995): scarica le email localmente, tipicamente le rimuove dal server</li>
+</ul>
+<p>In un'infrastruttura basata su forwarding (come SES → Gmail), questi protocolli non servono perché non c'è una casella locale — le email vengono inoltrate direttamente.</p>
+<h2 id="record-dns-per-lemail">Record DNS per l'email<a class="anchor" aria-hidden="true" hidden href="#record-dns-per-lemail">#</a></h2>
+<p>Il DNS è il fondamento di tutta l'infrastruttura email. Senza i record corretti, le email non arrivano e quelle inviate finiscono nello spam.</p>
+<h3 id="mx-mail-exchange">MX (Mail Exchange)<a class="anchor" aria-hidden="true" hidden href="#mx-mail-exchange">#</a></h3>
+<p>Il record MX dice al mondo <strong>quale server riceve le email</strong> per il tuo dominio.</p>
+<pre><code>safe.eu.    MX    10 inbound-smtp.eu-west-1.amazonaws.com
+</code></pre>
+<p>Il numero 10 è la <strong>priorità</strong> (più basso = più prioritario). Si possono avere più record MX per ridondanza:</p>
+<pre><code>safe.eu.    MX    10 server-primario.example.com
+safe.eu.    MX    20 server-backup.example.com
+</code></pre>
+<p>Quando qualcuno invia un'email a <code>hello@safe.eu</code>, il suo server:</p>
+<ol>
+<li>Fa una query DNS per i record MX di <code>safe.eu</code></li>
+<li>Si connette al server con priorità più alta</li>
+<li>Consegna l'email via SMTP</li>
+</ol>
+<h3 id="custom-mail-from">Custom MAIL FROM<a class="anchor" aria-hidden="true" hidden href="#custom-mail-from">#</a></h3>
+<p>Il MAIL FROM domain (anche detto "envelope sender domain" o "return-path domain") è il dominio usato nell'envelope SMTP. Di default, servizi come SES usano il proprio dominio (e.g. <code>amazonses.com</code>), ma configurare un custom MAIL FROM come <code>mail.safe.eu</code> migliora la deliverability perché SPF viene verificato contro il tuo dominio.</p>
+<p>Richiede due record aggiuntivi:</p>
+<pre><code>mail.safe.eu.    MX     10 feedback-smtp.eu-west-1.amazonses.com
+mail.safe.eu.    TXT    "v=spf1 include:amazonses.com ~all"
+</code></pre>
+<h2 id="autenticazione-email">Autenticazione Email<a class="anchor" aria-hidden="true" hidden href="#autenticazione-email">#</a></h2>
+<p>Questi tre meccanismi lavorano insieme per prevenire lo spoofing e garantire che le email siano legittime. Sono correlati ai principi di <a href="/notes/sicurezza-delle-reti/">Sicurezza delle reti</a> — in particolare <strong>autenticazione</strong> e <strong>integrità</strong>.</p>
+<h3 id="spf-sender-policy-framework">SPF (Sender Policy Framework)<a class="anchor" aria-hidden="true" hidden href="#spf-sender-policy-framework">#</a></h3>
+<p>SPF è un record TXT nel DNS che elenca <strong>quali server sono autorizzati a inviare email</strong> per conto del tuo dominio.</p>
+<pre><code>safe.eu.    TXT    "v=spf1 include:amazonses.com ~all"
+</code></pre>
+<p>Questo dice: "solo i server di Amazon SES possono inviare come @safe.eu". Quando un server riceve un'email da <code>@safe.eu</code>, controlla:</p>
+<ol>
+<li>Da quale IP è arrivata l'email</li>
+<li>Se quell'IP è nell'elenco SPF di <code>safe.eu</code></li>
+<li>Se non lo è, l'email è sospetta</li>
+</ol>
+<p>I qualificatori:</p>
+<ul>
+<li><code>~all</code> (softfail): le email non autorizzate vengono marcate ma non rifiutate</li>
+<li><code>-all</code> (hardfail): le email non autorizzate vengono rifiutate</li>
+<li><code>?all</code> (neutral): nessuna policy</li>
+</ul>
+<p>SPF controlla il dominio dell'<strong>envelope-from</strong> (Return-Path), NON l'header From che l'utente vede. Questa distinzione è cruciale per capire i problemi del forwarding.</p>
+<h3 id="dkim-domainkeys-identified-mail">DKIM (DomainKeys Identified Mail)<a class="anchor" aria-hidden="true" hidden href="#dkim-domainkeys-identified-mail">#</a></h3>
+<p>DKIM fornisce una <strong>firma crittografica</strong> su ogni email inviata. Funziona come una firma digitale classica (vedi <a href="/notes/sicurezza-delle-reti/">Sicurezza delle reti</a>):</p>
+<ol>
+<li>Il server mittente ha una <strong>chiave privata</strong></li>
+<li>La <strong>chiave pubblica</strong> viene pubblicata nel DNS come record CNAME:</li>
+</ol>
+<pre><code>abc123._domainkey.safe.eu.    CNAME    abc123.dkim.amazonses.com
+</code></pre>
+<ol start="3">
+<li>Ogni email inviata include un header <code>DKIM-Signature</code> con l'hash firmato di headers e corpo</li>
+<li>Il server ricevente recupera la chiave pubblica dal DNS e verifica la firma</li>
+</ol>
+<p>Se la firma è valida, il server sa che:</p>
+<ul>
+<li>L'email proviene realmente da quel dominio (autenticazione)</li>
+<li>Il contenuto non è stato modificato in transito (integrità)</li>
+</ul>
+<p>SES genera 3 coppie di chiavi DKIM (rotazione), quindi servono 3 record CNAME.</p>
+<h3 id="dmarc-domain-based-message-authentication-reporting-conformance">DMARC (Domain-based Message Authentication, Reporting &#x26; Conformance)<a class="anchor" aria-hidden="true" hidden href="#dmarc-domain-based-message-authentication-reporting-conformance">#</a></h3>
+<p>DMARC è la <strong>policy</strong> che dice ai server riceventi cosa fare quando SPF e DKIM falliscono. È il livello decisionale sopra SPF e DKIM.</p>
+<pre><code>_dmarc.safe.eu.    TXT    "v=DMARC1; p=quarantine; rua=mailto:dmarc@safe.eu"
+</code></pre>
+<p>Componenti:</p>
+<ul>
+<li><code>p=none</code>: non fare nulla, solo report (monitoring)</li>
+<li><code>p=quarantine</code>: metti in spam</li>
+<li><code>p=reject</code>: rifiuta completamente l'email</li>
+<li><code>rua=mailto:...</code>: indirizzo dove ricevere i report aggregati sulle email che falliscono i controlli</li>
+</ul>
+<p>DMARC richiede che <strong>almeno uno</strong> tra SPF o DKIM passi E sia <strong>allineato</strong> con il dominio nell'header From. "Allineato" significa che il dominio verificato da SPF/DKIM corrisponde al dominio nel From.</p>
+<h3 id="come-lavorano-insieme">Come lavorano insieme<a class="anchor" aria-hidden="true" hidden href="#come-lavorano-insieme">#</a></h3>
+<pre><code>Email da alice@company.com → server safe.eu → Gmail
+
+Gmail controlla:
+1. SPF: l'IP del server è autorizzato per il dominio nel Return-Path? 
+2. DKIM: la firma è valida e corrisponde al dominio?
+3. DMARC: almeno uno è passato E allineato? Se no → applica la policy
+</code></pre>
+<h2 id="il-problema-del-forwarding">Il problema del forwarding<a class="anchor" aria-hidden="true" hidden href="#il-problema-del-forwarding">#</a></h2>
+<p>Il forwarding email è sorprendentemente problematico per l'autenticazione. Quando <code>hello@safe.eu</code> viene inoltrato a <code>tuo@gmail.com</code>:</p>
+<h3 id="cosa-si-rompe">Cosa si rompe<a class="anchor" aria-hidden="true" hidden href="#cosa-si-rompe">#</a></h3>
+<ol>
+<li>
+<p><strong>SPF fallisce</strong>: l'email originale da <code>alice@company.com</code> arriva al tuo server. Il tuo server la inoltra a Gmail. Gmail vede che l'IP del tuo server NON è autorizzato a inviare per <code>company.com</code> → SPF fail.</p>
+</li>
+<li>
+<p><strong>DKIM può rompersi</strong>: se il forwarder modifica qualsiasi header o il corpo (anche solo aggiungendo un footer), la firma DKIM originale diventa invalida.</p>
+</li>
+<li>
+<p><strong>DMARC fallisce</strong>: se sia SPF che DKIM falliscono, DMARC applica la policy del dominio mittente. Se <code>company.com</code> ha <code>p=reject</code>, l'email viene rifiutata.</p>
+</li>
+</ol>
+<h3 id="approccio-semplice-lambda-rewrite">Approccio semplice (Lambda rewrite)<a class="anchor" aria-hidden="true" hidden href="#approccio-semplice-lambda-rewrite">#</a></h3>
+<p>Il metodo più semplice è riscrivere completamente gli headers:</p>
+<ul>
+<li>Cambiare <code>From:</code> a <code>noreply@safe.eu</code></li>
+<li>Aggiungere <code>Reply-To:</code> con il mittente originale</li>
+<li>Rimuovere <code>DKIM-Signature</code> originale</li>
+<li>Firmare con il proprio DKIM</li>
+</ul>
+<p>Funziona ma perde l'identità del mittente originale, e le email appaiono come "via safe.eu".</p>
+<h3 id="srs-sender-rewriting-scheme">SRS (Sender Rewriting Scheme)<a class="anchor" aria-hidden="true" hidden href="#srs-sender-rewriting-scheme">#</a></h3>
+<p>SRS risolve il problema SPF nel forwarding. Riscrive solo l'<strong>envelope-from</strong> (il Return-Path), non gli headers visibili.</p>
+<p>Trasformazione:</p>
+<pre><code>Envelope-from originale: alice@company.com
+Dopo SRS:               SRS0=hash=timestamp=company.com=alice@safe.eu
+</code></pre>
+<p>Ora quando Gmail controlla SPF, lo controlla contro <code>safe.eu</code> (il tuo dominio) → passa. L'header <code>From:</code> visibile resta <code>alice@company.com</code>.</p>
+<p>Se l'email rimbalza (bounce), il bounce va al tuo server. Il tuo server decodifica l'indirizzo SRS e inoltra il bounce al mittente originale.</p>
+<p>SRS è uno standard de facto per il forwarding trasparente, usato da servizi come Fastmail, Migadu, e molti server Postfix.</p>
+<h3 id="arc-authenticated-received-chain">ARC (Authenticated Received Chain)<a class="anchor" aria-hidden="true" hidden href="#arc-authenticated-received-chain">#</a></h3>
+<p>ARC risolve il problema DMARC nel forwarding. Quando il tuo server riceve un'email e vuole inoltrarla, aggiunge tre headers:</p>
+<ol>
+<li>
+<p><strong>ARC-Authentication-Results</strong>: "quando ho ricevuto questa email, ecco cosa è passato"</p>
+<pre><code>ARC-Authentication-Results: i=1; safe.eu;
+  dkim=pass header.d=company.com;
+  spf=pass smtp.mailfrom=alice@company.com
+</code></pre>
+</li>
+<li>
+<p><strong>ARC-Message-Signature</strong>: firma il contenuto del messaggio</p>
+<pre><code>ARC-Message-Signature: i=1; d=safe.eu; s=selector; ...
+</code></pre>
+</li>
+<li>
+<p><strong>ARC-Seal</strong>: firma l'intera catena ARC per impedire manomissioni</p>
+<pre><code>ARC-Seal: i=1; d=safe.eu; s=selector; cv=none; ...
+</code></pre>
+</li>
+</ol>
+<p>Il campo <code>i=</code> è un contatore incrementale: se l'email passa per più forwarder, ognuno aggiunge il proprio set di headers ARC con <code>i</code> incrementato.</p>
+<p>Gmail e i principali provider <strong>si fidano della catena ARC</strong> da forwarder affidabili. Anche se DKIM e SPF originali falliscono, vedono: "il server safe.eu ha verificato l'autenticazione quando ha ricevuto il messaggio, e noi ci fidiamo di safe.eu" → email accettata.</p>
+<h3 id="riepilogo-soluzioni-forwarding">Riepilogo soluzioni forwarding<a class="anchor" aria-hidden="true" hidden href="#riepilogo-soluzioni-forwarding">#</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Approccio</th><th>SPF</th><th>DKIM</th><th>DMARC</th><th>Complessità</th></tr></thead><tbody><tr><td>Lambda rewrite</td><td>✅ (nuovo From)</td><td>✅ (nuovo DKIM)</td><td>✅</td><td>Bassa</td></tr><tr><td>SRS + preserva DKIM</td><td>✅ (SRS)</td><td>✅ (originale)</td><td>✅</td><td>Media</td></tr><tr><td>SRS + ARC</td><td>✅ (SRS)</td><td>Può rompersi</td><td>✅ (ARC)</td><td>Alta</td></tr></tbody></table>
+<p>Il primo perde l'identità del mittente originale. Gli altri due la preservano ma richiedono un MTA reale (Postfix, OpenSMTPD) invece di una Lambda.</p>
+<h2 id="architettura-pratica-con-aws-ses">Architettura pratica con AWS SES<a class="anchor" aria-hidden="true" hidden href="#architettura-pratica-con-aws-ses">#</a></h2>
+<p>Un'architettura serverless per email su dominio custom:</p>
+<pre><code>                    ┌──────────────┐
+   Email in ──MX──→ │   AWS SES    │
+                    │  (receiving) │
+                    └──────┬───────┘
+                           │
+                    ┌──────▼───────┐     ┌──────────────┐
+                    │   S3 Bucket  │────→│    Lambda     │──→ Gmail (forward)
+                    │  (storage)   │     │  (forwarder)  │
+                    └──────────────┘     └──────────────┘
+
+                    ┌──────────────┐
+   Email out ◄───── │   AWS SES    │ ◄── Bot/Gmail "Send as"
+                    │  (sending)   │     (via SMTP credentials)
+                    └──────────────┘
+</code></pre>
+<p>Componenti:</p>
+<ul>
+<li><strong>SES receiving</strong>: riceve email (MX punta a SES)</li>
+<li><strong>S3</strong>: archivia le email raw per elaborazione bot</li>
+<li><strong>Lambda</strong>: inoltra le email a caselle esistenti (Gmail, etc.)</li>
+<li><strong>SES sending</strong>: il bot e Gmail "Send as" inviano tramite SMTP</li>
+<li><strong>IAM</strong>: credenziali SMTP per-indirizzo, revocabili indipendentemente</li>
+</ul>
+<p>Costo stimato: ~<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0.10/</span><span class="mord mathnormal">m</span><span class="mord mathnormal">ese</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mord mathnormal">u</span><span class="mord mathnormal">so</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mord mathnormal">so</span><span class="mord mathnormal">na</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span>0.10/1000 email, Lambda nel free tier).</p>
+<h2 id="sicurezza-e-considerazioni-operative">Sicurezza e considerazioni operative<a class="anchor" aria-hidden="true" hidden href="#sicurezza-e-considerazioni-operative">#</a></h2>
+<h3 id="ses-sandbox">SES Sandbox<a class="anchor" aria-hidden="true" hidden href="#ses-sandbox">#</a></h3>
+<p>SES parte in modalità sandbox: puoi inviare solo a indirizzi verificati. Per inviare a chiunque, devi richiedere l'accesso alla produzione tramite la console AWS.</p>
+<h3 id="separazione-delle-credenziali">Separazione delle credenziali<a class="anchor" aria-hidden="true" hidden href="#separazione-delle-credenziali">#</a></h3>
+<p>Ogni indirizzo sender dovrebbe avere credenziali SMTP dedicate (IAM user separato), così:</p>
+<ul>
+<li>Se una credenziale viene compromessa, si revoca solo quella</li>
+<li>Ogni IAM user ha una policy che permette di inviare solo dal proprio indirizzo</li>
+<li>Il principio del <strong>minimo privilegio</strong> viene rispettato</li>
+</ul>
+<h3 id="forward-mapping-e-privacy">Forward mapping e privacy<a class="anchor" aria-hidden="true" hidden href="#forward-mapping-e-privacy">#</a></h3>
+<p>Il mapping tra indirizzi pubblici (<code>hello@safe.eu</code>) e indirizzi privati (<code>tuo@gmail.com</code>) è informazione sensibile:</p>
+<ul>
+<li>Rivela il <strong>collegamento tra identità</strong> (dominio professionale → casella personale)</li>
+<li>Permette di <strong>bypassare filtri</strong> sul dominio inviando direttamente alla casella reale</li>
+<li>Può essere usato per <strong>enumerazione</strong> (quali indirizzi sono reali)</li>
+</ul>
+<p>Questo mapping non dovrebbe mai essere committato in un repository, nemmeno privato (i repo possono diventare pubblici, essere accessibili da CI, collaboratori, etc.).</p>]]></content:encoded>
+    </item>
     <item>
       <title>The Industrial Organization</title>
       <link>https://flecart.github.io/notes/the-industrial-organization/</link>
@@ -4408,321 +4649,6 @@ injury or normal cell turnover.</p>
 </blockquote>
 <h4 id="schwann-cells">Schwann Cells<a class="anchor" aria-hidden="true" hidden href="#schwann-cells">#</a></h4>
 <p>Schwann cells are the principal myelinating glial cells in the peripheral nervous system (PNS). Unlike oligodendrocytes, each Schwann cell wraps around a <strong>single axon segment</strong>, forming the myelin sheath necessary for rapid signal transmission. Beyond myelination, Schwann cells support axonal regeneration following injury, a capability that is notably limited in the CNS. They achieve this by releasing growth factors, clearing myelin debris, and guiding regenerating axons toward their targets. Due to their regenerative potential, Schwann cells are being investigated for therapeutic applications in spinal cord injuries and peripheral nerve repair.</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Birdsong and Song System</title>
-      <link>https://flecart.github.io/notes/birdsong-and-song-system/</link>
-      <pubDate>Sun, 24 Aug 2025 00:00:00 GMT</pubDate>
-      <guid>https://flecart.github.io/notes/birdsong-and-song-system/</guid>
-      <description>How are inputs made into motion? We analyze feedback systems in auditory systems in birds. Motivation # Birds are very good at producing and reproducing songs by moving their vocal cords complexly (sensory motor learning). We want to learn how they learn and then extrapolate on h</description>
-      <content:encoded><![CDATA[<p>How are inputs made into motion? We analyze feedback systems in auditory systems in birds.</p>
-<h3 id="motivation">Motivation<a class="anchor" aria-hidden="true" hidden href="#motivation">#</a></h3>
-<p>Birds are very good at producing and reproducing songs by moving their vocal cords complexly (sensory motor learning). We want to learn how they learn and then extrapolate on human or other kinds of speech learning.
-Birds and Humans do not have much of a common ancestry (last one was fishes).
-71% of the birds, both female and male birds sing, for Zebra finch it is a mating behaviour, so only male sing.</p>
-<h4 id="parallelism-between-humans-and-birds">Parallelism between humans and Birds<a class="anchor" aria-hidden="true" hidden href="#parallelism-between-humans-and-birds">#</a></h4>
-<p>If a baby does not receive any parent speech in some critical period, then it is not able to learn anymore.
-![[Birdsong and Song System-20250814132145209.webp| See <a href="http://kbsewall.weebly.com/why-songbirds.html">here</a>]]</p>
-<blockquote>
-<p>Humans and monkeys have common ancestors. Assuming live emerged only once on earth,
-all living beings have common ancestors. A <strong>phylogenetic</strong> tree or evolutionary tree is a
-branching diagram showing the evolutionary relationships among various biological species
-or other entities—their <strong>phylogeny</strong> —based upon similarities and differences in their
-physical or genetic characteristics. Only humans are believed to have cumulative culture. A
-prerequisite of cumulative culture seems to be the ability to imitate actions.
-Vocal learning is an example of action imitation. Both songbirds and mammals have the
-ability of vocal learning, but their common ancestor (reptiles) did not seem to have this
-ability. A <strong>homoplasy</strong> is a character shared by a set of species but not present in their
-common ancestor. A good example is the evolution of the eye which has originated
-independently in many different species.
-In evolutionary biology, <strong>convergent evolution</strong> is the process whereby organisms not
-closely related (not monophyletic), independently evolve similar traits as a result of having
-to adapt to similar environments or ecological niches.</p>
-</blockquote>
-<h3 id="zebra-finches">Zebra  Finches<a class="anchor" aria-hidden="true" hidden href="#zebra-finches">#</a></h3>
-<h4 id="zebra-finchs-song">Zebra Finch's Song<a class="anchor" aria-hidden="true" hidden href="#zebra-finchs-song">#</a></h4>
-<p>Both Zebra Finch and humans cannot learn to sing or speak anymore if in the critical period you don't have a tutor, or somebody that speaks to you.
-Birds sing naturally (other neuroscientists using mices, they need to train them to do something specific), and learns from the environment.
-Scientists have analyzed the development of Zebra Finch singing as they aged using its spectogram, and have seen after some months it has become quite similar to the Tutor's song. Only male birds learn to sing for mating reasons.</p>
-<ul>
-<li>Introductory note</li>
-<li>Motif (repeated in the same way over and over again)
-<ul>
-<li>It has some syllables with gaps in between.</li>
-</ul>
-</li>
-</ul>
-<h4 id="learning-to-sing">Learning to Sing<a class="anchor" aria-hidden="true" hidden href="#learning-to-sing">#</a></h4>
-<p>During a first <strong>sensory learning</strong> phase, they store a memory (template) of tutor song, and during a subsequent <strong>sensorimotor</strong> learning phase they practice their own songs to arrive at a good copy of the template.</p>
-<p>The following is a summary of the main idea of singing for Zebra Finches.</p>
-<ol>
-<li><strong>Sensory acquisition:</strong> Young bird hears tutor song → encodes auditory features.</li>
-<li><strong>Template formation:</strong> Neural circuits in <strong>auditory forebrain (e.g., NCM, HVC)</strong> store a representation.</li>
-<li><strong>Motor practice:</strong> Bird produces its own song via <strong>motor pathway (HVC → RA → nXIIts → syrinx)</strong>.</li>
-<li><strong>Error detection:</strong> Auditory feedback compares self-generated song with the template.</li>
-<li><strong>Adjustment:</strong> Synaptic plasticity updates motor commands to reduce mismatch.</li>
-</ol>
-<h4 id="singing-patterns">Singing Patterns<a class="anchor" aria-hidden="true" hidden href="#singing-patterns">#</a></h4>
-<p><strong>Subsong</strong>:</p>
-<ul>
-<li>Like <strong>babbling in human babies</strong>.</li>
-<li>The bird makes <strong>lots of random sounds</strong> and different note sequences.</li>
-<li>Nothing is organized yet, it has a very high variability during this stage.</li>
-</ul>
-<p><strong>Plastic Song (practice)</strong></p>
-<ul>
-<li>The bird <strong>hears itself and compares to the tutor song</strong> (that has been memorized with sensory acquisition).</li>
-<li>It starts <strong>adjusting notes and sequences</strong>, making them more consistent.</li>
-<li>Still not perfect: some variability remains.</li>
-</ul>
-<p><strong>Crystallized song (adult)</strong></p>
-<ul>
-<li>By adulthood, the song becomes <strong>stable and stereotyped</strong>.</li>
-<li>Each note and sequence is <strong>reproducible every time</strong>.</li>
-<li>This final song is usually a <strong>good copy of the tutor song</strong>.</li>
-<li>Once crystallized, <strong>the song doesn’t change anymore</strong>.</li>
-</ul>
-<h4 id="zebra-finchs-necessary-conditions">Zebra Finch's necessary conditions<a class="anchor" aria-hidden="true" hidden href="#zebra-finchs-necessary-conditions">#</a></h4>
-<p>If a bird doesn't have a tutor in the first part of their life they don't learn to sing properly (not stereotyped, and produce also different kinds of songs), they also need <strong>auditory feedback</strong> (if they cannot hear feedback, they cannot learn properly, e.g. if you make them deaf).
-This is sort of true also for humans, this is called <strong>critical period of vocal learning</strong>.
-Offsprings of isolated tutors are able to relearn after 3-4 generations the Zebra Finch stereotyped song.
-So there is some <strong>innate</strong> direction where they prefer to sing, but they cannot learn it if they don't have good parenting.</p>
-<ul>
-<li><strong>Isolated birds</strong> They learn to sing, but often they have some not stereotyped parts or odd syllables.</li>
-<li><strong>Deafened</strong>: they produce odd syllables that are very different compared to the template</li>
-</ul>
-<h3 id="song-learning-theory">Song Learning Theory<a class="anchor" aria-hidden="true" hidden href="#song-learning-theory">#</a></h3>
-<h4 id="types-of-errors">Types of errors<a class="anchor" aria-hidden="true" hidden href="#types-of-errors">#</a></h4>
-<p><strong>Syntax errors:</strong> meaning the structure of the sentence in their language is wrong, for example ABC instead of ACB.
-<strong>Pitch Errors</strong>: they sing using different pitch</p>
-<h4 id="serial-tutoring-paradigm">Serial Tutoring Paradigm<a class="anchor" aria-hidden="true" hidden href="#serial-tutoring-paradigm">#</a></h4>
-<p>How can you elaborate a measure of vocal performance error, with respect for its semantics? For example if a baby is trying to say water, but says baba, how can you define such a measure? This measure should also work for birds. See <a href="https://www.nature.com/articles/s41467-017-01436-0">(Lipkind et al. 2017)</a>.</p>
-<p>This is where Serial Tutoring comes into place.
-Birds learn to do it in steps (as they need to learn both transitions source to target and target to source):
-For example first learn AAA, then ABABAB.
-They learn each syllable independently before being able to switch.</p>
-<h4 id="learning-singing-patterns">Learning singing patterns<a class="anchor" aria-hidden="true" hidden href="#learning-singing-patterns">#</a></h4>
-<p><img src="/images/notes/Birdsong and Song System-20250327150309146.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250327150309146">
-In nature, we can find animals that learn in steps and then compose these steps to express their final behavior.</p>
-<p>In the image, you see a species of bird (Zebra Finch) that sings in regular patterns.<br>
-Suppose that initially, it knows how to sing in the pattern ABCABC, and you want to teach it ACBACB.<br>
-What happens is that it first learns to sing AC, then CB, and once it can perform BA, it is able to learn to sing ACBACB.</p>
-<p>The above is very similar in human infants.
-It is possible to do something very similar also in humans. Infants first start to say syllables, and then couple them together. Duplications <strong>decrease in time.</strong>, and variations are integrated in the child time.</p>
-<h4 id="songbirds-do-not-bifurcate">Songbirds do not Bifurcate<a class="anchor" aria-hidden="true" hidden href="#songbirds-do-not-bifurcate">#</a></h4>
-<p>If they have a pitch error, they chose to commit to only one pitch, and forget about the other.e
-<img src="/images/notes/Birdsong and Song System-20250823195222821.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250823195222821"></p>
-<p>They solve this by learning to sing a song for one syllable pitch and a call for the other. When they fork, they choose the syllable that is closer to their change.</p>
-<p>When they need to correct both pitch errors and sequence errors, they first fix the pitch and then fix the sequence.</p>
-<ul>
-<li><strong>Calls</strong> = simple, innate, general communication</li>
-<li><strong>Songs</strong> = complex, learned, reproductive communication</li>
-</ul>
-<h4 id="what-can-they-learn">What can they learn<a class="anchor" aria-hidden="true" hidden href="#what-can-they-learn">#</a></h4>
-<blockquote>
-<p>Juveniles match each syllable to the most spectrally similar sound in the target, regardless of its temporal position, resulting in unnecessary sequence errors, that they later try to correct <a href="https://www.nature.com/articles/s41467-017-01436-0">(Lipkind et al. 2017)</a></p>
-</blockquote>
-<p>They can learn <strong>sequence errors</strong>.
-They can also learn to correct <strong>pitch errors</strong>.
-They do not <em>refurcate syllables</em> (cannot learn b+ or b- but only one, but can add it into the song, they add the other into the call).</p>
-<p>This is a Quadratic assignment problem, which is NP-hard (how they learn first, pitch or sequence error?).
-If you teach a sequence error and pitch error, the bird will:</p>
-<ul>
-<li>first learn to change pitch match</li>
-<li>Then change the position of the syllable.</li>
-<li>Pitch assignment is greedy (they choose the version that is closer)
-<ul>
-<li>Every syllable greedily goes to the closest solution.</li>
-</ul>
-</li>
-</ul>
-<p><strong>Greedy vocabulary learning problem =</strong> making error corrections <strong>one syllable at a time</strong> without planning for later syllables can lead to <strong>suboptimal final sequences</strong>.</p>
-<h4 id="adult-birdsong-learning">Adult Birdsong Learning<a class="anchor" aria-hidden="true" hidden href="#adult-birdsong-learning">#</a></h4>
-<p> Song can be <strong>operantly conditioned</strong> by delivering auditory white noise (WN) bursts contingent on pitch of a targeted syllable.
- <img src="/images/notes/Birdsong and Song System-20250815123113176.webp" width="600" class="center" alt="Birdsong and Song System-20250815123113176"></p>
-<ul>
-<li>They try to compensate the <strong>error</strong> also in adults (they can learn to change it) (little headphones on birds, there is a cute image with birds on headphones).
-<ul>
-<li>They are actually able to change the song with that, they usually do avoidance feedback.</li>
-</ul>
-</li>
-<li>You can make them learn using trial and error (using small annoying sounds if they are too low for example). (you can make them further and further away from the correct pitch)
-<ul>
-<li>Also learn for visual feedback, but it is a different direction, they seem to like the light to be off, difference between deaf and hearing birds (these ones do not like the light to be off).</li>
-</ul>
-</li>
-</ul>
-<p>Maintakeaway:</p>
-<ul>
-<li>They take very little time to change the pitch.</li>
-<li>They take very little time to learn the same song again after the noise is removed.</li>
-<li>See next section, the same feedback can be given in a visual format.</li>
-</ul>
-<h4 id="visual-feedback">Visual feedback<a class="anchor" aria-hidden="true" hidden href="#visual-feedback">#</a></h4>
-<p>The question now is if birds can learn from visual feedback:
-Visual feedback by briefly switching off the light in the sound-isolation chamber of the singing bird whenever the pitch of a targeted syllable was below (or above) a threshold.
-This was enough of a change to make them change the pitch of the syllables.</p>
-<h3 id="brain-structures-in-song-learning">Brain structures in song learning<a class="anchor" aria-hidden="true" hidden href="#brain-structures-in-song-learning">#</a></h3>
-<p>In this section we study the neural level of song learning in Zebra finches.</p>
-<p>HVC (High Vocal Center). DLM, medial portion of the dorsolateral thalamic nucleus; LMAN, lateral magnocellular nucleus of the anterior nidopallium; nXIIts, tracheosyringeal portion of the twelfth nerve; RA, robust nucleus of the arcopallium; Uva, nucleus uvaeformis; VTA/SNc; ventral tegmental area/substantial nigra pars compacta.</p>
-<h4 id="song-pathways">Song Pathways<a class="anchor" aria-hidden="true" hidden href="#song-pathways">#</a></h4>
-<p>Two pathways</p>
-<ul>
-<li><strong>Anterior forebrain pathways</strong></li>
-<li>And <strong>motor pathways</strong></li>
-</ul>
-<p>Using systems we studied in <a href="/notes/the-neuron/">The Neuron</a> (glass with thing). Some neurons spike at some specific points in time.
-<img src="/images/notes/Birdsong and Song System-20250328151813932.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250328151813932"></p>
-<p>The motor pathway is necessary for song production and the anterior forebrain pathway (AFP) is necessary for song learning.
-Both of these pathways are important.</p>
-<p>The AFP is a cortical-basal ganglia loop that consists of LMAN, basal ganglia homologue Area X, and the pallido-recipient thalamic nucleus DLM.</p>
-<p>Note that RA, HVC, and LMAN are in the <strong>avian pallium</strong>, which is evolutionarily and developmentally related to mammalian cortex.</p>
-<h4 id="birds-thalamus-dlm">Bird's Thalamus: DLM<a class="anchor" aria-hidden="true" hidden href="#birds-thalamus-dlm">#</a></h4>
-<ul>
-<li>
-<p><strong>Where it sits:</strong> It’s the thalamic relay nucleus within the bird song system, part of the <strong>anterior forebrain pathway (AFP)</strong>, which is the basal ganglia–thalamocortical loop specialized for song learning.</p>
-</li>
-<li>
-<p><strong>Inputs:</strong></p>
-<ul>
-<li>Gets inhibitory input from <strong>Area X</strong> (bird basal ganglia, analogous to striatum + pallidum).</li>
-</ul>
-</li>
-<li>
-<p><strong>Outputs:</strong></p>
-<ul>
-<li>Projects excitatory output to <strong>LMAN</strong> (lateral magnocellular nucleus of the anterior nidopallium), which is like premotor cortex.</li>
-</ul>
-</li>
-<li>
-<p><strong>What it does functionally:</strong></p>
-<ul>
-<li>Relays basal ganglia–processed signals back to cortex (LMAN).</li>
-<li>Maintains and transmits variability in song output (important for trial-and-error exploration during learning).</li>
-<li>Provides the thalamic link that allows reinforcement signals (dopamine-driven) to influence motor exploration.</li>
-</ul>
-</li>
-</ul>
-<p>In short, this is the zone that produces the signal to the cortex (LMAN) for learning.</p>
-<h4 id="role-of-hvcra-neurons">Role of HVC(RA) neurons<a class="anchor" aria-hidden="true" hidden href="#role-of-hvcra-neurons">#</a></h4>
-<p>HVC neurons can be antidromically identified by electrical stimulation in RA and area X. c, Example RA-projecting HVC neurons and putative interneurons that could be activated from RA but not from area X. Stimulation in RA, triggered by spontaneous spikes, results in spike collision for RA-projecting neurons but not for interneurons.</p>
-<p>This allowed to discover the following:</p>
-<ul>
-<li>HVC(RA) neurons burst reliably at a single precise time in the song or call
-<ul>
-<li>This is not the same as for the RA neurons they are projecting to.</li>
-</ul>
-</li>
-<li>HVC interneurons spike or burst densely throughout these vocalizations.</li>
-</ul>
-<p> Song learning is then simply the process of modulating the effective connectivity from sparsely active HVC neurons to downstream motor neurons such that, at each moment, the correct motor output is produced: RA serves as a switchboard on which HVC(RA) neurons are wired up to the correct motor output.</p>
-<h4 id="song-production-of-ra-neurons">Song production of RA neurons<a class="anchor" aria-hidden="true" hidden href="#song-production-of-ra-neurons">#</a></h4>
-<p>Birds have more neurons per weight (about 2.2 times per unit weight).
-They recorded neural firing signals during song production, they see some kinds of clustering (in young birds it is quite random, while for adult birds they get more structured, and stereotyped).
-The following images are from a section called <strong>RA neurons</strong>.
-They have some properties:</p>
-<ul>
-<li>They are sparse in activation, very precise in for the specific syllable that the bird is producing now.</li>
-</ul>
-<p><img src="/images/notes/Birdsong and Song System-20250327153454452.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250327153454452"></p>
-<h4 id="hvc-and-ra-for-learning">HVC and RA for learning<a class="anchor" aria-hidden="true" hidden href="#hvc-and-ra-for-learning">#</a></h4>
-<p>HVC neurons spike only once (tells you when to play the note), while RA multiple times in a sequence (Tells you the note).
-If you remove HVC they <strong>cannot sing anymore</strong>, the subsong is the same, but plastic song is different and also the adult song is different.</p>
-<p><img src="/images/notes/Birdsong and Song System-20250823220746464.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250823220746464"></p>
-<p>the pattern of activity in RA, and thus the vocal output, is determined by the <strong>pattern</strong> of HVC(RA) -to-RA synapses; in this view, vocal learning is controlled by synaptic plasticity at these synapses. Song learning is then simply the process of modulating the effective connectivity from sparsely active HVC neurons to downstream motor neurons such that, at each moment, the correct motor output is produced: RA serves as a switchboard on which HVC(RA) neurons are wired up to the correct motor output.</p>
-<blockquote>
-<p>Song-aligned firing patterns in RA neurons change gradually during learning. As the song becomes less variable and more similar to the tutor, the firing patterns in RA become <em>more reproducible</em>, sparse, and <strong>bursty</strong>.</p>
-</blockquote>
-<h4 id="hvc-during-lesions">HVC during Lesions<a class="anchor" aria-hidden="true" hidden href="#hvc-during-lesions">#</a></h4>
-<p></p><figure class="center">
-<img src="/images/notes/Birdsong and Song System-20250815125703525.webp" style="width: 100%" alt="Birdsong and Song System-20250815125703525" title="Birdsong and Song System-20250815125703525">
-<figcaption><p style="text-align:center;"> Singing in the absence of HVC is highly similar to normal subsong. (A) Distributions of syllable durations for three birds of various ages (blue) and distributions for the same birds in the absence of HVC (red). (B) Average syllable duration distributions for normal subsong-producing birds (blue) and birds of different ages in the absence of HVC</p></figcaption>
-</figure><p></p>
-<p>HVC is fundamental for producing song, if you don't have it you produce songs very similar to the infants subsong.</p>
-<h4 id="antidromic-stimulation">Antidromic stimulation<a class="anchor" aria-hidden="true" hidden href="#antidromic-stimulation">#</a></h4>
-<blockquote>
-<p> <strong>Antidromic stimulation</strong> is a technique used for neuron identification in freely behaving animals. It allows to distinguish different types of projection neurons from each other and from interneurons via collision testing</p>
-</blockquote>
-<p><strong>Antidromic stimulation</strong> means you stimulate an axon at a point <strong>downstream</strong> from the cell body, and the action potential travels <em>backwards</em> (towards the soma) along the axon.<br>
-If your electrode is in HVC, and you stimulate RA, you can test whether the neuron you’re recording from in HVC actually projects to RA.</p>
-<p>To prove it’s truly the same neuron (not a polysynaptic response), you use a <strong>collision test</strong>. If you trigger an orthodromic spike just before the antidromic stimulus, the two action potentials collide in the axon and cancel. The inability to evoke an antidromic spike within the refractory period (~2 ms) confirms the recorded neuron is indeed an HVC→RA projection cell.</p>
-<h3 id="circuit-experiments">Circuit Experiments<a class="anchor" aria-hidden="true" hidden href="#circuit-experiments">#</a></h3>
-<h4 id="thermal-cooling-of-hvc">Thermal Cooling of HVC<a class="anchor" aria-hidden="true" hidden href="#thermal-cooling-of-hvc">#</a></h4>
-<p>HVC is for <strong>stereotypy</strong> and producing the songs.
-If you cool a brain area, you slow down the processes in that area.
-They observed that by cooling the HVC structure:</p>
-<ul>
-<li>The song gets longer. (<strong>slown down</strong>)</li>
-<li>Then they sing faster if you remove the cooling and you just learn with the cooling part.
-This insight has been used in human speech articulation and timing (motor area for speak -> not well comprensible, broca area -> Speak slower).</li>
-</ul>
-<h4 id="lman-injects-variability-and-bias">LMAN injects variability and bias<a class="anchor" aria-hidden="true" hidden href="#lman-injects-variability-and-bias">#</a></h4>
-<p>LMAN generates <strong>variability</strong> of the learnt songs. We can view this as the explorer node in the brain.
-They lesioned LMAN to have this observation.</p>
-<ul>
-<li>
-<p>Prevent context-dependent changes to song variability.</p>
-</li>
-<li>
-<p>If you deaf it, the song becomes degraded.</p>
-</li>
-<li>
-<p>If you lesion LMAN before deafness, the song is the same (no plasticity in learned songs).</p>
-<ul>
-<li>Juvenile birds with LMAN lesion cannot learn new songs anymore.</li>
-</ul>
-</li>
-<li>
-<p>LMAN <strong>biases output to avoid punishment</strong>: if you deactivate it, it unlearns the just learned thing.</p>
-<ul>
-<li>Something similar has been seen with tetrotoxin injected to LMAN area.</li>
-</ul>
-</li>
-</ul>
-<p>![[Birdsong and Song System-20250823222824029.webp| <strong>(A)</strong> Schematic:  Shows that when LMAN is active (gray dot), the bird’s pitch deviates from baseline toward the learned direction (up or down).  When LMAN is silenced (red dot), the pitch shifts back closer to baseline.<strong>(B)</strong> Time series:  For one bird, across training days, you see that the pitch with LMAN active moves away from baseline (as learning progresses), but when you inactivate LMAN, the pitch immediately drops back toward the baseline.<strong>(C)</strong> Scatter plot:  Across all inactivation tests, the same pattern: <strong>LMAN+ pitch</strong> is consistently shifted toward the learned direction.<strong>LMAN− pitch</strong> is closer to baseline.]]</p>
-<h4 id="area-x-lesions">Area X lesions<a class="anchor" aria-hidden="true" hidden href="#area-x-lesions">#</a></h4>
-<p>If you lesion <strong>Area X</strong>, even adult birds cannot learn anymore (aversive behaviour we have seen with light for example), as we see in <a href="/notes/conditioning-theory/">Conditioning Theory</a>, we need dopamine neurons to integrate feedback from the environment.
-But the song <strong>variability</strong> that LMAN injects is still present.</p>
-<h4 id="lmans-variability-is-for-plasticity">LMAN's variability is for plasticity<a class="anchor" aria-hidden="true" hidden href="#lmans-variability-is-for-plasticity">#</a></h4>
-<p> the AFP has been shown to actively inject variability into the motor pathway; LMAN lesions slightly reduce trial-by-trial variability of diverse spectral features even in adult birds.
- They also showed it has variable firing rates to RA zone.</p>
-<p><img src="/images/notes/Birdsong and Song System-20250825090345374.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250825090345374"></p>
-<h4 id="dopamine-in-zebra-finches">Dopamine in Zebra Finches<a class="anchor" aria-hidden="true" hidden href="#dopamine-in-zebra-finches">#</a></h4>
-<p>Dopamine encodes the <strong>quality of sillables</strong> in some songbirds. This is as expected after studying <a href="/notes/conditioning-theory/">Conditioning Theory</a>, bad quality means low VTA activations.</p>
-<p>VTA has some dopinanergic input.</p>
-<ul>
-<li>VTAx neurons reward prediction error firing (higher if it is better than expected, and lower if lower than expected).</li>
-<li>Optogenetic experiment to test the above hypothesis (experimentally manipulate the firing of some neurons.). See <a href="/notes/birdsong-and-song-system/">Birdsong and Song System</a>.
-<ul>
-<li>Basically it injects a virus and activates or disactivates to increase or decrease the firing.</li>
-<li>Exciting the area is enough for active seek of change (increase of pitch is ok).</li>
-<li>In the other case they seem to go away, which is consistent with the theory we have with</li>
-</ul>
-</li>
-<li>VTx neurons encode relative syllable quality compared to a tutor's song.</li>
-</ul>
-<p>Delayed rewards are discounted.</p>
-<h4 id="valence-reversal-caused-by-deafening">Valence reversal caused by deafening<a class="anchor" aria-hidden="true" hidden href="#valence-reversal-caused-by-deafening">#</a></h4>
-<p>Hearing birds already have sensory feedback, but deaf birds have a nice feedback, and have impact on the environment. They can manipulate the environment to get sensory feedback. This why they sorta just playing, this is why it is not punishing anymore, and it does not affect the playfulness value.
-See <a href="/notes/intrinsic-motivation-and-playfulness/">Intrinsic Motivation and Playfulness</a>, for an explanation based on <em>empowerment</em> theory.</p>
-<h4 id="vta-pathway">VTA pathway<a class="anchor" aria-hidden="true" hidden href="#vta-pathway">#</a></h4>
-<p>VTA is a <em>dopaminergic region</em> that projects to Area X, if birds hear the sound the dopamine is lower (worse vs better than expected), if it doesn't happen then it is a little higher suggesting internal rewards.</p>
-<p></p><figure class="center">
-<img src="/images/notes/Birdsong and Song System-20250823222241621.webp" style="width: 100%" alt="Birdsong and Song System-20250823222241621" title="Birdsong and Song System-20250823222241621">
-<figcaption><p style="text-align:center;"> Many dopaminergic neurons in the ventral tegmental area (VTA) project to Area X. Left: Strategy for antidromic identification of VTAx dopamine neurons. Top to bottom: spectrograms, spiking activity during undistorted and distorted trials, corresponding spike raster plots and rate histograms, and z-scored difference between undistorted and distorted rate histograms (plots aligned to target onset). Horizontal bars in histograms indicate significant deviations from baseline.</p></figcaption>
-</figure><p></p>
-<p>The motor system is attempting to predict its sensory feedbacks:
-<img src="/images/notes/Birdsong and Song System-20250328153359503.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250328153359503"></p>
-<h4 id="dopamine-neurons-encode-syllable-quality">Dopamine Neurons Encode Syllable Quality<a class="anchor" aria-hidden="true" hidden href="#dopamine-neurons-encode-syllable-quality">#</a></h4>
-<p></p><figure class="center">
-<img src="/images/notes/Birdsong and Song System-20250825130908273.webp" style="width: 100%" alt="Birdsong and Song System-20250825130908273" title="Birdsong and Song System-20250825130908273">
-<figcaption><p style="text-align:center;">Left bottom: An example syllable (inside red box) on six different days as it is refined across development. Left top: Schematic showing computation of relative distance to adult syllable (circles, juvenile syllable renditions; black square, median location of adult (day > 90) renditions; arrows, distance to adult syllable). Relative distance was calculated as the difference between the current distance to adult syllable and the mean distance of the previous 14 renditions (see Methods). Right: f, ΔF/F signals averaged across all 25 syllables and days 61−100 are plo ed similarly to e, but for each decile (10% of syllable renditions) of relative distance</p></figcaption>
-</figure><p></p>
-<h4 id="optogenetics-manipulation-of-vtax-neurons">Optogenetics Manipulation of VTAX neurons<a class="anchor" aria-hidden="true" hidden href="#optogenetics-manipulation-of-vtax-neurons">#</a></h4>
-<p>We can inhibit and excite using optogenetics (viral expression of the dopamine) to guide the quality of learning (aversive vs preference-based learning).
-<img src="/images/notes/Birdsong and Song System-20250825131108698.webp" style="width: 100%" class="center" alt="Birdsong and Song System-20250825131108698"></p>
-<h1 id="references">References<a class="anchor" aria-hidden="true" hidden href="#references">#</a></h1>
-<p id="lipkindSongbirdsWorkComputational2017">[1] Lipkind et al. <a href="https://www.nature.com/articles/s41467-017-01436-0">“Songbirds Work around Computational Complexity by Learning Song Vocabulary Independently of Sequence”</a> Nature Communications Vol. 8(1), pp. 1247 2017</p>]]></content:encoded>
     </item>
   </channel>
 </rss>

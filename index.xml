@@ -11,8 +11,249 @@
     </image>
     <generator>Next.js</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 06 Jun 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://flecart.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Infrastruttura Email</title>
+      <link>https://flecart.github.io/notes/infrastruttura-email/</link>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+      <guid>https://flecart.github.io/notes/infrastruttura-email/</guid>
+      <description>Infrastruttura Email # L&#39;email è uno dei protocolli più vecchi di Internet, ma la sua infrastruttura è sorprendentemente complessa. Questa nota copre tutti i componenti necessari per gestire un dominio email, dalla ricezione all&#39;invio, dall&#39;autenticazione alla sicurezza. Protocol</description>
+      <content:encoded><![CDATA[<h1 id="infrastruttura-email">Infrastruttura Email<a class="anchor" aria-hidden="true" hidden href="#infrastruttura-email">#</a></h1>
+<p>L'email è uno dei protocolli più vecchi di Internet, ma la sua infrastruttura è sorprendentemente complessa. Questa nota copre tutti i componenti necessari per gestire un dominio email, dalla ricezione all'invio, dall'autenticazione alla sicurezza.</p>
+<h2 id="protocolli-fondamentali">Protocolli fondamentali<a class="anchor" aria-hidden="true" hidden href="#protocolli-fondamentali">#</a></h2>
+<h3 id="smtp-simple-mail-transfer-protocol">SMTP (Simple Mail Transfer Protocol)<a class="anchor" aria-hidden="true" hidden href="#smtp-simple-mail-transfer-protocol">#</a></h3>
+<p>SMTP è il protocollo usato per <strong>inviare</strong> email tra server. Opera sulla porta 25 (server-to-server), 587 (submission con STARTTLS) o 465 (submission con TLS implicito).</p>
+<p>Il flusso è:</p>
+<ol>
+<li>Il client si connette al server SMTP</li>
+<li>Si identifica con <code>HELO</code>/<code>EHLO</code></li>
+<li>Specifica il mittente (<code>MAIL FROM:</code>) e il destinatario (<code>RCPT TO:</code>)</li>
+<li>Invia il corpo del messaggio (<code>DATA</code>)</li>
+</ol>
+<p>Importante: SMTP distingue tra <strong>envelope</strong> (busta) e <strong>headers</strong> (intestazioni). L'envelope è quello che i server usano per il routing, gli headers sono quello che l'utente vede nel client email. Possono essere diversi, e questa distinzione è fondamentale per capire SPF e il forwarding.</p>
+<h3 id="imap-e-pop3">IMAP e POP3<a class="anchor" aria-hidden="true" hidden href="#imap-e-pop3">#</a></h3>
+<p>Sono i protocolli per <strong>ricevere/leggere</strong> email da una casella:</p>
+<ul>
+<li><strong>IMAP</strong> (porta 993): mantiene le email sul server, sincronizzazione multi-dispositivo</li>
+<li><strong>POP3</strong> (porta 995): scarica le email localmente, tipicamente le rimuove dal server</li>
+</ul>
+<p>In un'infrastruttura basata su forwarding (come SES → Gmail), questi protocolli non servono perché non c'è una casella locale — le email vengono inoltrate direttamente.</p>
+<h2 id="record-dns-per-lemail">Record DNS per l'email<a class="anchor" aria-hidden="true" hidden href="#record-dns-per-lemail">#</a></h2>
+<p>Il DNS è il fondamento di tutta l'infrastruttura email. Senza i record corretti, le email non arrivano e quelle inviate finiscono nello spam.</p>
+<h3 id="mx-mail-exchange">MX (Mail Exchange)<a class="anchor" aria-hidden="true" hidden href="#mx-mail-exchange">#</a></h3>
+<p>Il record MX dice al mondo <strong>quale server riceve le email</strong> per il tuo dominio.</p>
+<pre><code>safe.eu.    MX    10 inbound-smtp.eu-west-1.amazonaws.com
+</code></pre>
+<p>Il numero 10 è la <strong>priorità</strong> (più basso = più prioritario). Si possono avere più record MX per ridondanza:</p>
+<pre><code>safe.eu.    MX    10 server-primario.example.com
+safe.eu.    MX    20 server-backup.example.com
+</code></pre>
+<p>Quando qualcuno invia un'email a <code>hello@safe.eu</code>, il suo server:</p>
+<ol>
+<li>Fa una query DNS per i record MX di <code>safe.eu</code></li>
+<li>Si connette al server con priorità più alta</li>
+<li>Consegna l'email via SMTP</li>
+</ol>
+<h3 id="custom-mail-from">Custom MAIL FROM<a class="anchor" aria-hidden="true" hidden href="#custom-mail-from">#</a></h3>
+<p>Il MAIL FROM domain (anche detto "envelope sender domain" o "return-path domain") è il dominio usato nell'envelope SMTP. Di default, servizi come SES usano il proprio dominio (e.g. <code>amazonses.com</code>), ma configurare un custom MAIL FROM come <code>mail.safe.eu</code> migliora la deliverability perché SPF viene verificato contro il tuo dominio.</p>
+<p>Richiede due record aggiuntivi:</p>
+<pre><code>mail.safe.eu.    MX     10 feedback-smtp.eu-west-1.amazonses.com
+mail.safe.eu.    TXT    "v=spf1 include:amazonses.com ~all"
+</code></pre>
+<h2 id="autenticazione-email">Autenticazione Email<a class="anchor" aria-hidden="true" hidden href="#autenticazione-email">#</a></h2>
+<p>Questi tre meccanismi lavorano insieme per prevenire lo spoofing e garantire che le email siano legittime. Sono correlati ai principi di <a href="/notes/sicurezza-delle-reti/">Sicurezza delle reti</a> — in particolare <strong>autenticazione</strong> e <strong>integrità</strong>.</p>
+<h3 id="spf-sender-policy-framework">SPF (Sender Policy Framework)<a class="anchor" aria-hidden="true" hidden href="#spf-sender-policy-framework">#</a></h3>
+<p>SPF è un record TXT nel DNS che elenca <strong>quali server sono autorizzati a inviare email</strong> per conto del tuo dominio.</p>
+<pre><code>safe.eu.    TXT    "v=spf1 include:amazonses.com ~all"
+</code></pre>
+<p>Questo dice: "solo i server di Amazon SES possono inviare come @safe.eu". Quando un server riceve un'email da <code>@safe.eu</code>, controlla:</p>
+<ol>
+<li>Da quale IP è arrivata l'email</li>
+<li>Se quell'IP è nell'elenco SPF di <code>safe.eu</code></li>
+<li>Se non lo è, l'email è sospetta</li>
+</ol>
+<p>I qualificatori:</p>
+<ul>
+<li><code>~all</code> (softfail): le email non autorizzate vengono marcate ma non rifiutate</li>
+<li><code>-all</code> (hardfail): le email non autorizzate vengono rifiutate</li>
+<li><code>?all</code> (neutral): nessuna policy</li>
+</ul>
+<p>SPF controlla il dominio dell'<strong>envelope-from</strong> (Return-Path), NON l'header From che l'utente vede. Questa distinzione è cruciale per capire i problemi del forwarding.</p>
+<h3 id="dkim-domainkeys-identified-mail">DKIM (DomainKeys Identified Mail)<a class="anchor" aria-hidden="true" hidden href="#dkim-domainkeys-identified-mail">#</a></h3>
+<p>DKIM fornisce una <strong>firma crittografica</strong> su ogni email inviata. Funziona come una firma digitale classica (vedi <a href="/notes/sicurezza-delle-reti/">Sicurezza delle reti</a>):</p>
+<ol>
+<li>Il server mittente ha una <strong>chiave privata</strong></li>
+<li>La <strong>chiave pubblica</strong> viene pubblicata nel DNS come record CNAME:</li>
+</ol>
+<pre><code>abc123._domainkey.safe.eu.    CNAME    abc123.dkim.amazonses.com
+</code></pre>
+<ol start="3">
+<li>Ogni email inviata include un header <code>DKIM-Signature</code> con l'hash firmato di headers e corpo</li>
+<li>Il server ricevente recupera la chiave pubblica dal DNS e verifica la firma</li>
+</ol>
+<p>Se la firma è valida, il server sa che:</p>
+<ul>
+<li>L'email proviene realmente da quel dominio (autenticazione)</li>
+<li>Il contenuto non è stato modificato in transito (integrità)</li>
+</ul>
+<p>SES genera 3 coppie di chiavi DKIM (rotazione), quindi servono 3 record CNAME.</p>
+<h3 id="dmarc-domain-based-message-authentication-reporting-conformance">DMARC (Domain-based Message Authentication, Reporting &#x26; Conformance)<a class="anchor" aria-hidden="true" hidden href="#dmarc-domain-based-message-authentication-reporting-conformance">#</a></h3>
+<p>DMARC è la <strong>policy</strong> che dice ai server riceventi cosa fare quando SPF e DKIM falliscono. È il livello decisionale sopra SPF e DKIM.</p>
+<pre><code>_dmarc.safe.eu.    TXT    "v=DMARC1; p=quarantine; rua=mailto:dmarc@safe.eu"
+</code></pre>
+<p>Componenti:</p>
+<ul>
+<li><code>p=none</code>: non fare nulla, solo report (monitoring)</li>
+<li><code>p=quarantine</code>: metti in spam</li>
+<li><code>p=reject</code>: rifiuta completamente l'email</li>
+<li><code>rua=mailto:...</code>: indirizzo dove ricevere i report aggregati sulle email che falliscono i controlli</li>
+</ul>
+<p>DMARC richiede che <strong>almeno uno</strong> tra SPF o DKIM passi E sia <strong>allineato</strong> con il dominio nell'header From. "Allineato" significa che il dominio verificato da SPF/DKIM corrisponde al dominio nel From.</p>
+<h3 id="come-lavorano-insieme">Come lavorano insieme<a class="anchor" aria-hidden="true" hidden href="#come-lavorano-insieme">#</a></h3>
+<pre><code>Email da alice@company.com → server safe.eu → Gmail
+
+Gmail controlla:
+1. SPF: l'IP del server è autorizzato per il dominio nel Return-Path? 
+2. DKIM: la firma è valida e corrisponde al dominio?
+3. DMARC: almeno uno è passato E allineato? Se no → applica la policy
+</code></pre>
+<h2 id="il-problema-del-forwarding">Il problema del forwarding<a class="anchor" aria-hidden="true" hidden href="#il-problema-del-forwarding">#</a></h2>
+<p>Il forwarding email è sorprendentemente problematico per l'autenticazione. Quando <code>hello@safe.eu</code> viene inoltrato a <code>tuo@gmail.com</code>:</p>
+<h3 id="cosa-si-rompe">Cosa si rompe<a class="anchor" aria-hidden="true" hidden href="#cosa-si-rompe">#</a></h3>
+<ol>
+<li>
+<p><strong>SPF fallisce</strong>: l'email originale da <code>alice@company.com</code> arriva al tuo server. Il tuo server la inoltra a Gmail. Gmail vede che l'IP del tuo server NON è autorizzato a inviare per <code>company.com</code> → SPF fail.</p>
+</li>
+<li>
+<p><strong>DKIM può rompersi</strong>: se il forwarder modifica qualsiasi header o il corpo (anche solo aggiungendo un footer), la firma DKIM originale diventa invalida.</p>
+</li>
+<li>
+<p><strong>DMARC fallisce</strong>: se sia SPF che DKIM falliscono, DMARC applica la policy del dominio mittente. Se <code>company.com</code> ha <code>p=reject</code>, l'email viene rifiutata.</p>
+</li>
+</ol>
+<h3 id="approccio-semplice-lambda-rewrite">Approccio semplice (Lambda rewrite)<a class="anchor" aria-hidden="true" hidden href="#approccio-semplice-lambda-rewrite">#</a></h3>
+<p>Il metodo più semplice è riscrivere completamente gli headers:</p>
+<ul>
+<li>Cambiare <code>From:</code> a <code>noreply@safe.eu</code></li>
+<li>Aggiungere <code>Reply-To:</code> con il mittente originale</li>
+<li>Rimuovere <code>DKIM-Signature</code> originale</li>
+<li>Firmare con il proprio DKIM</li>
+</ul>
+<p>Funziona ma perde l'identità del mittente originale, e le email appaiono come "via safe.eu".</p>
+<h3 id="srs-sender-rewriting-scheme">SRS (Sender Rewriting Scheme)<a class="anchor" aria-hidden="true" hidden href="#srs-sender-rewriting-scheme">#</a></h3>
+<p>SRS risolve il problema SPF nel forwarding. Riscrive solo l'<strong>envelope-from</strong> (il Return-Path), non gli headers visibili.</p>
+<p>Trasformazione:</p>
+<pre><code>Envelope-from originale: alice@company.com
+Dopo SRS:               SRS0=hash=timestamp=company.com=alice@safe.eu
+</code></pre>
+<p>Ora quando Gmail controlla SPF, lo controlla contro <code>safe.eu</code> (il tuo dominio) → passa. L'header <code>From:</code> visibile resta <code>alice@company.com</code>.</p>
+<p>Se l'email rimbalza (bounce), il bounce va al tuo server. Il tuo server decodifica l'indirizzo SRS e inoltra il bounce al mittente originale.</p>
+<p>SRS è uno standard de facto per il forwarding trasparente, usato da servizi come Fastmail, Migadu, e molti server Postfix.</p>
+<h3 id="arc-authenticated-received-chain">ARC (Authenticated Received Chain)<a class="anchor" aria-hidden="true" hidden href="#arc-authenticated-received-chain">#</a></h3>
+<p>ARC risolve il problema DMARC nel forwarding. Quando il tuo server riceve un'email e vuole inoltrarla, aggiunge tre headers:</p>
+<ol>
+<li>
+<p><strong>ARC-Authentication-Results</strong>: "quando ho ricevuto questa email, ecco cosa è passato"</p>
+<pre><code>ARC-Authentication-Results: i=1; safe.eu;
+  dkim=pass header.d=company.com;
+  spf=pass smtp.mailfrom=alice@company.com
+</code></pre>
+</li>
+<li>
+<p><strong>ARC-Message-Signature</strong>: firma il contenuto del messaggio</p>
+<pre><code>ARC-Message-Signature: i=1; d=safe.eu; s=selector; ...
+</code></pre>
+</li>
+<li>
+<p><strong>ARC-Seal</strong>: firma l'intera catena ARC per impedire manomissioni</p>
+<pre><code>ARC-Seal: i=1; d=safe.eu; s=selector; cv=none; ...
+</code></pre>
+</li>
+</ol>
+<p>Il campo <code>i=</code> è un contatore incrementale: se l'email passa per più forwarder, ognuno aggiunge il proprio set di headers ARC con <code>i</code> incrementato.</p>
+<p>Gmail e i principali provider <strong>si fidano della catena ARC</strong> da forwarder affidabili. Anche se DKIM e SPF originali falliscono, vedono: "il server safe.eu ha verificato l'autenticazione quando ha ricevuto il messaggio, e noi ci fidiamo di safe.eu" → email accettata.</p>
+<h3 id="riepilogo-soluzioni-forwarding">Riepilogo soluzioni forwarding<a class="anchor" aria-hidden="true" hidden href="#riepilogo-soluzioni-forwarding">#</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Approccio</th><th>SPF</th><th>DKIM</th><th>DMARC</th><th>Complessità</th></tr></thead><tbody><tr><td>Lambda rewrite</td><td>✅ (nuovo From)</td><td>✅ (nuovo DKIM)</td><td>✅</td><td>Bassa</td></tr><tr><td>SRS + preserva DKIM</td><td>✅ (SRS)</td><td>✅ (originale)</td><td>✅</td><td>Media</td></tr><tr><td>SRS + ARC</td><td>✅ (SRS)</td><td>Può rompersi</td><td>✅ (ARC)</td><td>Alta</td></tr></tbody></table>
+<p>Il primo perde l'identità del mittente originale. Gli altri due la preservano ma richiedono un MTA reale (Postfix, OpenSMTPD) invece di una Lambda.</p>
+<h2 id="architettura-pratica-con-aws-ses">Architettura pratica con AWS SES<a class="anchor" aria-hidden="true" hidden href="#architettura-pratica-con-aws-ses">#</a></h2>
+<p>Un'architettura serverless per email su dominio custom:</p>
+<pre><code>                    ┌──────────────┐
+   Email in ──MX──→ │   AWS SES    │
+                    │  (receiving) │
+                    └──────┬───────┘
+                           │
+                    ┌──────▼───────┐     ┌──────────────┐
+                    │   S3 Bucket  │────→│    Lambda     │──→ Gmail (forward)
+                    │  (storage)   │     │  (forwarder)  │
+                    └──────────────┘     └──────────────┘
+
+                    ┌──────────────┐
+   Email out ◄───── │   AWS SES    │ ◄── Bot/Gmail "Send as"
+                    │  (sending)   │     (via SMTP credentials)
+                    └──────────────┘
+</code></pre>
+<p>Componenti:</p>
+<ul>
+<li><strong>SES receiving</strong>: riceve email (MX punta a SES)</li>
+<li><strong>S3</strong>: archivia le email raw per elaborazione bot</li>
+<li><strong>Lambda</strong>: inoltra le email a caselle esistenti (Gmail, etc.)</li>
+<li><strong>SES sending</strong>: il bot e Gmail "Send as" inviano tramite SMTP</li>
+<li><strong>IAM</strong>: credenziali SMTP per-indirizzo, revocabili indipendentemente</li>
+</ul>
+<p>Costo stimato: ~<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0.10/</span><span class="mord mathnormal">m</span><span class="mord mathnormal">ese</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mord mathnormal">u</span><span class="mord mathnormal">so</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mord mathnormal">so</span><span class="mord mathnormal">na</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span>0.10/1000 email, Lambda nel free tier).</p>
+<h2 id="sicurezza-e-considerazioni-operative">Sicurezza e considerazioni operative<a class="anchor" aria-hidden="true" hidden href="#sicurezza-e-considerazioni-operative">#</a></h2>
+<h3 id="ses-sandbox">SES Sandbox<a class="anchor" aria-hidden="true" hidden href="#ses-sandbox">#</a></h3>
+<p>SES parte in modalità sandbox: puoi inviare solo a indirizzi verificati. Per inviare a chiunque, devi richiedere l'accesso alla produzione tramite la console AWS.</p>
+<h3 id="separazione-delle-credenziali">Separazione delle credenziali<a class="anchor" aria-hidden="true" hidden href="#separazione-delle-credenziali">#</a></h3>
+<p>Ogni indirizzo sender dovrebbe avere credenziali SMTP dedicate (IAM user separato), così:</p>
+<ul>
+<li>Se una credenziale viene compromessa, si revoca solo quella</li>
+<li>Ogni IAM user ha una policy che permette di inviare solo dal proprio indirizzo</li>
+<li>Il principio del <strong>minimo privilegio</strong> viene rispettato</li>
+</ul>
+<h3 id="forward-mapping-e-privacy">Forward mapping e privacy<a class="anchor" aria-hidden="true" hidden href="#forward-mapping-e-privacy">#</a></h3>
+<p>Il mapping tra indirizzi pubblici (<code>hello@safe.eu</code>) e indirizzi privati (<code>tuo@gmail.com</code>) è informazione sensibile:</p>
+<ul>
+<li>Rivela il <strong>collegamento tra identità</strong> (dominio professionale → casella personale)</li>
+<li>Permette di <strong>bypassare filtri</strong> sul dominio inviando direttamente alla casella reale</li>
+<li>Può essere usato per <strong>enumerazione</strong> (quali indirizzi sono reali)</li>
+</ul>
+<p>Questo mapping non dovrebbe mai essere committato in un repository, nemmeno privato (i repo possono diventare pubblici, essere accessibili da CI, collaboratori, etc.).</p>]]></content:encoded>
+    </item>
     <item>
       <title>What Is Punishment for an AI Agent</title>
       <link>https://flecart.github.io/posts/2026-06-06-what-is-punishment-for-an-ai-agent/</link>
@@ -3537,102 +3778,6 @@ The important part is Left inferior prefrontal cortex.
 This means that the memory system is still complex and we don't have understood clearly how this part comes into play.</p>
 <h1 id="references">References<a class="anchor" aria-hidden="true" hidden href="#references">#</a></h1>
 <p id="kandelPrinciplesNeuralScience2013">[1] Kandel <a href="https://www.google.ch/books/edition/Principles_of_Neural_Science_Fifth_Editi/s64z-LdAIsEC?hl=en&#x26;gbpv=0&#x26;bsq=Principles%20of%20Neural%20Science">“Principles of Neural Science, Fifth Edition”</a> McGraw Hill Professional 2013</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Synapses</title>
-      <link>https://flecart.github.io/notes/synapses/</link>
-      <pubDate>Tue, 26 Aug 2025 00:00:00 GMT</pubDate>
-      <guid>https://flecart.github.io/notes/synapses/</guid>
-      <description>Synapses are the connections that exist between one neuron and another, so we can think of them as the communication channel between neurons. Gap Junctions # Electrical based # These are also called Gap Junctions These are more direct connections between neurons, allowing excitat</description>
-      <content:encoded><![CDATA[<p>Synapses are the connections that exist between one neuron and another, so we can think of them as the <strong>communication channel</strong> between neurons.</p>
-<h3 id="gap-junctions">Gap Junctions<a class="anchor" aria-hidden="true" hidden href="#gap-junctions">#</a></h3>
-<h4 id="electrical-based">Electrical based<a class="anchor" aria-hidden="true" hidden href="#electrical-based">#</a></h4>
-<p>These are also called <strong>Gap Junctions</strong>
-<img src="/images/notes/The Neuron-1704441720132.jpeg" style="width: 100%" class="center" alt="The Neuron-1704441720132"><br>
-These are more direct connections between neurons, allowing excitation ions to pass through quite directly (this is the difference compared to chemically based ones). It’s a circuit more similar to an electronic one because it’s <strong>faster</strong>. The end of the presynapsic part is called axon <strong>bouton</strong>, or <strong>axon terminal</strong>.
-Another characteristic of these kinds of synapses is that they are <strong>two-way</strong> channels.</p>
-<p>They are usually necessary for <strong>fast processes</strong>, such as when we want neurons to fire together, like in <em>arc reflexes</em>.</p>
-<p>Electron-myscroscopy has a definition of 10nm, so it's quite a challenge to see these gap Junctions of about 3.5nm, between each other..</p>
-<p>We have <strong>almost instantaneous</strong> spike transmission, between the neurons (almost synchronized activity).
-We can interpret this as if it is <em>passive propagation</em>.</p>
-<h4 id="speed-of-transmission">Speed of transmission<a class="anchor" aria-hidden="true" hidden href="#speed-of-transmission">#</a></h4>
-<p>We can observe that most of the action potentials are transmitted to the other, so they are <strong>heavily paired</strong>.</p>
-<p><img src="/images/notes/Synapses-20250224102907797.webp" style="width: 100%" class="center" alt="Synapses-20250224102907797"></p>
-<h3 id="neurotrasmitters">Neurotrasmitters<a class="anchor" aria-hidden="true" hidden href="#neurotrasmitters">#</a></h3>
-<h4 id="what-is-neurotransmitter">What is Neurotransmitter?<a class="anchor" aria-hidden="true" hidden href="#what-is-neurotransmitter">#</a></h4>
-<p>They have four key properties.</p>
-<ul>
-<li>
-<p>They are stored in synaptic <strong>vesicles</strong> at the presynaptic terminal</p>
-</li>
-<li>
-<p><strong>Released</strong> in response to calcium influx during action potentials</p>
-</li>
-<li>
-<p>Bind to specific <strong>receptors</strong> on the target cell.</p>
-</li>
-<li>
-<p>They need to be present in the synaptic clepft.</p>
-</li>
-<li>
-<p>Are rapidly removed from the synaptic cleft (either by reuptake or enzymatic breakdown)</p>
-</li>
-</ul>
-<p>Examples are glutamate, GABA.</p>
-<p>E.g. Alcohol and Cocaine are not neurotransmitters as there are no bindings to receptors, but they are called <strong>neuromodulators</strong>.</p>
-<h4 id="agonist-and-antagonist-transmitters">Agonist and Antagonist Transmitters<a class="anchor" aria-hidden="true" hidden href="#agonist-and-antagonist-transmitters">#</a></h4>
-<p>They have <strong>antagonists</strong> and <strong>agonists</strong> meaning they make receptors close or open.
-Two main transmitters are small molecules (glutamate and GABA) and peptide neurotrasmitters.
-<strong>Glutamate</strong> is excitatory because its receptors allow positive ions to enter the postsynaptic neuron, making it more positively charged and thus more likely to fire an action potential. 
-Conversely, GABA is <strong>inhibitory</strong> because its receptors allow negative chloride ions into the neuron, or cause positive ions to flow out, making the neuron more negative and less likely to fire.</p>
-<h4 id="small-molecule-transmitters">Small Molecule Transmitters<a class="anchor" aria-hidden="true" hidden href="#small-molecule-transmitters">#</a></h4>
-<p>They usually have precursors before being released. These are the classic Glutamate GABA etc...</p>
-<p>They are small and <strong>lightcore</strong> (their core is light, instead of dense as peptide transmitters).
-These are <strong>rapidly synthesized on-demand</strong> and stored in small synaptic vesicles (40-50 nm diameter) ready for immediate release.
-They are <em>light</em> 40-50nm vesicles in EM scans.</p>
-<h4 id="neuropeptide-transmitters">Neuropeptide transmitters<a class="anchor" aria-hidden="true" hidden href="#neuropeptide-transmitters">#</a></h4>
-<p><strong>Chains of amino acids</strong> (short proteins) used as chemical messengers in the nervous system.
-<strong>Made in the cell body (soma)</strong> — not locally in the axon terminal, this is the main difference compared to other neurotransmitters.
-Not “point-to-point” like glutamate or GABA → they can diffuse farther and act on a broader range of targets (“volume transmission”).
-Effects are <strong>slower, longer-lasting</strong>, and <em>modulatory</em>, and act on the entire system usually.
-They’re <strong>not taken back up by transporters</strong>, but broken down GALAMIN is one example.</p>
-<h4 id="recycling-of-neurotransmitters">Recycling of Neurotransmitters<a class="anchor" aria-hidden="true" hidden href="#recycling-of-neurotransmitters">#</a></h4>
-<p>It takes about 10-20 seconds to recycle the neurotransmitter, so it’s quite a slow process. The whole process takes about one minute
-<img src="/images/notes/Synapses-20250224110306196.webp" style="width: 100%" class="center" alt="Synapses-20250224110306196"></p>
-<p>There are many diseases that interfer with this process (for example tetrodotoxin (TTX), which blocks the release of neurotransmitters).
-They did an experiment with HRP to prove it (so you can see the recycling part).</p>
-<p>The advantage of having a recycling cycle (slower for neuropeptides) is that they give some time and spatial scale modulation.</p>
-<h3 id="neurotransmitter-based-synapses">Neurotransmitter based Synapses<a class="anchor" aria-hidden="true" hidden href="#neurotransmitter-based-synapses">#</a></h3>
-<h4 id="lowi-experiments">Löwi experiments<a class="anchor" aria-hidden="true" hidden href="#lowi-experiments">#</a></h4>
-<p>Experiment done by Loewi in 1921, where he took two frog hearts and stimulated the first one, then put the liquid in the second one, and it started to beat. It was a groundbreaking study that provided the first direct evidence for <strong>chemical</strong> neurotransmission
-Loewi's work opened the door to discovering the vast array of neurotransmitters we know today and fundamentally changed how we understand brain function, leading to his Nobel Prize in 1936.</p>
-<p>This was the first proof of the existence of chemical synapses.</p>
-<p>He was studying the heart at the time. He discovered chemical based transmission of synaptical information.
-<img src="/images/notes/Synapses-20250820191333754.webp" style="width: 100%" class="center" alt="Synapses-20250820191333754"></p>
-<h4 id="steps-of-a-synapse">Steps of a Synapse<a class="anchor" aria-hidden="true" hidden href="#steps-of-a-synapse">#</a></h4>
-<p>We open Calcium channels at the pre-synaptic neuron, and then we have the <strong>vesicles</strong> that contain the neurotransmitter.<br>
-This leads to vesicle fusion with the membrane and the release of the neurotransmitter in the synaptic cleft.</p>
-<p>Sodium is already used for depolarization (more granular). While Calcium is lower inside the cell, so it is a clear switch, another degree of freedom that is used. Calcium modifies molecular properties of proteins that lead to the <strong>fusion</strong> of the <strong>vesicle</strong>.</p>
-<p>See that transmitter molecules are recycled with endocitosis.</p>
-<p><img src="/images/notes/Synapses-20250224103001985.webp" style="width: 100%" class="center" alt="Synapses-20250224103001985"></p>
-<h4 id="chemical-based">Chemical-Based<a class="anchor" aria-hidden="true" hidden href="#chemical-based">#</a></h4>
-<p>These are slower gates, the classic ones, which we then call <strong>neurotransmitters</strong>. When there is an action potential, vesicles are released into the intra-cellular space. On the other neuron, there are receptors that pick up these neurotransmitters and activate accordingly.</p>
-<p>They are also quite slow <strong>diffusion</strong> takes about a couple of ms to reach the other side.</p>
-<p>The interesting thing about this method is that the <strong>receptor can change gates</strong> to determine how much it cares about this new information. (So, if it cares about that signal, it can increase the number of gates; otherwise, it can decrease them—at least, that’s the theory.)<br>
-When the neuro-trasmittor binds with the post-synaptic neuron, it triggers a release of ions in the other cell that change the membrane conductivity, and thus the voltage (see <a href="/notes/firing-rate-based-network-models/">Firing-rate based Network models</a>).</p>
-<p>The cerebral cortex is one of the most important parts of the brain. It consists of <strong>6 uniform layers</strong> of neurons that follow a similar pattern.</p>
-<p>Layers 1 and 4 receive input from <em>higher</em> cortical areas, layer 4 from sub-cortical areas, and layer 6 from internal structures like the thalamus.</p>
-<h4 id="correlations-with-action-potential-timing">Correlations with Action Potential Timing<a class="anchor" aria-hidden="true" hidden href="#correlations-with-action-potential-timing">#</a></h4>
-<p>Between two communicating neurons, there is a fairly evident correlation that implies an increase in the strength of the connection (<em>synaptic strength</em>) with the timing of the spikes.<br>
-We also study this in <a href="/notes/memory-in-human-brain/">Memory in Human Brain</a> for potentiation of the Schaffer collatera.
-<img src="/images/notes/The Neuron-1704442181344.jpeg" style="width: 100%" class="center" alt="The Neuron-1704442181344"><br>
-These are called <strong>Long-Term Depression</strong> and <strong>Long-Term Potentiation</strong>.</p>
-<p>EPSP stands for <strong>Excitatory Post-Synaptic Potentiation</strong>. In the image, we see that if the second neuron activates after the first neuron has activated, the signal tends to strengthen; otherwise, it weakens.</p>
-<p>The weakening makes sense because it’s like I’m giving the signal back to you (even if not necessarily connected), or the other neuron is just tired, lol. We will better explain these phenomena in the following section.</p>
-<h4 id="why-calcium">Why calcium<a class="anchor" aria-hidden="true" hidden href="#why-calcium">#</a></h4>
-<p>We have learned that calcium is very important for triggering vesicle release of neurotransmitters in the synaptic clepft.
-This is because under standard situations there is no Calcium in the axon, and this is a clear switch indicator to release transmitters. While for sodium it is difficult to have a clear shift. It is some sort of state change.
-See <a href="/notes/neural-mechanisms/">Neural mechanisms</a>.</p>]]></content:encoded>
     </item>
   </channel>
 </rss>
