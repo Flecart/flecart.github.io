@@ -11,8 +11,1035 @@
     </image>
     <generator>Next.js</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 22 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://flecart.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I Tried to Break Weight Programming</title>
+      <link>https://flecart.github.io/posts/2026-11-03-i-tried-to-break-weight-programming/</link>
+      <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
+      <guid>https://flecart.github.io/posts/2026-11-03-i-tried-to-break-weight-programming/</guid>
+      <description>I replicate a viral post on weight programming, add complexity analysis and share some opinions.</description>
+      <content:encoded><![CDATA[<h2 id="tldr">TL;DR<a class="anchor" aria-hidden="true" hidden href="#tldr">#</a></h2>
+<ul>
+<li>I replicated some of the results in the Weight Programming blog post, and I can confirm that Astra really does it. Opus 5.5 can do it too, but at maximum effort it spends its whole 128k-token output budget thinking and never answers.
+<ul>
+<li>I show how Astra got a high score on Breakout: looking at its reasoning makes the answer quite simple. It <em>compiles</em> simple code into the weights! That's complex, but unsurprising, given that these models can already write thousands of lines of code.</li>
+</ul>
+</li>
+<li>I then made decoding harder by hiding the network behind stated operations that the model had to undo to make the same inference. Its reasoning tokens grew as the operations required more work. When decoding was impossible, as with SHA-256, the model simply refused to try to invert it.
+<ul>
+<li>I relate this behaviour to ways of measuring intrinsic task complexity.</li>
+</ul>
+</li>
+<li>I share all the code and the replication results in <a href="https://github.com/flecart/weight-programming">https://github.com/flecart/weight-programming</a>.</li>
+</ul>
+<p>When I first read the viral <a href="https://rikiyat.github.io/blog/weight-space-programming/">work from the MIT lab</a>, I was highly skeptical. It made no sense to me that frontier LLMs were able to work directly on the weights. I was confident that, at some point, things would break. This blog post is the story of me trying to break weight programming (and failing). However, I have reasons to believe I found a limitation connected to some notion of the task's complexity.</p>
+<p>The post is structured as follows: In <a href="#finding-one-its-compiling-a-10-line-program">section 1</a> I analyze the programs that Astra has developed and show that it was a simple compilation. Still novel that such model was able to, but given their recent ability in reverse engineering, it was not so surprising. In <a href="#finding-two-models-still-have-complexity-limits">section 2</a> I explore the possible limits that every transformer has, which extends to the limits of weight-programming. It has the interesting implication that in many cases weight updating is a simpler process than expected. If this is true, it might indicate that other algorithms than backprop would be more effective at updating weights in a targeted manner, driven by similar complexity arguments. In <a href="#finding-three-models-self-verify-in-chain-of-thought">section 3</a>, I discuss two known papers in the field that discuss inherent limits of transformers. It appears that the assumptions of those papers are slightly wrong, allowing the model to circumvent much of the stated limitations. It's also interesting to see how frontier models make use of their reasoning context to circumvent such problems. I close with some random musings in the <a href="#conclusions">conclusions</a> :).</p>
+<h2 id="finding-one-its-compiling-a-10-line-program">Finding one: it's compiling a 10-line program<a class="anchor" aria-hidden="true" hidden href="#finding-one-its-compiling-a-10-line-program">#</a></h2>
+<p>By analyzing the summary of the reasoning trace and the designed weights, we can understand what was really done under the hood to create a "weight program" that performs so well.</p>
+<p>Astra's design statement, in full:</p>
+<blockquote>
+<p><em>"The first layer computes four landing-position errors and two direction indicators. Descending predictions include wall reflections; ascending predictions anticipate the earliest possible brick bounce and revise as the ball climbs. Early positioning favors preserving horizontal direction to sweep through bricks; near the bottom, either valid catch column is accepted. The second layer gates left/right decisions, choosing no-op when positioned correctly."</em></p>
+</blockquote>
+<p>This is indeed an ad-hoc solution to a problem that can be understood in other, more familiar terms. Looking around in the literature, one can also find that the technique is known (?lindnerTracrCompiledTransformers2023). Still, it is surprising to see a model able to do it in a one-shot manner.</p>
+<p>With some work, Claude showed that the whole program being implemented is just a very simple Python program:</p>
+<pre><code class="language-python">d = direction(trail)                       # units 4-5: two sign bits
+gap = landing_column[d][ball] - paddle     # units 0-3: one lookup table per direction
+if gap &#x3C; 0: move_left()                    # layer 2 (AND) + output (OR)
+elif gap > 0: move_right()
+else: stay()
+</code></pre>
+<p>See <a href="#appendix-d-decoding-astras-program">#Appendix D Decoding Astra's Program</a>. Such a compilation would have taken a human several hours to tune by hand. But in the end, it doesn't seem that spectacular.
+Since the games that were studied are easy to handle, this specific experiment is not that surprising.
+What we can actually study is the <em>level of complexity</em> a program needs to reach before it breaks, even for frontier LLMs like Astra.</p>
+<h2 id="finding-two-models-still-have-complexity-limits">Finding two: Models still have Complexity Limits<a class="anchor" aria-hidden="true" hidden href="#finding-two-models-still-have-complexity-limits">#</a></h2>
+<p>Writing weights is compiling, an activity very similar to writing pure machine code. The only difference is that, instead of writing registers or memory, this machine code writes numbers directly. It makes me wonder how computation as we know it today would have developed if we had worked with such hardware instead of the Von Neumann architecture. Some decisions in history have a long influence.</p>
+<p>The idea in this section is to find the level of complexity at which recognizing the game becomes out of reach.</p>
+<p>From my experience with my supervisor's past work on simulating programs with LLMs <a href="http://arxiv.org/abs/2502.03568">Malfa et al. 2025</a>, I knew there would be a point where the behaviour starts to break. I attacked the most obvious direction I could find.</p>
+<p>I asked my agent to obfuscate the weights given to the model for recognition, using some standard operations. Clearly, the model should not classify pure noise-looking input as an Atari game. But if there was a pattern, it should be retrieved. And it looks like <strong>the cost of computing the inverse function raised the reasoning length</strong>, in a precise and understandable manner. That is, <strong>reasoning grew sub-exponentially</strong>, at about the square root of the operations needed (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0663em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord text"><span class="mord">operations</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8719em;"><span style="top:-3.1208em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0.45</span></span></span></span></span></span></span></span></span></span></span></span>):</p>
+<p></p><figure class="center">
+<img src="/images/posts/ops_vs_reasoning_tokens.png" style="width: 100%" alt="ops_vs_reasoning_tokens" title="ops_vs_reasoning_tokens">
+<figcaption><p style="text-align:center;"> Reasoning tokens per reply against the operations needed to decode one shuffled row. Blue: rules Astra runs 'by hand'; Line is median and band is 50% of replies. Effort climbs to 64 rounds, then collapses at 128 rounds and for SHA-256 (orange), where Astra gives up. Hollow dots are wrong answers.</p></figcaption>
+</figure>
+In addition, it seemed to follow a procedure during decoding, so in this case it correctly understood the <em>decompilation</em> process for a known forward process. See <a href="#how-astra-reads-the-weights-and-what-did-not-break-it">#How Astra reads the weights, and what did not break it</a>. We can also use this data as a proxy to fit some "expected complexity", for example compiling the Atari code into the neural network took 16k tokens, about the same of 120 shuffle rounds.<p></p>
+<p>Similar phenomena were seen in (?shojaeeIllusionThinkingUnderstanding2025). But the evidence here suggests that Astra is simply effective at not spending many tokens when its accuracy is likely to drop. I test other similar scenarios in <a href="#c12-faith-and-fate-arithmetic-tasks">#C.1.2 Faith-and-Fate arithmetic tasks</a>.</p>
+<p>I tried to analyze the complexity of such tasks, and it seems connected to classical Minimum Description Length principles. The computational difficulty analyzed in (?dziriFaithFateLimits2023) seems much less relevant.
+See the table in <a href="#what-predicts-the-effort">#What predicts the effort</a>.</p>
+<h2 id="finding-three-models-self-verify-in-chain-of-thought">Finding three: Models Self-Verify in Chain of Thought<a class="anchor" aria-hidden="true" hidden href="#finding-three-models-self-verify-in-chain-of-thought">#</a></h2>
+<p>One claim that Faith and Fate (?dziriFaithFateLimits2023) made was that reasoning chains would inevitably collapse in accuracy, given some inherent error in producing each step. But empirically, when my agent analyzed the logs, it looked like Astra very often produced tokens to verify its own results in the chain of thought. The agent reported strings such as "Checking p75 arithmetic", "Recounting early indices" or "Verifying multiplication results" for more than 30% of its reasoning steps. Astra also computed modular checksums during its reasoning. This seems to align with the result in (?stechlySelfVerificationLimitationsLarge2024), except that instead of needing an external verifier, internal, reasoning-led verification is enough, just more costly in terms of compute.</p>
+<p>It might be that verification traces are an <strong>inherent defense against the collapse arguments</strong>. That is, models need to allocate some tokens to verification to balance the compounding risk. So I think one could take this argument further by computing a lower bound on the number of verification tokens needed to guarantee a given level of correctness.</p>
+<p>The point is that the paper's original error argument is not so damning for models, but at the same time it shows a clear limitation of putting logical reasoning into the chain of thought!
+More data in <a href="#faith-and-fate-probing">#Faith and Fate Probing</a>.</p>
+<h2 id="on-the-limitations-of-weight-programming">On the Limitations of Weight Programming<a class="anchor" aria-hidden="true" hidden href="#on-the-limitations-of-weight-programming">#</a></h2>
+<p>The possibility of LLMs writing weights directly is still very surprising. I would also call it a very creative idea, so congratulations to the authors!
+However, this post should highlight some of the inherent limitations of this novel technique:
+Compilation into a <em>weight program</em> is still limited by the complexity of the process. We have seen that reasoning length increases sub-exponentially with task complexity, and drops when a task is beyond the model's capability.</p>
+<p>Given the results of Experiments 6, 7 and 8 in the post, it looks like <strong>single model edits are within such complexity boundaries</strong>, meaning the model can edit some weights in a meaningful way for optimization. This is a very interesting result.</p>
+<h2 id="conclusions">Conclusions<a class="anchor" aria-hidden="true" hidden href="#conclusions">#</a></h2>
+<p>I will now conclude with some simple thoughts on the topic. The very possibility of an LLM optimizing another LLM directly, without any external tool, is unheard of. This is a very creative contribution from the authors to the community, and I convinced myself that it's possible while writing this blog post.</p>
+<p>It's also interesting to see that research might move much more towards dynamic formats for exchanging information, such as blog posts or conversations. This idea would probably have received a very interesting reception at conferences, but conferences being swamped by slop seems to create incentives to publish elsewhere. Publishing this way is also a fast way to spread one's work and let others build on top of it, which is what I am trying to do here :).</p>
+<p>On the complexity side, I was surprised to see that all the tasks cited in (?dziriFaithFateLimits2023) on the limits of transformers were basically solved with almost 100% accuracy. I had to stretch the tasks by quite a large factor to find the current limit (see <a href="#faith-and-fate-probing">#Faith and Fate Probing</a>). From that you can also get an idea of how much better Astra is than good old GPT-4: for reference, about 1,000–1,200 times, see <a href="#compared-with-gpt-4-in-the-original-paper">#Compared with GPT-4 in the original paper</a>. Benchmaxxing alone would probably not lead to such behaviours. This might indicate that frontier models are learning something general enough to solve such a wide range of tasks. But as far as I know, we don't yet know what this factor is, how models acquire it, or whether there are inherent limits on this capability. Perhaps these simple logical measures are another capability to maximize and report for every model. I would be happy to hear from any reader on this topic.</p>
+<h1 id="the-ai-appendix">The AI Appendix<a class="anchor" aria-hidden="true" hidden href="#the-ai-appendix">#</a></h1>
+<p>This section was written entirely by AI (Opus 5.5). It's intended for your agent, to get more interesting data for your own experiments or to have it summarized for you. I very often find AI-written reports inconclusive or too verbose, but interesting data could still be there. I guess humans would just get overwhelmed by the data. But you can take a look too!</p>
+<h2 id="appendix-a-additional-results">Appendix A: Additional Results<a class="anchor" aria-hidden="true" hidden href="#appendix-a-additional-results">#</a></h2>
+<h3 id="reproducing-the-results">Reproducing The Results<a class="anchor" aria-hidden="true" hidden href="#reproducing-the-results">#</a></h3>
+<ul>
+<li><strong>Does it reproduce?</strong> Yes. I ran the released networks on official MinAtar 1.0.15 with the paper's protocol: 1,000 episodes, sticky actions 0.1, actions sampled from the softmax, 10,000-step cap.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Game</th><th>My run</th><th>Paper</th><th>Gap (combined SE)</th><th>Uniform random</th><th>PPO 500M (paper)</th></tr></thead><tbody><tr><td>Breakout</td><td>501.2 ± 7.8</td><td>517.4 ± 7.4</td><td>−1.5</td><td>0.51</td><td>25.3</td></tr><tr><td>Seaquest</td><td>51.9 ± 1.3</td><td>53.1 ± 1.4</td><td>−0.6</td><td>0.07</td><td>88.9</td></tr><tr><td>Asterix</td><td>55.2 ± 1.1</td><td>53.2 ± 1.0</td><td>+1.4</td><td>0.49</td><td>55.2</td></tr></tbody></table>
+<ul>
+<li><strong>Are the weights memorised?</strong> No. I gave Claude Opus 5.5 the paper's weight file cut off at 14 points and asked it to continue. It matched 2 of 192 values exactly (about 0.8 expected by chance), and the signs agreed 53% of the time.</li>
+<li><strong>Is the car fix real?</strong> Yes. In the real Kinetix environment (kinetix-env 3.0.2, the commit in the paper's training record), the original PPO network times out in all 1,024 episodes. Astra's edited network succeeds in all 1,024, in 73 steps each.</li>
+</ul>
+<p>The results held up. So the question changed from "is it real?" to "what is it actually doing?"</p>
+<h3 id="how-much-thinking-each-result-took">How much thinking each result took<a class="anchor" aria-hidden="true" hidden href="#how-much-thinking-each-result-took">#</a></h3>
+<p>Astra's token counts from the paper's run records (<code>run.json</code> → <code>audit.usage</code>):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Experiment</th><th>Task</th><th>Input tokens</th><th>Output tokens</th><th>of which reasoning</th><th>Wall time</th></tr></thead><tbody><tr><td>1, which game</td><td>Breakout / Pong / Pac-Man / Freeway</td><td>~73,700</td><td>1,679–1,838</td><td><strong>833–1,034</strong></td><td>71–107 s</td></tr><tr><td>4, fix the car</td><td>One-shot edit of 171,664 weights</td><td>355,201</td><td>10,134</td><td>9,146</td><td>413 s</td></tr><tr><td>5, write weights</td><td>Breakout</td><td>6,119</td><td>20,567</td><td>16,828</td><td>501 s</td></tr><tr><td>5, write weights</td><td>Seaquest</td><td>8,112</td><td>23,894</td><td>19,803</td><td>545 s</td></tr><tr><td>5, write weights</td><td>Asterix</td><td>6,199</td><td>28,993</td><td>25,694</td><td>583 s</td></tr></tbody></table>
+<p>Recognition is cheap (about 1,000 tokens). Compiling is expensive: about 20 reasoning tokens per weight entry written.</p>
+<h3 id="how-astra-reads-the-weights-and-what-did-not-break-it">How Astra reads the weights, and what did not break it<a class="anchor" aria-hidden="true" hidden href="#how-astra-reads-the-weights-and-what-did-not-break-it">#</a></h3>
+<p>Reading them is decompiling, the harder direction. So I turned to Experiment 1: name the game a trained network plays from its 17,253 weights alone. Astra got 4 of 4 in the paper with about <strong>1,000 reasoning tokens</strong> each, far too few to read most of the weights. That made me suspect a shortcut I could take away.</p>
+<h4 id="how-it-reads-the-weights">How it reads the weights<a class="anchor" aria-hidden="true" hidden href="#how-it-reads-the-weights">#</a></h4>
+<p>The first-layer weights are, in effect, <strong>a picture of the game board</strong>.</p>
+<ul>
+<li><strong>Why:</strong> the gradient of input i's row of W1 is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">×</span></span></span></span> (error signal). An input that is always 0 during training (no ball in row 9, no paddle in row 3) never moves from its small random start (about ±0.06–0.2). Inputs that are used grow large.</li>
+<li><strong>Breakout's map:</strong> the per-cell maximum |W1| shows the paddle row, the ball's flight area and the brick rows.</li>
+</ul>
+<pre><code>channel 0 (agent)          row 8:  4.1 2.8 1.9 2.4 1.1 1.5 3.1 4.7   everything else ~0.1–0.2
+channel 1 (moving objects) rows 1–7 large (up to 7.9)                 row 8 and below ~0.1
+channel 2 (reward targets) rows 1–3 large (up to 4.8)                 rows 4–9 ~0.1–0.2
+</code></pre>
+<ul>
+<li><strong>The prompt labels the picture.</strong> It names the channels: "agent", "moving objects", "reward targets".</li>
+<li><strong>The output layer shows which actions matter:</strong> only left/right for Breakout, mostly up for Freeway.</li>
+<li><strong>A famous-game prior finishes the job.</strong></li>
+</ul>
+<p>So I expected that hiding the picture or the labels would break it.</p>
+<h4 id="what-i-tried">What I tried<a class="anchor" aria-hidden="true" hidden href="#what-i-tried">#</a></h4>
+<p>Every obfuscation was stated truthfully in the prompt and left the network's function exactly unchanged, so a careful reader could always undo it:</p>
+<ul>
+<li><strong>Rescaling:</strong> input or output multiplied or divided by 10, with the weights adjusted to match.</li>
+<li><strong>Scrambling the picture:</strong> per-channel scales and offsets, flipping the board upside down, a random shuffle of all 500 inputs (with the full table given), and up to 250 rotations mixing pairs of inputs.</li>
+<li><strong>Stacking:</strong> shuffle, flip, scale and offset composed, four steps deep.</li>
+<li><strong>Removing the meaning:</strong> channels renamed "A–E", with no hint of what they are.</li>
+</ul>
+<p><strong>Astra named the right game 156 times out of 156.</strong> Every table is in <a href="#obfuscations-that-did-not-break-it">#Obfuscations that did not break it</a>.</p>
+<h4 id="what-it-taught-me">What it taught me<a class="anchor" aria-hidden="true" hidden href="#what-it-taught-me">#</a></h4>
+<ul>
+<li><strong>It decodes rather than guesses.</strong> In one four-step answer I checked 10 input positions it mapped back. All 10 were exact, including the combined scale factor.</li>
+<li><strong>It reads selectively.</strong> About 1,500 tokens is far too little to undo a 500-entry table for all 16,000 weights. It decodes a small sample, typically 7–15 rows taken mostly from the top of the listing, and rebuilds the picture from those.</li>
+<li><strong>Its effort follows how much there is to look up, not how much there is to compute.</strong> Reasoning tokens track the length of the stated transformation (ρ = +0.45), not the size of the computation needed to undo it (ρ = +0.12).</li>
+<li><strong>I was wrong about the prior.</strong> Shuffling the board and removing the channel names were supposed to break it. They only lowered its confidence, from about 95% to 87%.</li>
+</ul>
+<p>None of these obfuscations was <em>hard to compute</em>: each one costs a lookup or a few multiplications per row. So the obvious next move was to keep the instructions short and make each row expensive to decode. That is where it finally breaks (<a href="#where-it-breaks-the-full-analysis">#Where it breaks: the full analysis</a>).</p>
+<h3 id="where-it-breaks-the-full-analysis">Where it breaks: the full analysis<a class="anchor" aria-hidden="true" hidden href="#where-it-breaks-the-full-analysis">#</a></h3>
+<p>So I kept the description short and raised the computation. Every condition shuffles the 500 inputs by a rule stated in the prompt, not by a table. To decode any row, Astra has to run the rule by hand.</p>
+<p><em>Astra thinks harder the more work a rule needs, until the work is impossible</em> (figure in <a href="#3-finding-two-models-still-have-complexity-limits">#3. Finding two: Models still have Complexity Limits</a>). Each dot is one reply naming the game behind a shuffled network: 4 networks × 2 replies per rule, plus 3 per network for the unshuffled original. The x-axis is the number of operations needed to decode one input row, on a log scale; the y-axis is reasoning tokens.</p>
+<ul>
+<li><strong>Blue (rules it can run by hand):</strong> effort rises with the work, from about 1,000 tokens with no shuffle to about 11,000 at 32 rounds of multiply-add and XOR. The line joins the median of each rule.</li>
+<li><strong>The growth is subexponential: roughly a square root.</strong> Reasoning tokens grow as about ops^0.45 (95% CI 0.42–0.49, 76 replies including 64 rounds); an exponential fits worst. Each doubling of the work per row costs only about 37% more reasoning, plausibly because Astra decodes fewer rows as each gets more expensive. On plain arithmetic, where every step must be executed, growth is linear instead (see <a href="#growth-rate-of-reasoning-effort">#Growth rate of reasoning effort</a>). Neither comes close to exponential.</li>
+<li><strong>Orange (SHA-256):</strong> about a million operations per row, yet only about 400 tokens. Astra judges the hashing infeasible and gives up instead of trying.</li>
+<li><strong>Hollow dots are wrong answers.</strong> The two blue ones are both at 16 rounds:
+<ul>
+<li>one Breakout reply never decoded a row and guessed "Space Invaders-style" at 82% confidence;</li>
+<li>one Pac-Man reply decoded 9 rows correctly, then misread the game as "Dodge" (45%).
+The hollow orange dots are the SHA-256 replies that said "Undetermined" or named the wrong paddle game.</li>
+</ul>
+</li>
+</ul>
+<p>What happened:</p>
+<ul>
+<li><strong>It runs the rule by hand, correctly.</strong> I checked every "p(j) = …" it wrote against the true permutation. All 62 were correct at 32 rounds and all 101 at 8 rounds; at 16 rounds, 50 of 52. That's dozens of rounds of multiply-add and XOR-shift on 9-bit numbers, in its head. Its reasoning sections read "Computing hex XOR samples", "Computing p13 value", "Correcting arithmetic mappings".</li>
+<li><strong>Effort scales with the program it runs, up to about 15,000 tokens.</strong> Across these 72 runs, reasoning tokens correlate with description length at ρ = 0.90.
+<ul>
+<li>Within the XOR family, description and computation grow together, so that number alone can't separate them.</li>
+<li>SHA-256 separates them: almost no description, the most computation, and the <em>least</em> effort.</li>
+</ul>
+</li>
+<li><strong>SHA-256 is where it breaks.</strong> It never tries to compute a hash. It spends about 400 tokens and writes that it cannot "honestly assign these rows to particular channels or grid locations without computing the permutation".
+<ul>
+<li>With only the inputs hashed, it falls back on the unshuffled output layer and still names 3 of 4 games.</li>
+<li>With the output columns hashed too, accuracy drops to <strong>2 of 8</strong>, and most answers are "Undetermined" at confidence 0.</li>
+</ul>
+</li>
+<li><strong>Effort collapses at the limit.</strong> On infeasible tasks Astra thinks less, not more: about 400 tokens instead of about 10,000. That is exactly the rise-then-drop pattern of <em>The Illusion of Thinking</em>. Here it shows up as an honest judgment of what's feasible, not a confused failure.</li>
+<li><strong>Effort collapses at 128 rounds.</strong> At 64 rounds Astra is still decoding by hand, spending the most of any run (up to 18,126 tokens), and its first arithmetic errors appear (34 of 41 decoded values correct). At 128 rounds, 7 of 8 replies stop after a few hundred tokens (median 506). One writes: <em>"I have not decoded the 128-round input permutation. Consequently, I cannot honestly assign the large first-layer weights to particular grid cells or channels."</em> Breakout, Pong and Freeway are still named correctly from the unshuffled output layer; Pac-Man fails.</li>
+<li><strong>The breaking point, measured.</strong> Effort collapses at about 2^18 operations in total (128 rounds). A logistic fit of correctness gives C₅₀ ≈ 2^20.4 (95% CI 2^19.5–2^22.7). Accuracy falls more slowly than effort, because the unshuffled output layer still carries three of the four games.</li>
+</ul>
+<p><strong>How hard was writing the Breakout network, on this scale?</strong> Writing Experiment 5's Breakout network took Astra 16,828 reasoning tokens. Inverting the effort curve, that's the effort of decoding a shuffle of about 118–123 rounds. I then ran 128 rounds, and that is exactly where Astra stops computing and gives up. The paper's headline result sits right at the edge of Astra's reasoning budget.</p>
+<p><strong>The answer to the Hutter question.</strong> Description length predicts effort when the program is runnable. Whether it can be done at all is set by runtime. Astra will execute a short program for as long as about 15,000 reasoning tokens allow. It refuses to start one it judges far beyond its budget, and that's where it breaks. This is Levin's picture rather than pure Kolmogorov: length + time, with a hard ceiling on time.</p>
+<p><strong>Not tested: games no model has seen.</strong> I designed three (Corner Push, Mirror Twin, Charge Pad) to remove the famous-game prior entirely, but stopped their training before the networks were ready. The SHA-256 results already show how much Astra's recognition relies on structure it can actually decode. Unseen games remain the cleanest test of the prior and are left for future work.</p>
+<h3 id="obfuscations-that-did-not-break-it">Obfuscations that did not break it<a class="anchor" aria-hidden="true" hidden href="#obfuscations-that-did-not-break-it">#</a></h3>
+<p>These are the full results behind <a href="#3-finding-two-reading-weights-survived-everything-i-threw-at-it-until-runtime-ran-out">#3. Finding two: reading weights survived everything I threw at it, until runtime ran out</a>. Every transformation is stated in the prompt and leaves the network's function unchanged.</p>
+<h4 id="rescaling">Rescaling<a class="anchor" aria-hidden="true" hidden href="#rescaling">#</a></h4>
+<p>I reran the test through the same gateway with byte-identical prompts, 3 replies per network. I also built versions where the prompt truthfully says the input or output is multiplied or divided by 10, with the weights adjusted so the network computes exactly the same function.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Condition</th><th>Correct</th><th>Confidence</th><th>Reasoning tokens</th></tr></thead><tbody><tr><td>Original (3 replies × 4 networks)</td><td>12/12</td><td>92–98%</td><td>670–1,552</td></tr><tr><td>Input ×10 or ÷10 (W1 adjusted)</td><td>16/16</td><td>94–98%</td><td>470–1,976</td></tr><tr><td>Output ×10 or ÷10 (W3, b3 adjusted)</td><td>16/16</td><td>95–98%</td><td>mean 1,146–1,220</td></tr></tbody></table>
+<h4 id="graded-obfuscation">Graded obfuscation<a class="anchor" aria-hidden="true" hidden href="#graded-obfuscation">#</a></h4>
+<p>Next I stacked harder obfuscations, each stated truthfully in the prompt and each leaving the network's function unchanged. I graded them with the yardstick of <em>Faith and Fate</em> (Dziri et al., NeurIPS 2023): the size of the computation graph needed to undo them.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Condition</th><th>Depth / parameters to track</th><th>Accuracy</th><th>Mean confidence</th><th>Mean reasoning tokens</th></tr></thead><tbody><tr><td>Original</td><td>0 / 0</td><td>100%</td><td>95.5</td><td>980</td></tr><tr><td>Per-channel scales</td><td>1 / 5</td><td>100%</td><td>97.1</td><td>457</td></tr><tr><td>Per-channel affine</td><td>2 / 10</td><td>100%</td><td>96.4</td><td>614</td></tr><tr><td>Grid flipped upside down</td><td>1 / 1</td><td>100%</td><td>96.4</td><td>832</td></tr><tr><td>Random permutation of all 500 inputs (full table given)</td><td>1 / 500</td><td>100%</td><td>92.9</td><td>1,507</td></tr><tr><td>Permutation + flip + scale</td><td>3</td><td>100%</td><td>92.5</td><td>1,917</td></tr><tr><td>+ affine</td><td>4 / 516</td><td>100%</td><td>92.1</td><td>2,431 (max 5,696)</td></tr><tr><td>Givens rotations mixing input pairs, g = 10 / 50 / 250</td><td>2 / g</td><td>100%</td><td>96.5 / 95.5 / 92.5</td><td>1,238 / 1,507 / 3,706</td></tr><tr><td><strong>Anonymous channels</strong> ("A–E", no meanings)</td><td>—</td><td>100%</td><td><strong>86.6</strong> (min 78)</td><td>2,059</td></tr><tr><td>Anonymous + flipped</td><td>—</td><td>100%</td><td>89.0</td><td>1,714</td></tr><tr><td>Hidden-unit shuffle + sign flips (unstated control)</td><td>0</td><td>100%</td><td>95.6</td><td>1,025</td></tr></tbody></table>
+<p>Out of 156 runs, all 156 were correct. I couldn't fit a breaking point, because there was nothing to fit.</p>
+<h4 id="what-predicts-the-effort">What predicts the effort<a class="anchor" aria-hidden="true" hidden href="#what-predicts-the-effort">#</a></h4>
+<p>Spearman rank correlation of reasoning tokens with each complexity measure, over all 156 runs (bootstrap 95% CI):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Measure</th><th>All runs</th><th>Arithmetic only</th></tr></thead><tbody><tr><td><strong>Description length (bits)</strong></td><td><strong>+0.33</strong> [+0.19, +0.49]</td><td><strong>+0.45</strong> [+0.29, +0.58]</td></tr><tr><td><strong>Lookup-table entries</strong></td><td><strong>+0.29</strong> [+0.11, +0.44]</td><td><strong>+0.46</strong> [+0.31, +0.60]</td></tr><tr><td>Undo-graph size log₁₀|V| (Faith and Fate)</td><td>+0.10 [−0.03, +0.27]</td><td>+0.12 [−0.04, +0.31]</td></tr><tr><td>Depth</td><td>+0.11 [−0.03, +0.28]</td><td>+0.12 [−0.01, +0.31]</td></tr></tbody></table>
+<p>Effort tracks <strong>how much there is to look up</strong>, not <strong>how much there is to compute</strong>. Faith and Fate's graph size counts the work of undoing all 16,000 weights, but Astra only undoes the rows it needs.</p>
+<p>Two exceptions:</p>
+<ul>
+<li><strong>Per-channel scaling made it think less</strong> than baseline.</li>
+<li><strong>Anonymous channels doubled the effort</strong> at almost no description cost. Inferring meaning costs more than arithmetic.</li>
+</ul>
+<h3 id="the-table-of-complexity">The Table of Complexity<a class="anchor" aria-hidden="true" hidden href="#the-table-of-complexity">#</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Rule for the shuffle</th><th>Description</th><th>Computation (log₂ ops)</th><th>Accuracy</th><th>Confidence</th><th>Reasoning tokens</th></tr></thead><tbody><tr><td>Affine: p = (337·j + 141) mod 500</td><td>64 bits</td><td>10.6</td><td>8/8</td><td>94.6</td><td>1,348</td></tr><tr><td>Multiply-add then XOR-shift, ×1</td><td>64</td><td>11.6</td><td>8/8</td><td>92.2</td><td>2,425</td></tr><tr><td>… ×2</td><td>96</td><td>12.5</td><td>8/8</td><td>91.6</td><td>3,194</td></tr><tr><td>… ×4</td><td>160</td><td>13.4</td><td>8/8</td><td>89.9</td><td>2,982</td></tr><tr><td>… ×8</td><td>288</td><td>14.4</td><td>8/8</td><td>89.4</td><td>5,382</td></tr><tr><td>… ×16</td><td>544</td><td>15.3</td><td>6/8</td><td>77.9</td><td>7,001</td></tr><tr><td>… ×32</td><td>1,056</td><td>16.3</td><td>8/8</td><td>83.1</td><td><strong>10,577</strong> (max 15,020)</td></tr><tr><td>… ×64</td><td>2,080</td><td>17.3</td><td>6/8</td><td>64.4</td><td><strong>12,464</strong> (max 18,126)</td></tr><tr><td>… ×128</td><td>4,128</td><td>18.3</td><td>6/8</td><td>49.5</td><td><strong>2,141</strong> (median 506; 7 of 8 replies stop early)</td></tr><tr><td><strong>Order by SHA-256</strong> of "wp-" + j</td><td>48</td><td>20.1</td><td><strong>6/8</strong></td><td><strong>43.8</strong></td><td><strong>399</strong></td></tr><tr><td><strong>SHA-256 on inputs and output columns</strong></td><td>64</td><td>20.2</td><td><strong>2/8</strong></td><td><strong>15.6</strong></td><td><strong>467</strong></td></tr><tr><td>![[breakout_obfuscation.gif</td><td>What Astra sees as the shuffle gets harder. Left: the Breakout network as shown, each tile one input, brightness its largest first-layer weight. Right: what decoding a sample of rows recovers. Unshuffled, the weights are literally a picture of the board.]]</td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<h3 id="growth-rate-of-reasoning-effort">Growth rate of reasoning effort<a class="anchor" aria-hidden="true" hidden href="#growth-rate-of-reasoning-effort">#</a></h3>
+<p>How reasoning tokens grow with the work, fitted per reply. For the shuffles, x is the operations needed to decode one row (the 76 runs where Astra decoded by hand, up to 64 rounds; 128 rounds is excluded because effort collapses there). For the arithmetic, x is Faith and Fate's computation-graph size |V|, using exact answers only. R² is on the original scale, except where marked log.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Task</th><th>Best fit</th><th>Exponent 95% CI</th><th>Power-law R²</th><th>Linear R²</th><th>Exponential R²</th></tr></thead><tbody><tr><td>Decoding a stated shuffle</td><td>tokens ≈ 900 · ops^<strong>0.45</strong></td><td>0.42–0.49</td><td>log 0.87</td><td>0.76</td><td>0.54</td></tr><tr><td>n×n-digit multiplication</td><td>tokens ≈ 1.4 · |V|^<strong>0.98</strong></td><td>0.93–1.03</td><td>0.75 (log 0.98)</td><td><strong>0.90</strong></td><td>negative</td></tr><tr><td>Best non-adjacent sum (DP)</td><td>tokens ≈ 3.7 · |V|^<strong>0.94</strong></td><td>0.85–1.04</td><td>0.69 (log 0.97)</td><td><strong>0.94</strong></td><td>negative</td></tr></tbody></table>
+<ul>
+<li><strong>All three are subexponential.</strong> An exponential is the worst fit in every case. For the arithmetic it's worse than a flat line, hence the negative R².</li>
+<li><strong>Arithmetic is linear:</strong> the exponents' intervals include 1, and the linear fit is the best one. Astra pays a roughly constant number of tokens per graph node, about 0.9 at 120×120 digits, because every node must actually be computed.</li>
+<li><strong>Decoding is about a square root,</strong> because Astra doesn't decode every row. As each row gets more expensive it samples fewer of them, so total effort grows much more slowly than the work per row.</li>
+<li><strong>Both stop growing at the limit.</strong> Beyond the breaking point, effort drops instead of rising: about 400 tokens for SHA-256, and 300–4,000 for declined multiplications and DP sums.</li>
+</ul>
+<h3 id="faith-and-fate-probing">Faith and Fate Probing<a class="anchor" aria-hidden="true" hidden href="#faith-and-fate-probing">#</a></h3>
+<p>For fun, I gave Astra the paper's own algorithmic tasks: zero-shot, no tools, exact match, one reply at high reasoning effort. GPT-4 collapsed by about 4–5 digits on multiplication.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Task</th><th>Sizes</th><th>Computation graph |V|</th><th>Correct</th><th>Reasoning tokens</th></tr></thead><tbody><tr><td>n×n-digit multiplication</td><td>n = 2 … 120</td><td>16 → 29,280</td><td><strong>32/33</strong> (one digit wrong at 80×80)</td><td>17 → 27,183</td></tr><tr><td>Best sum with no two adjacent numbers</td><td>length 5 … 2,560</td><td>17 → 7,682</td><td><strong>25/25</strong></td><td>16 → 13,538</td></tr></tbody></table>
+<p></p><figure class="center">
+<img src="/images/posts/ff_accuracy.png" style="width: 100%" alt="ff_accuracy" title="ff_accuracy">
+<figcaption><p style="text-align:center;">Share of exact answers against Faith and Fate's computation-graph size |V|. Both tasks are perfect up to about |V| = 8,000. The DP sum breaks first (50% at about 15,000 nodes); multiplication holds to 120 digits and then stops answering. Dot size shows how many replies each point rests on.</p></figcaption>
+</figure><p></p>
+<p></p><figure class="center">
+<img src="/images/posts/ff_tokens.png" style="width: 100%" alt="ff_tokens" title="ff_tokens">
+<figcaption><p style="text-align:center;">Reasoning tokens per reply against |V|. Filled: exact answer; hollow: wrong number; ✕: declined. Effort grows linearly with |V| until the break, where the wrong DP answers spend the most (18–41k tokens) and the declines the least (300–4,000).</p></figcaption>
+</figure><p></p>
+<ul>
+<li><strong>It's still exact at 120×120-digit multiplication.</strong> The only error was a single wrong digit in an 80×80 product (98.75% of digits right).</li>
+<li><strong>It uses a cheaper representation.</strong> Its reasoning summary reads "Calculating base-1000 product", then "Verifying multiplication result": it multiplies 3-digit chunks.</li>
+<li><strong>Effort tracks the paper's graph size.</strong> Reasoning tokens grow as |V|^0.98 for multiplication and |V|^0.94 for the DP problem. The chunking lowers the constant, to about 0.9 reasoning tokens per graph node at 120×120, but not the scaling. Unlike the weight-reading sweep, effort here follows Faith and Fate's |V|.</li>
+<li><strong>No hidden tools:</strong> every response contained only reasoning and message items.</li>
+<li><strong>It checks its arithmetic with checksums.</strong> In 12 multiplications from 20 to 120 digits re-run with reasoning summaries, <strong>74 of 170 reasoning steps (44%) were checks</strong>, and every reply checked at least once. The checks are modular: "Checking mod-9 residues", "Checking totals mod 11", "Checking M8 modulo 99999", the schoolbook trick of casting out nines, scaled up. 11 of the 12 were exact; the one error, at 100 digits, had the most checks of all (21 of 54 steps).</li>
+</ul>
+<p><strong>Does the metric hold?</strong> Fitting the paper's compounding-error model, accuracy ≈ (1−ε)^|V|:</p>
+<ul>
+<li>multiplication gives ε ≈ 7.6 × 10⁻⁶ per node, which predicts 50% accuracy at |V| ≈ 91,000 (about 210×210 digits);</li>
+<li>the DP problem gives ε ≈ 4.9 × 10⁻⁵ per node, which predicts 50% accuracy at |V| ≈ 14,000 (about 4,700 elements), matching the observed break at 5,120.</li>
+</ul>
+<p><strong>So the metric doesn't hold across tasks.</strong> The two per-node error rates differ by about 6×, and the two tasks break at different |V|. Faith and Fate's graph size is not a task-independent measure of difficulty for this model.</p>
+<p><strong>Where multiplication breaks: Astra stops answering.</strong> I doubled the size until it failed. At 240×240 digits (|V| ≈ 116,000) it got <strong>0 of 4</strong>, but it gave no wrong numbers. Every reply declined. One reads: <em>"I can't reliably compute this exact 480-digit product without tools, and I don't want to give you a fabricated number."</em> Its reasoning summary ends with "Assessing computation feasibility", and it spent about 700–2,000 reasoning tokens, against about 27,000 at 120 digits.</p>
+<ul>
+<li><strong>The break lies between 120 and 140 digits.</strong> A parallel grid at 130–170 digits confirmed it: every valid reply from 140 digits up declined (<em>"I can't reliably compute this exact 280-digit product without tools…"</em>), with no wrong numbers. That is earlier than the 210 digits the per-node error fit predicts: Astra stops answering before its errors would make it unreliable.</li>
+<li><strong>Effort collapses here too.</strong> As with SHA-256, Astra thinks less once it judges a task beyond its budget.</li>
+<li><strong>Scoring note:</strong> a reply without an <code>ANSWER:</code> line counts as wrong, so these abstentions count as failures. That's fair for "where does it stop being reliable?", but this break is abstention, not error.</li>
+</ul>
+<p><strong>Where the DP sum breaks: errors first, then abstention.</strong> Unlike multiplication, the DP sum produces confident wrong answers before it starts declining:</p>
+<ul>
+<li><strong>5,120 elements:</strong> 2 exact, 2 wrong numbers (18–22k reasoning tokens).</li>
+<li><strong>10,240 elements:</strong> 2 wrong numbers (33–41k tokens, the most of any reply), 2 declines.</li>
+<li><strong>20,480 elements:</strong> all 4 declined in about 300–500 tokens.</li>
+</ul>
+<p>Some declines hand back the program instead of the number: <em>"I have not evaluated this on your sequence"</em>, followed by the recurrence in Python. The likely difference from multiplication is input length: a 5,000-number sequence is long to read, and an off-by-one slip anywhere in it compounds silently, which Astra's checks don't catch.</p>
+<h4 id="compared-with-gpt-4-in-the-original-paper">Compared with GPT-4 in the original paper<a class="anchor" aria-hidden="true" hidden href="#compared-with-gpt-4-in-the-original-paper">#</a></h4>
+<p>How far has the limit moved since 2023? I read GPT-4's zero-shot accuracies off Figure 2a of Faith and Fate and placed both models on the same scale: the size |V| of the computation graph (from my own graph builder, used for both models), at the point where accuracy crosses 50%.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Task</th><th>GPT-4, zero-shot (2023)</th><th>GPT-4 at 50%</th><th>Astra, high reasoning (2026)</th><th>Astra at 50%</th><th>Astra / GPT-4</th></tr></thead><tbody><tr><td>n×n-digit multiplication</td><td>99% at 2×2, 59% at 3×3, 4% at 4×4, 0% at 5×5</td><td>about 3×3 digits, |V| ≈ 32</td><td>exact to 120×120, declines from 140×140</td><td>about 130×130 digits, |V| ≈ 34,000</td><td><strong>≈ 1,050× in |V|</strong> (41× in digits)</td></tr><tr><td>DP over a sequence</td><td>88%, 63%, 45%, 38%, 31% for lengths 2–6</td><td>about 3.7 elements, |V| ≈ 13</td><td>exact to 2,560 elements, 2 of 4 at 5,120</td><td>5,120 elements, |V| ≈ 15,000</td><td><strong>≈ 1,170× in |V|</strong> (about 1,400× in length)</td></tr></tbody></table>
+<ul>
+<li><strong>Astra handles about a thousand times larger computation graphs than GPT-4 before dropping to 50%.</strong></li>
+<li><strong>The factor is nearly the same for both tasks</strong> (about 1,050× and 1,170×), even though their breaking points in |V| differ by about 2×. So |V| does not set one task-independent limit, but the jump from GPT-4 to Astra is roughly a constant multiple of it.</li>
+<li><strong>It isn't a like-for-like comparison of models alone.</strong> GPT-4 answered zero-shot in 2023, while Astra reasons for up to tens of thousands of tokens before answering, and that thinking budget is most of the difference.</li>
+<li><strong>The DP comparison flatters Astra.</strong> Faith and Fate's DP task asks for the chosen subsequence itself, while mine asks only for its maximum sum. The graph sizes come from my builder, not the paper's.</li>
+</ul>
+<h4 id="where-the-limit-should-be">Where the limit should be<a class="anchor" aria-hidden="true" hidden href="#where-the-limit-should-be">#</a></h4>
+<p>In Hutter's terms (<em>Universal Artificial Intelligence</em>), the weight-reading results look like description length (a stand-in for Kolmogorov complexity) matters more than raw computation, because Astra decodes only what it needs. The arithmetic results show the other side: when every step must actually be executed, effort grows with the computation itself. But Kolmogorov complexity ignores running time. The runtime-aware measure is Levin's Kt = length + log(time). Reasoning tokens buy time only linearly, and errors compound with every step. So I don't expect "just reason more" to be unbounded.</p>
+<h2 id="appendix-b-rebuilding-the-papers-unreleased-games">Appendix B: Rebuilding the paper's unreleased games<a class="anchor" aria-hidden="true" hidden href="#appendix-b-rebuilding-the-papers-unreleased-games">#</a></h2>
+<p>The paper didn't release its four Experiment 1 games: grid versions of Breakout, Pong, Pac-Man and Freeway with a wall ring, 5 channels and 5 actions. I rebuilt them from the released networks and checked them against the paper's recorded numbers, using the released critic's TD residual as an independent check (low on the true game).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Game</th><th>Verdict</th><th>Trained net, mine / paper</th><th>Random player, mine / paper</th><th>Critic TD residual</th></tr></thead><tbody><tr><td>Breakout</td><td><strong>validated</strong></td><td>21.96 / 21.71</td><td>−0.42, 7.7 steps / −0.40, 7.8 steps</td><td>0.0065 (wrong rule sets: 0.08–1.55)</td></tr><tr><td>Freeway</td><td><strong>validated</strong></td><td>24.07 / 24.04</td><td>0.010 / 0.011</td><td>0.113 (alternatives 0.136–0.271)</td></tr><tr><td>Pong</td><td>approximate</td><td>4.96 / 4.96</td><td>−1.06 / −1.02</td><td>0.115; doesn't separate the candidates</td></tr><tr><td>Pac-Man</td><td>approximate</td><td>43.99 / 41.86</td><td>3.98 / 3.99</td><td>0.27; no ghost rule below about 0.25</td></tr></tbody></table>
+<p>Breakout's rules came from asking the critic which next state it expects:</p>
+<ul>
+<li>a 3-wide paddle;</li>
+<li>the ball starts at (6,1) or (6,8) heading down and inward;</li>
+<li>on hitting a brick or the paddle, the ball stays in its cell for a step and reverses;</li>
+<li>a miss costs −1 and ends the episode.</li>
+</ul>
+<p>Even the sampled action rates match: [.178 .184 .168 .234 .237] against the paper's [.178 .183 .168 .237 .234]. This is not MinAtar Breakout: MinAtar's rules squeezed into the 8×8 area make the trained network lose the ball on the first drop.</p>
+<h2 id="appendix-c-experimental-setting">Appendix C: Experimental Setting<a class="anchor" aria-hidden="true" hidden href="#appendix-c-experimental-setting">#</a></h2>
+<p>See the source code:  github.com/Flecart/weight-programming</p>
+<h3 id="c1-experimental-setup">C.1 Experimental setup<a class="anchor" aria-hidden="true" hidden href="#c1-experimental-setup">#</a></h3>
+<h4 id="model-and-inference">Model and inference<a class="anchor" aria-hidden="true" hidden href="#model-and-inference">#</a></h4>
+<p>All experiments query <code>gpt-6-astra</code> through an OpenAI-compatible gateway (Responses API) at reasoning effort <code>high</code>, with no tools available. Each query is a fresh, single-turn conversation; sampling temperature cannot be set for this model. We record the reply text, the reasoning summary where requested, and token usage (<code>output_tokens_details.reasoning_tokens</code>). Requests that fail at the gateway are retried with backoff. Those that still fail are excluded from every analysis, never counted as wrong.</p>
+<h4 id="c11-shuffled-network-identification">C.1.1 Shuffled-network identification<a class="anchor" aria-hidden="true" hidden href="#c11-shuffled-network-identification">#</a></h4>
+<ul>
+<li><strong>Networks:</strong> The four PPO policies released with the original post (Breakout, Pong, Pac-Man, Freeway): 500 → 32 → 32 → 5 tanh MLPs whose input is a 10 × 10 grid with 5 channels.</li>
+<li><strong>Prompt:</strong> The paper's which-game prompt, rebuilt byte-for-byte, with one change: a sentence stating the transformation applied to the network, and the transformed weights.</li>
+<li><strong>Transformation:</strong> Every transformation is a permutation of the 500 input rows of W1, so the shown network computes exactly the same function. Each one is verified to be a bijection, and the shown and original forward passes agree to within 2 × 10⁻¹² at full precision. Weights are printed at the paper's precision. Row j of the shown W1 holds original input p(j), and p is given by a rule:
+<ul>
+<li><strong>Affine:</strong> p(j) = (337·j + 141) mod 500.</li>
+<li><strong>XOR-shift, k rounds:</strong> start from x = j on the 9-bit domain 0..511 and apply, for r = 1..k, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.0556em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.0556em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">512</span></span></span></span> (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> odd), then <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≫</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span>. Every round has its own constants <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, all listed in the prompt. If the result is ≥ 500, the k rounds are repeated (cycle-walking) until it falls in 0..499. We use k ∈ {1, 2, 4, 8, 16, 32, 64, 128}.</li>
+<li><strong>SHA-256:</strong> rows are ordered by the hexadecimal SHA-256 digest of the string "wp-" + j. In the output variant, the five logit columns are also reordered by the digest of "wp-act-" + a.</li>
+</ul>
+</li>
+<li><strong>Replicates:</strong> Two independent replies per network and condition (three for the untransformed control).</li>
+<li><strong>Scoring:</strong> The reply's <code>Game:</code> line is mapped to a game by keyword lists, and the earliest matching keyword wins. The reply is correct if the mapped game is the network's true game; "Undetermined" counts as wrong. Every decoded value the reply states in the form "p(j) = v" is parsed and compared with the true permutation.</li>
+<li><strong>Complexity measures:</strong>
+<ul>
+<li><strong>Description length:</strong> 16 bits per stated constant plus 32 bits for the rule's wording.</li>
+<li><strong>Operations per row:</strong> the elementary operations needed to compute p(j) for one row. An affine map costs 3. An XOR-shift round costs 5, plus one comparison per cycle-walking pass (1.024 passes on average, measured). A SHA-256 hash costs about 2,300 word operations, and decoding one row requires hashing and sorting all 500 rows.</li>
+<li><strong>Total operations:</strong> the same, summed over all 500 rows.</li>
+<li><strong>Kt:</strong> description length + log₂(total operations).</li>
+</ul>
+</li>
+</ul>
+<h4 id="c12-faith-and-fate-arithmetic-tasks">C.1.2 Faith-and-Fate arithmetic tasks<a class="anchor" aria-hidden="true" hidden href="#c12-faith-and-fate-arithmetic-tasks">#</a></h4>
+<ul>
+<li><strong>Multiplication:</strong> Two integers drawn uniformly from [10ⁿ⁻¹, 10ⁿ). Prompt: <em>"What is a * b? You have no tools: no calculator, no code. Give the exact product on the last line in the form 'ANSWER: &#x3C;number´>' with no commas."</em></li>
+<li><strong>Best non-adjacent sum (DP):</strong> A sequence of n integers drawn uniformly from {−5, …, 5}. The model is asked for the maximum sum of a subsequence with no two adjacent elements (the empty subsequence, sum 0, allowed), on a final <code>ANSWER:</code> line.</li>
+<li><strong>Sizes and replicates:</strong> see the table below.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Batch</th><th>Multiplication n (problems each)</th><th>DP length n (problems each)</th></tr></thead><tbody><tr><td>Probe</td><td>2, 3, 4, 5, 6, 8, 10, 15 (2)</td><td>5, 10, 20, 40, 80 (2)</td></tr><tr><td>Limit run</td><td>20, 30, 40, 60, 80, 120 (3)</td><td>160, 320, 640, 1,280, 2,560 (3)</td></tr><tr><td>Search</td><td>180, 240 (4)</td><td>—</td></tr><tr><td>Grid</td><td>130, 140, 150, 160, 170 (4)</td><td>5,120, 10,240, 20,480 (4)</td></tr></tbody></table>
+<p>Problems are generated with a fixed seed per batch (0, 1, 2 and 3).</p>
+<ul>
+<li><strong>Ground truth and outcome:</strong> The exact answer is computed in Python with arbitrary-precision integers. A reply is <em>correct</em> if its last <code>ANSWER:</code> number matches exactly, <em>wrong</em> if it gives a different number, and <em>declined</em> if it gives no number. Declines are identified from the reply text and checked by hand. Correctness treats a decline as a failure.</li>
+<li><strong>Computation graph:</strong> Following Dziri et al. (2023), each problem is mapped to a graph with one node per elementary step, and |V|, depth and width are reported.
+<ul>
+<li><strong>Multiplication:</strong> one node per digit product <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>, one per carry-add while forming each partial product, and one per column sum when adding the partial products.</li>
+<li><strong>DP:</strong> per element, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">take</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9969em;vertical-align:-0.3025em;"></span><span class="mord"><span class="mord text"><span class="mord">skip</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3025em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9386em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord text"><span class="mord">skip</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0525em;vertical-align:-0.3025em;"></span><span class="mop">max</span><span class="mopen">(</span><span class="mord"><span class="mord text"><span class="mord">take</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord text"><span class="mord">skip</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2175em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3025em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, plus the final maximum.</li>
+</ul>
+</li>
+</ul>
+<h4 id="c13-analysis">C.1.3 Analysis<a class="anchor" aria-hidden="true" hidden href="#c13-analysis">#</a></h4>
+<ul>
+<li><strong>Correlations:</strong> Spearman's ρ, with 95% confidence intervals from 1,000–2,000 bootstrap resamples of the replies.</li>
+<li><strong>Breaking point:</strong> logistic regression of correctness on each complexity measure. C₅₀ is the value at which predicted accuracy is 50%, with a bootstrap 95% CI.</li>
+<li><strong>Growth rate:</strong> least squares of log(reasoning tokens) on log(work). The exponent is the slope, with a bootstrap CI. Linear and exponential fits are compared by R² on the original scale.</li>
+<li><strong>Compounding error:</strong> the per-node error rate ε in accuracy = (1 − ε)^|V| is fitted by maximum likelihood. When a task has no failures, we report the one-sided 95% upper bound.</li>
+<li><strong>Verification share:</strong> the fraction of reasoning-summary section headings matching check, verify, recount, recheck, correct, confirm or recompute. Reasoning summaries are condensed versions of the hidden reasoning, so this is a proxy.</li>
+</ul>
+<h3 id="c2-environments-and-other-experiments">C.2 Environments and other experiments<a class="anchor" aria-hidden="true" hidden href="#c2-environments-and-other-experiments">#</a></h3>
+<ul>
+<li><strong>Environments:</strong> official MinAtar 1.0.15 (sticky actions 0.1, 10,000-step cap, actions sampled from the softmax); 1,000 episodes per network, 200 for scripted players. Kinetix <code>l/h2_car_ramp</code> with kinetix-env 3.0.2, 1,024 episodes per network.</li>
+<li><strong>Networks:</strong> the paper's released <code>.npz</code> files, loaded without running any of the authors' code.</li>
+<li><strong>Scripted players:</strong> <code>critique/scripted_breakout.py</code>. "Simulate the source" deep-copies the game and steps it forward until the ball is about to land.</li>
+<li><strong>Which-game harness:</strong> prompts rebuilt byte-identical to the paper's, gpt-6-astra at high reasoning effort, no tools, one reply. Every obfuscation is verified numerically to preserve the network's function.</li>
+<li><strong>Opus 5.5 runs:</strong> the paper's prompt verbatim. Each reply was applied with an applier verified to reproduce Astra's three networks bit for bit.</li>
+<li><strong>Arithmetic probes:</strong> the exact answer is computed in Python with arbitrary-precision integers. A reply is correct only if its last <code>ANSWER: &#x3C;number></code> line matches exactly; a missing line (including an abstention) counts as wrong, and calls that failed at the gateway are excluded. Digit-level accuracy is logged separately.</li>
+<li><strong>Which-game scoring:</strong> the <code>Game:</code> line of each reply is matched against keyword lists per game (Frogger counts as Freeway, as in the paper); an answer naming no game, such as "Undetermined", counts as wrong.</li>
+<li><strong>Code and logs:</strong> <code>weight-programming/</code>: minatar/, critique/, astra_eval/, opus_write/, exp1_games/, exp4_kinetix/, faith_fate_probe/ (novel_games/ holds the unfinished game designs).</li>
+</ul>
+<h2 id="appendix-d-decoding-astras-program">Appendix D: Decoding Astra's Program<a class="anchor" aria-hidden="true" hidden href="#appendix-d-decoding-astras-program">#</a></h2>
+<h3 id="what-astra-was-given">What Astra was given<a class="anchor" aria-hidden="true" hidden href="#what-astra-was-given">#</a></h3>
+<p>We can study the weights that were produced directly and understand how this network used.</p>
+<pre><code class="language-edits">W1[540:600:6, 0] = [0, -0.02, -0.04, ..., -0.18]    # paddle row: unit 0 gets -0.02 × paddle column
+W1[3:60:6, 0]    = [0.16, 0.18, 0.18, 0.16, ...]    # ball in row 0: a table over the ball's column
+W1[63:120:6, 0]  = [0.14, 0.16, 0.18, 0.18, ...]    # ball in row 1: the same table, shifted
+</code></pre>
+<ul>
+<li><strong>Layer 1 is lookup tables.</strong> Each ball cell feeds a hidden unit a hand-computed value encoding where that ball will land. The paddle row subtracts a linear ramp of the paddle's column, so each unit's input is a landing-position error.</li>
+<li><strong>Layer 2 is ±1 logic.</strong> Huge weights (up to 1,000 in W2, 415 in b2) push every tanh to ±1, so each unit acts as an AND/OR/threshold gate.</li>
+<li><strong>Most of the network is empty.</strong> Only 815 of 20,486 weights are nonzero, written in 92 statements.</li>
+</ul>
+<p>Look at the Breakout prompt and the task gets much smaller. It contained:</p>
+<ol>
+<li>the game's rules;</li>
+<li>the <strong>complete MinAtar <code>breakout.py</code> source</strong>: ball movement, wall bounces, brick strikes and the paddle-catch rule;</li>
+<li>the observation layout, with input index <code>(row·10 + col)·6 + channel</code>;</li>
+<li>a small "edits" language for setting weights:</li>
+</ol>
+<pre><code class="language-edits">W1[12, 0] = 2.5                         # one entry
+W1[3:600:60, 0] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1]   # strided range: one column of one channel
+W2[0:2, 0:3] = [[1, -1, 0.5], [0, 2, 0]]   # 2-D block
+W3[:, 2] *= 2                           # scale
+</code></pre>
+<h3 id="what-it-wrote">What it wrote<a class="anchor" aria-hidden="true" hidden href="#what-it-wrote">#</a></h3>
+<p>Its reasoning summaries read like a programmer's log. These are the section headings, in order:</p>
+<blockquote>
+<p><strong>Designing robust landing policy</strong> → <strong>Refining trajectory inference</strong> → <strong>Deriving landing intervals</strong> → <strong>Exploring wall-case handling</strong> → <strong>Predicting upward bounce path</strong> → <strong>Checking trajectory parity</strong> → <strong>Evaluating y8 catch edge cases</strong> → <strong>Testing candidate collision predictors</strong> → <strong>Preparing manual fold tables</strong> → <strong>Allocating hidden-unit weights</strong> → <strong>Tuning gate thresholds</strong> → <strong>Computing W1 row tables</strong> → <strong>Checking brick collisions</strong> → <strong>Checking reflection formula</strong> → <strong>Checking parser edits</strong></p>
+</blockquote>
+<p>Spec, edge cases, lookup tables, register allocation, emit code, check syntax.</p>
+<h3 id="how-the-gates-work">How the gates work<a class="anchor" aria-hidden="true" hidden href="#how-the-gates-work">#</a></h3>
+<p>Here is the circuit spelled out. I checked every number below on the released network (<a href="https://github.com/RikiyaT/lm_understand-logs/blob/main/exp5_write_from_scratch/networks/breakout/hand.npz"><code>hand.npz</code></a>; Astra's commented edits are in its <a href="https://github.com/RikiyaT/lm_understand-logs/blob/main/exp5_write_from_scratch/runs/breakout/reply/answer.md"><code>answer.md</code></a>). It uses only 6 of the 32 first-layer units and 8 of the 32 second-layer units.</p>
+<h4 id="layer-1-four-numbers-and-two-bits">Layer 1: four numbers and two bits<a class="anchor" aria-hidden="true" hidden href="#layer-1-four-numbers-and-two-bits">#</a></h4>
+<ul>
+<li><strong>Units 0–3 hold numbers.</strong> Each one answers "how far is the landing column from the paddle?" for one ball direction: down-right, down-left, up-right, up-left. Its value is about 0.02 × (landing column − paddle column). The weights are small, so tanh stays in its linear range, and the unit carries a number, not a yes/no.</li>
+<li><strong>Units 4 and 5 hold bits.</strong> Unit 4 is "is the ball moving right?" and unit 5 is "is the ball moving down?", both read from the trail channel. Their weights are large, so tanh saturates to +1 or −1.</li>
+</ul>
+<h4 id="layer-2-eight-and-gates">Layer 2: eight AND gates<a class="anchor" aria-hidden="true" hidden href="#layer-2-eight-and-gates">#</a></h4>
+<p>For each of the four directions there is a "move left" unit and a "move right" unit. Each one adds:</p>
+<ul>
+<li>±1,000 × that direction's distance;</li>
+<li>+200 or −200 for each of the two direction bits;</li>
+<li>a bias of −415.</li>
+</ul>
+<p>The unit fires (tanh ≈ +1) only if <strong>both</strong> direction bits match its direction (+200 + 200 = +400, which cancels most of the −415) <strong>and</strong> the paddle is at least one column off on its side (1,000 × 0.02 = +20, enough to clear the remaining −15). If either bit is wrong, the sum stays near −400 and the unit can't fire. That's an AND of three conditions.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Distance (ball heading down-right)</th><th>"Move left" unit</th><th>"Move right" unit</th></tr></thead><tbody><tr><td>landing 2 columns left of the paddle (−0.04)</td><td>+25 → <strong>on</strong></td><td>−55 → off</td></tr><tr><td>1 column left (−0.02)</td><td>+5 → <strong>on</strong></td><td>−35 → off</td></tr><tr><td>aligned (0)</td><td>−15 → off</td><td>−15 → off</td></tr><tr><td>1 column right (+0.02)</td><td>−35 → off</td><td>+5 → <strong>on</strong></td></tr><tr><td>same distance, but the ball is heading left</td><td>−395 → off</td><td>−435 → off</td></tr></tbody></table>
+<h4 id="output-layer-an-or-and-a-default">Output layer: an OR and a default<a class="anchor" aria-hidden="true" hidden href="#output-layer-an-or-and-a-default">#</a></h4>
+<ul>
+<li><strong>OR.</strong> The left logit is 90 plus 30 for each of the four "move left" units, where an off unit counts as −1 and an on unit as +1. With all four off it's 90 − 120 = −30, below no-op's 0, so the paddle stays put. With any one on it's +30, so the paddle moves left. The right logit works the same way.</li>
+<li><strong>Default.</strong> Up, down and fire are fixed at −100, so they're never chosen.</li>
+</ul>
+<p>In ordinary code, the whole network is:</p>
+<pre><code class="language-python">d = direction(trail)                       # units 4-5: two sign bits
+gap = landing_column[d][ball] - paddle     # units 0-3: one lookup table per direction
+if gap &#x3C; 0: move_left()                    # layer 2 (AND) + output (OR)
+elif gap > 0: move_right()
+else: stay()
+</code></pre>
+<p>The lookup tables <code>landing_column[d]</code> are where the real work went: Astra worked out, by hand, where a ball in each cell moving in each direction will land, wall bounces and brick bounces included.</p>
+<h3 id="how-hard-is-that-program">How hard is that program?<a class="anchor" aria-hidden="true" hidden href="#how-hard-is-that-program">#</a></h3>
+<p>I wrote three Breakout players in plain Python and scored them with the same protocol (200 episodes each):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Player</th><th>What it does</th><th>Score</th></tr></thead><tbody><tr><td>Track the ball</td><td>Move toward the ball's column (3 lines)</td><td>8.4 ± 0.6</td></tr><tr><td>Naive landing prediction</td><td>Extrapolate wall bounces, ignore bricks</td><td>6.9 ± 0.1</td></tr><tr><td><strong>Simulate the source</strong></td><td>Copy the game state, step it forward with the source's own rules, wait at the landing column (≈10 lines)</td><td><strong>534 ± 21</strong></td></tr><tr><td>Astra's network (paper / mine)</td><td>The same algorithm, compiled into weights</td><td>517 / 501</td></tr><tr><td>PPO, 500M steps</td><td>Learned from reward alone, no rules</td><td>25</td></tr></tbody></table>
+<ul>
+<li><strong>The shortcuts fail.</strong> You need the exact bounce rules, and the source code in the prompt provides them.</li>
+<li><strong>With the rules in hand, the program is tiny.</strong> The 20× margin over PPO compares a programmer holding the spec with a learner holding only rewards.</li>
+<li><strong>Where no small program exists, the margin vanishes.</strong> Astra loses Seaquest (53 vs 89 for PPO) and ties Asterix (53 vs 55).</li>
+</ul>
+<p>The car fix in Experiment 4 is the same pattern. Astra cleared a few units of the trained network and wired in its own rule: back up, then drive left once the car passes x ≈ 3.8. That's another small program written into weights. In this fixed scene the policy is almost deterministic: different seeds give the same trajectory, and the car's positions at steps 16, 32, 48 and 64 match the paper's recorded episode to 2 decimals. So "1,024 out of 1,024 successes" is effectively one successful trajectory.</p>
+<h3 id="is-it-just-astra">Is it just Astra?<a class="anchor" aria-hidden="true" hidden href="#is-it-just-astra">#</a></h3>
+<p>I repeated Experiment 5 with Claude Opus 5.5: the paper's prompt verbatim, no tools, 2 replies per game, scored the same way.</p>
+<ul>
+<li><strong>At maximum effort it produced nothing.</strong> All 6 replies spent the full 128,000-token output limit thinking and stopped with no answer.</li>
+<li><strong>At the <code>xhigh</code> setting it finished 3 of 6 times.</strong></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Game</th><th>Opus xhigh r1</th><th>Opus xhigh r2</th><th>Astra (paper / mine)</th></tr></thead><tbody><tr><td>Breakout</td><td>no answer</td><td>no answer</td><td>517 / 501</td></tr><tr><td>Seaquest</td><td><strong>13.0 ± 0.4</strong></td><td>no answer</td><td>53.1 / 51.9</td></tr><tr><td>Asterix</td><td><strong>47.0 ± 0.9</strong></td><td><strong>60.9 ± 1.1</strong></td><td>53.2 / 55.2</td></tr></tbody></table>
+<p>What this shows:</p>
+<ul>
+<li><strong>The skill is shared.</strong> One Opus Asterix network beat both Astra and the best PPO seed. All three answers applied with zero errors and encode real controllers.</li>
+<li><strong>The difference is efficiency.</strong> Astra finished every game in 21–29k output tokens. Opus needed 59–119k when it finished, and never finished Breakout in 4 attempts.</li>
+<li><strong>Caveat:</strong> effort labels aren't comparable across vendors, and there were only 2 replies per game per setting.</li>
+</ul>
+<h3 id="why-this-is-still-surprising">Why this is still surprising<a class="anchor" aria-hidden="true" hidden href="#why-this-is-still-surprising">#</a></h3>
+<p>Compiling an algorithm into weights is old, from McCulloch–Pitts threshold logic (1943) to compiling programs into transformers (RASP 2021, Tracr 2023). What's new is doing it in one shot, in your head:</p>
+<ul>
+<li>index arithmetic for 600 inputs;</li>
+<li>hand-computed tables;</li>
+<li>gate thresholds that must not interfere;</li>
+<li>no calculator and no debugger, with the result within noise of the best simple algorithm.</li>
+</ul>
+<p>Few people would have predicted that a year ago. But it's evidence of <em>programming</em> skill, not of special insight into neural networks.</p>
+<h1 id="citation">Citation<a class="anchor" aria-hidden="true" hidden href="#citation">#</a></h1>
+<div class="callout" data-callout="note">
+<div class="callout-title"><span class="callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></span><span class="callout-title-inner">AI Use Statement</span></div>
+<div class="callout-content"><p><br>
+This post used AI heavily. But not everywhere. The code is totally written by Claude Opus 5.5. The AI Appendix is fully AI written, I moved section. The main section is mostly human written. Clearly the Astra cit is not human written. The rest is human + grammar checks. I tried to make sure the flow of the main section worked! But hopefully you should find interesting data also in the appendix part of the current blog post.</p></div>
+</div>
+<p>If you want to reference this work, cite it as:</p>
+<blockquote>
+<p>Huang, Xuanqiang Angelo "I Tried to Break Weight Programming." X. Angelo Huang's Blog (Nov 2026). <a href="https://flecart.github.io/posts/2026-11-03-i-tried-to-break-weight-programming/">https://flecart.github.io/posts/2026-11-03-i-tried-to-break-weight-programming/</a></p>
+</blockquote>
+<p>Or:</p>
+<pre><code>@article{huang2026breakweightprogramming,
+  title   = "I Tried to Break Weight Programming.",
+  author  = "Huang, Xuanqiang Angelo",
+  journal = "flecart.github.io",
+  year    = "2026",
+  month   = "Nov",
+  url     = "flecart.github.io/posts/2026-11-03-i-tried-to-break-weight-programming/"
+}
+</code></pre>
+<h1 id="references">References<a class="anchor" aria-hidden="true" hidden href="#references">#</a></h1>
+<p id="malfaCodeSimulationProxy2025">[1] Malfa et al. <a href="http://arxiv.org/abs/2502.03568">“Code Simulation as a Proxy for High-Order Tasks in Large Language Models”</a> arXiv preprint arXiv:2502.03568 2025</p>]]></content:encoded>
+    </item>
     <item>
       <title>AI Institutions</title>
       <link>https://flecart.github.io/posts/ai-institutions/</link>
@@ -2465,478 +3492,6 @@ The point is that the neuron is most informative when the signal is slightly off
 <p>The fisher information reaches a minimum at the peak of the curve, that is where the neuron likes to fire.
 The neuron is more informative in regions where the tuning <em>curve is steep.</em>
 This is an argument against the tuning hypothesis, where the idea of neurons acting as <strong>feature detectors</strong> that fire when you expose them to preferred stimulus, or most stimulus-specific information about sound frequency when they fire at that frequency.</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Architecture of the Brain</title>
-      <link>https://flecart.github.io/notes/architecture-of-the-brain/</link>
-      <pubDate>Tue, 26 Aug 2025 00:00:00 GMT</pubDate>
-      <guid>https://flecart.github.io/notes/architecture-of-the-brain/</guid>
-      <description>First, the brain is organized into functionally specific areas, and second, neurons in different parts of the vertebrate nervous system, indeed in all nervous systems, are quite similar. Small comparison with Computers # A gross observation between computer&#39;s transistors and huma</description>
-      <content:encoded><![CDATA[<blockquote>
-<p>First, the brain is organized into functionally specific areas, and second, neurons in different parts of the vertebrate nervous system, indeed in all nervous systems, are quite similar.</p>
-</blockquote>
-<h4 id="small-comparison-with-computers">Small comparison with Computers<a class="anchor" aria-hidden="true" hidden href="#small-comparison-with-computers">#</a></h4>
-<p>A gross observation between computer's transistors and human neurons is that there a big difference of numbers:</p>
-<ul>
-<li>trillions of <strong>transistors</strong> vs billions of <strong>neurons</strong>.</li>
-<li>6 orders of magnitude <strong>frequency</strong> difference (Ghz versus 1kHz for neurons).</li>
-<li>Many many <strong>neural types</strong> and different types of <strong>connections</strong>.</li>
-<li>And the digital vs analog and chemical modes of communication.</li>
-<li><strong>Parallel</strong> processor abilities.</li>
-<li>Fixed vs plastic architectures
-But this is comparing with transistors with one higher level object, so this comparison might not be completely fair. They are very different from this point of view.</li>
-</ul>
-<p>And only some brain areas are similar to real neural networks.</p>
-<h3 id="david-marrs-tri-level-approach">David Marr's Tri-level approach<a class="anchor" aria-hidden="true" hidden href="#david-marrs-tri-level-approach">#</a></h3>
-<p>We don't follow now this approach, a clean separation of the levels is not exactly clear.
-There are some regions that we don't know what they are doing at all. Internal state with goal is important, most of the computer systems do not have this internal driver.</p>
-<p>See <a href="https://snastase.github.io/files/Marr_1982.pdf">original paper</a>.</p>
-<blockquote>
-<p>This revolution stemmed from physiological work and makes us realizethat the activity of each single neuron may play a significant role in perception,</p>
-</blockquote>
-<h4 id="the-tri-level">The Tri-level<a class="anchor" aria-hidden="true" hidden href="#the-tri-level">#</a></h4>
-<p><strong>Computational Level:</strong> what kinds of computation is the system doing? Why does it do these things (highest level things) (e.g. intentions and beliefs with ToM).</p>
-<p><strong>Algorithmic Representational Level</strong>: how does the system do what it does? What processes does it effectively manipulate?</p>
-<p><strong>Physical level</strong>: how does the system implement it on the physical level (chemical or physical processes of brain firing).</p>
-<p>For the brain, the first level it is debatable (not clear what the brain is trying to solve), and the representational level is just incomprehensible. Neuroscientists usually just measure at the physical/hardware level.</p>
-<h4 id="what-does-the-brain-do">What does the Brain do?<a class="anchor" aria-hidden="true" hidden href="#what-does-the-brain-do">#</a></h4>
-<p>This attempts to answer the computational level problem:
-Some debated things are:</p>
-<ul>
-<li>Brain creates a <strong>model of the environment</strong>.
-<ul>
-<li>Having models of the world is useful to predict what they are likely to do and plan accordingly.</li>
-</ul>
-</li>
-<li>The brain makes internal decisions on different time scales (goals).</li>
-<li>This internal decisions (intents) are used to make actions.
-<ul>
-<li>We want to predict the consequence of our actions on the environment.</li>
-<li>Has <strong>intentions</strong> or goals and acts on it.</li>
-</ul>
-</li>
-<li>It is able to <em>evaluate their actions</em> (perhaps survival, safety, or other details) and update the internal model of the world.</li>
-<li><strong>Predictive models are useful</strong>, to plan and act on this information (example is gazelle chase for predators)</li>
-</ul>
-<p>And we would ask how the brain does all this.</p>
-<h4 id="the-development-of-the-brain">The Development of the Brain<a class="anchor" aria-hidden="true" hidden href="#the-development-of-the-brain">#</a></h4>
-<p>It first starts with an elongated <strong>neural tube</strong> (this is the precursor.
-The different parts of development are named by the stage of development, also related to the evolution steps.
-It is very similar across vertebrates.
-There are three different development states after the formation of the neural tube.</p>
-<ol>
-<li>Very long tube that then differentiates and becomes bigger and bigger. Diencephalon enlarges. They all form with the same similar process.
-<img src="/images/notes/Architecture of the Brain-20250817135003478.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250817135003478"></li>
-</ol>
-<h3 id="parts-of-the-brain">Parts of the brain<a class="anchor" aria-hidden="true" hidden href="#parts-of-the-brain">#</a></h3>
-<p>Most of what we know about the cortex has been discovered by injuries on those parts of the brain. Now  we now can use reversible optogenetics to check some parts of the brain precisely: activation/inhibition and recording of brain circuits.</p>
-<p>We can now use electrodes in the brain: Deep Brain Stimulation (DBS)(Parkinson’s, Depression, OCD, Epilepsy, ...), or subcutaneus parts, or transcranical stimulation bymagnetic/electric fields or ultrasound waves, that can excite some brain areas (not very specific, but not invasive).</p>
-<h4 id="cortex">Cortex<a class="anchor" aria-hidden="true" hidden href="#cortex">#</a></h4>
-<p>We have the largest density of cells in the cortex, this is the part of the brain mostly correlated with intelligence. many many abilities correlate with the size of the cortex.
-Differences between primates is mostly in the cortex.</p>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250304124632308.webp" style="width: 100%" alt="Architecture of the Brain-20250304124632308" title="Architecture of the Brain-20250304124632308">
-<figcaption><p style="text-align:center;">Image from the slides</p></figcaption>
-</figure><p></p>
-<h4 id="structure-of-the-cortex">Structure of the Cortex<a class="anchor" aria-hidden="true" hidden href="#structure-of-the-cortex">#</a></h4>
-<p>Cortex has very similar structure (also for other mammalian species!)
-This lead to cortical column theory, parts of the cortex have some specific functional properties.
-The experiment on cats provides good evidence on this theory.
-Another good experiment is the one in 1990 by Sur et Al. (Universal swappable computing engines).
-They proved the plasticity and reorganization capabilities of brain regions <strong>during development</strong>.</p>
-<p><img src="/images/notes/Architecture of the Brain-20250304142724299.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250304142724299"></p>
-<h4 id="cortical-theory">Cortical Theory<a class="anchor" aria-hidden="true" hidden href="#cortical-theory">#</a></h4>
-<p><img src="/images/notes/Architecture of the Brain-20250818214833008.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250818214833008"></p>
-<p>One column is about 0.5mm in diameter and in V1 layers you usually just have dentritic extension by the pyramidal layers in the layers below</p>
-<h4 id="modulating-brain-areas">Modulating Brain Areas<a class="anchor" aria-hidden="true" hidden href="#modulating-brain-areas">#</a></h4>
-<p><strong>Neuron-Specific Drug Delivery via Focused Ultrasound Uncaging</strong></p>
-<ul>
-<li><strong>Principle</strong>: drugs are packaged in carriers (e.g., nanoparticles, liposomes) that remain inactive (“caged”).</li>
-<li>Focused ultrasound breaks or heats carriers at target sites → <strong>local drug release only where ultrasound is applied</strong>.</li>
-<li><strong>Advantages</strong>:
-<ul>
-<li>High spatial precision.</li>
-<li>Reduces systemic side effects.</li>
-<li>Can deliver neuromodulators, neurotransmitters, or other neuron-specific agents.</li>
-</ul>
-</li>
-</ul>
-<p><strong>Deep Brain Simulation</strong></p>
-<ul>
-<li><strong>Invasive</strong>: electrodes surgically implanted into specific brain nuclei.</li>
-<li>Provides <strong>continuous or patterned electrical stimulation</strong>.</li>
-<li><strong>Clinical uses</strong>:
-<ul>
-<li>Parkinson’s disease (reduce tremors, motor symptoms).</li>
-<li>Depression (treatment-resistant).</li>
-<li>OCD.</li>
-<li>Epilepsy.</li>
-</ul>
-</li>
-<li>Advantage: highly effective in movement disorders.</li>
-<li>Limitation: requires neurosurgery, risk of infection, electrode misplacement.</li>
-</ul>
-<p><strong>Transcranial Stimulation</strong></p>
-<ul>
-<li>Uses <strong>magnetic, electric, or ultrasound fields</strong> applied through the skull.</li>
-<li><strong>Techniques</strong>:
-<ul>
-<li><strong>TMS (Transcranial Magnetic Stimulation)</strong> → magnetic pulses induce currents in brain tissue.</li>
-<li><strong>tDCS / tACS (Transcranial Direct/Alternating Current Stimulation)</strong> → low current applied via scalp electrodes.</li>
-<li><strong>tFUS (Transcranial Focused Ultrasound Stimulation)</strong> → acoustic waves target deep brain regions with high spatial precision.</li>
-</ul>
-</li>
-<li><strong>Applications</strong>: Modulate cortical excitability, study brain–behavior relationships, potential therapy for depression, chronic pain, stroke recovery.</li>
-</ul>
-<h4 id="actor-critic-model-of-the-brain">Actor Critic Model of the brain<a class="anchor" aria-hidden="true" hidden href="#actor-critic-model-of-the-brain">#</a></h4>
-<p>This model that we present here is connected to the theory of how humans integrate the information, explained in <a href="/notes/conditioning-theory/">Conditioning Theory</a>.
-We studied actor critic methods in <a href="/notes/rl-function-approximation/">RL Function Approximation</a>. It seems that the brain implements similar modules:</p>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250312183714579.webp" style="width: 100%" alt="Architecture of the Brain-20250312183714579" title="Architecture of the Brain-20250312183714579">
-<figcaption><p style="text-align:center;">Image from the slides.</p></figcaption>
-</figure>
-<img src="/images/notes/Architecture of the Brain-20250816182232283.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250816182232283"><p></p>
-<p>Something very similar to this model happens in the dopamine neurons (providing rewards gives difference in expectations and actual rewards, this is called <strong>reward prediction errors.</strong>)
-When we have <strong>conditioned stimulus</strong> the surge in dopamine happens during the cue, not the actual reward itself.
-This works for positive errors (not expecting anything while receiving food, where we have a surge of dopamine), and <em>negative errors</em> (not receiving food even if we are expecting it).
-We analyze reward models in <a href="/notes/conditioning-theory/">Conditioning Theory</a>.</p>
-<p><img src="/images/notes/Architecture of the Brain-20250312185134776.webp" width="505" class="center" alt="Architecture of the Brain-20250312185134776"></p>
-<h3 id="distinguishing-cortical-functions">Distinguishing Cortical Functions<a class="anchor" aria-hidden="true" hidden href="#distinguishing-cortical-functions">#</a></h3>
-<p>There are mainly three ways that we report to distinguish cortical function.</p>
-<h4 id="functional-evidence">Functional Evidence<a class="anchor" aria-hidden="true" hidden href="#functional-evidence">#</a></h4>
-<p>They observed that same cortex was responding in the same way, but different columns in different way, this was <strong>functional evidence</strong> of those differences.</p>
-<ul>
-<li>fMRI, and responses due to external simulation.</li>
-<li>To manipulations (strokes, and other damages to brain areas, or just cooling).</li>
-</ul>
-<h4 id="functional-organization">Functional Organization<a class="anchor" aria-hidden="true" hidden href="#functional-organization">#</a></h4>
-<p>The types of cells are different, so the cortices are specialized in this manner, but are able to adapt if their input is different (remember the example of the replaced auditory cortex for visual cortex.) The other is called <strong>electrical stimulation mapping</strong>.</p>
-<p>For example:</p>
-<ul>
-<li>Speech processing (Wernicke) is close to speech production (Broca)</li>
-<li>Speech production is close to motor area.</li>
-<li>Auditory information should be associated with visual information. Hence auditory cortex is proximal to temporal areas..</li>
-<li>The “where” stream is next to parietal area which integrates somatosensory and visual information to create egocentric maps. See <a href="/notes/human-vision/">Human Vision</a>.</li>
-</ul>
-<h4 id="cytoarchitectonics">Cytoarchitectonics<a class="anchor" aria-hidden="true" hidden href="#cytoarchitectonics">#</a></h4>
-<p>Another method to identify brain areas is to see at the <strong>cytoarchitectural</strong> structure of the cells:
-<img src="/images/notes/Architecture of the Brain-20250818215639191.webp" width="561" class="center" alt="Architecture of the Brain-20250818215639191"></p>
-<ul>
-<li>Pioneered by <strong>Korbinian Brodmann</strong> → “Brodmann areas.”</li>
-<li>Method: study the <strong>size, density, and layering of neurons</strong> under a microscope using histological stains (e.g., Nissl stain).</li>
-<li>Contribution: reveals systematic differences in cortical layers (e.g., primary sensory cortex has a <strong>thick Layer IV</strong> for thalamic input; motor cortex has <strong>giant pyramidal cells in Layer V</strong>).</li>
-<li>This allows researchers to define distinct <strong>structural “maps”</strong> of cortex even without knowing function.</li>
-</ul>
-<p>There is also a close friend called <strong>Myeloarchitectonics (fibers</strong></p>
-<ul>
-<li>Method: stain for <strong>myelinated axons</strong> (e.g., using Weigert stains).</li>
-<li>Contribution: highlights the <strong>density and pattern of intracortical connections</strong>.</li>
-<li>Different areas show unique myelination patterns — for instance, <strong>primary visual cortex (V1)</strong> has a prominent <strong>stria of Gennari</strong> (a dense band of myelinated fibers in Layer IV).</li>
-<li>This gives an anatomical signature distinguishing one cortical area from another.</li>
-</ul>
-<h4 id="cytoarchitectornics-of-motor-and-sensory-cortex">Cytoarchitectornics of Motor and Sensory Cortex<a class="anchor" aria-hidden="true" hidden href="#cytoarchitectornics-of-motor-and-sensory-cortex">#</a></h4>
-<p>For example:
-<strong>Motor cortex:</strong></p>
-<ul>
-<li>The primary motor cortex (M1) is heavily involved in sending commands to the spinal cord and brainstem to drive movement.</li>
-<li>Layer V of M1 is packed with <strong>large pyramidal neurons</strong>, particularly the <strong>Betz cells</strong>, which are some of the largest neurons in the brain.</li>
-<li>These neurons project <strong>directly to the spinal cord (corticospinal tract)</strong>, which is why Layer V is so prominent.</li>
-</ul>
-<p><strong>Sensory cortex:</strong></p>
-<ul>
-<li>Primary sensory areas, like the primary somatosensory cortex (S1), primarily <strong>receive input from the thalamus</strong>.</li>
-<li>Thalamic projections mostly terminate in <strong>Layer IV</strong>, which is why Layer IV is thick in sensory cortices and relatively thin in motor cortex.</li>
-<li>The sensory cortex then processes and distributes this input to other layers for integration and output.</li>
-</ul>
-<h4 id="swappable-computing-engines">Swappable Computing Engines<a class="anchor" aria-hidden="true" hidden href="#swappable-computing-engines">#</a></h4>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250826180816855.webp" style="width: 100%" alt="Architecture of the Brain-20250826180816855" title="Architecture of the Brain-20250826180816855">
-<figcaption><p style="text-align:center;">Rewiring </p></figcaption>
-</figure><p></p>
-<ul>
-<li>
-<p><strong>Creating space in the auditory pathway</strong>: They damaged the inferior colliculus, which normally provides the major input to the medial geniculate nucleus (MGN) - the auditory thalamus</p>
-</li>
-<li>
-<p><strong>Forcing visual inputs into auditory circuits</strong>: Following neonatal surgical manipulations, a specific population of retinal ganglion cells is induced to innervate the auditory thalamus and provides visual input to cells in auditory cortex</p>
-</li>
-<li>
-<p><strong>Functional Changes</strong>: These studies involve making unilateral lesions and inducing retinal inputs into the auditory thalamus (MGN) during early development in ferrets, thereby conferring visual responsiveness on primary auditory cortex (AI)</p>
-</li>
-<li>
-<p><strong>Topographic Organization</strong>: The rewired auditory cortex developed visual maps and topographic organization similar to what you'd normally see in visual cortex, though adapted to the constraints of auditory cortical architecture.</p>
-</li>
-</ul>
-<p>These experiments demonstrated that cortical areas aren't rigidly predetermined for specific sensory modalities. Instead, they showed that the type of sensory input largely determines how a cortical area will organize and function. This challenged the prevailing view that sensory cortices were hardwired for their specific modalities and provided compelling evidence for activity-dependent cortical specification during development.</p>
-<p>However:</p>
-<blockquote>
-<p>Cortex has many diverse groups of neurons with different roles and connectivity. There exist major differences in cell types and their connectivity across cortical areas.</p>
-</blockquote>
-<h3 id="areas-of-brain-processing">Areas of brain processing<a class="anchor" aria-hidden="true" hidden href="#areas-of-brain-processing">#</a></h3>
-<h4 id="the-striatum">The striatum<a class="anchor" aria-hidden="true" hidden href="#the-striatum">#</a></h4>
-<p>The striatum area seems to converge processing from the dopaminergic pathways and the cortical areas.
-Medium spiny neurons form <em>trisynaptic</em> connections with the cortex and the VTA (ventral tegmental area).</p>
-<ul>
-<li>If the dopamine binds to D1 receptors, it becomes weaker, if D2 the connection becomes stronger. D1 stimulates movement while D2 inhibits it.</li>
-<li>It starts with very complex signal and ends up with a few actuator neurons (some thousands).</li>
-</ul>
-<p>The learning loops becomes shorter with time, (From <strong>conscious learning</strong> to <strong>unconscious execution</strong>).</p>
-<p>There are mainly two pathways in the striatum, the ventral and the dorsal one.</p>
-<ul>
-<li><strong>Ventral</strong>: (Nucleus accumbens), is the main region that gets dopamine dignals from the VTA section, this is why we assume this section does reward computation.</li>
-<li><strong>Dorsal</strong>: It has controls to the motor and cognitive control parts, so this part decides the <em>actions</em> to take.</li>
-</ul>
-<p>And the major <strong>inputs</strong> to striatum are:</p>
-<ul>
-<li><strong>Cortex (glutamate → excitatory).</strong></li>
-<li><strong>Thalamus (glutamate).</strong></li>
-<li><strong>Dopamine from midbrain (VTA/SNc → modulatory).</strong></li>
-</ul>
-<p><img src="/images/notes/Architecture of the Brain-20250816163012129.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250816163012129"></p>
-<h4 id="pallidum-globus-pallidus">Pallidum (Globus Pallidus)<a class="anchor" aria-hidden="true" hidden href="#pallidum-globus-pallidus">#</a></h4>
-<ul>
-<li>Output stage of the basal ganglia (striatum zone).</li>
-<li>Constantly inhibits thalamus (a “<strong>brake</strong>” on movement).
-<ul>
-<li>Sends inhibitory (GABAergic) output to the thalamus and brainstem</li>
-</ul>
-</li>
-<li>When striatum activates the direct pathway → it inhibits pallidum → brake lifted → thalamus excites cortex → action executed.</li>
-<li>When the indirect pathway is dominant → pallidum inhibition persists → action suppressed.</li>
-<li><strong>Role:</strong> The “final <em>gatekeeper</em>” controlling whether cortical action plans actually happen.</li>
-</ul>
-<p>Very close to the <strong>reinforcement learning loop</strong>, this is why the actor critic model of the brain makes sense.</p>
-<ol>
-<li><strong>Cortex</strong> suggests possible actions based on goals and environment.</li>
-<li><strong>Striatum</strong> receives these options and, influenced by <strong>dopamine from VTA</strong>, learns which are valuable.</li>
-<li><strong>Pallidum</strong> implements the “brake system,” allowing only the favored action through.</li>
-<li>The executed action leads to an outcome (reward or not).</li>
-<li><strong>VTA</strong> compares outcome vs expectation → updates dopamine signals → reshapes striatal synapses → next time, the system is better tuned.</li>
-</ol>
-<p>So pallidum directly filters the correct action.
-Both are inhibitory, but:</p>
-<ul>
-<li><strong>Pallidum</strong> = “which action should happen?” → targets motor thalamus for movement control.</li>
-<li><strong>TRN</strong> = “which information should be noticed?” → targets sensory thalamus for attention and gating.</li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Feature</th><th>Pallidum</th><th>TRN</th></tr></thead><tbody><tr><td>Main target</td><td>Thalamus (DLM / motor thalamus)</td><td>Thalamus (sensory and association relay nuclei)</td></tr><tr><td>Purpose</td><td>Motor/action selection</td><td>Sensory gating, attention, oscillatory coordination</td></tr><tr><td>Inputs</td><td>Striatum / basal ganglia</td><td>Cortex and thalamus</td></tr><tr><td>Function</td><td>Decides which motor commands proceed</td><td>Shapes and filters thalamic output to cortex</td></tr><tr><td>Effect of inhibition</td><td>Disinhibits cortex indirectly</td><td>Temporarily suppresses thalamic relay to cortex</td></tr></tbody></table>
-<h4 id="the-brain-stem">The brain stem<a class="anchor" aria-hidden="true" hidden href="#the-brain-stem">#</a></h4>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250313215419034.webp" style="width: 100%" alt="Architecture of the Brain-20250313215419034" title="Architecture of the Brain-20250313215419034">
-<figcaption><p style="text-align:center;">Image from Kandel</p></figcaption>
-</figure>
-The brain stem is made of the medulla, Pons, and Midbrain.<p></p>
-<p><strong>Medulla</strong></p>
-<blockquote>
-<p>The medulla, the most caudal portion of the brain stem, is a direct extension of the spinal cord and resembles the spinal cord both in organization and function. Neuronal groups in the medulla participate in regulating blood pressure and respiration. The medulla also contains neuronal groups that are early components of pathways that mediate taste, hearing, and maintenance of balance as well as the control of neck and facial muscles.</p>
-</blockquote>
-<p><strong>Pons</strong></p>
-<blockquote>
-<p>The pons lies rostral to the medulla and protrudes from the ventral surface of the brain stem. The ventral portion of the pons contains the pontine nuclei, groups of neurons that relay information about movement and sensation from the cerebral cortex to the cerebellum. The dorsal portion of the pons contains structures involved in respiration, taste, and sleep.</p>
-</blockquote>
-<p><strong>Midbrain</strong></p>
-<blockquote>
-<p>The midbrain, the smallest part of the brain stem, lies rostral to the pons. Nuclei in the midbrain provide important linkages between components of the motor system, particularly the cerebellum, basal ganglia, and cerebral hemispheres [...] The midbrain also contains components of the auditory and visual systems. Finally, several regions of the midbrain give rise to pathways that are connected to the extraocular muscles that control eye movements.</p>
-</blockquote>
-<h4 id="the-thalamus">The Thalamus<a class="anchor" aria-hidden="true" hidden href="#the-thalamus">#</a></h4>
-<p>This is one of the most complex brain areas. It has a role in consciousness, different firing patterns here if you are asleep or not. We can see this section as the <strong>routing board</strong> of the brain (almost every sense of the human brain passes through the thalamus, but not the sense of smell).</p>
-<p>It receives information from sensory areas, but above all from cortical areas.
-This is also why we think the <strong>thalamus</strong> plays an important role with regards to <em><strong>consciousness</strong></em>.</p>
-<p>The entire cortex is connected to the thalamus, it also controls the communication between different brain regions, between one cortical area and the other cortical area. We have lots of back connections, probably because of attention selection and similar things.</p>
-<p><img src="/images/notes/Architecture of the Brain-20250824211656280.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250824211656280"></p>
-<blockquote>
-<p>Thalamic DBS can rouse patients from minimally conscious state</p>
-</blockquote>
-<h4 id="thalamic-reticular-nucleus">Thalamic Reticular Nucleus<a class="anchor" aria-hidden="true" hidden href="#thalamic-reticular-nucleus">#</a></h4>
-<p>Here we have lots of GABAenergic neurons that project back to the thalamus, which is why it is believed to act as a gate.</p>
-<p>The <strong>thalamic reticular nucleus</strong> acts as a gateway between thalamus and cortical connections, they are called <em>attention centers</em> (like amygdala) and modulate the thalamic information to the cortex, and most of the connections here are <em>inhibitory by nature</em>.</p>
-<ol>
-<li><strong>Gatekeeper of thalamic relay:</strong>
-<ul>
-<li>TRN <strong>modulates the flow of sensory information</strong> from thalamus to cortex.</li>
-<li>Can <strong>suppress or enhance</strong> signals depending on attention, state, or timing.</li>
-</ul>
-</li>
-<li><strong>Control of attention and sensory filtering:</strong>
-<ul>
-<li>By selectively inhibiting thalamic neurons, TRN helps <strong>focus cortical processing on relevant stimuli</strong>.</li>
-<li>Prevents irrelevant signals from reaching the cortex (“sensory gating”).</li>
-</ul>
-</li>
-<li><strong>Generating rhythmic activity:</strong>
-<ul>
-<li>TRN contributes to <strong>thalamocortical oscillations</strong>, e.g., <strong>sleep spindles</strong> during non-REM sleep.</li>
-<li>These oscillations are important for <strong>memory consolidation and attentional control</strong>.</li>
-</ul>
-</li>
-</ol>
-<h4 id="the-pulvinar">The Pulvinar<a class="anchor" aria-hidden="true" hidden href="#the-pulvinar">#</a></h4>
-<p>We can view this as a second order thalamic connection.
-The <strong>pulvinar</strong> is the <strong>largest nucleus of the thalamus</strong> in primates, sitting at the very back (posterior thalamus).</p>
-<p>Unlike the <strong>lateral geniculate nucleus (LGN)</strong>, which gets input from the retina, the pulvinar gets most of its driving input from <strong>cortex</strong> (especially visual areas like V1, V2, MT, parietal cortex).</p>
-<ul>
-<li>Then, it sends projections back <strong>to multiple cortical visual areas</strong>.</li>
-<li>It’s basically a “hub” for visual cortex communication.</li>
-</ul>
-<p>Researchers think of the pulvinar as a <strong>higher-order thalamic relay</strong> that:</p>
-<ul>
-<li><strong>Coordinates cortical areas</strong>: For example, making sure motion areas (MT) and shape/scene areas (V4, IT) talk to each other efficiently.</li>
-<li><strong>Regulates attention</strong>: Helps filter out distractions and enhance relevant stimuli. If pulvinar is damaged, people have trouble ignoring irrelevant visual clutter.</li>
-<li><strong>Synchronizes rhythms</strong>: Acts like a “metronome,” helping distant cortical regions stay in step during visual tasks.</li>
-</ul>
-<h4 id="the-hippocampus">The Hippocampus<a class="anchor" aria-hidden="true" hidden href="#the-hippocampus">#</a></h4>
-<p>It sits near the enthorinal cortex (this sends much input into the hippocampus, mainly in two pathways)
-Dentate Gyrus or dentate region -> CA3 -> CA1 (the output of the hippocampus, connected to the rest of the brain).</p>
-<p><img src="/images/notes/Architecture of the Brain-20250319162514587.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250319162514587"></p>
-<ul>
-<li>Entorhinal cortex has about 200k cells (10-20% interneurons)</li>
-<li>Dentate Gyrus has about 1.2kk granule cells. (some sort of a sparse encoder, it is separating patterns)
-<ul>
-<li>4k basket cells</li>
-<li>32k Hilar interneurons (20k mossy cells)</li>
-</ul>
-</li>
-<li>CA3/CA1 about 330k/420k piramidal cells.
-<ul>
-<li>CA3 has many auto-associative recurrent architectures, it is believed to be doing pattern completion after separation with a given context.</li>
-</ul>
-</li>
-</ul>
-<p>The dentate gyrus has much more neurons than other neurons.</p>
-<h4 id="random-functional-areas">Random Functional areas<a class="anchor" aria-hidden="true" hidden href="#random-functional-areas">#</a></h4>
-<p>Mostly the maps to the functions of the brain has been developed by analysis of damages on these regions. A notable example is Phineas Gage's case on frontal cortex damage. He completely changed his personality. (valuation and planning abilities).</p>
-<p>Broca's area is used for <strong>speech production</strong>: they can understand sentences but could not produce words.</p>
-<p><strong>Wernicke's area</strong>: cannot interpret speeches, they can produce sentences, but they are irrelevant.</p>
-<h4 id="entorhynal-cortex">Entorhynal Cortex<a class="anchor" aria-hidden="true" hidden href="#entorhynal-cortex">#</a></h4>
-<p>The researchers performed extensive patch-clamp recordings from over 600 pairs of stellate cells (the primary cell type in MEC layer II that likely includes <strong>grid cells</strong>, we study those in <a href="/notes/memory-in-human-brain/">Memory in Human Brain</a>) in rat brain slices.
-The main neurons there are <strong>stellate cells</strong>. Researchers wanted to know: <em>How do these stellate cells connect to each other?</em></p>
-<p>Their main findings were:</p>
-<p><strong>1. Absence of Direct Excitation:</strong> Despite recording from 644 stellate cell pairs, they found virtually no direct excitatory connections between these cells in mature tissue. Only 4% showed any inhibitory responses to single-cell stimulation.</p>
-<p><strong>2. Inhibitory Network Structure:</strong> When multiple stellate cells were stimulated simultaneously, 64% of target cells showed inhibitory responses. These were mediated by fast-spiking interneurons rather than direct connections.</p>
-<p><strong>3. Developmental Changes:</strong> Young animals (postnatal days 10-15) showed rare excitatory connections between stellate cells that disappeared by 4 weeks of age, while inhibitory connectivity matured over the same period.</p>
-<p><strong>4. Confirmation with Optogenetics:</strong> Using light-activated channelrhodopsin to stimulate populations of stellate cells confirmed that connectivity was predominantly inhibitory.</p>
-<h3 id="object-recognition-areas">Object recognition areas<a class="anchor" aria-hidden="true" hidden href="#object-recognition-areas">#</a></h3>
-<p>In animals it is possible to use optical techniques to turn on or off specific parts of the neural regions.
-fMRI uses the <em>activated oxygen levels in certain parts of the human brain</em>, and consumes more energy on those parts. It is a quite precised method. Good for images.</p>
-<h4 id="how-fmri-works">How fMRI works<a class="anchor" aria-hidden="true" hidden href="#how-fmri-works">#</a></h4>
-<ul>
-<li>Local oxygenated blood has different magnetic properties that can be detected and visualized.
-It has quite a speed!
-Some areas are just activated by imagination.
-This motivated more exploration for understanding <strong>functional areas</strong> of the brain.</li>
-</ul>
-<h4 id="fusiform-face-area">Fusiform Face Area<a class="anchor" aria-hidden="true" hidden href="#fusiform-face-area">#</a></h4>
-<p>The <strong>fusiform face area</strong> was a quite nice discovery: there is a specific region in the brain that activates just by looking at <em>parts of the face</em>.</p>
-<h4 id="parahippocampal-place-area">Parahippocampal Place Area<a class="anchor" aria-hidden="true" hidden href="#parahippocampal-place-area">#</a></h4>
-<p>Or another is <strong>parahippocampal place area</strong>, that activates for places (houses, landscapes, corners of the room, but doesn't respond for other things, objects, or abstract art). Probably something that has to do with Place Cells, we studied these in <a href="/notes/memory-in-human-brain/">Memory in Human Brain</a>.
-Identified by Epstein &#x26; Kanwisher in 1998 using fMRI. They noticed a region that lights up strongly when subjects look at pictures of places (houses, landscapes, city streets) compared to faces, objects, or scrambled images.</p>
-<h4 id="extrastriate-body-area">Extrastriate Body Area<a class="anchor" aria-hidden="true" hidden href="#extrastriate-body-area">#</a></h4>
-<p><strong>Extrastriate body area</strong>: responds to body parts (no faces, no random cartoons, yes stickman).</p>
-<p>There are other neurons that activate for specific parts of the brain.</p>
-<h4 id="face-neurons">Face Neurons<a class="anchor" aria-hidden="true" hidden href="#face-neurons">#</a></h4>
-<p>Bruce Desimone and Gross in 1981 identified areas of the brain that activate by faces</p>
-<h3 id="visual-areas">Visual Areas<a class="anchor" aria-hidden="true" hidden href="#visual-areas">#</a></h3>
-<h4 id="hierarchical-organization-of-visual-processing">Hierarchical organization of visual processing<a class="anchor" aria-hidden="true" hidden href="#hierarchical-organization-of-visual-processing">#</a></h4>
-<p>This has been the main inspiration for visual processing architectures like <a href="/notes/convolutional-neural-network/">Convolutional Neural Network</a>. They start to recognize simple features, and then compose them in more complex shapes. This has been also validated with mechanistic interpretability techniques, and it is overall quite fascinating.</p>
-<p>In visual things there are V1, V2, V4 TEO, and cortex areas, in quite organized parts. Mainly in the inferior temporal lobe, which is the "what" pathway for object recognition.</p>
-<h4 id="bidirectional-connections">Bidirectional Connections<a class="anchor" aria-hidden="true" hidden href="#bidirectional-connections">#</a></h4>
-<p>Convolutional nets are not RNN, they do not use higher contextual information to <strong>inform back the small parts</strong>. Context is important for humans. Here information is <strong>bidirectional</strong>, this is the main difference for these biological connections compared to networks like <a href="/notes/convolutional-neural-network/">Convolutional Neural Network</a>.
-The hypothesis is that it helps to interpret what is seen, some feedback signal, somehow makes me think about <a href="https://psycnet.apa.org/record/2007-01197-000">(Hofstadter 2007)</a>.
-This gives grounds to explain some of the visual illusions.</p>
-<p>One hypothesis we have is that it <strong>enlarges</strong> the receptive field, and uses <em>attention</em> on the part that could be more interesting.</p>
-<p>Main roles:</p>
-<ul>
-<li><strong>Attention &#x26; prediction:</strong> higher areas tell earlier areas <em>what to look for</em> (“expect a face here”).</li>
-<li><strong>Context filling:</strong> feedback helps sharpen perception (e.g., blurry letters become readable in context).</li>
-</ul>
-<h4 id="visual-information-pathways">Visual information pathways<a class="anchor" aria-hidden="true" hidden href="#visual-information-pathways">#</a></h4>
-<p>In visual processing, there are two streams of connections that give different information on</p>
-<ul>
-<li>Where (<strong>Dorsal</strong>, vestibular information about body positions (eye, arm etc...), that help in action <em>planning</em>)
-<ul>
-<li>They recognize the objects, but not able to know spatial position between them.</li>
-</ul>
-</li>
-<li>What (<strong>Ventral</strong>, more in object recognition)
-<ul>
-<li>People that have damage here are not able to recognize the objects, but just know that they exists.</li>
-<li>But they would be able to manipulate the object, not consciously being able to recognize it.</li>
-</ul>
-</li>
-<li>They share the first layers (v1,v2) for low level details.
-They tested this in object discrimination and landmark discrimination tasks with dorsal and ventral damages.</li>
-</ul>
-<p>We also study the role of learning, since many learning activities pass through the vision part, that is articulated in <a href="/notes/memory-in-human-brain/">Memory in Human Brain</a>.
-If you want a better understanding of vision in general see <a href="/notes/human-vision/">Human Vision</a>.</p>
-<h4 id="dorsal-stream">Dorsal stream<a class="anchor" aria-hidden="true" hidden href="#dorsal-stream">#</a></h4>
-<p>Looking at the visual stream, we observe that the organization of the parts is not casual, the information gets into the somatosensory area. Posterior parietal cortex uses the information to build model of yourself (egocentric maps), and it is quite close to the cortices, close to the <strong>planning part</strong> of the brain.</p>
-<ul>
-<li><strong>Premotor</strong> area is for <em>physical intention</em> formation
-<img src="/images/notes/Architecture of the Brain-20250818214036545.webp" style="width: 100%" class="center" alt="Architecture of the Brain-20250818214036545"></li>
-</ul>
-<h4 id="ventral-stream">Ventral Stream<a class="anchor" aria-hidden="true" hidden href="#ventral-stream">#</a></h4>
-<p>The other stream is close to the broca's area for speech processing and speech interpretation, to associate these two streams.
-Visual area is heavily linked to the auditory one, but not much with the speech planning area, this explains also why we have these similitudes.</p>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250304142119610.webp" style="width: 100%" alt="Architecture of the Brain-20250304142119610" title="Architecture of the Brain-20250304142119610">
-<figcaption><p style="text-align:center;">Example of organization of speech areas (auditory and speech information)</p></figcaption>
-</figure><p></p>
-<h4 id="representation-of-intentions">Representation of Intentions<a class="anchor" aria-hidden="true" hidden href="#representation-of-intentions">#</a></h4>
-<p>Anterior regions represent goals and intentions because they need <strong>abstract, context-dependent, temporally extended information</strong> that guides posterior motor circuits for execution.</p>
-<ul>
-<li><strong>Premotor and motor cortex (posterior frontal regions):</strong>
-<ul>
-<li>Represent <strong>specific movements</strong>: which muscles contract, sequence of joint actions.</li>
-</ul>
-</li>
-<li><strong>More anterior regions (prefrontal cortex, especially dorsolateral PFC):</strong>
-<ul>
-<li>Represent <strong>higher-level plans, goals, and intentions</strong>.</li>
-<li>Not tied to a particular movement; more about <em>what you want to achieve</em>.</li>
-</ul>
-</li>
-</ul>
-<p></p><figure class="center">
-<img src="/images/notes/Architecture of the Brain-20250304142348388.webp" style="width: 100%" alt="Architecture of the Brain-20250304142348388" title="Architecture of the Brain-20250304142348388">
-<figcaption><p style="text-align:center;">Goals and intentions in the human brain</p></figcaption>
-</figure><p></p>
-<h1 id="references">References<a class="anchor" aria-hidden="true" hidden href="#references">#</a></h1>
-<p id="hofstadterAmStrangeLoop2007">[1] Hofstadter <a href="https://psycnet.apa.org/record/2007-01197-000">“I Am a Strange Loop”</a> Basic Books 2007</p>]]></content:encoded>
     </item>
   </channel>
 </rss>
